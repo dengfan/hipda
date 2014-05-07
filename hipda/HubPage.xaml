@@ -17,7 +17,7 @@
         </DataTemplate>
 
         <DataTemplate x:Name="HubHeaderTemplate2">
-            <TextBlock Text="{Binding}" FontWeight="Normal" FontSize="{ThemeResource TextStyleLargeFontSize}" />
+            <TextBlock Text="{Binding}" FontWeight="Normal" TextWrapping="WrapWholeWords" FontSize="{ThemeResource TextStyleLargeFontSize}" />
         </DataTemplate>
 
         <DataTemplate x:Key="ThreadListItemTemplate">
