@@ -1,0 +1,98 @@
+﻿<Page
+    x:Class="hipda.HubPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:hipda"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:hipda.Data"
+    mc:Ignorable="d"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    Background="WhiteSmoke" 
+    RequestedTheme="Light">
+    
+    <Page.Resources>
+        <DataTemplate x:Name="HubHeaderTemplate" x:Key="HubHeaderTemplate">
+            <TextBlock Text="{Binding}" FontWeight="Normal" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="ThreadListItemTemplate">
+            <StackPanel>
+                <TextBlock
+                    Text="{Binding Title}"
+                    TextWrapping="WrapWholeWords"
+                    Style="{ThemeResource BodyTextBlockStyle}"/>
+                <TextBlock
+                    Text="{Binding Id}"
+                    TextWrapping="WrapWholeWords"
+                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <Style x:Key="ThreadItemStyle" TargetType="ListViewItem">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Margin" Value="0,0,10,10"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+
+        <DataTemplate x:Key="ReplyListItemTemplate">
+            <StackPanel>
+                <TextBlock
+                    Text="{Binding Content}"
+                    TextWrapping="WrapWholeWords"
+                    Style="{ThemeResource BodyTextBlockStyle}"/>
+                <TextBlock
+                    Text="{Binding Id}"
+                    TextWrapping="WrapWholeWords"
+                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <Style x:Key="ReplyItemStyle" TargetType="ListViewItem">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Margin" Value="0,0,10,10"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+
+        <DataTemplate x:Key="ThreadListTemplate">
+            <ListView
+                ItemsSource="{Binding Threads}"
+                IsItemClickEnabled="True"
+                ItemClick="ThreadItem_ItemClick"
+                ContinuumNavigationTransitionInfo.ExitElementContainer="True"
+                ItemContainerStyle="{StaticResource ResourceKey=ThreadItemStyle}"
+                ItemTemplate="{StaticResource ThreadListItemTemplate}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Name="ReplyListTemplate">
+            <ListView
+                ItemsSource="{Binding Replys}"
+                IsItemClickEnabled="True"
+                ItemClick="ReplyItem_ItemClick"
+                ContinuumNavigationTransitionInfo.ExitElementContainer="True"
+                ItemContainerStyle="{StaticResource ResourceKey=ReplyItemStyle}"
+                ItemTemplate="{StaticResource ReplyListItemTemplate}"/>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Hub x:Uid="Hub" x:Name="Hub" Margin="0,27,0,0">
+            <HubSection
+                DataContext="{Binding FirstGroup}"
+                Header="{Binding Name}"
+                HeaderTemplate="{StaticResource HubHeaderTemplate}"
+                ContentTemplate="{StaticResource ThreadListTemplate}">
+            </HubSection>
+        </Hub>
+    </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Uid="AddAppBarButton" x:Name="AddAppBarButton" Label="add" Icon="Add" Click="AddAppBarButton_Click" />
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Uid="SecondaryButton1" x:Name="SecondaryButton1" Label="secondary command 1" />
+                <AppBarButton x:Uid="SecondaryButton2" x:Name="SecondaryButton2" Label="secondary command 2" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>
