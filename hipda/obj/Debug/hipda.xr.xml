@@ -4,10 +4,11 @@
     <RootPropertyPathName Name="DefaultViewModel" />
     <RootPropertyPathName Name="Item" />
     <RootPropertyPathName Name="Title" />
-    <RootPropertyPathName Name="Replys" />
+    <RootPropertyPathName Name="Replies" />
     <RootPropertyPathName Name="Threads" />
-    <RootPropertyPathName Name="Id" />
+    <RootPropertyPathName Name="OwnerName" />
     <RootPropertyPathName Name="Content" />
+    <RootPropertyPathName Name="Id" />
     <RootPropertyPathName Name="FirstGroup" />
     <RootPropertyPathName Name="Name" />
   </Roots.PropertyPathNames>

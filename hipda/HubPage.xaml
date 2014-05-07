@@ -12,8 +12,12 @@
     RequestedTheme="Light">
     
     <Page.Resources>
-        <DataTemplate x:Name="HubHeaderTemplate" x:Key="HubHeaderTemplate">
+        <DataTemplate x:Key="HubHeaderTemplate">
             <TextBlock Text="{Binding}" FontWeight="Normal" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" />
+        </DataTemplate>
+
+        <DataTemplate x:Name="HubHeaderTemplate2">
+            <TextBlock Text="{Binding}" FontWeight="Normal" FontSize="{ThemeResource TextStyleLargeFontSize}" />
         </DataTemplate>
 
         <DataTemplate x:Key="ThreadListItemTemplate">
@@ -42,7 +46,7 @@
                     TextWrapping="WrapWholeWords"
                     Style="{ThemeResource BodyTextBlockStyle}"/>
                 <TextBlock
-                    Text="{Binding Id}"
+                    Text="{Binding OwnerName}"
                     TextWrapping="WrapWholeWords"
                     Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
             </StackPanel>
@@ -66,7 +70,7 @@
 
         <DataTemplate x:Name="ReplyListTemplate">
             <ListView
-                ItemsSource="{Binding Replys}"
+                ItemsSource="{Binding Replies}"
                 IsItemClickEnabled="True"
                 ItemClick="ReplyItem_ItemClick"
                 ContinuumNavigationTransitionInfo.ExitElementContainer="True"
