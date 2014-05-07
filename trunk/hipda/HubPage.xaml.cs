@@ -29,10 +29,11 @@ namespace hipda
     public sealed partial class HubPage : Page
     {
         private const int maxHubSectionCount = 4;
+
         private string threadId = string.Empty;
+        private string threadTitle = string.Empty;
 
         private const string FirstGroupName = "FirstGroup";
-        private const string SecondGroupName = "SecondGroup";
 
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
@@ -117,7 +118,7 @@ namespace hipda
         /// </summary>
         private void AddAppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            //string groupName = this.pivot.SelectedIndex == 0 ? FirstGroupName : SecondGroupName;
+            //string groupName = FirstGroupName;
             //var group = this.DefaultViewModel[groupName] as SampleDataGroup;
             //var nextItemId = group.Items.Count + 1;
             //var newItem = new SampleDataItem(
@@ -139,23 +140,28 @@ namespace hipda
         /// <summary>
         /// 在贴子项上单击时调用
         /// </summary>
-        private void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
+        private async void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
         {
             // 动态创建 hub section
             threadId = ((Thread)e.ClickedItem).Id;
+            threadTitle = ((Thread)e.ClickedItem).Title;
+
+            var sampleDataGroup = await DataSource.LoadReplyDataAsync(threadId);
 
             HubSection hubSec = new HubSection()
             {
-                Header = threadId,
-                HeaderTemplate = HubHeaderTemplate,
-                ContentTemplate = ReplyListTemplate
+                Header = threadTitle,
+                HeaderTemplate = HubHeaderTemplate2,
+                ContentTemplate = ReplyListTemplate,
+                DataContext = sampleDataGroup
             };
-            
-            hubSec.Loaded += SecondPivot_Loaded;
+
+            // 限制 hubsection 的数量
             if (Hub.Sections.Count > maxHubSectionCount)
             {
                 Hub.Sections.RemoveAt(maxHubSectionCount);
             }
+
             Hub.Sections.Insert(1, hubSec);
             Hub.ScrollToSection(hubSec);
 
@@ -181,9 +187,7 @@ namespace hipda
         /// </summary>
         private async void SecondPivot_Loaded(object sender, RoutedEventArgs e)
         {
-
-            //var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-5");
-            //this.DefaultViewModel[SecondGroupName] = sampleDataGroup;
+            
         }
 
         #region NavigationHelper 注册

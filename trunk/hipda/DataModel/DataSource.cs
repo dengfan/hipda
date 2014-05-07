@@ -13,16 +13,13 @@ namespace hipda.Data
 {
     public class Reply
     {
-        public Reply(string id, string ownerName, string ownerId, string content, string createTime)
+        public Reply(string ownerId, string ownerName, string content, string createTime)
         {
-            this.Id = id;
-            this.OwnerName = ownerName;
             this.OwnerId = ownerId;
+            this.OwnerName = ownerName;
             this.Content = content;
             this.CreateTime = createTime;
         }
-
-        public string Id { get; private set; }
 
         public string OwnerName { get; private set; }
 
@@ -49,7 +46,7 @@ namespace hipda.Data
             this.OwnerId = ownerId;
             this.CreateTime = createTime;
             this.LastReplyTime = lastReplyTime;
-            //this.Replys = new ObservableCollection<Reply>();
+            this.Replies = new ObservableCollection<Reply>();
         }
 
         public string Id { get; private set; }
@@ -59,7 +56,7 @@ namespace hipda.Data
         public string OwnerId { get; private set; }
         public string CreateTime { get; private set; }
         public string LastReplyTime { get; private set; }
-        //public ObservableCollection<Reply> Replys { get; private set; }
+        public ObservableCollection<Reply> Replies { get; private set; }
 
         public override string ToString()
         {
@@ -100,14 +97,14 @@ namespace hipda.Data
 
         public static async Task<IEnumerable<Forum>> GetForumsAsync()
         {
-            await _dataSource.LoadDataAsync();
+            await _dataSource.LoadThreadDataAsync();
 
             return _dataSource.Forums;
         }
 
         public static async Task<Forum> GetForumAsync(string uniqueId)
         {
-            await _dataSource.LoadDataAsync();
+            await _dataSource.LoadThreadDataAsync();
 
             // 对于小型数据集可接受简单线性搜索
             var matches = _dataSource.Forums.Where((f) => f.Id.Equals(uniqueId));
@@ -117,7 +114,7 @@ namespace hipda.Data
 
         public static async Task<Thread> GetThreadAsync(string uniqueId)
         {
-            await _dataSource.LoadDataAsync();
+            await _dataSource.LoadThreadDataAsync();
 
             // 对于小型数据集可接受简单线性搜索
             var matches = _dataSource.Forums.SelectMany(forum => forum.Threads).Where((thread) => thread.Id.Equals(uniqueId));
@@ -125,7 +122,7 @@ namespace hipda.Data
             return null;
         }
 
-        private async Task LoadDataAsync()
+        private async Task LoadThreadDataAsync()
         {
             if (this._forums.Count != 0) return;
 
@@ -198,5 +195,149 @@ namespace hipda.Data
 
             this.Forums.Add(forum);
         }
+
+        #region 读取指定贴子的回复列表数据
+        public static async Task<Thread> LoadReplyDataAsync(string threadId)
+        {
+            HttpClient httpClient = new HttpClient();
+            Helpers.CreateHttpClient(ref httpClient);
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            int pageNo = 1;
+
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}", threadId, pageNo);
+            HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
+            response.Content.Headers.ContentType.CharSet = "GBK";
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            Thread thread = new Thread(threadId, "fadsf", "", "", "", "", "");
+
+            // 载入HTML
+            doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
+            var data = doc.DocumentNode
+                .ChildNodes[2] // html
+                .ChildNodes[3] // body
+                .ChildNodes[14] // div#wrap
+                .ChildNodes[5] // div#postlist
+                .ChildNodes;
+
+            int i = 0;
+            foreach (var item in data)
+            {
+                string ownerId = string.Empty;
+                string ownerName = string.Empty;
+                string postTime = string.Empty;
+                try
+                {
+                    var authorNode = item.ChildNodes[0] // table
+                    .ChildNodes[1] // tr
+                    .ChildNodes[1] // td
+                    .ChildNodes[1] // div
+                    .ChildNodes[1]; // a
+
+                    ownerId = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
+                    ownerName = authorNode.InnerText;
+                }
+                catch
+                {
+                    
+                    throw new Exception("author node");
+                }
+
+                
+
+                string content = string.Empty;
+                if (i == 0)
+                {
+                    try
+                    {
+                        var postTimeNode = item.ChildNodes[0] // table
+                        .ChildNodes[1] // tr
+                        .ChildNodes[3] // td
+                        .ChildNodes[3] // div.postinfo
+                        .ChildNodes[3] // div.posterinfo
+                        .ChildNodes[3] // div.authorinfo
+                        .ChildNodes[1]; // em
+
+                        postTime = postTimeNode.InnerText;
+                    }
+                    catch
+                    {
+
+                        throw new Exception("post time node");
+                    }
+
+                    try
+                    {
+                        content = item.ChildNodes[0] // table
+                        .ChildNodes[1] // tr
+                        .ChildNodes[3] // td.postcontent
+                        .ChildNodes[5] // div.defaultpost
+                        .ChildNodes[5] // div.postmessage
+                        .ChildNodes[3] // div.t_msgfontfix
+                        .ChildNodes[1] // table
+                        .ChildNodes[0] // tr
+                        .ChildNodes[0] // td
+                        .InnerText;
+                    }
+                    catch
+                    {
+                        
+                        throw new Exception("main post");
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        var postTimeNode = item.ChildNodes[0] // table
+                        .ChildNodes[1] // tr
+                        .ChildNodes[3] // td
+                        .ChildNodes[1] // div.postinfo
+                        .ChildNodes[3] // div.posterinfo
+                        .ChildNodes[3] // div.authorinfo
+                        .ChildNodes[1]; // em
+
+                        postTime = postTimeNode.InnerText;
+                    }
+                    catch
+                    {
+
+                        throw new Exception("post time node");
+                    }
+
+                    try
+                    {
+                        content = item.ChildNodes[0] // table
+                        .ChildNodes[1] // tr
+                        .ChildNodes[3] // td.postcontent
+                        .ChildNodes[3] // div.defaultpost
+                        .ChildNodes[5] // div.postmessage
+                        .ChildNodes[1] // div.t_msgfontfix
+                        .ChildNodes[1] // table
+                        .ChildNodes[0] // tr
+                        .ChildNodes[0] // td
+                        .InnerText;
+                    }
+                    catch
+                    {
+                        
+                        throw new Exception("others post");
+                    }
+                }
+
+                Reply reply = new Reply(ownerId, ownerName, content, postTime);
+                thread.Replies.Add(reply);
+                
+                i++;
+            }
+
+            return thread;
+        }
+        #endregion
     }
 }
