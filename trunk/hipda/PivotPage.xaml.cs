@@ -26,7 +26,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace hipda
 {
-    public sealed partial class HubPage : Page
+    public sealed partial class PivotPage : Page
     {
         private const int maxHubSectionCount = 4;
 
@@ -39,7 +39,7 @@ namespace hipda
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
-        public HubPage()
+        public PivotPage()
         {
             this.InitializeComponent();
 
@@ -148,22 +148,22 @@ namespace hipda
 
             var sampleDataGroup = await DataSource.LoadReplyDataAsync(threadId);
 
-            HubSection hubSec = new HubSection()
+            PivotItem pivotItem = new PivotItem()
             {
-                Header = threadTitle,
-                HeaderTemplate = HubHeaderTemplate2,
+                Header = threadTitle.Length > 4 ? threadTitle.Substring(0, 4) + "..." : threadTitle,
                 ContentTemplate = ReplyListTemplate,
-                DataContext = sampleDataGroup
+                DataContext = sampleDataGroup,
+                Margin = new Thickness(5,0,5,0)
             };
 
             // 限制 hubsection 的数量
-            if (Hub.Sections.Count > maxHubSectionCount)
+            if (Pivot.Items.Count > maxHubSectionCount)
             {
-                Hub.Sections.RemoveAt(maxHubSectionCount);
+                Pivot.Items.RemoveAt(maxHubSectionCount);
             }
 
-            Hub.Sections.Insert(1, hubSec);
-            Hub.ScrollToSection(hubSec);
+            Pivot.Items.Insert(1, pivotItem);
+            Pivot.SelectedItem = pivotItem;
 
             //// 导航至相应的目标页，并
             //// 通过将所需信息作为导航参数传入来配置新页

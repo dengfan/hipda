@@ -13,14 +13,16 @@ namespace hipda.Data
 {
     public class Reply
     {
-        public Reply(string ownerId, string ownerName, string content, string createTime)
+        public Reply(int index, string ownerId, string ownerName, string content, string createTime)
         {
+            this.Index = index;
             this.OwnerId = ownerId;
             this.OwnerName = ownerName;
             this.Content = content;
             this.CreateTime = createTime;
         }
 
+        public int Index { get; private set; }
         public string OwnerName { get; private set; }
 
         public string OwnerId { get; private set; }
@@ -37,8 +39,9 @@ namespace hipda.Data
 
     public class Thread
     {
-        public Thread(string id, string title, string replyAndViewInfo, string ownerName, string ownerId, string createTime, string lastReplyTime)
+        public Thread(int index, string id, string title, string replyAndViewInfo, string ownerName, string ownerId, string createTime, string lastReplyTime)
         {
+            this.Index = index;
             this.Id = id;
             this.Title = title;
             this.ReplyAndViewInfo = replyAndViewInfo;
@@ -49,6 +52,7 @@ namespace hipda.Data
             this.Replies = new ObservableCollection<Reply>();
         }
 
+        public int Index { get; private set; }
         public string Id { get; private set; }
         public string Title { get; private set; }
         public string ReplyAndViewInfo { get; private set; }
@@ -150,6 +154,7 @@ namespace hipda.Data
             bool isNormalThread = false;
             
             Forum forum = new Forum(forumId, "Discovery");
+            int i = 0;
             foreach (var item in data)
             {
                 if (isNormalThread == false && pageNo == 1)
@@ -167,7 +172,7 @@ namespace hipda.Data
                         string id = tdSubjectSpan.Attributes[0].Value.Substring("thread_".Length);
                         string title = tdSubjectSpanA.InnerText;
 
-                        Thread thread = new Thread(id, title, "1", "2", "3", "4", "5");
+                        Thread thread = new Thread(i, id, title, "1", "2", "3", "4", "5");
 
                         forum.Threads.Add(thread);
                         isNormalThread = true;
@@ -186,11 +191,13 @@ namespace hipda.Data
                     string id = tdSubjectSpan.Attributes[0].Value.Substring("thread_".Length);
                     string title = tdSubjectSpanA.InnerText;
 
-                    Thread thread = new Thread(id, title, "1", "2", "3", "4", "5");
+                    Thread thread = new Thread(i, id, title, "1", "2", "3", "4", "5");
 
                     forum.Threads.Add(thread);
                     isNormalThread = true;
                 }
+
+                i++;
             }
 
             this.Forums.Add(forum);
@@ -214,7 +221,7 @@ namespace hipda.Data
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
 
-            Thread thread = new Thread(threadId, "fadsf", "", "", "", "", "");
+            Thread thread = new Thread(1, threadId, "fadsf", "", "", "", "", "");
 
             // 载入HTML
             doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
@@ -330,7 +337,7 @@ namespace hipda.Data
                     }
                 }
 
-                Reply reply = new Reply(ownerId, ownerName, content, postTime);
+                Reply reply = new Reply(i, ownerId, ownerName, content, postTime);
                 thread.Replies.Add(reply);
                 
                 i++;

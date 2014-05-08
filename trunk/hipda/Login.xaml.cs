@@ -62,7 +62,7 @@ namespace hipda
             string resultContent = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
             if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败"))
             {
-                if (!Frame.Navigate(typeof(HubPage)))
+                if (!Frame.Navigate(typeof(PivotPage)))
                 {
                     throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
                 }
