@@ -153,7 +153,7 @@ namespace hipda
                 Header = threadTitle.Length > 4 ? threadTitle.Substring(0, 4) + "..." : threadTitle,
                 ContentTemplate = ReplyListTemplate,
                 DataContext = sampleDataGroup,
-                Margin = new Thickness(5,0,5,0)
+                Margin = new Thickness(0,0,0,0)
             };
 
             // 限制 hubsection 的数量

@@ -8,7 +8,7 @@
     xmlns:data="using:hipda.Data"
     mc:Ignorable="d"
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
-    Background="WhiteSmoke" 
+    Background="White" 
     RequestedTheme="Light">
 
     <Page.Transitions>
@@ -84,7 +84,7 @@
                 Header="{Binding Name}"
                 ContentTemplate="{StaticResource ThreadListTemplate}"
                 CommonNavigationTransitionInfo.IsStaggerElement="True"
-                Margin="5,0">
+                Margin="0">
             </PivotItem>
         </Pivot>
     </Grid>
