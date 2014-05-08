@@ -16,7 +16,7 @@ namespace hipda
         protected override Style SelectStyleCore(object item, DependencyObject container)
         {
             Thread listViewItem = (Thread)item;
-            SolidColorBrush background = ((listViewItem.Index % 2) == 0 ? new SolidColorBrush(Colors.White) : new SolidColorBrush(Colors.WhiteSmoke));
+            SolidColorBrush background = ((listViewItem.Index % 2) == 0 ? new SolidColorBrush(Colors.WhiteSmoke) : new SolidColorBrush(Colors.White));
             Style style = new Style(typeof(ListViewItem));
             style.Setters.Add(new Setter(ListViewItem.BackgroundProperty, background));
             style.Setters.Add(new Setter(ListViewItem.MarginProperty, "0"));
