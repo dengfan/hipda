@@ -9,8 +9,8 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBox x:Name="txtUsername" HorizontalAlignment="Left" Margin="147,84,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="37" Width="221"/>
-        <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Margin="147,148,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" RenderTransformOrigin="-0.373,-0.639" Height="35" Width="221"/>
+        <TextBox x:Name="txtUsername" HorizontalAlignment="Left" Margin="147,84,0,0" TextWrapping="Wrap" Text="cainiao1v1" VerticalAlignment="Top" Height="37" Width="221"/>
+        <TextBox x:Name="txtPassword" HorizontalAlignment="Left" Margin="147,148,0,0" TextWrapping="Wrap" Text="!1234qwer" VerticalAlignment="Top" RenderTransformOrigin="-0.373,-0.639" Height="35" Width="221"/>
         <Button x:Name="btnLogin" Content="登录" HorizontalAlignment="Left" Margin="147,202,0,0" VerticalAlignment="Top" Click="btnLogin_Click"/>
         <TextBlock HorizontalAlignment="Left" Margin="58,97,0,0" TextWrapping="Wrap" Text="账号" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="58,159,0,0" TextWrapping="Wrap" Text="密码" VerticalAlignment="Top"/>

@@ -6,21 +6,63 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     Background="WhiteSmoke"
     RequestedTheme="Light">
 
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <CommonNavigationTransitionInfo IsStaggeringEnabled="True"/>
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+    
+    <Page.Resources>
+        <local:BackgroundStyleSelecterForForumItem x:Key="BackgroundStyleSelecterForForumItem"/>
+        
+        <DataTemplate x:Key="ForumListItemTemplate">
+            <StackPanel>
+                <TextBlock
+                    Text="{Binding Name}"
+                    TextWrapping="WrapWholeWords"
+                    Style="{ThemeResource BodyTextBlockStyle}"/>
+                <TextBlock
+                    Text="{Binding Info}"
+                    TextWrapping="WrapWholeWords"
+                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ForumListTemplate">
+            <ListView 
+                ItemsSource="{Binding Forums}" 
+                ContinuumNavigationTransitionInfo.ExitElementContainer="True"
+                ItemTemplate="{StaticResource ForumListItemTemplate}"
+                ItemContainerStyleSelector="{StaticResource BackgroundStyleSelecterForForumItem}" />
+        </DataTemplate>
+    </Page.Resources>
+
     <Grid>
-        <Hub Header="Hi-PDA">
-            <HubSection Header="版区">
+        <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
+            <Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
+                </DataTemplate>
+            </Pivot.HeaderTemplate>
+            <PivotItem 
+                DataContext="{Binding FirstGroup}" 
+                Header="版区" 
+                CommonNavigationTransitionInfo.IsStaggerElement="True"
+                ContentTemplate="{StaticResource ForumListTemplate}"
+                Margin="0"/>
+            <!--<PivotItem Header="个人中心" Margin="0">
                 <DataTemplate>
                     <ListView></ListView>
                 </DataTemplate>
-            </HubSection>
-            <HubSection Header="个人中心">
-                <DataTemplate>
-                    <ListView></ListView>
-                </DataTemplate>
-            </HubSection>
-        </Hub>
+            </PivotItem>-->
+        </Pivot>
     </Grid>
 </Page>

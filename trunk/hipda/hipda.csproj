@@ -109,6 +109,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BackgroundStyleSelecterForForumItem.cs" />
     <Compile Include="BackgroundStyleSelecterForReplyItem.cs" />
     <Compile Include="BackgroundStyleSelecterForThreadItem.cs" />
     <Compile Include="BlankPage1.xaml.cs">
