@@ -76,7 +76,7 @@
         <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraLargePlusFontSize}" />
+                    <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem
@@ -84,8 +84,7 @@
                 Header="{Binding Name}"
                 ContentTemplate="{StaticResource ThreadListTemplate}"
                 CommonNavigationTransitionInfo.IsStaggerElement="True"
-                Margin="0">
-            </PivotItem>
+                Margin="0"/>
         </Pivot>
     </Grid>
 

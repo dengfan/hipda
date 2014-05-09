@@ -48,21 +48,6 @@ namespace hipda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-
-            ShowStatusBar();
-        }
-
-        private async void ShowStatusBar()
-        {
-            StatusBar statusBar = StatusBar.GetForCurrentView();
-            statusBar.BackgroundColor = Colors.Purple;
-            statusBar.BackgroundOpacity = 100;
-            statusBar.ForegroundColor = Colors.White;
-            await statusBar.ShowAsync();
-
-            statusBar.ProgressIndicator.Text = string.Concat("Hi-PDA");
-            statusBar.ProgressIndicator.ProgressValue = 0;
-            await statusBar.ProgressIndicator.ShowAsync();
         }
 
         /// <summary>

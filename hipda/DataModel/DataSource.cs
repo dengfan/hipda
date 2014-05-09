@@ -70,15 +70,21 @@ namespace hipda.Data
 
     public class Forum
     {
-        public Forum(string id, string name)
+        public Forum(int index, string id, string name, int todayCount, string info)
         {
+            this.Index = index;
             this.Id = id;
             this.Name = name;
+            this.TodayCount = todayCount;
+            this.Info = info;
             this.Threads = new ObservableCollection<Thread>();
         }
 
+        public int Index { get; private set; }
         public string Id { get; private set; }
         public string Name { get; private set; }
+        public string Info { get; private set; }
+        public int TodayCount { get; private set; }
 
         public ObservableCollection<Thread> Threads { get; private set; }
 
@@ -87,6 +93,16 @@ namespace hipda.Data
             return this.Name;
         }
  
+    }
+
+    public class Hipda
+    {
+        public Hipda()
+        {
+            this.Forums = new ObservableCollection<Forum>();
+        }
+
+        public ObservableCollection<Forum> Forums { get; private set; }
     }
 
     public sealed class DataSource
@@ -153,7 +169,7 @@ namespace hipda.Data
             // 这个参数的目的是为了过滤掉首页长期置顶的贴子后，就不再判断每个节点是否是置顶贴，以节省性能
             bool isNormalThread = false;
             
-            Forum forum = new Forum(forumId, "Discovery");
+            Forum forum = new Forum(1, forumId, "Discovery", 0, string.Empty);
             int i = 0;
             foreach (var item in data)
             {
@@ -203,7 +219,19 @@ namespace hipda.Data
             this.Forums.Add(forum);
         }
 
-        #region 读取指定贴子的回复列表数据
+        // 读取所以版区列表数据
+        public static async Task<Hipda> LoadFormsDataAsync()
+        {
+            Hipda hipda = new Hipda();
+            hipda.Forums.Add(new Forum(1, "1", "Test1", 1, "fadsfa fasdf asdf f a dsafa 中华人民共和国."));
+            hipda.Forums.Add(new Forum(2, "2", "我有铃声", 234, "fadsfa fasdf asdf f a dsafa ds."));
+            hipda.Forums.Add(new Forum(3, "3", "地在工", 32, "中华人民共和国。中华人民共和国，中华人民共和国，中华人民共和国。中华人民共和国，中华人民共和国，中华人民共和国。中华人民共和国，中华人民共和国，中华人民共和国。"));
+            hipda.Forums.Add(new Forum(4, "4", "中华人民共和国", 5, "fadsfa fasdf 中华人民共和国 f a dsafa ds."));
+            hipda.Forums.Add(new Forum(5, "5", "法煤革", 12312, "fadsfa fasdf asdf中华，人民共和国 中华人民共和。国中华人民共和国 f东奔西走东奔西走 a dsfadsf adf adafa ds."));
+            return hipda;
+        }
+
+        // 读取指定贴子的回复列表数据
         public static async Task<Thread> LoadReplyDataAsync(string threadId)
         {
             HttpClient httpClient = new HttpClient();
@@ -345,6 +373,5 @@ namespace hipda.Data
 
             return thread;
         }
-        #endregion
     }
 }
