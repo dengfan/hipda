@@ -122,39 +122,16 @@ namespace hipda.Data
             get { return this._forums; }
         }
 
-        public static async Task<IEnumerable<Forum>> GetForumsAsync()
+        public static async Task<Forum> GetForumsAsync(Forum fourm, int pageNo)
         {
-            await _dataSource.LoadThreadDataAsync();
+            await _dataSource.LoadThreadDataAsync(fourm, pageNo);
 
-            return _dataSource.Forums;
+            return _dataSource.Forums.Single(f => f.Id.Equals(fourm.Id));
         }
 
-        public static async Task<Forum> GetForumAsync(string uniqueId)
-        {
-            await _dataSource.LoadThreadDataAsync();
-
-            // 对于小型数据集可接受简单线性搜索
-            var matches = _dataSource.Forums.Where((f) => f.Id.Equals(uniqueId));
-            if (matches.Count() == 1) return matches.First();
-            return null;
-        }
-
-        public static async Task<Thread> GetThreadAsync(string uniqueId)
-        {
-            await _dataSource.LoadThreadDataAsync();
-
-            // 对于小型数据集可接受简单线性搜索
-            var matches = _dataSource.Forums.SelectMany(forum => forum.Threads).Where((thread) => thread.Id.Equals(uniqueId));
-            if (matches.Count() == 1) return matches.First();
-            return null;
-        }
-
-        private async Task LoadThreadDataAsync()
+        private async Task LoadThreadDataAsync(Forum forum, int pageNo)
         {
             if (this._forums.Count != 0) return;
-
-            int pageNo = 1;
-            string forumId = "2";
 
             HttpClient httpClient = new HttpClient();
             Helpers.CreateHttpClient(ref httpClient);
@@ -162,7 +139,7 @@ namespace hipda.Data
             CancellationTokenSource cts = new CancellationTokenSource();
 
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&page={1}", forumId, pageNo);
+            string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&page={1}", forum.Id, pageNo);
             HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
             response.Content.Headers.ContentType.CharSet = "GBK";
 
@@ -175,8 +152,7 @@ namespace hipda.Data
 
             // 这个参数的目的是为了过滤掉首页长期置顶的贴子后，就不再判断每个节点是否是置顶贴，以节省性能
             bool isNormalThread = false;
-            
-            Forum forum = new Forum(forumId, "Discovery", string.Empty, string.Empty);
+
             int i = 0;
             foreach (var item in data)
             {
