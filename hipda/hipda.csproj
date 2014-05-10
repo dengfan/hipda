@@ -123,6 +123,7 @@
       <DependentUpon>Content.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModel\DataSource.cs" />
+    <Compile Include="ListGroupStyleSelector.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>

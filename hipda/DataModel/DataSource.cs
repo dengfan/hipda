@@ -1,5 +1,4 @@
-﻿using HtmlAgilityPack;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using Windows.Web.Http;
+using Windows.Data.Xml;
+using HtmlAgilityPack;
 
 namespace hipda.Data
 {
@@ -70,9 +71,8 @@ namespace hipda.Data
 
     public class Forum
     {
-        public Forum(int index, string id, string name, int todayCount, string info)
+        public Forum(string id, string name, string todayCount, string info)
         {
-            this.Index = index;
             this.Id = id;
             this.Name = name;
             this.TodayCount = todayCount;
@@ -80,11 +80,10 @@ namespace hipda.Data
             this.Threads = new ObservableCollection<Thread>();
         }
 
-        public int Index { get; private set; }
         public string Id { get; private set; }
         public string Name { get; private set; }
         public string Info { get; private set; }
-        public int TodayCount { get; private set; }
+        public string TodayCount { get; private set; }
 
         public ObservableCollection<Thread> Threads { get; private set; }
 
@@ -95,19 +94,27 @@ namespace hipda.Data
  
     }
 
-    public class Hipda
+    public class ForumGroup
     {
-        public Hipda()
+        public ForumGroup(string name)
         {
+            this.Name = name;
             this.Forums = new ObservableCollection<Forum>();
         }
 
+        public string Name { get; private set; }
         public ObservableCollection<Forum> Forums { get; private set; }
     }
 
     public sealed class DataSource
     {
         private static DataSource _dataSource = new DataSource();
+
+        private ObservableCollection<ForumGroup> _forumGroups = new ObservableCollection<ForumGroup>();
+        public ObservableCollection<ForumGroup> ForumGroups
+        {
+            get { return this._forumGroups; }
+        }
 
         private ObservableCollection<Forum> _forums = new ObservableCollection<Forum>();
         public ObservableCollection<Forum> Forums
@@ -169,7 +176,7 @@ namespace hipda.Data
             // 这个参数的目的是为了过滤掉首页长期置顶的贴子后，就不再判断每个节点是否是置顶贴，以节省性能
             bool isNormalThread = false;
             
-            Forum forum = new Forum(1, forumId, "Discovery", 0, string.Empty);
+            Forum forum = new Forum(forumId, "Discovery", string.Empty, string.Empty);
             int i = 0;
             foreach (var item in data)
             {
@@ -219,16 +226,82 @@ namespace hipda.Data
             this.Forums.Add(forum);
         }
 
-        // 读取所以版区列表数据
-        public static async Task<Hipda> LoadFormsDataAsync()
+
+        public static async Task<IEnumerable<ForumGroup>> GetForumGroupsAsync()
         {
-            Hipda hipda = new Hipda();
-            hipda.Forums.Add(new Forum(1, "1", "Test1", 1, "fadsfa fasdf asdf f a dsafa 中华人民共和国."));
-            hipda.Forums.Add(new Forum(2, "2", "我有铃声", 234, "fadsfa fasdf asdf f a dsafa ds."));
-            hipda.Forums.Add(new Forum(3, "3", "地在工", 32, "中华人民共和国。中华人民共和国，中华人民共和国，中华人民共和国。中华人民共和国，中华人民共和国，中华人民共和国。中华人民共和国，中华人民共和国，中华人民共和国。"));
-            hipda.Forums.Add(new Forum(4, "4", "中华人民共和国", 5, "fadsfa fasdf 中华人民共和国 f a dsafa ds."));
-            hipda.Forums.Add(new Forum(5, "5", "法煤革", 12312, "fadsfa fasdf asdf中华，人民共和国 中华人民共和。国中华人民共和国 f东奔西走东奔西走 a dsfadsf adf adafa ds."));
-            return hipda;
+            await _dataSource.LoadForumGroupDataAsync();
+
+            return _dataSource.ForumGroups;
+        }
+
+        // 读取所以版区列表数据
+        public async Task LoadForumGroupDataAsync()
+        {
+            if (this._forumGroups.Count > 0)
+            {
+                return;
+            }
+
+            HttpClient httpClient = new HttpClient();
+            Helpers.CreateHttpClient(ref httpClient);
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            // 读取数据
+            string url = "http://www.hi-pda.com/forum/index.php";
+            HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
+            response.Content.Headers.ContentType.CharSet = "GBK";
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
+            var data = doc.DocumentNode;
+
+            var content = data.ChildNodes[2] // html
+                .ChildNodes[3] // body
+                .ChildNodes[10] // div#wrap
+                .ChildNodes[1] // div.main
+                .ChildNodes[0]; // div.content 登录后有23个子节点
+
+            var mainBoxes = content.Descendants().Where(n => n.GetAttributeValue("class", "") == "mainbox list" && n.GetAttributeValue("id", "") != "online");
+            foreach (var mainBox in mainBoxes)
+            {
+                string forumGroupName = mainBox.ChildNodes[3].ChildNodes[0].InnerText;
+                ForumGroup forumGroup = new ForumGroup(forumGroupName);
+
+                var tbodies = mainBox.ChildNodes[5] // table
+                    .Descendants().Where(n => n.GetAttributeValue("id", "").Contains("forum"));
+
+                foreach (var tbody in tbodies)
+                {
+                    var divLeft = tbody
+                        .ChildNodes[1] // tr
+                        .ChildNodes[1] // th
+                        .ChildNodes[1]; // div.left
+
+                    var h2 = divLeft.ChildNodes[1]; // h2
+                    var p = divLeft.ChildNodes[3]; // p
+
+                    var a = h2.ChildNodes[0];
+                    string forumId = a.Attributes[0].Value.Substring("forumdisplay.php?fid=".Length);
+                    string forumName = a.InnerText;
+
+                    string forumTodayQuantity = string.Empty;
+                    if (h2.ChildNodes.Count == 2)
+                    {
+                        var em = h2.ChildNodes[1];
+                        forumTodayQuantity = em.InnerText;
+                    }
+
+                    string forumInfo = p.InnerText;
+
+                    forumGroup.Forums.Add(new Forum(forumId, forumName, forumTodayQuantity, forumInfo));
+                }
+
+                this.ForumGroups.Add(forumGroup);
+            }
         }
 
         // 读取指定贴子的回复列表数据
