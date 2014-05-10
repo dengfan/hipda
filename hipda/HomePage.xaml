@@ -58,10 +58,63 @@
         <DataTemplate x:Key="GroupTemplate">
             <ListView 
                 ItemsSource="{Binding Source={StaticResource cvsForumGroups}}"
+                IsItemClickEnabled="True"
+                ItemClick="ForumItem_ItemClick"
                 ContinuumNavigationTransitionInfo.ExitElementContainer="True"
                 ItemTemplate="{StaticResource GroupItemTemplate}"
                 GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"
                 ItemContainerStyle="{StaticResource GroupItemStyle}"/>
+        </DataTemplate>
+
+
+
+        <local:BackgroundStyleSelecterForThreadItem x:Key="BackgroundStyleSelecterForThreadItem"/>
+        <local:BackgroundStyleSelecterForReplyItem x:Key="BackgroundStyleSelecterForReplyItem"/>
+
+        <DataTemplate x:Key="ThreadListItemTemplate">
+            <StackPanel>
+                <TextBlock
+                    Text="{Binding Title}"
+                    TextWrapping="WrapWholeWords"
+                    Style="{ThemeResource BodyTextBlockStyle}"/>
+                <TextBlock
+                    Text="{Binding Id}"
+                    TextWrapping="WrapWholeWords"
+                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ReplyListItemTemplate">
+            <StackPanel>
+                <TextBlock
+                    Text="{Binding Content}"
+                    TextWrapping="WrapWholeWords"
+                    Style="{ThemeResource BodyTextBlockStyle}"/>
+                <TextBlock
+                    Text="{Binding OwnerName}"
+                    TextWrapping="WrapWholeWords"
+                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Name="ThreadListTemplate">
+            <ListView
+                ItemsSource="{Binding Threads}"
+                IsItemClickEnabled="True"
+                ItemClick="ThreadItem_ItemClick"
+                ContinuumNavigationTransitionInfo.ExitElementContainer="True"
+                ItemTemplate="{StaticResource ThreadListItemTemplate}"
+                ItemContainerStyleSelector="{StaticResource BackgroundStyleSelecterForThreadItem}" />
+        </DataTemplate>
+
+        <DataTemplate x:Name="ReplyListTemplate">
+            <ListView
+                ItemsSource="{Binding Replies}"
+                IsItemClickEnabled="True"
+                ItemClick="ReplyItem_ItemClick"
+                ContinuumNavigationTransitionInfo.ExitElementContainer="True"
+                ItemTemplate="{StaticResource ReplyListItemTemplate}"
+                ItemContainerStyleSelector="{StaticResource ResourceKey=BackgroundStyleSelecterForReplyItem}"/>
         </DataTemplate>
     </Page.Resources>
 
@@ -69,7 +122,7 @@
         <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" Style="{StaticResource SubheaderTextBlockStyle}" />
+                    <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem
