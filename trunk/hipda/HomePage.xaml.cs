@@ -107,86 +107,43 @@ namespace hipda
             // TODO: 在此处保存页面的唯一状态。
         }
 
-        private async void ForumItem_ItemClick(object sender, ItemClickEventArgs e)
+        private void ForumItem_ItemClick(object sender, ItemClickEventArgs e)
         {
-            // 开启忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
+            //// 开启忙指示器
+            //StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
 
-            Forum forum = (Forum)e.ClickedItem;
-            string forumId = forum.Id;
-            string forumName = forum.Name;
+            //Forum forum = (Forum)e.ClickedItem;
+            //string forumId = forum.Id;
+            //string forumName = forum.Name;
 
-            var data = await DataSource.GetForumsAsync(forum, 1);
-            var pivotItem = new PivotItem
-            {
-                Header = forumName.Length > 10 ? forumName.Substring(0, 10) + "..." : forumName,
-                ContentTemplate = ThreadListTemplate,
-                DataContext = data,
-                Margin = new Thickness(0, 0, 0, 0)
-            };
-
-            // 限制 hubsection 的数量
-            if (Pivot.Items.Count > maxHubSectionCount)
-            {
-                Pivot.Items.RemoveAt(maxHubSectionCount);
-            }
-
-            Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
-            Pivot.SelectedItem = pivotItem;
-
-            // 关闭忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
-        }
-
-        /// <summary>
-        /// 在贴子项上单击时调用
-        /// </summary>
-        private async void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            // 开启忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
-
-            Thread thread = (Thread)e.ClickedItem;
-            string threadId = thread.Id;
-            string threadTitle = thread.Title;
-
-            var data = await DataSource.LoadReplyDataAsync(threadId);
-
-            var pivotItem = new PivotItem
-            {
-                Header = threadTitle.Length > 4 ? threadTitle.Substring(0, 4) + "..." : threadTitle,
-                ContentTemplate = ReplyListTemplate,
-                DataContext = data,
-                Margin = new Thickness(0, 0, 0, 0)
-            };
-
-            // 限制 hubsection 的数量
-            if (Pivot.Items.Count > maxHubSectionCount)
-            {
-                Pivot.Items.RemoveAt(maxHubSectionCount);
-            }
-
-            Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
-            Pivot.SelectedItem = pivotItem;
-
-            // 关闭忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
-
-            //// 导航至相应的目标页，并
-            //// 通过将所需信息作为导航参数传入来配置新页
-            //var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            //if (!Frame.Navigate(typeof(ItemPage), itemId))
+            //var data = await DataSource.GetForumsAsync(forum, 1);
+            //var pivotItem = new PivotItem
             //{
-            //    throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            //    Header = forumName.Length > 10 ? forumName.Substring(0, 10) + "..." : forumName,
+            //    ContentTemplate = ThreadListTemplate,
+            //    DataContext = data,
+            //    Margin = new Thickness(0, 0, 0, 0)
+            //};
+
+            //// 限制 hubsection 的数量
+            //if (Pivot.Items.Count > maxHubSectionCount)
+            //{
+            //    Pivot.Items.RemoveAt(maxHubSectionCount);
             //}
-        }
 
-        /// <summary>
-        /// 在回复项上单击时调用
-        /// </summary>
-        private void ReplyItem_ItemClick(object sender, ItemClickEventArgs e)
-        {
+            //Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
+            //Pivot.SelectedItem = pivotItem;
 
+            //// 关闭忙指示器
+            //StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
+
+            // 导航至相应的目标页，并
+            // 通过将所需信息作为导航参数传入来配置新页
+            Forum forum = (Forum)e.ClickedItem;
+            if (!Frame.Navigate(typeof(PivotPage), forum))
+            {
+                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            }
         }
 
         #region NavigationHelper 注册

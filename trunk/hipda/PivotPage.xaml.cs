@@ -33,8 +33,6 @@ namespace hipda
         private string threadId = string.Empty;
         private string threadTitle = string.Empty;
 
-        private const string FirstGroupName = "FirstGroup";
-
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
@@ -81,8 +79,9 @@ namespace hipda
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: 创建适用于问题域的合适数据模型以替换示例数据
-            //var sampleDataGroup = await DataSource.GetForumAsync("2");
-            //this.DefaultViewModel[FirstGroupName] = sampleDataGroup;
+            Forum forumParam = (Forum)e.NavigationParameter;
+            var data = await DataSource.GetForumsAsync(forumParam, 1);
+            ThreadsPivot.DataContext = data;
         }
 
         /// <summary>
@@ -127,9 +126,12 @@ namespace hipda
         /// </summary>
         private async void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
         {
-            // 动态创建 hub section
-            threadId = ((Thread)e.ClickedItem).Id;
-            threadTitle = ((Thread)e.ClickedItem).Title;
+            // 开启忙指示器
+            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
+
+            Thread thread = (Thread)e.ClickedItem;
+            threadId = thread.Id;
+            threadTitle = thread.Title;
 
             var sampleDataGroup = await DataSource.LoadReplyDataAsync(threadId);
 
