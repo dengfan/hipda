@@ -75,7 +75,7 @@ namespace hipda.Data
         {
             this.Id = id;
             this.Name = name;
-            this.TodayCount = todayCount;
+            this.TodayQuantity = todayCount;
             this.Info = info;
             this.Threads = new ObservableCollection<Thread>();
         }
@@ -83,7 +83,7 @@ namespace hipda.Data
         public string Id { get; private set; }
         public string Name { get; private set; }
         public string Info { get; private set; }
-        public string TodayCount { get; private set; }
+        public string TodayQuantity { get; private set; }
 
         public ObservableCollection<Thread> Threads { get; private set; }
 
