@@ -65,57 +65,6 @@
                 GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"
                 ItemContainerStyle="{StaticResource GroupItemStyle}"/>
         </DataTemplate>
-
-
-
-        <local:BackgroundStyleSelecterForThreadItem x:Key="BackgroundStyleSelecterForThreadItem"/>
-        <local:BackgroundStyleSelecterForReplyItem x:Key="BackgroundStyleSelecterForReplyItem"/>
-
-        <DataTemplate x:Key="ThreadListItemTemplate">
-            <StackPanel>
-                <TextBlock
-                    Text="{Binding Title}"
-                    TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource BodyTextBlockStyle}"/>
-                <TextBlock
-                    Text="{Binding Id}"
-                    TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Key="ReplyListItemTemplate">
-            <StackPanel>
-                <TextBlock
-                    Text="{Binding Content}"
-                    TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource BodyTextBlockStyle}"/>
-                <TextBlock
-                    Text="{Binding OwnerName}"
-                    TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
-            </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Name="ThreadListTemplate">
-            <ListView
-                ItemsSource="{Binding Threads}"
-                IsItemClickEnabled="True"
-                ItemClick="ThreadItem_ItemClick"
-                ContinuumNavigationTransitionInfo.ExitElementContainer="True"
-                ItemTemplate="{StaticResource ThreadListItemTemplate}"
-                ItemContainerStyleSelector="{StaticResource BackgroundStyleSelecterForThreadItem}" />
-        </DataTemplate>
-
-        <DataTemplate x:Name="ReplyListTemplate">
-            <ListView
-                ItemsSource="{Binding Replies}"
-                IsItemClickEnabled="True"
-                ItemClick="ReplyItem_ItemClick"
-                ContinuumNavigationTransitionInfo.ExitElementContainer="True"
-                ItemTemplate="{StaticResource ReplyListItemTemplate}"
-                ItemContainerStyleSelector="{StaticResource ResourceKey=BackgroundStyleSelecterForReplyItem}"/>
-        </DataTemplate>
     </Page.Resources>
 
     <Grid>

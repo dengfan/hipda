@@ -9,6 +9,7 @@ using System.Xml;
 using Windows.Web.Http;
 using Windows.Data.Xml;
 using HtmlAgilityPack;
+using Windows.UI.ViewManagement;
 
 namespace hipda.Data
 {
@@ -124,12 +125,12 @@ namespace hipda.Data
 
         public static async Task<Forum> GetForumsAsync(Forum fourm, int pageNo)
         {
-            await _dataSource.LoadThreadDataAsync(fourm, pageNo);
+            await _dataSource.LoadForumThreadsDataAsync(fourm, pageNo);
 
             return _dataSource.Forums.Single(f => f.Id.Equals(fourm.Id));
         }
 
-        private async Task LoadThreadDataAsync(Forum forum, int pageNo)
+        private async Task LoadForumThreadsDataAsync(Forum forum, int pageNo)
         {
             if (this._forums.Count != 0) return;
 
@@ -148,58 +149,36 @@ namespace hipda.Data
 
             // 载入HTML
             doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
-            var data = doc.DocumentNode.ChildNodes[2].ChildNodes[3].ChildNodes[10].ChildNodes[1].ChildNodes[1].ChildNodes[9].ChildNodes[7].ChildNodes;
 
-            // 这个参数的目的是为了过滤掉首页长期置顶的贴子后，就不再判断每个节点是否是置顶贴，以节省性能
-            bool isNormalThread = false;
+            // 
+            var dataTable = doc.DocumentNode.Descendants().Single(n => n.GetAttributeValue("class", "") == "datatable");
+            var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("normalthread_"));
 
             int i = 0;
-            foreach (var item in data)
+            foreach (var item in tbodies)
             {
-                if (isNormalThread == false && pageNo == 1)
-                {
-                    if (item.Attributes.Count() == 1 && item.Attributes[0].Value.Contains("normalthread_"))
-                    {
-                        var tr = item.ChildNodes[1];
-                        var tdSubject = tr.ChildNodes[5];
-                        var tdSubjectSpan = tdSubject.ChildNodes[3];
-                        var tdSubjectSpanA = tdSubjectSpan.ChildNodes[0];
-                        //var tdAuthor = tr.ChildNodes[7];
-                        //var tdNums = tr.ChildNodes[9];
-                        //var tdLastPost = tr.ChildNodes[11];
+                var tr = item.ChildNodes[1];
+                var th = tr.ChildNodes[5];
+                var span = th.Descendants().Single(n => n.GetAttributeValue("id", "").StartsWith("thread_"));
+                var a = span.ChildNodes[0];
+                //var tdAuthor = tr.ChildNodes[7];
+                //var tdNums = tr.ChildNodes[9];
+                //var tdLastPost = tr.ChildNodes[11];
 
-                        string id = tdSubjectSpan.Attributes[0].Value.Substring("thread_".Length);
-                        string title = tdSubjectSpanA.InnerText;
+                string id = span.Attributes[0].Value.Substring("thread_".Length);
+                string title = a.InnerText;
 
-                        Thread thread = new Thread(i, id, title, "1", "2", "3", "4", "5");
+                Thread thread = new Thread(i, id, title, "1", "2", "3", "4", "5");
 
-                        forum.Threads.Add(thread);
-                        isNormalThread = true;
-                    }
-                }
-                else
-                {
-                    var tr = item.ChildNodes[1];
-                    var tdSubject = tr.ChildNodes[5];
-                    var tdSubjectSpan = tdSubject.ChildNodes[3];
-                    var tdSubjectSpanA = tdSubjectSpan.ChildNodes[0];
-                    //var tdAuthor = tr.ChildNodes[7];
-                    //var tdNums = tr.ChildNodes[9];
-                    //var tdLastPost = tr.ChildNodes[11];
-
-                    string id = tdSubjectSpan.Attributes[0].Value.Substring("thread_".Length);
-                    string title = tdSubjectSpanA.InnerText;
-
-                    Thread thread = new Thread(i, id, title, "1", "2", "3", "4", "5");
-
-                    forum.Threads.Add(thread);
-                    isNormalThread = true;
-                }
+                forum.Threads.Add(thread);
 
                 i++;
             }
 
             this.Forums.Add(forum);
+
+            // 关闭忙指示器
+            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
         }
 
 
@@ -248,7 +227,7 @@ namespace hipda.Data
                 ForumGroup forumGroup = new ForumGroup(forumGroupName);
 
                 var tbodies = mainBox.ChildNodes[5] // table
-                    .Descendants().Where(n => n.GetAttributeValue("id", "").Contains("forum"));
+                    .Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("forum"));
 
                 foreach (var tbody in tbodies)
                 {
@@ -278,6 +257,9 @@ namespace hipda.Data
 
                 this.ForumGroups.Add(forumGroup);
             }
+
+            // 关闭忙指示器
+            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
         }
 
         // 读取指定贴子的回复列表数据
@@ -419,6 +401,9 @@ namespace hipda.Data
                 
                 i++;
             }
+
+            // 关闭忙指示器
+            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
 
             return thread;
         }

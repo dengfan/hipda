@@ -7,7 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:hipda.Data"
     mc:Ignorable="d"
-    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     Background="White" 
     RequestedTheme="Light">
 
@@ -79,8 +78,7 @@
                     <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
-            <PivotItem
-                DataContext="{Binding FirstGroup}"
+            <PivotItem x:Name="ThreadsPivot"
                 Header="{Binding Name}"
                 ContentTemplate="{StaticResource ThreadListTemplate}"
                 CommonNavigationTransitionInfo.IsStaggerElement="True"
