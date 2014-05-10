@@ -5,12 +5,15 @@
     xmlns:local="using:hipda">
     <Application.Resources>
         <ResourceDictionary>
-            <GroupStyle x:Key="listViewGroupStyle">
+            <Style x:Key="GroupHeaderStyle" TargetType="ListViewHeaderItem">
+                <Setter Property="Background" Value="LightGray"/>
+                <Setter Property="Padding" Value="10,5,10,7"/>
+            </Style>
+
+            <GroupStyle x:Key="listViewGroupStyle" HeaderContainerStyle="{StaticResource ResourceKey=GroupHeaderStyle}">
                 <GroupStyle.HeaderTemplate>
                     <DataTemplate>
-                        <Grid Background="LightGray">
-                            <TextBlock Text="{Binding Name}" Foreground="Black" Margin="10" Style="{StaticResource SubheaderTextBlockStyle}" />
-                        </Grid>
+                        <TextBlock Text="{Binding Name}" Style="{StaticResource GroupHeaderTextBlockStyle}" />
                     </DataTemplate>
                 </GroupStyle.HeaderTemplate>
             </GroupStyle>

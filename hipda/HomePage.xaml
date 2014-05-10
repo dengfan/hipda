@@ -25,18 +25,33 @@
         <local:BackgroundStyleSelecterForForumItem x:Key="BackgroundStyleSelecterForForumItem"/>
         <local:ListGroupStyleSelector x:Key="listGroupStyleSelector"/>
         
-        
+        <Style x:Key="GroupItemStyle" TargetType="ListViewItem">
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="BorderThickness"  Value="{StaticResource AppBarBottomBorderThemeThickness}"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+        </Style>
         
         <DataTemplate x:Key="GroupItemTemplate">
             <StackPanel>
-                <TextBlock
-                    Text="{Binding Name}"
-                    TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource BodyTextBlockStyle}"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Text="{Binding Name}"
+                        TextWrapping="WrapWholeWords"
+                        Style="{ThemeResource BodyTextBlockStyle}">
+                    </TextBlock>
+                    <TextBlock
+                        Text="{Binding TodayQuantity}"
+                        TextWrapping="WrapWholeWords"
+                        Style="{ThemeResource BaseTextBlockStyle}"
+                        Foreground="{ThemeResource PhoneAccentBrush}"
+                        FontWeight="Bold">
+                    </TextBlock>
+                </StackPanel>
+                
                 <TextBlock
                     Text="{Binding Info}"
                     TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
+                    Style="{ThemeResource ControlContextualInfoTextBlockStyle}"/>
             </StackPanel>
         </DataTemplate>
 
@@ -45,7 +60,8 @@
                 ItemsSource="{Binding Source={StaticResource cvsForumGroups}}"
                 ContinuumNavigationTransitionInfo.ExitElementContainer="True"
                 ItemTemplate="{StaticResource GroupItemTemplate}"
-                GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"/>
+                GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"
+                ItemContainerStyle="{StaticResource GroupItemStyle}"/>
         </DataTemplate>
     </Page.Resources>
 
@@ -53,7 +69,7 @@
         <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
+                    <TextBlock Text="{Binding}" Style="{StaticResource SubheaderTextBlockStyle}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem
