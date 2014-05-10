@@ -90,8 +90,8 @@ namespace hipda
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: 创建适用于问题域的合适数据模型以替换示例数据
-            var sampleDataGroup = await DataSource.LoadFormsDataAsync();
-            this.DefaultViewModel[FirstGroupName] = sampleDataGroup;
+            var sampleDataGroup = await DataSource.GetForumGroupsAsync();
+            cvsForumGroups.Source = sampleDataGroup;
         }
 
         /// <summary>

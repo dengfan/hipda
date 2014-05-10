@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     Background="WhiteSmoke"
     RequestedTheme="Light">
 
@@ -21,9 +20,14 @@
     </Page.Transitions>
     
     <Page.Resources>
+        <CollectionViewSource x:Name="cvsForumGroups" IsSourceGrouped="True" ItemsPath="Forums"/>
+
         <local:BackgroundStyleSelecterForForumItem x:Key="BackgroundStyleSelecterForForumItem"/>
+        <local:ListGroupStyleSelector x:Key="listGroupStyleSelector"/>
         
-        <DataTemplate x:Key="ForumListItemTemplate">
+        
+        
+        <DataTemplate x:Key="GroupItemTemplate">
             <StackPanel>
                 <TextBlock
                     Text="{Binding Name}"
@@ -36,12 +40,12 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="ForumListTemplate">
+        <DataTemplate x:Key="GroupTemplate">
             <ListView 
-                ItemsSource="{Binding Forums}" 
+                ItemsSource="{Binding Source={StaticResource cvsForumGroups}}"
                 ContinuumNavigationTransitionInfo.ExitElementContainer="True"
-                ItemTemplate="{StaticResource ForumListItemTemplate}"
-                ItemContainerStyleSelector="{StaticResource BackgroundStyleSelecterForForumItem}" />
+                ItemTemplate="{StaticResource GroupItemTemplate}"
+                GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"/>
         </DataTemplate>
     </Page.Resources>
 
@@ -52,11 +56,10 @@
                     <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
-            <PivotItem 
-                DataContext="{Binding FirstGroup}" 
+            <PivotItem
                 Header="版区" 
                 CommonNavigationTransitionInfo.IsStaggerElement="True"
-                ContentTemplate="{StaticResource ForumListTemplate}"
+                ContentTemplate="{StaticResource GroupTemplate}"
                 Margin="0"/>
             <!--<PivotItem Header="个人中心" Margin="0">
                 <DataTemplate>
