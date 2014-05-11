@@ -130,13 +130,12 @@ namespace hipda
             string threadId = thread.Id;
             string threadTitle = thread.Title;
 
-            var sampleDataGroup = await DataSource.GetThreadAsync(thread.ForumId, thread, 1);
-
+            var data = await DataSource.GetThreadAsync(thread.ForumId, thread, 1);
             var pivotItem = new PivotItem
             {
                 Header = threadTitle.Length > 4 ? threadTitle.Substring(0, 4) + "..." : threadTitle,
                 ContentTemplate = ReplyListTemplate,
-                DataContext = sampleDataGroup,
+                DataContext = data,
                 Margin = new Thickness(0,0,0,0)
             };
 
@@ -148,14 +147,6 @@ namespace hipda
 
             Pivot.Items.Insert(1, pivotItem);
             Pivot.SelectedItem = pivotItem;
-
-            //// 导航至相应的目标页，并
-            //// 通过将所需信息作为导航参数传入来配置新页
-            //var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            //if (!Frame.Navigate(typeof(ItemPage), itemId))
-            //{
-            //    throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
-            //}
         }
 
         /// <summary>
@@ -164,14 +155,6 @@ namespace hipda
         private void ReplyItem_ItemClick(object sender, ItemClickEventArgs e)
         { 
 
-        }
-
-        /// <summary>
-        /// 滚动到视图中后，为第二个数据透视项加载内容。
-        /// </summary>
-        private async void SecondPivot_Loaded(object sender, RoutedEventArgs e)
-        {
-            
         }
 
         #region NavigationHelper 注册
