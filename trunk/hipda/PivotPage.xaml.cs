@@ -77,8 +77,28 @@ namespace hipda
         {
             // TODO: 创建适用于问题域的合适数据模型以替换示例数据
             Forum forumParam = (Forum)e.NavigationParameter;
-            var data = await DataSource.GetForumsAsync(forumParam, 1);
-            ThreadsPivot.DataContext = data;
+
+            string forumId = forumParam.Id;
+            string forumTitle = forumParam.Name;
+            
+            var pivotItem = new PivotItem
+            {
+                Header = forumTitle.Length > 10 ? forumTitle.Substring(0, 10) + "..." : forumTitle,
+                ContentTemplate = ThreadListTemplate,
+                Margin = new Thickness(0, 0, 0, 0)
+            };
+
+            // 限制 hubsection 的数量
+            if (Pivot.Items.Count > maxHubSectionCount)
+            {
+                Pivot.Items.RemoveAt(maxHubSectionCount);
+            }
+
+            int index = Pivot.Items.Count == 0 ? 0 : Pivot.Items.Count;
+            Pivot.Items.Insert(0, pivotItem);
+            Pivot.SelectedItem = pivotItem;
+
+            pivotItem.DataContext = await DataSource.GetForumsAsync(forumParam, 1);
         }
 
         /// <summary>
@@ -130,12 +150,10 @@ namespace hipda
             string threadId = thread.Id;
             string threadTitle = thread.Title;
 
-            var data = await DataSource.GetThreadAsync(thread.ForumId, thread, 1);
             var pivotItem = new PivotItem
             {
                 Header = threadTitle.Length > 4 ? threadTitle.Substring(0, 4) + "..." : threadTitle,
                 ContentTemplate = ReplyListTemplate,
-                DataContext = data,
                 Margin = new Thickness(0,0,0,0)
             };
 
@@ -145,8 +163,10 @@ namespace hipda
                 Pivot.Items.RemoveAt(maxHubSectionCount);
             }
 
-            Pivot.Items.Insert(1, pivotItem);
+            Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
             Pivot.SelectedItem = pivotItem;
+
+            pivotItem.DataContext = await DataSource.GetThreadAsync(thread.ForumId, thread, 1);
         }
 
         /// <summary>

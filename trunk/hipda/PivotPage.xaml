@@ -50,7 +50,7 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="ThreadListTemplate">
+        <DataTemplate x:Name="ThreadListTemplate">
             <ListView
                 ItemsSource="{Binding Threads}"
                 IsItemClickEnabled="True"
@@ -78,11 +78,6 @@
                     <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
-            <PivotItem x:Name="ThreadsPivot"
-                Header="{Binding Name}"
-                ContentTemplate="{StaticResource ThreadListTemplate}"
-                CommonNavigationTransitionInfo.IsStaggerElement="True"
-                Margin="0"/>
         </Pivot>
     </Grid>
 
