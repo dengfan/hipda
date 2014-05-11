@@ -187,7 +187,7 @@ namespace hipda
                 string text = item.Header.ToString().Substring(0, 1);
                 if (Pivot.SelectedItem == item)
                 {
-                    navTextContainer.Append(string.Format("<{0}>-", text));
+                    navTextContainer.Append(string.Format("@{0} -", text));
                 }
                 else
                 {
