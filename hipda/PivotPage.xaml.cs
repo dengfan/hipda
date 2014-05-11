@@ -29,7 +29,7 @@ namespace hipda
 {
     public sealed partial class PivotPage : Page
     {
-        private const int maxHubSectionCount = 4;
+        private const int maxHubSectionCount = 6;
 
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
