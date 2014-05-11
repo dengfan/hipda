@@ -30,9 +30,6 @@ namespace hipda
     {
         private const int maxHubSectionCount = 4;
 
-        private string threadId = string.Empty;
-        private string threadTitle = string.Empty;
-
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
@@ -130,12 +127,12 @@ namespace hipda
             StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
 
             Thread thread = (Thread)e.ClickedItem;
-            threadId = thread.Id;
-            threadTitle = thread.Title;
+            string threadId = thread.Id;
+            string threadTitle = thread.Title;
 
-            var sampleDataGroup = await DataSource.LoadReplyDataAsync(threadId);
+            var sampleDataGroup = await DataSource.GetThreadAsync(thread.ForumId, thread, 1);
 
-            PivotItem pivotItem = new PivotItem()
+            var pivotItem = new PivotItem
             {
                 Header = threadTitle.Length > 4 ? threadTitle.Substring(0, 4) + "..." : threadTitle,
                 ContentTemplate = ReplyListTemplate,

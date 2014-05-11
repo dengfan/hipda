@@ -15,16 +15,21 @@ namespace hipda.Data
 {
     public class Reply
     {
-        public Reply(int index, string ownerId, string ownerName, string content, string createTime)
+        public Reply(int index, int pageNo, string threadId, string ownerId, string ownerName, string content, string createTime)
         {
             this.Index = index;
+            this.PageNo = pageNo;
+            this.ThreadId = threadId;
             this.OwnerId = ownerId;
             this.OwnerName = ownerName;
             this.Content = content;
             this.CreateTime = createTime;
         }
 
+        
         public int Index { get; private set; }
+        public int PageNo { get; private set; }
+        public string ThreadId { get; private set; }
         public string OwnerName { get; private set; }
 
         public string OwnerId { get; private set; }
@@ -41,9 +46,11 @@ namespace hipda.Data
 
     public class Thread
     {
-        public Thread(int index, string id, string title, string replyAndViewInfo, string ownerName, string ownerId, string createTime, string lastReplyTime)
+        public Thread(int index, int pageNo, string forumId, string id, string title, string replyAndViewInfo, string ownerName, string ownerId, string createTime, string lastReplyTime)
         {
             this.Index = index;
+            this.PageNo = pageNo;
+            this.ForumId = forumId;
             this.Id = id;
             this.Title = title;
             this.ReplyAndViewInfo = replyAndViewInfo;
@@ -55,6 +62,8 @@ namespace hipda.Data
         }
 
         public int Index { get; private set; }
+        public int PageNo { get; private set; }
+        public string ForumId { get; private set; }
         public string Id { get; private set; }
         public string Title { get; private set; }
         public string ReplyAndViewInfo { get; private set; }
@@ -132,7 +141,11 @@ namespace hipda.Data
 
         private async Task LoadForumThreadsDataAsync(Forum forum, int pageNo)
         {
-            if (this._forums.Count != 0) return;
+            // 如果数据已存在，则不加载
+            if (this._forums.Count(f => f.Id.Equals(forum.Id) && f.Threads.Count(t => t.PageNo == pageNo) > 0) > 0)
+            {
+                return;
+            }
 
             HttpClient httpClient = new HttpClient();
             Helpers.CreateHttpClient(ref httpClient);
@@ -168,7 +181,7 @@ namespace hipda.Data
                 string id = span.Attributes[0].Value.Substring("thread_".Length);
                 string title = a.InnerText;
 
-                Thread thread = new Thread(i, id, title, "1", "2", "3", "4", "5");
+                Thread thread = new Thread(i, pageNo, forum.Id, id, title, "1", "2", "3", "4", "5");
 
                 forum.Threads.Add(thread);
 
@@ -262,25 +275,44 @@ namespace hipda.Data
             StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
         }
 
-        // 读取指定贴子的回复列表数据
-        public static async Task<Thread> LoadReplyDataAsync(string threadId)
+        public static async Task<Thread> GetThreadAsync(string forumId, Thread thread, int pageNo)
         {
+            await _dataSource.LoadReplyDataAsync(forumId, thread, pageNo);
+
+            return _dataSource
+                .Forums.Single(f => f.Id.Equals(forumId))
+                .Threads.Single(t => t.Id.Equals(thread.Id));
+        }
+
+        // 读取指定贴子的回复列表数据
+        public async Task LoadReplyDataAsync(string forumId, Thread thread, int pageNo)
+        {
+            // 如果数据已存在，则不读取
+            Forum forum = this._forums.Single(f => f.Id.Equals(forumId));
+            if (forum != null)
+            {
+                Thread threadData = forum.Threads.Single(t => t.Id.Equals(thread.Id));
+                if (threadData != null)
+                {
+                    if (threadData.Replies.Count(r => r.PageNo == pageNo) > 0)
+                    {
+                        return;
+                    }
+                }
+            }
+
             HttpClient httpClient = new HttpClient();
             Helpers.CreateHttpClient(ref httpClient);
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            int pageNo = 1;
-
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}", threadId, pageNo);
+            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}", thread.Id, pageNo);
             HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
             response.Content.Headers.ContentType.CharSet = "GBK";
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
-
-            Thread thread = new Thread(1, threadId, "fadsf", "", "", "", "", "");
 
             // 载入HTML
             doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
@@ -313,7 +345,6 @@ namespace hipda.Data
                     
                     throw new Exception("author node");
                 }
-
                 
 
                 string content = string.Empty;
@@ -396,16 +427,16 @@ namespace hipda.Data
                     }
                 }
 
-                Reply reply = new Reply(i, ownerId, ownerName, content, postTime);
+                Reply reply = new Reply(i, pageNo, thread.Id, ownerId, ownerName, content, postTime);
                 thread.Replies.Add(reply);
                 
                 i++;
             }
 
+            this._forums.Single(f => f.Id.Equals(forumId)).Threads.Add(thread);
+
             // 关闭忙指示器
             StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
-
-            return thread;
         }
     }
 }
