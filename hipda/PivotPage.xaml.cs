@@ -1,6 +1,7 @@
 ﻿using hipda.Common;
 using hipda.Data;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -175,6 +176,30 @@ namespace hipda
         private void ReplyItem_ItemClick(object sender, ItemClickEventArgs e)
         { 
 
+        }
+
+        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            StringBuilder navTextContainer = new StringBuilder();
+
+            foreach (PivotItem item in Pivot.Items)
+            {
+                string text = item.Header.ToString().Substring(0, 1);
+                if (Pivot.SelectedItem == item)
+                {
+                    navTextContainer.Append(string.Format("<{0}>-", text));
+                }
+                else
+                {
+                    navTextContainer.Append(string.Format(" {0} -", text));
+                }
+            }
+
+            string navText = navTextContainer.ToString();
+            navText = navText.Substring(0, navText.Length - 1);
+
+            StatusBar.GetForCurrentView().ProgressIndicator.Text = navText;
+            await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
         }
 
         #region NavigationHelper 注册
