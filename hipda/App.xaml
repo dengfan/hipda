@@ -6,7 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <Style x:Key="GroupHeaderStyle" TargetType="ListViewHeaderItem">
-                <Setter Property="Background" Value="LightGray"/>
+                <Setter Property="Background" Value="WhiteSmoke"/>
                 <Setter Property="Padding" Value="10,5,10,7"/>
             </Style>
 
