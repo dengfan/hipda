@@ -89,9 +89,7 @@ namespace hipda
         /// 的字典。首次访问页面时，该状态将为 null。</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: 创建适用于问题域的合适数据模型以替换示例数据
-            var sampleDataGroup = await DataSource.GetForumGroupsAsync();
-            cvsForumGroups.Source = sampleDataGroup;
+            cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
         }
 
         /// <summary>
