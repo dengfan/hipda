@@ -198,7 +198,7 @@ namespace hipda
             string navText = navTextContainer.ToString();
             navText = navText.Substring(0, navText.Length - 1);
 
-            StatusBar.GetForCurrentView().ProgressIndicator.Text = navText;
+            StatusBar.GetForCurrentView().ProgressIndicator.Text = string.Concat("Hi!PDA ", navText);
             await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
         }
 
