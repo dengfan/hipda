@@ -85,11 +85,10 @@
 
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton x:Uid="AddAppBarButton" x:Name="AddAppBarButton" Label="主贴列表" Icon="Home" Click="AddAppBarButton_Click" />
-            <CommandBar.SecondaryCommands>
-                <AppBarButton x:Uid="SecondaryButton1" x:Name="SecondaryButton1" Label="secondary command 1" />
-                <AppBarButton x:Uid="SecondaryButton2" x:Name="SecondaryButton2" Label="secondary command 2" />
-            </CommandBar.SecondaryCommands>
+            <AppBarButton x:Name="SecondaryButton" Label="个人中心" />
+            <AppBarButton x:Name="SecondaryButton1" Icon="DockBottom" Label="地板"/>
+            <AppBarButton x:Name="SecondaryButton2" Icon="Tag" Label="BS版" />
+            <AppBarButton x:Name="SecondaryButton3" Icon="Page2" Label="Eink版" />
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
