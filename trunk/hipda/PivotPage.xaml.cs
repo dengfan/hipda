@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Text.RegularExpressions;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -30,6 +31,67 @@ namespace hipda
     public sealed partial class PivotPage : Page
     {
         private const int maxHubSectionCount = 6;
+        private const string regexForTitle = @"[^@.a-zA-Z0-9\u4e00-\u9fa5]";
+
+
+        public static string GetFirstString(string stringToSub, int length)
+        {
+
+            Regex regex = new Regex(@"[\u4e00-\u9fa5]+");
+
+            char[] stringChar = stringToSub.ToCharArray();
+
+            StringBuilder sb = new StringBuilder();
+
+            int nLength = 0;
+
+            for (int i = 0; i < stringChar.Length; i++)
+            {
+
+                if (regex.IsMatch((stringChar[i]).ToString()))
+                {
+
+                    nLength += 2;
+
+                }
+
+                else
+                {
+
+                    nLength = nLength + 1;
+
+                }
+
+
+
+                if (nLength <= length)
+                {
+
+                    sb.Append(stringChar[i]);
+
+                }
+
+                else
+                {
+
+                    break;
+
+                }
+
+            }
+
+            if (sb.ToString() != stringToSub)
+            {
+
+                sb.Append("...");
+
+            }
+
+            return sb.ToString();
+
+        }
+
+
 
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
@@ -81,10 +143,31 @@ namespace hipda
 
             string forumId = forumParam.Id;
             string forumTitle = forumParam.Name;
-            
+            switch (forumId)
+            {
+                case "6":
+                    forumTitle = "BS版";
+                    break;
+                case "7":
+                    forumTitle = "G版";
+                    break;
+                case "14":
+                    forumTitle = "Win版";
+                    break;
+                case "2":
+                    forumTitle = "地板";
+                    break;
+                case "59":
+                    forumTitle = "E版";
+                    break;
+                default:
+                    forumTitle = forumTitle.Substring(0, 1) + "版";
+                    break;
+            }
+
             var pivotItem = new PivotItem
             {
-                Header = forumTitle.Length > 10 ? forumTitle.Substring(0, 10) + "..." : forumTitle,
+                Header = forumTitle,
                 ContentTemplate = ThreadListTemplate,
                 Margin = new Thickness(0, 0, 0, 0)
             };
@@ -150,10 +233,11 @@ namespace hipda
             Thread thread = (Thread)e.ClickedItem;
             string threadId = thread.Id;
             string threadTitle = thread.Title;
-
+            threadTitle = Regex.Replace(threadTitle, regexForTitle, string.Empty);
+            if (string.IsNullOrEmpty(threadTitle)) threadTitle = "标题";
             var pivotItem = new PivotItem
             {
-                Header = threadTitle.Length > 4 ? threadTitle.Substring(0, 4) + "..." : threadTitle,
+                Header = GetFirstString(threadTitle, 16),
                 ContentTemplate = ReplyListTemplate,
                 Margin = new Thickness(0,0,0,0)
             };
@@ -184,7 +268,12 @@ namespace hipda
 
             foreach (PivotItem item in Pivot.Items)
             {
-                string text = item.Header.ToString().Substring(0, 1);
+                string text = item.Header.ToString();
+                if (!"|BS版|G版|Win版|地板|E版|".Contains(text))
+                { 
+                    text = item.Header.ToString().Substring(0, 1);
+                }
+
                 if (Pivot.SelectedItem == item)
                 {
                     navTextContainer.Append(string.Format("@{0} -", text));
