@@ -72,7 +72,9 @@
     </Page.Resources>
 
     <Grid>
-        <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True" SelectionChanged="Pivot_SelectionChanged">
+        <Pivot x:Name="Pivot" 
+               CommonNavigationTransitionInfo.IsStaggerElement="True" 
+               SelectionChanged="Pivot_SelectionChanged">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
