@@ -30,7 +30,7 @@ namespace hipda
 {
     public sealed partial class PivotPage : Page
     {
-        private const int maxHubSectionCount = 6;
+        private const int maxHubSectionCount = 5;
         private const string regexForTitle = @"[^@.a-zA-Z0-9\u4e00-\u9fa5]";
 
 

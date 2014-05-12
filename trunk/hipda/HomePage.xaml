@@ -68,7 +68,8 @@
     </Page.Resources>
 
     <Grid>
-        <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
+        <Pivot x:Name="Pivot" 
+               CommonNavigationTransitionInfo.IsStaggerElement="True">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
@@ -79,11 +80,11 @@
                 CommonNavigationTransitionInfo.IsStaggerElement="True"
                 ContentTemplate="{StaticResource GroupTemplate}"
                 Margin="0"/>
-            <!--<PivotItem Header="个人中心" Margin="0">
+            <PivotItem Header="个人中心" Margin="0">
                 <DataTemplate>
                     <ListView></ListView>
                 </DataTemplate>
-            </PivotItem>-->
+            </PivotItem>
         </Pivot>
     </Grid>
 </Page>
