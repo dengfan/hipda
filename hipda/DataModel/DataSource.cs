@@ -44,6 +44,18 @@ namespace hipda.Data
         }
     }
 
+    public class ReplyPage
+    {
+        public ReplyPage(int pageNo)
+        {
+            this.PageNo = pageNo;
+            this.Replies = new ObservableCollection<Reply>();
+        }
+
+        public int PageNo { get; private set; }
+        public ObservableCollection<Reply> Replies { get; private set; }
+    }
+
     public class Thread
     {
         public Thread(int index, int pageNo, string forumId, string id, string title, string replyAndViewInfo, string ownerName, string ownerId, string createTime, string lastReplyTime)
@@ -58,7 +70,7 @@ namespace hipda.Data
             this.OwnerId = ownerId;
             this.CreateTime = createTime;
             this.LastReplyTime = lastReplyTime;
-            this.Replies = new ObservableCollection<Reply>();
+            this.ReplyPages = new ObservableCollection<ReplyPage>();
         }
 
         public int Index { get; private set; }
@@ -71,7 +83,7 @@ namespace hipda.Data
         public string OwnerId { get; private set; }
         public string CreateTime { get; private set; }
         public string LastReplyTime { get; private set; }
-        public ObservableCollection<Reply> Replies { get; private set; }
+        public ObservableCollection<ReplyPage> ReplyPages { get; private set; }
 
         public override string ToString()
         {
@@ -296,10 +308,13 @@ namespace hipda.Data
                 Thread threadData = forum.Threads.Single(t => t.Id.Equals(thread.Id));
                 if (threadData != null)
                 {
-                    if (threadData.Replies.Count(r => r.PageNo == pageNo) > 0)
+                    if (threadData.ReplyPages.SingleOrDefault(rp => rp.PageNo == pageNo) != null)
                     {
                         return;
                     }
+
+                    this.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id.Equals(thread.Id)).ReplyPages.Add(new ReplyPage(pageNo));
+
 
                     HttpClient httpClient = new HttpClient();
                     Helpers.CreateHttpClient(ref httpClient);
@@ -388,7 +403,8 @@ namespace hipda.Data
                             }
 
                             Reply reply = new Reply(i, pageNo, thread.Id, ownerId, ownerName, content, postTime);
-                            this.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id.Equals(thread.Id)).Replies.Add(reply);
+
+                            this.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id.Equals(thread.Id)).ReplyPages.Single(rp => rp.PageNo == pageNo).Replies.Add(reply);
 
                             i++;
                         }

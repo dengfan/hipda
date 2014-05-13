@@ -251,7 +251,9 @@ namespace hipda
             Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
             Pivot.SelectedItem = pivotItem;
 
-            pivotItem.DataContext = await DataSource.GetThreadAsync(thread.ForumId, thread, 1);
+            Thread data = await DataSource.GetThreadAsync(thread.ForumId, thread, 1);
+            pivotItem.DataContext = data;
+            cvsRepayPages.Source = data.ReplyPages;
         }
 
         /// <summary>
