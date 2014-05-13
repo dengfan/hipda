@@ -14,6 +14,7 @@
         <Button x:Name="btnLogin" Content="登录" HorizontalAlignment="Left" Margin="147,202,0,0" VerticalAlignment="Top" Click="btnLogin_Click"/>
         <TextBlock HorizontalAlignment="Left" Margin="58,97,0,0" TextWrapping="Wrap" Text="账号" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="58,159,0,0" TextWrapping="Wrap" Text="密码" VerticalAlignment="Top"/>
-        <TextBox x:Name="OutputField" HorizontalAlignment="Left" Margin="10,274,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="356" Width="380"/>
+        <TextBox x:Name="OutputField" HorizontalAlignment="Left" Margin="10,274,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="145" Width="380"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,433,0,0" TextWrapping="Wrap" Text="此乃临时登录界面，做完主要功能再优化这个。请使用能正常登录使用的账号登录。我暂时没作各种登录判断。" VerticalAlignment="Top" Width="380"/>
     </Grid>
 </Page>

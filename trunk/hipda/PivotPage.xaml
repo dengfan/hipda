@@ -24,6 +24,9 @@
         <local:BackgroundStyleSelecterForThreadItem x:Key="BackgroundStyleSelecterForThreadItem"/>
         <local:BackgroundStyleSelecterForReplyItem x:Key="BackgroundStyleSelecterForReplyItem"/>
 
+        <local:ListGroupStyleSelectorFroReply x:Key="replyListViewGroupStyle"/>
+        <CollectionViewSource x:Name="cvsRepayPages" IsSourceGrouped="True" ItemsPath="Replies"/>
+
         <DataTemplate x:Key="ThreadListItemTemplate">
             <StackPanel>
                 <TextBlock
@@ -62,12 +65,15 @@
 
         <DataTemplate x:Name="ReplyListTemplate">
             <ListView
-                ItemsSource="{Binding Replies}"
+                ItemsSource="{Binding Source={StaticResource cvsRepayPages}}"
                 IsItemClickEnabled="True"
                 ItemClick="ReplyItem_ItemClick"
+                SelectionChanged=""
                 ContinuumNavigationTransitionInfo.ExitElementContainer="True"
                 ItemTemplate="{StaticResource ReplyListItemTemplate}"
-                ItemContainerStyleSelector="{StaticResource ResourceKey=BackgroundStyleSelecterForReplyItem}"/>
+                GroupStyleSelector="{StaticResource replyListViewGroupStyle}"
+                ItemContainerStyleSelector="{StaticResource ResourceKey=BackgroundStyleSelecterForReplyItem}"
+                />
         </DataTemplate>
     </Page.Resources>
 
@@ -84,11 +90,11 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar>
-            <AppBarButton x:Name="SecondaryButton" Label="个人中心" />
-            <AppBarButton x:Name="SecondaryButton1" Icon="DockBottom" Label="地板"/>
-            <AppBarButton x:Name="SecondaryButton2" Icon="Tag" Label="BS版" />
-            <AppBarButton x:Name="SecondaryButton3" Icon="Page2" Label="Eink版" />
+        <CommandBar ClosedDisplayMode="Minimal">
+            <AppBarButton x:Name="SecondaryButton" Icon="Edit" Label="回复" />
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="SecondaryButton2" Icon="Read" Label="个人中心" />
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

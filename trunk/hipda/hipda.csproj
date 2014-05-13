@@ -111,6 +111,7 @@
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="HttpJsonContent.cs" />
+    <Compile Include="ListGroupStyleSelectorForReply.cs" />
     <Compile Include="Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
