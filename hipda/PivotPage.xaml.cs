@@ -238,7 +238,6 @@ namespace hipda
             var pivotItem = new PivotItem
             {
                 Header = GetFirstString(threadTitle, 16),
-                ContentTemplate = ReplyListTemplate,
                 Margin = new Thickness(0,0,0,0)
             };
 
@@ -253,14 +252,37 @@ namespace hipda
 
             Thread data = await DataSource.GetThreadAsync(thread.ForumId, thread, 1);
             pivotItem.DataContext = data;
-            cvsRepayPages.Source = data.ReplyPages;
-        }
+            
+            var cvs = new CollectionViewSource();
+            cvs.IsSourceGrouped = true;
+            cvs.ItemsPath = new PropertyPath("Replies");
+            cvs.Source = data.ReplyPages;
 
-        /// <summary>
-        /// 在回复项上单击时调用
-        /// </summary>
-        private void ReplyItem_ItemClick(object sender, ItemClickEventArgs e)
-        { 
+            var listView = new ListView
+            {
+                ItemsSource = cvs.View,
+                //IsItemClickEnabled = true,
+                //ContinuumNavigationTransitionInfo.ExitElementContainer="True",
+                ItemTemplate = ReplyListItemTemplate,
+                GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
+                ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
+                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge,
+                IncrementalLoadingThreshold = 4.0,
+                DataFetchSize = 8.0
+            };
+            pivotItem.Content = listView;
+
+            //_employees = new MyIncrementalLoading<Employee>(1000, (startIndex, count) =>
+            //{
+            //    lblLog.Text += string.Format("从索引 {0} 处开始获取 {1} 条数据", startIndex, count);
+            //    lblLog.Text += Environment.NewLine;
+
+            //    return TestData.GetEmployees().Skip(startIndex).Take(count).ToList();
+            //});
+
+            //_employees.CollectionChanged += _employees_CollectionChanged;
+
+            //listView.ItemsSource = _employees;
 
         }
 
