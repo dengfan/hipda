@@ -93,10 +93,11 @@ namespace hipda.Data
 
     public class Forum
     {
-        public Forum(string id, string name, string todayCount, string info)
+        public Forum(string id, string name, string alias, string todayCount, string info)
         {
             this.Id = id;
             this.Name = name;
+            this.Alias = alias;
             this.TodayQuantity = todayCount;
             this.Info = info;
             this.Threads = new ObservableCollection<Thread>();
@@ -104,6 +105,7 @@ namespace hipda.Data
 
         public string Id { get; private set; }
         public string Name { get; private set; }
+        public string Alias { get; private set; }
         public string Info { get; private set; }
         public string TodayQuantity { get; private set; }
 
@@ -205,6 +207,28 @@ namespace hipda.Data
                     var a = h2.ChildNodes[0];
                     string forumId = a.Attributes[0].Value.Substring("forumdisplay.php?fid=".Length);
                     string forumName = a.InnerText;
+                    string forumAlias = forumName;
+                    switch (forumId)
+                    {
+                        case "6":
+                            forumAlias = "BS版";
+                            break;
+                        case "7":
+                            forumAlias = "G版";
+                            break;
+                        case "14":
+                            forumAlias = "Win版";
+                            break;
+                        case "2":
+                            forumAlias = "地板";
+                            break;
+                        case "59":
+                            forumAlias = "E版";
+                            break;
+                        default:
+                            forumAlias = string.Format("{0}版", forumAlias.Substring(0, 1));
+                            break;
+                    }
 
                     string forumTodayQuantity = string.Empty;
                     if (h2.ChildNodes.Count == 2)
@@ -215,7 +239,7 @@ namespace hipda.Data
 
                     string forumInfo = p.InnerText;
 
-                    forumGroup.Forums.Add(new Forum(forumId, forumName, forumTodayQuantity, forumInfo));
+                    forumGroup.Forums.Add(new Forum(forumId, forumName, forumAlias, forumTodayQuantity, forumInfo));
                 }
 
                 this.ForumGroups.Add(forumGroup);
