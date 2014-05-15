@@ -108,7 +108,7 @@ namespace hipda
         private void ForumItem_ItemClick(object sender, ItemClickEventArgs e)
         {
             Forum forum = (Forum)e.ClickedItem;
-            string data = string.Format("{0}&{1}", forum.Id, forum.Alias);
+            string data = string.Format("{0},{1}", forum.Id, forum.Alias);
             if (!Frame.Navigate(typeof(PivotPage), data))
             {
                 throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));

@@ -140,7 +140,7 @@ namespace hipda
         {
             // TODO: 创建适用于问题域的合适数据模型以替换示例数据
             string dataStr = (string)e.NavigationParameter;
-            string[] data = dataStr.Split('&');
+            string[] data = dataStr.Split(',');
             string forumId = data[0];
             string forumName = data[1];
 
