@@ -139,35 +139,14 @@ namespace hipda
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: 创建适用于问题域的合适数据模型以替换示例数据
-            Forum forumParam = (Forum)e.NavigationParameter;
-
-            string forumId = forumParam.Id;
-            string forumTitle = forumParam.Name;
-            switch (forumId)
-            {
-                case "6":
-                    forumTitle = "BS版";
-                    break;
-                case "7":
-                    forumTitle = "G版";
-                    break;
-                case "14":
-                    forumTitle = "Win版";
-                    break;
-                case "2":
-                    forumTitle = "地板";
-                    break;
-                case "59":
-                    forumTitle = "E版";
-                    break;
-                default:
-                    forumTitle = forumTitle.Substring(0, 1) + "版";
-                    break;
-            }
+            string dataStr = (string)e.NavigationParameter;
+            string[] data = dataStr.Split('&');
+            string forumId = data[0];
+            string forumName = data[1];
 
             var pivotItem = new PivotItem
             {
-                Header = forumTitle,
+                Header = forumName,
                 ContentTemplate = ThreadListTemplate,
                 Margin = new Thickness(0, 0, 0, 0)
             };
@@ -182,7 +161,7 @@ namespace hipda
             Pivot.Items.Insert(0, pivotItem);
             Pivot.SelectedItem = pivotItem;
 
-            pivotItem.DataContext = await DataSource.GetForumsAsync(forumParam, 1);
+            pivotItem.DataContext = await DataSource.GetForumsAsync(new Forum(forumId, forumName, string.Empty, string.Empty, string.Empty), 1);
         }
 
         /// <summary>
