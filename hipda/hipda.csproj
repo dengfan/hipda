@@ -105,6 +105,8 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="DataModel\DataSource.cs" />
+    <Compile Include="DataModel\GeneratorIncrementalLoadingClass.cs" />
+    <Compile Include="DataModel\IncrementalLoadingBase.cs" />
     <Compile Include="ListGroupStyleSelector.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="HomePage.xaml.cs">
@@ -142,7 +144,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataModel\SampleData.json" />
     <PRIResource Include="Strings\zh-CN\Resources.resw">
       <SubType>Designer</SubType>
     </PRIResource>
