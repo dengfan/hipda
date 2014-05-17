@@ -213,7 +213,7 @@ namespace hipda
             string threadId = thread.Id;
             string threadTitle = thread.Title;
             threadTitle = Regex.Replace(threadTitle, regexForTitle, string.Empty);
-            if (string.IsNullOrEmpty(threadTitle)) threadTitle = "标题";
+            if (string.IsNullOrEmpty(threadTitle)) threadTitle = "无标题";
             var pivotItem = new PivotItem
             {
                 Header = GetFirstString(threadTitle, 16),
