@@ -44,17 +44,17 @@ namespace hipda.Data
         }
     }
 
-    public class ReplyPage
-    {
-        public ReplyPage(int pageNo)
-        {
-            this.PageNo = pageNo;
-            this.Replies = new ObservableCollection<Reply>();
-        }
+    //public class ReplyPage
+    //{
+    //    public ReplyPage(int pageNo)
+    //    {
+    //        this.PageNo = pageNo;
+    //        this.Replies = new ObservableCollection<Reply>();
+    //    }
 
-        public int PageNo { get; private set; }
-        public ObservableCollection<Reply> Replies { get; private set; }
-    }
+    //    public int PageNo { get; private set; }
+    //    public ObservableCollection<Reply> Replies { get; private set; }
+    //}
 
     public class Thread
     {
@@ -70,7 +70,7 @@ namespace hipda.Data
             this.OwnerId = ownerId;
             this.CreateTime = createTime;
             this.LastReplyTime = lastReplyTime;
-            this.ReplyPages = new ObservableCollection<ReplyPage>();
+            this.Replies = new ObservableCollection<Reply>();
         }
 
         public int Index { get; private set; }
@@ -83,7 +83,7 @@ namespace hipda.Data
         public string OwnerId { get; private set; }
         public string CreateTime { get; private set; }
         public string LastReplyTime { get; private set; }
-        public ObservableCollection<ReplyPage> ReplyPages { get; private set; }
+        public ObservableCollection<Reply> Replies { get; private set; }
 
         public override string ToString()
         {
@@ -315,38 +315,40 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
-        public static async Task<Thread> GetThreadAsync(string forumId, Thread thread, int pageNo)
+        public static Thread GetThread(string forumId, string threadId)
         {
-            await _dataSource.LoadReplyDataAsync(forumId, thread, pageNo);
+            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId);
+        }
 
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == thread.Id);
+        public static async Task<int> GetLoadRepliesCountAsync(string forumId, string threadId, int pageNo)
+        {
+            await _dataSource.LoadReplyDataAsync(forumId, threadId, pageNo);
+
+            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.Count;
+        }
+
+        public static Reply GetReply(string forumId, string threadId, int index)
+        {
+            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.ElementAt(index);
         }
 
         // 读取指定贴子的回复列表数据
-        public async Task LoadReplyDataAsync(string forumId, Thread thread, int pageNo)
+        private async Task LoadReplyDataAsync(string forumId, string threadId, int pageNo)
         {
             // 如果数据已存在，则不读取
             Forum forum = this._forums.Single(f => f.Id.Equals(forumId));
             if (forum != null)
             {
-                Thread threadData = forum.Threads.Single(t => t.Id.Equals(thread.Id));
+                Thread threadData = forum.Threads.Single(t => t.Id.Equals(threadId));
                 if (threadData != null)
                 {
-                    if (threadData.ReplyPages.SingleOrDefault(rp => rp.PageNo == pageNo) != null)
-                    {
-                        return;
-                    }
-
-                    this.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id.Equals(thread.Id)).ReplyPages.Add(new ReplyPage(pageNo));
-
-
                     HttpClient httpClient = new HttpClient();
                     Helpers.CreateHttpClient(ref httpClient);
 
                     CancellationTokenSource cts = new CancellationTokenSource();
 
                     // 读取数据
-                    string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}", thread.Id, pageNo);
+                    string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}", threadId, pageNo);
                     HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
                     response.Content.Headers.ContentType.CharSet = "GBK";
 
@@ -426,9 +428,9 @@ namespace hipda.Data
                                 throw new Exception("main post");
                             }
 
-                            Reply reply = new Reply(i, pageNo, thread.Id, ownerId, ownerName, content, postTime);
+                            Reply reply = new Reply(i, pageNo, threadId, ownerId, ownerName, content, postTime);
 
-                            this.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id.Equals(thread.Id)).ReplyPages.Single(rp => rp.PageNo == pageNo).Replies.Add(reply);
+                            this.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id.Equals(threadId)).Replies.Add(reply);
 
                             i++;
                         }
