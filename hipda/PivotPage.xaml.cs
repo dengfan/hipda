@@ -229,13 +229,22 @@ namespace hipda
             Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
             Pivot.SelectedItem = pivotItem;
 
-            Thread data = await DataSource.GetThreadAsync(thread.ForumId, thread, 1);
-            pivotItem.DataContext = data;
+            pivotItem.DataContext = DataSource.GetThread(thread.ForumId, thread.Id);
             
             var cvs = new CollectionViewSource();
-            cvs.IsSourceGrouped = true;
-            cvs.ItemsPath = new PropertyPath("Replies");
-            cvs.Source = data.ReplyPages;
+            //cvs.IsSourceGrouped = true;
+            //cvs.ItemsPath = new PropertyPath("Replies");
+            //cvs.Source = data.Replies;
+            cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(async pageNo =>
+            {
+                // 加载分页数据，并写入静态类中
+                // 返回的是本次加载的数据量
+                return await DataSource.GetLoadRepliesCountAsync(thread.ForumId, thread.Id, pageNo);
+            }, (index) =>
+            {
+                // 从静态类中返回需要显示出来的数据
+                return DataSource.GetReply(thread.ForumId, thread.Id, index);
+            });
 
             var listView = new ListView
             {
@@ -243,26 +252,13 @@ namespace hipda
                 //IsItemClickEnabled = true,
                 //ContinuumNavigationTransitionInfo.ExitElementContainer="True",
                 ItemTemplate = ReplyListItemTemplate,
-                GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
-                ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
+                //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
+                //ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge,
-                IncrementalLoadingThreshold = 4.0,
-                DataFetchSize = 8.0
+                DataFetchSize = 5, // 每次预提数据的5屏
+                IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据
             };
             pivotItem.Content = listView;
-
-            //_employees = new MyIncrementalLoading<Employee>(1000, (startIndex, count) =>
-            //{
-            //    lblLog.Text += string.Format("从索引 {0} 处开始获取 {1} 条数据", startIndex, count);
-            //    lblLog.Text += Environment.NewLine;
-
-            //    return TestData.GetEmployees().Skip(startIndex).Take(count).ToList();
-            //});
-
-            //_employees.CollectionChanged += _employees_CollectionChanged;
-
-            //listView.ItemsSource = _employees;
-
         }
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
