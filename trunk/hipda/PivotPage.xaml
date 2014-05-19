@@ -23,7 +23,7 @@
     <Page.Resources>
         <local:BackgroundStyleSelecterForThreadItem x:Key="BackgroundStyleSelecterForThreadItem"/>
 
-        <DataTemplate x:Key="ThreadListItemTemplate">
+        <DataTemplate x:Name="ThreadListItemTemplate">
             <StackPanel>
                 <TextBlock
                     Text="{Binding Title}"
@@ -47,16 +47,6 @@
                     TextWrapping="WrapWholeWords"
                     Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
             </StackPanel>
-        </DataTemplate>
-
-        <DataTemplate x:Name="ThreadListTemplate">
-            <ListView
-                ItemsSource="{Binding Threads}"
-                IsItemClickEnabled="True"
-                ItemClick="ThreadItem_ItemClick"
-                ContinuumNavigationTransitionInfo.ExitElementContainer="True"
-                ItemTemplate="{StaticResource ThreadListItemTemplate}"
-                ItemContainerStyleSelector="{StaticResource BackgroundStyleSelecterForThreadItem}" />
         </DataTemplate>
     </Page.Resources>
 

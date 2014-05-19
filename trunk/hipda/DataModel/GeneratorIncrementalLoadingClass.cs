@@ -21,8 +21,9 @@ namespace hipda.Data
     //  and instead downloads items from a live data source in LoadMoreItemsOverrideAsync.
     public class GeneratorIncrementalLoadingClass<T>: IncrementalLoadingBase
     {
-        public GeneratorIncrementalLoadingClass(Func<int, Task<int>> loadMore, Func<int, T> generator)
+        public GeneratorIncrementalLoadingClass(int pageSize, Func<int, Task<int>> loadMore, Func<int, T> generator)
         {
+            _pageSize = pageSize;
             _loadMore = loadMore;
             _generator = generator;
         }  
@@ -47,9 +48,9 @@ namespace hipda.Data
             else
             {
                 uint total = _generatedCount + count;
-                if (total >= pageSize)
+                if (total > _pageSize)
                 {
-                    int pageNo = (int)Math.Ceiling(Convert.ToDecimal(_generatedCount + count) / Convert.ToDecimal(pageSize));
+                    int pageNo = (int)Math.Ceiling(Convert.ToDecimal(_generatedCount + count) / Convert.ToDecimal(_pageSize));
                     if (pageNo - prevPageNo == 1)
                     {
                         // Wait for load 
@@ -65,6 +66,12 @@ namespace hipda.Data
                         }
                         prevPageNo = pageNo;
                     }
+                }
+                else if (total == _pageSize)
+                {
+                    int pageNo = prevPageNo + 1;
+                    _currentDataMaxCount = await _loadMore(pageNo);
+                    prevPageNo = pageNo;
                 }
             }
 
@@ -96,9 +103,9 @@ namespace hipda.Data
         Func<int, T> _generator;
         uint _generatedCount = 0; // 已加载并显示的数量
         int _currentDataMaxCount = 0; // 当前数据总量
+        int _pageSize;
 
         int prevPageNo = 1;
-        int pageSize = 50;
 
         #endregion 
     }

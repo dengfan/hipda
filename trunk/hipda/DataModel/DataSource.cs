@@ -132,6 +132,7 @@ namespace hipda.Data
 
     public sealed class DataSource
     {
+        private static int pageSize = 50;
         private static DataSource _dataSource = new DataSource();
 
         private ObservableCollection<ForumGroup> _forumGroups = new ObservableCollection<ForumGroup>();
@@ -161,6 +162,9 @@ namespace hipda.Data
             {
                 return;
             }
+
+            // 开启忙指示器
+            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
 
             HttpClient httpClient = new HttpClient();
             Helpers.CreateHttpClient(ref httpClient);
@@ -251,20 +255,44 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定版块下的所有贴子
-        public static async Task<Forum> GetForumsAsync(Forum fourm, int pageNo)
+        public static Forum GetForum(string forumId, string forumName)
         {
-            await _dataSource.LoadForumThreadsDataAsync(fourm, pageNo);
+            var count = _dataSource.Forums.Count(f => f.Id.Equals(forumId));
+            if (count == 0)
+            {
+                _dataSource.Forums.Add(new Forum(forumId, forumName, string.Empty, string.Empty, string.Empty));
+            }
 
-            return _dataSource.Forums.Single(f => f.Id.Equals(fourm.Id));
+            return _dataSource.Forums.SingleOrDefault(f => f.Id.Equals(forumId));
         }
 
-        private async Task LoadForumThreadsDataAsync(Forum forum, int pageNo)
+        public static async Task<int> GetLoadThreadsCountAsync(string forumId, int pageNo)
         {
-            // 如果数据已存在，则不加载
-            if (this._forums.Count(f => f.Id.Equals(forum.Id) && f.Threads.Count(t => t.PageNo == pageNo) > 0) > 0)
+            await _dataSource.LoadThreadsDataAsync(forumId, pageNo);
+
+            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Count;
+        }
+        public static Thread GetThreadByIndex(string forumId, int index)
+        {
+            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.ElementAt(index);
+        }
+
+        private async Task LoadThreadsDataAsync(string forumId, int pageNo)
+        {
+            Forum forum = this._forums.SingleOrDefault(f => f.Id.Equals(forumId));
+            if (forum == null)
             {
                 return;
             }
+
+            int count = forum.Threads.Count(t => t.PageNo == pageNo);
+            if (count > 0)
+            {
+                return;
+            }
+
+            // 开启忙指示器
+            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
 
             HttpClient httpClient = new HttpClient();
             Helpers.CreateHttpClient(ref httpClient);
@@ -272,7 +300,7 @@ namespace hipda.Data
             CancellationTokenSource cts = new CancellationTokenSource();
 
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&page={1}", forum.Id, pageNo);
+            string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&page={1}", forumId, pageNo);
             HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
             response.Content.Headers.ContentType.CharSet = "GBK";
 
@@ -282,9 +310,8 @@ namespace hipda.Data
             // 载入HTML
             doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
 
-            // 
             var dataTable = doc.DocumentNode.Descendants().Single(n => n.GetAttributeValue("class", "") == "datatable");
-            var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("normalthread_"));
+            var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("normalthread_") || n.GetAttributeValue("id", "").StartsWith("stickthread_"));
 
             int i = 0;
             foreach (var item in tbodies)
@@ -300,14 +327,13 @@ namespace hipda.Data
                 string id = span.Attributes[0].Value.Substring("thread_".Length);
                 string title = a.InnerText;
 
-                Thread thread = new Thread(i, pageNo, forum.Id, id, title, "1", "2", "3", "4", "5");
+                Thread thread = new Thread(i, pageNo, forumId, id, title, "1", "2", "3", "4", "5");
 
+                //this.Forums.Single(f => f.Id.Equals(forumId)).Threads.Add(thread);
                 forum.Threads.Add(thread);
 
                 i++;
             }
-
-            this.Forums.Add(forum);
 
             // 关闭忙指示器
             StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
@@ -322,119 +348,133 @@ namespace hipda.Data
 
         public static async Task<int> GetLoadRepliesCountAsync(string forumId, string threadId, int pageNo)
         {
-            await _dataSource.LoadReplyDataAsync(forumId, threadId, pageNo);
+            await _dataSource.LoadRepliesDataAsync(forumId, threadId, pageNo);
 
             return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.Count;
         }
 
-        public static Reply GetReply(string forumId, string threadId, int index)
+        public static Reply GetReplyByIndex(string forumId, string threadId, int index)
         {
             return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.ElementAt(index);
         }
 
         // 读取指定贴子的回复列表数据
-        private async Task LoadReplyDataAsync(string forumId, string threadId, int pageNo)
+        private async Task LoadRepliesDataAsync(string forumId, string threadId, int pageNo)
         {
             // 如果数据已存在，则不读取
-            Forum forum = this._forums.Single(f => f.Id.Equals(forumId));
-            if (forum != null)
+            Forum forum = this._forums.SingleOrDefault(f => f.Id.Equals(forumId));
+            if (forum == null)
             {
-                Thread threadData = forum.Threads.Single(t => t.Id.Equals(threadId));
-                if (threadData != null)
+                return;
+            }
+
+            Thread threadData = forum.Threads.SingleOrDefault(t => t.Id.Equals(threadId));
+            if (threadData == null)
+            {
+                return;
+            }
+
+            int count = threadData.Replies.Count(r => r.PageNo == pageNo);
+            if (count > 0)
+            {
+                return;
+            }
+
+            // 开启忙指示器
+            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
+
+            HttpClient httpClient = new HttpClient();
+            Helpers.CreateHttpClient(ref httpClient);
+
+            var cts = new CancellationTokenSource();
+
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}", threadId, pageNo);
+            HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
+            response.Content.Headers.ContentType.CharSet = "GBK";
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
+
+            // 解析HTML
+            //var data = doc.DocumentNode
+            //    .ChildNodes[2] // html
+            //    .ChildNodes[3] // body
+            //    .ChildNodes[14] // div#wrap
+            //    .ChildNodes[5] // div#postlist
+            //    .ChildNodes;
+
+            var data = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
+            if (data != null)
+            {
+                int i = 0;
+                foreach (var item in data)
                 {
-                    HttpClient httpClient = new HttpClient();
-                    Helpers.CreateHttpClient(ref httpClient);
+                    var postAuthorNode = item.ChildNodes[0] // table
+                            .ChildNodes[1] // tr
+                            .ChildNodes[1]; // td.postauthor
 
-                    CancellationTokenSource cts = new CancellationTokenSource();
+                    var postContentNode = item.ChildNodes[0] // table
+                            .ChildNodes[1] // tr
+                            .ChildNodes[3]; // td.postcontent
 
-                    // 读取数据
-                    string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}", threadId, pageNo);
-                    HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
-                    response.Content.Headers.ContentType.CharSet = "GBK";
-
-                    // 实例化 HtmlAgilityPack.HtmlDocument 对象
-                    HtmlDocument doc = new HtmlDocument();
-
-                    // 载入HTML
-                    doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
-
-                    // 解析HTML
-                    //var data = doc.DocumentNode
-                    //    .ChildNodes[2] // html
-                    //    .ChildNodes[3] // body
-                    //    .ChildNodes[14] // div#wrap
-                    //    .ChildNodes[5] // div#postlist
-                    //    .ChildNodes;
-
-                    var data = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
-                    if (data != null)
+                    string ownerId = string.Empty;
+                    string ownerName = string.Empty;
+                    string postTime = string.Empty;
+                    try
                     {
-                        int i = 0;
-                        foreach (var item in data)
+                        var authorNode = postAuthorNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
+                        if (authorNode != null)
                         {
-                            var postAuthorNode = item.ChildNodes[0] // table
-                                    .ChildNodes[1] // tr
-                                    .ChildNodes[1]; // td.postauthor
-
-                            var postContentNode = item.ChildNodes[0] // table
-                                    .ChildNodes[1] // tr
-                                    .ChildNodes[3]; // td.postcontent
-
-                            string ownerId = string.Empty;
-                            string ownerName = string.Empty;
-                            string postTime = string.Empty;
-                            try
-                            {
-                                var authorNode = postAuthorNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
-                                if (authorNode != null)
-                                {
-                                    authorNode = authorNode.ChildNodes[1]; // a
-                                    ownerId = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
-                                    ownerName = authorNode.InnerText;
-                                }
-                            }
-                            catch
-                            {
-
-                                throw new Exception("author node");
-                            }
-
-                            try
-                            {
-                                var postTimeNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
-                                if (postTimeNode != null)
-                                {
-                                    postTime = postTimeNode.InnerText;
-                                }
-                            }
-                            catch
-                            {
-
-                                throw new Exception("post time node");
-                            }
-
-                            string content = string.Empty;
-                            try
-                            {
-                                var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("postmessage_"));
-                                if (contentNode != null)
-                                {
-                                    content = contentNode.InnerText;
-                                }
-                            }
-                            catch
-                            {
-
-                                throw new Exception("main post");
-                            }
-
-                            Reply reply = new Reply(i, pageNo, threadId, ownerId, ownerName, content, postTime);
-
-                            this.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id.Equals(threadId)).Replies.Add(reply);
-
-                            i++;
+                            authorNode = authorNode.ChildNodes[1]; // a
+                            ownerId = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
+                            ownerName = authorNode.InnerText;
                         }
                     }
+                    catch
+                    {
+
+                        throw new Exception("author node");
+                    }
+
+                    try
+                    {
+                        var postTimeNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
+                        if (postTimeNode != null)
+                        {
+                            postTime = postTimeNode.InnerText;
+                        }
+                    }
+                    catch
+                    {
+
+                        throw new Exception("post time node");
+                    }
+
+                    string content = string.Empty;
+                    try
+                    {
+                        var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("postmessage_"));
+                        if (contentNode != null)
+                        {
+                            content = contentNode.InnerText;
+                        }
+                    }
+                    catch
+                    {
+
+                        throw new Exception("main post");
+                    }
+
+                    Reply reply = new Reply(i, pageNo, threadId, ownerId, ownerName, content, postTime);
+
+                    //this.Forums.SingleOrDefault(f => f.Id.Equals(forumId)).Threads.SingleOrDefault(t => t.Id.Equals(threadId)).Replies.Add(reply);
+                    threadData.Replies.Add(reply);
+
+                    i++;
                 }
             }
 
