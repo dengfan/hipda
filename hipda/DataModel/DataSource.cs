@@ -132,7 +132,8 @@ namespace hipda.Data
 
     public sealed class DataSource
     {
-        private static int pageSize = 50;
+        private static int threadsPageSize = 75;
+        private static int repliesPageSize = 50;
         private static DataSource _dataSource = new DataSource();
 
         private ObservableCollection<ForumGroup> _forumGroups = new ObservableCollection<ForumGroup>();
@@ -285,11 +286,11 @@ namespace hipda.Data
                 return;
             }
 
-            int count = forum.Threads.Count(t => t.PageNo == pageNo);
-            if (count > 0)
-            {
-                return;
-            }
+            //int count = forum.Threads.Count(t => t.PageNo == pageNo);
+            //if (count >= threadsPageSize)
+            //{
+            //    return;
+            //}
 
             // 开启忙指示器
             StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
@@ -374,11 +375,25 @@ namespace hipda.Data
                 return;
             }
 
-            int count = threadData.Replies.Count(r => r.PageNo == pageNo);
-            if (count > 0)
-            {
-                return;
-            }
+
+            //int count = threadData.Replies.Count(r => r.PageNo == pageNo);
+            //if (count > 0)
+            //{
+            //    if (count >= repliesPageSize)
+            //    {
+            //        return;
+            //    }
+            //    else
+            //    {
+            //        // 回复数量不足一页，表示此页随时可能有新回复，故删除
+            //        foreach (var item in threadData.Replies.Where(r => r.PageNo == pageNo))
+            //        {
+            //            int index = item.Index - 1;
+            //            threadData.Replies.RemoveAt(index);
+            //        }
+            //    }
+            //}
+            
 
             // 开启忙指示器
             StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;

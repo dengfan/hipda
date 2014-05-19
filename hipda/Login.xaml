@@ -22,10 +22,10 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Grid.Row="0" Grid.Column="0" Text="账号" FontSize="{StaticResource TextStyleLargeFontSize}" />
-        <TextBox x:Name="txtUsername" Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Text="cainiao1v1" FontSize="{StaticResource TextStyleLargeFontSize}" />
+        <TextBox x:Name="txtUsername" Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Text="" FontSize="{StaticResource TextStyleLargeFontSize}" />
 
         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Grid.Row="1" Grid.Column="0" Text="密码" FontSize="{StaticResource TextStyleLargeFontSize}" />
-        <TextBox x:Name="txtPassword" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Text="!1234qwer" FontSize="{StaticResource TextStyleLargeFontSize}"/>
+        <TextBox x:Name="txtPassword" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Text="" FontSize="{StaticResource TextStyleLargeFontSize}"/>
 
         <Button x:Name="btnLogin" Grid.Row="2" Grid.Column="1" Content="登录" Click="btnLogin_Click" FontSize="{StaticResource TextStyleLargeFontSize}"/>
 
