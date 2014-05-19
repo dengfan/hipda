@@ -31,70 +31,47 @@ namespace hipda
     public sealed partial class PivotPage : Page
     {
         private const int maxHubSectionCount = 5;
-        private const string regexForTitle = @"[^@.a-zA-Z0-9\u4e00-\u9fa5]";
-
+        private const string regexForTitle = @"[^@.a-zA-Z0-9\u4e00-\u9fa5]"; // 用于过滤掉无意义符号
 
         public static string GetFirstString(string stringToSub, int length)
         {
-
             Regex regex = new Regex(@"[\u4e00-\u9fa5]+");
-
             char[] stringChar = stringToSub.ToCharArray();
-
             StringBuilder sb = new StringBuilder();
-
             int nLength = 0;
 
             for (int i = 0; i < stringChar.Length; i++)
             {
-
                 if (regex.IsMatch((stringChar[i]).ToString()))
                 {
-
                     nLength += 2;
-
                 }
 
                 else
                 {
-
                     nLength = nLength + 1;
-
                 }
-
-
 
                 if (nLength <= length)
                 {
-
                     sb.Append(stringChar[i]);
-
                 }
 
                 else
                 {
-
                     break;
-
                 }
-
             }
 
             if (sb.ToString() != stringToSub)
             {
-
                 sb.Append("...");
-
             }
 
             return sb.ToString();
-
         }
 
-
-
         private readonly NavigationHelper navigationHelper;
-        private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
         public PivotPage()
@@ -117,15 +94,6 @@ namespace hipda
         }
 
         /// <summary>
-        /// 获取此 <see cref="Page"/> 的视图模型。
-        /// 可将其更改为强类型视图模型。
-        /// </summary>
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
-        }
-
-        /// <summary>
         /// 使用在导航过程中传递的内容填充页。在从以前的会话
         /// 重新创建页时，也会提供任何已保存状态。
         /// </summary>
@@ -136,9 +104,8 @@ namespace hipda
         /// <see cref="Frame.Navigate(Type, Object)"/> 的导航参数，又提供
         /// 此页在以前会话期间保留的状态的
         /// 的字典。首次访问页面时，该状态将为 null。</param>
-        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: 创建适用于问题域的合适数据模型以替换示例数据
             string dataStr = (string)e.NavigationParameter;
             string[] data = dataStr.Split(',');
             string forumId = data[0];
@@ -147,21 +114,49 @@ namespace hipda
             var pivotItem = new PivotItem
             {
                 Header = forumName,
-                ContentTemplate = ThreadListTemplate,
                 Margin = new Thickness(0, 0, 0, 0)
             };
 
-            // 限制 hubsection 的数量
+            // 限制 pivot item 的数量
             if (Pivot.Items.Count > maxHubSectionCount)
             {
                 Pivot.Items.RemoveAt(maxHubSectionCount);
             }
 
-            int index = Pivot.Items.Count == 0 ? 0 : Pivot.Items.Count;
+            //int itemIndex = Pivot.Items.Count == 0 ? 0 : Pivot.Items.Count;
             Pivot.Items.Insert(0, pivotItem);
             Pivot.SelectedItem = pivotItem;
 
-            pivotItem.DataContext = await DataSource.GetForumsAsync(new Forum(forumId, forumName, string.Empty, string.Empty, string.Empty), 1);
+            // 在静态数据类中创建一个版块容器，用来装载主贴数据列表
+            pivotItem.DataContext = DataSource.GetForum(forumId, forumName);
+
+            var cvs = new CollectionViewSource();
+            cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(75, async pageNo =>
+            {
+                // 加载分页数据，并写入静态类中
+                // 返回的是本次加载的数据量
+                return await DataSource.GetLoadThreadsCountAsync(forumId, pageNo);
+            }, (index) =>
+            {
+                // 从静态类中返回需要显示出来的数据
+                return DataSource.GetThreadByIndex(forumId, index);
+            });
+
+            var listView = new ListView
+            {
+                ItemsSource = cvs.View,
+                IsItemClickEnabled = true,
+                //ContinuumNavigationTransitionInfo.ExitElementContainer="True",
+                ItemTemplate = ThreadListItemTemplate,
+                //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
+                //ItemContainerStyleSelector = new BackgroundStyleSelecterForThreadItem(),
+                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge,
+                DataFetchSize = 4, // 每次预提数据的5屏
+                IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据
+            };
+
+            listView.ItemClick += ThreadItem_ItemClick;
+            pivotItem.Content = listView;
         }
 
         /// <summary>
@@ -174,7 +169,6 @@ namespace hipda
         ///的事件数据。</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
-            // TODO: 在此处保存页面的唯一状态。
         }
 
         /// <summary>
@@ -182,45 +176,26 @@ namespace hipda
         /// </summary>
         private void AddAppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            //string groupName = FirstGroupName;
-            //var group = this.DefaultViewModel[groupName] as SampleDataGroup;
-            //var nextItemId = group.Items.Count + 1;
-            //var newItem = new SampleDataItem(
-            //    string.Format(CultureInfo.InvariantCulture, "Group-{0}-Item-{1}", this.pivot.SelectedIndex + 1, nextItemId),
-            //    string.Format(CultureInfo.CurrentCulture, this.resourceLoader.GetString("NewItemTitle"), nextItemId),
-            //    string.Empty,
-            //    string.Empty,
-            //    this.resourceLoader.GetString("NewItemDescription"),
-            //    string.Empty);
-
-            //group.Items.Add(newItem);
-
-            //// 将新的项滚动到视图中。
-            //var container = this.pivot.ContainerFromIndex(this.pivot.SelectedIndex) as ContentControl;
-            //var listView = container.ContentTemplateRoot as ListView;
-            //listView.ScrollIntoView(newItem, ScrollIntoViewAlignment.Leading);
         }
 
         /// <summary>
         /// 在贴子项上单击时调用
         /// </summary>
-        private async void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
+        private void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
         {
-            // 开启忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
-
             Thread thread = (Thread)e.ClickedItem;
             string threadId = thread.Id;
             string threadTitle = thread.Title;
             threadTitle = Regex.Replace(threadTitle, regexForTitle, string.Empty);
             if (string.IsNullOrEmpty(threadTitle)) threadTitle = "无标题";
+
             var pivotItem = new PivotItem
             {
                 Header = GetFirstString(threadTitle, 16),
                 Margin = new Thickness(0,0,0,0)
             };
 
-            // 限制 hubsection 的数量
+            // 限制 pivot item 的数量
             if (Pivot.Items.Count > maxHubSectionCount)
             {
                 Pivot.Items.RemoveAt(maxHubSectionCount);
@@ -229,13 +204,11 @@ namespace hipda
             Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
             Pivot.SelectedItem = pivotItem;
 
+            // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
             pivotItem.DataContext = DataSource.GetThread(thread.ForumId, thread.Id);
             
             var cvs = new CollectionViewSource();
-            //cvs.IsSourceGrouped = true;
-            //cvs.ItemsPath = new PropertyPath("Replies");
-            //cvs.Source = data.Replies;
-            cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(async pageNo =>
+            cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(50, async pageNo =>
             {
                 // 加载分页数据，并写入静态类中
                 // 返回的是本次加载的数据量
@@ -243,19 +216,19 @@ namespace hipda
             }, (index) =>
             {
                 // 从静态类中返回需要显示出来的数据
-                return DataSource.GetReply(thread.ForumId, thread.Id, index);
+                return DataSource.GetReplyByIndex(thread.ForumId, thread.Id, index);
             });
 
             var listView = new ListView
             {
                 ItemsSource = cvs.View,
-                //IsItemClickEnabled = true,
+                IsItemClickEnabled = false,
                 //ContinuumNavigationTransitionInfo.ExitElementContainer="True",
                 ItemTemplate = ReplyListItemTemplate,
                 //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
                 //ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge,
-                DataFetchSize = 5, // 每次预提数据的5屏
+                DataFetchSize = 4, // 每次预提数据的5屏
                 IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据
             };
             pivotItem.Content = listView;

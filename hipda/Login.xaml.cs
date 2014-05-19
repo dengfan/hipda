@@ -57,6 +57,7 @@ namespace hipda
             postDataDic.Add("password", password);
 
             HttpFormUrlEncodedContent postData = new HttpFormUrlEncodedContent(postDataDic);
+            postData.Headers.ContentType.CharSet = "UTF-8";
 
             HttpResponseMessage response = await httpClient.PostAsync(new Uri("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1"), postData).AsTask(cts.Token);
             string resultContent = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
