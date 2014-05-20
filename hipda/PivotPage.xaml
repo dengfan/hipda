@@ -21,7 +21,8 @@
     </Page.Transitions>
 
     <Page.Resources>
-        <local:BackgroundStyleSelecterForThreadItem x:Key="BackgroundStyleSelecterForThreadItem"/>
+        <!--<local:BackgroundStyleSelecterForThreadItem x:Key="BackgroundStyleSelecterForThreadItem"/>
+        <local:BackgroundStyleSelecterForReplyItem x:Key="BackgroundStyleSelecterForReplyItem"/>-->
 
         <DataTemplate x:Name="ThreadListItemTemplate">
             <StackPanel>
@@ -37,16 +38,55 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ReplyListItemTemplate">
-            <StackPanel>
-                <TextBlock
-                    Text="{Binding Content}"
-                    TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource BodyTextBlockStyle}"/>
-                <TextBlock
-                    Text="{Binding OwnerName}"
-                    TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
-            </StackPanel>
+            <Border BorderBrush="LightGray" Padding="10,0,10,15"
+                    BorderThickness="{ThemeResource AppBarTopBorderThemeThickness}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                        <Border CornerRadius="30" Width="60" Height="60" BorderBrush="LightGray" >
+                            <Border.Background>
+                                <ImageBrush Stretch="UniformToFill" ImageSource="{Binding AvatarUrl}" />
+                            </Border.Background>
+                        </Border>
+                        <!--<Border Width="60" Height="60" Background="LightGray">
+                            <Image>
+                                <Image.Source>
+                                    <BitmapImage UriSource="{Binding AvatarUrl}" DecodePixelWidth="60" DecodePixelHeight="60"/>
+                                </Image.Source>
+                            </Image>
+                        </Border>-->
+
+                        <TextBlock
+                            Padding="5"
+                            TextWrapping="WrapWholeWords"
+                            Style="{ThemeResource ListViewItemContentTextBlockStyle}">
+                            <Run Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}"/>
+                            <LineBreak/>
+                            <Run Text="{Binding CreateTime}" Foreground="Gray"/>
+                        </TextBlock>
+                    </StackPanel>
+                
+                    <TextBlock Grid.Row="0" Grid.Column="1" 
+                               Text="{Binding FloorNumStr}"
+                               HorizontalAlignment="Right" 
+                               Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                               Padding="0,3,0,0"
+                               Text="{Binding Content}"
+                               TextWrapping="WrapWholeWords"
+                               Style="{ThemeResource BodyTextBlockStyle}"/>
+                </Grid>
+            </Border>
         </DataTemplate>
     </Page.Resources>
 

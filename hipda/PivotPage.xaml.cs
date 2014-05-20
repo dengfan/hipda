@@ -226,7 +226,7 @@ namespace hipda
                 //ContinuumNavigationTransitionInfo.ExitElementContainer="True",
                 ItemTemplate = ReplyListItemTemplate,
                 //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
-                //ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
+                ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge,
                 DataFetchSize = 4, // 每次预提数据的5屏
                 IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据

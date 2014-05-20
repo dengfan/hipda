@@ -42,6 +42,28 @@ namespace hipda.Data
         {
             return this.Content;
         }
+        public string AvatarUrl
+        {
+            get
+            {
+                int uid = Convert.ToInt32(OwnerId);
+                var s = new int[10];
+                for (int i = 0; i < s.Length - 1; ++i)
+                {
+                    s[i] = uid % 10;
+                    uid = (uid - s[i]) / 10;
+                }
+                return "http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg";
+            }
+        }
+
+        public string FloorNumStr
+        {
+            get
+            {
+                return string.Format("{0}#", Floor);
+            }
+        }
     }
 
     //public class ReplyPage
@@ -132,7 +154,7 @@ namespace hipda.Data
 
     public sealed class DataSource
     {
-        private static int threadsPageSize = 75;
+        //private static int threadsPageSize = 75;
         private static int repliesPageSize = 50;
         private static DataSource _dataSource = new DataSource();
 
@@ -357,7 +379,7 @@ namespace hipda.Data
 
         public static Reply GetReplyByIndex(string forumId, string threadId, int index)
         {
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.ElementAt(index);
+            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.OrderBy(r => r.Floor).ElementAt(index);
         }
 
         // 读取指定贴子的回复列表数据
@@ -465,7 +487,6 @@ namespace hipda.Data
 
                     string ownerId = string.Empty;
                     string ownerName = string.Empty;
-                    string postTime = string.Empty;
                     var authorNode = postAuthorNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
                     if (authorNode != null)
                     {
@@ -473,18 +494,20 @@ namespace hipda.Data
                         ownerId = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
                         ownerName = authorNode.InnerText;
                     }
-
-                   
+                    
                     var floorNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")) // div
                         .ChildNodes[1] // strong
                         .ChildNodes[0] // a
                         .ChildNodes[0]; // em
                     int floor = Convert.ToInt32(floorNode.InnerText);
 
+                    string postTime = string.Empty;
                     var postTimeNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
                     if (postTimeNode != null)
                     {
-                        postTime = postTimeNode.InnerText;
+                        postTime = postTimeNode.InnerText
+                            .Replace("发表于 ", string.Empty)
+                            .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                     }
 
                     string content = string.Empty;
@@ -496,7 +519,6 @@ namespace hipda.Data
 
                     Reply reply = new Reply(floor, pageNo, threadId, ownerId, ownerName, content, postTime);
 
-                    //this.Forums.SingleOrDefault(f => f.Id.Equals(forumId)).Threads.SingleOrDefault(t => t.Id.Equals(threadId)).Replies.Add(reply);
                     threadData.Replies.Add(reply);
                 }
             }
