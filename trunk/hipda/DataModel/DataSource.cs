@@ -363,7 +363,7 @@ namespace hipda.Data
         // 读取指定贴子的回复列表数据
         private async Task LoadRepliesDataAsync(string forumId, string threadId, int pageNo)
         {
-            #region 如果数据已存在，则不读取
+            #region 如果数据已存在，则不读取，以便节省流量
             Forum forum = this._forums.SingleOrDefault(f => f.Id.Equals(forumId));
             if (forum == null)
             {
@@ -376,11 +376,12 @@ namespace hipda.Data
                 return;
             }
 
-
+            // 如果页面已存在，并且已载满数据，则不重新从网站拉取数据，以便节省流量， 
+            // 但最后一页（如果数据少于一页，那么第一页就是最后一页）由于随时可能会有新回复，所以对于最后一页的处理方式是先清除再重新加载
             int count = threadData.Replies.Count(r => r.PageNo == pageNo);
             if (count > 0)
             {
-                if (count >= repliesPageSize) // 满页的不再加载
+                if (count >= repliesPageSize) // 满页的不再加载，以便节省流量
                 {
                     return;
                 }
@@ -416,15 +417,7 @@ namespace hipda.Data
             // 载入HTML
             doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
 
-            // 解析HTML
-            //var data = doc.DocumentNode
-            //    .ChildNodes[2] // html
-            //    .ChildNodes[3] // body
-            //    .ChildNodes[14] // div#wrap
-            //    .ChildNodes[5] // div#postlist
-            //    .ChildNodes;
-
-            // 先判断页码是否已超过最大页码，以免造成重复加载
+            #region 先判断页码是否已超过最大页码，以免造成重复加载
             if (pageNo > 1)
             {
                 var forumControlNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forumcontrol s_clear"));
@@ -455,7 +448,7 @@ namespace hipda.Data
                     }
                 }
             }
-            
+            #endregion
 
             var data = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
             if (data != null)
