@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:hipda.Data"
     mc:Ignorable="d"
-    Background="White" 
+    Background="WhiteSmoke" 
     RequestedTheme="Light">
 
     <Page.Transitions>
@@ -40,23 +40,20 @@
         <DataTemplate x:Name="ReplyListItemTemplate">
             <Border BorderBrush="LightGray" Padding="10,0,10,15"
                     BorderThickness="{ThemeResource AppBarTopBorderThemeThickness}">
-                <Grid>
+                <Grid x:Name="LayoutGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                        <Border CornerRadius="30" Width="60" Height="60" BorderBrush="LightGray" >
-                            <Border.Background>
-                                <ImageBrush Stretch="UniformToFill" ImageSource="{Binding AvatarUrl}" />
-                            </Border.Background>
-                        </Border>
+                    <StackPanel x:Name="authorStackPanel" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                        <Border x:Name="avatarImageBorder" CornerRadius="30" Width="60" Height="60" BorderBrush="LightGray" />
+
                         <!--<Border Width="60" Height="60" Background="LightGray">
                             <Image>
                                 <Image.Source>
@@ -65,22 +62,35 @@
                             </Image>
                         </Border>-->
 
-                        <TextBlock
-                            Padding="5"
-                            TextWrapping="WrapWholeWords"
-                            Style="{ThemeResource ListViewItemContentTextBlockStyle}">
-                            <Run Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}"/>
-                            <LineBreak/>
-                            <Run Text="{Binding CreateTime}" Foreground="Gray"/>
-                        </TextBlock>
+                        <StackPanel Orientation="Vertical" Margin="6">
+                            <TextBlock x:Name="ownerNameTextBlock"
+                                       Text="{Binding OwnerName}"
+                                       TextWrapping="WrapWholeWords"
+                                       HorizontalAlignment="Left"
+                                       FontWeight="Bold"
+                                       Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                                       Foreground="{ThemeResource PhoneAccentBrush}" />
+
+                            <TextBlock x:Name="createTimeTextBlock"
+                                       Text="{Binding CreateTime}" 
+                                       HorizontalAlignment="Left"
+                                       Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                                       Foreground="Gray"/>
+                        </StackPanel>
                     </StackPanel>
-                
-                    <TextBlock Grid.Row="0" Grid.Column="1" 
+
+                    <TextBlock x:Name="floorNumTextBlock" Grid.Row="0" Grid.Column="1" 
                                Text="{Binding FloorNumStr}"
                                HorizontalAlignment="Right" 
                                Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                    <Rectangle x:Name="placeholderRectangle" 
+                               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                               Fill="White"
+                               Opacity="0"/>
+
+                    <TextBlock x:Name="replyContentTextBlock" 
+                               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                Padding="0,3,0,0"
                                Text="{Binding Content}"
                                TextWrapping="WrapWholeWords"

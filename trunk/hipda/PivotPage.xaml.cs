@@ -23,6 +23,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Text.RegularExpressions;
+using Windows.UI.Xaml.Shapes;
+using Windows.Graphics.Imaging;
+using Windows.UI.Xaml.Media.Imaging;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -231,8 +234,115 @@ namespace hipda
                 DataFetchSize = 4, // 每次预提数据的5屏
                 IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据
             };
+            listView.ContainerContentChanging += listView_ContainerContentChanging;
             pivotItem.Content = listView;
         }
+
+        void listView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            args.Handled = true;
+
+            if (args.Phase != 0)
+            {
+                throw new Exception("Not in phase 0.");
+            }
+
+            // First, show the items' placeholders.
+            Border templateRoot = (Border)args.ItemContainer.ContentTemplateRoot;
+            Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
+
+            //StackPanel authorStackPanel = (StackPanel)layoutGrid.FindName("authorStackPanel");
+            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+            //TextBlock authorInfoTextBlock = (TextBlock)layoutGrid.FindName("authorInfoTextBlock");
+            TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
+            TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
+            TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
+            Rectangle placeholderRectangle = (Rectangle)layoutGrid.FindName("placeholderRectangle");
+            TextBlock replyContentTextBlock = (TextBlock)layoutGrid.FindName("replyContentTextBlock");
+
+            //avatarImageBorder.Opacity = 0;
+            //authorInfoTextBlock.Opacity = 0;
+            ownerNameTextBlock.Opacity = 0;
+            createTimeTextBlock.Opacity = 0;
+            floorNumTextBlock.Opacity = 0;
+            placeholderRectangle.Opacity = 1; // 显示占位符
+            replyContentTextBlock.Opacity = 0;
+
+            // Show the items' titles in the next phase.
+            args.RegisterUpdateCallback(ShowAuthor);
+        }
+
+        private void ShowAuthor(
+                ListViewBase sender,
+                ContainerContentChangingEventArgs args)
+        {
+            if (args.Phase != 1)
+            {
+                throw new Exception("Not in phase 1.");
+            }
+
+            Reply reply = (Reply)args.Item;
+            SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
+            Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
+            Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
+
+            StackPanel authorStackPanel = (StackPanel)layoutGrid.FindName("authorStackPanel");
+            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+            ImageBrush avatarImageImageBrush = (ImageBrush)layoutGrid.FindName("avatarImageImageBrush");
+            //TextBlock authorInfoTextBlock = (TextBlock)layoutGrid.FindName("authorInfoTextBlock");
+            TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
+            TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
+            TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
+
+
+            var bitmapImage = new BitmapImage();
+            bitmapImage.DecodePixelWidth = 60; // natural px width of image source
+            bitmapImage.DecodePixelHeight = 60; // natural px width of image source
+            bitmapImage.UriSource = new Uri(reply.AvatarUrl);
+
+            var imageBrush = new ImageBrush()
+            {
+                ImageSource = bitmapImage
+            };
+
+            avatarImageBorder.Background = imageBrush;
+            avatarImageBorder.Opacity = 1;
+
+            ownerNameTextBlock.Text = reply.OwnerName;
+            ownerNameTextBlock.Opacity = 1;
+
+            createTimeTextBlock.Text = reply.CreateTime;
+            createTimeTextBlock.Opacity = 1;
+
+            floorNumTextBlock.Text = reply.FloorNumStr;
+            floorNumTextBlock.Opacity = 1;
+
+            // Show the items' subtitles in the next phase.
+            args.RegisterUpdateCallback(ShowReplyContent);
+        }
+
+        private void ShowReplyContent(
+                ListViewBase sender,
+                ContainerContentChangingEventArgs args)
+        {
+            if (args.Phase != 2)
+            {
+                throw new Exception("Not in phase 2.");
+            }
+
+            Reply reply = (Reply)args.Item;
+            SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
+            Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
+            Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
+
+            Rectangle placeholderRectangle = (Rectangle)layoutGrid.FindName("placeholderRectangle");
+            TextBlock replyContentTextBlock = (TextBlock)layoutGrid.FindName("replyContentTextBlock");
+
+            placeholderRectangle.Opacity = 0; // 显示占位符
+            replyContentTextBlock.Text = reply.Content;
+            replyContentTextBlock.Opacity = 1;
+        }
+
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
