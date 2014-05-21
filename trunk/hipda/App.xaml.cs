@@ -8,6 +8,8 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -112,6 +114,15 @@ namespace hipda
 
             // 确保当前窗口处于活动状态。
             Window.Current.Activate();
+
+            StatusBar statusBar = StatusBar.GetForCurrentView();
+            statusBar.BackgroundColor = Colors.Purple;
+            statusBar.BackgroundOpacity = 100;
+            statusBar.ForegroundColor = Colors.White;
+            await statusBar.ShowAsync();
+
+            statusBar.ProgressIndicator.Text = string.Concat("Hi!PDA");
+            await statusBar.ProgressIndicator.ShowAsync();
         }
 
         /// <summary>

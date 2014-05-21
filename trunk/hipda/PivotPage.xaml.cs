@@ -26,6 +26,7 @@ using System.Text.RegularExpressions;
 using Windows.UI.Xaml.Shapes;
 using Windows.Graphics.Imaging;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Media.Animation;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -149,7 +150,6 @@ namespace hipda
             {
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
-                //ContinuumNavigationTransitionInfo.ExitElementContainer="True",
                 ItemTemplate = ThreadListItemTemplate,
                 //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
                 //ItemContainerStyleSelector = new BackgroundStyleSelecterForThreadItem(),
@@ -157,7 +157,7 @@ namespace hipda
                 DataFetchSize = 4, // 每次预提数据的5屏
                 IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据
             };
-
+            ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
             listView.ItemClick += ThreadItem_ItemClick;
             pivotItem.Content = listView;
         }
@@ -226,7 +226,6 @@ namespace hipda
             {
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
-                //ContinuumNavigationTransitionInfo.ExitElementContainer="True",
                 ItemTemplate = ReplyListItemTemplate,
                 //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
                 ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
@@ -234,6 +233,7 @@ namespace hipda
                 DataFetchSize = 4, // 每次预提数据的5屏
                 IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据
             };
+            ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
             listView.ContainerContentChanging += listView_ContainerContentChanging;
             pivotItem.Content = listView;
         }
@@ -247,28 +247,20 @@ namespace hipda
                 throw new Exception("Not in phase 0.");
             }
 
-            // First, show the items' placeholders.
             Border templateRoot = (Border)args.ItemContainer.ContentTemplateRoot;
             Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
 
-            //StackPanel authorStackPanel = (StackPanel)layoutGrid.FindName("authorStackPanel");
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
-            //TextBlock authorInfoTextBlock = (TextBlock)layoutGrid.FindName("authorInfoTextBlock");
             TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
             TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
             TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
-            Rectangle placeholderRectangle = (Rectangle)layoutGrid.FindName("placeholderRectangle");
             TextBlock replyContentTextBlock = (TextBlock)layoutGrid.FindName("replyContentTextBlock");
 
-            //avatarImageBorder.Opacity = 0;
-            //authorInfoTextBlock.Opacity = 0;
             ownerNameTextBlock.Opacity = 0;
             createTimeTextBlock.Opacity = 0;
             floorNumTextBlock.Opacity = 0;
-            placeholderRectangle.Opacity = 1; // 显示占位符
             replyContentTextBlock.Opacity = 0;
 
-            // Show the items' titles in the next phase.
             args.RegisterUpdateCallback(ShowAuthor);
         }
 
@@ -289,7 +281,6 @@ namespace hipda
             StackPanel authorStackPanel = (StackPanel)layoutGrid.FindName("authorStackPanel");
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
             ImageBrush avatarImageImageBrush = (ImageBrush)layoutGrid.FindName("avatarImageImageBrush");
-            //TextBlock authorInfoTextBlock = (TextBlock)layoutGrid.FindName("authorInfoTextBlock");
             TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
             TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
             TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
@@ -317,7 +308,6 @@ namespace hipda
             floorNumTextBlock.Text = reply.FloorNumStr;
             floorNumTextBlock.Opacity = 1;
 
-            // Show the items' subtitles in the next phase.
             args.RegisterUpdateCallback(ShowReplyContent);
         }
 
@@ -335,10 +325,8 @@ namespace hipda
             Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
             Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
 
-            Rectangle placeholderRectangle = (Rectangle)layoutGrid.FindName("placeholderRectangle");
             TextBlock replyContentTextBlock = (TextBlock)layoutGrid.FindName("replyContentTextBlock");
 
-            placeholderRectangle.Opacity = 0; // 显示占位符
             replyContentTextBlock.Text = reply.Content;
             replyContentTextBlock.Opacity = 1;
         }

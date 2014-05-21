@@ -38,8 +38,7 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ReplyListItemTemplate">
-            <Border BorderBrush="LightGray" Padding="10,0,10,15"
-                    BorderThickness="{ThemeResource AppBarTopBorderThemeThickness}">
+            <Border CornerRadius="40,0,40,0" Padding="10" Background="White">
                 <Grid x:Name="LayoutGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -53,14 +52,6 @@
 
                     <StackPanel x:Name="authorStackPanel" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
                         <Border x:Name="avatarImageBorder" CornerRadius="30" Width="60" Height="60" BorderBrush="LightGray" />
-
-                        <!--<Border Width="60" Height="60" Background="LightGray">
-                            <Image>
-                                <Image.Source>
-                                    <BitmapImage UriSource="{Binding AvatarUrl}" DecodePixelWidth="60" DecodePixelHeight="60"/>
-                                </Image.Source>
-                            </Image>
-                        </Border>-->
 
                         <StackPanel Orientation="Vertical" Margin="6">
                             <TextBlock x:Name="ownerNameTextBlock"
@@ -83,11 +74,6 @@
                                Text="{Binding FloorNumStr}"
                                HorizontalAlignment="Right" 
                                Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
-
-                    <Rectangle x:Name="placeholderRectangle" 
-                               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                               Fill="White"
-                               Opacity="0"/>
 
                     <TextBlock x:Name="replyContentTextBlock" 
                                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
