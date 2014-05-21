@@ -44,7 +44,7 @@ namespace hipda
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
 
-            ShowStatusBar();
+            //ShowStatusBar();
         }
 
         private async void ShowStatusBar()
