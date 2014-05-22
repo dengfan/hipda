@@ -20,7 +20,7 @@ namespace hipda
             Style style = new Style(typeof(ListViewItem));
             style.Setters.Add(new Setter(ListViewItem.HorizontalContentAlignmentProperty, "Stretch"));
             //style.Setters.Add(new Setter(ListViewItem.BackgroundProperty, background));
-            style.Setters.Add(new Setter(ListViewItem.MarginProperty, "10,5"));
+            style.Setters.Add(new Setter(ListViewItem.MarginProperty, "10,0,10,10"));
             //style.Setters.Add(new Setter(ListViewItem.PaddingProperty, "10"));
             return style;
         }
