@@ -121,17 +121,11 @@ namespace hipda
                 Margin = new Thickness(0, 0, 0, 0)
             };
 
-            // 限制 pivot item 的数量
-            if (Pivot.Items.Count > maxHubSectionCount)
-            {
-                Pivot.Items.RemoveAt(maxHubSectionCount);
-            }
-
-            //int itemIndex = Pivot.Items.Count == 0 ? 0 : Pivot.Items.Count;
             Pivot.Items.Insert(0, pivotItem);
             Pivot.SelectedItem = pivotItem;
 
             // 在静态数据类中创建一个版块容器，用来装载主贴数据列表
+            // 预先读取第一页的数据，用于过渡动画会被执行
             var forumData = await DataSource.GetForum(forumId, forumName);
             pivotItem.DataContext = forumData;
 
@@ -161,6 +155,12 @@ namespace hipda
             ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
             listView.ItemClick += ThreadItem_ItemClick;
             pivotItem.Content = listView;
+
+            // 限制 pivot item 的数量
+            if (Pivot.Items.Count > maxHubSectionCount)
+            {
+                Pivot.Items.RemoveAt(maxHubSectionCount);
+            }
         }
 
         /// <summary>
@@ -192,23 +192,18 @@ namespace hipda
             string threadTitle = thread.Title;
             threadTitle = Regex.Replace(threadTitle, regexForTitle, string.Empty);
             if (string.IsNullOrEmpty(threadTitle)) threadTitle = "无标题";
-
+             
             var pivotItem = new PivotItem
             {
                 Header = GetFirstString(threadTitle, 16),
                 Margin = new Thickness(0,0,0,0)
             };
 
-            // 限制 pivot item 的数量
-            if (Pivot.Items.Count > maxHubSectionCount)
-            {
-                Pivot.Items.RemoveAt(maxHubSectionCount);
-            }
-
             Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
             Pivot.SelectedItem = pivotItem;
 
             // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
+            // 预先读取第一页的数据，用于过渡动画会被执行
             var threadData = await DataSource.GetThread(thread.ForumId, thread.Id);
             pivotItem.DataContext = threadData;
             
@@ -238,6 +233,12 @@ namespace hipda
             ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
             listView.ContainerContentChanging += listView_ContainerContentChanging;
             pivotItem.Content = listView;
+
+            // 限制 pivot item 的数量
+            if (Pivot.Items.Count > maxHubSectionCount)
+            {
+                Pivot.Items.RemoveAt(maxHubSectionCount);
+            }
         }
 
         void listView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
