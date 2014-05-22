@@ -409,19 +409,23 @@ namespace hipda.Data
             int count = threadData.Replies.Count(r => r.PageNo == pageNo);
             if (count > 0)
             {
+                // 由于第一页已经预加载了，所以这里不再加载第一页的数据
+                if (pageNo == 1)
+                {
+                    return;
+                }
+
                 if (count >= repliesPageSize) // 满页的不再加载，以便节省流量
                 {
                     return;
                 }
-                else
+
+                // 再判断未满页的
+                // 第一页或最后一页的回复数量不足一页，表示此页随时可能有新回复，故删除
+                var lastPageData = threadData.Replies.Where(r => r.PageNo == pageNo).ToList();
+                foreach (var item in lastPageData)
                 {
-                    // 再判断未满页的
-                    // 第一页或最后一页的回复数量不足一页，表示此页随时可能有新回复，故删除
-                    var lastPageData = threadData.Replies.Where(r => r.PageNo == pageNo).ToList();
-                    foreach (var item in lastPageData)
-                    {
-                        threadData.Replies.Remove(threadData.Replies.Single(r => r.Floor == item.Floor));
-                    }
+                    threadData.Replies.Remove(threadData.Replies.Single(r => r.Floor == item.Floor));
                 }
             }
             #endregion
