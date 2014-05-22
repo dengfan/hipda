@@ -101,8 +101,9 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar ClosedDisplayMode="Minimal">
-            <AppBarButton x:Name="SecondaryButton" Icon="Edit" Label="回复" />
+        <CommandBar>
+            <AppBarButton x:Name="RefreshButton" Icon="Refresh" Label="刷新" Click="RefreshButton_Click" />
+            <AppBarButton x:Name="ReplyButton" Icon="Edit" Label="回复" />
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="SecondaryButton2" Icon="Read" Label="个人中心" />
             </CommandBar.SecondaryCommands>

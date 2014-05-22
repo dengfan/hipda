@@ -225,6 +225,7 @@ namespace hipda
 
             var listView = new ListView
             {
+                Name = "replyListView",
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,
@@ -393,5 +394,10 @@ namespace hipda
         }
 
         #endregion
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }
