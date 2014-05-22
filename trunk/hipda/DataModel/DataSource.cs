@@ -186,9 +186,6 @@ namespace hipda.Data
                 return;
             }
 
-            // 开启忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
-
             HttpClient httpClient = new HttpClient();
             Helpers.CreateHttpClient(ref httpClient);
 
@@ -271,13 +268,19 @@ namespace hipda.Data
 
                 this.ForumGroups.Add(forumGroup);
             }
-
-            // 关闭忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
         }
         #endregion
 
         #region 读取指定版块下的所有贴子
+        public static void RemoveForum(string forumId)
+        {
+            var forumData = _dataSource.Forums.SingleOrDefault(f => f.Id.Equals(forumId));
+            if (forumData != null)
+            {
+                _dataSource.Forums.Remove(forumData);
+            }
+        }
+
         public static async Task<Forum> GetForum(string forumId, string forumName)
         {
             var count = _dataSource.Forums.Count(f => f.Id.Equals(forumId));
@@ -317,9 +320,6 @@ namespace hipda.Data
             {
                 return;
             }
-
-            // 开启忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
 
             HttpClient httpClient = new HttpClient();
             Helpers.CreateHttpClient(ref httpClient);
@@ -361,9 +361,6 @@ namespace hipda.Data
 
                 i++;
             }
-
-            // 关闭忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
         }
         #endregion
 
@@ -376,9 +373,11 @@ namespace hipda.Data
             return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId);
         }
 
-        public static async Task<int> GetLoadRepliesCountAsync(string forumId, string threadId, int pageNo)
+        public static async Task<int> GetLoadRepliesCountAsync(string forumId, string threadId, int pageNo, Action showProgressBar, Action hideProgressBar)
         {
+            showProgressBar();
             await _dataSource.LoadRepliesDataAsync(forumId, threadId, pageNo);
+            hideProgressBar();
 
             return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.Count;
         }
@@ -430,9 +429,6 @@ namespace hipda.Data
             }
             #endregion
 
-            // 开启忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = null;
-
             HttpClient httpClient = new HttpClient();
             Helpers.CreateHttpClient(ref httpClient);
 
@@ -459,9 +455,6 @@ namespace hipda.Data
                     .Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
                 if (pagesNode == null) // 没有超过两页
                 {
-                    // 关闭忙指示器
-                    StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
-
                     return;
                 }
                 else
@@ -472,9 +465,6 @@ namespace hipda.Data
                         int currentPage = Convert.ToInt32(actualCurrentPageNode.InnerText);
                         if (pageNo > currentPage)
                         {
-                            // 关闭忙指示器
-                            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
-
                             return;
                         }
                     }
@@ -532,9 +522,6 @@ namespace hipda.Data
                     threadData.Replies.Add(reply);
                 }
             }
-
-            // 关闭忙指示器
-            StatusBar.GetForCurrentView().ProgressIndicator.ProgressValue = 0;
         }
         #endregion
     }

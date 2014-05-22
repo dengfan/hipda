@@ -121,6 +121,7 @@ namespace hipda
             statusBar.ForegroundColor = Colors.White;
             await statusBar.ShowAsync();
 
+            statusBar.ProgressIndicator.ProgressValue = 0;
             statusBar.ProgressIndicator.Text = string.Concat("Hi!PDA");
             await statusBar.ProgressIndicator.ShowAsync();
         }
