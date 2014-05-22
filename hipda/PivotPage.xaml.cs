@@ -108,7 +108,7 @@ namespace hipda
         /// <see cref="Frame.Navigate(Type, Object)"/> 的导航参数，又提供
         /// 此页在以前会话期间保留的状态的
         /// 的字典。首次访问页面时，该状态将为 null。</param>
-        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             string dataStr = (string)e.NavigationParameter;
             string[] data = dataStr.Split(',');
@@ -132,7 +132,8 @@ namespace hipda
             Pivot.SelectedItem = pivotItem;
 
             // 在静态数据类中创建一个版块容器，用来装载主贴数据列表
-            pivotItem.DataContext = DataSource.GetForum(forumId, forumName);
+            var forumData = await DataSource.GetForum(forumId, forumName);
+            pivotItem.DataContext = forumData;
 
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(75, async pageNo =>
@@ -184,7 +185,7 @@ namespace hipda
         /// <summary>
         /// 在贴子项上单击时调用
         /// </summary>
-        private void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
+        private async void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
         {
             Thread thread = (Thread)e.ClickedItem;
             string threadId = thread.Id;
@@ -208,7 +209,8 @@ namespace hipda
             Pivot.SelectedItem = pivotItem;
 
             // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
-            pivotItem.DataContext = DataSource.GetThread(thread.ForumId, thread.Id);
+            var threadData = await DataSource.GetThread(thread.ForumId, thread.Id);
+            pivotItem.DataContext = threadData;
             
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(50, async pageNo =>
