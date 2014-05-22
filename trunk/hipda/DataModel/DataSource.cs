@@ -278,13 +278,16 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定版块下的所有贴子
-        public static Forum GetForum(string forumId, string forumName)
+        public static async Task<Forum> GetForum(string forumId, string forumName)
         {
             var count = _dataSource.Forums.Count(f => f.Id.Equals(forumId));
             if (count == 0)
             {
                 _dataSource.Forums.Add(new Forum(forumId, forumName, string.Empty, string.Empty, string.Empty));
             }
+
+            // 先加载第一页的数据，以提高响应流畅度
+            await _dataSource.LoadThreadsDataAsync(forumId, 1);
 
             return _dataSource.Forums.SingleOrDefault(f => f.Id.Equals(forumId));
         }
@@ -365,8 +368,11 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
-        public static Thread GetThread(string forumId, string threadId)
+        public static async Task<Thread> GetThread(string forumId, string threadId)
         {
+            // 先加载第一页的数据，以提高响应流畅度
+            await _dataSource.LoadRepliesDataAsync(forumId, threadId, 1);
+
             return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId);
         }
 
