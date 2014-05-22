@@ -186,6 +186,7 @@ namespace hipda
         /// </summary>
         private async void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
         {
+            threadProgressBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
             Thread thread = (Thread)e.ClickedItem;
             string threadId = thread.Id;
             string threadTitle = thread.Title;
@@ -203,13 +204,19 @@ namespace hipda
 
             Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
             Pivot.SelectedItem = pivotItem;
+            threadProgressBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(50, async pageNo =>
             {
                 // 加载分页数据，并写入静态类中
                 // 返回的是本次加载的数据量
-                return await DataSource.GetLoadRepliesCountAsync(thread.ForumId, thread.Id, pageNo);
+                return await DataSource.GetLoadRepliesCountAsync(thread.ForumId, thread.Id, pageNo, () =>
+                {
+                    replyProgressRing.IsActive = true;
+                }, () => {
+                    replyProgressRing.IsActive = false;
+                });
             }, (index) =>
             {
                 // 从静态类中返回需要显示出来的数据

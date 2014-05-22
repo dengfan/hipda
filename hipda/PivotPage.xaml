@@ -96,6 +96,8 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
+        <ProgressBar x:Name="threadProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
+        <ProgressRing x:Name="replyProgressRing" />
     </Grid>
 
     <Page.BottomAppBar>
