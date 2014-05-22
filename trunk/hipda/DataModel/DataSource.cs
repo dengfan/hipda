@@ -365,6 +365,12 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
+        public static async void RefrashReply(string forumId, string threadId)
+        {
+            int maxPageNo = _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.Max(r => r.PageNo);
+            await _dataSource.LoadRepliesDataAsync(forumId, threadId, maxPageNo);
+        }
+
         public static async Task<Thread> GetThread(string forumId, string threadId)
         {
             // 先加载第一页的数据，以提高响应流畅度
