@@ -118,16 +118,14 @@ namespace hipda
             var pivotItem = new PivotItem
             {
                 Header = forumName,
-                Margin = new Thickness(0, 0, 0, 0)
+                Margin = new Thickness(0, 0, 0, 0),
+                // 在静态数据类中创建一个版块容器，用来装载主贴数据列表
+                // 预先读取第一页的数据，用于过渡动画会被执行
+                DataContext = await DataSource.GetForum(forumId, forumName)
             };
 
             Pivot.Items.Insert(0, pivotItem);
             Pivot.SelectedItem = pivotItem;
-
-            // 在静态数据类中创建一个版块容器，用来装载主贴数据列表
-            // 预先读取第一页的数据，用于过渡动画会被执行
-            var forumData = await DataSource.GetForum(forumId, forumName);
-            pivotItem.DataContext = forumData;
 
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(75, async pageNo =>
@@ -148,10 +146,11 @@ namespace hipda
                 ItemTemplate = ThreadListItemTemplate,
                 //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
                 //ItemContainerStyleSelector = new BackgroundStyleSelecterForThreadItem(),
-                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge,
-                DataFetchSize = 4, // 每次预提数据的5屏
-                IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据
+                //DataFetchSize = 4, // 每次预提数据的5屏
+                //IncrementalLoadingThreshold = 3, // 每滚动三屏就触发预提数据
+                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
+
             ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
             listView.ItemClick += ThreadItem_ItemClick;
             pivotItem.Content = listView;
@@ -196,16 +195,14 @@ namespace hipda
             var pivotItem = new PivotItem
             {
                 Header = GetFirstString(threadTitle, 16),
-                Margin = new Thickness(0, 0, 0, 0)
+                Margin = new Thickness(0, 0, 0, 0),
+                // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
+                // 预先读取第一页的数据，用于过渡动画会被执行
+                DataContext = await DataSource.GetThread(thread.ForumId, thread.Id)
             };
 
             Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
             Pivot.SelectedItem = pivotItem;
-
-            // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
-            // 预先读取第一页的数据，用于过渡动画会被执行
-            var threadData = await DataSource.GetThread(thread.ForumId, thread.Id);
-            pivotItem.DataContext = threadData;
             
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(50, async pageNo =>
@@ -226,10 +223,11 @@ namespace hipda
                 ItemTemplate = ReplyListItemTemplate,
                 //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
                 ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
-                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge,
-                DataFetchSize = 4, // 每次预提数据的5屏
-                IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据
+                //DataFetchSize = 4, // 每次预提数据的5屏
+                //IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据
+                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
+
             ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
             listView.ContainerContentChanging += listView_ContainerContentChanging;
             pivotItem.Content = listView;
@@ -250,6 +248,8 @@ namespace hipda
                 throw new Exception("Not in phase 0.");
             }
 
+            Reply reply = (Reply)args.Item;
+
             Border templateRoot = (Border)args.ItemContainer.ContentTemplateRoot;
             Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
 
@@ -262,7 +262,7 @@ namespace hipda
             ownerNameTextBlock.Opacity = 0;
             createTimeTextBlock.Opacity = 0;
             floorNumTextBlock.Opacity = 0;
-            replyContentTextBlock.Opacity = 0;
+            replyContentTextBlock.Text = reply.Content;
 
             args.RegisterUpdateCallback(ShowAuthor);
         }
@@ -282,25 +282,11 @@ namespace hipda
             Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
 
             StackPanel authorStackPanel = (StackPanel)layoutGrid.FindName("authorStackPanel");
-            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+            
             ImageBrush avatarImageImageBrush = (ImageBrush)layoutGrid.FindName("avatarImageImageBrush");
             TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
             TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
             TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
-
-
-            var bitmapImage = new BitmapImage();
-            bitmapImage.DecodePixelWidth = 60; // natural px width of image source
-            bitmapImage.DecodePixelHeight = 60; // natural px width of image source
-            bitmapImage.UriSource = new Uri(reply.AvatarUrl);
-
-            var imageBrush = new ImageBrush()
-            {
-                ImageSource = bitmapImage
-            };
-
-            avatarImageBorder.Background = imageBrush;
-            avatarImageBorder.Opacity = 1;
 
             ownerNameTextBlock.Text = reply.OwnerName;
             ownerNameTextBlock.Opacity = 1;
@@ -311,10 +297,10 @@ namespace hipda
             floorNumTextBlock.Text = reply.FloorNumStr;
             floorNumTextBlock.Opacity = 1;
 
-            args.RegisterUpdateCallback(ShowReplyContent);
+            args.RegisterUpdateCallback(ShowAuthorFace);
         }
 
-        private void ShowReplyContent(
+        private void ShowAuthorFace(
                 ListViewBase sender,
                 ContainerContentChangingEventArgs args)
         {
@@ -328,10 +314,20 @@ namespace hipda
             Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
             Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
 
-            TextBlock replyContentTextBlock = (TextBlock)layoutGrid.FindName("replyContentTextBlock");
+            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
 
-            replyContentTextBlock.Text = reply.Content;
-            replyContentTextBlock.Opacity = 1;
+            var bitmapImage = new BitmapImage();
+            bitmapImage.DecodePixelWidth = 60; // natural px width of image source
+            bitmapImage.DecodePixelHeight = 60; // natural px width of image source
+            bitmapImage.UriSource = new Uri(reply.AvatarUrl);
+
+            var imageBrush = new ImageBrush()
+            {
+                ImageSource = bitmapImage
+            };
+
+            avatarImageBorder.Background = imageBrush;
+            avatarImageBorder.Opacity = 1;
         }
 
 
