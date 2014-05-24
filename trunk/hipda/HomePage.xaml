@@ -51,7 +51,7 @@
                 <TextBlock
                     Text="{Binding Info}"
                     TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource ControlContextualInfoTextBlockStyle}"/>
+                    Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
             </StackPanel>
         </DataTemplate>
 

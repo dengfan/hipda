@@ -21,20 +21,63 @@
     </Page.Transitions>
 
     <Page.Resources>
-        <!--<local:BackgroundStyleSelecterForThreadItem x:Key="BackgroundStyleSelecterForThreadItem"/>
-        <local:BackgroundStyleSelecterForReplyItem x:Key="BackgroundStyleSelecterForReplyItem"/>-->
-
         <DataTemplate x:Name="ThreadListItemTemplate">
-            <StackPanel>
-                <TextBlock
-                    Text="{Binding Title}"
-                    TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource BodyTextBlockStyle}"/>
-                <TextBlock
-                    Text="{Binding Id}"
-                    TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"/>
-            </StackPanel>
+            <Border CornerRadius="40,0,40,0" Padding="10" Background="White">
+                <Grid x:Name="layoutGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Border x:Name="avatarImageBorder" Grid.Column="0" Grid.Row="0" CornerRadius="30" Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Top" />
+
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0" Margin="10,0,0,0">
+                        <TextBlock x:Name="ownerInfoTextBlock"
+                                TextWrapping="WrapWholeWords"
+                                HorizontalAlignment="Left"
+                                Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                                FontFamily="Global User Interface">
+                            <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                            <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
+                        </TextBlock>
+                        <TextBlock x:Name="titleTextBlock" 
+                            Padding="0,5,0,0"
+                            TextWrapping="WrapWholeWords"
+                            Style="{ThemeResource BodyTextBlockStyle}" FontFamily="Global User Interface">
+                            <Run x:Name="titleTextBlockRun" Text="{Binding Title}" FontFamily="Global User Interface" />
+                            <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                        </TextBlock>
+                        <!--<StackPanel Orientation="Horizontal">
+                            <Image>
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.image.png" 
+                                        DecodePixelWidth="36" DecodePixelHeight="36"/>
+                                </Image.Source>
+                            </Image>
+
+                            <Image>
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.paperclip.rotated.png" 
+                                        DecodePixelWidth="36" DecodePixelHeight="36"/>
+                                </Image.Source>
+                            </Image>
+
+                            <Image>
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.thumbs.up.png" 
+                                        DecodePixelWidth="36" DecodePixelHeight="36"/>
+                                </Image.Source>
+                            </Image>
+                        </StackPanel>-->
+                        <TextBlock x:Name="lastPostTextBlock" 
+                            Text="{Binding LastPostInfo}"
+                            TextWrapping="WrapWholeWords"
+                            Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
         </DataTemplate>
 
         <DataTemplate x:Name="ReplyListItemTemplate">
@@ -46,12 +89,12 @@
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel x:Name="authorStackPanel" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                        <Border x:Name="avatarImageBorder" CornerRadius="30" Width="60" Height="60" BorderBrush="LightGray" />
+                        <Border x:Name="avatarImageBorder" CornerRadius="30" Width="60" Height="60" />
 
                         <StackPanel Orientation="Vertical" Margin="6">
                             <TextBlock x:Name="ownerNameTextBlock"

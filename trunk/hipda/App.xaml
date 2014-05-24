@@ -17,21 +17,6 @@
                     </DataTemplate>
                 </GroupStyle.HeaderTemplate>
             </GroupStyle>
-
-            <Style x:Key="GroupHeaderStyleForReplyPage" TargetType="ListViewHeaderItem">
-                <Setter Property="Padding" Value="10,1"/>
-            </Style>
-            <GroupStyle x:Key="replyListViewGroupStyle" HeaderContainerStyle="{StaticResource ResourceKey=GroupHeaderStyleForReplyPage}">
-                <GroupStyle.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Style="{ThemeResource ControlContextualInfoTextBlockStyle}">
-                            <Run>第</Run>
-                            <Run Text="{Binding PageNo}"/>
-                            <Run>页</Run>
-                        </TextBlock>
-                    </DataTemplate>
-                </GroupStyle.HeaderTemplate>
-            </GroupStyle>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
