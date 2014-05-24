@@ -28,15 +28,18 @@ namespace hipda.Data
         int _loadedDataMaxCount = 0; // 记录已经载入数据总量，用于与刚载入的数量总量进行对比，如果数据量没有变大，则上一次的页码保持不变
         int _prevPageNo = 0; // 记录上次加载的页码，以免重复加载
 
+        int triggerLoadedCount = 0;
+
         public GeneratorIncrementalLoadingClass(int pageSize, Func<int, Task<int>> loadMore, Func<int, T> generator)
         {
             _pageSize = pageSize;
             _loadMore = loadMore;
             _generator = generator;
-        }  
+        }
 
         /// <summary>
         /// 数据懒加载
+        /// 
         /// </summary>
         /// <param name="c"></param>
         /// <param name="count">每次触发懒加载时，将要新加入的数量</param>
@@ -45,9 +48,8 @@ namespace hipda.Data
         {
             uint toGenerate = 0; // 本次要显示的数量
 
-            // 表示通过刷新按钮刷新最后一页数据
-            // 由于增量加载一启动就会默认先显示一条数据，所以这里必须是 _generatedCount > 1 && count == 1 同时满足才表示是刷新
-            if (_generatedCount > 1 && count == 1)
+            if ((_generatedCount > 1 && count == 1) || // 当只请求加载一条数据，并且 _generatedCount > 1 时 才允许刷新
+                (triggerLoadedCount == 1 && _generatedCount == 1 && _loadedDataMaxCount == 1 && count == 1)) // 也需要允许 “只有一楼而没有任何回复的贴子” 可以刷新
             {
                 uint total = _generatedCount + count;
                 if (total <= _pageSize)
@@ -64,8 +66,13 @@ namespace hipda.Data
                 // 触发刷新后，有多少新数据全显示出来
                 toGenerate = (uint)_loadedDataMaxCount - _generatedCount;
             }
-            else
+            else // 正常的滑动翻页流程，非点击刷新按钮走的流程
             {
+                if (count == 1)
+                {
+                    triggerLoadedCount++;
+                }
+
                 uint total = _generatedCount + count;
                 if (total <= _pageSize)
                 {
@@ -78,7 +85,6 @@ namespace hipda.Data
                             _prevPageNo = pageNo;
                             _loadedDataMaxCount = currentDataMaxCount;
                         }
-                        
                     }
                 }
                 else if (total > _pageSize)
@@ -93,7 +99,6 @@ namespace hipda.Data
                             _prevPageNo = pageNo;
                             _loadedDataMaxCount = currentDataMaxCount;
                         }
-                        
                     }
                     else if (pageNo - _prevPageNo > 1)
                     {
