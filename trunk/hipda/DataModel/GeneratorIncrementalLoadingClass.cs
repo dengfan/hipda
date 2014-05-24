@@ -65,6 +65,10 @@ namespace hipda.Data
 
                 // 触发刷新后，有多少新数据全显示出来
                 toGenerate = (uint)_loadedDataMaxCount - _generatedCount;
+                if (toGenerate > 30)
+                {
+                    toGenerate = 15;
+                }
             }
             else // 正常的滑动翻页流程，非点击刷新按钮走的流程
             {
@@ -74,7 +78,7 @@ namespace hipda.Data
                 }
 
                 uint total = _generatedCount + count;
-                if (total <= _pageSize)
+                if (total < _pageSize)
                 {
                     int pageNo = 1;
                     if (pageNo - _prevPageNo == 1) // 避免重复加载
@@ -89,7 +93,7 @@ namespace hipda.Data
                 }
                 else if (total > _pageSize)
                 {
-                    int pageNo = (int)Math.Ceiling(Convert.ToDecimal(_generatedCount + count) / Convert.ToDecimal(_pageSize));
+                    int pageNo = (int)Math.Ceiling(Convert.ToDecimal(total) / Convert.ToDecimal(_pageSize));
                     if (pageNo - _prevPageNo == 1) // 表示正常的上划分页加载
                     {
                         // Wait for load 
@@ -109,6 +113,24 @@ namespace hipda.Data
                             if (currentDataMaxCount > _loadedDataMaxCount)
                             {
                                 _prevPageNo = i;
+                                _loadedDataMaxCount = currentDataMaxCount;
+                            }
+                        }
+                    }
+                }
+                else // 刚好是满页，此时必须主动加载下一页
+                {
+                    if (total % _pageSize == 0)
+                    {
+                        int pageNo = (int)Math.Ceiling(Convert.ToDecimal(total) / Convert.ToDecimal(_pageSize));
+                        if (pageNo == _prevPageNo) // 表示正常的上划分页加载
+                        {
+                            pageNo++;
+
+                            int currentDataMaxCount = await _loadMore(pageNo);
+                            if (currentDataMaxCount > _loadedDataMaxCount) // 有新数据加入
+                            {
+                                _prevPageNo = pageNo;
                                 _loadedDataMaxCount = currentDataMaxCount;
                             }
                         }
