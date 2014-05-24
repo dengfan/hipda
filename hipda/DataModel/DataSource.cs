@@ -281,7 +281,7 @@ namespace hipda.Data
             }
         }
 
-        public static async Task<Forum> GetForum(string forumId, string forumName)
+        public static Forum GetForum(string forumId, string forumName)
         {
             var count = _dataSource.Forums.Count(f => f.Id.Equals(forumId));
             if (count == 0)
@@ -289,15 +289,14 @@ namespace hipda.Data
                 _dataSource.Forums.Add(new Forum(forumId, forumName, string.Empty, string.Empty, string.Empty));
             }
 
-            // 先加载第一页的数据，以提高响应流畅度
-            await _dataSource.LoadThreadsDataAsync(forumId, 1);
-
             return _dataSource.Forums.SingleOrDefault(f => f.Id.Equals(forumId));
         }
 
-        public static async Task<int> GetLoadThreadsCountAsync(string forumId, int pageNo)
+        public static async Task<int> GetLoadThreadsCountAsync(string forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
         {
+            showProgressBar();
             await _dataSource.LoadThreadsDataAsync(forumId, pageNo);
+            hideProgressBar();
 
             return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Count;
         }

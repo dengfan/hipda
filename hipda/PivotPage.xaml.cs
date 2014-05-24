@@ -108,7 +108,7 @@ namespace hipda
         /// <see cref="Frame.Navigate(Type, Object)"/> 的导航参数，又提供
         /// 此页在以前会话期间保留的状态的
         /// 的字典。首次访问页面时，该状态将为 null。</param>
-        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             string dataStr = (string)e.NavigationParameter;
             string[] data = dataStr.Split(',');
@@ -118,21 +118,27 @@ namespace hipda
             var pivotItem = new PivotItem
             {
                 Header = forumName,
-                Margin = new Thickness(0, 0, 0, 0),
-                // 在静态数据类中创建一个版块容器，用来装载主贴数据列表
-                // 预先读取第一页的数据，用于过渡动画会被执行
-                DataContext = await DataSource.GetForum(forumId, forumName)
+                Margin = new Thickness(0, 0, 0, 0)
             };
 
             Pivot.Items.Insert(0, pivotItem);
             Pivot.SelectedItem = pivotItem;
+
+            // 在静态数据类中创建一个版块容器，用来装载主贴数据列表
+            pivotItem.DataContext = DataSource.GetForum(forumId, forumName);
 
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(75, async pageNo =>
             {
                 // 加载分页数据，并写入静态类中
                 // 返回的是本次加载的数据量
-                return await DataSource.GetLoadThreadsCountAsync(forumId, pageNo);
+                return await DataSource.GetLoadThreadsCountAsync(forumId, pageNo, () =>
+                {
+                    replyProgressRing.IsActive = true;
+                }, () =>
+                {
+                    replyProgressRing.IsActive = false;
+                });
             }, (index) =>
             {
                 // 从静态类中返回需要显示出来的数据
@@ -202,7 +208,6 @@ namespace hipda
             Pivot.SelectedItem = pivotItem;
 
             // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
-            // 预先读取第一页的数据，用于过渡动画会被执行
             pivotItem.DataContext = DataSource.GetThread(thread.ForumId, thread.Id);
             
             var cvs = new CollectionViewSource();
@@ -224,7 +229,6 @@ namespace hipda
 
             var listView = new ListView
             {
-                Name = "replyListView",
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,
@@ -261,7 +265,6 @@ namespace hipda
 
             listView.Footer = refreshButton;
 
-            //ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
             listView.ContainerContentChanging += listView_ContainerContentChanging;
             pivotItem.Content = listView;
 
