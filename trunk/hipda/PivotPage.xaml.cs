@@ -256,7 +256,7 @@ namespace hipda
 
             refreshButton.Tapped += async (s2, e2) => {
                 ICollectionView view = (ICollectionView)listView.ItemsSource;
-                await view.LoadMoreItemsAsync(1); // count = 50 表示是要刷新
+                await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
             };
 
             listView.Footer = refreshButton;
