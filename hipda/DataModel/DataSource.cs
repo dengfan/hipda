@@ -25,7 +25,6 @@ namespace hipda.Data
             this.Content = content;
             this.CreateTime = createTime;
         }
-
         
         public int Floor { get; private set; }
         public int PageNo { get; private set; }
@@ -66,32 +65,23 @@ namespace hipda.Data
         }
     }
 
-    //public class ReplyPage
-    //{
-    //    public ReplyPage(int pageNo)
-    //    {
-    //        this.PageNo = pageNo;
-    //        this.Replies = new ObservableCollection<Reply>();
-    //    }
-
-    //    public int PageNo { get; private set; }
-    //    public ObservableCollection<Reply> Replies { get; private set; }
-    //}
-
     public class Thread
     {
-        public Thread(int index, int pageNo, string forumId, string id, string title, string replyAndViewInfo, string ownerName, string ownerId, string createTime, string lastReplyTime)
+        public Thread(int index, int pageNo, string forumId, string id, string title, int attachType, string replyNum, string viewNum, string ownerName, string ownerId, string createTime, string lastPostAuthorName, string lastPostTime)
         {
             this.Index = index;
             this.PageNo = pageNo;
             this.ForumId = forumId;
             this.Id = id;
             this.Title = title;
-            this.ReplyAndViewInfo = replyAndViewInfo;
+            this.AttachType = attachType;
+            this.ReplyNum = replyNum;
+            this.ViewNum = viewNum;
             this.OwnerName = ownerName;
             this.OwnerId = ownerId;
             this.CreateTime = createTime;
-            this.LastReplyTime = lastReplyTime;
+            this.LastPostAuthorName = lastPostAuthorName;
+            this.LastPostTime = lastPostTime;
             this.Replies = new ObservableCollection<Reply>();
         }
 
@@ -100,16 +90,50 @@ namespace hipda.Data
         public string ForumId { get; private set; }
         public string Id { get; private set; }
         public string Title { get; private set; }
-        public string ReplyAndViewInfo { get; private set; }
+        public int AttachType { get; private set; }
+        public string ReplyNum { get; private set; }
+        public string ViewNum { get; private set; }
         public string OwnerName { get; private set; }
         public string OwnerId { get; private set; }
         public string CreateTime { get; private set; }
-        public string LastReplyTime { get; private set; }
+        public string LastPostAuthorName { get; private set; }
+        public string LastPostTime { get; private set; }
         public ObservableCollection<Reply> Replies { get; private set; }
 
         public override string ToString()
         {
             return this.Title;
+        }
+
+        public string AvatarUrl
+        {
+            get
+            {
+                int uid = Convert.ToInt32(OwnerId);
+                var s = new int[10];
+                for (int i = 0; i < s.Length - 1; ++i)
+                {
+                    s[i] = uid % 10;
+                    uid = (uid - s[i]) / 10;
+                }
+                return "http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg";
+            }
+        }
+
+        public string Numbers
+        {
+            get
+            {
+                return string.Format("({0}/{1})", ReplyNum, ViewNum);
+            }
+        }
+
+        public string LastPostInfo
+        {
+            get
+            {
+                return string.Format("{0} {1}", LastPostAuthorName, LastPostTime);
+            }
         }
     }
 
@@ -346,16 +370,42 @@ namespace hipda.Data
                 var th = tr.ChildNodes[5];
                 var span = th.Descendants().Single(n => n.GetAttributeValue("id", "").StartsWith("thread_"));
                 var a = span.ChildNodes[0];
-                //var tdAuthor = tr.ChildNodes[7];
-                //var tdNums = tr.ChildNodes[9];
-                //var tdLastPost = tr.ChildNodes[11];
+                var tdAuthor = tr.ChildNodes[7];
+                var tdNums = tr.ChildNodes[9];
+                var tdLastPost = tr.ChildNodes[11];
 
                 string id = span.Attributes[0].Value.Substring("thread_".Length);
                 string title = a.InnerText;
 
-                Thread thread = new Thread(i, pageNo, forumId, id, title, "1", "2", "3", "4", "5");
+                int attachType = -1;
+                var attachIconNode = th.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("attach"));
+                if (attachIconNode != null)
+                {
+                    string attachString = attachIconNode.Attributes[1].Value;
+                    if (attachString.Equals("图片附件"))
+                    {
+                        attachType = 1;
+                    }
 
-                //this.Forums.Single(f => f.Id.Equals(forumId)).Threads.Add(thread);
+                    if (attachString.Equals("附件"))
+                    {
+                        attachType = 2;
+                    }
+                }
+
+                var authorName = tdAuthor.ChildNodes[1].ChildNodes[1].InnerText;
+                var authorId = tdAuthor.ChildNodes[1].ChildNodes[1].Attributes[0].Value.Substring("space.php?uid=".Length);
+                var authorCreateTime = tdAuthor.ChildNodes[3].InnerText;
+
+                var replyNum = tdNums.ChildNodes[0].InnerText;
+                var viewNum = tdNums.ChildNodes[2].InnerText;
+
+                var lastPostAuthorName = tdLastPost.ChildNodes[1].ChildNodes[0].InnerText;
+                var lastPostTime = tdLastPost.ChildNodes[3].ChildNodes[0].InnerText
+                    .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty)
+                    .Replace(string.Format("{0}-{1} ", DateTime.Now.Month, DateTime.Now.Day), string.Empty);
+
+                Thread thread = new Thread(i, pageNo, forumId, id, title, attachType, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
                 forum.Threads.Add(thread);
 
                 i++;

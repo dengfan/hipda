@@ -27,6 +27,7 @@ using Windows.UI.Xaml.Shapes;
 using Windows.Graphics.Imaging;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Documents;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -150,8 +151,7 @@ namespace hipda
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
                 ItemTemplate = ThreadListItemTemplate,
-                //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
-                //ItemContainerStyleSelector = new BackgroundStyleSelecterForThreadItem(),
+                ItemContainerStyleSelector = new BackgroundStyleSelecterForThreadItem(),
                 //DataFetchSize = 4, // 每次预提数据的5屏
                 //IncrementalLoadingThreshold = 3, // 每滚动三屏就触发预提数据
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
@@ -159,6 +159,7 @@ namespace hipda
 
             ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
             listView.ItemClick += ThreadItem_ItemClick;
+            listView.ContainerContentChanging += ThemeListView_ContainerContentChanging;
             pivotItem.Content = listView;
 
             // 限制 pivot item 的数量
@@ -166,6 +167,94 @@ namespace hipda
             {
                 Pivot.Items.RemoveAt(maxHubSectionCount);
             }
+        }
+
+        private void ThemeListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            args.Handled = true;
+
+            if (args.Phase != 0)
+            {
+                throw new Exception("Not in phase 0.");
+            }
+
+            Thread thread = (Thread)args.Item;
+
+            Border templateRoot = (Border)args.ItemContainer.ContentTemplateRoot;
+            Grid layoutGrid = (Grid)templateRoot.FindName("layoutGrid");
+
+            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+            TextBlock ownerInfoTextBlock = (TextBlock)layoutGrid.FindName("ownerInfoTextBlock");
+            Run titleTextBlockRun = (Run)layoutGrid.FindName("titleTextBlockRun");
+            Run numbersTextBlockRun = (Run)layoutGrid.FindName("numbersTextBlockRun");
+            TextBlock lastPostTextBlock = (TextBlock)layoutGrid.FindName("lastPostTextBlock");
+
+            avatarImageBorder.Opacity = 0;
+            ownerInfoTextBlock.Opacity = 0;
+            titleTextBlockRun.Text = thread.Title;
+            numbersTextBlockRun.Text = thread.Numbers;
+            lastPostTextBlock.Opacity = 0;
+
+            args.RegisterUpdateCallback(ShowThreadAuthor);
+        }
+
+        private void ShowThreadAuthor(
+                ListViewBase sender,
+                ContainerContentChangingEventArgs args)
+        {
+            if (args.Phase != 1)
+            {
+                throw new Exception("Not in phase 1.");
+            }
+
+            Thread thread = (Thread)args.Item;
+            SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
+            Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
+            Grid layoutGrid = (Grid)templateRoot.FindName("layoutGrid");
+
+            TextBlock ownerInfoTextBlock = (TextBlock)layoutGrid.FindName("ownerInfoTextBlock");
+            Run ownerNameTextBlockRun = (Run)layoutGrid.FindName("ownerNameTextBlockRun");
+            Run createTimeTextBlockRun = (Run)layoutGrid.FindName("createTimeTextBlockRun");
+            TextBlock lastPostTextBlock = (TextBlock)layoutGrid.FindName("lastPostTextBlock");
+
+            ownerNameTextBlockRun.Text = thread.OwnerName;
+            createTimeTextBlockRun.Text = thread.CreateTime;
+            ownerInfoTextBlock.Opacity = 1;
+
+            lastPostTextBlock.Text = thread.LastPostInfo;
+            lastPostTextBlock.Opacity = 1;
+
+            args.RegisterUpdateCallback(ShowThreadAuthorFace);
+        }
+
+        private void ShowThreadAuthorFace(
+                ListViewBase sender,
+                ContainerContentChangingEventArgs args)
+        {
+            if (args.Phase != 2)
+            {
+                throw new Exception("Not in phase 2.");
+            }
+
+            Thread thread = (Thread)args.Item;
+            SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
+            Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
+            Grid layoutGrid = (Grid)templateRoot.FindName("layoutGrid");
+
+            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+
+            var imageBrush = new ImageBrush()
+            {
+                ImageSource = new BitmapImage()
+                {
+                    DecodePixelWidth = 60, // natural px width of image source
+                    DecodePixelHeight = 60, // natural px width of image source
+                    UriSource = new Uri(thread.AvatarUrl)
+                }
+            };
+
+            avatarImageBorder.Background = imageBrush;
+            avatarImageBorder.Opacity = 1;
         }
 
         /// <summary>
@@ -232,7 +321,6 @@ namespace hipda
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,
-                //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
                 ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
                 //DataFetchSize = 5, // 每次预提数据的5屏
                 //IncrementalLoadingThreshold = 3.5, // 每滚动三屏就触发预提数据
@@ -265,7 +353,7 @@ namespace hipda
 
             listView.Footer = refreshButton;
 
-            listView.ContainerContentChanging += listView_ContainerContentChanging;
+            listView.ContainerContentChanging += ReplyListView_ContainerContentChanging;
             pivotItem.Content = listView;
 
             // 限制 pivot item 的数量
@@ -275,7 +363,7 @@ namespace hipda
             }
         }
 
-        void listView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             args.Handled = true;
 
@@ -295,6 +383,7 @@ namespace hipda
             TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
             TextBlock replyContentTextBlock = (TextBlock)layoutGrid.FindName("replyContentTextBlock");
 
+            avatarImageBorder.Opacity = 0;
             ownerNameTextBlock.Opacity = 0;
             createTimeTextBlock.Opacity = 0;
             floorNumTextBlock.Opacity = 0;
@@ -317,9 +406,6 @@ namespace hipda
             Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
             Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
 
-            StackPanel authorStackPanel = (StackPanel)layoutGrid.FindName("authorStackPanel");
-            
-            ImageBrush avatarImageImageBrush = (ImageBrush)layoutGrid.FindName("avatarImageImageBrush");
             TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
             TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
             TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
