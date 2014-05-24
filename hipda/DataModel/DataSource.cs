@@ -367,9 +367,6 @@ namespace hipda.Data
         #region 读取指定贴子下所有回复
         public static Thread GetThread(string forumId, string threadId)
         {
-            // 先加载第一页的数据，以提高响应流畅度
-            //await _dataSource.LoadRepliesDataAsync(forumId, threadId, 1);
-
             return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId);
         }
 
