@@ -230,8 +230,8 @@ namespace hipda
                 ItemTemplate = ReplyListItemTemplate,
                 //GroupStyleSelector = new ListGroupStyleSelectorFroReply(),
                 ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
-                //DataFetchSize = 4, // 每次预提数据的5屏
-                //IncrementalLoadingThreshold = 2, // 每滚动三屏就触发预提数据
+                //DataFetchSize = 5, // 每次预提数据的5屏
+                //IncrementalLoadingThreshold = 3.5, // 每滚动三屏就触发预提数据
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
 
