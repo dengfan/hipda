@@ -365,16 +365,10 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
-        public static async void RefrashReply(string forumId, string threadId)
-        {
-            int maxPageNo = _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.Max(r => r.PageNo);
-            await _dataSource.LoadRepliesDataAsync(forumId, threadId, maxPageNo);
-        }
-
-        public static async Task<Thread> GetThread(string forumId, string threadId)
+        public static Thread GetThread(string forumId, string threadId)
         {
             // 先加载第一页的数据，以提高响应流畅度
-            await _dataSource.LoadRepliesDataAsync(forumId, threadId, 1);
+            //await _dataSource.LoadRepliesDataAsync(forumId, threadId, 1);
 
             return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId);
         }
@@ -414,12 +408,6 @@ namespace hipda.Data
             int count = threadData.Replies.Count(r => r.PageNo == pageNo);
             if (count > 0)
             {
-                // 由于第一页已经预加载了，所以这里不再加载第一页的数据
-                if (pageNo == 1)
-                {
-                    return;
-                }
-
                 if (count >= repliesPageSize) // 满页的不再加载，以便节省流量
                 {
                     return;
@@ -441,7 +429,7 @@ namespace hipda.Data
             var cts = new CancellationTokenSource();
 
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}", threadId, pageNo);
+            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&" + DateTime.Now.Second, threadId, pageNo);
             HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
             response.Content.Headers.ContentType.CharSet = "GBK";
 
@@ -513,7 +501,8 @@ namespace hipda.Data
                     {
                         postTime = postTimeNode.InnerText
                             .Replace("发表于 ", string.Empty)
-                            .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
+                            .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty)
+                            .Replace(string.Format("{0}-{1} ", DateTime.Now.Month, DateTime.Now.Day), string.Empty);
                     }
 
                     string content = string.Empty;

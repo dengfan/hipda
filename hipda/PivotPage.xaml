@@ -38,7 +38,7 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ReplyListItemTemplate">
-            <Border CornerRadius="40,0,40,0" Padding="10" Background="White">
+            <Border Padding="10" BorderBrush="LightGray" BorderThickness="{ThemeResource AppBarTopBorderThemeThickness}">
                 <Grid x:Name="LayoutGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -96,13 +96,11 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
-        <ProgressBar x:Name="threadProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
         <ProgressRing x:Name="replyProgressRing" />
     </Grid>
 
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton x:Name="RefreshButton" Icon="Refresh" Label="刷新" Click="RefreshButton_Click" />
             <AppBarButton x:Name="ReplyButton" Icon="Edit" Label="回复" />
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="SecondaryButton2" Icon="Read" Label="个人中心" />

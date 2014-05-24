@@ -21,6 +21,13 @@ namespace hipda.Data
     //  and instead downloads items from a live data source in LoadMoreItemsOverrideAsync.
     public class GeneratorIncrementalLoadingClass<T>: IncrementalLoadingBase
     {
+        Func<int, Task<int>> _loadMore;
+        Func<int, T> _generator;
+        int _pageSize;
+        uint _generatedCount = 0; // 已加载并显示的数量
+        int _loadedDataMaxCount = 0; // 记录已经载入数据总量，用于与刚载入的数量总量进行对比，如果数据量没有变大，则上一次的页码保持不变
+        int _prevPageNo = 0; // 记录上次加载的页码，以免重复加载
+
         public GeneratorIncrementalLoadingClass(int pageSize, Func<int, Task<int>> loadMore, Func<int, T> generator)
         {
             _pageSize = pageSize;
@@ -36,47 +43,76 @@ namespace hipda.Data
         /// <returns></returns>
         protected async override Task<IList<object>> LoadMoreItemsOverrideAsync(System.Threading.CancellationToken c, uint count)
         {
-            // 按条件加载分页数据
-            if (_generatedCount == 0)
-            {
-                int pageNo = 1;
+            uint toGenerate = 0; // 本次要显示的数量
 
-                // Wait for load
-                _currentDataMaxCount = await _loadMore(pageNo);
-                prevPageNo = pageNo;
+            // 表示通过刷新按钮刷新最后一页数据
+            // 由于增量加载一启动就会默认先显示一条数据，所以这里必须是 _generatedCount > 1 && count == 1 同时满足才表示是刷新
+            if (_generatedCount > 1 && count == 1)
+            {
+                uint total = _generatedCount + count;
+                if (total <= _pageSize)
+                {
+                    int pageNo = 1;
+                    _loadedDataMaxCount = await _loadMore(pageNo);
+                }
+                else if (total > _pageSize)
+                {
+                    int pageNo = (int)Math.Ceiling(Convert.ToDecimal(_generatedCount + count) / Convert.ToDecimal(_pageSize));
+                    _loadedDataMaxCount = await _loadMore(pageNo);
+                }
+
+                // 触发刷新后，有多少新数据全显示出来
+                toGenerate = (uint)_loadedDataMaxCount - _generatedCount;
             }
             else
             {
                 uint total = _generatedCount + count;
-                if (total > _pageSize)
+                if (total <= _pageSize)
+                {
+                    int pageNo = 1;
+                    if (pageNo - _prevPageNo == 1) // 避免重复加载
+                    {
+                        int currentDataMaxCount = await _loadMore(pageNo);
+                        if (currentDataMaxCount > _loadedDataMaxCount) // 有新数据加入
+                        {
+                            _prevPageNo = pageNo;
+                            _loadedDataMaxCount = currentDataMaxCount;
+                        }
+                        
+                    }
+                }
+                else if (total > _pageSize)
                 {
                     int pageNo = (int)Math.Ceiling(Convert.ToDecimal(_generatedCount + count) / Convert.ToDecimal(_pageSize));
-                    if (pageNo - prevPageNo == 1)
+                    if (pageNo - _prevPageNo == 1) // 表示正常的上划分页加载
                     {
                         // Wait for load 
-                        _currentDataMaxCount = await _loadMore(pageNo);
-                        prevPageNo = pageNo;
+                        int currentDataMaxCount = await _loadMore(pageNo);
+                        if (currentDataMaxCount > _loadedDataMaxCount) // 有新数据加入
+                        {
+                            _prevPageNo = pageNo;
+                            _loadedDataMaxCount = currentDataMaxCount;
+                        }
+                        
                     }
-                    else if (pageNo - prevPageNo > 1)
+                    else if (pageNo - _prevPageNo > 1)
                     {
-                        for (int i = prevPageNo; i < pageNo - prevPageNo; i++)
+                        for (int i = _prevPageNo; i < pageNo - _prevPageNo; i++)
                         {
                             // Wait for load 
-                            _currentDataMaxCount = await _loadMore(i);
+                            int currentDataMaxCount = await _loadMore(i);
+                            if (currentDataMaxCount > _loadedDataMaxCount)
+                            {
+                                _prevPageNo = i;
+                                _loadedDataMaxCount = currentDataMaxCount;
+                            }
                         }
-                        prevPageNo = pageNo;
                     }
                 }
-                else if (total == _pageSize)
-                {
-                    int pageNo = prevPageNo + 1;
-                    _currentDataMaxCount = await _loadMore(pageNo);
-                    prevPageNo = pageNo;
-                }
-            }
 
-            // 本次要显示的数量
-            uint toGenerate = System.Math.Min(count, (uint)_currentDataMaxCount - _generatedCount);
+                // 触发加载下一页后，只加载要加载的数量
+                toGenerate = System.Math.Min(count, (uint)_loadedDataMaxCount - _generatedCount);
+            }
 
             // This code simply generates
             var values = from j in Enumerable.Range((int)_generatedCount, (int)toGenerate)
@@ -89,24 +125,12 @@ namespace hipda.Data
 
         protected override bool HasMoreItemsOverride()
         {
-            if (_currentDataMaxCount == 0)
+            if (_loadedDataMaxCount == 0)
             {
                 return true;
             }
 
-            return _generatedCount < _currentDataMaxCount;
+            return _generatedCount < _loadedDataMaxCount;
         }
-
-        #region State
-
-        Func<int, Task<int>> _loadMore;
-        Func<int, T> _generator;
-        uint _generatedCount = 0; // 已加载并显示的数量
-        int _currentDataMaxCount = 0; // 当前数据总量
-        int _pageSize;
-
-        int prevPageNo = 1;
-
-        #endregion 
     }
 }

@@ -184,9 +184,8 @@ namespace hipda
         /// <summary>
         /// 在贴子项上单击时调用
         /// </summary>
-        private async void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
+        private void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
         {
-            threadProgressBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
             Thread thread = (Thread)e.ClickedItem;
             string threadId = thread.Id;
             string threadTitle = thread.Title;
@@ -196,15 +195,15 @@ namespace hipda
             var pivotItem = new PivotItem
             {
                 Header = GetFirstString(threadTitle, 16),
-                Margin = new Thickness(0, 0, 0, 0),
-                // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
-                // 预先读取第一页的数据，用于过渡动画会被执行
-                DataContext = await DataSource.GetThread(thread.ForumId, thread.Id)
+                Margin = new Thickness(0, 0, 0, 0)
             };
 
             Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
             Pivot.SelectedItem = pivotItem;
-            threadProgressBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
+            // 预先读取第一页的数据，用于过渡动画会被执行
+            pivotItem.DataContext = DataSource.GetThread(thread.ForumId, thread.Id);
             
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(50, async pageNo =>
@@ -236,7 +235,33 @@ namespace hipda
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
 
-            ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
+            Border refreshButton = new Border
+            {
+                //CornerRadius = new CornerRadius(5),
+                Margin = new Thickness(10,0,10,100),
+                Background = new SolidColorBrush(Colors.Green),
+                Height = 50,
+                HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Stretch
+            };
+
+            Image refreshIcon = new Image
+            {
+                Source = new BitmapImage
+                {
+                    UriSource = new Uri("ms-appx:///Assets/Icons/appbar.refresh.png")
+                }
+            };
+
+            refreshButton.Child = refreshIcon;
+
+            refreshButton.Tapped += async (s2, e2) => {
+                ICollectionView view = (ICollectionView)listView.ItemsSource;
+                await view.LoadMoreItemsAsync(1); // count = 50 表示是要刷新
+            };
+
+            listView.Footer = refreshButton;
+
+            //ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
             listView.ContainerContentChanging += listView_ContainerContentChanging;
             pivotItem.Content = listView;
 
@@ -324,14 +349,14 @@ namespace hipda
 
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
 
-            var bitmapImage = new BitmapImage();
-            bitmapImage.DecodePixelWidth = 60; // natural px width of image source
-            bitmapImage.DecodePixelHeight = 60; // natural px width of image source
-            bitmapImage.UriSource = new Uri(reply.AvatarUrl);
-
             var imageBrush = new ImageBrush()
             {
-                ImageSource = bitmapImage
+                ImageSource = new BitmapImage()
+                {
+                    DecodePixelWidth = 60, // natural px width of image source
+                    DecodePixelHeight = 60, // natural px width of image source
+                    UriSource = new Uri(reply.AvatarUrl)
+                }
             };
 
             avatarImageBorder.Background = imageBrush;
@@ -394,10 +419,5 @@ namespace hipda
         }
 
         #endregion
-
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
     }
 }
