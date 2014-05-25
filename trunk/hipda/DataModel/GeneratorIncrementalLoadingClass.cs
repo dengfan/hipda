@@ -91,34 +91,7 @@ namespace hipda.Data
                         }
                     }
                 }
-                else if (total > _pageSize)
-                {
-                    int pageNo = (int)Math.Ceiling(Convert.ToDecimal(total) / Convert.ToDecimal(_pageSize));
-                    if (pageNo - _prevPageNo == 1) // 表示正常的上划分页加载
-                    {
-                        // Wait for load 
-                        int currentDataMaxCount = await _loadMore(pageNo);
-                        if (currentDataMaxCount > _loadedDataMaxCount) // 有新数据加入
-                        {
-                            _prevPageNo = pageNo;
-                            _loadedDataMaxCount = currentDataMaxCount;
-                        }
-                    }
-                    else if (pageNo - _prevPageNo > 1)
-                    {
-                        for (int i = _prevPageNo; i < pageNo - _prevPageNo; i++)
-                        {
-                            // Wait for load 
-                            int currentDataMaxCount = await _loadMore(i);
-                            if (currentDataMaxCount > _loadedDataMaxCount)
-                            {
-                                _prevPageNo = i;
-                                _loadedDataMaxCount = currentDataMaxCount;
-                            }
-                        }
-                    }
-                }
-                else // 刚好是满页，此时必须主动加载下一页
+                else if (total >= _pageSize)
                 {
                     if (total % _pageSize == 0)
                     {
@@ -132,6 +105,33 @@ namespace hipda.Data
                             {
                                 _prevPageNo = pageNo;
                                 _loadedDataMaxCount = currentDataMaxCount;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        int pageNo = (int)Math.Ceiling(Convert.ToDecimal(total) / Convert.ToDecimal(_pageSize));
+                        if (pageNo - _prevPageNo == 1) // 表示正常的上划分页加载
+                        {
+                            // Wait for load 
+                            int currentDataMaxCount = await _loadMore(pageNo);
+                            if (currentDataMaxCount > _loadedDataMaxCount) // 有新数据加入
+                            {
+                                _prevPageNo = pageNo;
+                                _loadedDataMaxCount = currentDataMaxCount;
+                            }
+                        }
+                        else if (pageNo - _prevPageNo > 1)
+                        {
+                            for (int i = _prevPageNo; i < pageNo - _prevPageNo; i++)
+                            {
+                                // Wait for load 
+                                int currentDataMaxCount = await _loadMore(i);
+                                if (currentDataMaxCount > _loadedDataMaxCount)
+                                {
+                                    _prevPageNo = i;
+                                    _loadedDataMaxCount = currentDataMaxCount;
+                                }
                             }
                         }
                     }
