@@ -22,110 +22,128 @@
 
     <Page.Resources>
         <DataTemplate x:Name="ThreadListItemTemplate">
-            <Border CornerRadius="40,0,40,0" Padding="10" Background="White">
-                <Grid x:Name="layoutGrid">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Border x:Name="avatarImageBorder" Grid.Column="0" Grid.Row="0" CornerRadius="30" Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                    
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                    <TextBlock x:Name="titleTextBlock" 
+                        TextWrapping="WrapWholeWords"
+                        Style="{ThemeResource BodyTextBlockStyle}" FontFamily="Global User Interface">
+                        <Run x:Name="titleTextBlockRun" Text="{Binding Title}" FontFamily="Global User Interface" />
+                        <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                    </TextBlock>
+                    <!--<StackPanel Orientation="Horizontal">
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.image.png" 
+                                    DecodePixelWidth="36" DecodePixelHeight="36"/>
+                            </Image.Source>
+                        </Image>
 
-                    <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0" Margin="10,0,0,0">
-                        <TextBlock x:Name="ownerInfoTextBlock"
-                                TextWrapping="WrapWholeWords"
-                                HorizontalAlignment="Left"
-                                Style="{ThemeResource ListViewItemContentTextBlockStyle}"
-                                FontFamily="Global User Interface">
-                            <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
-                            <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
-                        </TextBlock>
-                        <TextBlock x:Name="titleTextBlock" 
-                            Padding="0,5,0,0"
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.paperclip.rotated.png" 
+                                    DecodePixelWidth="36" DecodePixelHeight="36"/>
+                            </Image.Source>
+                        </Image>
+
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.thumbs.up.png" 
+                                    DecodePixelWidth="36" DecodePixelHeight="36"/>
+                            </Image.Source>
+                        </Image>
+                    </StackPanel>-->
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+                    <Border x:Name="avatarImageBorder" Margin="0,10,10,0" CornerRadius="30" Width="60" Height="60" HorizontalAlignment="Left" />
+                    <TextBlock x:Name="ownerInfoTextBlock"
                             TextWrapping="WrapWholeWords"
-                            Style="{ThemeResource BodyTextBlockStyle}" FontFamily="Global User Interface">
-                            <Run x:Name="titleTextBlockRun" Text="{Binding Title}" FontFamily="Global User Interface" />
-                            <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
-                        </TextBlock>
-                        <!--<StackPanel Orientation="Horizontal">
-                            <Image>
-                                <Image.Source>
-                                    <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.image.png" 
-                                        DecodePixelWidth="36" DecodePixelHeight="36"/>
-                                </Image.Source>
-                            </Image>
+                            HorizontalAlignment="Left"
+                               VerticalAlignment="Bottom"
+                            Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                            FontFamily="Global User Interface">
+                        <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                        <LineBreak/>
+                        <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
+                    </TextBlock>
+                    
+                </StackPanel>
 
-                            <Image>
-                                <Image.Source>
-                                    <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.paperclip.rotated.png" 
-                                        DecodePixelWidth="36" DecodePixelHeight="36"/>
-                                </Image.Source>
-                            </Image>
+                <TextBlock x:Name="lastPostTextBlock"  Grid.Row="1" Grid.Column="1"
+                        Text="{Binding LastPostInfo}"
+                        TextWrapping="WrapWholeWords"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"
+                        Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
 
-                            <Image>
-                                <Image.Source>
-                                    <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.thumbs.up.png" 
-                                        DecodePixelWidth="36" DecodePixelHeight="36"/>
-                                </Image.Source>
-                            </Image>
-                        </StackPanel>-->
-                        <TextBlock x:Name="lastPostTextBlock" 
-                            Text="{Binding LastPostInfo}"
-                            TextWrapping="WrapWholeWords"
-                            Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
+                <Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                        X1="0" Y1="15"
+                        X2="600" Y2="15"
+                        Stroke="LightGray" StrokeDashArray="8,4" />
+            </Grid>
         </DataTemplate>
 
         <DataTemplate x:Name="ReplyListItemTemplate">
-            <Border Padding="10" BorderBrush="LightGray" BorderThickness="{ThemeResource AppBarTopBorderThemeThickness}">
-                <Grid x:Name="LayoutGrid">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                    <StackPanel x:Name="authorStackPanel" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                        <Border x:Name="avatarImageBorder" CornerRadius="30" Width="60" Height="60" />
+                <StackPanel x:Name="authorStackPanel" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                    <Border x:Name="avatarImageBorder" CornerRadius="30" Width="60" Height="60" />
 
-                        <StackPanel Orientation="Vertical" Margin="6">
-                            <TextBlock x:Name="ownerNameTextBlock"
-                                       Text="{Binding OwnerName}"
-                                       TextWrapping="WrapWholeWords"
-                                       HorizontalAlignment="Left"
-                                       FontWeight="Bold"
-                                       Style="{ThemeResource ListViewItemContentTextBlockStyle}"
-                                       Foreground="{ThemeResource PhoneAccentBrush}" />
+                    <StackPanel Orientation="Vertical" Margin="6">
+                        <TextBlock x:Name="ownerNameTextBlock"
+                                    Text="{Binding OwnerName}"
+                                    TextWrapping="WrapWholeWords"
+                                    HorizontalAlignment="Left"
+                                    FontWeight="Bold"
+                                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                                    Foreground="{ThemeResource PhoneAccentBrush}" />
 
-                            <TextBlock x:Name="createTimeTextBlock"
-                                       Text="{Binding CreateTime}" 
-                                       HorizontalAlignment="Left"
-                                       Style="{ThemeResource ListViewItemContentTextBlockStyle}"
-                                       Foreground="Gray"/>
-                        </StackPanel>
+                        <TextBlock x:Name="createTimeTextBlock"
+                                    Text="{Binding CreateTime}" 
+                                    HorizontalAlignment="Left"
+                                    Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                                    Foreground="Gray"/>
                     </StackPanel>
+                </StackPanel>
 
-                    <TextBlock x:Name="floorNumTextBlock" Grid.Row="0" Grid.Column="1" 
-                               Text="{Binding FloorNumStr}"
-                               HorizontalAlignment="Right" 
-                               Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
+                <TextBlock x:Name="floorNumTextBlock" Grid.Row="0" Grid.Column="1" 
+                            Text="{Binding FloorNumStr}"
+                            HorizontalAlignment="Right" 
+                            Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
 
-                    <TextBlock x:Name="replyContentTextBlock" 
-                               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                               Padding="0,3,0,0"
-                               Text="{Binding Content}"
-                               TextWrapping="WrapWholeWords"
-                               Style="{ThemeResource BodyTextBlockStyle}"/>
-                </Grid>
-            </Border>
+                <TextBlock x:Name="replyContentTextBlock" 
+                            Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                            Padding="0,3,0,0"
+                            Text="{Binding Content}"
+                            TextWrapping="WrapWholeWords"
+                            Style="{ThemeResource BodyTextBlockStyle}"/>
+
+                <Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                        X1="0" Y1="15"
+                        X2="600" Y2="15"
+                        Stroke="LightGray" StrokeDashArray="8,4" />
+            </Grid>
         </DataTemplate>
     </Page.Resources>
 
