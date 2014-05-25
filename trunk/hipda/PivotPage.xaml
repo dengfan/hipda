@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:hipda.Data"
     mc:Ignorable="d"
-    Background="AliceBlue" 
+    Background="WhiteSmoke" 
     RequestedTheme="Light">
 
     <Page.Transitions>
@@ -143,7 +143,7 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar>
+        <CommandBar ClosedDisplayMode="Minimal">
             <AppBarButton x:Name="ReplyButton" Icon="Edit" Label="回复" />
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="SecondaryButton2" Icon="Read" Label="个人中心" />
