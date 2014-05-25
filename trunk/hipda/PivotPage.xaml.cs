@@ -180,8 +180,7 @@ namespace hipda
 
             Thread thread = (Thread)args.Item;
 
-            Border templateRoot = (Border)args.ItemContainer.ContentTemplateRoot;
-            Grid layoutGrid = (Grid)templateRoot.FindName("layoutGrid");
+            Grid layoutGrid = (Grid)args.ItemContainer.ContentTemplateRoot;
 
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
             TextBlock ownerInfoTextBlock = (TextBlock)layoutGrid.FindName("ownerInfoTextBlock");
@@ -209,8 +208,7 @@ namespace hipda
 
             Thread thread = (Thread)args.Item;
             SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
-            Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
-            Grid layoutGrid = (Grid)templateRoot.FindName("layoutGrid");
+            Grid layoutGrid = (Grid)itemContainer.ContentTemplateRoot;
 
             TextBlock ownerInfoTextBlock = (TextBlock)layoutGrid.FindName("ownerInfoTextBlock");
             Run ownerNameTextBlockRun = (Run)layoutGrid.FindName("ownerNameTextBlockRun");
@@ -238,8 +236,7 @@ namespace hipda
 
             Thread thread = (Thread)args.Item;
             SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
-            Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
-            Grid layoutGrid = (Grid)templateRoot.FindName("layoutGrid");
+            Grid layoutGrid = (Grid)itemContainer.ContentTemplateRoot;
 
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
 
@@ -374,8 +371,7 @@ namespace hipda
 
             Reply reply = (Reply)args.Item;
 
-            Border templateRoot = (Border)args.ItemContainer.ContentTemplateRoot;
-            Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
+            Grid layoutGrid = (Grid)args.ItemContainer.ContentTemplateRoot;
 
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
             TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
@@ -403,8 +399,7 @@ namespace hipda
 
             Reply reply = (Reply)args.Item;
             SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
-            Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
-            Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
+            Grid layoutGrid = (Grid)itemContainer.ContentTemplateRoot;
 
             TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
             TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
@@ -433,8 +428,7 @@ namespace hipda
 
             Reply reply = (Reply)args.Item;
             SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
-            Border templateRoot = (Border)itemContainer.ContentTemplateRoot;
-            Grid layoutGrid = (Grid)templateRoot.FindName("LayoutGrid");
+            Grid layoutGrid = (Grid)itemContainer.ContentTemplateRoot;
 
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
 
