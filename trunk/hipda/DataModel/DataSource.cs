@@ -10,6 +10,8 @@ using Windows.Web.Http;
 using Windows.Data.Xml;
 using HtmlAgilityPack;
 using Windows.UI.ViewManagement;
+using Windows.UI.Notifications;
+using Windows.UI.Popups;
 
 namespace hipda.Data
 {
@@ -227,13 +229,20 @@ namespace hipda.Data
             doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
             var data = doc.DocumentNode;
 
-            var content = data.ChildNodes[2] // html
-                .ChildNodes[3] // body
-                .ChildNodes[10] // div#wrap
-                .ChildNodes[1] // div.main
-                .ChildNodes[0]; // div.content 登录后有23个子节点
+            var content = data.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("content"));
+            if (content == null)
+            {
+                await new MessageDialog("解析“所有版块”页面第一阶段出错！").ShowAsync();
+                return;
+            }
 
-            var mainBoxes = content.Descendants().Where(n => n.GetAttributeValue("class", "") == "mainbox list" && n.GetAttributeValue("id", "") != "online");
+            var mainBoxes = content.Descendants().Where(n => n.GetAttributeValue("class", "").Equals("mainbox list") && !n.GetAttributeValue("id", "").Equals("online"));
+            if (mainBoxes == null)
+            {
+                await new MessageDialog("解析“所有版块”页面第二阶段出错！").ShowAsync();
+                return;
+            }
+
             foreach (var mainBox in mainBoxes)
             {
                 string forumGroupName = mainBox.ChildNodes[3].ChildNodes[0].InnerText;
@@ -241,6 +250,11 @@ namespace hipda.Data
 
                 var tbodies = mainBox.ChildNodes[5] // table
                     .Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("forum"));
+
+                if (tbodies == null)
+                {
+                    return;
+                }
 
                 foreach (var tbody in tbodies)
                 {

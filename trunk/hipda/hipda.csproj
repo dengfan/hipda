@@ -111,10 +111,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataModel\IncrementalLoadingBase.cs" />
+    <Compile Include="DBCSEncoding.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HttpHandle.cs" />
     <Compile Include="HttpJsonContent.cs" />
     <Compile Include="ListGroupStyleSelector.cs">
       <SubType>Code</SubType>
@@ -163,6 +165,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="gb2312.bin" />
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
