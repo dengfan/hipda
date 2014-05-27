@@ -235,23 +235,26 @@ namespace hipda
             }
 
             Thread thread = (Thread)args.Item;
-            SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
-            Grid layoutGrid = (Grid)itemContainer.ContentTemplateRoot;
-
-            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
-
-            var imageBrush = new ImageBrush()
+            if (!string.IsNullOrEmpty(thread.AvatarUrl))
             {
-                ImageSource = new BitmapImage()
-                {
-                    DecodePixelWidth = 60, // natural px width of image source
-                    DecodePixelHeight = 60, // natural px width of image source
-                    UriSource = new Uri(thread.AvatarUrl)
-                }
-            };
+                SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
+                Grid layoutGrid = (Grid)itemContainer.ContentTemplateRoot;
 
-            avatarImageBorder.Background = imageBrush;
-            avatarImageBorder.Opacity = 1;
+                Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+
+                var imageBrush = new ImageBrush()
+                {
+                    ImageSource = new BitmapImage()
+                    {
+                        DecodePixelWidth = 60, // natural px width of image source
+                        DecodePixelHeight = 60, // natural px width of image source
+                        UriSource = new Uri(thread.AvatarUrl)
+                    }
+                };
+
+                avatarImageBorder.Background = imageBrush;
+                avatarImageBorder.Opacity = 1;
+            }
         }
 
         /// <summary>

@@ -27,8 +27,6 @@ namespace hipda
     public sealed partial class Login : Page
     {
         private HttpHandle httpClient = HttpHandle.getInstance();
-        //private HttpClient httpClient;
-        //private CancellationTokenSource cts;
 
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
@@ -37,16 +35,9 @@ namespace hipda
             this.InitializeComponent();
         }
 
-        /// <summary>
-        /// 在此页将要在 Frame 中显示时进行调用。
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             httpClient.setEncoding("gb2312");
-            //Helpers.CreateHttpClient(ref httpClient);
-            //cts = new CancellationTokenSource();
         }
 
         private async void btnLogin_Click(object sender, RoutedEventArgs e)
@@ -54,17 +45,11 @@ namespace hipda
             string username = txtUsername.Text.Trim();
             string password = txtPassword.Text.Trim();
 
-            Dictionary<string, object> postDataDic = new Dictionary<string, object>();
-            postDataDic.Add("username", username);
-            postDataDic.Add("password", password);
+            Dictionary<string, object> postData = new Dictionary<string, object>();
+            postData.Add("username", username);
+            postData.Add("password", password);
 
-            //HttpFormUrlEncodedContent postData = new HttpFormUrlEncodedContent(postDataDic);
-            //postData.Headers.ContentType.CharSet = "UTF-8";
-
-            //HttpResponseMessage response = await httpClient.PostAsync(new Uri("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1"), postData).AsTask(cts.Token);
-            //string resultContent = await response.Content.ReadAsStringAsync().AsTask(cts.Token);
-
-            string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postDataDic);
+            string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
             if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败"))
             {
                 if (!Frame.Navigate(typeof(HomePage)))
@@ -76,21 +61,6 @@ namespace hipda
             {
                 OutputField.Text = resultContent;
             }
-            //await Helpers.DisplayTextResultAsync(response, OutputField, cts.Token);
-
-            //HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter();
-            
-            //if (response.Headers.ContainsKey("Set-Cookie"))
-            //{
-            //    string cookieStr = response.Headers["Set-Cookie"];
-
-            //    string[] cookieStrAry = cookieStr.Split(';');
-            //    foreach (string cookiestr in cookieStrAry)
-            //    {
-            //        OutputField.Text += cookiestr;
-            //    }
-            //}
-            
         }
     }
 }
