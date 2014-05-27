@@ -111,6 +111,11 @@ namespace hipda.Data
         {
             get
             {
+                if (string.IsNullOrEmpty(OwnerId))
+                {
+                    return string.Empty;
+                }
+
                 int uid = Convert.ToInt32(OwnerId);
                 var s = new int[10];
                 for (int i = 0; i < s.Length - 1; ++i)
@@ -212,21 +217,18 @@ namespace hipda.Data
                 return;
             }
 
-            HttpClient httpClient = new HttpClient();
-            Helpers.CreateHttpClient(ref httpClient);
-
-            CancellationTokenSource cts = new CancellationTokenSource();
+            HttpHandle httpClient = HttpHandle.getInstance();
+            httpClient.setEncoding("gb2312");
 
             // 读取数据
             string url = "http://www.hi-pda.com/forum/index.php";
-            HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
-            response.Content.Headers.ContentType.CharSet = "GBK";
+            string htmlContent = await httpClient.HttpGet(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
 
             // 载入HTML
-            doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
+            doc.LoadHtml(htmlContent);
             var data = doc.DocumentNode;
 
             var content = data.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("content"));
@@ -358,24 +360,32 @@ namespace hipda.Data
                 return;
             }
 
-            HttpClient httpClient = new HttpClient();
-            Helpers.CreateHttpClient(ref httpClient);
-
-            CancellationTokenSource cts = new CancellationTokenSource();
+            HttpHandle httpClient = HttpHandle.getInstance();
+            httpClient.setEncoding("gb2312");
 
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&page={1}", forumId, pageNo);
-            HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
-            response.Content.Headers.ContentType.CharSet = "GBK";
+            string htmlContent = await httpClient.HttpGet(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
 
             // 载入HTML
-            doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
+            doc.LoadHtml(htmlContent);
 
-            var dataTable = doc.DocumentNode.Descendants().Single(n => n.GetAttributeValue("class", "") == "datatable");
+            var dataTable = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
+            if (dataTable == null)
+            {
+                await new MessageDialog("解析主贴列表页第一阶段出错！").ShowAsync();
+                return;
+            }
+
             var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("normalthread_") || n.GetAttributeValue("id", "").StartsWith("stickthread_"));
+            if (tbodies == null)
+            {
+                await new MessageDialog("解析主贴列表页第二阶段出错！").ShowAsync();
+                return;
+            }
 
             int i = 0;
             foreach (var item in tbodies)
@@ -407,8 +417,20 @@ namespace hipda.Data
                     }
                 }
 
-                var authorName = tdAuthor.ChildNodes[1].ChildNodes[1].InnerText;
-                var authorId = tdAuthor.ChildNodes[1].ChildNodes[1].Attributes[0].Value.Substring("space.php?uid=".Length);
+                var authorName = string.Empty;
+                var authorId = string.Empty;
+                var authorNameNode = tdAuthor.ChildNodes[1]; // cite
+                var authorNameLink = authorNameNode.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
+                if (authorNameLink == null)
+                {
+                    authorName = authorNameNode.InnerText;
+                }
+                else
+                {
+                    authorName = authorNameLink.InnerText;
+                    authorId = authorNameLink.Attributes[0].Value.Substring("space.php?uid=".Length);
+                }
+
                 var authorCreateTime = tdAuthor.ChildNodes[3].InnerText;
 
                 var replyNum = tdNums.ChildNodes[0].InnerText;
@@ -416,8 +438,8 @@ namespace hipda.Data
 
                 var lastPostAuthorName = tdLastPost.ChildNodes[1].ChildNodes[0].InnerText;
                 var lastPostTime = tdLastPost.ChildNodes[3].ChildNodes[0].InnerText
-                    .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty)
-                    .Replace(string.Format("{0}-{1} ", DateTime.Now.Month, DateTime.Now.Day), string.Empty);
+                    .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
+                    .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
 
                 Thread thread = new Thread(i, pageNo, forumId, id, title, attachType, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
                 forum.Threads.Add(thread);
@@ -483,21 +505,18 @@ namespace hipda.Data
             }
             #endregion
 
-            HttpClient httpClient = new HttpClient();
-            Helpers.CreateHttpClient(ref httpClient);
-
-            var cts = new CancellationTokenSource();
+            HttpHandle httpClient = HttpHandle.getInstance();
+            httpClient.setEncoding("gb2312");
 
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&" + DateTime.Now.Second, threadId, pageNo);
-            HttpResponseMessage response = await httpClient.GetAsync(new Uri(url)).AsTask(cts.Token);
-            response.Content.Headers.ContentType.CharSet = "GBK";
+            string htmlContent = await httpClient.HttpGet(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
 
             // 载入HTML
-            doc.LoadHtml(await response.Content.ReadAsStringAsync().AsTask(cts.Token));
+            doc.LoadHtml(htmlContent);
 
             #region 先判断页码是否已超过最大页码，以免造成重复加载
             if (pageNo > 1)
@@ -527,55 +546,58 @@ namespace hipda.Data
             #endregion
 
             var data = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
-            if (data != null)
+            if (data == null)
             {
-                foreach (var item in data)
+                await new MessageDialog("解析回复列表页第一阶段出错！").ShowAsync();
+                return;
+            }
+
+            foreach (var item in data)
+            {
+                var postAuthorNode = item.ChildNodes[0] // table
+                        .ChildNodes[1] // tr
+                        .ChildNodes[1]; // td.postauthor
+
+                var postContentNode = item.ChildNodes[0] // table
+                        .ChildNodes[1] // tr
+                        .ChildNodes[3]; // td.postcontent
+
+                string ownerId = string.Empty;
+                string ownerName = string.Empty;
+                var authorNode = postAuthorNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
+                if (authorNode != null)
                 {
-                    var postAuthorNode = item.ChildNodes[0] // table
-                            .ChildNodes[1] // tr
-                            .ChildNodes[1]; // td.postauthor
-
-                    var postContentNode = item.ChildNodes[0] // table
-                            .ChildNodes[1] // tr
-                            .ChildNodes[3]; // td.postcontent
-
-                    string ownerId = string.Empty;
-                    string ownerName = string.Empty;
-                    var authorNode = postAuthorNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
-                    if (authorNode != null)
-                    {
-                        authorNode = authorNode.ChildNodes[1]; // a
-                        ownerId = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
-                        ownerName = authorNode.InnerText;
-                    }
-                    
-                    var floorNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")) // div
-                        .ChildNodes[1] // strong
-                        .ChildNodes[0] // a
-                        .ChildNodes[0]; // em
-                    int floor = Convert.ToInt32(floorNode.InnerText);
-
-                    string postTime = string.Empty;
-                    var postTimeNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
-                    if (postTimeNode != null)
-                    {
-                        postTime = postTimeNode.InnerText
-                            .Replace("发表于 ", string.Empty)
-                            .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty)
-                            .Replace(string.Format("{0}-{1} ", DateTime.Now.Month, DateTime.Now.Day), string.Empty);
-                    }
-
-                    string content = string.Empty;
-                    var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("postmessage_"));
-                    if (contentNode != null)
-                    {
-                        content = contentNode.InnerText;
-                    }
-
-                    Reply reply = new Reply(floor, pageNo, threadId, ownerId, ownerName, content, postTime);
-
-                    threadData.Replies.Add(reply);
+                    authorNode = authorNode.ChildNodes[1]; // a
+                    ownerId = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
+                    ownerName = authorNode.InnerText;
                 }
+
+                var floorNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")) // div
+                    .ChildNodes[1] // strong
+                    .ChildNodes[0] // a
+                    .ChildNodes[0]; // em
+                int floor = Convert.ToInt32(floorNode.InnerText);
+
+                string postTime = string.Empty;
+                var postTimeNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
+                if (postTimeNode != null)
+                {
+                    postTime = postTimeNode.InnerText
+                        .Replace("发表于 ", string.Empty)
+                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty)
+                        .Replace(string.Format("{0}-{1} ", DateTime.Now.Month, DateTime.Now.Day), string.Empty);
+                }
+
+                string content = string.Empty;
+                var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("postmessage_"));
+                if (contentNode != null)
+                {
+                    content = contentNode.InnerText;
+                }
+
+                Reply reply = new Reply(floor, pageNo, threadId, ownerId, ownerName, content, postTime);
+
+                threadData.Replies.Add(reply);
             }
         }
         #endregion

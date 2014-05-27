@@ -112,7 +112,6 @@
     </Compile>
     <Compile Include="DataModel\IncrementalLoadingBase.cs" />
     <Compile Include="DBCSEncoding.cs" />
-    <Compile Include="Helpers.cs" />
     <Compile Include="HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
