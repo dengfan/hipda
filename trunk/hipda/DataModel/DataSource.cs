@@ -452,7 +452,7 @@ namespace hipda.Data
         #region 读取指定贴子下所有回复
         public static Thread GetThread(string forumId, string threadId)
         {
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId);
+            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.First(t => t.Id == threadId);
         }
 
         public static async Task<int> GetLoadRepliesCountAsync(string forumId, string threadId, int pageNo, Action showProgressBar, Action hideProgressBar)
@@ -461,12 +461,12 @@ namespace hipda.Data
             await _dataSource.LoadRepliesDataAsync(forumId, threadId, pageNo);
             hideProgressBar();
 
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.Count;
+            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.First(t => t.Id == threadId).Replies.Count;
         }
 
         public static Reply GetReplyByIndex(string forumId, string threadId, int index)
         {
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Single(t => t.Id == threadId).Replies.OrderBy(r => r.Floor).ElementAt(index);
+            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.First(t => t.Id == threadId).Replies.OrderBy(r => r.Floor).ElementAt(index);
         }
 
         // 读取指定贴子的回复列表数据
@@ -479,7 +479,7 @@ namespace hipda.Data
                 return;
             }
 
-            Thread threadData = forum.Threads.SingleOrDefault(t => t.Id.Equals(threadId));
+            Thread threadData = forum.Threads.FirstOrDefault(t => t.Id.Equals(threadId));
             if (threadData == null)
             {
                 return;
