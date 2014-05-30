@@ -157,7 +157,7 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
-        <ProgressRing x:Name="replyProgressRing" />
+        <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" />
     </Grid>
 
     <Page.BottomAppBar>

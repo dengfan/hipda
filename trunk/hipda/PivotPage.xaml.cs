@@ -135,10 +135,10 @@ namespace hipda
                 // 返回的是本次加载的数据量
                 return await DataSource.GetLoadThreadsCountAsync(forumId, pageNo, () =>
                 {
-                    replyProgressRing.IsActive = true;
+                    replyProgressBar.Visibility = Visibility.Visible;
                 }, () =>
                 {
-                    replyProgressRing.IsActive = false;
+                    replyProgressBar.Visibility = Visibility.Collapsed;
                 });
             }, (index) =>
             {
@@ -306,9 +306,9 @@ namespace hipda
                 // 返回的是本次加载的数据量
                 return await DataSource.GetLoadRepliesCountAsync(thread.ForumId, thread.Id, pageNo, () =>
                 {
-                    replyProgressRing.IsActive = true;
+                    replyProgressBar.Visibility = Visibility.Visible;
                 }, () => {
-                    replyProgressRing.IsActive = false;
+                    replyProgressBar.Visibility = Visibility.Collapsed;
                 });
             }, (index) =>
             {
@@ -327,13 +327,13 @@ namespace hipda
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
 
-            Border refreshButton = new Border
+            Button refreshButton = new Button
             {
-                //CornerRadius = new CornerRadius(5),
-                Margin = new Thickness(10,0,10,100),
+                BorderThickness = new Thickness(0),
+                Margin = new Thickness(10, 0, 10, 100),
                 Background = new SolidColorBrush(Colors.Green),
-                Height = 50,
-                HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Stretch
+                Height = 66,
+                HorizontalAlignment = HorizontalAlignment.Stretch
             };
 
             Image refreshIcon = new Image
@@ -344,7 +344,7 @@ namespace hipda
                 }
             };
 
-            refreshButton.Child = refreshIcon;
+            refreshButton.Content = refreshIcon;
 
             refreshButton.Tapped += async (s2, e2) => {
                 ICollectionView view = (ICollectionView)listView.ItemsSource;
