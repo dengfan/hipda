@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -27,6 +29,8 @@ namespace hipda
     /// </summary>
     public sealed partial class HomePage : Page
     {
+        private HttpHandle httpClient = HttpHandle.getInstance();
+
         private const int maxHubSectionCount = 4;
         private const string FirstGroupName = "FirstGroup";
 
@@ -75,7 +79,13 @@ namespace hipda
         /// 的字典。首次访问页面时，该状态将为 null。</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
+            // 首次进入时才加载数据
+            if (e.PageState == null)
+            {
+                replyProgressBar.Visibility = Visibility.Visible;
+                cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
+                replyProgressBar.Visibility = Visibility.Collapsed;
+            }
         }
 
         /// <summary>
@@ -127,5 +137,31 @@ namespace hipda
         }
 
         #endregion
+
+        private async void loginButton_Click(object sender, RoutedEventArgs e)
+        {
+            httpClient.setEncoding("gb2312");
+
+            string username = usernameTextBox.Text.Trim();
+            string password = passwordTextBox.Password.Trim();
+
+            Dictionary<string, object> postData = new Dictionary<string, object>();
+            postData.Add("username", username);
+            postData.Add("password", password);
+
+            string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
+            if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败"))
+            {
+                Pivot.SelectedIndex = 0;
+
+                replyProgressBar.Visibility = Visibility.Visible;
+                cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
+                replyProgressBar.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                await new MessageDialog(resultContent).ShowAsync();
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@
         <ResourceDictionary>
             <Style x:Key="GroupHeaderStyle" TargetType="ListViewHeaderItem">
                 <Setter Property="Background" Value="WhiteSmoke"/>
-                <Setter Property="Padding" Value="10,5,10,7"/>
+                <Setter Property="Padding" Value="10,6,10,6"/>
             </Style>
 
             <GroupStyle x:Key="listViewGroupStyle" HeaderContainerStyle="{StaticResource ResourceKey=GroupHeaderStyle}">

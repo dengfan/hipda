@@ -214,14 +214,14 @@ namespace hipda.Data
         {
             if (this._forumGroups.Count > 0)
             {
-                return;
+                this.ForumGroups.Clear();
             }
 
             HttpHandle httpClient = HttpHandle.getInstance();
             httpClient.setEncoding("gb2312");
 
             // 读取数据
-            string url = "http://www.hi-pda.com/forum/index.php";
+            string url = "http://www.hi-pda.com/forum/index.php?r=" + DateTime.Now.Second;
             string htmlContent = await httpClient.HttpGet(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
