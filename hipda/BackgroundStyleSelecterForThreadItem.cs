@@ -15,12 +15,13 @@ namespace hipda
     {
         protected override Style SelectStyleCore(object item, DependencyObject container)
         {
-            //Thread listViewItem = (Thread)item;
-            //SolidColorBrush background = ((listViewItem.Index % 2) == 0 ? new SolidColorBrush(Colors.AliceBlue) : new SolidColorBrush(Colors.WhiteSmoke));
+            Thread listViewItem = (Thread)item;
+            SolidColorBrush background = ((listViewItem.Index % 2) == 0 ? new SolidColorBrush(Color.FromArgb(255, 242, 243, 245)) : new SolidColorBrush(Colors.White));
             Style style = new Style(typeof(ListViewItem));
-            //style.Setters.Add(new Setter(ListViewItem.BackgroundProperty, "White"));
+            style.Setters.Add(new Setter(ListViewItem.BackgroundProperty, background));
             style.Setters.Add(new Setter(ListViewItem.HorizontalContentAlignmentProperty, "Stretch"));
-            style.Setters.Add(new Setter(ListViewItem.MarginProperty, "10,0,10,15"));
+            style.Setters.Add(new Setter(ListViewItem.MarginProperty, "10,0,10,0"));
+            style.Setters.Add(new Setter(ListViewItem.PaddingProperty, "10,10,10,10"));
             return style;
         }
     }

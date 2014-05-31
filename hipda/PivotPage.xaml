@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:hipda.Data"
     mc:Ignorable="d"
-    Background="WhiteSmoke" 
+    Background="White"
     RequestedTheme="Light">
 
     <Page.Transitions>
@@ -38,7 +38,7 @@
                     <TextBlock x:Name="titleTextBlock" 
                         TextWrapping="WrapWholeWords"
                         Style="{ThemeResource BodyTextBlockStyle}" FontFamily="Global User Interface">
-                        <Run x:Name="titleTextBlockRun" Text="{Binding Title}" FontFamily="Global User Interface" />
+                        <Run x:Name="titleTextBlockRun" Text="{Binding Title}" Foreground="DimGray" FontWeight="Bold" FontFamily="Global User Interface" />
                         <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
                     </TextBlock>
                     <!--<StackPanel Orientation="Horizontal">
@@ -87,10 +87,10 @@
                            VerticalAlignment="Bottom"
                         Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
 
-                <Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                <!--<Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                         X1="0" Y1="15"
                         X2="600" Y2="15"
-                        Stroke="LightGray" StrokeDashArray="8,4" />
+                        Stroke="LightGray" StrokeDashArray="8,4" />-->
             </Grid>
         </DataTemplate>
 
