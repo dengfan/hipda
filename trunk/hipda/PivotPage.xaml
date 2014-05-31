@@ -157,7 +157,7 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
-        <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" />
+        <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
 
     <Page.BottomAppBar>

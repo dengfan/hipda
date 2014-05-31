@@ -54,21 +54,10 @@
                     Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
             </StackPanel>
         </DataTemplate>
-
-        <DataTemplate x:Key="GroupTemplate">
-            <ListView 
-                ItemsSource="{Binding Source={StaticResource cvsForumGroups}}"
-                IsItemClickEnabled="True"
-                ItemClick="ForumItem_ItemClick"
-                ContinuumNavigationTransitionInfo.ExitElementContainer="True"
-                ItemTemplate="{StaticResource GroupItemTemplate}"
-                GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"
-                ItemContainerStyle="{StaticResource GroupItemStyle}"/>
-        </DataTemplate>
     </Page.Resources>
 
     <Grid>
-        <Pivot x:Name="Pivot" 
+        <Pivot x:Name="Pivot"
                CommonNavigationTransitionInfo.IsStaggerElement="True">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
@@ -78,13 +67,51 @@
             <PivotItem
                 Header="版区" 
                 CommonNavigationTransitionInfo.IsStaggerElement="True"
-                ContentTemplate="{StaticResource GroupTemplate}"
-                Margin="0"/>
-            <PivotItem Header="个人中心" Margin="0">
-                <DataTemplate>
-                    <ListView></ListView>
-                </DataTemplate>
+                Margin="0">
+                <ListView
+                    Padding="10,0,10,0"
+                    ItemsSource="{Binding Source={StaticResource cvsForumGroups}}"
+                    IsItemClickEnabled="True"
+                    ItemClick="ForumItem_ItemClick"
+                    ContinuumNavigationTransitionInfo.ExitElementContainer="True"
+                    ItemTemplate="{StaticResource GroupItemTemplate}"
+                    GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"
+                    ItemContainerStyle="{StaticResource GroupItemStyle}"/>
+            </PivotItem>
+            <PivotItem 
+                Header="个人中心" 
+                CommonNavigationTransitionInfo.IsStaggerElement="True"
+                Margin="0">
+                <StackPanel Margin="10,0,10,0" Orientation="Vertical">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBox Grid.Row="0" x:Name="usernameTextBox" Header="用户名" Background="White" BorderBrush="Black"/>
+                        <PasswordBox Grid.Row="1" x:Name="passwordTextBox" Header="密码" Background="White" BorderBrush="Black" />
+                        <Button Grid.Row="2" x:Name="loginButton" Click="loginButton_Click" Content="登录" HorizontalAlignment="Stretch" Background="Green" BorderThickness="0" Foreground="White" />
+                    </Grid>
+                </StackPanel>
             </PivotItem>
         </Pivot>
+        <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar ClosedDisplayMode="Minimal">
+            <AppBarButton x:Name="ReplyButton" Icon="OtherUser" Label="登录">
+                <!--<AppBarButton.Flyout>
+                    <Flyout>
+                        
+                    </Flyout>
+                </AppBarButton.Flyout>-->
+            </AppBarButton>
+            <!--<CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="SecondaryButton2" Icon="Read" Label="个人中心" />
+            </CommandBar.SecondaryCommands>-->
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>
