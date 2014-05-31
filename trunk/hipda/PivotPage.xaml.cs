@@ -318,6 +318,7 @@ namespace hipda
 
             var listView = new ListView
             {
+                Padding = new Thickness(10, 0, 10, 0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,
@@ -330,9 +331,9 @@ namespace hipda
             Button refreshButton = new Button
             {
                 BorderThickness = new Thickness(0),
-                Margin = new Thickness(10, 0, 10, 100),
+                Margin = new Thickness(0, 0, 0, 100),
                 Background = new SolidColorBrush(Colors.Green),
-                Height = 66,
+                Height = 60,
                 HorizontalAlignment = HorizontalAlignment.Stretch
             };
 

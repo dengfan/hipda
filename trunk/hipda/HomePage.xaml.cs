@@ -38,6 +38,18 @@ namespace hipda
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
+        public async Task UpdateStatus()
+        {
+            StatusBar statusBar = StatusBar.GetForCurrentView();
+            statusBar.ProgressIndicator.Text = string.Concat("Hi!PDA ", DataSource.IsLogin ? string.Empty : "未登录");
+            await statusBar.ProgressIndicator.ShowAsync();
+
+            if (DataSource.IsLogin)
+            {
+                loginPanel.Visibility = Visibility.Collapsed;
+            }
+        }
+
         public HomePage()
         {
             this.InitializeComponent();
@@ -85,6 +97,8 @@ namespace hipda
                 replyProgressBar.Visibility = Visibility.Visible;
                 cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
                 replyProgressBar.Visibility = Visibility.Collapsed;
+
+                await UpdateStatus();
             }
         }
 
@@ -157,6 +171,8 @@ namespace hipda
                 replyProgressBar.Visibility = Visibility.Visible;
                 cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
                 replyProgressBar.Visibility = Visibility.Collapsed;
+
+                await UpdateStatus();
             }
             else
             {

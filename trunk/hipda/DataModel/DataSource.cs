@@ -195,6 +195,16 @@ namespace hipda.Data
             get { return this._forumGroups; }
         }
 
+        public static bool IsLogin
+        {
+            get
+            {
+                return _dataSource.ForumGroups.Count() > 1;
+            }
+        }
+
+
+
         private ObservableCollection<Forum> _forums = new ObservableCollection<Forum>();
         public ObservableCollection<Forum> Forums
         {

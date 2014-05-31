@@ -9,7 +9,7 @@
     Background="White"
     RequestedTheme="Light">
 
-    <Page.Transitions>
+    <!--<Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
                 <NavigationThemeTransition.DefaultNavigationTransitionInfo>
@@ -17,7 +17,7 @@
                 </NavigationThemeTransition.DefaultNavigationTransitionInfo>
             </NavigationThemeTransition>
         </TransitionCollection>
-    </Page.Transitions>
+    </Page.Transitions>-->
     
     <Page.Resources>
         <CollectionViewSource x:Name="cvsForumGroups" IsSourceGrouped="True" ItemsPath="Forums"/>
@@ -83,16 +83,16 @@
                 CommonNavigationTransitionInfo.IsStaggerElement="True"
                 Margin="0">
                 <StackPanel Margin="10,0,10,0" Orientation="Vertical">
-                    <Grid>
+                    <Grid x:Name="loginPanel">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBox Grid.Row="0" x:Name="usernameTextBox" Header="用户名" Background="White" BorderBrush="Black"/>
-                        <PasswordBox Grid.Row="1" x:Name="passwordTextBox" Header="密码" Background="White" BorderBrush="Black" />
-                        <Button Grid.Row="2" x:Name="loginButton" Click="loginButton_Click" Content="登录" HorizontalAlignment="Stretch" Background="Green" BorderThickness="0" Foreground="White" />
+                        <TextBox Grid.Row="0" x:Name="usernameTextBox" TabIndex="1" Header="用户名" Background="White" BorderBrush="Black"/>
+                        <PasswordBox Grid.Row="1" x:Name="passwordTextBox" TabIndex="2" Header="密码" Background="White" BorderBrush="Black" />
+                        <Button Grid.Row="2" x:Name="loginButton" TabIndex="3" Click="loginButton_Click" Height="60" Content="登录" HorizontalAlignment="Stretch" BorderBrush="Green" Background="Green" Foreground="White" />
                     </Grid>
                 </StackPanel>
             </PivotItem>
