@@ -111,10 +111,16 @@ namespace hipda
         /// 的字典。首次访问页面时，该状态将为 null。</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            //if (string.IsNullOrEmpty((string)e.NavigationParameter))
+            //{
+            //    return;
+            //}
+
             string dataStr = (string)e.NavigationParameter;
             string[] data = dataStr.Split(',');
             string forumId = data[0];
             string forumName = data[1];
+
 
             var pivotItem = new PivotItem
             {
@@ -169,6 +175,7 @@ namespace hipda
             }
         }
 
+        #region 增量更新
         private void ThemeListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             args.Handled = true;
@@ -256,6 +263,7 @@ namespace hipda
                 avatarImageBorder.Opacity = 1;
             }
         }
+        #endregion
 
         /// <summary>
         /// 保留与此页关联的状态，以防挂起应用程序或
@@ -267,6 +275,7 @@ namespace hipda
         ///的事件数据。</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+
         }
 
         /// <summary>

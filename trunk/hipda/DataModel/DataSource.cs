@@ -12,6 +12,7 @@ using HtmlAgilityPack;
 using Windows.UI.ViewManagement;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
+using Windows.Storage;
 
 namespace hipda.Data
 {
@@ -189,6 +190,8 @@ namespace hipda.Data
         private static int repliesPageSize = 50;
         private static DataSource _dataSource = new DataSource();
 
+        private static HttpHandle httpClient = HttpHandle.getInstance();
+
         private ObservableCollection<ForumGroup> _forumGroups = new ObservableCollection<ForumGroup>();
         public ObservableCollection<ForumGroup> ForumGroups
         {
@@ -203,12 +206,63 @@ namespace hipda.Data
             }
         }
 
-
-
         private ObservableCollection<Forum> _forums = new ObservableCollection<Forum>();
         public ObservableCollection<Forum> Forums
         {
             get { return this._forums; }
+        }
+
+        public static async Task<bool> Login(string username, string password, bool isSave)
+        {
+            var localSettings = ApplicationData.Current.LocalSettings;
+
+            var postData = new Dictionary<string, object>();
+            postData.Add("username", username);
+            postData.Add("password", password);
+
+            string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
+            if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败"))
+            {
+                if (isSave)
+                {
+                    var accountData = new ApplicationDataCompositeValue();
+                    accountData["username"] = username;
+                    accountData["password"] = password;
+
+                    ApplicationDataContainer container = localSettings.CreateContainer("userData", ApplicationDataCreateDisposition.Always);
+                    if (localSettings.Containers.ContainsKey("userData"))
+                    {
+                        string name = string.Format("user_{0:yyyyMMddHHmmss}", DateTime.Now);
+                        localSettings.Containers["userData"].Values[name] = accountData;
+                        localSettings.Containers["userData"].Values["default"] = name;
+                    }
+                }
+                
+                return true;
+            }
+
+            return false;
+        }
+
+        public static async void AutoLogin()
+        {
+            var localSettings = ApplicationData.Current.LocalSettings;
+            ApplicationDataContainer container = localSettings.CreateContainer("userData", ApplicationDataCreateDisposition.Always);
+            if (localSettings.Containers.ContainsKey("userData"))
+            {
+                if (localSettings.Containers["userData"].Values.ContainsKey("default"))
+                {
+                    string name = localSettings.Containers["userData"].Values["default"].ToString();
+                    var accountData = (ApplicationDataCompositeValue)localSettings.Containers["userData"].Values[name];
+                    if (accountData != null)
+                    {
+                        string username = accountData["username"].ToString();
+                        string password = accountData["password"].ToString();
+
+                        await Login(username, password, false);
+                    }
+                }
+            }
         }
 
         #region 读取论坛所有版板数据
@@ -226,9 +280,6 @@ namespace hipda.Data
             {
                 this.ForumGroups.Clear();
             }
-
-            HttpHandle httpClient = HttpHandle.getInstance();
-            httpClient.setEncoding("gb2312");
 
             // 读取数据
             string url = "http://www.hi-pda.com/forum/index.php?r=" + DateTime.Now.Second;
@@ -370,9 +421,6 @@ namespace hipda.Data
                 return;
             }
 
-            HttpHandle httpClient = HttpHandle.getInstance();
-            httpClient.setEncoding("gb2312");
-
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&page={1}", forumId, pageNo);
             string htmlContent = await httpClient.HttpGet(url);
@@ -386,7 +434,8 @@ namespace hipda.Data
             var dataTable = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
-                await new MessageDialog("解析主贴列表页第一阶段出错！").ShowAsync();
+                throw new Exception("解析主贴列表页第一阶段出错");
+                //await new MessageDialog("解析主贴列表页第一阶段出错！").ShowAsync();
                 return;
             }
 
@@ -439,6 +488,10 @@ namespace hipda.Data
                 {
                     authorName = authorNameLink.InnerText;
                     authorId = authorNameLink.Attributes[0].Value.Substring("space.php?uid=".Length);
+                    if (authorId.Contains("&"))
+                    {
+                        authorId = authorId.Split('&')[0];
+                    }
                 }
 
                 var authorCreateTime = tdAuthor.ChildNodes[3].InnerText;
@@ -515,9 +568,6 @@ namespace hipda.Data
             }
             #endregion
 
-            HttpHandle httpClient = HttpHandle.getInstance();
-            httpClient.setEncoding("gb2312");
-
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&" + DateTime.Now.Second, threadId, pageNo);
             string htmlContent = await httpClient.HttpGet(url);
@@ -572,13 +622,17 @@ namespace hipda.Data
                         .ChildNodes[1] // tr
                         .ChildNodes[3]; // td.postcontent
 
-                string ownerId = string.Empty;
+                string authorId = string.Empty;
                 string ownerName = string.Empty;
                 var authorNode = postAuthorNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
                 if (authorNode != null)
                 {
                     authorNode = authorNode.ChildNodes[1]; // a
-                    ownerId = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
+                    authorId = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
+                    if (authorId.Contains("&"))
+                    {
+                        authorId = authorId.Split('&')[0];
+                    }
                     ownerName = authorNode.InnerText;
                 }
 
@@ -594,8 +648,8 @@ namespace hipda.Data
                 {
                     postTime = postTimeNode.InnerText
                         .Replace("发表于 ", string.Empty)
-                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty)
-                        .Replace(string.Format("{0}-{1} ", DateTime.Now.Month, DateTime.Now.Day), string.Empty);
+                        .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
+                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
                 string content = string.Empty;
@@ -605,7 +659,7 @@ namespace hipda.Data
                     content = contentNode.InnerText;
                 }
 
-                Reply reply = new Reply(floor, pageNo, threadId, ownerId, ownerName, content, postTime);
+                Reply reply = new Reply(floor, pageNo, threadId, authorId, ownerName, content, postTime);
 
                 threadData.Replies.Add(reply);
             }

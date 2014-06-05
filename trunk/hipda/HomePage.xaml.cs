@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
@@ -29,7 +30,7 @@ namespace hipda
     /// </summary>
     public sealed partial class HomePage : Page
     {
-        private HttpHandle httpClient = HttpHandle.getInstance();
+        HttpHandle httpClient = HttpHandle.getInstance();
 
         private const int maxHubSectionCount = 4;
         private const string FirstGroupName = "FirstGroup";
@@ -37,6 +38,8 @@ namespace hipda
         private readonly NavigationHelper navigationHelper;
         private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
+
+        private ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
         public async Task UpdateStatus()
         {
@@ -91,15 +94,11 @@ namespace hipda
         /// 的字典。首次访问页面时，该状态将为 null。</param>
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // 首次进入时才加载数据
-            if (e.PageState == null)
-            {
-                replyProgressBar.Visibility = Visibility.Visible;
-                cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
-                replyProgressBar.Visibility = Visibility.Collapsed;
+            replyProgressBar.Visibility = Visibility.Visible;
+            cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
+            replyProgressBar.Visibility = Visibility.Collapsed;
 
-                await UpdateStatus();
-            }
+            await UpdateStatus();
         }
 
         /// <summary>
@@ -122,6 +121,24 @@ namespace hipda
             if (!Frame.Navigate(typeof(PivotPage), data))
             {
                 throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            }
+        }
+
+        private async void loginButton_Click(object sender, RoutedEventArgs e)
+        {
+            string username = usernameTextBox.Text.Trim();
+            string password = passwordTextBox.Password.Trim();
+
+            bool isOk = await DataSource.Login(username, password, true);
+            if (isOk)
+            {
+                Pivot.SelectedIndex = 0;
+
+                replyProgressBar.Visibility = Visibility.Visible;
+                cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
+                replyProgressBar.Visibility = Visibility.Collapsed;
+
+                await UpdateStatus();
             }
         }
 
@@ -151,33 +168,5 @@ namespace hipda
         }
 
         #endregion
-
-        private async void loginButton_Click(object sender, RoutedEventArgs e)
-        {
-            httpClient.setEncoding("gb2312");
-
-            string username = usernameTextBox.Text.Trim();
-            string password = passwordTextBox.Password.Trim();
-
-            Dictionary<string, object> postData = new Dictionary<string, object>();
-            postData.Add("username", username);
-            postData.Add("password", password);
-
-            string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
-            if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败"))
-            {
-                Pivot.SelectedIndex = 0;
-
-                replyProgressBar.Visibility = Visibility.Visible;
-                cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
-                replyProgressBar.Visibility = Visibility.Collapsed;
-
-                await UpdateStatus();
-            }
-            else
-            {
-                await new MessageDialog(resultContent).ShowAsync();
-            }
-        }
     }
 }

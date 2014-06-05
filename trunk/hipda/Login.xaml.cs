@@ -37,7 +37,6 @@ namespace hipda
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            httpClient.setEncoding("gb2312");
         }
 
         private async void btnLogin_Click(object sender, RoutedEventArgs e)

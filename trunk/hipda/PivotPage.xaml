@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:hipda.Data"
     mc:Ignorable="d"
-    Background="White"
+    Background="WhiteSmoke"
     RequestedTheme="Light">
 
     <Page.Transitions>

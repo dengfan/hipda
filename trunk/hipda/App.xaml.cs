@@ -1,21 +1,13 @@
 ﻿using hipda.Common;
+using hipda.Data;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
@@ -38,6 +30,7 @@ namespace hipda
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            //this.Resuming += this.OnResuming;
         }
 
         /// <summary>
@@ -55,6 +48,9 @@ namespace hipda
             }
 #endif
 
+            // 自动登录
+            DataSource.AutoLogin();
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -68,7 +64,7 @@ namespace hipda
                 SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
 
                 // TODO: 将此值更改为适合您的应用程序的缓存大小。
-                rootFrame.CacheSize = 1;
+                //rootFrame.CacheSize = 1;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -90,18 +86,18 @@ namespace hipda
 
             if (rootFrame.Content == null)
             {
-                // 删除用于启动的旋转门导航。
-                if (rootFrame.ContentTransitions != null)
-                {
-                    this.transitions = new TransitionCollection();
-                    foreach (var c in rootFrame.ContentTransitions)
-                    {
-                        this.transitions.Add(c);
-                    }
-                }
+                //// 删除用于启动的旋转门导航。
+                //if (rootFrame.ContentTransitions != null)
+                //{
+                //    this.transitions = new TransitionCollection();
+                //    foreach (var c in rootFrame.ContentTransitions)
+                //    {
+                //        this.transitions.Add(c);
+                //    }
+                //}
 
-                rootFrame.ContentTransitions = null;
-                rootFrame.Navigated += this.RootFrame_FirstNavigated;
+                //rootFrame.ContentTransitions = null;
+                //rootFrame.Navigated += this.RootFrame_FirstNavigated;
 
                 // 当导航堆栈尚未还原时，导航到第一页，
                 // 并通过将所需信息作为导航参数传入来配置
@@ -114,6 +110,8 @@ namespace hipda
 
             // 确保当前窗口处于活动状态。
             Window.Current.Activate();
+
+            
 
             StatusBar statusBar = StatusBar.GetForCurrentView();
             statusBar.BackgroundColor = Colors.Purple;
@@ -129,12 +127,12 @@ namespace hipda
         /// <summary>
         /// 启动应用程序后还原内容转换。
         /// </summary>
-        private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
-        {
-            var rootFrame = sender as Frame;
-            rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
-            rootFrame.Navigated -= this.RootFrame_FirstNavigated;
-        }
+        //private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
+        //{
+        //    var rootFrame = sender as Frame;
+        //    rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
+        //    rootFrame.Navigated -= this.RootFrame_FirstNavigated;
+        //}
 
         /// <summary>
         /// 在将要挂起应用程序执行时调用。    将保存应用程序状态
@@ -149,5 +147,11 @@ namespace hipda
             await SuspensionManager.SaveAsync();
             deferral.Complete();
         }
+
+        //private async void OnResuming(object sender, object e)
+        //{
+        //    //throw new NotImplementedException();
+        //    await new MessageDialog("恢复").ShowAsync();
+        //}
     }
 }
