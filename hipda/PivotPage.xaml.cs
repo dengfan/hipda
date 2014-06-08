@@ -40,6 +40,8 @@ namespace hipda
         private const int maxHubSectionCount = 5;
         private const string regexForTitle = @"[^@.a-zA-Z0-9\u4e00-\u9fa5]"; // 用于过滤掉无意义符号
 
+        private string accountName = "未登录";
+
         public static string GetFirstString(string stringToSub, int length)
         {
             Regex regex = new Regex(@"[\u4e00-\u9fa5]+");
@@ -117,11 +119,22 @@ namespace hipda
             //{
             //    return;
             //}
+            if (DataSource.GetAccountData() != null)
+            {
+                var data = DataSource.GetAccountData();
+                var item = data.SingleOrDefault(a => a.IsDefault == true);
+                if (item != null)
+                {
+                    accountName = item.Username;
+                    accountName = string.Format("{0}*{1}", accountName.First(), accountName.Last());
+                    accountName = accountName.ToUpper();
+                }
+            }
 
             string dataStr = (string)e.NavigationParameter;
-            string[] data = dataStr.Split(',');
-            string forumId = data[0];
-            string forumName = data[1];
+            string[] dataAry = dataStr.Split(',');
+            string forumId = dataAry[0];
+            string forumName = dataAry[1];
 
             var pivotItem = new PivotItem
             {
@@ -486,7 +499,7 @@ namespace hipda
             string navText = navTextContainer.ToString();
             navText = navText.Substring(0, navText.Length - 1);
 
-            StatusBar.GetForCurrentView().ProgressIndicator.Text = string.Concat("Hi!PDA ", navText);
+            StatusBar.GetForCurrentView().ProgressIndicator.Text = string.Format("{0} {1}", accountName, navText);
             await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
         }
 
