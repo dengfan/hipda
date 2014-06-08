@@ -13,9 +13,38 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.Storage;
+using System.Collections.Specialized;
+using Windows.Data.Xml.Dom;
 
 namespace hipda.Data
 {
+    public class Account
+    {
+        public Account(string key, string username, string password, bool isDefault)
+        {
+            this.Key = key;
+            this.Username = username;
+            this.Password = password;
+            this.IsDefault = isDefault;
+        }
+
+        public string Key { get; private set; }
+
+        public string Username { get; private set; }
+
+        public string Password { get; private set; }
+
+        public bool IsDefault { get; private set; }
+
+        public string Label
+        {
+            get 
+            {
+                return this.IsDefault ? " ● " : string.Empty;
+            }
+        }
+    }
+
     public class Reply
     {
         public Reply(int floor, int pageNo, string threadId, string ownerId, string ownerName, string content, string createTime)
@@ -186,6 +215,10 @@ namespace hipda.Data
 
     public sealed class DataSource
     {
+        private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+        private static string accountDataKeyName = "accountData";
+        private static string defaultAccountKeyName = "defaultAccount";
+
         //private static int threadsPageSize = 75;
         private static int repliesPageSize = 50;
         private static DataSource _dataSource = new DataSource();
@@ -198,30 +231,40 @@ namespace hipda.Data
             get { return this._forumGroups; }
         }
 
-        public static bool IsLogin
-        {
-            get
-            {
-                return _dataSource.ForumGroups.Count() > 1;
-            }
-        }
-
         private ObservableCollection<Forum> _forums = new ObservableCollection<Forum>();
         public ObservableCollection<Forum> Forums
         {
             get { return this._forums; }
         }
 
+        #region 账户管理
+        public static async Task AutoLogin()
+        {
+            ApplicationDataContainer container = localSettings.CreateContainer(accountDataKeyName, ApplicationDataCreateDisposition.Always);
+            var accountDataContainer = localSettings.Containers[accountDataKeyName];
+            if (accountDataContainer.Values.ContainsKey(defaultAccountKeyName))
+            {
+                string name = accountDataContainer.Values[defaultAccountKeyName].ToString();
+
+                var accountData = (ApplicationDataCompositeValue)accountDataContainer.Values[name];
+                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
+                {
+                    string username = accountData["username"].ToString();
+                    string password = accountData["password"].ToString();
+
+                    await Login(username, password, false);
+                }
+            }
+        }
+
         public static async Task<bool> Login(string username, string password, bool isSave)
         {
-            var localSettings = ApplicationData.Current.LocalSettings;
-
             var postData = new Dictionary<string, object>();
             postData.Add("username", username);
             postData.Add("password", password);
 
             string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
-            if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败"))
+            if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败") && !resultContent.Contains("非激活"))
             {
                 if (isSave)
                 {
@@ -229,13 +272,12 @@ namespace hipda.Data
                     accountData["username"] = username;
                     accountData["password"] = password;
 
-                    ApplicationDataContainer container = localSettings.CreateContainer("userData", ApplicationDataCreateDisposition.Always);
-                    if (localSettings.Containers.ContainsKey("userData"))
-                    {
-                        string name = string.Format("user_{0:yyyyMMddHHmmss}", DateTime.Now);
-                        localSettings.Containers["userData"].Values[name] = accountData;
-                        localSettings.Containers["userData"].Values["default"] = name;
-                    }
+                    ApplicationDataContainer container = localSettings.CreateContainer(accountDataKeyName, ApplicationDataCreateDisposition.Always);
+                    var accountDataContainer = localSettings.Containers[accountDataKeyName];
+
+                    string name = string.Format("user_{0:yyyyMMddHHmmss}", DateTime.Now);
+                    accountDataContainer.Values[name] = accountData;
+                    accountDataContainer.Values[defaultAccountKeyName] = name;
                 }
                 
                 return true;
@@ -244,26 +286,57 @@ namespace hipda.Data
             return false;
         }
 
-        public static async void AutoLogin()
+        public static List<Account> GetAccountData()
         {
-            var localSettings = ApplicationData.Current.LocalSettings;
-            ApplicationDataContainer container = localSettings.CreateContainer("userData", ApplicationDataCreateDisposition.Always);
-            if (localSettings.Containers.ContainsKey("userData"))
-            {
-                if (localSettings.Containers["userData"].Values.ContainsKey("default"))
-                {
-                    string name = localSettings.Containers["userData"].Values["default"].ToString();
-                    var accountData = (ApplicationDataCompositeValue)localSettings.Containers["userData"].Values[name];
-                    if (accountData != null)
-                    {
-                        string username = accountData["username"].ToString();
-                        string password = accountData["password"].ToString();
+            if (!localSettings.Containers.ContainsKey(accountDataKeyName)) return null;
 
-                        await Login(username, password, false);
-                    }
+            var accountDataContainer = localSettings.Containers[accountDataKeyName];
+            if (!accountDataContainer.Values.ContainsKey(defaultAccountKeyName)) return null;
+
+            var data = new List<Account>();
+            string defaultName = accountDataContainer.Values[defaultAccountKeyName].ToString();
+            var items = accountDataContainer.Values.Where(v => v.Key != defaultAccountKeyName);
+            foreach (var item in items)
+            {
+                var accountData = (ApplicationDataCompositeValue)item.Value;
+                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
+                {
+                    string key = item.Key;
+                    string username = accountData["username"].ToString();
+                    string password = accountData["password"].ToString();
+                    bool isDefault = key.Equals(defaultName);
+                    data.Add(new Account(key, username, password, isDefault));
+                }
+            }
+
+            return data;
+        }
+
+        public static void SetDefault(string accountKeyName)
+        {
+            var accountDataContainer = localSettings.Containers[accountDataKeyName];
+            accountDataContainer.Values[defaultAccountKeyName] = accountKeyName;
+        }
+
+        public static void DeleteAccount(string accountKeyName)
+        {
+            var accountDataContainer = localSettings.Containers[accountDataKeyName];
+            accountDataContainer.Values.Remove(accountKeyName);
+
+            // 删除后，取另一个为登录账号
+            var items = accountDataContainer.Values.Where(v => v.Key != defaultAccountKeyName);
+            foreach (var item in items)
+            {
+                var accountData = (ApplicationDataCompositeValue)item.Value;
+                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
+                {
+                    string key = item.Key;
+                    accountDataContainer.Values[defaultAccountKeyName] = key;
+                    break;
                 }
             }
         }
+        #endregion
 
         #region 读取论坛所有版板数据
         public static async Task<IEnumerable<ForumGroup>> GetForumGroupsAsync()

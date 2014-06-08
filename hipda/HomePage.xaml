@@ -18,19 +18,20 @@
             </NavigationThemeTransition>
         </TransitionCollection>
     </Page.Transitions>-->
-    
+
     <Page.Resources>
         <CollectionViewSource x:Name="cvsForumGroups" IsSourceGrouped="True" ItemsPath="Forums"/>
 
         <local:BackgroundStyleSelecterForForumItem x:Key="BackgroundStyleSelecterForForumItem"/>
         <local:ListGroupStyleSelector x:Key="listGroupStyleSelector"/>
-        
-        <Style x:Key="GroupItemStyle" TargetType="ListViewItem">
+
+        <Style x:Key="listItemStyle" TargetType="ListViewItem">
             <Setter Property="Padding" Value="10" />
             <Setter Property="BorderThickness"  Value="{StaticResource AppBarBottomBorderThemeThickness}"/>
             <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
-        
+
         <DataTemplate x:Key="GroupItemTemplate">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -47,13 +48,19 @@
                         FontWeight="Bold">
                     </TextBlock>
                 </StackPanel>
-                
+
                 <TextBlock
                     Text="{Binding Info}"
                     TextWrapping="WrapWholeWords"
                     Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
             </StackPanel>
         </DataTemplate>
+
+        <Style x:Key="accountListItemStyle" TargetType="ListViewItem">
+            <Setter Property="BorderThickness"  Value="{StaticResource AppBarBottomBorderThemeThickness}"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -76,42 +83,42 @@
                     ContinuumNavigationTransitionInfo.ExitElementContainer="True"
                     ItemTemplate="{StaticResource GroupItemTemplate}"
                     GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"
-                    ItemContainerStyle="{StaticResource GroupItemStyle}"/>
+                    ItemContainerStyle="{StaticResource listItemStyle}"/>
             </PivotItem>
             <PivotItem 
-                Header="个人中心" 
+                Header="账号" 
                 CommonNavigationTransitionInfo.IsStaggerElement="True"
                 Margin="0">
-                <StackPanel Margin="10,0,10,0" Orientation="Vertical">
-                    <Grid x:Name="loginPanel">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBox Grid.Row="0" x:Name="usernameTextBox" TabIndex="1" Header="用户名" Background="White" BorderBrush="Black"/>
-                        <PasswordBox Grid.Row="1" x:Name="passwordTextBox" TabIndex="2" Header="密码" Background="White" BorderBrush="Black" />
-                        <Button Grid.Row="2" x:Name="loginButton" TabIndex="3" Click="loginButton_Click" Height="60" Content="登录" HorizontalAlignment="Stretch" BorderBrush="Green" Background="Green" Foreground="White" />
-                    </Grid>
-                </StackPanel>
+                <ListView x:Name="accountList" 
+                          Padding="10,0,10,0" 
+                          ItemContainerStyle="{StaticResource accountListItemStyle}">
+                    <ListView.Header>
+                        <StackPanel x:Name="addAccountPanel">
+                            <TextBox Grid.Row="0" x:Name="usernameTextBox" TabIndex="1" Header="用户名" Background="White" BorderBrush="Black"/>
+                            <PasswordBox Grid.Row="1" x:Name="passwordTextBox" TabIndex="2" Header="密码" Background="White" BorderBrush="Black" />
+                            <Button Grid.Row="2" x:Name="loginButton" TabIndex="3" Click="loginButton_Click" Content="添加账号并登录" HorizontalAlignment="Stretch" BorderThickness="0" Background="Green" Foreground="White" />
+                        </StackPanel>
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid x:Name="accountItem" Holding="accountItem_Holding">
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem x:Name="setDefaultItem" Text="切换到此账号" Click="setDefaultItem_Click" />
+                                        <MenuFlyoutItem x:Name="deleteItem" Text="删除" Click="deleteItem_Click" />
+                                    </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
+                                
+                                <TextBlock Padding="10" Style="{ThemeResource BodyTextBlockStyle}">
+                                    <Run Text="{Binding Username}"/>
+                                    <Run Text="{Binding Label}" Foreground="Green" FontWeight="Bold"/>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </PivotItem>
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
-
-    <Page.BottomAppBar>
-        <CommandBar ClosedDisplayMode="Minimal">
-            <AppBarButton x:Name="ReplyButton" Icon="OtherUser" Label="登录">
-                <!--<AppBarButton.Flyout>
-                    <Flyout>
-                        
-                    </Flyout>
-                </AppBarButton.Flyout>-->
-            </AppBarButton>
-            <!--<CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="SecondaryButton2" Icon="Read" Label="个人中心" />
-            </CommandBar.SecondaryCommands>-->
-        </CommandBar>
-    </Page.BottomAppBar>
 </Page>
