@@ -1,33 +1,21 @@
 ﻿using hipda.Common;
 using hipda.Data;
 using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
+using System.Text;
+using System.Text.RegularExpressions;
 using Windows.ApplicationModel.Resources;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Graphics.Display;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using System.Text.RegularExpressions;
-using Windows.UI.Xaml.Shapes;
-using Windows.Graphics.Imaging;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Documents;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Navigation;
 
 // “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
 
@@ -39,6 +27,9 @@ namespace hipda
 
         private const int maxHubSectionCount = 5;
         private const string regexForTitle = @"[^@.a-zA-Z0-9\u4e00-\u9fa5]"; // 用于过滤掉无意义符号
+
+        private readonly NavigationHelper navigationHelper;
+        private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
         private string accountName = "未登录";
 
@@ -80,9 +71,6 @@ namespace hipda
             return sb.ToString();
         }
 
-        private readonly NavigationHelper navigationHelper;
-        private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
-
         public PivotPage()
         {
             this.InitializeComponent();
@@ -94,31 +82,14 @@ namespace hipda
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
         }
 
-        /// <summary>
-        /// 获取与此 <see cref="Page"/> 关联的 <see cref="NavigationHelper"/>。
-        /// </summary>
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
         }
 
-        /// <summary>
-        /// 使用在导航过程中传递的内容填充页。在从以前的会话
-        /// 重新创建页时，也会提供任何已保存状态。
-        /// </summary>
-        /// <param name="sender">
-        /// 事件的来源；通常为 <see cref="NavigationHelper"/>。
-        /// </param>
-        /// <param name="e">事件数据，其中既提供在最初请求此页时传递给
-        /// <see cref="Frame.Navigate(Type, Object)"/> 的导航参数，又提供
-        /// 此页在以前会话期间保留的状态的
-        /// 的字典。首次访问页面时，该状态将为 null。</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            //if (string.IsNullOrEmpty((string)e.NavigationParameter))
-            //{
-            //    return;
-            //}
+            // 读取当前账号的名称
             if (DataSource.GetAccountData() != null)
             {
                 var data = DataSource.GetAccountData();
@@ -172,8 +143,6 @@ namespace hipda
                 IsItemClickEnabled = true,
                 ItemTemplate = ThreadListItemTemplate,
                 ItemContainerStyleSelector = new BackgroundStyleSelecterForThreadItem(),
-                //DataFetchSize = 4, // 每次预提数据的5屏
-                //IncrementalLoadingThreshold = 3, // 每滚动三屏就触发预提数据
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
 
@@ -279,17 +248,8 @@ namespace hipda
         }
         #endregion
 
-        /// <summary>
-        /// 保留与此页关联的状态，以防挂起应用程序或
-        /// 从导航缓存中放弃此页。值必须符合序列化
-        /// <see cref="SuspensionManager.SessionState"/> 的序列化要求。
-        /// </summary>
-        /// <param name="sender">事件的来源；通常为 <see cref="NavigationHelper"/>。</param>
-        ///<param name="e">提供要使用可序列化状态填充的空字典
-        ///的事件数据。</param>
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
-
         }
 
         /// <summary>
@@ -387,6 +347,7 @@ namespace hipda
             }
         }
 
+        #region 增量更新
         void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             args.Handled = true;
@@ -472,7 +433,7 @@ namespace hipda
             avatarImageBorder.Background = imageBrush;
             avatarImageBorder.Opacity = 1;
         }
-
+        #endregion
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
