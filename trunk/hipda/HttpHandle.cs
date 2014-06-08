@@ -1,13 +1,13 @@
-﻿using System;
+﻿using DBCSCodePage;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
 using System.IO;
-using Windows.Foundation;
+using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
-using DBCSCodePage;
+using System.Threading.Tasks;
+using Windows.Foundation;
+
 namespace hipda
 {
     class HttpHandle
@@ -15,26 +15,37 @@ namespace hipda
         private CookieContainer cookieJar = new CookieContainer();
         private Encoding encode = null;
         private Encoding gbk = null;
-        static private HttpHandle instance = null;
-        static public HttpHandle getInstance()
+        private static HttpHandle instance = null;
+
+        public static HttpHandle getInstance()
         {
-            if (instance==null)
+            if (instance == null)
             {
                 instance = new HttpHandle();
             }
+
             return instance;
         }
+
         public HttpHandle()
         {
             encode = DBCSEncoding.GetDBCSEncoding("gb2312");
             gbk = DBCSEncoding.GetDBCSEncoding("gb2312");
         }
 
-        //public void setEncoding(string code)
-        //{
-        //    if (code == "gbk" || code == "gb2312") encode = DBCSEncoding.GetDBCSEncoding("gb2312");
-        //    else encode = null;
-        //}
+        public bool HasCookies
+        {
+            get
+            {
+                return cookieJar.Count > 0;
+            }
+        }
+
+        public void ClearCookies()
+        {
+            cookieJar = new CookieContainer();
+        }
+
         public IAsyncOperation<string> HttpGet(string url)
         {
             return Task.Run<string>(async () =>

@@ -49,7 +49,7 @@ namespace hipda
 #endif
 
             // 自动登录
-            DataSource.AutoLogin();
+            await DataSource.AutoLogin();
 
             Frame rootFrame = Window.Current.Content as Frame;
 

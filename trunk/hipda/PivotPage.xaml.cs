@@ -35,6 +35,8 @@ namespace hipda
 {
     public sealed partial class PivotPage : Page
     {
+        HttpHandle httpClient = HttpHandle.getInstance();
+
         private const int maxHubSectionCount = 5;
         private const string regexForTitle = @"[^@.a-zA-Z0-9\u4e00-\u9fa5]"; // 用于过滤掉无意义符号
 
@@ -120,7 +122,6 @@ namespace hipda
             string[] data = dataStr.Split(',');
             string forumId = data[0];
             string forumName = data[1];
-
 
             var pivotItem = new PivotItem
             {

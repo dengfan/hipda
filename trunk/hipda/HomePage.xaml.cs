@@ -30,28 +30,13 @@ namespace hipda
     /// </summary>
     public sealed partial class HomePage : Page
     {
-        HttpHandle httpClient = HttpHandle.getInstance();
-
         private const int maxHubSectionCount = 4;
         private const string FirstGroupName = "FirstGroup";
 
         private readonly NavigationHelper navigationHelper;
-        private readonly ObservableDictionary defaultViewModel = new ObservableDictionary();
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
-
         private ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-
-        public async Task UpdateStatus()
-        {
-            StatusBar statusBar = StatusBar.GetForCurrentView();
-            statusBar.ProgressIndicator.Text = string.Concat("Hi!PDA ", DataSource.IsLogin ? string.Empty : "未登录");
-            await statusBar.ProgressIndicator.ShowAsync();
-
-            if (DataSource.IsLogin)
-            {
-                loginPanel.Visibility = Visibility.Collapsed;
-            }
-        }
+        private HttpHandle httpClient = HttpHandle.getInstance();
 
         public HomePage()
         {
@@ -72,13 +57,30 @@ namespace hipda
             get { return this.navigationHelper; }
         }
 
-        /// <summary>
-        /// 获取此 <see cref="Page"/> 的视图模型。
-        /// 可将其更改为强类型视图模型。
-        /// </summary>
-        public ObservableDictionary DefaultViewModel
+        private async void Refresh()
         {
-            get { return this.defaultViewModel; }
+            // 刷新账号列表
+            accountList.ItemsSource = DataSource.GetAccountData();
+
+            // 刷新版块列表
+            replyProgressBar.Visibility = Visibility.Visible;
+            cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
+            replyProgressBar.Visibility = Visibility.Collapsed;
+
+            // 刷新顶部状态栏
+            StatusBar statusBar = StatusBar.GetForCurrentView();
+            string accountName = "未登录";
+            if (DataSource.GetAccountData() != null)
+            {
+                var data = DataSource.GetAccountData();
+                var item = data.SingleOrDefault(a => a.IsDefault == true);
+                if (item != null)
+                {
+                    accountName = item.Username;
+                }
+            }
+            statusBar.ProgressIndicator.Text = string.Format("Hi!PDA - {0}", accountName.ToUpper());
+            await statusBar.ProgressIndicator.ShowAsync();
         }
 
         /// <summary>
@@ -92,13 +94,9 @@ namespace hipda
         /// <see cref="Frame.Navigate(Type, Object)"/> 的导航参数，又提供
         /// 此页在以前会话期间保留的状态的
         /// 的字典。首次访问页面时，该状态将为 null。</param>
-        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            replyProgressBar.Visibility = Visibility.Visible;
-            cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
-            replyProgressBar.Visibility = Visibility.Collapsed;
-
-            await UpdateStatus();
+            Refresh();
         }
 
         /// <summary>
@@ -126,20 +124,31 @@ namespace hipda
 
         private async void loginButton_Click(object sender, RoutedEventArgs e)
         {
-            string username = usernameTextBox.Text.Trim();
-            string password = passwordTextBox.Password.Trim();
+            StackPanel loginPanel = (StackPanel)accountList.FindName("addAccountPanel");
+            TextBox usernameTextBox = ((TextBox)loginPanel.FindName("usernameTextBox"));
+            PasswordBox passwordBox = ((PasswordBox)loginPanel.FindName("passwordTextBox"));
 
-            bool isOk = await DataSource.Login(username, password, true);
-            if (isOk)
+            string username = usernameTextBox.Text.Trim().ToLower();
+            string password = passwordBox.Password.Trim();
+
+            // 清除当前的登录cookie
+            httpClient.ClearCookies();
+            
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                Pivot.SelectedIndex = 0;
-
-                replyProgressBar.Visibility = Visibility.Visible;
-                cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
-                replyProgressBar.Visibility = Visibility.Collapsed;
-
-                await UpdateStatus();
+                bool isOk = await DataSource.Login(username, password, true);
+                if (isOk)
+                {
+                    Refresh();
+                }
+                else
+                {
+                    await new MessageDialog("1. 请确保账号密码正确，否则失败次数超过5次，会被禁止登录15分钟！\n2. 账号必须已激活。", "账号验证失败").ShowAsync();
+                }
             }
+
+            usernameTextBox.Text = string.Empty;
+            passwordBox.Password = string.Empty;
         }
 
         #region NavigationHelper 注册
@@ -168,5 +177,34 @@ namespace hipda
         }
 
         #endregion
+
+        private void accountItem_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+
+            flyoutBase.ShowAt(senderElement);
+        }
+
+        private void setDefaultItem_Click(object sender, RoutedEventArgs e)
+        {
+            Account data = (sender as MenuFlyoutItem).DataContext as Account;
+            string keyName = data.Key;
+            DataSource.SetDefault(keyName);
+
+            Refresh();
+        }
+
+        private void deleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            // 清除登录cookies
+            httpClient.ClearCookies();
+
+            Account data = (sender as MenuFlyoutItem).DataContext as Account;
+            string keyName = data.Key;
+            DataSource.DeleteAccount(keyName);
+
+            Refresh();
+        }
     }
 }
