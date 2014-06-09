@@ -89,7 +89,7 @@ namespace hipda
 
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // 读取当前账号的名称
+            #region 读取当前账号的名称
             if (DataSource.GetAccountData() != null)
             {
                 var data = DataSource.GetAccountData();
@@ -101,6 +101,7 @@ namespace hipda
                     accountName = accountName.ToUpper();
                 }
             }
+            #endregion
 
             string dataStr = (string)e.NavigationParameter;
             string[] dataAry = dataStr.Split(',');
