@@ -77,9 +77,13 @@ namespace hipda
                 if (item != null)
                 {
                     accountName = item.Username;
+                    if (accountName.Length > 3)
+                    {
+                        accountName = string.Format("{0}*{1}", accountName.Substring(0, 2), accountName.Last());
+                    }
                 }
             }
-            statusBar.ProgressIndicator.Text = string.Format("Hi!PDA - {0}", accountName.ToUpper());
+            statusBar.ProgressIndicator.Text = string.Format("Hi!PDA > {0}", accountName.ToUpper());
             await statusBar.ProgressIndicator.ShowAsync();
         }
 
