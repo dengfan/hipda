@@ -1,6 +1,7 @@
 ﻿using hipda.Common;
 using hipda.Data;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -25,51 +26,14 @@ namespace hipda
     {
         HttpHandle httpClient = HttpHandle.getInstance();
 
-        private const int maxHubSectionCount = 5;
+        private const int maxHubSectionCount = 6;
         private const string regexForTitle = @"[^@.a-zA-Z0-9\u4e00-\u9fa5]"; // 用于过滤掉无意义符号
 
         private readonly NavigationHelper navigationHelper;
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
         private string accountName = "未登录";
-
-        public static string GetFirstString(string stringToSub, int length)
-        {
-            Regex regex = new Regex(@"[\u4e00-\u9fa5]+");
-            char[] stringChar = stringToSub.ToCharArray();
-            StringBuilder sb = new StringBuilder();
-            int nLength = 0;
-
-            for (int i = 0; i < stringChar.Length; i++)
-            {
-                if (regex.IsMatch((stringChar[i]).ToString()))
-                {
-                    nLength += 2;
-                }
-
-                else
-                {
-                    nLength = nLength + 1;
-                }
-
-                if (nLength <= length)
-                {
-                    sb.Append(stringChar[i]);
-                }
-
-                else
-                {
-                    break;
-                }
-            }
-
-            if (sb.ToString() != stringToSub)
-            {
-                sb.Append("...");
-            }
-
-            return sb.ToString();
-        }
+        private List<Tab> tabList = new List<Tab>();
 
         public PivotPage()
         {
@@ -97,8 +61,10 @@ namespace hipda
                 if (item != null)
                 {
                     accountName = item.Username;
-                    accountName = string.Format("{0}*{1}", accountName.First(), accountName.Last());
-                    accountName = accountName.ToUpper();
+                    if (accountName.Length > 3)
+                    {
+                        accountName = string.Format("{0}*{1}", accountName.Substring(0, 2), accountName.Last());
+                    }
                 }
             }
             #endregion
@@ -114,6 +80,7 @@ namespace hipda
                 Margin = new Thickness(0, 0, 0, 0)
             };
 
+            tabList.Add(new Tab { Type = 0, Id = forumId, Title = forumName });
             Pivot.Items.Insert(0, pivotItem);
             Pivot.SelectedItem = pivotItem;
 
@@ -155,7 +122,8 @@ namespace hipda
             // 限制 pivot item 的数量
             if (Pivot.Items.Count > maxHubSectionCount)
             {
-                Pivot.Items.RemoveAt(maxHubSectionCount);
+                PivotItem item = (PivotItem)Pivot.Items.Last();
+                Pivot.Items.Remove(item);
             }
         }
 
@@ -273,10 +241,11 @@ namespace hipda
 
             var pivotItem = new PivotItem
             {
-                Header = GetFirstString(threadTitle, 16),
+                Header = threadTitle.Length > 7 ? threadTitle.Substring(0, 7) : threadTitle,
                 Margin = new Thickness(0, 0, 0, 0)
             };
 
+            tabList.Add(new Tab { Type = Pivot.SelectedIndex + 1, Id = threadId, Title = threadTitle });
             Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
             Pivot.SelectedItem = pivotItem;
 
@@ -344,7 +313,8 @@ namespace hipda
             // 限制 pivot item 的数量
             if (Pivot.Items.Count > maxHubSectionCount)
             {
-                Pivot.Items.RemoveAt(maxHubSectionCount);
+                PivotItem item = (PivotItem)Pivot.Items.Last();
+                Pivot.Items.Remove(item);
             }
         }
 
@@ -450,18 +420,18 @@ namespace hipda
 
                 if (Pivot.SelectedItem == item)
                 {
-                    navTextContainer.Append(string.Format("@{0} -", text));
+                    navTextContainer.Append(string.Format("{0}●-", text));
                 }
                 else
                 {
-                    navTextContainer.Append(string.Format(" {0} -", text));
+                    navTextContainer.Append(string.Format("{0}-", text));
                 }
             }
 
             string navText = navTextContainer.ToString();
             navText = navText.Substring(0, navText.Length - 1);
 
-            StatusBar.GetForCurrentView().ProgressIndicator.Text = string.Format("{0} {1}", accountName, navText);
+            StatusBar.GetForCurrentView().ProgressIndicator.Text = string.Format("{0} > {1}", accountName, navText);
             await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
         }
 

@@ -18,6 +18,14 @@ using Windows.Data.Xml.Dom;
 
 namespace hipda.Data
 {
+    public class Tab
+    {
+        public int Type { get; set; }
+        public string Id { get; set; }
+
+        public string Title { get; set; }
+    }
+
     public class Account
     {
         public Account(string key, string username, string password, bool isDefault)
