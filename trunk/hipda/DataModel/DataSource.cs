@@ -1,56 +1,32 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
-using Windows.Web.Http;
-using Windows.Data.Xml;
-using HtmlAgilityPack;
-using Windows.UI.ViewManagement;
-using Windows.UI.Notifications;
 using Windows.UI.Popups;
-using Windows.Storage;
-using System.Collections.Specialized;
-using Windows.Data.Xml.Dom;
 
 namespace hipda.Data
 {
     public class Tab
     {
-        public int Type { get; set; }
+        public Tab(string uniqueId, string parentId, string id, string title)
+        {
+            this.UniqueId = uniqueId;
+            this.ParentId = parentId;
+            this.Id = id;
+            this.Title = title;
+        }
+
+        public string Type { get; set; }
+
+        public string UniqueId { get; set; }
+
+        public string ParentId { get; set; }
+
         public string Id { get; set; }
 
         public string Title { get; set; }
-    }
-
-    public class Account
-    {
-        public Account(string key, string username, string password, bool isDefault)
-        {
-            this.Key = key;
-            this.Username = username;
-            this.Password = password;
-            this.IsDefault = isDefault;
-        }
-
-        public string Key { get; private set; }
-
-        public string Username { get; private set; }
-
-        public string Password { get; private set; }
-
-        public bool IsDefault { get; private set; }
-
-        public string Label
-        {
-            get 
-            {
-                return this.IsDefault ? " ● " : string.Empty;
-            }
-        }
     }
 
     public class Reply
@@ -223,12 +199,10 @@ namespace hipda.Data
 
     public sealed class DataSource
     {
-        private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-        private static string accountDataKeyName = "accountData";
-        private static string defaultAccountKeyName = "defaultAccount";
+        public static int ThreadPageSize { get { return 75; } }
 
-        //private static int threadsPageSize = 75;
-        private static int repliesPageSize = 50;
+        public static int ReplyPageSize { get { return 50; } }
+
         private static DataSource _dataSource = new DataSource();
 
         private static HttpHandle httpClient = HttpHandle.getInstance();
@@ -244,107 +218,6 @@ namespace hipda.Data
         {
             get { return this._forums; }
         }
-
-        #region 账户管理
-        public static async Task AutoLogin()
-        {
-            ApplicationDataContainer container = localSettings.CreateContainer(accountDataKeyName, ApplicationDataCreateDisposition.Always);
-            var accountDataContainer = localSettings.Containers[accountDataKeyName];
-            if (accountDataContainer.Values.ContainsKey(defaultAccountKeyName))
-            {
-                string name = accountDataContainer.Values[defaultAccountKeyName].ToString();
-
-                var accountData = (ApplicationDataCompositeValue)accountDataContainer.Values[name];
-                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
-                {
-                    string username = accountData["username"].ToString();
-                    string password = accountData["password"].ToString();
-
-                    await Login(username, password, false);
-                }
-            }
-        }
-
-        public static async Task<bool> Login(string username, string password, bool isSave)
-        {
-            var postData = new Dictionary<string, object>();
-            postData.Add("username", username);
-            postData.Add("password", password);
-
-            string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
-            if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败") && !resultContent.Contains("非激活"))
-            {
-                if (isSave)
-                {
-                    var accountData = new ApplicationDataCompositeValue();
-                    accountData["username"] = username;
-                    accountData["password"] = password;
-
-                    ApplicationDataContainer container = localSettings.CreateContainer(accountDataKeyName, ApplicationDataCreateDisposition.Always);
-                    var accountDataContainer = localSettings.Containers[accountDataKeyName];
-
-                    string name = string.Format("user_{0:yyyyMMddHHmmss}", DateTime.Now);
-                    accountDataContainer.Values[name] = accountData;
-                    accountDataContainer.Values[defaultAccountKeyName] = name;
-                }
-                
-                return true;
-            }
-
-            return false;
-        }
-
-        public static List<Account> GetAccountData()
-        {
-            if (!localSettings.Containers.ContainsKey(accountDataKeyName)) return null;
-
-            var accountDataContainer = localSettings.Containers[accountDataKeyName];
-            if (!accountDataContainer.Values.ContainsKey(defaultAccountKeyName)) return null;
-
-            var data = new List<Account>();
-            string defaultName = accountDataContainer.Values[defaultAccountKeyName].ToString();
-            var items = accountDataContainer.Values.Where(v => v.Key != defaultAccountKeyName);
-            foreach (var item in items)
-            {
-                var accountData = (ApplicationDataCompositeValue)item.Value;
-                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
-                {
-                    string key = item.Key;
-                    string username = accountData["username"].ToString();
-                    string password = accountData["password"].ToString();
-                    bool isDefault = key.Equals(defaultName);
-                    data.Add(new Account(key, username, password, isDefault));
-                }
-            }
-
-            return data;
-        }
-
-        public static void SetDefault(string accountKeyName)
-        {
-            var accountDataContainer = localSettings.Containers[accountDataKeyName];
-            accountDataContainer.Values[defaultAccountKeyName] = accountKeyName;
-        }
-
-        public static void DeleteAccount(string accountKeyName)
-        {
-            var accountDataContainer = localSettings.Containers[accountDataKeyName];
-            accountDataContainer.Values.Remove(accountKeyName);
-
-            // 删除后，取另一个为登录账号
-            var items = accountDataContainer.Values.Where(v => v.Key != defaultAccountKeyName);
-            foreach (var item in items)
-            {
-                var accountData = (ApplicationDataCompositeValue)item.Value;
-                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
-                {
-                    string key = item.Key;
-                    accountDataContainer.Values[defaultAccountKeyName] = key;
-                    break;
-                }
-            }
-        }
-        #endregion
 
         #region 读取论坛所有版板数据
         public static async Task<IEnumerable<ForumGroup>> GetForumGroupsAsync()
@@ -412,6 +285,11 @@ namespace hipda.Data
 
                     var a = h2.ChildNodes[0];
                     string forumId = a.Attributes[0].Value.Substring("forumdisplay.php?fid=".Length);
+                    if (forumId.Contains("&"))
+                    {
+                        forumId = forumId.Split('&')[0];
+                    }
+
                     string forumName = a.InnerText;
                     string forumAlias = forumName;
                     switch (forumId)
@@ -471,7 +349,7 @@ namespace hipda.Data
                 _dataSource.Forums.Add(new Forum(forumId, forumName, string.Empty, string.Empty, string.Empty));
             }
 
-            return _dataSource.Forums.SingleOrDefault(f => f.Id.Equals(forumId));
+            return _dataSource.Forums.Single(f => f.Id.Equals(forumId));
         }
 
         public static async Task<int> GetLoadThreadsCountAsync(string forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
@@ -515,15 +393,12 @@ namespace hipda.Data
             var dataTable = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
-                throw new Exception("解析主贴列表页第一阶段出错");
-                //await new MessageDialog("解析主贴列表页第一阶段出错！").ShowAsync();
                 return;
             }
 
             var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("normalthread_") || n.GetAttributeValue("id", "").StartsWith("stickthread_"));
             if (tbodies == null)
             {
-                await new MessageDialog("解析主贴列表页第二阶段出错！").ShowAsync();
                 return;
             }
 
@@ -594,9 +469,22 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
-        public static Thread GetThread(string forumId, string threadId)
+        public static async Task<Thread> GetThread(string forumId, string threadId)
         {
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.First(t => t.Id == threadId);
+            var forum = _dataSource.Forums.FirstOrDefault(f => f.Id.Equals(forumId));
+            if (forum == null)
+            {
+                await _dataSource.LoadThreadsDataAsync(forumId, 1);
+                //_dataSource.Forums.Add(new Forum(forumId, "恢复", string.Empty, string.Empty, string.Empty));
+            }
+
+            var thread = _dataSource.Forums.FirstOrDefault(f => f.Id.Equals(forumId)).Threads.FirstOrDefault(t => t.Id == threadId);
+            if (thread == null)
+            {
+                forum.Threads.Add(new Thread(0, 1, forumId, threadId, "恢复标题", -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty));
+            }
+
+            return thread;
         }
 
         public static async Task<int> GetLoadRepliesCountAsync(string forumId, string threadId, int pageNo, Action showProgressBar, Action hideProgressBar)
@@ -634,7 +522,7 @@ namespace hipda.Data
             int count = threadData.Replies.Count(r => r.PageNo == pageNo);
             if (count > 0)
             {
-                if (count >= repliesPageSize) // 满页的不再加载，以便节省流量
+                if (count >= ReplyPageSize) // 满页的不再加载，以便节省流量
                 {
                     return;
                 }

@@ -106,6 +106,7 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="DataModel\AccountHelper.cs" />
     <Compile Include="DataModel\DataSource.cs" />
     <Compile Include="DataModel\GeneratorIncrementalLoadingClass.cs">
       <SubType>Code</SubType>

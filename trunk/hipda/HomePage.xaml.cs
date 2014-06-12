@@ -59,9 +59,6 @@ namespace hipda
 
         private async void Refresh()
         {
-            // 刷新账号列表
-            accountList.ItemsSource = DataSource.GetAccountData();
-
             // 刷新版块列表
             replyProgressBar.Visibility = Visibility.Visible;
             cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
@@ -69,20 +66,13 @@ namespace hipda
 
             // 刷新顶部状态栏
             StatusBar statusBar = StatusBar.GetForCurrentView();
-            string accountName = "未登录";
-            if (DataSource.GetAccountData() != null)
+            Account account = AccountHelper.GetDefault();
+            string accountName = account != null ? account.Username : "未登录";
+            if (accountName.Length > 3)
             {
-                var data = DataSource.GetAccountData();
-                var item = data.SingleOrDefault(a => a.IsDefault == true);
-                if (item != null)
-                {
-                    accountName = item.Username;
-                    if (accountName.Length > 3)
-                    {
-                        accountName = string.Format("{0}*{1}", accountName.Substring(0, 2), accountName.Last());
-                    }
-                }
+                accountName = string.Format("{0}*{1}", accountName.Substring(0, 2), accountName.Last());
             }
+
             statusBar.ProgressIndicator.Text = string.Format("Hi!PDA > {0}", accountName.ToUpper());
             await statusBar.ProgressIndicator.ShowAsync();
         }
@@ -100,6 +90,8 @@ namespace hipda
         /// 的字典。首次访问页面时，该状态将为 null。</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            accountList.ItemsSource = AccountHelper.List;
+
             Refresh();
         }
 
@@ -140,7 +132,7 @@ namespace hipda
             
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                bool isOk = await DataSource.Login(username, password, true);
+                bool isOk = await AccountHelper.LoginAndAdd(username, password, true);
                 if (isOk)
                 {
                     Refresh();
@@ -194,7 +186,7 @@ namespace hipda
         {
             Account data = (sender as MenuFlyoutItem).DataContext as Account;
             string keyName = data.Key;
-            DataSource.SetDefault(keyName);
+            AccountHelper.SetDefault(keyName);
 
             Refresh();
         }
@@ -206,7 +198,7 @@ namespace hipda
 
             Account data = (sender as MenuFlyoutItem).DataContext as Account;
             string keyName = data.Key;
-            DataSource.DeleteAccount(keyName);
+            AccountHelper.Delete(keyName);
 
             Refresh();
         }
