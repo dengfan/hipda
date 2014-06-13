@@ -66,7 +66,6 @@ namespace hipda
 
             if (e.PageState != null && e.PageState.Count > 0)
             {
-
                 string tabStr = e.PageState["PivotItems"].ToString();
                 tabStr = tabStr.Substring(0, tabStr.Length - 1);
                 if (!string.IsNullOrEmpty(tabStr))
@@ -166,6 +165,18 @@ namespace hipda
             {
                 PivotItem item = (PivotItem)Pivot.Items.Last();
                 Pivot.Items.Remove(item);
+            }
+
+            // 由于在最后一个thread tab 打开一个 reply tab，会因超过 tab 数量而被删除，导致用户看不到
+            // 所以如果发现最后一个 tab 是 thread tab，则删除之
+            if (Pivot.Items.Count == 6)
+            {
+                PivotItem lastItem = (PivotItem)Pivot.Items.Last();
+                string tabType = lastItem.GetValue(PivotItemTabTypeProperty).ToString();
+                if (tabType.Equals("1"))
+                {
+                    Pivot.Items.Remove(lastItem);
+                }
             }
         }
 
@@ -292,7 +303,7 @@ namespace hipda
         /// <summary>
         /// 在贴子项上单击时调用
         /// </summary>
-        private void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
+        private async void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
         {
             Thread thread = (Thread)e.ClickedItem;
             string threadId = thread.Id;
@@ -302,9 +313,11 @@ namespace hipda
             if (string.IsNullOrEmpty(threadTitle)) threadTitle = "无标题";
 
             CreateThreadTab(threadId, threadTitle, false);
+
+            await RefreshStatusBar();
         }
 
-        private async void CreateThreadTab(string threadId, string threadTitle, bool isResume)
+        private void CreateThreadTab(string threadId, string threadTitle, bool isResume)
         {
             var pivotItem = new PivotItem
             {
@@ -391,6 +404,18 @@ namespace hipda
             {
                 PivotItem item = (PivotItem)Pivot.Items.Last();
                 Pivot.Items.Remove(item);
+            }
+
+            // 由于在最后一个thread tab 打开一个 reply tab，会因超过 tab 数量而被删除，导致用户看不到
+            // 所以如果发现最后一个 tab 是 thread tab，则删除之
+            if (Pivot.Items.Count == 6)
+            {
+                PivotItem lastItem = (PivotItem)Pivot.Items.Last();
+                string tabType = lastItem.GetValue(PivotItemTabTypeProperty).ToString();
+                if (tabType.Equals("1"))
+                {
+                    Pivot.Items.Remove(lastItem);
+                }
             }
         }
 
