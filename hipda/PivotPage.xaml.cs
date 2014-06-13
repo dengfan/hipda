@@ -33,10 +33,9 @@ namespace hipda
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
 
         private string accountName = "未登录";
-        private List<Tab> tab = new List<Tab>();
 
+        public static readonly DependencyProperty PivotItemTabTypeProperty = DependencyProperty.Register("TabType", typeof(String), typeof(PivotItem), null);
         public static readonly DependencyProperty PivotItemTabIdProperty = DependencyProperty.Register("TabId", typeof(String), typeof(PivotItem), null);
-        public static readonly DependencyProperty PivotItemUniqueIdProperty = DependencyProperty.Register("UniqueId", typeof(String), typeof(PivotItem), null);
         
         public PivotPage()
         {
@@ -54,11 +53,11 @@ namespace hipda
             get { return this.navigationHelper; }
         }
 
-        private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             #region 读取当前账号的名称
             Account account = AccountHelper.GetDefault();
-            string accountName = account != null ? account.Username : "未登录";
+            accountName = account != null ? account.Username : "未登录";
             if (accountName.Length > 3)
             {
                 accountName = string.Format("{0}*{1}", accountName.Substring(0, 2), accountName.Last());
@@ -67,30 +66,32 @@ namespace hipda
 
             if (e.PageState != null && e.PageState.Count > 0)
             {
-                tab.Clear();
-                string tabStr = e.PageState["a"].ToString();
+
+                string tabStr = e.PageState["PivotItems"].ToString();
                 tabStr = tabStr.Substring(0, tabStr.Length - 1);
                 if (!string.IsNullOrEmpty(tabStr))
                 {
                     string[] tabAry = tabStr.Split(';');
-                    foreach (var item in tabAry)
+                    foreach (var item in tabAry.Reverse())
                     {
                         string[] tabAttrAry = item.Split(',');
-                        string tabUniqueId = tabAttrAry[0];
-                        string tabParentId = tabAttrAry[1];
-                        string tabId = tabAttrAry[2];
-                        string tabTitle = tabAttrAry[3];
+                        string tabId = tabAttrAry[0];
+                        string tabTitle = tabAttrAry[1];
+                        string tabType = tabAttrAry[2];
 
-                        if (tabParentId.Equals("0"))
+                        if (tabType.Equals("1"))
                         {
-                            CreateForumTab(tabId, tabTitle);
+                            CreateForumTab(tabId, tabTitle, true);
                         }
                         else
                         {
-                            CreateThreadTab(tabParentId, tabId, tabTitle);
+                            CreateThreadTab(tabId, tabTitle, true);
                         }
                     }
                 }
+
+                int selectedIndex = Convert.ToInt16(e.PageState["PivotSelectedIndex"]);
+                Pivot.SelectedIndex = selectedIndex;
             }
             else
             {
@@ -99,26 +100,34 @@ namespace hipda
                 string forumId = dataAry[0];
                 string forumName = dataAry[1];
 
-                CreateForumTab(forumId, forumName);
+                CreateForumTab(forumId, forumName, false);
+
+                await RefreshStatusBar();
             }
         }
 
-        private void CreateForumTab(string forumId, string forumName)
+        private void CreateForumTab(string forumId, string forumName, bool isResume)
         {
             var pivotItem = new PivotItem
             {
                 Header = forumName,
                 Margin = new Thickness(0, 0, 0, 0)
             };
-            pivotItem.SetValue(PivotItemUniqueIdProperty, "tab_" + DateTime.Now.ToString("yyyyMMddHHmmss"));
+            pivotItem.SetValue(PivotItemTabTypeProperty, "1");
             pivotItem.SetValue(PivotItemTabIdProperty, forumId);
 
-            tab.Add(new Tab(pivotItem.GetValue(PivotItemUniqueIdProperty).ToString(), "0", pivotItem.GetValue(PivotItemTabIdProperty).ToString(), pivotItem.GetValue(PivotItemTabIdProperty).ToString()));
-            Pivot.Items.Insert(0, pivotItem);
+            if (isResume)
+            {
+                Pivot.Items.Insert(0, pivotItem);
+            }
+            else
+            {
+                Pivot.Items.Insert(0, pivotItem);
+            }
             Pivot.SelectedItem = pivotItem;
 
             // 在静态数据类中创建一个版块容器，用来装载主贴数据列表
-            pivotItem.DataContext = DataSource.GetForum(forumId, forumName);
+            pivotItem.DataContext = DataSource.GetThread(forumId, forumName);
 
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(DataSource.ThreadPageSize, async pageNo =>
@@ -254,11 +263,23 @@ namespace hipda
         {
             // 获取当前 pivot item 用于从墓碑状态恢复
             StringBuilder tabStr = new StringBuilder();
-            foreach (var item in tab)
+            int i = 0;
+            int selectedIndex = 0;
+            foreach (PivotItem item in Pivot.Items)
             {
-                tabStr.Append(string.Format("{0},{1},{2},{3};", item.UniqueId, item.ParentId, item.Id, item.Title));
+                string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
+                string tabId = item.GetValue(PivotItemTabIdProperty).ToString();
+                string tabTitle = item.Header.ToString();
+                tabStr.Append(string.Format("{0},{1},{2};", tabId, tabTitle, tabType));
+                if (Pivot.SelectedItem.Equals(item))
+                {
+                    selectedIndex = i;
+                }
+                i++;
             }
-            e.PageState["a"] = tabStr.ToString();
+
+            e.PageState["PivotItems"] = tabStr.ToString();
+            e.PageState["PivotSelectedIndex"] = selectedIndex;
         }
 
         /// <summary>
@@ -275,36 +296,44 @@ namespace hipda
         {
             Thread thread = (Thread)e.ClickedItem;
             string threadId = thread.Id;
-            string threadTitle = thread.Title.Length > 7 ? thread.Title.Substring(0, 7) : thread.Title;
+            string threadTitle = thread.Title;
             threadTitle = Regex.Replace(threadTitle, regexForTitle, string.Empty);
+            threadTitle = threadTitle.Length > 7 ? threadTitle.Substring(0, 7) : threadTitle;
             if (string.IsNullOrEmpty(threadTitle)) threadTitle = "无标题";
 
-            CreateThreadTab(thread.ForumId, threadId, threadTitle);
+            CreateThreadTab(threadId, threadTitle, false);
         }
 
-        private void CreateThreadTab(string forumId, string threadId, string threadTitle)
+        private async void CreateThreadTab(string threadId, string threadTitle, bool isResume)
         {
             var pivotItem = new PivotItem
             {
-                Header = threadTitle.Length > 7 ? threadTitle.Substring(0, 7) : threadTitle,
+                Header = threadTitle,
                 Margin = new Thickness(0, 0, 0, 0)
             };
-            pivotItem.SetValue(PivotItemUniqueIdProperty, "tab_" + DateTime.Now.ToString("yyyyMMddHHmmss"));
+            pivotItem.SetValue(PivotItemTabTypeProperty, "2");
             pivotItem.SetValue(PivotItemTabIdProperty, threadId);
 
-            tab.Add(new Tab(pivotItem.GetValue(PivotItemUniqueIdProperty).ToString(), forumId, pivotItem.GetValue(PivotItemTabIdProperty).ToString(), pivotItem.GetValue(PivotItemTabIdProperty).ToString()));
-            Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
+            if (isResume)
+            {
+                Pivot.Items.Insert(0, pivotItem);
+            }
+            else
+            {
+                Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
+            }
+            
             Pivot.SelectedItem = pivotItem;
 
             // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
-            pivotItem.DataContext = DataSource.GetThread(forumId, threadId);
+            pivotItem.DataContext = DataSource.GetReply(threadId, threadTitle);
 
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(50, async pageNo =>
             {
                 // 加载分页数据，并写入静态类中
                 // 返回的是本次加载的数据量
-                return await DataSource.GetLoadRepliesCountAsync(forumId, threadId, pageNo, () =>
+                return await DataSource.GetLoadRepliesCountAsync(threadId, pageNo, () =>
                 {
                     replyProgressBar.Visibility = Visibility.Visible;
                 }, () =>
@@ -314,7 +343,7 @@ namespace hipda
             }, (index) =>
             {
                 // 从静态类中返回需要显示出来的数据
-                return DataSource.GetReplyByIndex(forumId, threadId, index);
+                return DataSource.GetReplyByIndex(threadId, index);
             });
 
             var listView = new ListView
@@ -455,13 +484,18 @@ namespace hipda
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            await RefreshStatusBar();
+        }
+
+        private async Task RefreshStatusBar()
+        {
             StringBuilder navTextContainer = new StringBuilder();
 
             foreach (PivotItem item in Pivot.Items)
             {
                 string text = item.Header.ToString();
                 if (!"|BS版|G版|Win版|地板|E版|".Contains(text))
-                { 
+                {
                     text = item.Header.ToString().Substring(0, 1);
                 }
 

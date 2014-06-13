@@ -10,19 +10,14 @@ namespace hipda.Data
 {
     public class Tab
     {
-        public Tab(string uniqueId, string parentId, string id, string title)
+        public Tab(string type, string id, string title)
         {
-            this.UniqueId = uniqueId;
-            this.ParentId = parentId;
+            this.Type = type;
             this.Id = id;
             this.Title = title;
         }
 
         public string Type { get; set; }
-
-        public string UniqueId { get; set; }
-
-        public string ParentId { get; set; }
 
         public string Id { get; set; }
 
@@ -81,6 +76,19 @@ namespace hipda.Data
         }
     }
 
+    public class ReplyItem
+    {
+        public ReplyItem(string threadId, string threadName)
+        {
+            this.ThreadId = threadId;
+            this.ThreadName = threadName;
+            this.Replies = new ObservableCollection<Reply>();
+        }
+        public string ThreadId { get; private set; }
+        public string ThreadName { get; private set; }
+        public ObservableCollection<Reply> Replies { get; private set; }
+    }
+
     public class Thread
     {
         public Thread(int index, int pageNo, string forumId, string id, string title, int attachType, string replyNum, string viewNum, string ownerName, string ownerId, string createTime, string lastPostAuthorName, string lastPostTime)
@@ -98,7 +106,6 @@ namespace hipda.Data
             this.CreateTime = createTime;
             this.LastPostAuthorName = lastPostAuthorName;
             this.LastPostTime = lastPostTime;
-            this.Replies = new ObservableCollection<Reply>();
         }
 
         public int Index { get; private set; }
@@ -114,7 +121,6 @@ namespace hipda.Data
         public string CreateTime { get; private set; }
         public string LastPostAuthorName { get; private set; }
         public string LastPostTime { get; private set; }
-        public ObservableCollection<Reply> Replies { get; private set; }
 
         public override string ToString()
         {
@@ -158,6 +164,21 @@ namespace hipda.Data
         }
     }
 
+    public class ThreadItem
+    {
+        public ThreadItem(string forumId, string forumName)
+        {
+            this.ForumId = forumId;
+            this.ForumName = forumName;
+            this.Threads = new ObservableCollection<Thread>();
+        }
+        public string ForumId { get; private set; }
+
+        public string ForumName { get; private set; }
+
+        public ObservableCollection<Thread> Threads { get; private set; }
+    }
+
     public class Forum
     {
         public Forum(string id, string name, string alias, string todayCount, string info)
@@ -167,7 +188,6 @@ namespace hipda.Data
             this.Alias = alias;
             this.TodayQuantity = todayCount;
             this.Info = info;
-            this.Threads = new ObservableCollection<Thread>();
         }
 
         public string Id { get; private set; }
@@ -175,8 +195,6 @@ namespace hipda.Data
         public string Alias { get; private set; }
         public string Info { get; private set; }
         public string TodayQuantity { get; private set; }
-
-        public ObservableCollection<Thread> Threads { get; private set; }
 
         public override string ToString()
         {
@@ -213,10 +231,16 @@ namespace hipda.Data
             get { return this._forumGroups; }
         }
 
-        private ObservableCollection<Forum> _forums = new ObservableCollection<Forum>();
-        public ObservableCollection<Forum> Forums
+        private ObservableCollection<ThreadItem> _threadList = new ObservableCollection<ThreadItem>();
+        public ObservableCollection<ThreadItem> ThreadList
         {
-            get { return this._forums; }
+            get { return this._threadList; }
+        }
+
+        private List<ReplyItem> _replyList = new List<ReplyItem>();
+        public List<ReplyItem> ReplyList
+        {
+            get { return this._replyList; }
         }
 
         #region 读取论坛所有版板数据
@@ -332,24 +356,15 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定版块下的所有贴子
-        public static void RemoveForum(string forumId)
+        public static ThreadItem GetThread(string forumId, string forumName)
         {
-            var forumData = _dataSource.Forums.SingleOrDefault(f => f.Id.Equals(forumId));
-            if (forumData != null)
-            {
-                _dataSource.Forums.Remove(forumData);
-            }
-        }
-
-        public static Forum GetForum(string forumId, string forumName)
-        {
-            var count = _dataSource.Forums.Count(f => f.Id.Equals(forumId));
+            var count = _dataSource.ThreadList.Count(t => t.ForumId.Equals(forumId));
             if (count == 0)
             {
-                _dataSource.Forums.Add(new Forum(forumId, forumName, string.Empty, string.Empty, string.Empty));
+                _dataSource.ThreadList.Add(new ThreadItem(forumId, forumName));
             }
 
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId));
+            return _dataSource.ThreadList.Single(t => t.ForumId.Equals(forumId));
         }
 
         public static async Task<int> GetLoadThreadsCountAsync(string forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
@@ -358,24 +373,31 @@ namespace hipda.Data
             await _dataSource.LoadThreadsDataAsync(forumId, pageNo);
             hideProgressBar();
 
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.Count;
+            return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count;
         }
+
+        /// <summary>
+        /// 用于增量加载来控制要显示哪几项
+        /// </summary>
+        /// <param name="forumId"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public static Thread GetThreadByIndex(string forumId, int index)
         {
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.ElementAt(index);
+            return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.ElementAt(index);
         }
 
         private async Task LoadThreadsDataAsync(string forumId, int pageNo)
         {
-            Forum forum = this._forums.SingleOrDefault(f => f.Id.Equals(forumId));
+            // 载入过的页面不再载入
+            var forum = _dataSource.ThreadList.FirstOrDefault(t => t.ForumId.Equals(forumId));
             if (forum == null)
             {
                 return;
             }
 
-            // 载入过的页面不再载入
-            int count = forum.Threads.Count(t => t.PageNo == pageNo);
-            if (count > 0)
+            int threadCount = forum.Threads.Count(t => t.PageNo == pageNo);
+            if (threadCount > 1)
             {
                 return;
             }
@@ -469,57 +491,52 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
-        public static async Task<Thread> GetThread(string forumId, string threadId)
+        public static ReplyItem GetReply(string threadId, string threadName)
         {
-            var forum = _dataSource.Forums.FirstOrDefault(f => f.Id.Equals(forumId));
-            if (forum == null)
+            var count = _dataSource.ReplyList.Count(t => t.ThreadId.Equals(threadId));
+            if (count == 0)
             {
-                await _dataSource.LoadThreadsDataAsync(forumId, 1);
-                //_dataSource.Forums.Add(new Forum(forumId, "恢复", string.Empty, string.Empty, string.Empty));
+                _dataSource.ReplyList.Add(new ReplyItem(threadId, threadName));
             }
 
-            var thread = _dataSource.Forums.FirstOrDefault(f => f.Id.Equals(forumId)).Threads.FirstOrDefault(t => t.Id == threadId);
-            if (thread == null)
-            {
-                forum.Threads.Add(new Thread(0, 1, forumId, threadId, "恢复标题", -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty));
-            }
-
-            return thread;
+            return _dataSource.ReplyList.Single(t => t.ThreadId.Equals(threadId));
         }
 
-        public static async Task<int> GetLoadRepliesCountAsync(string forumId, string threadId, int pageNo, Action showProgressBar, Action hideProgressBar)
+        public static async Task<int> GetLoadRepliesCountAsync(string threadId, int pageNo, Action showProgressBar, Action hideProgressBar)
         {
             showProgressBar();
-            await _dataSource.LoadRepliesDataAsync(forumId, threadId, pageNo);
+            await _dataSource.LoadRepliesDataAsync(threadId, pageNo);
             hideProgressBar();
 
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.First(t => t.Id == threadId).Replies.Count;
+            return _dataSource.ReplyList.First(t => t.ThreadId == threadId).Replies.Count;
         }
 
-        public static Reply GetReplyByIndex(string forumId, string threadId, int index)
+        /// <summary>
+        /// 用于增量加载来控制要显示哪几项
+        /// </summary>
+        /// <param name="forumId"></param>
+        /// <param name="threadId"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static Reply GetReplyByIndex(string threadId, int index)
         {
-            return _dataSource.Forums.Single(f => f.Id.Equals(forumId)).Threads.First(t => t.Id == threadId).Replies.OrderBy(r => r.Floor).ElementAt(index);
+            return _dataSource.ReplyList.Single(r => r.ThreadId.Equals(threadId)).Replies.OrderBy(r => r.Floor).ElementAt(index);
         }
 
         // 读取指定贴子的回复列表数据
-        private async Task LoadRepliesDataAsync(string forumId, string threadId, int pageNo)
+        private async Task LoadRepliesDataAsync(string threadId, int pageNo)
         {
             #region 如果数据已存在，则不读取，以便节省流量
-            Forum forum = this._forums.SingleOrDefault(f => f.Id.Equals(forumId));
-            if (forum == null)
-            {
-                return;
-            }
-
-            Thread threadData = forum.Threads.FirstOrDefault(t => t.Id.Equals(threadId));
-            if (threadData == null)
+            // 载入过的页面不再载入
+            var thread = _dataSource.ReplyList.FirstOrDefault(t => t.ThreadId.Equals(threadId));
+            if (thread == null)
             {
                 return;
             }
 
             // 如果页面已存在，并且已载满数据，则不重新从网站拉取数据，以便节省流量， 
             // 但最后一页（如果数据少于一页，那么第一页就是最后一页）由于随时可能会有新回复，所以对于最后一页的处理方式是先清除再重新加载
-            int count = threadData.Replies.Count(r => r.PageNo == pageNo);
+            int count = thread.Replies.Count(o => o.PageNo == pageNo);
             if (count > 0)
             {
                 if (count >= ReplyPageSize) // 满页的不再加载，以便节省流量
@@ -529,10 +546,10 @@ namespace hipda.Data
 
                 // 再判断未满页的
                 // 第一页或最后一页的回复数量不足一页，表示此页随时可能有新回复，故删除
-                var lastPageData = threadData.Replies.Where(r => r.PageNo == pageNo).ToList();
+                var lastPageData = thread.Replies.Where(r => r.PageNo == pageNo).ToList();
                 foreach (var item in lastPageData)
                 {
-                    threadData.Replies.Remove(threadData.Replies.Single(r => r.Floor == item.Floor));
+                    thread.Replies.Remove(thread.Replies.Single(r => r.Floor == item.Floor));
                 }
             }
             #endregion
@@ -629,8 +646,7 @@ namespace hipda.Data
                 }
 
                 Reply reply = new Reply(floor, pageNo, threadId, authorId, ownerName, content, postTime);
-
-                threadData.Replies.Add(reply);
+                thread.Replies.Add(reply);
             }
         }
         #endregion
