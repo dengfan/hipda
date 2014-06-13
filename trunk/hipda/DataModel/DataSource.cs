@@ -8,22 +8,6 @@ using Windows.UI.Popups;
 
 namespace hipda.Data
 {
-    public class Tab
-    {
-        public Tab(string type, string id, string title)
-        {
-            this.Type = type;
-            this.Id = id;
-            this.Title = title;
-        }
-
-        public string Type { get; set; }
-
-        public string Id { get; set; }
-
-        public string Title { get; set; }
-    }
-
     public class Reply
     {
         public Reply(int floor, int pageNo, string threadId, string ownerId, string ownerName, string content, string createTime)

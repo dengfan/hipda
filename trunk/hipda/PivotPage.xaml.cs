@@ -338,6 +338,15 @@ namespace hipda
             
             Pivot.SelectedItem = pivotItem;
 
+            Button refreshButton = new Button
+            {
+                BorderThickness = new Thickness(0),
+                Margin = new Thickness(0, 0, 0, 100),
+                Background = new SolidColorBrush(Colors.Green),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Height = 60
+            };
+
             // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
             pivotItem.DataContext = DataSource.GetReply(threadId, threadTitle);
 
@@ -348,9 +357,11 @@ namespace hipda
                 // 返回的是本次加载的数据量
                 return await DataSource.GetLoadRepliesCountAsync(threadId, pageNo, () =>
                 {
+                    refreshButton.IsEnabled = false;
                     replyProgressBar.Visibility = Visibility.Visible;
                 }, () =>
                 {
+                    refreshButton.IsEnabled = true;
                     replyProgressBar.Visibility = Visibility.Collapsed;
                 });
             }, (index) =>
@@ -369,15 +380,7 @@ namespace hipda
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
 
-            Button refreshButton = new Button
-            {
-                BorderThickness = new Thickness(0),
-                Margin = new Thickness(0, 0, 0, 100),
-                Background = new SolidColorBrush(Colors.Green),
-                Height = 60,
-                HorizontalAlignment = HorizontalAlignment.Stretch
-            };
-
+            #region 底部刷新按钮
             Image refreshIcon = new Image
             {
                 Source = new BitmapImage
@@ -390,11 +393,13 @@ namespace hipda
 
             refreshButton.Tapped += async (s2, e2) =>
             {
+                Button btn = (Button)s2;
                 ICollectionView view = (ICollectionView)listView.ItemsSource;
                 await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
             };
 
             listView.Footer = refreshButton;
+            #endregion
 
             listView.ContainerContentChanging += ReplyListView_ContainerContentChanging;
             pivotItem.Content = listView;
