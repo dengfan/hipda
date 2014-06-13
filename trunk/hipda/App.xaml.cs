@@ -30,7 +30,6 @@ namespace hipda
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
-            //this.Resuming += this.OnResuming;
         }
 
         /// <summary>
@@ -111,17 +110,18 @@ namespace hipda
             // 确保当前窗口处于活动状态。
             Window.Current.Activate();
 
-            
-
             StatusBar statusBar = StatusBar.GetForCurrentView();
             statusBar.BackgroundColor = Colors.Purple;
             statusBar.BackgroundOpacity = 100;
             statusBar.ForegroundColor = Colors.White;
+            statusBar.ProgressIndicator.ProgressValue = 0;
             await statusBar.ShowAsync();
 
-            statusBar.ProgressIndicator.ProgressValue = 0;
-            statusBar.ProgressIndicator.Text = string.Concat("Hi!PDA");
-            await statusBar.ProgressIndicator.ShowAsync();
+            if (e.PreviousExecutionState == ApplicationExecutionState.NotRunning)
+            {
+                statusBar.ProgressIndicator.Text = string.Concat("Hi!PDA");
+                await statusBar.ProgressIndicator.ShowAsync();
+            }
         }
 
         /// <summary>
@@ -147,11 +147,5 @@ namespace hipda
             await SuspensionManager.SaveAsync();
             deferral.Complete();
         }
-
-        //private async void OnResuming(object sender, object e)
-        //{
-        //    //throw new NotImplementedException();
-        //    await new MessageDialog("恢复").ShowAsync();
-        //}
     }
 }
