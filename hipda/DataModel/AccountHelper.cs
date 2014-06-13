@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -152,7 +153,7 @@ namespace hipda.Data
         }
     }
 
-    public class Account
+    public class Account : INotifyPropertyChanged
     {
         public Account(string key, string username, string password, bool isDefault)
         {
@@ -168,7 +169,24 @@ namespace hipda.Data
 
         public string Password { get; set; }
 
-        public bool IsDefault { get; set; }
+        private bool isDefault;
+
+        public bool IsDefault
+        {
+            get
+            {
+                return this.isDefault;
+            }
+            set
+            {
+                if (this.isDefault != value)
+                {
+                    this.isDefault = value;
+                    OnPropertyChanged("IsDefault");
+                    OnPropertyChanged("Label");
+                }
+            }
+        }
 
         public string Label
         {
@@ -177,5 +195,22 @@ namespace hipda.Data
                 return this.IsDefault ? " ● " : string.Empty;
             }
         }
+
+        
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
     }
 }
