@@ -393,7 +393,7 @@ namespace hipda.Data
             }
 
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&page={1}", forumId, pageNo);
+            string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&page={1}&r={2}", forumId, pageNo, DateTime.Now.ToString("HHmmss"));
             string htmlContent = await httpClient.HttpGet(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象

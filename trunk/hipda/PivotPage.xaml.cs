@@ -337,12 +337,31 @@ namespace hipda
             string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
             if (tabType.Equals("1"))
             {
+                ListView listView = (ListView)item.FindName("threadsListView");
+                listView.ItemsSource = null;
+
                 string tabId = data.ForumId;
                 await DataSource.RefreshThread(tabId);
 
-                //ListView listView = (ListView)item.FindName("threadsListView");
-                //ICollectionView view = (ICollectionView)listView.ItemsSource;
-                //await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
+                var cvs = new CollectionViewSource();
+                cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(DataSource.ThreadPageSize, async pageNo =>
+                {
+                    // 加载分页数据，并写入静态类中
+                    // 返回的是本次加载的数据量
+                    return await DataSource.GetLoadThreadsCountAsync(tabId, pageNo, () =>
+                    {
+                        replyProgressBar.Visibility = Visibility.Visible;
+                    }, () =>
+                    {
+                        replyProgressBar.Visibility = Visibility.Collapsed;
+                    });
+                }, (index) =>
+                {
+                    // 从静态类中返回需要显示出来的数据
+                    return DataSource.GetThreadByIndex(tabId, index);
+                });
+
+                listView.ItemsSource = cvs.View;
             }
         }
 
@@ -443,6 +462,7 @@ namespace hipda
 
             var listView = new ListView
             {
+                Name = "threadsListView",
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
                 ItemTemplate = ThreadListItemTemplate,
