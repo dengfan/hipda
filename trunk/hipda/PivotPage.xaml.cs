@@ -337,10 +337,11 @@ namespace hipda
             string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
             if (tabType.Equals("1"))
             {
-                ListView listView = (ListView)item.FindName("threadsListView");
-                listView.ItemsSource = null;
-
                 string tabId = data.ForumId;
+
+                ListView listView = (ListView)item.FindName("threadsListView" + tabId);
+                listView.ItemsSource = null;
+                
                 await DataSource.RefreshThread(tabId);
 
                 var cvs = new CollectionViewSource();
@@ -462,7 +463,7 @@ namespace hipda
 
             var listView = new ListView
             {
-                Name = "threadsListView",
+                Name = "threadsListView" + forumId,
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
                 ItemTemplate = ThreadListItemTemplate,
