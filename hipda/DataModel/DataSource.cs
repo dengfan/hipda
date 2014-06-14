@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.UI.Popups;
 
 namespace hipda.Data
 {
@@ -202,7 +201,6 @@ namespace hipda.Data
     public sealed class DataSource
     {
         public static int ThreadPageSize { get { return 75; } }
-
         public static int ReplyPageSize { get { return 50; } }
 
         private static DataSource _dataSource = new DataSource();
@@ -257,14 +255,12 @@ namespace hipda.Data
             var content = data.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("content"));
             if (content == null)
             {
-                await new MessageDialog("解析“所有版块”页面第一阶段出错！").ShowAsync();
                 return;
             }
 
             var mainBoxes = content.Descendants().Where(n => n.GetAttributeValue("class", "").Equals("mainbox list") && !n.GetAttributeValue("id", "").Equals("online"));
             if (mainBoxes == null)
             {
-                await new MessageDialog("解析“所有版块”页面第二阶段出错！").ShowAsync();
                 return;
             }
 
@@ -351,13 +347,31 @@ namespace hipda.Data
             return _dataSource.ThreadList.Single(t => t.ForumId.Equals(forumId));
         }
 
+        public static async Task RefreshThread(string forumId)
+        {
+            var threadItem = _dataSource.ThreadList.FirstOrDefault(t => t.ForumId.Equals(forumId));
+            if (threadItem != null)
+            {
+                threadItem.Threads.Clear();
+                await _dataSource.LoadThreadsDataAsync(forumId, 1);
+            }
+        }
+
         public static async Task<int> GetLoadThreadsCountAsync(string forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
         {
             showProgressBar();
             await _dataSource.LoadThreadsDataAsync(forumId, pageNo);
             hideProgressBar();
 
-            return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count;
+            // 每一页一般会有置顶贴，导致数据项不足而引起无法加载下一页，所以第一页默认返回 pagesize
+            if (pageNo == 1)
+            {
+                return DataSource.ThreadPageSize;
+            }
+            else
+            {
+                return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count;
+            }
         }
 
         /// <summary>
@@ -402,7 +416,8 @@ namespace hipda.Data
                 return;
             }
 
-            var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("normalthread_") || n.GetAttributeValue("id", "").StartsWith("stickthread_"));
+            // 如果置顶贴数过多，只取非置顶贴的话，第一页数据项过少，会导致不会自动触发加载下一页数据
+            var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("normalthread_"));
             if (tbodies == null)
             {
                 return;
@@ -578,7 +593,6 @@ namespace hipda.Data
             var data = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
             if (data == null)
             {
-                await new MessageDialog("解析回复列表页第一阶段出错！").ShowAsync();
                 return;
             }
 

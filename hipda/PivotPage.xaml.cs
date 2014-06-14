@@ -80,11 +80,11 @@ namespace hipda
 
                         if (tabType.Equals("1"))
                         {
-                            CreateForumTab(tabId, tabTitle, true);
+                            CreateThreadListTab(tabId, tabTitle, true);
                         }
                         else
                         {
-                            CreateThreadTab(tabId, tabTitle, true);
+                            CreateReplyListTab(tabId, tabTitle, true);
                         }
                     }
                 }
@@ -99,84 +99,9 @@ namespace hipda
                 string forumId = dataAry[0];
                 string forumName = dataAry[1];
 
-                CreateForumTab(forumId, forumName, false);
+                CreateThreadListTab(forumId, forumName, false);
 
-                await RefreshStatusBar();
-            }
-        }
-
-        private void CreateForumTab(string forumId, string forumName, bool isResume)
-        {
-            var pivotItem = new PivotItem
-            {
-                Header = forumName,
-                Margin = new Thickness(0, 0, 0, 0)
-            };
-            pivotItem.SetValue(PivotItemTabTypeProperty, "1");
-            pivotItem.SetValue(PivotItemTabIdProperty, forumId);
-
-            if (isResume)
-            {
-                Pivot.Items.Insert(0, pivotItem);
-            }
-            else
-            {
-                Pivot.Items.Insert(0, pivotItem);
-            }
-            Pivot.SelectedItem = pivotItem;
-
-            // 在静态数据类中创建一个版块容器，用来装载主贴数据列表
-            pivotItem.DataContext = DataSource.GetThread(forumId, forumName);
-
-            var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(DataSource.ThreadPageSize, async pageNo =>
-            {
-                // 加载分页数据，并写入静态类中
-                // 返回的是本次加载的数据量
-                return await DataSource.GetLoadThreadsCountAsync(forumId, pageNo, () =>
-                {
-                    replyProgressBar.Visibility = Visibility.Visible;
-                }, () =>
-                {
-                    replyProgressBar.Visibility = Visibility.Collapsed;
-                });
-            }, (index) =>
-            {
-                // 从静态类中返回需要显示出来的数据
-                return DataSource.GetThreadByIndex(forumId, index);
-            });
-
-            var listView = new ListView
-            {
-                ItemsSource = cvs.View,
-                IsItemClickEnabled = true,
-                ItemTemplate = ThreadListItemTemplate,
-                ItemContainerStyleSelector = new BackgroundStyleSelecterForThreadItem(),
-                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
-            };
-
-            ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
-            listView.ItemClick += ThreadItem_ItemClick;
-            listView.ContainerContentChanging += ThemeListView_ContainerContentChanging;
-            pivotItem.Content = listView;
-
-            // 限制 pivot item 的数量
-            if (Pivot.Items.Count > maxHubSectionCount)
-            {
-                PivotItem item = (PivotItem)Pivot.Items.Last();
-                Pivot.Items.Remove(item);
-            }
-
-            // 由于在最后一个thread tab 打开一个 reply tab，会因超过 tab 数量而被删除，导致用户看不到
-            // 所以如果发现最后一个 tab 是 thread tab，则删除之
-            if (Pivot.Items.Count == 6)
-            {
-                PivotItem lastItem = (PivotItem)Pivot.Items.Last();
-                string tabType = lastItem.GetValue(PivotItemTabTypeProperty).ToString();
-                if (tabType.Equals("1"))
-                {
-                    Pivot.Items.Remove(lastItem);
-                }
+                await RefreshElementStatus();
             }
         }
 
@@ -312,116 +237,9 @@ namespace hipda
             threadTitle = threadTitle.Length > 7 ? threadTitle.Substring(0, 7) : threadTitle;
             if (string.IsNullOrEmpty(threadTitle)) threadTitle = "无标题";
 
-            CreateThreadTab(threadId, threadTitle, false);
+            CreateReplyListTab(threadId, threadTitle, false);
 
-            await RefreshStatusBar();
-        }
-
-        private void CreateThreadTab(string threadId, string threadTitle, bool isResume)
-        {
-            var pivotItem = new PivotItem
-            {
-                Header = threadTitle,
-                Margin = new Thickness(0, 0, 0, 0)
-            };
-            pivotItem.SetValue(PivotItemTabTypeProperty, "2");
-            pivotItem.SetValue(PivotItemTabIdProperty, threadId);
-
-            if (isResume)
-            {
-                Pivot.Items.Insert(0, pivotItem);
-            }
-            else
-            {
-                Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
-            }
-            
-            Pivot.SelectedItem = pivotItem;
-
-            Button refreshButton = new Button
-            {
-                BorderThickness = new Thickness(0),
-                Margin = new Thickness(0, 0, 0, 100),
-                Background = new SolidColorBrush(Colors.Green),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                Height = 60
-            };
-
-            // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
-            pivotItem.DataContext = DataSource.GetReply(threadId, threadTitle);
-
-            var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(50, async pageNo =>
-            {
-                // 加载分页数据，并写入静态类中
-                // 返回的是本次加载的数据量
-                return await DataSource.GetLoadRepliesCountAsync(threadId, pageNo, () =>
-                {
-                    refreshButton.IsEnabled = false;
-                    replyProgressBar.Visibility = Visibility.Visible;
-                }, () =>
-                {
-                    refreshButton.IsEnabled = true;
-                    replyProgressBar.Visibility = Visibility.Collapsed;
-                });
-            }, (index) =>
-            {
-                // 从静态类中返回需要显示出来的数据
-                return DataSource.GetReplyByIndex(threadId, index);
-            });
-
-            var listView = new ListView
-            {
-                Padding = new Thickness(10, 0, 10, 0),
-                ItemsSource = cvs.View,
-                IsItemClickEnabled = false,
-                ItemTemplate = ReplyListItemTemplate,
-                ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
-                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
-            };
-
-            #region 底部刷新按钮
-            Image refreshIcon = new Image
-            {
-                Source = new BitmapImage
-                {
-                    UriSource = new Uri("ms-appx:///Assets/Icons/appbar.refresh.png")
-                }
-            };
-
-            refreshButton.Content = refreshIcon;
-
-            refreshButton.Tapped += async (s2, e2) =>
-            {
-                Button btn = (Button)s2;
-                ICollectionView view = (ICollectionView)listView.ItemsSource;
-                await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
-            };
-
-            listView.Footer = refreshButton;
-            #endregion
-
-            listView.ContainerContentChanging += ReplyListView_ContainerContentChanging;
-            pivotItem.Content = listView;
-
-            // 限制 pivot item 的数量
-            if (Pivot.Items.Count > maxHubSectionCount)
-            {
-                PivotItem item = (PivotItem)Pivot.Items.Last();
-                Pivot.Items.Remove(item);
-            }
-
-            // 由于在最后一个thread tab 打开一个 reply tab，会因超过 tab 数量而被删除，导致用户看不到
-            // 所以如果发现最后一个 tab 是 thread tab，则删除之
-            if (Pivot.Items.Count == 6)
-            {
-                PivotItem lastItem = (PivotItem)Pivot.Items.Last();
-                string tabType = lastItem.GetValue(PivotItemTabTypeProperty).ToString();
-                if (tabType.Equals("1"))
-                {
-                    Pivot.Items.Remove(lastItem);
-                }
-            }
+            await RefreshElementStatus();
         }
 
         #region 增量更新
@@ -512,24 +330,58 @@ namespace hipda
         }
         #endregion
 
-        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void refreshButton_Click(object sender, RoutedEventArgs e)
         {
-            await RefreshStatusBar();
+            PivotItem item = (PivotItem)Pivot.SelectedItem;
+            ThreadItem data = (ThreadItem)item.DataContext;
+            string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
+            if (tabType.Equals("1"))
+            {
+                string tabId = data.ForumId;
+                await DataSource.RefreshThread(tabId);
+
+                //ListView listView = (ListView)item.FindName("threadsListView");
+                //ICollectionView view = (ICollectionView)listView.ItemsSource;
+                //await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
+            }
         }
 
-        private async Task RefreshStatusBar()
+        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            await RefreshElementStatus();
+        }
+
+        private async Task RefreshElementStatus()
+        {
+            #region 刷新 底部按钮
+            PivotItem item = (PivotItem)Pivot.SelectedItem;
+            string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
+            if (tabType.Equals("1")) // 主贴列表页
+            {
+                tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+                refreshButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+            else // 回复列表页
+            {
+                tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+                refreshButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+            #endregion
+
+            #region 刷新 顶部状态栏
             StringBuilder navTextContainer = new StringBuilder();
 
-            foreach (PivotItem item in Pivot.Items)
+            foreach (PivotItem pivotItem in Pivot.Items)
             {
-                string text = item.Header.ToString();
+                string text = pivotItem.Header.ToString();
                 if (!"|BS版|G版|Win版|地板|E版|".Contains(text))
                 {
-                    text = item.Header.ToString().Substring(0, 1);
+                    text = pivotItem.Header.ToString().Substring(0, 1);
                 }
 
-                if (Pivot.SelectedItem == item)
+                if (Pivot.SelectedItem == pivotItem)
                 {
                     navTextContainer.Append(string.Format("{0}●-", text));
                 }
@@ -544,7 +396,192 @@ namespace hipda
 
             StatusBar.GetForCurrentView().ProgressIndicator.Text = string.Format("{0} > {1}", accountName, navText);
             await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
+            #endregion
         }
+
+        #region 创建 tab 页
+        private void CreateThreadListTab(string forumId, string forumName, bool isResume)
+        {
+            var pivotItem = new PivotItem
+            {
+                Header = forumName,
+                Margin = new Thickness(0, 0, 0, 0)
+            };
+            pivotItem.SetValue(PivotItemTabTypeProperty, "1");
+            pivotItem.SetValue(PivotItemTabIdProperty, forumId);
+
+            if (isResume)
+            {
+                Pivot.Items.Insert(0, pivotItem);
+            }
+            else
+            {
+                Pivot.Items.Insert(0, pivotItem);
+            }
+            Pivot.SelectedItem = pivotItem;
+
+            // 在静态数据类中创建一个版块容器，用来装载主贴数据列表
+            pivotItem.DataContext = DataSource.GetThread(forumId, forumName);
+
+            var cvs = new CollectionViewSource();
+            cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(DataSource.ThreadPageSize, async pageNo =>
+            {
+                // 加载分页数据，并写入静态类中
+                // 返回的是本次加载的数据量
+                return await DataSource.GetLoadThreadsCountAsync(forumId, pageNo, () =>
+                {
+                    replyProgressBar.Visibility = Visibility.Visible;
+                }, () =>
+                {
+                    replyProgressBar.Visibility = Visibility.Collapsed;
+                });
+            }, (index) =>
+            {
+                // 从静态类中返回需要显示出来的数据
+                return DataSource.GetThreadByIndex(forumId, index);
+            });
+
+            var listView = new ListView
+            {
+                ItemsSource = cvs.View,
+                IsItemClickEnabled = true,
+                ItemTemplate = ThreadListItemTemplate,
+                ItemContainerStyleSelector = new BackgroundStyleSelecterForThreadItem(),
+                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
+            };
+
+            ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
+            listView.ItemClick += ThreadItem_ItemClick;
+            listView.ContainerContentChanging += ThemeListView_ContainerContentChanging;
+            pivotItem.Content = listView;
+
+            // 限制 pivot item 的数量
+            if (Pivot.Items.Count > maxHubSectionCount)
+            {
+                PivotItem item = (PivotItem)Pivot.Items.Last();
+                Pivot.Items.Remove(item);
+            }
+
+            // 由于在最后一个thread tab 打开一个 reply tab，会因超过 tab 数量而被删除，导致用户看不到
+            // 所以如果发现最后一个 tab 是 thread tab，则删除之
+            if (Pivot.Items.Count == 6)
+            {
+                PivotItem lastItem = (PivotItem)Pivot.Items.Last();
+                string tabType = lastItem.GetValue(PivotItemTabTypeProperty).ToString();
+                if (tabType.Equals("1"))
+                {
+                    Pivot.Items.Remove(lastItem);
+                }
+            }
+        }
+
+        private void CreateReplyListTab(string threadId, string threadTitle, bool isResume)
+        {
+            var pivotItem = new PivotItem
+            {
+                Header = threadTitle,
+                Margin = new Thickness(0, 0, 0, 0)
+            };
+            pivotItem.SetValue(PivotItemTabTypeProperty, "2");
+            pivotItem.SetValue(PivotItemTabIdProperty, threadId);
+
+            if (isResume)
+            {
+                Pivot.Items.Insert(0, pivotItem);
+            }
+            else
+            {
+                Pivot.Items.Insert(Pivot.SelectedIndex + 1, pivotItem);
+            }
+
+            Pivot.SelectedItem = pivotItem;
+
+            Button refreshButton = new Button
+            {
+                BorderThickness = new Thickness(0),
+                Margin = new Thickness(0, 0, 0, 100),
+                Background = new SolidColorBrush(Colors.Green),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Height = 60
+            };
+
+            // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
+            pivotItem.DataContext = DataSource.GetReply(threadId, threadTitle);
+
+            var cvs = new CollectionViewSource();
+            cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(50, async pageNo =>
+            {
+                // 加载分页数据，并写入静态类中
+                // 返回的是本次加载的数据量
+                return await DataSource.GetLoadRepliesCountAsync(threadId, pageNo, () =>
+                {
+                    refreshButton.IsEnabled = false;
+                    replyProgressBar.Visibility = Visibility.Visible;
+                }, () =>
+                {
+                    refreshButton.IsEnabled = true;
+                    replyProgressBar.Visibility = Visibility.Collapsed;
+                });
+            }, (index) =>
+            {
+                // 从静态类中返回需要显示出来的数据
+                return DataSource.GetReplyByIndex(threadId, index);
+            });
+
+            var listView = new ListView
+            {
+                Padding = new Thickness(10, 0, 10, 0),
+                ItemsSource = cvs.View,
+                IsItemClickEnabled = false,
+                ItemTemplate = ReplyListItemTemplate,
+                ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
+                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
+            };
+
+            #region 底部刷新按钮
+            Image refreshIcon = new Image
+            {
+                Source = new BitmapImage
+                {
+                    UriSource = new Uri("ms-appx:///Assets/Icons/appbar.refresh.png")
+                }
+            };
+
+            refreshButton.Content = refreshIcon;
+
+            refreshButton.Tapped += async (s2, e2) =>
+            {
+                Button btn = (Button)s2;
+                ICollectionView view = (ICollectionView)listView.ItemsSource;
+                await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
+            };
+
+            listView.Footer = refreshButton;
+            #endregion
+
+            listView.ContainerContentChanging += ReplyListView_ContainerContentChanging;
+            pivotItem.Content = listView;
+
+            // 限制 pivot item 的数量
+            if (Pivot.Items.Count > maxHubSectionCount)
+            {
+                PivotItem item = (PivotItem)Pivot.Items.Last();
+                Pivot.Items.Remove(item);
+            }
+
+            // 由于在最后一个thread tab 打开一个 reply tab，会因超过 tab 数量而被删除，导致用户看不到
+            // 所以如果发现最后一个 tab 是 thread tab，则删除之
+            if (Pivot.Items.Count == 6)
+            {
+                PivotItem lastItem = (PivotItem)Pivot.Items.Last();
+                string tabType = lastItem.GetValue(PivotItemTabTypeProperty).ToString();
+                if (tabType.Equals("1"))
+                {
+                    Pivot.Items.Remove(lastItem);
+                }
+            }
+        }
+        #endregion
 
         #region NavigationHelper 注册
 
