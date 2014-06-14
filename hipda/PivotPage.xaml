@@ -55,7 +55,6 @@
                         <LineBreak/>
                         <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
                     </TextBlock>
-                    
                 </StackPanel>
 
                 <TextBlock x:Name="lastPostTextBlock"  Grid.Row="1" Grid.Column="1"

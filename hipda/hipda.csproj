@@ -102,7 +102,6 @@
     <Compile Include="BackgroundStyleSelecterForForumItem.cs" />
     <Compile Include="BackgroundStyleSelecterForReplyItem.cs" />
     <Compile Include="BackgroundStyleSelecterForThreadItem.cs" />
-    <Compile Include="VisibilityConverter.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
@@ -118,7 +117,6 @@
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="HttpHandle.cs" />
-    <Compile Include="HttpJsonContent.cs" />
     <Compile Include="ListGroupStyleSelector.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -128,7 +126,6 @@
     <Compile Include="PivotPage.xaml.cs">
       <DependentUpon>PivotPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PlugInFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
