@@ -28,7 +28,7 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                    
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -41,38 +41,16 @@
                         <Run x:Name="titleTextBlockRun" Text="{Binding Title}" Foreground="DimGray" FontWeight="Bold" FontFamily="Global User Interface" />
                         <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
                     </TextBlock>
-                    <!--<StackPanel Orientation="Horizontal">
-                        <Image>
-                            <Image.Source>
-                                <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.image.png" 
-                                    DecodePixelWidth="36" DecodePixelHeight="36"/>
-                            </Image.Source>
-                        </Image>
-
-                        <Image>
-                            <Image.Source>
-                                <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.paperclip.rotated.png" 
-                                    DecodePixelWidth="36" DecodePixelHeight="36"/>
-                            </Image.Source>
-                        </Image>
-
-                        <Image>
-                            <Image.Source>
-                                <BitmapImage UriSource="ms-appx:///Assets/Icons/appbar.thumbs.up.png" 
-                                    DecodePixelWidth="36" DecodePixelHeight="36"/>
-                            </Image.Source>
-                        </Image>
-                    </StackPanel>-->
                 </StackPanel>
                 
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
                     <Border x:Name="avatarImageBorder" Margin="0,10,10,0" CornerRadius="30" Width="60" Height="60" HorizontalAlignment="Left" />
                     <TextBlock x:Name="ownerInfoTextBlock"
-                            TextWrapping="WrapWholeWords"
-                            HorizontalAlignment="Left"
+                               TextWrapping="WrapWholeWords"
+                               HorizontalAlignment="Left"
                                VerticalAlignment="Bottom"
-                            Style="{ThemeResource ListViewItemContentTextBlockStyle}"
-                            FontFamily="Global User Interface">
+                               Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                               FontFamily="Global User Interface">
                         <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
                         <LineBreak/>
                         <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
@@ -81,16 +59,11 @@
                 </StackPanel>
 
                 <TextBlock x:Name="lastPostTextBlock"  Grid.Row="1" Grid.Column="1"
-                        Text="{Binding LastPostInfo}"
-                        TextWrapping="WrapWholeWords"
+                           Text="{Binding LastPostInfo}"
+                           TextWrapping="WrapWholeWords"
                            HorizontalAlignment="Right"
                            VerticalAlignment="Bottom"
-                        Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
-
-                <!--<Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                        X1="0" Y1="15"
-                        X2="600" Y2="15"
-                        Stroke="LightGray" StrokeDashArray="8,4" />-->
+                           Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
             </Grid>
         </DataTemplate>
 
@@ -161,10 +134,13 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar ClosedDisplayMode="Minimal">
-            <AppBarButton x:Name="ReplyButton" Icon="Edit" Label="回复" />
+        <CommandBar x:Name="tabPageCommandBar">
+            <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="刷新" Click="refreshButton_Click" Visibility="Collapsed" />
+            <AppBarButton x:Name="replyButton" Icon="Edit" Label="回复" Visibility="Collapsed" />
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="SecondaryButton2" Icon="Read" Label="个人中心" />
+                <AppBarButton x:Name="openTabForDiscovery" Label="地板" />
+                <AppBarButton x:Name="openTabForBuyAndSell" Label="B/S 版" />
+                <AppBarButton x:Name="openTabForEink" Label="Eink 版" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

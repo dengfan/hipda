@@ -102,6 +102,7 @@
     <Compile Include="BackgroundStyleSelecterForForumItem.cs" />
     <Compile Include="BackgroundStyleSelecterForReplyItem.cs" />
     <Compile Include="BackgroundStyleSelecterForThreadItem.cs" />
+    <Compile Include="VisibilityConverter.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
