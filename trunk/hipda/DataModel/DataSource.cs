@@ -363,15 +363,7 @@ namespace hipda.Data
             await _dataSource.LoadThreadsDataAsync(forumId, pageNo);
             hideProgressBar();
 
-            // 每一页一般会有置顶贴，导致数据项不足而引起无法加载下一页，所以第一页默认返回 pagesize
-            if (pageNo == 1)
-            {
-                return DataSource.ThreadPageSize;
-            }
-            else
-            {
-                return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count;
-            }
+            return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count;
         }
 
         /// <summary>

@@ -27,6 +27,7 @@ namespace hipda.Data
         uint _generatedCount = 0; // 已加载并显示的数量
         int _loadedDataMaxCount = 0; // 记录已经载入数据总量，用于与刚载入的数量总量进行对比，如果数据量没有变大，则上一次的页码保持不变
         int _prevPageNo = 0; // 记录上次加载的页码，以免重复加载
+        int _stickCount = 0; // 置顶贴的数量，用于在判断是否翻页时，要加上置顶贴的数量，否则可能不会自动加载下一页的数据
 
         int triggerLoadedCount = 0;
 
@@ -77,7 +78,8 @@ namespace hipda.Data
                     triggerLoadedCount++;
                 }
 
-                uint total = _generatedCount + count;
+                // 判断是否需要加载下一页
+                uint total = _generatedCount + count + (uint)_stickCount;
                 if (total < _pageSize)
                 {
                     int pageNo = 1;
@@ -88,6 +90,12 @@ namespace hipda.Data
                         {
                             _prevPageNo = pageNo;
                             _loadedDataMaxCount = currentDataMaxCount;
+                        }
+
+                        // 获取置顶贴的数量
+                        if (pageNo == 1 && currentDataMaxCount < _pageSize)
+                        {
+                            _stickCount = _pageSize - currentDataMaxCount;
                         }
                     }
                 }
@@ -105,6 +113,12 @@ namespace hipda.Data
                             {
                                 _prevPageNo = pageNo;
                                 _loadedDataMaxCount = currentDataMaxCount;
+                            }
+
+                            // 获取置顶贴的数量
+                            if (pageNo == 1 && currentDataMaxCount < _pageSize)
+                            {
+                                _stickCount = _pageSize - currentDataMaxCount;
                             }
                         }
                     }
