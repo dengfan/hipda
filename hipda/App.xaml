@@ -17,6 +17,94 @@
                     </DataTemplate>
                 </GroupStyle.HeaderTemplate>
             </GroupStyle>
+
+            <ControlTemplate x:Key="ListViewItem1" TargetType="ListViewItem">
+                <Border x:Name="OuterContainer" RenderTransformOrigin="0.5,0.5">
+                    <Border.RenderTransform>
+                        <ScaleTransform x:Name="ContentScaleTransform"/>
+                    </Border.RenderTransform>
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="DataVirtualizationStates">
+                            <VisualState x:Name="DataAvailable"/>
+                            <VisualState x:Name="DataPlaceholder">
+                                <Storyboard>
+                                    <ObjectAnimationUsingKeyFrames Duration="0" Storyboard.TargetProperty="Visibility" Storyboard.TargetName="PlaceholderTextBlock">
+                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                                    </ObjectAnimationUsingKeyFrames>
+                                    <ObjectAnimationUsingKeyFrames Duration="0" Storyboard.TargetProperty="Visibility" Storyboard.TargetName="PlaceholderRect">
+                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                                    </ObjectAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </VisualState>
+                        </VisualStateGroup>
+                        <VisualStateGroup x:Name="ReorderModeStates">
+                            <VisualStateGroup.Transitions>
+                                <VisualTransition From="ReorderEnabled" GeneratedDuration="00:00:00.2" To="ReorderDisabled"/>
+                            </VisualStateGroup.Transitions>
+                            <VisualState x:Name="ReorderEnabled">
+                                <Storyboard>
+                                    <DropTargetItemThemeAnimation Storyboard.TargetName="OuterContainer"/>
+                                </Storyboard>
+                            </VisualState>
+                            <VisualState x:Name="Reorderable">
+                                <Storyboard>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="ContentScaleTransform">
+                                        <LinearDoubleKeyFrame KeyTime="00:00:00.075" Value="1.05"/>
+                                        <LinearDoubleKeyFrame KeyTime="00:00:00.2" Value="1.0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="ScaleY" Storyboard.TargetName="ContentScaleTransform">
+                                        <LinearDoubleKeyFrame KeyTime="00:00:00.075" Value="1.05"/>
+                                        <LinearDoubleKeyFrame KeyTime="00:00:00.2" Value="1.0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </VisualState>
+                            <VisualState x:Name="ReorderDisabled"/>
+                        </VisualStateGroup>
+                        <VisualStateGroup x:Name="ReorderHintStates">
+                            <VisualStateGroup.Transitions>
+                                <VisualTransition GeneratedDuration="0:0:0.2" To="NoReorderHint"/>
+                            </VisualStateGroup.Transitions>
+                            <VisualState x:Name="NoReorderHint"/>
+                            <VisualState x:Name="BottomReorderHint">
+                                <Storyboard>
+                                    <DragOverThemeAnimation Direction="Bottom" ToOffset="{ThemeResource ListViewItemReorderHintThemeOffset}" Storyboard.TargetName="ReorderHintContent"/>
+                                </Storyboard>
+                            </VisualState>
+                            <VisualState x:Name="RightReorderHint">
+                                <Storyboard>
+                                    <DragOverThemeAnimation Direction="Right" ToOffset="{ThemeResource ListViewItemReorderHintThemeOffset}" Storyboard.TargetName="ReorderHintContent"/>
+                                </Storyboard>
+                            </VisualState>
+                            <VisualState x:Name="TopReorderHint">
+                                <Storyboard>
+                                    <DragOverThemeAnimation Direction="Top" ToOffset="0" Storyboard.TargetName="ReorderHintContent"/>
+                                </Storyboard>
+                            </VisualState>
+                            <VisualState x:Name="LeftReorderHint">
+                                <Storyboard>
+                                    <DragOverThemeAnimation Direction="Left" ToOffset="0" Storyboard.TargetName="ReorderHintContent"/>
+                                </Storyboard>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                    <Grid x:Name="ReorderHintContent" Background="Transparent">
+                        <Border x:Name="ContentContainer">
+                            <Border x:Name="TiltContainer">
+                                <Border x:Name="ContentBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                    <Border.RenderTransform>
+                                        <TranslateTransform x:Name="ContentBorderTranslateTransform"/>
+                                    </Border.RenderTransform>
+                                    <Grid>
+                                        <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        <TextBlock x:Name="PlaceholderTextBlock" AutomationProperties.AccessibilityView="Raw" Foreground="{x:Null}" IsHitTestVisible="False" Margin="{TemplateBinding Padding}" Opacity="0" Text="Xg"/>
+                                        <Rectangle x:Name="PlaceholderRect" Fill="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}" IsHitTestVisible="False" Visibility="Collapsed"/>
+                                    </Grid>
+                                </Border>
+                            </Border>
+                        </Border>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

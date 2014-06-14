@@ -21,6 +21,8 @@
     </Page.Transitions>
 
     <Page.Resources>
+        
+
         <DataTemplate x:Name="ThreadListItemTemplate">
             <Grid>
                 <Grid.RowDefinitions>

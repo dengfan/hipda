@@ -134,13 +134,6 @@ namespace hipda
         //    rootFrame.Navigated -= this.RootFrame_FirstNavigated;
         //}
 
-        /// <summary>
-        /// 在将要挂起应用程序执行时调用。    将保存应用程序状态
-        /// 将被终止还是恢复的情况下保存应用程序状态，
-        /// 并让内存内容保持不变。
-        /// </summary>
-        /// <param name="sender">挂起的请求的源。</param>
-        /// <param name="e">有关挂起的请求的详细信息。</param>
         private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
