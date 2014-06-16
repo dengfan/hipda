@@ -21,7 +21,7 @@
     </Page.Transitions>
 
     <Page.Resources>
-        
+        <local:RtFToBlocks x:Key="RtFToBlocks"/>
 
         <DataTemplate x:Name="ThreadListItemTemplate">
             <Grid>
@@ -106,16 +106,18 @@
                             HorizontalAlignment="Right" 
                             Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
 
-                <TextBlock x:Name="replyContentTextBlock" 
+                <!--<TextBlock x:Name="replyContent" 
                             Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                             Padding="0,3,0,0"
-                            Text="{Binding Content}"
                             TextWrapping="WrapWholeWords"
-                            Style="{ThemeResource BodyTextBlockStyle}"/>
+                            Style="{ThemeResource BodyTextBlockStyle}"/>-->
+
+                <ContentControl x:Name="replyContent" 
+                                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  />
 
                 <Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                         X1="0" Y1="15"
-                        X2="600" Y2="15"
+                        X2="800" Y2="15"
                         Stroke="LightGray" StrokeDashArray="8,4" />
             </Grid>
         </DataTemplate>
@@ -139,9 +141,9 @@
             <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="刷新" Click="refreshButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="replyButton" Icon="Edit" Label="回复" Visibility="Collapsed" />
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="openTabForDiscovery" Label="地板" />
-                <AppBarButton x:Name="openTabForBuyAndSell" Label="B/S 版" />
-                <AppBarButton x:Name="openTabForEink" Label="Eink 版" />
+                <AppBarButton x:Name="openTabForDiscovery" Label="地板" Click="openTabForDiscovery_Click" />
+                <AppBarButton x:Name="openTabForBuyAndSell" Label="B/S 版" Click="openTabForBuyAndSell_Click" />
+                <AppBarButton x:Name="openTabForEink" Label="Eink 版" Click="openTabForEink_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

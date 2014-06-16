@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace hipda.Data
@@ -629,11 +630,71 @@ namespace hipda.Data
                 }
 
                 string content = string.Empty;
-                var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("postmessage_"));
+                var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
-                    content = contentNode.InnerText;
+                    contentNode = contentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("postmessage_"));
+                    content = contentNode.InnerHtml;
+
+                    content = content.Replace("[", "［");
+                    content = content.Replace("]", "］");
+                    content = content.Replace("&nbsp;", "&#160;");
+                    content = content.Replace("<br/>", "[LineBreak/]");
+                    content = content.Replace("<br />", "[LineBreak/]");
+                    content = content.Replace("<br>", "[LineBreak/]");
+                    content = content.Replace("<br>", "[LineBreak/]");
+
+                    // 替换引用 
+                    content = content.Replace("<blockquote>", @"[LineBreak/][Span Foreground=""DimGray""]");
+                    content = content.Replace("</blockquote>", "[/Span]");
+
+                    // 移除无意义图片HTML
+                    content = content.Replace(@"<img src=""images/default/attachimg.gif"" border=""0"">", string.Empty);
+
+                    // 将HTML字符串转换为RichTextBlock XAML字符串
+                    // 替换上载图片
+                    MatchCollection matchs = new Regex(@"<img\b[^>]*?\bfile[\s]*=[\s]*[""']?[\s]*([^""'>]*)[^>]*?/?[\s]*>").Matches(content);
+                    if (matchs != null && matchs.Count > 0)
+                    {
+                        for (int a = 0; a < matchs.Count; a++)
+                        {
+                            string placeHolderLabel = matchs[a].Groups[0].Value; // 要被替换的元素
+                            string imgUrl = matchs[a].Groups[1].Value; // 图片URL
+                            string imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl);
+                            content = content.Replace(placeHolderLabel, imgXaml);
+                        }
+                    }
+
+                    // 替换网络图片
+                    MatchCollection matchs2 = new Regex(@"<img\b[^>]*?\bsrc[\s]*=[\s]*[""']?[\s]*([^""'>]*)[^>]*?/?[\s]*>").Matches(content);
+                    if (matchs2 != null && matchs2.Count > 0)
+                    {
+                        for (int j = 0; j < matchs2.Count; j++)
+                        {
+                            var m = matchs2[j];
+                            string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
+                            string imgUrl = m.Groups[1].Value; // 图片URL
+                            if (!imgUrl.StartsWith("http"))
+                            {
+                                imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
+                            }
+                            string imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl);
+                            content = content.Replace(placeHolderLabel, imgXaml);
+                        }
+                    }
                 }
+                else
+                {
+                    content = @"作者被禁止或删除&#160;内容自动屏蔽";
+                }
+
+                content = string.Format(@"[RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Margin=""0,7,0,0""][Paragraph FontSize=""18""]{0}[/Paragraph][/RichTextBlock]", content);
+                content = new Regex("<[^<]*>").Replace(content, string.Empty);
+                content = new Regex("\r\n").Replace(content, string.Empty);
+                content = new Regex("\r").Replace(content, string.Empty);
+                content = new Regex("\n").Replace(content, string.Empty);
+                content = content.Replace("[", "<");
+                content = content.Replace("]", ">");
 
                 Reply reply = new Reply(floor, pageNo, threadId, authorId, ownerName, content, postTime);
                 thread.Replies.Add(reply);
