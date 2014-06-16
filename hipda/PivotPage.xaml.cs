@@ -1,9 +1,7 @@
 ﻿using hipda.Common;
 using hipda.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,6 +13,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
+using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
@@ -260,13 +259,13 @@ namespace hipda
             TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
             TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
             TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
-            TextBlock replyContentTextBlock = (TextBlock)layoutGrid.FindName("replyContentTextBlock");
+            ContentControl replyContent = (ContentControl)layoutGrid.FindName("replyContent");
 
             avatarImageBorder.Opacity = 0;
             ownerNameTextBlock.Opacity = 0;
             createTimeTextBlock.Opacity = 0;
             floorNumTextBlock.Opacity = 0;
-            replyContentTextBlock.Text = reply.Content;
+            replyContent.Content = XamlReader.Load(reply.Content);
 
             args.RegisterUpdateCallback(ShowAuthor);
         }
@@ -630,5 +629,20 @@ namespace hipda
         }
 
         #endregion
+
+        private void openTabForDiscovery_Click(object sender, RoutedEventArgs e)
+        {
+            CreateThreadListTab("2", "地板", false);
+        }
+
+        private void openTabForBuyAndSell_Click(object sender, RoutedEventArgs e)
+        {
+            CreateThreadListTab("6", "B/S 版", false);
+        }
+
+        private void openTabForEink_Click(object sender, RoutedEventArgs e)
+        {
+            CreateThreadListTab("59", "Eink 版", false);
+        }
     }
 }
