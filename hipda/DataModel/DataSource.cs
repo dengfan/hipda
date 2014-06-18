@@ -660,7 +660,11 @@ namespace hipda.Data
                         {
                             string placeHolderLabel = matchs[a].Groups[0].Value; // 要被替换的元素
                             string imgUrl = matchs[a].Groups[1].Value; // 图片URL
-                            string imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl);
+                            string imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl); 
+                            if (imgUrl.StartsWith("attachments/"))
+                            {
+                                imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""Uniform""][Image.Source][BitmapImage UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl); 
+                            }
                             content = content.Replace(placeHolderLabel, imgXaml);
                         }
                     }
