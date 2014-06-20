@@ -641,7 +641,7 @@ namespace hipda.Data
                     content = content.Replace("&nbsp;", "&#160;");
 
                     // 替换链接
-                    MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^>]*)</a>").Matches(content);
+                    MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^>#]*)</a>").Matches(content);
                     if (matchsForLink != null && matchsForLink.Count > 0)
                     {
                         for (int i = 0; i < matchsForLink.Count; i++)
