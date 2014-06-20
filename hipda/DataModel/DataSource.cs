@@ -681,8 +681,8 @@ namespace hipda.Data
                         {
                             string placeHolderLabel = matchsForImage1[i].Groups[0].Value; // 要被替换的元素
                             string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
-                            string imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl); 
-                            if (imgUrl.StartsWith("attachments/"))
+                            string imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl);
+                            if (imgUrl.StartsWith("attachments/") || !imgUrl.Contains("images/attachicons"))
                             {
                                 imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl); 
                             }
@@ -697,11 +697,11 @@ namespace hipda.Data
                         for (int i = 0; i < matchsForImage2.Count; i++)
                         {
                             var m = matchsForImage2[i];
-                            string imgXaml = string.Empty;
                             string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
                             string imgUrl = m.Groups[1].Value; // 图片URL
-                            
-                            if (imgUrl.EndsWith("/back.gif") || imgUrl.StartsWith("images/smilies/"))
+                            string imgXaml = string.Empty;
+
+                            if (imgUrl.EndsWith("/back.gif") || imgUrl.StartsWith("images/smilies/") || imgUrl.Contains("images/attachicons"))
                             {
                                 imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                             }
