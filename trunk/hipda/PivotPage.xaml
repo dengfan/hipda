@@ -21,7 +21,7 @@
     </Page.Transitions>
 
     <Page.Resources>
-        <local:RtFToBlocks x:Key="RtFToBlocks"/>
+        <!--<local:RtFToBlocks x:Key="RtFToBlocks"/>-->
 
         <DataTemplate x:Name="ThreadListItemTemplate">
             <Grid>
