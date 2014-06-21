@@ -125,7 +125,7 @@
     <Page.BottomAppBar>
         <CommandBar ClosedDisplayMode="Minimal">
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="openTabForApp" Label="特别鸣谢及关于" Click="openTabForApp_Click" />
+                <AppBarButton x:Name="openTabForApp" Label="特别鸣谢 + 关于" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
