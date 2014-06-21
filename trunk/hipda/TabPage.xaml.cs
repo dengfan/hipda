@@ -7,6 +7,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
@@ -23,12 +25,12 @@ using Windows.UI.Xaml.Navigation;
 
 namespace hipda
 {
-    public sealed partial class PivotPage : Page
+    public sealed partial class TabPage : Page
     {
         HttpHandle httpClient = HttpHandle.getInstance();
 
         private const int maxHubSectionCount = 6;
-        private const string regexForTitle = @"[^@.a-zA-Z0-9\u4e00-\u9fa5]"; // 用于过滤掉无意义符号
+        private const string regexForTitle = @"[^a-zA-Z\d\u4e00-\u9fa5]"; // 用于过滤掉无意义符号
 
         private readonly NavigationHelper navigationHelper;
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
@@ -38,7 +40,7 @@ namespace hipda
         public static readonly DependencyProperty PivotItemTabTypeProperty = DependencyProperty.Register("TabType", typeof(String), typeof(PivotItem), null);
         public static readonly DependencyProperty PivotItemTabIdProperty = DependencyProperty.Register("TabId", typeof(String), typeof(PivotItem), null);
         
-        public PivotPage()
+        public TabPage()
         {
             this.InitializeComponent();
 
@@ -99,7 +101,7 @@ namespace hipda
                 if (e.NavigationParameter == null)
                 {
                     CreateThreadListTab("14", "WIN版", false);
-                    CreateReplyListTab("1427253", "特别鸣谢及关于", false);
+                    CreateReplyListTab("1427253", "特别鸣谢 + 关于", false);
                 }
                 else
                 {
@@ -646,7 +648,7 @@ namespace hipda
 
         private void openTabForApp_Click(object sender, RoutedEventArgs e)
         {
-            CreateReplyListTab("1427253", "特别鸣谢及关于", false);
+            CreateReplyListTab("1427253", "特别鸣谢 + 关于", false);
         }
 
         private void openTabForDiscovery_Click(object sender, RoutedEventArgs e)
@@ -686,11 +688,16 @@ namespace hipda
 
         private async void postButton_Click(object sender, RoutedEventArgs e)
         {
+            //postPanelFadeIn.Begin();
+
             // 获取当前主贴ID
             PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
             string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
 
             string message = postMessageTextBox.Text;
+
+            // 先刷新 formhash
+            await DataSource.GetFormHash();
 
             var postData = new Dictionary<string, object>();
             postData.Add("formhash", DataSource.FormHash);
@@ -720,6 +727,11 @@ namespace hipda
             popupGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
             postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            openTabForDiscovery.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            openTabForBuyAndSell.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            openTabForEink.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            openTabForApp.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private void ShowPostButton()
@@ -728,6 +740,32 @@ namespace hipda
             popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
             replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             postButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            openTabForDiscovery.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            openTabForBuyAndSell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            openTabForEink.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            openTabForApp.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private async void addImageForPostButton_Click(object sender, RoutedEventArgs e)
+        {
+            //FileOpenPicker openPicker = new FileOpenPicker();
+            //openPicker.ViewMode = PickerViewMode.Thumbnail;
+            //openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            //openPicker.FileTypeFilter.Add(".jpg");
+            //openPicker.FileTypeFilter.Add(".jpeg");
+            //openPicker.FileTypeFilter.Add(".png");
+
+            //StorageFile file = await openPicker.PickSingleFileAsync();
+            //if (file != null)
+            //{
+                
+            //}
+            //else
+            //{
+                
+            //}
+
         }
     }
 }

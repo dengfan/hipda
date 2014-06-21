@@ -86,7 +86,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PivotPage.xaml">
+    <Page Include="TabPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -116,8 +116,8 @@
     <Compile Include="ListGroupStyleSelector.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PivotPage.xaml.cs">
-      <DependentUpon>PivotPage.xaml</DependentUpon>
+    <Compile Include="TabPage.xaml.cs">
+      <DependentUpon>TabPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -140,7 +140,6 @@ namespace hipda.Data
                 string password = accountData["password"].ToString();
 
                 await LoginAndAdd(username, password, false);
-                await DataSource.GetFormHash();
             }
 
             foreach (var item in _accountHelper._list)

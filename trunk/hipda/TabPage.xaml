@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="hipda.PivotPage"
+    x:Class="hipda.TabPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:hipda"
@@ -21,8 +21,6 @@
     </Page.Transitions>
 
     <Page.Resources>
-        <!--<local:RtFToBlocks x:Key="RtFToBlocks"/>-->
-
         <DataTemplate x:Name="ThreadListItemTemplate">
             <Grid>
                 <Grid.RowDefinitions>
@@ -135,27 +133,31 @@
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
         <Grid x:Name="popupGrid" Visibility="Collapsed">
-            <Rectangle Canvas.ZIndex="0" Fill="WhiteSmoke" Opacity="0.9" />
-            <Grid VerticalAlignment="Center" Background="Green">
+            <!--<Grid.Resources>
+                <Storyboard x:Name="postPanelFadeIn">
+                    <RepositionThemeAnimation Storyboard.TargetName="postPanelGrid" FromHorizontalOffset="-200" />
+                </Storyboard>
+            </Grid.Resources>-->
+            <Rectangle Canvas.ZIndex="0" Fill="LightGray" Opacity="0.9" />
+            <Grid x:Name="postPanelGrid" VerticalAlignment="Center" Background="Green">
                 <StackPanel>
-                    <TextBox x:Name="postMessageTextBox" Margin="20" Grid.Row="0" Grid.Column="1"
+                    <!--<StackPanel Margin="10,5,10,0" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button x:Name="addImageForPostButton" Content="添加图片" Click="addImageForPostButton_Click"/>
+                    </StackPanel>-->
+                    <TextBox x:Name="postMessageTextBox" Margin="10"
                              Height="300"
-                             BorderBrush="White"
+                             BorderBrush="Green"
                              Background="White"
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
-                             Header="回复内容"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,15,0,7" HorizontalAlignment="Center">
-                        <Button Content="确定"/>
-                        <Button Content="取消" Margin="10,0,0,0"/>
-                    </StackPanel>
+                             Header="编辑回复内容"/>
                 </StackPanel>
             </Grid>
         </Grid>
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar x:Name="tabPageCommandBar">
+        <CommandBar x:Name="tabPageCommandBar" Background="Silver" Opacity="0.9">
             <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="刷新" Click="refreshButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="replyButton" Icon="Edit" Label="回复" Click="replyButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="postButton" Icon="PostUpdate" Label="发布" Click="postButton_Click" Visibility="Collapsed" />
@@ -163,7 +165,7 @@
                 <AppBarButton x:Name="openTabForDiscovery" Label="地板" Click="openTabForDiscovery_Click" />
                 <AppBarButton x:Name="openTabForBuyAndSell" Label="BS 版" Click="openTabForBuyAndSell_Click" />
                 <AppBarButton x:Name="openTabForEink" Label="Eink 版" Click="openTabForEink_Click" />
-                <AppBarButton x:Name="openTabForApp" Label="特别鸣谢及关于" Click="openTabForApp_Click" />
+                <AppBarButton x:Name="openTabForApp" Label="特别鸣谢 + 关于" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
