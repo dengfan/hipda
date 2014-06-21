@@ -1,12 +1,14 @@
 ﻿using hipda.Common;
 using hipda.Data;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -45,6 +47,7 @@ namespace hipda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+            Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
 
         public NavigationHelper NavigationHelper
@@ -93,12 +96,20 @@ namespace hipda
             }
             else
             {
-                string dataStr = (string)e.NavigationParameter;
-                string[] dataAry = dataStr.Split(',');
-                string forumId = dataAry[0];
-                string forumName = dataAry[1];
+                if (e.NavigationParameter == null)
+                {
+                    CreateThreadListTab("14", "WIN版", false);
+                    CreateReplyListTab("1427253", "特别鸣谢及关于", false);
+                }
+                else
+                {
+                    string dataStr = (string)e.NavigationParameter;
+                    string[] dataAry = dataStr.Split(',');
+                    string forumId = dataAry[0];
+                    string forumName = dataAry[1];
 
-                CreateThreadListTab(forumId, forumName, false);
+                    CreateThreadListTab(forumId, forumName, false);
+                }
 
                 await RefreshElementStatus();
             }
@@ -380,12 +391,14 @@ namespace hipda
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
                 refreshButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
             else // 回复列表页
             {
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
                 refreshButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
             #endregion
 
@@ -550,6 +563,7 @@ namespace hipda
 
             var listView = new ListView
             {
+                Name = "repliesListView" + threadId,
                 Padding = new Thickness(10, 0, 10, 0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
@@ -630,6 +644,11 @@ namespace hipda
 
         #endregion
 
+        private void openTabForApp_Click(object sender, RoutedEventArgs e)
+        {
+            CreateReplyListTab("1427253", "特别鸣谢及关于", false);
+        }
+
         private void openTabForDiscovery_Click(object sender, RoutedEventArgs e)
         {
             CreateThreadListTab("2", "地板", false);
@@ -637,7 +656,7 @@ namespace hipda
 
         private void openTabForBuyAndSell_Click(object sender, RoutedEventArgs e)
         {
-            CreateThreadListTab("6", "B/S 版", false);
+            CreateThreadListTab("6", "BS 版", false);
         }
 
         private void openTabForEink_Click(object sender, RoutedEventArgs e)
@@ -647,10 +666,68 @@ namespace hipda
 
         private void replyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!Frame.Navigate(typeof(PostPage)))
+            ShowPostButton();
+        }
+
+        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        {
+            if (popupGrid.Visibility == Windows.UI.Xaml.Visibility.Visible)
             {
-                throw new Exception("NavigationFailedExceptionMessage");
+                NavigationHelper.IsCanGoBack = false;
+                e.Handled = true;
+
+                ShowReplyButton();
             }
+            else
+            {
+                NavigationHelper.IsCanGoBack = true;
+            }
+        }
+
+        private async void postButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 获取当前主贴ID
+            PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
+            string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
+
+            string message = postMessageTextBox.Text;
+
+            var postData = new Dictionary<string, object>();
+            postData.Add("formhash", DataSource.FormHash);
+            postData.Add("subject", string.Empty);
+            postData.Add("usesig", "1");
+            postData.Add("message", message + "\n\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]");
+
+            string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/post.php?action=reply&tid=" + threadId + "&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", postData);
+            if (resultContent.Contains("您的回复已经发布"))
+            {
+                ShowReplyButton();
+
+                // 刷新数据
+                ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
+                ICollectionView view = (ICollectionView)listView.ItemsSource;
+                await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
+            }
+            else
+            {
+                await new MessageDialog("您的发布请求已不成功！", "注意").ShowAsync();
+            }
+        }
+
+        private void ShowReplyButton()
+        {
+            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private void ShowPostButton()
+        {
+            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            postButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
     }
 }

@@ -134,16 +134,36 @@
             </Pivot.HeaderTemplate>
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
+        <Grid x:Name="popupGrid" Visibility="Collapsed">
+            <Rectangle Canvas.ZIndex="0" Fill="WhiteSmoke" Opacity="0.9" />
+            <Grid VerticalAlignment="Center" Background="Green">
+                <StackPanel>
+                    <TextBox x:Name="postMessageTextBox" Margin="20" Grid.Row="0" Grid.Column="1"
+                             Height="300"
+                             BorderBrush="White"
+                             Background="White"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             Header="回复内容"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,15,0,7" HorizontalAlignment="Center">
+                        <Button Content="确定"/>
+                        <Button Content="取消" Margin="10,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Grid>
 
     <Page.BottomAppBar>
         <CommandBar x:Name="tabPageCommandBar">
             <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="刷新" Click="refreshButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="replyButton" Icon="Edit" Label="回复" Click="replyButton_Click" Visibility="Collapsed" />
+            <AppBarButton x:Name="postButton" Icon="PostUpdate" Label="发布" Click="postButton_Click" Visibility="Collapsed" />
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openTabForDiscovery" Label="地板" Click="openTabForDiscovery_Click" />
-                <AppBarButton x:Name="openTabForBuyAndSell" Label="B/S 版" Click="openTabForBuyAndSell_Click" />
+                <AppBarButton x:Name="openTabForBuyAndSell" Label="BS 版" Click="openTabForBuyAndSell_Click" />
                 <AppBarButton x:Name="openTabForEink" Label="Eink 版" Click="openTabForEink_Click" />
+                <AppBarButton x:Name="openTabForApp" Label="特别鸣谢及关于" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

@@ -158,6 +158,8 @@ namespace hipda.Common
             }
         }
 
+        public bool IsCanGoBack = true;
+
         /// <summary>
         /// <see cref="GoBackCommand"/> 属性使用的虚拟方法，用于
         /// 确定 <see cref="Frame"/> 能否后退。
@@ -168,7 +170,7 @@ namespace hipda.Common
         /// </returns>
         public virtual bool CanGoBack()
         {
-            return this.Frame != null && this.Frame.CanGoBack;
+            return this.Frame != null && this.Frame.CanGoBack && IsCanGoBack;
         }
         /// <summary>
         /// <see cref="GoForwardCommand"/> 属性使用的虚拟方法，用于

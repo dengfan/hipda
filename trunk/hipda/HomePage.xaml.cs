@@ -118,6 +118,14 @@ namespace hipda
             }
         }
 
+        private void openTabForApp_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Frame.Navigate(typeof(PivotPage)))
+            {
+                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+            }
+        }
+
         private async void loginButton_Click(object sender, RoutedEventArgs e)
         {
             StackPanel loginPanel = (StackPanel)accountList.FindName("addAccountPanel");
@@ -182,23 +190,26 @@ namespace hipda
             flyoutBase.ShowAt(senderElement);
         }
 
-        private void setDefaultItem_Click(object sender, RoutedEventArgs e)
-        {
-            Account data = (sender as MenuFlyoutItem).DataContext as Account;
-            string keyName = data.Key;
-            AccountHelper.SetDefault(keyName);
-
-            Refresh();
-        }
-
-        private void deleteItem_Click(object sender, RoutedEventArgs e)
+        private async void setDefaultItem_Click(object sender, RoutedEventArgs e)
         {
             // 清除登录cookies
             httpClient.ClearCookies();
 
             Account data = (sender as MenuFlyoutItem).DataContext as Account;
             string keyName = data.Key;
-            AccountHelper.Delete(keyName);
+            await AccountHelper.SetDefault(keyName);
+
+            Refresh();
+        }
+
+        private async void deleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            // 清除登录cookies
+            httpClient.ClearCookies();
+
+            Account data = (sender as MenuFlyoutItem).DataContext as Account;
+            string keyName = data.Key;
+            await AccountHelper.Delete(keyName);
 
             Refresh();
         }
