@@ -130,6 +130,7 @@
     <Content Include="Assets\Icons\appbar.image.png" />
     <Content Include="Assets\Icons\appbar.paperclip.rotated.png" />
     <Content Include="Assets\Icons\appbar.refresh.png" />
+    <Content Include="Assets\Icons\appbar.reply.people.png" />
     <Content Include="Assets\Icons\appbar.thumbs.up.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
