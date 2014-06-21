@@ -644,5 +644,13 @@ namespace hipda
         {
             CreateThreadListTab("59", "Eink 版", false);
         }
+
+        private void replyButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Frame.Navigate(typeof(PostPage)))
+            {
+                throw new Exception("NavigationFailedExceptionMessage");
+            }
+        }
     }
 }
