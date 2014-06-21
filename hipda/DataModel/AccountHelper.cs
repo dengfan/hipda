@@ -107,7 +107,7 @@ namespace hipda.Data
             return false;
         }
 
-        public static void Delete(string accountKeyName)
+        public static async Task Delete(string accountKeyName)
         {
             var accountDataContainer = localSettings.Containers[accountDataKeyName];
             accountDataContainer.Values.Remove(accountKeyName);
@@ -123,16 +123,25 @@ namespace hipda.Data
                     string key = item.Key;
                     accountDataContainer.Values[defaultAccountKeyName] = key;
 
-                    SetDefault(key);
+                    await SetDefault(key);
                     break;
                 }
             }
         }
 
-        public static void SetDefault(string accountKeyName)
+        public static async Task SetDefault(string accountKeyName)
         {
+            // 切换到此账号登录，并设置为默认账号
             var accountDataContainer = localSettings.Containers[accountDataKeyName];
-            accountDataContainer.Values[defaultAccountKeyName] = accountKeyName;
+            var accountData = (ApplicationDataCompositeValue)accountDataContainer.Values[accountKeyName];
+            if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
+            {
+                string username = accountData["username"].ToString();
+                string password = accountData["password"].ToString();
+
+                await LoginAndAdd(username, password, false);
+                await DataSource.GetFormHash();
+            }
 
             foreach (var item in _accountHelper._list)
             {

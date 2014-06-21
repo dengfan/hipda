@@ -121,4 +121,12 @@
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar ClosedDisplayMode="Minimal">
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="openTabForApp" Label="特别鸣谢及关于" Click="openTabForApp_Click" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

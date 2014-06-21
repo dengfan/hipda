@@ -208,6 +208,12 @@ namespace hipda.Data
 
         private static HttpHandle httpClient = HttpHandle.getInstance();
 
+        private string _formHash = string.Empty;
+        public static string FormHash
+        {
+            get { return _dataSource._formHash; }
+        }
+
         private ObservableCollection<ForumGroup> _forumGroups = new ObservableCollection<ForumGroup>();
         public ObservableCollection<ForumGroup> ForumGroups
         {
@@ -589,6 +595,19 @@ namespace hipda.Data
                 return;
             }
 
+            // 读取 formhash 用于发布内容
+            string formHash = string.Empty;
+            var postNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("f_post"));
+            if (postNode != null)
+            {
+                var formHashInputNode = postNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
+                if (formHashInputNode != null)
+                {
+                    formHash = formHashInputNode.Attributes[2].Value.ToString();
+                    this._formHash = formHash;
+                }
+            }
+
             foreach (var item in data)
             {
                 var postAuthorNode = item.ChildNodes[0] // table
@@ -730,9 +749,12 @@ namespace hipda.Data
                     string placeHolderLabel = matchsForImage1[i].Groups[0].Value; // 要被替换的元素
                     string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
                     string imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl);
-                    if (imgUrl.StartsWith("attachments/") || !imgUrl.Contains("images/attachicons"))
+                    if (!imgUrl.Equals("attachments/day_140621/1406211752793e731a4fec8f7b.png"))
                     {
-                        imgXaml = string.Format(@"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]", imgUrl);
+                        if (imgUrl.StartsWith("attachments/") || !imgUrl.Contains("images/attachicons"))
+                        {
+                            imgXaml = string.Format(@"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]", imgUrl);
+                        }
                     }
                     content = content.Replace(placeHolderLabel, imgXaml);
                 }
@@ -749,7 +771,7 @@ namespace hipda.Data
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     string imgXaml = string.Empty;
 
-                    if (imgUrl.EndsWith("/back.gif") || imgUrl.StartsWith("images/smilies/") || imgUrl.Contains("images/attachicons"))
+                    if (imgUrl.EndsWith("/back.gif") || imgUrl.StartsWith("images/smilies/") || imgUrl.Contains("images/attachicons") || imgUrl.EndsWith("/1406211752793e731a4fec8f7b.png"))
                     {
                         imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                     }
@@ -768,6 +790,36 @@ namespace hipda.Data
                 }
             }
             return content;
+        }
+        #endregion
+
+        #region 获取 formhash 用于提交数据
+        public static async Task GetFormHash()
+        {
+            await _dataSource.LoadFormHash();
+        }
+
+        private async Task LoadFormHash()
+        {
+            string url = "http://www.hi-pda.com/forum/post.php?action=newthread&fid=2";
+            string htmlContent = await httpClient.HttpGet(url);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlContent);
+
+            // 读取 formhash 用于发布内容
+            var postNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("content editorcontent"));
+            if (postNode != null)
+            {
+                var formHashInputNode = postNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
+                if (formHashInputNode != null)
+                {
+                    this._formHash = formHashInputNode.Attributes[2].Value.ToString();
+                }
+            }
         }
         #endregion
     }
