@@ -732,7 +732,7 @@ namespace hipda.Data
                     string imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl);
                     if (imgUrl.StartsWith("attachments/") || !imgUrl.Contains("images/attachicons"))
                     {
-                        imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl);
+                        imgXaml = string.Format(@"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]", imgUrl);
                     }
                     content = content.Replace(placeHolderLabel, imgXaml);
                 }
@@ -755,7 +755,7 @@ namespace hipda.Data
                     }
                     else
                     {
-                        imgXaml = @"[InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                        imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
                     }
 
                     if (!imgUrl.StartsWith("http"))
