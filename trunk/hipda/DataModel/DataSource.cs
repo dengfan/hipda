@@ -10,14 +10,15 @@ namespace hipda.Data
 {
     public class Reply
     {
-        public Reply(int floor, int pageNo, string threadId, string ownerId, string ownerName, string content, string createTime)
+        public Reply(int floor, int pageNo, string threadId, string ownerId, string ownerName, string textContent, string xamlConent, string createTime)
         {
             this.Floor = floor;
             this.PageNo = pageNo;
             this.ThreadId = threadId;
             this.OwnerId = ownerId;
             this.OwnerName = ownerName;
-            this.Content = content;
+            this.TextContent = textContent;
+            this.XamlContent = xamlConent;
             this.CreateTime = createTime;
         }
         
@@ -28,13 +29,15 @@ namespace hipda.Data
 
         public string OwnerId { get; private set; }
 
-        public string Content { get; private set; }
+        public string TextContent { get; private set; }
+
+        public string XamlContent { get; private set; }
 
         public string CreateTime { get; private set; }
 
         public override string ToString()
         {
-            return this.Content;
+            return this.TextContent;
         }
         public string AvatarUrl
         {
@@ -648,29 +651,31 @@ namespace hipda.Data
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
-                string content = string.Empty;
+                string textContent = string.Empty;
+                string xamlContent = string.Empty;
                 var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
                     contentNode = contentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("postmessage_"));
-                    content = contentNode.InnerHtml;
+                    textContent = contentNode.InnerText;
+                    xamlContent = contentNode.InnerHtml;
 
-                    content = HtmlToXaml(content);
+                    xamlContent = HtmlToXaml(xamlContent);
                 }
                 else
                 {
-                    content = @"作者被禁止或删除&#160;内容自动屏蔽";
+                    xamlContent = @"作者被禁止或删除&#160;内容自动屏蔽";
                 }
 
-                content = string.Format(@"[RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Margin=""0,10,0,0""][Paragraph FontSize=""18""]{0}[/Paragraph][/RichTextBlock]", content);
-                content = new Regex("<[^<]*>").Replace(content, string.Empty);
-                content = new Regex("\r\n").Replace(content, string.Empty);
-                content = new Regex("\r").Replace(content, string.Empty);
-                content = new Regex("\n").Replace(content, string.Empty);
-                content = content.Replace("[", "<");
-                content = content.Replace("]", ">");
+                xamlContent = string.Format(@"[RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Margin=""0,10,0,0""][Paragraph FontSize=""18""]{0}[/Paragraph][/RichTextBlock]", xamlContent);
+                xamlContent = new Regex("<[^<]*>").Replace(xamlContent, string.Empty);
+                xamlContent = new Regex("\r\n").Replace(xamlContent, string.Empty);
+                xamlContent = new Regex("\r").Replace(xamlContent, string.Empty);
+                xamlContent = new Regex("\n").Replace(xamlContent, string.Empty);
+                xamlContent = xamlContent.Replace("[", "<");
+                xamlContent = xamlContent.Replace("]", ">");
 
-                Reply reply = new Reply(floor, pageNo, threadId, authorId, ownerName, content, postTime);
+                Reply reply = new Reply(floor, pageNo, threadId, authorId, ownerName, textContent, xamlContent, postTime);
                 thread.Replies.Add(reply);
             }
         }
@@ -817,7 +822,7 @@ namespace hipda.Data
                 var formHashInputNode = postNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
                 if (formHashInputNode != null)
                 {
-                    this._formHash = formHashInputNode.Attributes[2].Value.ToString();
+                    this._formHash = formHashInputNode.Attributes[3].Value.ToString();
                 }
             }
         }

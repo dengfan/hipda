@@ -75,7 +75,7 @@
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -97,9 +97,22 @@
                                     Style="{ThemeResource ListViewItemContentTextBlockStyle}"
                                     Foreground="Gray"/>
                     </StackPanel>
+                    <Button x:Name="menuButton" Margin="6">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <TextBlock Text="[回复]" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Foreground="Gray" />
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Flyout>
+                            <MenuFlyout x:Name="replyMenu">
+                                <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
+                                <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
                 </StackPanel>
-
-                <TextBlock x:Name="floorNumTextBlock" Grid.Row="0" Grid.Column="1" 
+                
+                <TextBlock x:Name="floorNumTextBlock" Grid.Row="0" Grid.Column="1"
                             Text="{Binding FloorNumStr}"
                             HorizontalAlignment="Right" 
                             Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
@@ -139,13 +152,13 @@
                 </Storyboard>
             </Grid.Resources>-->
             <Rectangle Canvas.ZIndex="0" Fill="LightGray" Opacity="0.9" />
-            <Grid x:Name="postPanelGrid" VerticalAlignment="Center" Background="Green">
+            <Grid x:Name="postPanelGrid" VerticalAlignment="Top" Margin="20,90,20,0" Background="Green">
                 <StackPanel>
                     <!--<StackPanel Margin="10,5,10,0" Orientation="Horizontal" HorizontalAlignment="Left">
                         <Button x:Name="addImageForPostButton" Content="添加图片" Click="addImageForPostButton_Click"/>
                     </StackPanel>-->
                     <TextBox x:Name="postMessageTextBox" Margin="10"
-                             Height="300"
+                             Height="200"
                              BorderBrush="Green"
                              Background="White"
                              TextWrapping="Wrap"

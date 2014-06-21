@@ -48,7 +48,20 @@ namespace hipda
 #endif
 
             // 自动登录
-            await AccountHelper.AutoLogin();
+            string err = string.Empty;
+            try
+            {
+                await AccountHelper.AutoLogin();
+            }
+            catch (System.Net.WebException we)
+            {
+                err = string.Format("请检查网络设置 :( \n", we.Message);
+            }
+
+            if (!string.IsNullOrEmpty(err))
+            {
+                await new MessageDialog(err, "注意").ShowAsync();
+            }
 
             Frame rootFrame = Window.Current.Content as Frame;
 

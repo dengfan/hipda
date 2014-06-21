@@ -39,6 +39,10 @@ namespace hipda
 
         public static readonly DependencyProperty PivotItemTabTypeProperty = DependencyProperty.Register("TabType", typeof(String), typeof(PivotItem), null);
         public static readonly DependencyProperty PivotItemTabIdProperty = DependencyProperty.Register("TabId", typeof(String), typeof(PivotItem), null);
+
+        private string noticeauthor = string.Empty;
+        private string noticetrimstr = string.Empty;
+        private string noticeauthormsg = string.Empty;
         
         public TabPage()
         {
@@ -231,13 +235,6 @@ namespace hipda
         }
 
         /// <summary>
-        /// 在单击应用程序栏按钮时将项添加到列表中。
-        /// </summary>
-        private void AddAppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        /// <summary>
         /// 在贴子项上单击时调用
         /// </summary>
         private async void ThreadItem_ItemClick(object sender, ItemClickEventArgs e)
@@ -271,14 +268,16 @@ namespace hipda
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
             TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
             TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
+            Button menuButton = (Button)layoutGrid.FindName("menuButton");
             TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
             ContentControl replyContent = (ContentControl)layoutGrid.FindName("replyContent");
 
             avatarImageBorder.Opacity = 0;
             ownerNameTextBlock.Opacity = 0;
             createTimeTextBlock.Opacity = 0;
+            menuButton.DataContext = reply;
             floorNumTextBlock.Opacity = 0;
-            replyContent.Content = XamlReader.Load(reply.Content);
+            replyContent.Content = XamlReader.Load(reply.XamlContent);
 
             args.RegisterUpdateCallback(ShowAuthor);
         }
@@ -696,13 +695,16 @@ namespace hipda
 
             string message = postMessageTextBox.Text;
 
-            // 先刷新 formhash
-            await DataSource.GetFormHash();
-
             var postData = new Dictionary<string, object>();
+            postData.Add("noticeauthor", noticeauthor);
+            postData.Add("noticetrimstr", noticetrimstr);
+            postData.Add("noticeauthormsg", noticeauthormsg);
+
             postData.Add("formhash", DataSource.FormHash);
             postData.Add("subject", string.Empty);
             postData.Add("usesig", "1");
+
+            // 客户端尾巴
             postData.Add("message", message + "\n\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]");
 
             string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/post.php?action=reply&tid=" + threadId + "&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", postData);
@@ -714,6 +716,8 @@ namespace hipda
                 ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
                 ICollectionView view = (ICollectionView)listView.ItemsSource;
                 await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
+
+                postMessageTextBox.Text = string.Empty;
             }
             else
             {
@@ -747,25 +751,52 @@ namespace hipda
             openTabForApp.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
-        private async void addImageForPostButton_Click(object sender, RoutedEventArgs e)
+        private void replyReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            //FileOpenPicker openPicker = new FileOpenPicker();
-            //openPicker.ViewMode = PickerViewMode.Thumbnail;
-            //openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-            //openPicker.FileTypeFilter.Add(".jpg");
-            //openPicker.FileTypeFilter.Add(".jpeg");
-            //openPicker.FileTypeFilter.Add(".png");
+            Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
 
-            //StorageFile file = await openPicker.PickSingleFileAsync();
-            //if (file != null)
-            //{
-                
-            //}
-            //else
-            //{
-                
-            //}
+            noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
+            noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n", data.Floor, data.OwnerName);
+            noticeauthormsg = data.TextContent;
 
+            postMessageTextBox.Text = noticetrimstr;
+
+            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            ShowPostButton();
         }
+
+        private void refReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
+
+            noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
+            noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n", data.Floor, data.OwnerName, data.TextContent.Length > 200 ? data.TextContent.Substring(200) + "..." : data.TextContent);
+            noticeauthormsg = data.TextContent;
+
+            postMessageTextBox.Text = noticetrimstr;
+
+            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            ShowPostButton();
+        }
+
+        //private async void addImageForPostButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    FileOpenPicker openPicker = new FileOpenPicker();
+        //    openPicker.ViewMode = PickerViewMode.Thumbnail;
+        //    openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+        //    openPicker.FileTypeFilter.Add(".jpg");
+        //    openPicker.FileTypeFilter.Add(".jpeg");
+        //    openPicker.FileTypeFilter.Add(".png");
+
+        //    StorageFile file = await openPicker.PickSingleFileAsync();
+        //    if (file != null)
+        //    {
+
+        //    }
+        //    else
+        //    {
+
+        //    }
+        //}
     }
 }
