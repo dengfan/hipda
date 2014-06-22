@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="430b8d7c-c8d2-4eea-aa3a-a82919eaa7da" Publisher="CN=dengfan" Version="1.0.0.9" />
-  <mp:PhoneIdentity PhoneProductId="430b8d7c-c8d2-4eea-aa3a-a82919eaa7da" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="63653AppxKing.HiPDA" Publisher="CN=5C7BFBCC-D6D6-4906-A546-DE530049BD46" Version="1.1.0.1" />
+  <mp:PhoneIdentity PhoneProductId="3bc4545e-7b5a-4680-91ba-786d9f63c44e" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>hipda</DisplayName>
-    <PublisherDisplayName>APPXFAN</PublisherDisplayName>
+    <DisplayName>Hi!PDA</DisplayName>
+    <PublisherDisplayName>AppxKing</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
@@ -16,8 +16,11 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="hipda.App">
-      <m3:VisualElements DisplayName="Hi!PDA" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="hipda" ForegroundText="light" BackgroundColor="transparent">
+      <m3:VisualElements DisplayName="Hi!PDA" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="HiPDA是一个创建于2001年的以讨论数码产品为主论坛，里面充斥着各式各样的机器与Geek；而如今则是一群人生温拿时时发出“人生难免有今日&quot;般的嗟叹！" ForegroundText="light" BackgroundColor="transparent">
         <m3:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png">
+          <m3:ShowNameOnTiles>
+            <m3:ShowOn Tile="wide310x150Logo" />
+          </m3:ShowNameOnTiles>
         </m3:DefaultTile>
         <m3:SplashScreen Image="Assets\SplashScreen.png" />
         <m3:ApplicationView MinWidth="width320" />
