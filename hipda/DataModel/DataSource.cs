@@ -734,6 +734,7 @@ namespace hipda.Data
                 }
             }
 
+            content = content.Replace(@"<div class=""postattachlist"">", "[LineBreak/][LineBreak/]");
             content = content.Replace("<br/>", "[LineBreak/]");
             content = content.Replace("<br />", "[LineBreak/]");
             content = content.Replace("<br>", "[LineBreak/]");
