@@ -718,6 +718,9 @@ namespace hipda
                 await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
 
                 postMessageTextBox.Text = string.Empty;
+                noticeauthor = string.Empty;
+                noticetrimstr = string.Empty;
+                noticeauthormsg = string.Empty;
             }
             else
             {
@@ -756,7 +759,7 @@ namespace hipda
             Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
-            noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n", data.Floor, data.OwnerName);
+            noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n\n", data.Floor, data.OwnerName);
             noticeauthormsg = data.TextContent;
 
             postMessageTextBox.Text = noticetrimstr;
@@ -770,7 +773,7 @@ namespace hipda
             Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
-            noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n", data.Floor, data.OwnerName, data.TextContent.Length > 200 ? data.TextContent.Substring(200) + "..." : data.TextContent);
+            noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, data.TextContent.Length > 100 ? data.TextContent.Substring(100) + "..." : data.TextContent);
             noticeauthormsg = data.TextContent;
 
             postMessageTextBox.Text = noticetrimstr;
