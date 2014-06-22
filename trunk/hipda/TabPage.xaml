@@ -100,7 +100,7 @@
                     <Button x:Name="menuButton" Margin="6">
                         <Button.Template>
                             <ControlTemplate>
-                                <TextBlock Text="[回复]" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Foreground="Gray" />
+                                <TextBlock Text="-回复-" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Foreground="Gray" />
                             </ControlTemplate>
                         </Button.Template>
                         <Button.Flyout>
@@ -158,7 +158,7 @@
                         <Button x:Name="addImageForPostButton" Content="添加图片" Click="addImageForPostButton_Click"/>
                     </StackPanel>-->
                     <TextBox x:Name="postMessageTextBox" Margin="10"
-                             Height="200"
+                             Height="300"
                              BorderBrush="Green"
                              Background="White"
                              TextWrapping="Wrap"

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.Data.Html;
 
 namespace hipda.Data
 {
@@ -656,7 +657,7 @@ namespace hipda.Data
                 var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
-                    contentNode = contentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("postmessage_"));
+                    //contentNode = contentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("postmessage_"));
                     textContent = contentNode.InnerText;
                     xamlContent = contentNode.InnerHtml;
 
