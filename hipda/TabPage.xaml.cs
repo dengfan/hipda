@@ -760,7 +760,7 @@ namespace hipda
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
             noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n\n", data.Floor, data.OwnerName);
-            noticeauthormsg = data.TextContent.Length > 100 ? data.TextContent.Substring(100) + "..." : data.TextContent;
+            noticeauthormsg = data.TextContent.Length > 100 ? data.TextContent.Substring(0, 95) + "..." : data.TextContent;
 
             postMessageTextBox.Text = noticetrimstr;
 
@@ -774,10 +774,11 @@ namespace hipda
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
 
-            noticetrimstr = data.TextContent.Length > 100 ? data.TextContent.Substring(100) + "..." : data.TextContent;
+            noticetrimstr = data.TextContent.Length > 100 ? data.TextContent.Substring(0, 95) + "..." : data.TextContent;
             noticetrimstr = new Regex("\r\n").Replace(noticetrimstr, string.Empty);
             noticetrimstr = new Regex("\r").Replace(noticetrimstr, string.Empty);
             noticetrimstr = new Regex("\n").Replace(noticetrimstr, string.Empty);
+            noticetrimstr = noticetrimstr.Replace("&nbsp;", string.Empty);
             noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, noticetrimstr);
 
             noticeauthormsg = noticetrimstr;

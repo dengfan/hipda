@@ -7,7 +7,7 @@
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
     <AppxPackageIsForStore>True</AppxPackageIsForStore>
-    <AppxShowAllApps>False</AppxShowAllApps>
+    <AppxShowAllApps>True</AppxShowAllApps>
     <AppxBuildConfigurationSelection>neutral</AppxBuildConfigurationSelection>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
