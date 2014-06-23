@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Data.Html;
@@ -668,7 +669,7 @@ namespace hipda.Data
                     xamlContent = @"作者被禁止或删除&#160;内容自动屏蔽";
                 }
 
-                xamlContent = string.Format(@"[RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Margin=""0,10,0,0""][Paragraph FontSize=""18""]{0}[/Paragraph][/RichTextBlock]", xamlContent);
+                xamlContent = string.Format(@"[RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Margin=""0,10,0,0"" MaxHeight=""5000"" FontSize=""18""][Paragraph]{0}[/Paragraph][/RichTextBlock]", xamlContent);
                 xamlContent = new Regex("<[^<]*>").Replace(xamlContent, string.Empty);
                 xamlContent = new Regex("\r\n").Replace(xamlContent, string.Empty);
                 xamlContent = new Regex("\r").Replace(xamlContent, string.Empty);
@@ -681,14 +682,17 @@ namespace hipda.Data
             }
         }
 
-        private static string HtmlToXaml(string content)
+        private static string HtmlToXaml(string htmlContent)
         {
+            var content = new StringBuilder(htmlContent);
+            content.EnsureCapacity(htmlContent.Length * 2);
+
             content = content.Replace("[", "［");
             content = content.Replace("]", "］");
             content = content.Replace("&nbsp;", "&#160;");
 
             // 移除无用的信息 
-            MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_smallfont"">[\d\s-:]*</div>").Matches(content);
+            MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_smallfont"">[\d\s-:]*</div>").Matches(content.ToString());
             if (matchsForInvalidHtml1 != null && matchsForInvalidHtml1.Count > 0)
             {
                 for (int i = 0; i < matchsForInvalidHtml1.Count; i++)
@@ -701,7 +705,7 @@ namespace hipda.Data
             }
 
             // 移除无用的信息 
-            MatchCollection matchsForInvalidHtml2 = new Regex(@"<strong>下载</strong></a>[()\d\sKB.]*<br\s*\/*>").Matches(content);
+            MatchCollection matchsForInvalidHtml2 = new Regex(@"<strong>下载</strong></a>[()\d\sKB.]*<br\s*\/*>").Matches(content.ToString());
             if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
             {
                 for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
@@ -714,7 +718,7 @@ namespace hipda.Data
             }
 
             // 替换链接
-            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^>#]*)</a>").Matches(content);
+            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^>#]*)</a>").Matches(content.ToString());
             if (matchsForLink != null && matchsForLink.Count > 0)
             {
                 for (int i = 0; i < matchsForLink.Count; i++)
@@ -738,6 +742,7 @@ namespace hipda.Data
             content = content.Replace("<br/>", "[LineBreak/]");
             content = content.Replace("<br />", "[LineBreak/]");
             content = content.Replace("<br>", "[LineBreak/]");
+            content = content.Replace("</p>", @"[/Paragraph][Paragraph]");
 
             // 替换引用 
             content = content.Replace("<blockquote>", @"[LineBreak/][Span Foreground=""DimGray""]");
@@ -748,55 +753,98 @@ namespace hipda.Data
 
             // 将HTML字符串转换为RichTextBlock XAML字符串
             // 替换上载图片
-            MatchCollection matchsForImage1 = new Regex(@"<img\b[^>]*?\bfile[\s]*=[\s]*[""']?[\s]*([^""'>]*)[^>]*?/?[\s]*>").Matches(content);
+            MatchCollection matchsForImage1 = new Regex(@"<img\b[^>]*?\bfile=""([^""]*)""\swidth=""([\d]*)""[^>]*?/?[\s]*>").Matches(content.ToString());
             if (matchsForImage1 != null && matchsForImage1.Count > 0)
             {
                 for (int i = 0; i < matchsForImage1.Count; i++)
                 {
                     string placeHolderLabel = matchsForImage1[i].Groups[0].Value; // 要被替换的元素
                     string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
-                    string imgXaml = string.Format(@"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]", imgUrl);
-                    if (!imgUrl.Equals("attachments/day_140621/1406211752793e731a4fec8f7b.png"))
+                    int width = Convert.ToInt16(matchsForImage1[i].Groups[2].Value); // 图片宽度
+
+                    string imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                    if (width > 200)
                     {
-                        if (imgUrl.StartsWith("attachments/") || !imgUrl.Contains("images/attachicons"))
-                        {
-                            imgXaml = string.Format(@"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]", imgUrl);
-                        }
+                        imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""http://www.hi-pda.com/forum/{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
                     }
+
+                    //if (!imgUrl.Equals("attachments/day_140621/1406211752793e731a4fec8f7b.png"))
+                    //{
+                    //    if (imgUrl.StartsWith("attachments/") || !imgUrl.Contains("images/attachicons"))
+                    //    {
+
+                    //    }
+                    //}
+
+                    imgXaml = string.Format(imgXaml, imgUrl);
                     content = content.Replace(placeHolderLabel, imgXaml);
                 }
             }
 
-            // 替换网络图片
-            MatchCollection matchsForImage2 = new Regex(@"<img\b[^>]*?\bsrc[\s]*=[\s]*[""']?[\s]*([^""'>]*)[^>]*?/?[\s]*>").Matches(content);
+            // 替换图片，已知图片宽度，主要是用编辑器引用网络图片，及少量带宽度的直接复制到编辑器里的图片
+            MatchCollection matchsForImage2 = new Regex(@"<img\swidth=""([\d]*)""[^>]*src=""([^""]*)""[^>]*>").Matches(content.ToString());
             if (matchsForImage2 != null && matchsForImage2.Count > 0)
             {
                 for (int i = 0; i < matchsForImage2.Count; i++)
                 {
                     var m = matchsForImage2[i];
                     string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
-                    string imgUrl = m.Groups[1].Value; // 图片URL
-                    string imgXaml = string.Empty;
+                    int width = Convert.ToInt16(matchsForImage2[i].Groups[1].Value); // 图片宽度
+                    string imgUrl = m.Groups[2].Value; // 图片URL
 
-                    if (imgUrl.EndsWith("/back.gif") || imgUrl.StartsWith("images/smilies/") || imgUrl.Contains("images/attachicons") || imgUrl.EndsWith("/1406211752793e731a4fec8f7b.png"))
-                    {
-                        imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
-                    }
-                    else
+                    string imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                    if (width > 200)
                     {
                         imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
                     }
 
-                    if (!imgUrl.StartsWith("http"))
-                    {
-                        imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
-                    }
+                    //if (imgUrl.EndsWith("/back.gif") || imgUrl.StartsWith("images/smilies/") || imgUrl.Contains("images/attachicons") || imgUrl.EndsWith("/1406211752793e731a4fec8f7b.png"))
+                    //{
+                        
+                    //}
+                    //else
+                    //{
+                    //    if (true)
+                    //    {
+                            
+                    //    }
+                    //}
+
+                    if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
                     imgXaml = string.Format(imgXaml, imgUrl);
                     content = content.Replace(placeHolderLabel, imgXaml);
                 }
             }
-            return content;
+
+            // 替换图片，未知图片宽度，来自直接复制到编辑器里的图片
+            MatchCollection matchsForImage3 = new Regex(@"<img[^>]*src=""([^""]*)""[^>]*>").Matches(content.ToString());
+            if (matchsForImage3 != null && matchsForImage3.Count > 0)
+            {
+                for (int i = 0; i < matchsForImage3.Count; i++)
+                {
+                    var m = matchsForImage3[i];
+                    string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
+                    string imgUrl = m.Groups[1].Value; // 图片URL
+                    string imgXaml = @"[InlineUIContainer][Image Stretch=""None"" MaxWidth=""320""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+
+                    //if (imgUrl.EndsWith("/back.gif") || imgUrl.StartsWith("images/smilies/") || imgUrl.Contains("images/attachicons")) // 论坛自带
+                    //{
+                    //    imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                    //}
+                    //else
+                    //{
+                    //    imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
+                    //}
+
+                    if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
+
+                    imgXaml = string.Format(imgXaml, imgUrl);
+                    content = content.Replace(placeHolderLabel, imgXaml);
+                }
+            }
+
+            return content.ToString();
         }
         #endregion
 
