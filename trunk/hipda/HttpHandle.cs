@@ -22,6 +22,7 @@ namespace hipda
             if (instance == null)
             {
                 instance = new HttpHandle();
+                instance.setEncoding("gb2312");
             }
 
             return instance;
@@ -29,8 +30,13 @@ namespace hipda
 
         public HttpHandle()
         {
-            encode = DBCSEncoding.GetDBCSEncoding("gb2312");
             gbk = DBCSEncoding.GetDBCSEncoding("gb2312");
+        }
+
+        public void setEncoding(string code)
+        {
+            if (code == "gbk" || code == "gb2312") encode = DBCSEncoding.GetDBCSEncoding("gb2312");
+            else encode = null;
         }
 
         public bool HasCookies
