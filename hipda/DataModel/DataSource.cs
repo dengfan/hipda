@@ -691,6 +691,7 @@ namespace hipda.Data
             content = content.Replace("[", "［");
             content = content.Replace("]", "］");
             content = content.Replace("&nbsp;", "&#160;");
+            content = content.Replace("", string.Empty); // 这里不是空字符，而是一个非常特殊的音乐符号
 
             // 移除无用的的日期信息 
             MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_smallfont"">[\d\s-:]*</div>").Matches(content.ToString());
@@ -706,7 +707,7 @@ namespace hipda.Data
             }
 
             // 移除无用的下载提示信息 
-            MatchCollection matchsForInvalidHtml2 = new Regex(@"<strong>下载</strong></a>[()\d\sKB.]*<br\s*\/*>").Matches(content.ToString());
+            MatchCollection matchsForInvalidHtml2 = new Regex(@"<strong>下载</strong></a>[()\d\sKB.]*<br[^>]*>").Matches(content.ToString());
             if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
             {
                 for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
@@ -743,7 +744,7 @@ namespace hipda.Data
             content = content.Replace("<br/>", "[LineBreak/]");
             content = content.Replace("<br />", "[LineBreak/]");
             content = content.Replace("<br>", "[LineBreak/]");
-            content = content.Replace("</p>", @"[/Paragraph][Paragraph]");
+            //content = content.Replace("</p>", @"[/Paragraph][Paragraph]");
 
             // 替换引用文字标签
             content = content.Replace("<blockquote>", @"[LineBreak/][Span Foreground=""DimGray""]");
