@@ -175,11 +175,11 @@
             <AppBarButton x:Name="replyButton" Icon="Edit" Label="回复" Click="replyButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="postButton" Icon="PostUpdate" Label="发布" Click="postButton_Click" Visibility="Collapsed" />
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="closeTab" Label="关闭当前标签页" Click="closeTab_Click" />
+                <AppBarButton x:Name="openTabForApp" Label="特别鸣谢 + 关于" Click="openTabForApp_Click" />
                 <AppBarButton x:Name="openTabForDiscovery" Label="地板" Click="openTabForDiscovery_Click" />
                 <AppBarButton x:Name="openTabForBuyAndSell" Label="BS 版" Click="openTabForBuyAndSell_Click" />
                 <AppBarButton x:Name="openTabForEink" Label="Eink 版" Click="openTabForEink_Click" />
-                <AppBarButton x:Name="openTabForApp" Label="特别鸣谢 + 关于" Click="openTabForApp_Click" />
+                <AppBarButton x:Name="closeTab" Label="关闭当前标签页" Click="closeTab_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
