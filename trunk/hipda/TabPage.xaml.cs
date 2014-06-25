@@ -72,7 +72,7 @@ namespace hipda
             }
             #endregion
 
-            if (e.PageState != null && e.PageState.Count > 0)
+            if (e.PageState != null && e.PageState.Count > 0) // 从墓碑恢复
             {
                 string tabStr = e.PageState["PivotItems"].ToString();
                 tabStr = tabStr.Substring(0, tabStr.Length - 1);
@@ -100,7 +100,7 @@ namespace hipda
                 int selectedIndex = Convert.ToInt16(e.PageState["PivotSelectedIndex"]);
                 Pivot.SelectedIndex = selectedIndex;
             }
-            else
+            else // 正常打开
             {
                 if (e.NavigationParameter == null)
                 {
@@ -435,6 +435,28 @@ namespace hipda
         #region 创建 tab 页
         private void CreateThreadListTab(string forumId, string forumName, bool isResume)
         {
+            // 先检查要打开的版块是否已存在于 tabs 中
+            // 由于要确保位置位于第一位，所以如果已存在，则删除之然后再创建，以确保位置正确
+            if (Pivot.Items.Count > 0)
+            {
+                var tabs = Pivot.Items;
+                foreach (PivotItem tab in tabs)
+                {
+                    if (tab.Header.ToString().Equals(forumName))
+                    {
+                        if (Pivot.Items[0] == tab)
+                        {
+                            Pivot.SelectedIndex = 0;
+                            return;
+                        }
+                        else
+                        {
+                            Pivot.Items.Remove(tab);
+                        }
+                    }
+                }
+            }
+
             var pivotItem = new PivotItem
             {
                 Header = forumName,
@@ -511,6 +533,20 @@ namespace hipda
 
         private void CreateReplyListTab(string threadId, string threadTitle, bool isResume)
         {
+            // 先检查要打开的版块是否已存在于 tabs 中
+            // 由于要确保位置位于所属板块的后面，所以如果已存在，则删除之然后再创建，以确保位置正确
+            if (Pivot.Items.Count > 0)
+            {
+                var tabs = Pivot.Items;
+                foreach (PivotItem tab in tabs)
+                {
+                    if (tab.Header.ToString().Equals(threadTitle))
+                    {
+                        Pivot.Items.Remove(tab);
+                    }
+                }
+            }
+
             var pivotItem = new PivotItem
             {
                 Header = threadTitle,
@@ -657,12 +693,12 @@ namespace hipda
 
         private void openTabForBuyAndSell_Click(object sender, RoutedEventArgs e)
         {
-            CreateThreadListTab("6", "BS 版", false);
+            CreateThreadListTab("6", "BS版", false);
         }
 
         private void openTabForEink_Click(object sender, RoutedEventArgs e)
         {
-            CreateThreadListTab("59", "Eink 版", false);
+            CreateThreadListTab("59", "E版", false);
         }
 
         private void replyButton_Click(object sender, RoutedEventArgs e)
@@ -787,6 +823,20 @@ namespace hipda
 
             popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
             ShowPostButton();
+        }
+
+        private async void closeTab_Click(object sender, RoutedEventArgs e)
+        {
+            // 获取当前tab页
+            if (Pivot.Items.Count > 1)
+            {
+                PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
+                Pivot.Items.Remove(pivotItem);
+            }
+            else
+            {
+                await new MessageDialog("您不能删除最后一个标签页！", "提示").ShowAsync();
+            }
         }
 
         //private async void addImageForPostButton_Click(object sender, RoutedEventArgs e)
