@@ -538,6 +538,14 @@ namespace hipda.Data
                 return;
             }
 
+            //// 现改为，只要当前页数据存在就不重新加载，让用户自己点击最底下的刷新按钮来刷新
+            //// 此举可提高响应速度
+            //int count = thread.Replies.Count(o => o.PageNo == pageNo);
+            //if (count > 0)
+            //{
+            //    return;
+            //}
+
             // 如果页面已存在，并且已载满数据，则不重新从网站拉取数据，以便节省流量， 
             // 但最后一页（如果数据少于一页，那么第一页就是最后一页）由于随时可能会有新回复，所以对于最后一页的处理方式是先清除再重新加载
             int count = thread.Replies.Count(o => o.PageNo == pageNo);
