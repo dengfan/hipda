@@ -200,10 +200,10 @@ namespace hipda
                     ImageSource = new BitmapImage()
                     {
                         DecodePixelWidth = 60, // natural px width of image source
-                        DecodePixelHeight = 60, // natural px width of image source
                         UriSource = new Uri(thread.AvatarUrl)
                     }
                 };
+                imageBrush.Stretch = Stretch.UniformToFill;
 
                 avatarImageBorder.Background = imageBrush;
                 avatarImageBorder.Opacity = 1;
@@ -331,10 +331,10 @@ namespace hipda
                 ImageSource = new BitmapImage()
                 {
                     DecodePixelWidth = 60, // natural px width of image source
-                    DecodePixelHeight = 60, // natural px width of image source
                     UriSource = new Uri(reply.AvatarUrl)
                 }
             };
+            imageBrush.Stretch = Stretch.UniformToFill;
 
             avatarImageBorder.Background = imageBrush;
             avatarImageBorder.Opacity = 1;
@@ -617,6 +617,7 @@ namespace hipda
                     UriSource = new Uri("ms-appx:///Assets/Icons/appbar.refresh.png")
                 }
             };
+            refreshIcon.Stretch = Stretch.Uniform;
 
             refreshButton.Content = refreshIcon;
 
@@ -681,25 +682,48 @@ namespace hipda
 
         #endregion
 
+        #region 打开标签页菜单按钮
         private void openTabForApp_Click(object sender, RoutedEventArgs e)
         {
             CreateReplyListTab("1427253", "特别鸣谢 + 关于", false);
         }
 
-        private void openTabForDiscovery_Click(object sender, RoutedEventArgs e)
+        private async void openTabForDiscovery_Click(object sender, RoutedEventArgs e)
         {
-            CreateThreadListTab("2", "地板", false);
+            if (!accountName.Equals("未登录"))
+            {
+                CreateThreadListTab("2", "地板", false);
+            }
+            else
+            {
+                await new MessageDialog("您必须先登录，才允许访问地板！", "提示").ShowAsync();
+            }
         }
 
-        private void openTabForBuyAndSell_Click(object sender, RoutedEventArgs e)
+        private async void openTabForBuyAndSell_Click(object sender, RoutedEventArgs e)
         {
-            CreateThreadListTab("6", "BS版", false);
+            if (!accountName.Equals("未登录"))
+            {
+                CreateThreadListTab("6", "BS版", false);
+            }
+            else
+            {
+                await new MessageDialog("您必须先登录，才允许访问BS版！", "提示").ShowAsync();
+            }
         }
 
-        private void openTabForEink_Click(object sender, RoutedEventArgs e)
+        private async void openTabForEink_Click(object sender, RoutedEventArgs e)
         {
-            CreateThreadListTab("59", "E版", false);
+            if (!accountName.Equals("未登录"))
+            {
+                CreateThreadListTab("59", "E版", false);
+            }
+            else
+            {
+                await new MessageDialog("您必须先登录，才允许访问Eink版！", "提示").ShowAsync();
+            }
         }
+        #endregion
 
         private void replyButton_Click(object sender, RoutedEventArgs e)
         {
