@@ -38,7 +38,7 @@
                     <TextBlock
                         Text="{Binding Name}"
                         TextWrapping="WrapWholeWords"
-                        Style="{ThemeResource BodyTextBlockStyle}">
+                        FontSize="{ThemeResource ContentControlFontSize}">
                     </TextBlock>
                     <TextBlock
                         Text="{Binding TodayQuantity}"
