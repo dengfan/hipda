@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
@@ -271,13 +272,21 @@ namespace hipda
             Button menuButton = (Button)layoutGrid.FindName("menuButton");
             TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
             ContentControl replyContent = (ContentControl)layoutGrid.FindName("replyContent");
-
+            Button showMoreButton = (Button)layoutGrid.FindName("showMoreButton");
+            
             avatarImageBorder.Opacity = 0;
             ownerNameTextBlock.Opacity = 0;
             createTimeTextBlock.Opacity = 0;
             menuButton.DataContext = reply;
             floorNumTextBlock.Opacity = 0;
             replyContent.Content = XamlReader.Load(reply.XamlContent);
+
+            if (reply.ImageCount > 10)
+            {
+                showMoreButton.DataContext = reply;
+                showMoreButton.Content = string.Format("查看本楼层完整原始内容 ({0}P)", reply.ImageCount);
+                showMoreButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
 
             args.RegisterUpdateCallback(ShowAuthor);
         }
@@ -340,6 +349,16 @@ namespace hipda
             avatarImageBorder.Opacity = 1;
         }
         #endregion
+
+        private void viewFullContentButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            Reply data = (Reply)btn.DataContext;
+
+            string html = HtmlFormat(data.HtmlContent);
+            webView.NavigateToString(html);
+            popupWebViewGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+        }
 
         private async void refreshButton_Click(object sender, RoutedEventArgs e)
         {
@@ -739,10 +758,20 @@ namespace hipda
 
                 ShowReplyButton();
             }
+            else if (popupWebViewGrid.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            {
+                NavigationHelper.IsCanGoBack = false;
+                e.Handled = true;
+
+                popupWebViewGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
             else
             {
                 NavigationHelper.IsCanGoBack = true;
             }
+
+            // 清除针对回复的数据
+            noticeauthor = noticetrimstr = noticeauthormsg = string.Empty;
         }
 
         private async void postButton_Click(object sender, RoutedEventArgs e)
@@ -791,27 +820,27 @@ namespace hipda
         private void ShowReplyButton()
         {
             tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
-            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
-            openTabForDiscovery.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            openTabForBuyAndSell.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            openTabForEink.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            openTabForApp.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
+            {
+                btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+
+            replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            postButton.Visibility = popupGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         private void ShowPostButton()
         {
             tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
-            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            postButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
-            openTabForDiscovery.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            openTabForBuyAndSell.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            openTabForEink.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            openTabForApp.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
+            {
+                btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+
+            replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            postButton.Visibility = popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private void replyReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -820,7 +849,7 @@ namespace hipda
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
             noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n\n", data.Floor, data.OwnerName);
-            noticeauthormsg = data.TextContent.Length > 100 ? data.TextContent.Substring(0, 95) + "..." : data.TextContent;
+            noticeauthormsg = data.HtmlContent.Length > 100 ? data.HtmlContent.Substring(0, 95) + "..." : data.HtmlContent;
 
             postMessageTextBox.Text = noticetrimstr;
 
@@ -834,7 +863,7 @@ namespace hipda
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
 
-            noticetrimstr = data.TextContent.Length > 100 ? data.TextContent.Substring(0, 95) + "..." : data.TextContent;
+            noticetrimstr = data.HtmlContent.Length > 100 ? data.HtmlContent.Substring(0, 95) + "..." : data.HtmlContent;
             noticetrimstr = new Regex("\r\n").Replace(noticetrimstr, string.Empty);
             noticetrimstr = new Regex("\r").Replace(noticetrimstr, string.Empty);
             noticetrimstr = new Regex("\n").Replace(noticetrimstr, string.Empty);
@@ -847,6 +876,29 @@ namespace hipda
 
             popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
             ShowPostButton();
+        }
+
+        private void viewFullContentMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
+
+            string html = HtmlFormat(data.HtmlContent);
+            webView.NavigateToString(html);
+            popupWebViewGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+        }
+
+        private static string HtmlFormat(string htmlStr)
+        {
+            // 整理HTML
+            string html = htmlStr
+                .Replace(@"<img src=""images/default/attachimg.gif"" border=""0"">", string.Empty)
+                .Replace(@" src=""images/common/none.gif""", string.Empty)
+                .Replace(@" file=""attachments/", @" src=""http://www.hi-pda.com/forum/attachments/")
+                .Replace(@" src=""images/smilies/", @" src=""http://www.hi-pda.com/forum/images/smilies/")
+                .Replace(@" src=""images/attachicons/", @" src=""http://www.hi-pda.com/forum/images/attachicons/");
+
+            html = string.Format(@"<html><head><style>table{{width:100%;}}blockquote{{margin:20px;width:100%;}}</style></head><body style=""word-break:break-all;"">{0}</body></html>", html);
+            return html;
         }
 
         private async void closeTab_Click(object sender, RoutedEventArgs e)
