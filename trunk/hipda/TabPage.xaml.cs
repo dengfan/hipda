@@ -41,10 +41,12 @@ namespace hipda
         public static readonly DependencyProperty PivotItemTabTypeProperty = DependencyProperty.Register("TabType", typeof(String), typeof(PivotItem), null);
         public static readonly DependencyProperty PivotItemTabIdProperty = DependencyProperty.Register("TabId", typeof(String), typeof(PivotItem), null);
 
+        #region 用于回复给某人的参数
         private string noticeauthor = string.Empty;
         private string noticetrimstr = string.Empty;
         private string noticeauthormsg = string.Empty;
-        
+        #endregion
+
         public TabPage()
         {
             this.InitializeComponent();
@@ -279,6 +281,7 @@ namespace hipda
             createTimeTextBlock.Opacity = 0;
             menuButton.DataContext = reply;
             floorNumTextBlock.Opacity = 0;
+
             replyContent.Content = XamlReader.Load(reply.XamlContent);
 
             if (reply.ImageCount > 10)
@@ -764,6 +767,9 @@ namespace hipda
                 e.Handled = true;
 
                 popupWebViewGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                
+                // 清空内容
+                webView.NavigateToString(string.Empty);
             }
             else
             {

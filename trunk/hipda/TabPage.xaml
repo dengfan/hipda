@@ -72,7 +72,6 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
-                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -119,20 +118,17 @@
                             HorizontalAlignment="Right" 
                             Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
 
-                <!--<TextBlock x:Name="replyContent" 
-                            Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                            Padding="0,3,0,0"
-                            TextWrapping="WrapWholeWords"
-                            Style="{ThemeResource BodyTextBlockStyle}"/>-->
-
-                <ContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  x:Name="replyContent"
-                                Margin="0,10,0,0" FontSize="{ThemeResource ContentControlFontSize}" />
-
-                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="showMoreButton" 
+                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0">
+                    <ContentControl x:Name="replyContent" FontSize="{ThemeResource ContentControlFontSize}" />
+                    <Button x:Name="showMoreButton" 
                         HorizontalAlignment="Stretch" Background="Green" Foreground="White" BorderThickness="0"
                         Click="viewFullContentButton_Click" Visibility="Collapsed" />
+                </StackPanel>
+                
 
-                <Line HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                
+
+                <Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                         X1="0" Y1="15"
                         X2="1000" Y2="15"
                         Stroke="Silver" StrokeDashArray="8,4" />
@@ -183,7 +179,7 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar x:Name="tabPageCommandBar" Background="DarkGray" Opacity="0.9">
+        <CommandBar x:Name="tabPageCommandBar" Background="Silver" Opacity="0.9">
             <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="刷新" Click="refreshButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="replyButton" Icon="Edit" Label="回复" Click="replyButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="postButton" Icon="PostUpdate" Label="发布" Click="postButton_Click" Visibility="Collapsed" />
