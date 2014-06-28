@@ -533,6 +533,13 @@ namespace hipda.Data
         // 读取指定贴子的回复列表数据
         private async Task LoadRepliesDataAsync(string threadId, int pageNo)
         {
+            // 移除过旧的数量，以释放内存空间
+            if (_dataSource.ReplyList.Count > 7)
+            {
+                _dataSource.ReplyList[0] = null;
+                _dataSource.ReplyList.RemoveAt(0);
+            }
+
             #region 如果数据已存在，则不读取，以便节省流量
             // 载入过的页面不再载入
             var thread = _dataSource.ReplyList.FirstOrDefault(t => t.ThreadId.Equals(threadId));
@@ -763,7 +770,7 @@ namespace hipda.Data
             content = content.Replace(@"src=""http://www.hi-pda.com/forum/images/default/attachimg.gif""", string.Empty);
 
             imageCount = 0;
-            int maxImageCount = 10;
+            int maxImageCount = 7;
 
             // 将HTML字符串转换为RichTextBlock XAML字符串
             // 替换上载图片
