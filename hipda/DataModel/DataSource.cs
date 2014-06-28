@@ -820,7 +820,7 @@ namespace hipda.Data
                     }
                     else
                     {
-                        imgXaml = @"[Span Foreground=""DimGray""]［为节省流量，图片{0}已被智能忽略。］[/Span]";
+                        imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略。 -[/Span]";
                         imgXaml = string.Format(imgXaml, imageCount);
                     }
                     
@@ -858,7 +858,7 @@ namespace hipda.Data
                     }
                     else
                     {
-                        imgXaml = @"[Span Foreground=""DimGray""]［为节省流量，图片{0}已被智能忽略。］[/Span]";
+                        imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略。 -[/Span]";
                         imgXaml = string.Format(imgXaml, imageCount);
                     }
 

@@ -123,7 +123,7 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar ClosedDisplayMode="Minimal">
+        <CommandBar ClosedDisplayMode="Minimal" Background="Silver" Opacity="0.9">
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openTabForApp" Label="特别鸣谢 + 关于" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
