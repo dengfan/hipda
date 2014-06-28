@@ -72,6 +72,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -100,13 +101,14 @@
                     <Button x:Name="menuButton" Margin="6">
                         <Button.Template>
                             <ControlTemplate>
-                                <TextBlock Text="-回复-" Style="{ThemeResource ListViewItemContentTextBlockStyle}" Foreground="Gray" />
+                                <TextBlock Text=" ••• " Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
                             </ControlTemplate>
                         </Button.Template>
                         <Button.Flyout>
                             <MenuFlyout x:Name="replyMenu">
                                 <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
                                 <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
+                                <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" Click="viewFullContentMenuFlyoutItem_Click" />
                             </MenuFlyout>
                         </Button.Flyout>
                     </Button>
@@ -123,13 +125,17 @@
                             TextWrapping="WrapWholeWords"
                             Style="{ThemeResource BodyTextBlockStyle}"/>-->
 
-                <ContentControl x:Name="replyContent"  Margin="0,10,0,0" FontSize="{ThemeResource ContentControlFontSize}"
-                                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  />
+                <ContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  x:Name="replyContent"
+                                Margin="0,10,0,0" FontSize="{ThemeResource ContentControlFontSize}" />
 
-                <Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="showMoreButton" 
+                        HorizontalAlignment="Stretch" Background="Green" Foreground="White" BorderThickness="0"
+                        Click="viewFullContentButton_Click" Visibility="Collapsed" />
+
+                <Line HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                         X1="0" Y1="15"
-                        X2="800" Y2="15"
-                        Stroke="LightGray" StrokeDashArray="8,4" />
+                        X2="1000" Y2="15"
+                        Stroke="Silver" StrokeDashArray="8,4" />
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -144,6 +150,7 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
+        
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
         <Grid x:Name="popupGrid" Visibility="Collapsed">
             <!--<Grid.Resources>
@@ -151,7 +158,7 @@
                     <RepositionThemeAnimation Storyboard.TargetName="postPanelGrid" FromHorizontalOffset="-200" />
                 </Storyboard>
             </Grid.Resources>-->
-            <Rectangle Canvas.ZIndex="0" Fill="LightGray" Opacity="0.9" />
+            <Rectangle Canvas.ZIndex="1" Fill="LightGray" Opacity="0.6" />
             <Grid x:Name="postPanelGrid" VerticalAlignment="Top" Margin="20,90,20,0" Background="Green">
                 <StackPanel>
                     <!--<StackPanel Margin="10,5,10,0" Orientation="Horizontal" HorizontalAlignment="Left">
@@ -167,10 +174,16 @@
                 </StackPanel>
             </Grid>
         </Grid>
+        <Grid x:Name="popupWebViewGrid" Visibility="Collapsed">
+            <Rectangle Canvas.ZIndex="0" Fill="LightGray" Opacity="0.6" />
+            <Border BorderThickness="5" BorderBrush="Green" Background="White" Margin="20" Padding="5">
+                <WebView x:Name="webView" />
+            </Border>
+        </Grid>
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar x:Name="tabPageCommandBar" Background="Silver" Opacity="0.9">
+        <CommandBar x:Name="tabPageCommandBar" Background="DarkGray" Opacity="0.9">
             <AppBarButton x:Name="refreshButton" Icon="Refresh" Label="刷新" Click="refreshButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="replyButton" Icon="Edit" Label="回复" Click="replyButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="postButton" Icon="PostUpdate" Label="发布" Click="postButton_Click" Visibility="Collapsed" />
