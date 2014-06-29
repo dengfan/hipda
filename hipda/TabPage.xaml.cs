@@ -47,6 +47,13 @@ namespace hipda
         private string noticeauthormsg = string.Empty;
         #endregion
 
+        #region 是否正在显示楼层菜单
+        // 用于避免在显示显示回复页楼层菜单时，不会因为页面缩小触发收缩底部菜单的事件
+        private bool isShowReplyFloorContextMenu = false;
+        #endregion
+
+        private int newLineCountInMessagePostBoxByUser = 0;
+
         public TabPage()
         {
             this.InitializeComponent();
@@ -258,6 +265,11 @@ namespace hipda
         void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             args.Handled = true;
+
+            if (isShowReplyFloorContextMenu == false)
+            {
+                tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+            }
 
             if (args.Phase != 0)
             {
@@ -749,7 +761,7 @@ namespace hipda
 
         private void replyButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowPostButton();
+            ShowPostBoxAndButton();
         }
 
         private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
@@ -759,7 +771,7 @@ namespace hipda
                 NavigationHelper.IsCanGoBack = false;
                 e.Handled = true;
 
-                ShowReplyButton();
+                HidePostBoxAndButton();
             }
             else if (popupWebViewGrid.Visibility == Windows.UI.Xaml.Visibility.Visible)
             {
@@ -777,6 +789,7 @@ namespace hipda
             }
 
             // 清除针对回复的数据
+            postMessageTextBox.Text = string.Empty;
             noticeauthor = noticetrimstr = noticeauthormsg = string.Empty;
         }
 
@@ -805,7 +818,7 @@ namespace hipda
             string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/post.php?action=reply&tid=" + threadId + "&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", postData);
             if (resultContent.Contains("您的回复已经发布"))
             {
-                ShowReplyButton();
+                HidePostBoxAndButton();
 
                 // 刷新数据
                 ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
@@ -823,9 +836,11 @@ namespace hipda
             }
         }
 
-        private void ShowReplyButton()
+        private void HidePostBoxAndButton()
         {
             tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+
+            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
@@ -833,12 +848,14 @@ namespace hipda
             }
 
             replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            postButton.Visibility = popupGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
-        private void ShowPostButton()
+        private void ShowPostBoxAndButton()
         {
             tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+
+            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
@@ -846,7 +863,8 @@ namespace hipda
             }
 
             replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            postButton.Visibility = popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            postButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
         }
 
         private void replyReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -855,12 +873,11 @@ namespace hipda
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
             noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n\n", data.Floor, data.OwnerName);
-            noticeauthormsg = data.HtmlContent.Length > 100 ? data.HtmlContent.Substring(0, 95) + "..." : data.HtmlContent;
+            noticeauthormsg = data.TextContent;
 
             postMessageTextBox.Text = noticetrimstr;
 
-            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            ShowPostButton();
+            ShowPostBoxAndButton();
         }
 
         private void refReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -868,20 +885,12 @@ namespace hipda
             Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
-
-            noticetrimstr = data.HtmlContent.Length > 100 ? data.HtmlContent.Substring(0, 95) + "..." : data.HtmlContent;
-            noticetrimstr = new Regex("\r\n").Replace(noticetrimstr, string.Empty);
-            noticetrimstr = new Regex("\r").Replace(noticetrimstr, string.Empty);
-            noticetrimstr = new Regex("\n").Replace(noticetrimstr, string.Empty);
-            noticetrimstr = noticetrimstr.Replace("&nbsp;", string.Empty);
-            noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, noticetrimstr);
-
-            noticeauthormsg = noticetrimstr;
+            noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, data.TextContent);
+            noticeauthormsg = data.TextContent;
 
             postMessageTextBox.Text = noticetrimstr;
 
-            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            ShowPostButton();
+            ShowPostBoxAndButton();
         }
 
         private void viewFullContentMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -919,6 +928,49 @@ namespace hipda
             {
                 await new MessageDialog("您不能删除最后一个标签页！", "提示").ShowAsync();
             }
+        }
+
+        private void addFaceButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            string value = btn.Content.ToString();
+
+            string message = string.Empty;
+            if (value.StartsWith(":"))
+            {
+                message = string.Format(" {0} ", value);
+            }
+            else
+            {
+                message = string.Format(@" {{:{0}:}} ", value);
+            }
+
+            // 获取有几个换行符
+            string content = postMessageTextBox.Text;
+            MatchCollection matchsForNewLine = new Regex(@"\r\n").Matches(content);
+            int newLineCountInMessageContent = matchsForNewLine.Count;
+
+            int index = postMessageTextBox.SelectionStart;
+            if (index > 0)
+            {
+                index += newLineCountInMessageContent;
+            }
+            
+            postMessageTextBox.Text = postMessageTextBox.Text.Insert(index, message);
+
+        }
+
+        private void replyMenu_Opening(object sender, object e)
+        {
+            // 此举是为了隐定回复框弹出层的大小
+            // 以免底部菜单变大后，重新调整回复框弹出层的大小
+            isShowReplyFloorContextMenu = true;
+            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+        }
+
+        private void replyMenu_Closed(object sender, object e)
+        {
+            isShowReplyFloorContextMenu = false;
         }
 
         //private async void addImageForPostButton_Click(object sender, RoutedEventArgs e)

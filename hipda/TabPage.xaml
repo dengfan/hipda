@@ -104,7 +104,7 @@
                             </ControlTemplate>
                         </Button.Template>
                         <Button.Flyout>
-                            <MenuFlyout x:Name="replyMenu">
+                            <MenuFlyout x:Name="replyMenu" Opening="replyMenu_Opening" Closed="replyMenu_Closed">
                                 <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
                                 <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
                                 <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" Click="viewFullContentMenuFlyoutItem_Click" />
@@ -121,13 +121,10 @@
                 <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0">
                     <ContentControl x:Name="replyContent" FontSize="{ThemeResource ContentControlFontSize}" />
                     <Button x:Name="showMoreButton" 
-                        HorizontalAlignment="Stretch" Background="Green" Foreground="White" BorderThickness="0"
+                        HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                         Click="viewFullContentButton_Click" Visibility="Collapsed" />
                 </StackPanel>
                 
-
-                
-
                 <Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                         X1="0" Y1="15"
                         X2="1000" Y2="15"
@@ -146,36 +143,795 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
-        
-        <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
+
+        <Grid x:Name="popupWebViewGrid" Visibility="Collapsed">
+            <Rectangle Canvas.ZIndex="0" Fill="LightGray" Opacity="0.7" />
+            <Border BorderThickness="0" Background="White" Margin="25,0,25,0" Padding="10">
+                <WebView x:Name="webView" />
+            </Border>
+        </Grid>
+
         <Grid x:Name="popupGrid" Visibility="Collapsed">
             <!--<Grid.Resources>
                 <Storyboard x:Name="postPanelFadeIn">
                     <RepositionThemeAnimation Storyboard.TargetName="postPanelGrid" FromHorizontalOffset="-200" />
                 </Storyboard>
             </Grid.Resources>-->
-            <Rectangle Canvas.ZIndex="1" Fill="LightGray" Opacity="0.6" />
-            <Grid x:Name="postPanelGrid" VerticalAlignment="Top" Margin="20,90,20,0" Background="Green">
-                <StackPanel>
-                    <!--<StackPanel Margin="10,5,10,0" Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Button x:Name="addImageForPostButton" Content="添加图片" Click="addImageForPostButton_Click"/>
-                    </StackPanel>-->
-                    <TextBox x:Name="postMessageTextBox" Margin="10"
-                             Height="300"
-                             BorderBrush="Green"
-                             Background="White"
-                             TextWrapping="Wrap"
-                             AcceptsReturn="True"
-                             Header="编辑回复内容"/>
-                </StackPanel>
-            </Grid>
-        </Grid>
-        <Grid x:Name="popupWebViewGrid" Visibility="Collapsed">
-            <Rectangle Canvas.ZIndex="0" Fill="LightGray" Opacity="0.6" />
-            <Border BorderThickness="5" BorderBrush="Green" Background="White" Margin="20" Padding="5">
-                <WebView x:Name="webView" />
+            <Rectangle Canvas.ZIndex="0" Fill="LightGray" Opacity="0.7" />
+            <Border x:Name="postPanelGrid" BorderThickness="0" Background="White" Margin="25,0,25,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <TextBox x:Name="postMessageTextBox" Grid.Row="0" Margin="15" Height="300"
+                        BorderThickness="0" Background="White" TextWrapping="Wrap" AcceptsReturn="True" Header="编辑回复内容" />
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="WhiteSmoke">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
+                                <!--<RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>-->
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Content="3_57" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/01.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Content="3_58" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/02.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Content="3_59" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/03.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" Content="3_60" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/04.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="0" Grid.Column="4" HorizontalAlignment="Center" Content="3_61" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/05.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Content="3_62" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/06.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Content="3_63" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/07.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Content="3_64" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/08.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" Content="3_65" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/09.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" Content="3_66" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/10.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Content="3_67" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/11.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Content="3_68" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/12.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Content="3_69" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/13.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" Content="3_70" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/14.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" Content="3_71" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/15.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Content="3_72" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/16.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Content="3_73" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/17.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Content="3_74" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/18.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" Content="3_75" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/19.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center" Content="3_76" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/20.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Content="3_77" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/21.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Content="3_78" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/22.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Content="3_79" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/23.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" Content="3_80" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/24.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="4" Grid.Column="4" HorizontalAlignment="Center" Content="2_41" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/01.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Content="2_42" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/02.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Content="2_43" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/03.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Content="2_44" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/04.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="5" Grid.Column="3" HorizontalAlignment="Center" Content="2_45" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/05.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="5" Grid.Column="4" HorizontalAlignment="Center" Content="2_46" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/06.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="6" Grid.Column="0" HorizontalAlignment="Center" Content="2_47" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/07.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Content="2_48" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/08.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" Content="2_49" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/09.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center" Content="2_50" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/10.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="6" Grid.Column="4" HorizontalAlignment="Center" Content="2_51" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/11.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center" Content="2_52" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/12.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Content="2_53" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/13.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="7" Grid.Column="2" HorizontalAlignment="Center" Content="2_54" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/14.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="7" Grid.Column="3" HorizontalAlignment="Center" Content="2_55" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/15.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="7" Grid.Column="4" HorizontalAlignment="Center" Content="2_56" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Stretch="None">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/16.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <!--<Button Grid.Row="8" Grid.Column="0" HorizontalAlignment="Center" Content=":)" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/smile.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="8" Grid.Column="1" HorizontalAlignment="Center" Content=":sweat:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/sweat.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="8" Grid.Column="2" HorizontalAlignment="Center" Content=":huffy:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/huffy.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="8" Grid.Column="3" HorizontalAlignment="Center" Content=":cry:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/cry.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="8" Grid.Column="4" HorizontalAlignment="Center" Content=":titter:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/titter.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="9" Grid.Column="0" HorizontalAlignment="Center" Content=":handshake:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/handshake.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="9" Grid.Column="1" HorizontalAlignment="Center" Content=":victory:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/victory.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="9" Grid.Column="2" HorizontalAlignment="Center" Content=":curse:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/curse.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="9" Grid.Column="3" HorizontalAlignment="Center" Content=":dizzy:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/dizzy.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="9" Grid.Column="4" HorizontalAlignment="Center" Content=":shutup:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/shutup.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="10" Grid.Column="0" HorizontalAlignment="Center" Content=":funk:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/funk.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="10" Grid.Column="1" HorizontalAlignment="Center" Content=":loveliness:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/loveliness.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="10" Grid.Column="2" HorizontalAlignment="Center" Content=":(" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/sad.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="10" Grid.Column="3" HorizontalAlignment="Center" Content=":D" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/biggrin.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="10" Grid.Column="4" HorizontalAlignment="Center" Content=":cool:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/cool.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="11" Grid.Column="0" HorizontalAlignment="Center" Content=":mad:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/mad.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="11" Grid.Column="1" HorizontalAlignment="Center" Content=":o" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/shocked.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="11" Grid.Column="2" HorizontalAlignment="Center" Content=":P" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/tongue.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="11" Grid.Column="3" HorizontalAlignment="Center" Content=":lol:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/lol.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="11" Grid.Column="4" HorizontalAlignment="Center" Content=":shy:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/shy.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="12" Grid.Column="0" HorizontalAlignment="Center" Content=":sleepy:" Click="addFaceButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Width="48" Height="48">
+                                            <Image.Source>
+                                                <BitmapImage UriSource="ms-appx:///Assets/Faces/default/sleepy.gif" />
+                                            </Image.Source>
+                                        </Image>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>-->
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
             </Border>
         </Grid>
+
+        <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
 
     <Page.BottomAppBar>
