@@ -789,7 +789,7 @@ namespace hipda
             }
 
             // 清除针对回复的数据
-            postMessageTextBox.Text = string.Empty;
+            //postMessageTextBox.Text = string.Empty;
             noticeauthor = noticetrimstr = noticeauthormsg = string.Empty;
         }
 
@@ -801,7 +801,8 @@ namespace hipda
             PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
             string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
 
-            string message = postMessageTextBox.Text;
+            //string message = postMessageTextBox.Text;
+            string message = string.Empty;
 
             var postData = new Dictionary<string, object>();
             postData.Add("noticeauthor", noticeauthor);
@@ -825,7 +826,7 @@ namespace hipda
                 ICollectionView view = (ICollectionView)listView.ItemsSource;
                 await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
 
-                postMessageTextBox.Text = string.Empty;
+                //postMessageTextBox.Text = string.Empty;
                 noticeauthor = string.Empty;
                 noticetrimstr = string.Empty;
                 noticeauthormsg = string.Empty;
@@ -875,7 +876,7 @@ namespace hipda
             noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n\n", data.Floor, data.OwnerName);
             noticeauthormsg = data.TextContent;
 
-            postMessageTextBox.Text = noticetrimstr;
+            //postMessageTextBox.Text = noticetrimstr;
 
             ShowPostBoxAndButton();
         }
@@ -888,7 +889,7 @@ namespace hipda
             noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, data.TextContent);
             noticeauthormsg = data.TextContent;
 
-            postMessageTextBox.Text = noticetrimstr;
+            //postMessageTextBox.Text = noticetrimstr;
 
             ShowPostBoxAndButton();
         }
@@ -912,7 +913,20 @@ namespace hipda
                 .Replace(@" src=""images/smilies/", @" src=""http://www.hi-pda.com/forum/images/smilies/")
                 .Replace(@" src=""images/attachicons/", @" src=""http://www.hi-pda.com/forum/images/attachicons/");
 
-            html = string.Format(@"<html><head><style>table{{width:100%;}}blockquote{{margin:20px;width:100%;}}</style></head><body style=""word-break:break-all;"">{0}</body></html>", html);
+            // 移除任意连续50个的非文字字符
+            MatchCollection matchsForInvalidHtml2 = new Regex(@"\p{P}{30}").Matches(html);
+            if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
+            {
+                for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
+                {
+                    var m = matchsForInvalidHtml2[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    html = html.Replace(placeHolder, string.Empty);
+                }
+            }
+
+            html = string.Format(@"<html><head><style>table{{width:100%;}}blockquote{{margin:20px;width:100%;}}img{{display:block;}}</style></head><body style=""padding:20px 0;white-space:normal;word-break:break-all;word-wrap:break-word;"">{0}</body></html>", html);
             return html;
         }
 
@@ -945,18 +959,18 @@ namespace hipda
                 message = string.Format(@" {{:{0}:}} ", value);
             }
 
-            // 获取有几个换行符
-            string content = postMessageTextBox.Text;
-            MatchCollection matchsForNewLine = new Regex(@"\r\n").Matches(content);
-            int newLineCountInMessageContent = matchsForNewLine.Count;
+            //// 获取有几个换行符
+            //string content = postMessageTextBox.Text;
+            //MatchCollection matchsForNewLine = new Regex(@"\r\n").Matches(content);
+            //int newLineCountInMessageContent = matchsForNewLine.Count;
 
-            int index = postMessageTextBox.SelectionStart;
-            if (index > 0)
-            {
-                index += newLineCountInMessageContent;
-            }
+            //int index = postMessageTextBox.SelectionStart;
+            //if (index > 0)
+            //{
+            //    index += newLineCountInMessageContent;
+            //}
             
-            postMessageTextBox.Text = postMessageTextBox.Text.Insert(index, message);
+            //postMessageTextBox.Text = postMessageTextBox.Text.Insert(index, message);
 
         }
 

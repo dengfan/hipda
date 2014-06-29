@@ -146,7 +146,7 @@
 
         <Grid x:Name="popupWebViewGrid" Visibility="Collapsed">
             <Rectangle Canvas.ZIndex="0" Fill="LightGray" Opacity="0.7" />
-            <Border BorderThickness="0" Background="White" Margin="25,0,25,0" Padding="10">
+            <Border BorderThickness="0" Background="White" Margin="25,0,25,0" Padding="10,0,10,0">
                 <WebView x:Name="webView" />
             </Border>
         </Grid>
@@ -165,7 +165,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <TextBox x:Name="postMessageTextBox" Grid.Row="0" Margin="15" Height="300"
+                    <RichEditBox x:Name="postMessageTextBox" Grid.Row="0" Margin="15" Height="300"
                         BorderThickness="0" Background="White" TextWrapping="Wrap" AcceptsReturn="True" Header="编辑回复内容" />
 
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="WhiteSmoke">
