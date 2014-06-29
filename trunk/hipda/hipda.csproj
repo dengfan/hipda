@@ -82,6 +82,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Page Include="FaceIconGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -109,6 +113,9 @@
     </Compile>
     <Compile Include="DataModel\IncrementalLoadingBase.cs" />
     <Compile Include="DBCSEncoding.cs" />
+    <Compile Include="FaceIconGrid.xaml.cs">
+      <DependentUpon>FaceIconGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
@@ -127,6 +134,67 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Faces\coolmonkey\01.gif" />
+    <Content Include="Assets\Faces\coolmonkey\02.gif" />
+    <Content Include="Assets\Faces\coolmonkey\03.gif" />
+    <Content Include="Assets\Faces\coolmonkey\04.gif" />
+    <Content Include="Assets\Faces\coolmonkey\05.gif" />
+    <Content Include="Assets\Faces\coolmonkey\06.gif" />
+    <Content Include="Assets\Faces\coolmonkey\07.gif" />
+    <Content Include="Assets\Faces\coolmonkey\08.gif" />
+    <Content Include="Assets\Faces\coolmonkey\09.gif" />
+    <Content Include="Assets\Faces\coolmonkey\10.gif" />
+    <Content Include="Assets\Faces\coolmonkey\11.gif" />
+    <Content Include="Assets\Faces\coolmonkey\12.gif" />
+    <Content Include="Assets\Faces\coolmonkey\13.gif" />
+    <Content Include="Assets\Faces\coolmonkey\14.gif" />
+    <Content Include="Assets\Faces\coolmonkey\15.gif" />
+    <Content Include="Assets\Faces\coolmonkey\16.gif" />
+    <Content Include="Assets\Faces\default\biggrin.gif" />
+    <Content Include="Assets\Faces\default\cool.gif" />
+    <Content Include="Assets\Faces\default\cry.gif" />
+    <Content Include="Assets\Faces\default\curse.gif" />
+    <Content Include="Assets\Faces\default\dizzy.gif" />
+    <Content Include="Assets\Faces\default\funk.gif" />
+    <Content Include="Assets\Faces\default\handshake.gif" />
+    <Content Include="Assets\Faces\default\huffy.gif" />
+    <Content Include="Assets\Faces\default\lol.gif" />
+    <Content Include="Assets\Faces\default\loveliness.gif" />
+    <Content Include="Assets\Faces\default\mad.gif" />
+    <Content Include="Assets\Faces\default\sad.gif" />
+    <Content Include="Assets\Faces\default\shocked.gif" />
+    <Content Include="Assets\Faces\default\shutup.gif" />
+    <Content Include="Assets\Faces\default\shy.gif" />
+    <Content Include="Assets\Faces\default\sleepy.gif" />
+    <Content Include="Assets\Faces\default\smile.gif" />
+    <Content Include="Assets\Faces\default\sweat.gif" />
+    <Content Include="Assets\Faces\default\titter.gif" />
+    <Content Include="Assets\Faces\default\tongue.gif" />
+    <Content Include="Assets\Faces\default\victory.gif" />
+    <Content Include="Assets\Faces\grapeman\01.gif" />
+    <Content Include="Assets\Faces\grapeman\02.gif" />
+    <Content Include="Assets\Faces\grapeman\03.gif" />
+    <Content Include="Assets\Faces\grapeman\04.gif" />
+    <Content Include="Assets\Faces\grapeman\05.gif" />
+    <Content Include="Assets\Faces\grapeman\06.gif" />
+    <Content Include="Assets\Faces\grapeman\07.gif" />
+    <Content Include="Assets\Faces\grapeman\08.gif" />
+    <Content Include="Assets\Faces\grapeman\09.gif" />
+    <Content Include="Assets\Faces\grapeman\10.gif" />
+    <Content Include="Assets\Faces\grapeman\11.gif" />
+    <Content Include="Assets\Faces\grapeman\12.gif" />
+    <Content Include="Assets\Faces\grapeman\13.gif" />
+    <Content Include="Assets\Faces\grapeman\14.gif" />
+    <Content Include="Assets\Faces\grapeman\15.gif" />
+    <Content Include="Assets\Faces\grapeman\16.gif" />
+    <Content Include="Assets\Faces\grapeman\17.gif" />
+    <Content Include="Assets\Faces\grapeman\18.gif" />
+    <Content Include="Assets\Faces\grapeman\19.gif" />
+    <Content Include="Assets\Faces\grapeman\20.gif" />
+    <Content Include="Assets\Faces\grapeman\21.gif" />
+    <Content Include="Assets\Faces\grapeman\22.gif" />
+    <Content Include="Assets\Faces\grapeman\23.gif" />
+    <Content Include="Assets\Faces\grapeman\24.gif" />
     <Content Include="Assets\Icons\appbar.refresh.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />

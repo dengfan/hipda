@@ -13,13 +13,14 @@ namespace hipda.Data
 {
     public class Reply
     {
-        public Reply(int floor, int pageNo, string threadId, string ownerId, string ownerName, string htmlContent, string xamlConent, int imageCount, string createTime)
+        public Reply(int floor, int pageNo, string threadId, string ownerId, string ownerName, string textContent, string htmlContent, string xamlConent, int imageCount, string createTime)
         {
             this.Floor = floor;
             this.PageNo = pageNo;
             this.ThreadId = threadId;
             this.OwnerId = ownerId;
             this.OwnerName = ownerName;
+            this.TextContent = textContent;
             this.HtmlContent = htmlContent;
             this.XamlContent = xamlConent;
             this.ImageCount = imageCount;
@@ -32,6 +33,8 @@ namespace hipda.Data
         public string OwnerName { get; private set; }
 
         public string OwnerId { get; private set; }
+
+        public string TextContent { get; private set; }
 
         public string HtmlContent { get; private set; }
 
@@ -672,13 +675,25 @@ namespace hipda.Data
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
+                string textContent = string.Empty;
                 string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
                 var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
+                    // 用于回复引用
+                    textContent = contentNode.InnerText.Trim();
+                    textContent = new Regex("\r\n").Replace(textContent, string.Empty);
+                    textContent = new Regex("\r").Replace(textContent, string.Empty);
+                    textContent = new Regex("\n").Replace(textContent, string.Empty);
+                    textContent = textContent.Replace("&nbsp;", string.Empty);
+                    textContent = textContent.Length > 100 ? textContent.Substring(0, 97) + "..." : textContent;
+                    
+                    // 用于显示原始内容
                     htmlContent = xamlContent = contentNode.InnerHtml;
+
+                    // 用于正常显示
                     xamlContent = HtmlToXaml(xamlContent, out imageCount);
                 }
                 else
@@ -694,7 +709,7 @@ namespace hipda.Data
                 xamlContent = xamlContent.Replace("[", "<");
                 xamlContent = xamlContent.Replace("]", ">");
 
-                Reply reply = new Reply(floor, pageNo, threadId, authorId, ownerName, htmlContent, xamlContent, imageCount, postTime);
+                Reply reply = new Reply(floor, pageNo, threadId, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
                 thread.Replies.Add(reply);
             }
         }
@@ -841,32 +856,35 @@ namespace hipda.Data
             {
                 for (int i = 0; i < matchsForImage3.Count; i++)
                 {
-                    imageCount++;
-
                     var m = matchsForImage3[i];
                     string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     //string imgXaml = @"[InlineUIContainer][Image Stretch=""None"" MaxWidth=""400""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                     string imgXaml = string.Empty;
 
-                    if (imageCount <= maxImageCount)
+                    if (imgUrl.EndsWith("/back.gif") || imgUrl.StartsWith("images/smilies/") || imgUrl.Contains("images/attachicons")) // 论坛自带
                     {
-                        if (imgUrl.EndsWith("/back.gif") || imgUrl.StartsWith("images/smilies/") || imgUrl.Contains("images/attachicons")) // 论坛自带
-                        {
-                            imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
-                        }
-                        else
-                        {
-                            imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
-                        }
+                        imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
 
                         if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
                         imgXaml = string.Format(imgXaml, imgUrl);
                     }
                     else
                     {
-                        imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略。 -[/Span]";
-                        imgXaml = string.Format(imgXaml, imageCount);
+                        imageCount++;
+
+                        if (imageCount <= maxImageCount)
+                        {
+                            imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
+
+                            if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
+                            imgXaml = string.Format(imgXaml, imgUrl);
+                        }
+                        else
+                        {
+                            imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略。 -[/Span]";
+                            imgXaml = string.Format(imgXaml, imageCount);
+                        }
                     }
 
                     content = content.Replace(placeHolderLabel, imgXaml);
