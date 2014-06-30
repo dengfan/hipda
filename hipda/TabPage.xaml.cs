@@ -789,7 +789,7 @@ namespace hipda
             }
 
             // 清除针对回复的数据
-            //postMessageTextBox.Text = string.Empty;
+            postMessageTextBox.Text = string.Empty;
             noticeauthor = noticetrimstr = noticeauthormsg = string.Empty;
         }
 
@@ -801,8 +801,7 @@ namespace hipda
             PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
             string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
 
-            //string message = postMessageTextBox.Text;
-            string message = string.Empty;
+            string message = postMessageTextBox.Text;
 
             var postData = new Dictionary<string, object>();
             postData.Add("noticeauthor", noticeauthor);
@@ -826,7 +825,7 @@ namespace hipda
                 ICollectionView view = (ICollectionView)listView.ItemsSource;
                 await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
 
-                //postMessageTextBox.Text = string.Empty;
+                postMessageTextBox.Text = string.Empty;
                 noticeauthor = string.Empty;
                 noticetrimstr = string.Empty;
                 noticeauthormsg = string.Empty;
@@ -866,6 +865,10 @@ namespace hipda
             replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             postButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
+
+            //int cursorPosition = postMessageTextBox.Text.Length;
+            //postMessageTextBox.SelectionStart = cursorPosition;
+            //postMessageTextBox.Focus(FocusState.Programmatic);
         }
 
         private void replyReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -876,7 +879,7 @@ namespace hipda
             noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n\n", data.Floor, data.OwnerName);
             noticeauthormsg = data.TextContent;
 
-            //postMessageTextBox.Text = noticetrimstr;
+            postMessageTextBox.Text = noticetrimstr;
 
             ShowPostBoxAndButton();
         }
@@ -889,7 +892,7 @@ namespace hipda
             noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, data.TextContent);
             noticeauthormsg = data.TextContent;
 
-            //postMessageTextBox.Text = noticetrimstr;
+            postMessageTextBox.Text = noticetrimstr;
 
             ShowPostBoxAndButton();
         }
@@ -926,7 +929,7 @@ namespace hipda
                 }
             }
 
-            html = string.Format(@"<html><head><style>table{{width:100%;}}blockquote{{margin:20px;width:100%;}}img{{display:block;}}</style></head><body style=""padding:20px 0;white-space:normal;word-break:break-all;word-wrap:break-word;"">{0}</body></html>", html);
+            html = string.Format(@"<html><head><style>table{{width:100%;}}blockquote{{margin:20px;width:100%;}}img{{display:block;max-width:800px !important;}}</style></head><body style=""padding:20px 0;white-space:normal;word-break:break-all;word-wrap:break-word;"">{0}</body></html>", html);
             return html;
         }
 
@@ -959,19 +962,17 @@ namespace hipda
                 message = string.Format(@" {{:{0}:}} ", value);
             }
 
-            //// 获取有几个换行符
-            //string content = postMessageTextBox.Text;
-            //MatchCollection matchsForNewLine = new Regex(@"\r\n").Matches(content);
-            //int newLineCountInMessageContent = matchsForNewLine.Count;
+            int occurences = 0;
+            string source = postMessageTextBox.Text;
 
-            //int index = postMessageTextBox.SelectionStart;
-            //if (index > 0)
-            //{
-            //    index += newLineCountInMessageContent;
-            //}
-            
-            //postMessageTextBox.Text = postMessageTextBox.Text.Insert(index, message);
+            for (var i = 0; i < postMessageTextBox.SelectionStart + occurences; i++)
+            {
+                if (source[i] == '\r' && source[i + 1] == '\n')
+                    occurences++;
+            }
 
+            int cursorPosition = postMessageTextBox.SelectionStart + occurences;
+            postMessageTextBox.Text = postMessageTextBox.Text.Insert(cursorPosition, message);
         }
 
         private void replyMenu_Opening(object sender, object e)
@@ -985,6 +986,14 @@ namespace hipda
         private void replyMenu_Closed(object sender, object e)
         {
             isShowReplyFloorContextMenu = false;
+        }
+
+        private void replyListItemGrid_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+
+            flyoutBase.ShowAt(senderElement);
         }
 
         //private async void addImageForPostButton_Click(object sender, RoutedEventArgs e)

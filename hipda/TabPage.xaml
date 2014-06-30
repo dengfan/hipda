@@ -165,7 +165,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <RichEditBox x:Name="postMessageTextBox" Grid.Row="0" Margin="15" Height="300"
+                    <TextBox x:Name="postMessageTextBox" Grid.Row="0" Margin="15" Height="300"
                         BorderThickness="0" Background="White" TextWrapping="Wrap" AcceptsReturn="True" Header="编辑回复内容" />
 
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="WhiteSmoke">
