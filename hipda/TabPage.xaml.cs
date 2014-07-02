@@ -7,8 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
-using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
@@ -51,8 +49,6 @@ namespace hipda
         // 用于避免在显示显示回复页楼层菜单时，不会因为页面缩小触发收缩底部菜单的事件
         private bool isShowReplyFloorContextMenu = false;
         #endregion
-
-        private int newLineCountInMessagePostBoxByUser = 0;
 
         public TabPage()
         {
@@ -266,11 +262,6 @@ namespace hipda
         {
             args.Handled = true;
 
-            if (isShowReplyFloorContextMenu == false)
-            {
-                tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
-            }
-
             if (args.Phase != 0)
             {
                 throw new Exception("Not in phase 0.");
@@ -424,6 +415,7 @@ namespace hipda
             if (tabType.Equals("1")) // 主贴列表页
             {
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+
                 refreshButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -431,6 +423,7 @@ namespace hipda
             else // 回复列表页
             {
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+
                 refreshButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -832,15 +825,15 @@ namespace hipda
             }
             else
             {
-                await new MessageDialog("您的发布请求已不成功！", "注意").ShowAsync();
+                await new MessageDialog("您的发布请求已不成功！\n如持续不成功，请尝试刷新或重开当前页面。", "注意").ShowAsync();
             }
         }
 
         private void HidePostBoxAndButton()
         {
-            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
-
             popupGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
 
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
@@ -853,9 +846,9 @@ namespace hipda
 
         private void ShowPostBoxAndButton()
         {
-            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
-
             popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
 
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
@@ -980,6 +973,7 @@ namespace hipda
             // 此举是为了隐定回复框弹出层的大小
             // 以免底部菜单变大后，重新调整回复框弹出层的大小
             isShowReplyFloorContextMenu = true;
+
             tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
         }
 
