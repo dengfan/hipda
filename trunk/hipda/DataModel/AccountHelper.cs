@@ -136,6 +136,7 @@ namespace hipda.Data
             var accountData = (ApplicationDataCompositeValue)accountDataContainer.Values[accountKeyName];
             if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
             {
+                accountDataContainer.Values[defaultAccountKeyName] = accountKeyName;
                 string username = accountData["username"].ToString();
                 string password = accountData["password"].ToString();
 
