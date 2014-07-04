@@ -785,7 +785,7 @@ namespace hipda.Data
             content = content.Replace(@"src=""http://www.hi-pda.com/forum/images/default/attachimg.gif""", string.Empty);
 
             imageCount = 0;
-            int maxImageCount = 7;
+            int maxImageCount = 5;
 
             // 将HTML字符串转换为RichTextBlock XAML字符串
             // 替换上载图片
