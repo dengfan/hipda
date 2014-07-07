@@ -102,10 +102,12 @@
     <Compile Include="BackgroundStyleSelecterForForumItem.cs" />
     <Compile Include="BackgroundStyleSelecterForReplyItem.cs" />
     <Compile Include="BackgroundStyleSelecterForThreadItem.cs" />
+    <Compile Include="ImageHelper.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="ContinuationManager.cs" />
     <Compile Include="DataModel\AccountHelper.cs" />
     <Compile Include="DataModel\DataSource.cs" />
     <Compile Include="DataModel\GeneratorIncrementalLoadingClass.cs">

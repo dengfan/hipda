@@ -21,10 +21,13 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.ApplicationModel.Activation;
 
 namespace hipda
 {
-    public sealed partial class TabPage : Page
+    public sealed partial class TabPage : Page, IFileOpenPickerContinuable
     {
         HttpHandle httpClient = HttpHandle.getInstance();
 
@@ -43,11 +46,7 @@ namespace hipda
         private string noticeauthor = string.Empty;
         private string noticetrimstr = string.Empty;
         private string noticeauthormsg = string.Empty;
-        #endregion
-
-        #region 是否正在显示楼层菜单
-        // 用于避免在显示显示回复页楼层菜单时，不会因为页面缩小触发收缩底部菜单的事件
-        private bool isShowReplyFloorContextMenu = false;
+        private List<string> imageNameList = new List<string>();
         #endregion
 
         public TabPage()
@@ -805,6 +804,11 @@ namespace hipda
             postData.Add("subject", string.Empty);
             postData.Add("usesig", "1");
 
+            foreach (var imageName in imageNameList)
+            {
+                postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+            }
+
             // 客户端尾巴
             postData.Add("message", message + "\n\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]");
 
@@ -813,15 +817,20 @@ namespace hipda
             {
                 HidePostBoxAndButton();
 
-                // 刷新数据
-                ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                ICollectionView view = (ICollectionView)listView.ItemsSource;
-                await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
-
                 postMessageTextBox.Text = string.Empty;
                 noticeauthor = string.Empty;
                 noticetrimstr = string.Empty;
                 noticeauthormsg = string.Empty;
+
+                // 刷新数据
+                ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
+                ICollectionView view = (ICollectionView)listView.ItemsSource;
+
+                // count = 1 表示是要刷新
+                await view.LoadMoreItemsAsync(1);
+
+                // 加载下一页数据，同时获取用于继续回复的 hash 值
+                await DataSource.GetNextPageDataAndHashValueForReply(threadId);
             }
             else
             {
@@ -970,16 +979,7 @@ namespace hipda
 
         private void replyMenu_Opening(object sender, object e)
         {
-            // 此举是为了隐定回复框弹出层的大小
-            // 以免底部菜单变大后，重新调整回复框弹出层的大小
-            isShowReplyFloorContextMenu = true;
-
             tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
-        }
-
-        private void replyMenu_Closed(object sender, object e)
-        {
-            isShowReplyFloorContextMenu = false;
         }
 
         private void replyListItemGrid_Holding(object sender, HoldingRoutedEventArgs e)
@@ -990,24 +990,65 @@ namespace hipda
             flyoutBase.ShowAt(senderElement);
         }
 
-        //private async void addImageForPostButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    FileOpenPicker openPicker = new FileOpenPicker();
-        //    openPicker.ViewMode = PickerViewMode.Thumbnail;
-        //    openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-        //    openPicker.FileTypeFilter.Add(".jpg");
-        //    openPicker.FileTypeFilter.Add(".jpeg");
-        //    openPicker.FileTypeFilter.Add(".png");
+        private void addPhotoButton_Click(object sender, RoutedEventArgs e)
+        {
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.ViewMode = PickerViewMode.Thumbnail;
+            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            openPicker.FileTypeFilter.Add(".jpg");
+            openPicker.FileTypeFilter.Add(".jpeg");
+            openPicker.FileTypeFilter.Add(".png");
 
-        //    StorageFile file = await openPicker.PickSingleFileAsync();
-        //    if (file != null)
-        //    {
+            // Launch file open picker and caller app is suspended and may be terminated if required
+            openPicker.PickSingleFileAndContinue();
+        }
 
-        //    }
-        //    else
-        //    {
+        /// <summary>
+        /// Handle the returned files from file picker
+        /// This method is triggered by ContinuationManager based on ActivationKind
+        /// </summary>
+        /// <param name="args">File open picker continuation activation argment. It cantains the list of files user selected with file open picker </param>
+        public async void ContinueFileOpenPicker(FileOpenPickerContinuationEventArgs args)
+        {
+            if (args.Files.Count > 0)
+            {
+                StorageFile file = args.Files[0];
+                if (file != null)
+                {
+                    imageNameList.Add(file.Name);
+                    byte[] image = await ImageHelper.LoadAsync(file);
 
-        //    }
-        //}
+                    var data = new Dictionary<string, object>();
+                    data.Add("uid", "589694");
+                    data.Add("hash", "61c403928590507bbc41d7659ab50c8b");
+
+                    string result = await httpClient.HttpPostFile("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1&type=image", data, file.Name, "image/jpg", "Filedata", image);
+                    if (result.Contains("DISCUZUPLOAD|"))
+                    {
+                        string value = result.Split('|')[2];
+                        value = string.Format("[attachimg]{0}[/attachimg]", value);
+
+                        int occurences = 0;
+                        string source = postMessageTextBox.Text;
+
+                        for (var i = 0; i < postMessageTextBox.SelectionStart + occurences; i++)
+                        {
+                            if (source[i] == '\r' && source[i + 1] == '\n')
+                                occurences++;
+                        }
+
+                        int cursorPosition = postMessageTextBox.SelectionStart + occurences;
+                        postMessageTextBox.Text = postMessageTextBox.Text.Insert(cursorPosition, value);
+                    }
+                }
+            }
+        }
+
+        private static int GeneratePostTime()
+        {
+            var startTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            var diff = DateTime.Now - startTime;
+            return (int)Math.Floor(diff.TotalSeconds);
+        }
     }
 }
