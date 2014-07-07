@@ -104,7 +104,7 @@
                             </ControlTemplate>
                         </Button.Template>
                         <Button.Flyout>
-                            <MenuFlyout x:Name="replyMenu" Opening="replyMenu_Opening" Closed="replyMenu_Closed">
+                            <MenuFlyout x:Name="replyMenu" Opening="replyMenu_Opening">
                                 <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
                                 <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
                                 <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" Click="viewFullContentMenuFlyoutItem_Click" />
@@ -179,6 +179,7 @@
                                 <RowDefinition Height="65"/>
                                 <RowDefinition Height="65"/>
                                 <RowDefinition Height="65"/>
+                                <RowDefinition Height="65"/>
                                 <!--<RowDefinition Height="65"/>
                                 <RowDefinition Height="65"/>
                                 <RowDefinition Height="65"/>
@@ -194,7 +195,15 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Content="3_57" Click="addFaceButton_Click">
+                            <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Click="addPhotoButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Path Width="40" Height="40" Stretch="Fill" Fill="Silver" Data="F1 M 22,12L 26,12L 26,22L 36,22L 36,26L 26,26L 26,36L 22,36L 22,26L 12,26L 12,22L 22,22L 22,12 Z "/>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <Button Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Content="3_57" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -206,7 +215,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Content="3_58" Click="addFaceButton_Click">
+                            <Button Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Content="3_58" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -218,7 +227,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Content="3_59" Click="addFaceButton_Click">
+                            <Button Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" Content="3_59" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -230,7 +239,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" Content="3_60" Click="addFaceButton_Click">
+                            <Button Grid.Row="0" Grid.Column="4" HorizontalAlignment="Center" Content="3_60" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -242,7 +251,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="0" Grid.Column="4" HorizontalAlignment="Center" Content="3_61" Click="addFaceButton_Click">
+                            <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Content="3_61" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -254,7 +263,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Content="3_62" Click="addFaceButton_Click">
+                            <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Content="3_62" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -266,7 +275,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Content="3_63" Click="addFaceButton_Click">
+                            <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Content="3_63" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -278,7 +287,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Content="3_64" Click="addFaceButton_Click">
+                            <Button Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" Content="3_64" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -290,7 +299,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" Content="3_65" Click="addFaceButton_Click">
+                            <Button Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" Content="3_65" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -302,7 +311,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" Content="3_66" Click="addFaceButton_Click">
+                            <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Content="3_66" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -314,7 +323,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Content="3_67" Click="addFaceButton_Click">
+                            <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Content="3_67" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -326,7 +335,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Content="3_68" Click="addFaceButton_Click">
+                            <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Content="3_68" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -338,7 +347,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Content="3_69" Click="addFaceButton_Click">
+                            <Button Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" Content="3_69" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -350,7 +359,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" Content="3_70" Click="addFaceButton_Click">
+                            <Button Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" Content="3_70" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -362,7 +371,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" Content="3_71" Click="addFaceButton_Click">
+                            <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Content="3_71" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -374,7 +383,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Content="3_72" Click="addFaceButton_Click">
+                            <Button Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Content="3_72" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -386,7 +395,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Content="3_73" Click="addFaceButton_Click">
+                            <Button Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Content="3_73" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -398,7 +407,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Content="3_74" Click="addFaceButton_Click">
+                            <Button Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" Content="3_74" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -410,7 +419,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" Content="3_75" Click="addFaceButton_Click">
+                            <Button Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center" Content="3_75" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -422,7 +431,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center" Content="3_76" Click="addFaceButton_Click">
+                            <Button Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Content="3_76" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -434,7 +443,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Content="3_77" Click="addFaceButton_Click">
+                            <Button Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Content="3_77" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -446,7 +455,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Content="3_78" Click="addFaceButton_Click">
+                            <Button Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Content="3_78" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -458,7 +467,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Content="3_79" Click="addFaceButton_Click">
+                            <Button Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" Content="3_79" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -470,7 +479,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" Content="3_80" Click="addFaceButton_Click">
+                            <Button Grid.Row="4" Grid.Column="4" HorizontalAlignment="Center" Content="3_80" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -482,7 +491,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="4" Grid.Column="4" HorizontalAlignment="Center" Content="2_41" Click="addFaceButton_Click">
+                            <Button Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Content="2_41" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -494,7 +503,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Content="2_42" Click="addFaceButton_Click">
+                            <Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Content="2_42" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -506,7 +515,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Content="2_43" Click="addFaceButton_Click">
+                            <Button Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Content="2_43" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -518,7 +527,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Content="2_44" Click="addFaceButton_Click">
+                            <Button Grid.Row="5" Grid.Column="3" HorizontalAlignment="Center" Content="2_44" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -530,7 +539,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="5" Grid.Column="3" HorizontalAlignment="Center" Content="2_45" Click="addFaceButton_Click">
+                            <Button Grid.Row="5" Grid.Column="4" HorizontalAlignment="Center" Content="2_45" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -542,7 +551,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="5" Grid.Column="4" HorizontalAlignment="Center" Content="2_46" Click="addFaceButton_Click">
+                            <Button Grid.Row="6" Grid.Column="0" HorizontalAlignment="Center" Content="2_46" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -554,7 +563,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="6" Grid.Column="0" HorizontalAlignment="Center" Content="2_47" Click="addFaceButton_Click">
+                            <Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Content="2_47" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -566,7 +575,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Content="2_48" Click="addFaceButton_Click">
+                            <Button Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" Content="2_48" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -578,7 +587,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" Content="2_49" Click="addFaceButton_Click">
+                            <Button Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center" Content="2_49" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -590,7 +599,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center" Content="2_50" Click="addFaceButton_Click">
+                            <Button Grid.Row="6" Grid.Column="4" HorizontalAlignment="Center" Content="2_50" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -602,7 +611,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="6" Grid.Column="4" HorizontalAlignment="Center" Content="2_51" Click="addFaceButton_Click">
+                            <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center" Content="2_51" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -614,7 +623,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center" Content="2_52" Click="addFaceButton_Click">
+                            <Button Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Content="2_52" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -626,7 +635,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Content="2_53" Click="addFaceButton_Click">
+                            <Button Grid.Row="7" Grid.Column="2" HorizontalAlignment="Center" Content="2_53" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -638,7 +647,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="7" Grid.Column="2" HorizontalAlignment="Center" Content="2_54" Click="addFaceButton_Click">
+                            <Button Grid.Row="7" Grid.Column="3" HorizontalAlignment="Center" Content="2_54" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -650,7 +659,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="7" Grid.Column="3" HorizontalAlignment="Center" Content="2_55" Click="addFaceButton_Click">
+                            <Button Grid.Row="7" Grid.Column="4" HorizontalAlignment="Center" Content="2_55" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">
@@ -662,7 +671,7 @@
                                 </Button.Template>
                             </Button>
 
-                            <Button Grid.Row="7" Grid.Column="4" HorizontalAlignment="Center" Content="2_56" Click="addFaceButton_Click">
+                            <Button Grid.Row="8" Grid.Column="0" HorizontalAlignment="Center" Content="2_56" Click="addFaceButton_Click">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Stretch="None">

@@ -501,6 +501,23 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
+        /// <summary>
+        /// 用于回复成功之后，预加载下一页数据，同时获取用于继续回复的 hash 值
+        /// </summary>
+        /// <param name="threadId">贴子ID</param>
+        /// <param name="pageNo">页码</param>
+        public static async Task GetNextPageDataAndHashValueForReply(string threadId)
+        {
+            var replyData = _dataSource.ReplyList.SingleOrDefault(t => t.ThreadId.Equals(threadId));
+            if (replyData != null)
+            {
+                int maxPageNo = replyData.Replies.Max(r => r.PageNo);
+
+                // 加载下一页数据，同时获取用于继续回复的 hash 值
+                await _dataSource.LoadRepliesDataAsync(threadId, maxPageNo + 1);
+            }
+        }
+
         public static ReplyItem GetReply(string threadId, string threadName)
         {
             var count = _dataSource.ReplyList.Count(t => t.ThreadId.Equals(threadId));

@@ -171,7 +171,7 @@ namespace hipda
             }).AsAsyncOperation();
         }
 
-        public IAsyncOperation<string> HttpPostFile(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer,int len=0)
+        public IAsyncOperation<string> HttpPostFile(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer)
         {
             return Task.Run<string>(async () =>
             {
@@ -198,13 +198,15 @@ namespace hipda
                     string header = string.Format(headerTemplate, fieldname, filename, filetype);
                     byte[] headerbytes = Encoding.UTF8.GetBytes(header);
                     newStream.Write(headerbytes, 0, headerbytes.Length);
-                    //newStream.wr
-                    if(len>0)newStream.Write(buffer, 0, len);
-                    else newStream.Write(buffer, 0, buffer.Length);
+
+                    // File binary array
+                    newStream.Write(buffer, 0, buffer.Length);
+
+                    // footer
                     byte[] trailer = ascii.GetBytes("\r\n--" + boundary + "--\r\n");
                     newStream.Write(trailer, 0, trailer.Length);
                 }
-                
+
                 Task<WebResponse> taskresponse = request.GetResponseAsync();
                 HttpWebResponse response = (HttpWebResponse)await taskresponse;
                 byte[] data = new byte[1024000];
