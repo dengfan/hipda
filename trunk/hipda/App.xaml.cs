@@ -12,8 +12,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-// “透视应用程序”模板在 http://go.microsoft.com/fwlink/?LinkID=391641 上有介绍
-
 namespace hipda
 {
     /// <summary>

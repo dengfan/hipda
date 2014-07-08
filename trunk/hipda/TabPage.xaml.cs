@@ -828,13 +828,10 @@ namespace hipda
 
                 // count = 1 表示是要刷新
                 await view.LoadMoreItemsAsync(1);
-
-                // 加载下一页数据，同时获取用于继续回复的 hash 值
-                await DataSource.GetNextPageDataAndHashValueForReply(threadId);
             }
             else
             {
-                await new MessageDialog("您的发布请求已不成功！\n如持续不成功，请尝试刷新或重开当前页面。", "注意").ShowAsync();
+                await new MessageDialog("您的发布请求已不成功！\n可能是你连续回复过快，请稍候再发。", "注意").ShowAsync();
             }
         }
 

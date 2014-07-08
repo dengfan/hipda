@@ -11,6 +11,7 @@ using Windows.Data.Html;
 
 namespace hipda.Data
 {
+    #region 实体类
     public class Reply
     {
         public Reply(int floor, int pageNo, string threadId, string ownerId, string ownerName, string textContent, string htmlContent, string xamlConent, int imageCount, string createTime)
@@ -210,6 +211,7 @@ namespace hipda.Data
         public string Name { get; private set; }
         public ObservableCollection<Forum> Forums { get; private set; }
     }
+    #endregion
 
     public sealed class DataSource
     {
@@ -501,23 +503,6 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
-        /// <summary>
-        /// 用于回复成功之后，预加载下一页数据，同时获取用于继续回复的 hash 值
-        /// </summary>
-        /// <param name="threadId">贴子ID</param>
-        /// <param name="pageNo">页码</param>
-        public static async Task GetNextPageDataAndHashValueForReply(string threadId)
-        {
-            var replyData = _dataSource.ReplyList.SingleOrDefault(t => t.ThreadId.Equals(threadId));
-            if (replyData != null)
-            {
-                int maxPageNo = replyData.Replies.Max(r => r.PageNo);
-
-                // 加载下一页数据，同时获取用于继续回复的 hash 值
-                await _dataSource.LoadRepliesDataAsync(threadId, maxPageNo + 1);
-            }
-        }
-
         public static ReplyItem GetReply(string threadId, string threadName)
         {
             var count = _dataSource.ReplyList.Count(t => t.ThreadId.Equals(threadId));
@@ -920,7 +905,7 @@ namespace hipda.Data
 
         private async Task LoadFormHash()
         {
-            string url = "http://www.hi-pda.com/forum/post.php?action=newthread&fid=2";
+            string url = "http://www.hi-pda.com/forum/post.php?action=newthread&fid=2&r=" + DateTime.Now.Second;
             string htmlContent = await httpClient.HttpGet(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
