@@ -101,6 +101,9 @@ namespace hipda.Data
                     _accountHelper._list.Add(new Account(key, username, password, true));
                 }
 
+                // 登录成功就获取一次 formhash/uid/hash，用于发布文本信息和上载图片
+                await DataSource.GetHashAndUserId();
+
                 return true;
             }
 
@@ -141,9 +144,6 @@ namespace hipda.Data
                 string password = accountData["password"].ToString();
 
                 await LoginAndAdd(username, password, false);
-
-                // 先刷新 formhash
-                await DataSource.GetFormHash();
             }
 
             foreach (var item in _accountHelper._list)
