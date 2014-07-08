@@ -222,10 +222,31 @@ namespace hipda.Data
 
         private static HttpHandle httpClient = HttpHandle.getInstance();
 
+        /// <summary>
+        /// 用于发布信息的 formhash 值
+        /// </summary>
         private string _formHash = string.Empty;
         public static string FormHash
         {
             get { return _dataSource._formHash; }
+        }
+
+        /// <summary>
+        /// 用户ID，用于上传图片
+        /// </summary>
+        private string _userId = string.Empty;
+        public static string UserId
+        {
+            get { return _dataSource._userId; }
+        }
+
+        /// <summary>
+        /// 用于上载图片所需的 hash 值
+        /// </summary>
+        private string _hash = string.Empty;
+        public static string Hash
+        {
+            get { return _dataSource._hash; }
         }
 
         private ObservableCollection<ForumGroup> _forumGroups = new ObservableCollection<ForumGroup>();
@@ -625,17 +646,17 @@ namespace hipda.Data
             }
 
             // 读取 formhash 用于发布内容
-            string formHash = string.Empty;
-            var postNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("f_post"));
-            if (postNode != null)
-            {
-                var formHashInputNode = postNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
-                if (formHashInputNode != null)
-                {
-                    formHash = formHashInputNode.Attributes[2].Value.ToString();
-                    this._formHash = formHash;
-                }
-            }
+            //string formHash = string.Empty;
+            //var postNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("f_post"));
+            //if (postNode != null)
+            //{
+            //    var formHashInputNode = postNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
+            //    if (formHashInputNode != null)
+            //    {
+            //        formHash = formHashInputNode.Attributes[2].Value.ToString();
+            //        this._formHash = formHash;
+            //    }
+            //}
 
             foreach (var item in data)
             {
@@ -897,13 +918,13 @@ namespace hipda.Data
         }
         #endregion
 
-        #region 获取 formhash 用于提交数据
-        public static async Task GetFormHash()
+        #region 获取 formhash 用于提交数据，用于切换账号时调用
+        public static async Task GetHashAndUserId()
         {
-            await _dataSource.LoadFormHash();
+            await _dataSource.LoadHashAndUserId();
         }
 
-        private async Task LoadFormHash()
+        private async Task LoadHashAndUserId()
         {
             string url = "http://www.hi-pda.com/forum/post.php?action=newthread&fid=2&r=" + DateTime.Now.Second;
             string htmlContent = await httpClient.HttpGet(url);
@@ -914,7 +935,7 @@ namespace hipda.Data
             // 载入HTML
             doc.LoadHtml(htmlContent);
 
-            // 读取 formhash 用于发布内容
+            // 读取发布文字信息所需要的 hash 值
             var postNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("content editorcontent"));
             if (postNode != null)
             {
@@ -922,6 +943,23 @@ namespace hipda.Data
                 if (formHashInputNode != null)
                 {
                     this._formHash = formHashInputNode.Attributes[3].Value.ToString();
+                }
+            }
+
+            // 读取 上载图片所需的 uid 和 hash 值
+            var imgAttachNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("imgattachbtnhidden"));
+            if (imgAttachNode != null)
+            {
+                var userIdNode = imgAttachNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("uid"));
+                if (userIdNode != null)
+                {
+                    this._userId = userIdNode.Attributes[2].Value;
+                }
+
+                var hashNode = imgAttachNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("hash"));
+                if (hashNode != null)
+                {
+                    this._hash = hashNode.Attributes[2].Value;
                 }
             }
         }

@@ -110,7 +110,7 @@ namespace hipda
                 if (e.NavigationParameter == null)
                 {
                     CreateThreadListTab("14", "WIN版", false);
-                    CreateReplyListTab("1427253", "特别鸣谢 + 关于", false);
+                    CreateReplyListTab("1427253", "特别感谢 + 关于 + 反馈", false);
                 }
                 else
                 {
@@ -365,7 +365,7 @@ namespace hipda
             popupWebViewGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
-        private async void refreshButton_Click(object sender, RoutedEventArgs e)
+        private async void refreshThreadsButton_Click(object sender, RoutedEventArgs e)
         {
             PivotItem item = (PivotItem)Pivot.SelectedItem;
             ThreadItem data = (ThreadItem)item.DataContext;
@@ -415,7 +415,7 @@ namespace hipda
             {
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
 
-                refreshButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                refreshThreadsButton.Visibility = postNewButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
@@ -423,7 +423,7 @@ namespace hipda
             {
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
 
-                refreshButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                refreshThreadsButton.Visibility = postNewButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
@@ -711,7 +711,7 @@ namespace hipda
         #region 打开标签页菜单按钮
         private void openTabForApp_Click(object sender, RoutedEventArgs e)
         {
-            CreateReplyListTab("1427253", "特别鸣谢 + 关于", false);
+            CreateReplyListTab("1427253", "特别感谢 + 关于 + 反馈", false);
         }
 
         private async void openTabForDiscovery_Click(object sender, RoutedEventArgs e)
@@ -809,30 +809,36 @@ namespace hipda
                 postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
             }
 
+            if (string.IsNullOrEmpty(message))
+            {
+                await new MessageDialog("您的发布请求已不成功！\n发布的内容不能为空。", "注意").ShowAsync();
+                return;
+            }
+
             // 客户端尾巴
             postData.Add("message", message + "\n\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]");
-
+            
+            // 发布请求
             string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/post.php?action=reply&tid=" + threadId + "&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", postData);
-            if (resultContent.Contains("您的回复已经发布"))
+            if (!resultContent.Contains("您的回复已经发布"))
             {
-                HidePostBoxAndButton();
-
-                postMessageTextBox.Text = string.Empty;
-                noticeauthor = string.Empty;
-                noticetrimstr = string.Empty;
-                noticeauthormsg = string.Empty;
-
-                // 刷新数据
-                ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                ICollectionView view = (ICollectionView)listView.ItemsSource;
-
-                // count = 1 表示是要刷新
-                await view.LoadMoreItemsAsync(1);
+                await new MessageDialog("您的发布请求已不成功！\n可能是你连续回复过快，请稍候再试。", "注意").ShowAsync();
+                return;
             }
-            else
-            {
-                await new MessageDialog("您的发布请求已不成功！\n可能是你连续回复过快，请稍候再发。", "注意").ShowAsync();
-            }
+
+            HidePostBoxAndButton();
+
+            postMessageTextBox.Text = string.Empty;
+            noticeauthor = string.Empty;
+            noticetrimstr = string.Empty;
+            noticeauthormsg = string.Empty;
+
+            // 刷新数据
+            ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
+            ICollectionView view = (ICollectionView)listView.ItemsSource;
+
+            // count = 1 表示是要刷新
+            await view.LoadMoreItemsAsync(1);
         }
 
         private void HidePostBoxAndButton()
@@ -1016,8 +1022,8 @@ namespace hipda
                     byte[] image = await ImageHelper.LoadAsync(file);
 
                     var data = new Dictionary<string, object>();
-                    data.Add("uid", "589694");
-                    data.Add("hash", "61c403928590507bbc41d7659ab50c8b");
+                    data.Add("uid", DataSource.UserId);
+                    data.Add("hash", DataSource.Hash);
 
                     string result = await httpClient.HttpPostFile("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1&type=image", data, file.Name, "image/jpg", "Filedata", image);
                     if (result.Contains("DISCUZUPLOAD|"))
