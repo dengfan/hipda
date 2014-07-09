@@ -216,7 +216,14 @@ namespace hipda.Data
     public sealed class DataSource
     {
         public static int ThreadPageSize { get { return 75; } }
+
         public static int ReplyPageSize { get { return 50; } }
+
+        /// <summary>
+        /// 每个楼层默认显示的图片数据
+        /// 用于节省流量
+        /// </summary>
+        public static int MaxImageCount { get { return 5; } }
 
         private static DataSource _dataSource = new DataSource();
 
@@ -808,7 +815,6 @@ namespace hipda.Data
             content = content.Replace(@"src=""http://www.hi-pda.com/forum/images/default/attachimg.gif""", string.Empty);
 
             imageCount = 0;
-            int maxImageCount = 5;
 
             // 将HTML字符串转换为RichTextBlock XAML字符串
             // 替换上载图片
@@ -819,7 +825,7 @@ namespace hipda.Data
                 {
                     imageCount++;
 
-                    if (imageCount <= maxImageCount)
+                    if (imageCount <= MaxImageCount)
                     {
                         string placeHolderLabel = matchsForImage1[i].Groups[0].Value; // 要被替换的元素
                         string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
@@ -852,7 +858,7 @@ namespace hipda.Data
                     string imgUrl = m.Groups[2].Value; // 图片URL
                     string imgXaml = string.Empty;
 
-                    if (imageCount <= maxImageCount)
+                    if (imageCount <= MaxImageCount)
                     {
                         imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                         if (width > 300)
@@ -896,7 +902,7 @@ namespace hipda.Data
                     {
                         imageCount++;
 
-                        if (imageCount <= maxImageCount)
+                        if (imageCount <= MaxImageCount)
                         {
                             imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
 

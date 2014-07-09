@@ -94,8 +94,8 @@
                           ItemContainerStyle="{StaticResource accountListItemStyle}">
                     <ListView.Header>
                         <StackPanel x:Name="addAccountPanel">
-                            <TextBox Grid.Row="0" x:Name="usernameTextBox" TabIndex="1" Header="用户名" Background="White" BorderBrush="Black"/>
-                            <PasswordBox Grid.Row="1" x:Name="passwordTextBox" TabIndex="2" Header="密码" Background="White" BorderBrush="Black" />
+                            <TextBox Grid.Row="0" x:Name="usernameTextBox" TabIndex="1" Header="输入账号" Background="White" BorderBrush="Black"/>
+                            <PasswordBox Grid.Row="1" x:Name="passwordTextBox" TabIndex="2" Header="输入密码" Background="White" BorderBrush="Black"/>
                             <Button Grid.Row="2" x:Name="loginButton" TabIndex="3" Click="loginButton_Click" Content="添加账号并登录" HorizontalAlignment="Stretch" BorderThickness="0" Background="Green" Foreground="White" />
                         </StackPanel>
                     </ListView.Header>

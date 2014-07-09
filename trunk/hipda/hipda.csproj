@@ -197,6 +197,7 @@
     <Content Include="Assets\Faces\grapeman\22.gif" />
     <Content Include="Assets\Faces\grapeman\23.gif" />
     <Content Include="Assets\Faces\grapeman\24.gif" />
+    <Content Include="Assets\Faces\plus_48x48.png" />
     <Content Include="Assets\Icons\appbar.refresh.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
