@@ -49,6 +49,12 @@ namespace hipda
         private List<string> imageNameList = new List<string>();
         #endregion
 
+        /// <summary>
+        /// 记录当前发布信息的 TextBox
+        /// 用于在输入表情时输出表情字符到此 TextBox
+        /// </summary>
+        private TextBox currentPostTextBox = null;
+
         public TabPage()
         {
             this.InitializeComponent();
@@ -286,7 +292,7 @@ namespace hipda
 
             replyContent.Content = XamlReader.Load(reply.XamlContent);
 
-            if (reply.ImageCount > 10)
+            if (reply.ImageCount > DataSource.MaxImageCount)
             {
                 showMoreButton.DataContext = reply;
                 showMoreButton.Content = string.Format("查看本楼层完整原始内容 ({0}P)", reply.ImageCount);
@@ -362,7 +368,7 @@ namespace hipda
 
             string html = HtmlFormat(data.HtmlContent);
             webView.NavigateToString(html);
-            popupWebViewGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            floorOriginalContentPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private async void refreshThreadsButton_Click(object sender, RoutedEventArgs e)
@@ -415,16 +421,16 @@ namespace hipda
             {
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
 
-                refreshThreadsButton.Visibility = postNewButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                refreshThreadsButton.Visibility = openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                openPostReplyPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
             else // 回复列表页
             {
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
 
-                refreshThreadsButton.Visibility = postNewButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                refreshThreadsButton.Visibility = openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                openPostReplyPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
             #endregion
@@ -751,26 +757,38 @@ namespace hipda
         }
         #endregion
 
-        private void replyButton_Click(object sender, RoutedEventArgs e)
+        private void openPostReplyPanelButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowPostBoxAndButton();
+            ShowPostReplyPanelAndButton();
+        }
+
+        private void openPostNewPanelButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPostNewPanelAndButton();
         }
 
         private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
-            if (popupGrid.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            if (postNewPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
             {
                 NavigationHelper.IsCanGoBack = false;
                 e.Handled = true;
 
-                HidePostBoxAndButton();
+                HidePostNewPanelAndButton();
             }
-            else if (popupWebViewGrid.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            else if (postReplyPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
             {
                 NavigationHelper.IsCanGoBack = false;
                 e.Handled = true;
 
-                popupWebViewGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                HidePostReplyPanelAndButton();
+            }
+            else if (floorOriginalContentPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            {
+                NavigationHelper.IsCanGoBack = false;
+                e.Handled = true;
+
+                floorOriginalContentPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 
                 // 清空内容
                 webView.NavigateToString(string.Empty);
@@ -781,7 +799,7 @@ namespace hipda
             }
 
             // 清除针对回复的数据
-            postMessageTextBox.Text = string.Empty;
+            postReplyContentTextBox.Text = string.Empty;
             noticeauthor = noticetrimstr = noticeauthormsg = string.Empty;
         }
 
@@ -793,7 +811,7 @@ namespace hipda
             PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
             string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
 
-            string message = postMessageTextBox.Text;
+            string message = postReplyContentTextBox.Text;
 
             var postData = new Dictionary<string, object>();
             postData.Add("noticeauthor", noticeauthor);
@@ -826,9 +844,9 @@ namespace hipda
                 return;
             }
 
-            HidePostBoxAndButton();
+            HidePostReplyPanelAndButton();
 
-            postMessageTextBox.Text = string.Empty;
+            postReplyContentTextBox.Text = string.Empty;
             noticeauthor = string.Empty;
             noticetrimstr = string.Empty;
             noticeauthormsg = string.Empty;
@@ -841,9 +859,9 @@ namespace hipda
             await view.LoadMoreItemsAsync(1);
         }
 
-        private void HidePostBoxAndButton()
+        private void HidePostReplyPanelAndButton()
         {
-            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            postReplyPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
             tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
 
@@ -852,13 +870,14 @@ namespace hipda
                 btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
 
-            replyButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            openPostReplyPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
             postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
-        private void ShowPostBoxAndButton()
+        private void ShowPostReplyPanelAndButton()
         {
-            popupGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            postReplyPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            currentPostTextBox = postReplyContentTextBox;
 
             tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
 
@@ -867,13 +886,37 @@ namespace hipda
                 btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
 
-            replyButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            openPostReplyPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             postButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+        }
 
+        private void HidePostNewPanelAndButton()
+        {
+            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
-            //int cursorPosition = postMessageTextBox.Text.Length;
-            //postMessageTextBox.SelectionStart = cursorPosition;
-            //postMessageTextBox.Focus(FocusState.Programmatic);
+            foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
+            {
+                btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+
+            refreshThreadsButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            postButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private void ShowPostNewPanelAndButton()
+        {
+            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            currentPostTextBox = postNewContentTextBox;
+
+            foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
+            {
+                btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+
+            refreshThreadsButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            postButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private void replyReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -884,9 +927,9 @@ namespace hipda
             noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n\n", data.Floor, data.OwnerName);
             noticeauthormsg = data.TextContent;
 
-            postMessageTextBox.Text = noticetrimstr;
+            postReplyContentTextBox.Text = noticetrimstr;
 
-            ShowPostBoxAndButton();
+            ShowPostReplyPanelAndButton();
         }
 
         private void refReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -897,9 +940,9 @@ namespace hipda
             noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, data.TextContent);
             noticeauthormsg = data.TextContent;
 
-            postMessageTextBox.Text = noticetrimstr;
+            postReplyContentTextBox.Text = noticetrimstr;
 
-            ShowPostBoxAndButton();
+            ShowPostReplyPanelAndButton();
         }
 
         private void viewFullContentMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -908,7 +951,7 @@ namespace hipda
 
             string html = HtmlFormat(data.HtmlContent);
             webView.NavigateToString(html);
-            popupWebViewGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            floorOriginalContentPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private static string HtmlFormat(string htmlStr)
@@ -968,16 +1011,16 @@ namespace hipda
             }
 
             int occurences = 0;
-            string source = postMessageTextBox.Text;
+            string source = currentPostTextBox.Text;
 
-            for (var i = 0; i < postMessageTextBox.SelectionStart + occurences; i++)
+            for (var i = 0; i < currentPostTextBox.SelectionStart + occurences; i++)
             {
                 if (source[i] == '\r' && source[i + 1] == '\n')
                     occurences++;
             }
 
-            int cursorPosition = postMessageTextBox.SelectionStart + occurences;
-            postMessageTextBox.Text = postMessageTextBox.Text.Insert(cursorPosition, message);
+            int cursorPosition = currentPostTextBox.SelectionStart + occurences;
+            currentPostTextBox.Text = currentPostTextBox.Text.Insert(cursorPosition, message);
         }
 
         private void replyMenu_Opening(object sender, object e)
@@ -1032,16 +1075,16 @@ namespace hipda
                         value = string.Format("[attachimg]{0}[/attachimg]", value);
 
                         int occurences = 0;
-                        string source = postMessageTextBox.Text;
+                        string source = postReplyContentTextBox.Text;
 
-                        for (var i = 0; i < postMessageTextBox.SelectionStart + occurences; i++)
+                        for (var i = 0; i < postReplyContentTextBox.SelectionStart + occurences; i++)
                         {
                             if (source[i] == '\r' && source[i + 1] == '\n')
                                 occurences++;
                         }
 
-                        int cursorPosition = postMessageTextBox.SelectionStart + occurences;
-                        postMessageTextBox.Text = postMessageTextBox.Text.Insert(cursorPosition, value);
+                        int cursorPosition = postReplyContentTextBox.SelectionStart + occurences;
+                        postReplyContentTextBox.Text = postReplyContentTextBox.Text.Insert(cursorPosition, value);
                     }
                 }
             }
