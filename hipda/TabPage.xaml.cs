@@ -27,6 +27,12 @@ using Windows.ApplicationModel.Activation;
 
 namespace hipda
 {
+    public enum EnumPostType
+    {
+        Reply,
+        NewThread
+    }
+
     public sealed partial class TabPage : Page, IFileOpenPickerContinuable
     {
         HttpHandle httpClient = HttpHandle.getInstance();
@@ -42,18 +48,22 @@ namespace hipda
         public static readonly DependencyProperty PivotItemTabTypeProperty = DependencyProperty.Register("TabType", typeof(String), typeof(PivotItem), null);
         public static readonly DependencyProperty PivotItemTabIdProperty = DependencyProperty.Register("TabId", typeof(String), typeof(PivotItem), null);
 
-        #region 用于回复给某人的参数
+        /// <summary>
+        /// 用于回复给某人的参数
+        /// </summary>
         private string noticeauthor = string.Empty;
         private string noticetrimstr = string.Empty;
         private string noticeauthormsg = string.Empty;
-        private List<string> imageNameList = new List<string>();
-        #endregion
 
         /// <summary>
-        /// 记录当前发布信息的 TextBox
-        /// 用于在输入表情时输出表情字符到此 TextBox
+        /// 回复或发贴所上载的图片集合
         /// </summary>
-        private TextBox currentPostTextBox = null;
+        private List<string> imageNameList = new List<string>();
+
+        /// <summary>
+        /// 记录当前发布信息的类型
+        /// </summary>
+        private EnumPostType currentPostType = EnumPostType.Reply;
 
         public TabPage()
         {
@@ -379,32 +389,37 @@ namespace hipda
             if (tabType.Equals("1"))
             {
                 string tabId = data.ForumId;
-
                 ListView listView = (ListView)item.FindName("threadsListView" + tabId);
-                listView.ItemsSource = null;
-                
-                await DataSource.RefreshThread(tabId);
 
-                var cvs = new CollectionViewSource();
-                cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(DataSource.ThreadPageSize, async pageNo =>
-                {
-                    // 加载分页数据，并写入静态类中
-                    // 返回的是本次加载的数据量
-                    return await DataSource.GetLoadThreadsCountAsync(tabId, pageNo, () =>
-                    {
-                        replyProgressBar.Visibility = Visibility.Visible;
-                    }, () =>
-                    {
-                        replyProgressBar.Visibility = Visibility.Collapsed;
-                    });
-                }, (index) =>
-                {
-                    // 从静态类中返回需要显示出来的数据
-                    return DataSource.GetThreadByIndex(tabId, index);
-                });
-
-                listView.ItemsSource = cvs.View;
+                await RefreshThreadListPage(listView, tabId);
             }
+        }
+
+        private async Task RefreshThreadListPage(ListView listView, string forumId)
+        {
+            listView.ItemsSource = null;
+
+            await DataSource.RefreshThread(forumId);
+
+            var cvs = new CollectionViewSource();
+            cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(DataSource.ThreadPageSize, async pageNo =>
+            {
+                // 加载分页数据，并写入静态类中
+                // 返回的是本次加载的数据量
+                return await DataSource.GetLoadThreadsCountAsync(forumId, pageNo, () =>
+                {
+                    replyProgressBar.Visibility = Visibility.Visible;
+                }, () =>
+                {
+                    replyProgressBar.Visibility = Visibility.Collapsed;
+                });
+            }, (index) =>
+            {
+                // 从静态类中返回需要显示出来的数据
+                return DataSource.GetThreadByIndex(forumId, index);
+            });
+
+            listView.ItemsSource = cvs.View;
         }
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -805,58 +820,118 @@ namespace hipda
 
         private async void postButton_Click(object sender, RoutedEventArgs e)
         {
-            //postPanelFadeIn.Begin();
-
-            // 获取当前主贴ID
             PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
-            string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
 
-            string message = postReplyContentTextBox.Text;
-
-            var postData = new Dictionary<string, object>();
-            postData.Add("noticeauthor", noticeauthor);
-            postData.Add("noticetrimstr", noticetrimstr);
-            postData.Add("noticeauthormsg", noticeauthormsg);
-
-            postData.Add("formhash", DataSource.FormHash);
-            postData.Add("subject", string.Empty);
-            postData.Add("usesig", "1");
-
-            foreach (var imageName in imageNameList)
+            if (currentPostType == EnumPostType.Reply)
             {
-                postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
-            }
+                // 获取当前主贴ID
+                string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
 
-            if (string.IsNullOrEmpty(message))
+                string message = postReplyContentTextBox.Text;
+                if (string.IsNullOrEmpty(message))
+                {
+                    await new MessageDialog("您的发布请求已不成功！\n内容不能为空。", "注意").ShowAsync();
+                    return;
+                }
+
+                var postData = new Dictionary<string, object>();
+                postData.Add("noticeauthor", noticeauthor);
+                postData.Add("noticetrimstr", noticetrimstr);
+                postData.Add("noticeauthormsg", noticeauthormsg);
+
+                postData.Add("formhash", DataSource.FormHash);
+                postData.Add("subject", string.Empty);
+                postData.Add("usesig", "1");
+
+                foreach (var imageName in imageNameList)
+                {
+                    postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+                }
+
+                // 客户端尾巴
+                postData.Add("message", message + "\n\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]");
+
+                // 发布请求
+                string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/post.php?action=reply&tid=" + threadId + "&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", postData);
+                if (!resultContent.Contains("您的回复已经发布"))
+                {
+                    await new MessageDialog("您的发布请求已不成功！\n可能是你连续发布过快，请稍候再试。", "注意").ShowAsync();
+                    return;
+                }
+
+                HidePostReplyPanelAndButton();
+
+                postReplyContentTextBox.Text = string.Empty;
+                noticeauthor = string.Empty;
+                noticetrimstr = string.Empty;
+                noticeauthormsg = string.Empty;
+
+                // 清空上载图片记录之集合
+                imageNameList.Clear();
+
+                // 刷新数据
+                ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
+                ICollectionView view = (ICollectionView)listView.ItemsSource;
+
+                // count = 1 表示是要刷新
+                await view.LoadMoreItemsAsync(1);
+            }
+            else if (currentPostType == EnumPostType.NewThread)
             {
-                await new MessageDialog("您的发布请求已不成功！\n发布的内容不能为空。", "注意").ShowAsync();
-                return;
+                // 获取当前版块ID
+                string forumId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
+
+                string subject = postNewTitleTextBox.Text;
+                if (string.IsNullOrEmpty(subject))
+                {
+                    await new MessageDialog("您的发布请求已不成功！\n标题不能为空。", "注意").ShowAsync();
+                    return;
+                }
+
+                string message = postNewContentTextBox.Text;
+                if (string.IsNullOrEmpty(message))
+                {
+                    await new MessageDialog("您的发布请求已不成功！\n内容不能为空。", "注意").ShowAsync();
+                    return;
+                }
+
+                var postData = new Dictionary<string, object>();
+                postData.Add("formhash", DataSource.FormHash);
+                postData.Add("wysiwyg", "1");
+                postData.Add("iconid", string.Empty);
+                postData.Add("subject", subject);
+                postData.Add("tags", string.Empty);
+                postData.Add("attention_add", "1");
+                postData.Add("usesig", "1");
+
+                foreach (var imageName in imageNameList)
+                {
+                    postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+                }
+
+                // 客户端尾巴
+                postData.Add("message", message + "\n\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]");
+
+                // 发布请求
+                string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/post.php?action=newthread&fid=" + forumId + "&extra=&topicsubmit=yes", postData);
+                if (resultContent.Contains("对不起，您两次发表间隔少于"))
+                {
+                    await new MessageDialog("您的发布请求已不成功！\n可能是你连续发布过快，请稍候再试。", "注意").ShowAsync();
+                    return;
+                }
+
+                HidePostNewPanelAndButton();
+
+                postNewTitleTextBox.Text = string.Empty;
+                postNewContentTextBox.Text = string.Empty;
+
+                // 清空上载图片记录之集合
+                imageNameList.Clear();
+
+                // 刷新数据
+                ListView listView = (ListView)pivotItem.FindName("threadsListView" + forumId);
+                await RefreshThreadListPage(listView, forumId);
             }
-
-            // 客户端尾巴
-            postData.Add("message", message + "\n\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]");
-            
-            // 发布请求
-            string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/post.php?action=reply&tid=" + threadId + "&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", postData);
-            if (!resultContent.Contains("您的回复已经发布"))
-            {
-                await new MessageDialog("您的发布请求已不成功！\n可能是你连续回复过快，请稍候再试。", "注意").ShowAsync();
-                return;
-            }
-
-            HidePostReplyPanelAndButton();
-
-            postReplyContentTextBox.Text = string.Empty;
-            noticeauthor = string.Empty;
-            noticetrimstr = string.Empty;
-            noticeauthormsg = string.Empty;
-
-            // 刷新数据
-            ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-            ICollectionView view = (ICollectionView)listView.ItemsSource;
-
-            // count = 1 表示是要刷新
-            await view.LoadMoreItemsAsync(1);
         }
 
         private void HidePostReplyPanelAndButton()
@@ -877,7 +952,7 @@ namespace hipda
         private void ShowPostReplyPanelAndButton()
         {
             postReplyPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            currentPostTextBox = postReplyContentTextBox;
+            currentPostType = EnumPostType.Reply;
 
             tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
 
@@ -907,7 +982,7 @@ namespace hipda
         private void ShowPostNewPanelAndButton()
         {
             postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            currentPostTextBox = postNewContentTextBox;
+            currentPostType = EnumPostType.NewThread;
 
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
@@ -1011,16 +1086,34 @@ namespace hipda
             }
 
             int occurences = 0;
-            string source = currentPostTextBox.Text;
+            string originalContent = string.Empty;
 
-            for (var i = 0; i < currentPostTextBox.SelectionStart + occurences; i++)
+            if (currentPostType == EnumPostType.Reply)
             {
-                if (source[i] == '\r' && source[i + 1] == '\n')
-                    occurences++;
-            }
+                originalContent = postReplyContentTextBox.Text;
 
-            int cursorPosition = currentPostTextBox.SelectionStart + occurences;
-            currentPostTextBox.Text = currentPostTextBox.Text.Insert(cursorPosition, message);
+                for (var i = 0; i < postReplyContentTextBox.SelectionStart + occurences; i++)
+                {
+                    if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                        occurences++;
+                }
+
+                int cursorPosition = postReplyContentTextBox.SelectionStart + occurences;
+                postReplyContentTextBox.Text = postReplyContentTextBox.Text.Insert(cursorPosition, message);
+            }
+            else if (currentPostType == EnumPostType.NewThread)
+            {
+                originalContent = postNewContentTextBox.Text;
+
+                for (var i = 0; i < postNewContentTextBox.SelectionStart + occurences; i++)
+                {
+                    if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                        occurences++;
+                }
+
+                int cursorPosition = postNewContentTextBox.SelectionStart + occurences;
+                postNewContentTextBox.Text = postNewContentTextBox.Text.Insert(cursorPosition, message);
+            }
         }
 
         private void replyMenu_Opening(object sender, object e)
@@ -1075,16 +1168,34 @@ namespace hipda
                         value = string.Format("[attachimg]{0}[/attachimg]", value);
 
                         int occurences = 0;
-                        string source = postReplyContentTextBox.Text;
+                        string originalContent = string.Empty;
 
-                        for (var i = 0; i < postReplyContentTextBox.SelectionStart + occurences; i++)
+                        if (currentPostType == EnumPostType.Reply)
                         {
-                            if (source[i] == '\r' && source[i + 1] == '\n')
-                                occurences++;
-                        }
+                            originalContent = postReplyContentTextBox.Text;
 
-                        int cursorPosition = postReplyContentTextBox.SelectionStart + occurences;
-                        postReplyContentTextBox.Text = postReplyContentTextBox.Text.Insert(cursorPosition, value);
+                            for (var i = 0; i < postReplyContentTextBox.SelectionStart + occurences; i++)
+                            {
+                                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                                    occurences++;
+                            }
+
+                            int cursorPosition = postReplyContentTextBox.SelectionStart + occurences;
+                            postReplyContentTextBox.Text = postReplyContentTextBox.Text.Insert(cursorPosition, value);
+                        }
+                        else if (currentPostType == EnumPostType.NewThread)
+                        {
+                            originalContent = postNewContentTextBox.Text;
+
+                            for (var i = 0; i < postNewContentTextBox.SelectionStart + occurences; i++)
+                            {
+                                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                                    occurences++;
+                            }
+
+                            int cursorPosition = postNewContentTextBox.SelectionStart + occurences;
+                            postNewContentTextBox.Text = postNewContentTextBox.Text.Insert(cursorPosition, value);
+                        }
                     }
                 }
             }
