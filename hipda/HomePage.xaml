@@ -52,7 +52,8 @@
                 <TextBlock
                     Text="{Binding Info}"
                     TextWrapping="WrapWholeWords"
-                    Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+                    Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
+                    Pivot.SlideInAnimationGroup="GroupOne"/>
             </StackPanel>
         </DataTemplate>
 

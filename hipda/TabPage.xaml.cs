@@ -158,12 +158,16 @@ namespace hipda
 
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
             TextBlock ownerInfoTextBlock = (TextBlock)layoutGrid.FindName("ownerInfoTextBlock");
+            Run pictureIconTextBlockRun = (Run)layoutGrid.FindName("pictureIconTextBlockRun");
+            Run pagerclipTextBlockRun = (Run)layoutGrid.FindName("pagerclipTextBlockRun");
             Run titleTextBlockRun = (Run)layoutGrid.FindName("titleTextBlockRun");
             Run numbersTextBlockRun = (Run)layoutGrid.FindName("numbersTextBlockRun");
             TextBlock lastPostTextBlock = (TextBlock)layoutGrid.FindName("lastPostTextBlock");
 
             avatarImageBorder.Opacity = 0;
             ownerInfoTextBlock.Opacity = 0;
+            if (thread.AttachType == 1) pictureIconTextBlockRun.Text = "\uE187";
+            if (thread.AttachType == 2) pagerclipTextBlockRun.Text = "\uE16C";
             titleTextBlockRun.Text = thread.Title;
             numbersTextBlockRun.Text = thread.Numbers;
             lastPostTextBlock.Opacity = 0;
