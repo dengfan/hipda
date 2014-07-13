@@ -100,13 +100,14 @@
                     <Button x:Name="menuButton" Margin="6">
                         <Button.Template>
                             <ControlTemplate>
-                                <TextBlock Text=" ••• " Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
+                                <TextBlock Text="&#xE10C;" FontFamily="Segoe UI Symbol" Style="{ThemeResource ListViewItemContentTextBlockStyle}" />
                             </ControlTemplate>
                         </Button.Template>
                         <Button.Flyout>
                             <MenuFlyout x:Name="replyMenu" Opening="replyMenu_Opening">
                                 <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
                                 <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
+                                <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" Click="modifyMenuFlyoutItem_Click" Visibility="Collapsed" />
                                 <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" Click="viewFullContentMenuFlyoutItem_Click" />
                             </MenuFlyout>
                         </Button.Flyout>
@@ -120,7 +121,7 @@
 
                 <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0"  Pivot.SlideInAnimationGroup="GroupOne">
                     <ContentControl x:Name="replyContent" FontSize="{ThemeResource ContentControlFontSize}" />
-                    <Button x:Name="showMoreButton" 
+                    <Button x:Name="showMoreButton"
                         HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                         Click="viewFullContentButton_Click" Visibility="Collapsed" />
                 </StackPanel>
@@ -972,8 +973,8 @@
         <CommandBar x:Name="tabPageCommandBar" Background="Silver" Opacity="0.9">
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
-            <AppBarButton x:Name="openPostReplyPanelButton" Icon="Edit" Label="回复" Click="openPostReplyPanelButton_Click" Visibility="Collapsed" />
-            <AppBarButton x:Name="postButton" Icon="PostUpdate" Label="发布" Click="postButton_Click" Visibility="Collapsed" />
+            <AppBarButton x:Name="openPostReplyPanelButton" Icon="Edit" Label="评论" Click="openPostReplyPanelButton_Click" Visibility="Collapsed" />
+            <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openTabForDiscovery" Label="地板" Click="openTabForDiscovery_Click" />
                 <AppBarButton x:Name="openTabForBuyAndSell" Label="BS 版" Click="openTabForBuyAndSell_Click" />

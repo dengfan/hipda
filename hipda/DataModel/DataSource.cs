@@ -12,11 +12,32 @@ using Windows.Data.Html;
 namespace hipda.Data
 {
     #region 实体类
+    public class ContentForEdit
+    {
+        public ContentForEdit(string subject, string content, string postId, string threadId)
+        {
+            this.Subject = subject;
+            this.Content = content;
+            this.PostId = postId;
+            this.ThreadId = threadId;
+        }
+
+        public string Subject { get; private set; }
+
+        public string Content { get; private set; }
+
+        public string PostId { get; private set; }
+
+        public string ThreadId { get; private set; }
+    }
+
     public class Reply
     {
-        public Reply(int floor, int pageNo, string threadId, string ownerId, string ownerName, string textContent, string htmlContent, string xamlConent, int imageCount, string createTime)
+        public Reply(int index, int floor, string postId, int pageNo, string threadId, string ownerId, string ownerName, string textContent, string htmlContent, string xamlConent, int imageCount, string createTime)
         {
+            this.Index = index;
             this.Floor = floor;
+            this.PostId = postId;
             this.PageNo = pageNo;
             this.ThreadId = threadId;
             this.OwnerId = ownerId;
@@ -27,8 +48,10 @@ namespace hipda.Data
             this.ImageCount = imageCount;
             this.CreateTime = createTime;
         }
-        
+
+        public int Index { get; private set; }
         public int Floor { get; private set; }
+        public string PostId { get; private set; }
         public int PageNo { get; private set; }
         public string ThreadId { get; private set; }
         public string OwnerName { get; private set; }
@@ -73,9 +96,9 @@ namespace hipda.Data
         }
     }
 
-    public class ReplyItem
+    public class ReplyData
     {
-        public ReplyItem(string threadId, string threadName)
+        public ReplyData(string threadId, string threadName)
         {
             this.ThreadId = threadId;
             this.ThreadName = threadName;
@@ -161,9 +184,9 @@ namespace hipda.Data
         }
     }
 
-    public class ThreadItem
+    public class ThreadData
     {
-        public ThreadItem(string forumId, string forumName)
+        public ThreadData(string forumId, string forumName)
         {
             this.ForumId = forumId;
             this.ForumName = forumName;
@@ -223,7 +246,9 @@ namespace hipda.Data
         /// 每个楼层默认显示的图片数据
         /// 用于节省流量
         /// </summary>
-        public static int MaxImageCount { get { return 5; } }
+        public static int MaxImageCount { get { return 6; } }
+
+        public static string MessageTail { get { return "[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]"; } }
 
         private static DataSource _dataSource = new DataSource();
 
@@ -262,16 +287,22 @@ namespace hipda.Data
             get { return this._forumGroups; }
         }
 
-        private ObservableCollection<ThreadItem> _threadList = new ObservableCollection<ThreadItem>();
-        public ObservableCollection<ThreadItem> ThreadList
+        private ObservableCollection<ThreadData> _threadList = new ObservableCollection<ThreadData>();
+        public ObservableCollection<ThreadData> ThreadList
         {
             get { return this._threadList; }
         }
 
-        private List<ReplyItem> _replyList = new List<ReplyItem>();
-        public List<ReplyItem> ReplyList
+        private List<ReplyData> _replyList = new List<ReplyData>();
+        public List<ReplyData> ReplyList
         {
             get { return this._replyList; }
+        }
+
+        private ContentForEdit _contentForEdit = null;
+        public static ContentForEdit ContentForEdit
+        {
+            get { return _dataSource._contentForEdit; }
         }
 
         #region 读取论坛所有版板数据
@@ -385,23 +416,23 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定版块下的所有贴子
-        public static ThreadItem GetThread(string forumId, string forumName)
+        public static ThreadData GetThread(string forumId, string forumName)
         {
             var count = _dataSource.ThreadList.Count(t => t.ForumId.Equals(forumId));
             if (count == 0)
             {
-                _dataSource.ThreadList.Add(new ThreadItem(forumId, forumName));
+                _dataSource.ThreadList.Add(new ThreadData(forumId, forumName));
             }
 
             return _dataSource.ThreadList.Single(t => t.ForumId.Equals(forumId));
         }
 
-        public static async Task RefreshThread(string forumId)
+        public static async Task RefreshThreadList(string forumId)
         {
-            var threadItem = _dataSource.ThreadList.FirstOrDefault(t => t.ForumId.Equals(forumId));
-            if (threadItem != null)
+            var threadData = _dataSource.ThreadList.FirstOrDefault(t => t.ForumId.Equals(forumId));
+            if (threadData != null)
             {
-                threadItem.Threads.Clear();
+                threadData.Threads.Clear();
                 await _dataSource.LoadThreadsDataAsync(forumId, 1);
             }
         }
@@ -531,15 +562,25 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
-        public static ReplyItem GetReply(string threadId, string threadName)
+        public static ReplyData GetReply(string threadId, string threadName)
         {
             var count = _dataSource.ReplyList.Count(t => t.ThreadId.Equals(threadId));
             if (count == 0)
             {
-                _dataSource.ReplyList.Add(new ReplyItem(threadId, threadName));
+                _dataSource.ReplyList.Add(new ReplyData(threadId, threadName));
             }
 
             return _dataSource.ReplyList.Single(t => t.ThreadId.Equals(threadId));
+        }
+
+        public static async Task RefreshReplyList(string threadId)
+        {
+            var replyData = _dataSource.ReplyList.FirstOrDefault(r => r.ThreadId.Equals(threadId));
+            if (replyData != null)
+            {
+                replyData.Replies.Clear();
+                await _dataSource.LoadRepliesDataAsync(threadId, 1);
+            }
         }
 
         public static async Task<int> GetLoadRepliesCountAsync(string threadId, int pageNo, Action showProgressBar, Action hideProgressBar)
@@ -560,7 +601,7 @@ namespace hipda.Data
         /// <returns></returns>
         public static Reply GetReplyByIndex(string threadId, int index)
         {
-            return _dataSource.ReplyList.Single(r => r.ThreadId.Equals(threadId)).Replies.OrderBy(r => r.Floor).ElementAt(index);
+            return _dataSource.ReplyList.Single(r => r.ThreadId.Equals(threadId)).Replies.OrderBy(r => r.Index).ElementAt(index);
         }
 
         // 读取指定贴子的回复列表数据
@@ -610,6 +651,7 @@ namespace hipda.Data
             #endregion
 
             // 读取数据
+            //string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&ordertype=1&" + DateTime.Now.Second, threadId, pageNo);
             string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&" + DateTime.Now.Second, threadId, pageNo);
             string htmlStr = await httpClient.HttpGet(url);
 
@@ -652,19 +694,7 @@ namespace hipda.Data
                 return;
             }
 
-            // 读取 formhash 用于发布内容
-            //string formHash = string.Empty;
-            //var postNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("f_post"));
-            //if (postNode != null)
-            //{
-            //    var formHashInputNode = postNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
-            //    if (formHashInputNode != null)
-            //    {
-            //        formHash = formHashInputNode.Attributes[2].Value.ToString();
-            //        this._formHash = formHash;
-            //    }
-            //}
-
+            int index = thread.Replies.Count;
             foreach (var item in data)
             {
                 var postAuthorNode = item.ChildNodes[0] // table
@@ -689,11 +719,11 @@ namespace hipda.Data
                     ownerName = authorNode.InnerText;
                 }
 
-                var floorNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")) // div
-                    .ChildNodes[1] // strong
-                    .ChildNodes[0] // a
-                    .ChildNodes[0]; // em
-                int floor = Convert.ToInt32(floorNode.InnerText);
+                var floorPostInfoNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
+                var floorLinkNode = floorPostInfoNode.ChildNodes[1].ChildNodes[0]; // a
+                string postId = floorLinkNode.Attributes["id"].Value.Replace("postnum", string.Empty);
+                var floorNumNode = floorLinkNode.ChildNodes[0]; // em
+                int floor = Convert.ToInt32(floorNumNode.InnerText);
 
                 string postTime = string.Empty;
                 var postTimeNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
@@ -717,6 +747,7 @@ namespace hipda.Data
                     textContent = new Regex("\r\n").Replace(textContent, string.Empty);
                     textContent = new Regex("\r").Replace(textContent, string.Empty);
                     textContent = new Regex("\n").Replace(textContent, string.Empty);
+                    textContent = new Regex(@"[\s]{2}").Replace(textContent, " ");
                     textContent = textContent.Replace("&nbsp;", string.Empty);
                     textContent = textContent.Length > 100 ? textContent.Substring(0, 97) + "..." : textContent;
                     
@@ -724,7 +755,7 @@ namespace hipda.Data
                     htmlContent = xamlContent = contentNode.InnerHtml;
 
                     // 用于正常显示
-                    xamlContent = HtmlToXaml(xamlContent, out imageCount);
+                    xamlContent = HtmlToXaml(xamlContent, ref imageCount);
                 }
                 else
                 {
@@ -739,12 +770,14 @@ namespace hipda.Data
                 xamlContent = xamlContent.Replace("[", "<");
                 xamlContent = xamlContent.Replace("]", ">");
 
-                Reply reply = new Reply(floor, pageNo, threadId, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
+                Reply reply = new Reply(index, floor, postId, pageNo, threadId, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
                 thread.Replies.Add(reply);
+
+                index++;
             }
         }
 
-        private static string HtmlToXaml(string htmlContent, out int imageCount)
+        private static string HtmlToXaml(string htmlContent, ref int imageCount)
         {
             var content = new StringBuilder(htmlContent);
             content.EnsureCapacity(htmlContent.Length * 2);
@@ -814,8 +847,6 @@ namespace hipda.Data
             content = content.Replace(@"src=""images/default/attachimg.gif""", string.Empty);
             content = content.Replace(@"src=""http://www.hi-pda.com/forum/images/default/attachimg.gif""", string.Empty);
 
-            imageCount = 0;
-
             // 将HTML字符串转换为RichTextBlock XAML字符串
             // 替换上载图片
             MatchCollection matchsForImage1 = new Regex(@"<img[^>]*file=""([^""]*)""\swidth=""([\d]*)""[^>]*>").Matches(content.ToString());
@@ -825,13 +856,14 @@ namespace hipda.Data
                 {
                     imageCount++;
 
+                    string placeHolderLabel = matchsForImage1[i].Groups[0].Value; // 要被替换的元素
+                    string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
+                    int width = Convert.ToInt16(matchsForImage1[i].Groups[2].Value); // 图片宽度
+
+                    string imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+
                     if (imageCount <= MaxImageCount)
                     {
-                        string placeHolderLabel = matchsForImage1[i].Groups[0].Value; // 要被替换的元素
-                        string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
-                        int width = Convert.ToInt16(matchsForImage1[i].Groups[2].Value); // 图片宽度
-
-                        string imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                         if (width > 300)
                         {
                             imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
@@ -839,8 +871,14 @@ namespace hipda.Data
 
                         imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
                         imgXaml = string.Format(imgXaml, imgUrl);
-                        content = content.Replace(placeHolderLabel, imgXaml);
                     }
+                    else
+                    {
+                        imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略 -[/Span]";
+                        imgXaml = string.Format(imgXaml, imageCount);
+                    }
+                    
+                    content = content.Replace(placeHolderLabel, imgXaml);
                 }
             }
 
@@ -871,7 +909,7 @@ namespace hipda.Data
                     }
                     else
                     {
-                        imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略。 -[/Span]";
+                        imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略 -[/Span]";
                         imgXaml = string.Format(imgXaml, imageCount);
                     }
                     
@@ -911,7 +949,7 @@ namespace hipda.Data
                         }
                         else
                         {
-                            imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略。 -[/Span]";
+                            imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略 -[/Span]";
                             imgXaml = string.Format(imgXaml, imageCount);
                         }
                     }
@@ -968,6 +1006,43 @@ namespace hipda.Data
                     this._hash = hashNode.Attributes[2].Value;
                 }
             }
+        }
+        #endregion
+
+        #region 读取指定贴子标题、内容及回复数据，用于修改贴子或回复
+        public static async Task GetContentForEdit(string threadId, string postId)
+        {
+            await _dataSource.LoadContentForEdit(threadId, postId);
+        }
+
+        private async Task LoadContentForEdit(string threadId, string postId)
+        {
+            string url = string.Format("http://www.hi-pda.com/forum/post.php?action=edit&tid={0}&pid={1}&page=1&r=" + DateTime.Now.ToString("HHmmss"), threadId, postId);
+            string htmlContent = await httpClient.HttpGet(url);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlContent);
+
+            // 标题
+            string subject = string.Empty;
+            var subjectInput = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("prompt", "").Equals("post_subject"));
+            if (subjectInput != null)
+            {
+                subject = subjectInput.Attributes["value"].Value;
+            }
+
+            // 内容
+            string content = string.Empty;
+            var contentTextArea = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("prompt", "").Equals("post_message"));
+            if (contentTextArea != null)
+            {
+                content = contentTextArea.InnerText.Replace(MessageTail, string.Empty).TrimEnd();
+            }
+
+            this._contentForEdit = new ContentForEdit(subject, content, postId, threadId);
         }
         #endregion
     }
