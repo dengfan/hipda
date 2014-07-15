@@ -136,6 +136,31 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Faces\baoman\1.png" />
+    <Content Include="Assets\Faces\baoman\10.png" />
+    <Content Include="Assets\Faces\baoman\11.png" />
+    <Content Include="Assets\Faces\baoman\12.png" />
+    <Content Include="Assets\Faces\baoman\13.png" />
+    <Content Include="Assets\Faces\baoman\14.png" />
+    <Content Include="Assets\Faces\baoman\15.png" />
+    <Content Include="Assets\Faces\baoman\16.png" />
+    <Content Include="Assets\Faces\baoman\17.png" />
+    <Content Include="Assets\Faces\baoman\18.png" />
+    <Content Include="Assets\Faces\baoman\19.png" />
+    <Content Include="Assets\Faces\baoman\2.png" />
+    <Content Include="Assets\Faces\baoman\20.png" />
+    <Content Include="Assets\Faces\baoman\21.png" />
+    <Content Include="Assets\Faces\baoman\22.png" />
+    <Content Include="Assets\Faces\baoman\23.png" />
+    <Content Include="Assets\Faces\baoman\24.png" />
+    <Content Include="Assets\Faces\baoman\25.png" />
+    <Content Include="Assets\Faces\baoman\3.png" />
+    <Content Include="Assets\Faces\baoman\4.png" />
+    <Content Include="Assets\Faces\baoman\5.png" />
+    <Content Include="Assets\Faces\baoman\6.png" />
+    <Content Include="Assets\Faces\baoman\7.png" />
+    <Content Include="Assets\Faces\baoman\8.png" />
+    <Content Include="Assets\Faces\baoman\9.png" />
     <Content Include="Assets\Faces\coolmonkey\01.gif" />
     <Content Include="Assets\Faces\coolmonkey\02.gif" />
     <Content Include="Assets\Faces\coolmonkey\03.gif" />
@@ -152,27 +177,6 @@
     <Content Include="Assets\Faces\coolmonkey\14.gif" />
     <Content Include="Assets\Faces\coolmonkey\15.gif" />
     <Content Include="Assets\Faces\coolmonkey\16.gif" />
-    <Content Include="Assets\Faces\default\biggrin.gif" />
-    <Content Include="Assets\Faces\default\cool.gif" />
-    <Content Include="Assets\Faces\default\cry.gif" />
-    <Content Include="Assets\Faces\default\curse.gif" />
-    <Content Include="Assets\Faces\default\dizzy.gif" />
-    <Content Include="Assets\Faces\default\funk.gif" />
-    <Content Include="Assets\Faces\default\handshake.gif" />
-    <Content Include="Assets\Faces\default\huffy.gif" />
-    <Content Include="Assets\Faces\default\lol.gif" />
-    <Content Include="Assets\Faces\default\loveliness.gif" />
-    <Content Include="Assets\Faces\default\mad.gif" />
-    <Content Include="Assets\Faces\default\sad.gif" />
-    <Content Include="Assets\Faces\default\shocked.gif" />
-    <Content Include="Assets\Faces\default\shutup.gif" />
-    <Content Include="Assets\Faces\default\shy.gif" />
-    <Content Include="Assets\Faces\default\sleepy.gif" />
-    <Content Include="Assets\Faces\default\smile.gif" />
-    <Content Include="Assets\Faces\default\sweat.gif" />
-    <Content Include="Assets\Faces\default\titter.gif" />
-    <Content Include="Assets\Faces\default\tongue.gif" />
-    <Content Include="Assets\Faces\default\victory.gif" />
     <Content Include="Assets\Faces\grapeman\01.gif" />
     <Content Include="Assets\Faces\grapeman\02.gif" />
     <Content Include="Assets\Faces\grapeman\03.gif" />
@@ -228,6 +232,7 @@
     <EmbeddedResource Include="gb2312.bin" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
