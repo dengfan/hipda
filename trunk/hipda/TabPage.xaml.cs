@@ -323,7 +323,11 @@ namespace hipda
             // 如果楼层内容的作者是当前账号，则显示编辑按钮
             if (reply.OwnerId == DataSource.UserId)
             {
-                modifyMenuFlyoutItem.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                modifyMenuFlyoutItem.IsEnabled = true;
+            }
+            else
+            {
+                modifyMenuFlyoutItem.IsEnabled = false;
             }
             
             if (reply.ImageCount > DataSource.MaxImageCount)
@@ -1269,14 +1273,14 @@ namespace hipda
             Button btn = (Button)sender;
             string value = btn.Content.ToString();
 
-            string message = string.Empty;
-            if (value.StartsWith(":"))
+            string imageStr = string.Empty;
+            if (value.StartsWith(":") || value.EndsWith("[/img]"))
             {
-                message = string.Format(" {0} ", value);
+                imageStr = string.Format(" {0} ", value);
             }
             else
             {
-                message = string.Format(@" {{:{0}:}} ", value);
+                imageStr = string.Format(@" {{:{0}:}} ", value);
             }
 
             int occurences = 0;
@@ -1293,7 +1297,7 @@ namespace hipda
                 }
 
                 int cursorPosition = postReplyContentTextBox.SelectionStart + occurences;
-                postReplyContentTextBox.Text = postReplyContentTextBox.Text.Insert(cursorPosition, message);
+                postReplyContentTextBox.Text = postReplyContentTextBox.Text.Insert(cursorPosition, imageStr);
             }
             else if (currentPostType == EnumPostType.NewThread)
             {
@@ -1306,7 +1310,7 @@ namespace hipda
                 }
 
                 int cursorPosition = postNewContentTextBox.SelectionStart + occurences;
-                postNewContentTextBox.Text = postNewContentTextBox.Text.Insert(cursorPosition, message);
+                postNewContentTextBox.Text = postNewContentTextBox.Text.Insert(cursorPosition, imageStr);
             }
         }
 
