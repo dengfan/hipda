@@ -106,7 +106,7 @@ namespace hipda.Data
         }
         public string ThreadId { get; private set; }
         public string ThreadName { get; private set; }
-        public ObservableCollection<Reply> Replies { get; private set; }
+        public IList<Reply> Replies { get; private set; }
     }
 
     public class Thread
@@ -196,7 +196,7 @@ namespace hipda.Data
 
         public string ForumName { get; private set; }
 
-        public ObservableCollection<Thread> Threads { get; private set; }
+        public IList<Thread> Threads { get; private set; }
     }
 
     public class Forum
@@ -454,7 +454,7 @@ namespace hipda.Data
         /// <returns></returns>
         public static Thread GetThreadByIndex(string forumId, int index)
         {
-            return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.ElementAt(index);
+            return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads[index];
         }
 
         private async Task LoadThreadsDataAsync(string forumId, int pageNo)
@@ -601,18 +601,18 @@ namespace hipda.Data
         /// <returns></returns>
         public static Reply GetReplyByIndex(string threadId, int index)
         {
-            return _dataSource.ReplyList.Single(r => r.ThreadId.Equals(threadId)).Replies.OrderBy(r => r.Index).ElementAt(index);
+            return _dataSource.ReplyList.Single(r => r.ThreadId.Equals(threadId)).Replies[index];
         }
 
         // 读取指定贴子的回复列表数据
         private async Task LoadRepliesDataAsync(string threadId, int pageNo)
         {
             // 移除过旧的数量，以释放内存空间
-            if (_dataSource.ReplyList.Count > 7)
-            {
-                _dataSource.ReplyList[0] = null;
-                _dataSource.ReplyList.RemoveAt(0);
-            }
+            //if (_dataSource.ReplyList.Count > 7)
+            //{
+            //    _dataSource.ReplyList[0] = null;
+            //    _dataSource.ReplyList.RemoveAt(0);
+            //}
 
             #region 如果数据已存在，则不读取，以便节省流量
             // 载入过的页面不再载入
@@ -694,7 +694,7 @@ namespace hipda.Data
                 return;
             }
 
-            int index = thread.Replies.Count;
+            int i = thread.Replies.Count;
             foreach (var item in data)
             {
                 var postAuthorNode = item.ChildNodes[0] // table
@@ -770,10 +770,10 @@ namespace hipda.Data
                 xamlContent = xamlContent.Replace("[", "<");
                 xamlContent = xamlContent.Replace("]", ">");
 
-                Reply reply = new Reply(index, floor, postId, pageNo, threadId, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
+                Reply reply = new Reply(i, floor, postId, pageNo, threadId, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
                 thread.Replies.Add(reply);
 
-                index++;
+                i++;
             }
         }
 
