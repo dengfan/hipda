@@ -220,7 +220,7 @@
                     </Button.Template>
                 </Button>
 
-                <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522171e4cb3f0eb26c192.png[/img]" Click="addFaceButton_Click">
+                <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217a3afef9be5dcd55b.png[/img]" Click="addFaceButton_Click">
                     <Button.Template>
                         <ControlTemplate>
                             <Image Stretch="None">
