@@ -1022,6 +1022,11 @@
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="openPostReplyPanelButton" Icon="Edit" Label="评论" Click="openPostReplyPanelButton_Click" Visibility="Collapsed" />
+            <AppBarToggleButton x:Name="reverseListButton" Label="倒序看贴" Click="reverseListButton_Click" Visibility="Collapsed">
+                <AppBarToggleButton.Icon>
+                    <FontIcon FontFamily="Segoe UI Symbol" Glyph="&#xE169;"/>
+                </AppBarToggleButton.Icon>
+            </AppBarToggleButton>
             <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openTabForDiscovery" Label="地板" Click="openTabForDiscovery_Click" />

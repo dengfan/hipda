@@ -248,6 +248,8 @@ namespace hipda.Data
         /// </summary>
         public static int MaxImageCount { get { return 6; } }
 
+        public static int OrderType = 2;
+
         public static string MessageTail { get { return "[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]"; } }
 
         private static DataSource _dataSource = new DataSource();
@@ -651,8 +653,7 @@ namespace hipda.Data
             #endregion
 
             // 读取数据
-            //string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&ordertype=1&" + DateTime.Now.Second, threadId, pageNo);
-            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&" + DateTime.Now.Second, threadId, pageNo);
+            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&ordertype={2}&" + DateTime.Now.Second, threadId, pageNo, OrderType);
             string htmlStr = await httpClient.HttpGet(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
@@ -866,7 +867,7 @@ namespace hipda.Data
                     {
                         if (width > 300)
                         {
-                            imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
+                            imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""360""][Image.Source][BitmapImage DecodePixelWidth=""360"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
                         }
 
                         imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -901,7 +902,7 @@ namespace hipda.Data
                         imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                         if (width > 300)
                         {
-                            imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
+                            imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""360""][Image.Source][BitmapImage DecodePixelWidth=""360"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
                         }
 
                         if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -942,7 +943,7 @@ namespace hipda.Data
 
                         if (imageCount <= MaxImageCount)
                         {
-                            imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""320""][Image.Source][BitmapImage DecodePixelWidth=""320"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
+                            imgXaml = @"[LineBreak/][InlineUIContainer][Image Stretch=""Uniform"" Width=""360""][Image.Source][BitmapImage DecodePixelWidth=""360"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer][LineBreak/]";
 
                             if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
                             imgXaml = string.Format(imgXaml, imgUrl);

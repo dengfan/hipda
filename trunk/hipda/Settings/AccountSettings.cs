@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hipda.Data;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -7,15 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace hipda.Data
+namespace hipda.Settings
 {
-    public class AccountHelper
+    public class AccountSettings
     {
         private static string accountDataKeyName = "accountData";
         private static string defaultAccountKeyName = "defaultAccount";
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
-        private static AccountHelper _accountHelper = new AccountHelper();
+        private static AccountSettings _accountHelper = new AccountSettings();
 
         private ObservableCollection<Account> _list = new ObservableCollection<Account>();
         public static ObservableCollection<Account> List
@@ -26,7 +27,7 @@ namespace hipda.Data
             }
         }
 
-        public AccountHelper()
+        public AccountSettings()
         {
             if (!localSettings.Containers.ContainsKey(accountDataKeyName)) return;
 

@@ -1,5 +1,6 @@
 ﻿using hipda.Common;
 using hipda.Data;
+using hipda.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,7 +67,7 @@ namespace hipda
 
             // 刷新顶部状态栏
             StatusBar statusBar = StatusBar.GetForCurrentView();
-            Account account = AccountHelper.GetDefault();
+            Account account = AccountSettings.GetDefault();
             string accountName = account != null ? account.Username : "未登录";
             if (accountName.Length > 3)
             {
@@ -90,7 +91,7 @@ namespace hipda
         /// 的字典。首次访问页面时，该状态将为 null。</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            accountList.ItemsSource = AccountHelper.List;
+            accountList.ItemsSource = AccountSettings.List;
 
             Refresh();
         }
@@ -140,7 +141,7 @@ namespace hipda
             
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                bool isOk = await AccountHelper.LoginAndAdd(username, password, true);
+                bool isOk = await AccountSettings.LoginAndAdd(username, password, true);
                 if (isOk)
                 {
                     Refresh();
@@ -197,7 +198,7 @@ namespace hipda
 
             Account data = (sender as MenuFlyoutItem).DataContext as Account;
             string keyName = data.Key;
-            await AccountHelper.SetDefault(keyName);
+            await AccountSettings.SetDefault(keyName);
 
             Refresh();
         }
@@ -209,7 +210,7 @@ namespace hipda
 
             Account data = (sender as MenuFlyoutItem).DataContext as Account;
             string keyName = data.Key;
-            await AccountHelper.Delete(keyName);
+            await AccountSettings.Delete(keyName);
 
             Refresh();
         }

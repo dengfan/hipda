@@ -1,5 +1,6 @@
 ﻿using hipda.Common;
 using hipda.Data;
+using hipda.Settings;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -118,7 +119,7 @@ namespace hipda
             string err = string.Empty;
             try
             {
-                await AccountHelper.AutoLogin();
+                await AccountSettings.AutoLogin();
             }
             catch (System.Net.WebException we)
             {
@@ -129,6 +130,9 @@ namespace hipda
             {
                 await new MessageDialog(err, "注意").ShowAsync();
             }
+
+            // 倒序看贴
+            DataSource.OrderType = SortSettings.GetSortType;
 
             Frame rootFrame = Window.Current.Content as Frame;
 
