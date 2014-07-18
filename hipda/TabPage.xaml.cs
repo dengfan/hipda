@@ -1,5 +1,6 @@
 ﻿using hipda.Common;
 using hipda.Data;
+using hipda.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,8 +98,19 @@ namespace hipda
 
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            #region 同步倒序看贴开关按钮之开关状态
+            if (SortSettings.GetSortType == 1)
+            {
+                reverseListButton.IsChecked = true;
+            }
+            else
+            {
+                reverseListButton.IsChecked = false;
+            }
+            #endregion
+
             #region 读取当前账号的名称
-            Account account = AccountHelper.GetDefault();
+            Account account = AccountSettings.GetDefault();
             accountName = account != null ? account.Username : "未登录";
             if (accountName.Length > 3)
             {
@@ -179,8 +191,8 @@ namespace hipda
 
             avatarImageBorder.Opacity = 0;
             ownerInfoTextBlock.Opacity = 0;
-            if (thread.AttachType == 1) pictureIconTextBlockRun.Text = "\uE158";
-            if (thread.AttachType == 2) pagerclipTextBlockRun.Text = "\uE16C";
+            pictureIconTextBlockRun.Text = thread.AttachType == 1 ? "\uE158" : string.Empty;
+            pagerclipTextBlockRun.Text = thread.AttachType == 2 ? "\uE16C" : string.Empty;
             titleTextBlockRun.Text = thread.Title;
             numbersTextBlockRun.Text = thread.Numbers;
             lastPostTextBlock.Opacity = 0;
@@ -478,7 +490,7 @@ namespace hipda
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
 
                 refreshThreadsButton.Visibility = openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                openPostReplyPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
             else // 回复列表页
@@ -486,7 +498,7 @@ namespace hipda
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
 
                 refreshThreadsButton.Visibility = openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                openPostReplyPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
             #endregion
@@ -875,7 +887,16 @@ namespace hipda
             }
             else
             {
-                NavigationHelper.IsCanGoBack = true;
+                if (Pivot.SelectedIndex > 0)
+                {
+                    NavigationHelper.IsCanGoBack = false;
+                    e.Handled = true;
+                    Pivot.SelectedIndex = 0;
+                }
+                else
+                {
+                    NavigationHelper.IsCanGoBack = true;
+                }
             }
 
             // 清除针对回复的数据
@@ -1112,7 +1133,7 @@ namespace hipda
                 btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
 
-            openPostReplyPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
@@ -1127,7 +1148,7 @@ namespace hipda
                 btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
 
-            openPostReplyPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
         #endregion
@@ -1170,7 +1191,7 @@ namespace hipda
                 btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
 
-            openPostReplyPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
@@ -1183,7 +1204,7 @@ namespace hipda
                 btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
 
-            openPostReplyPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
         #endregion
@@ -1442,6 +1463,17 @@ namespace hipda
                     ShowPostReplyPanelAndButton();
                 }
             }
+        }
+
+        private async void reverseListButton_Click(object sender, RoutedEventArgs e)
+        {
+            SortSettings.Toggle();
+
+            // 刷新当前贴子回复列表
+            PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
+            string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
+            ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
+            await RefreshReplyListPage(listView, threadId);
         }
     }
 }
