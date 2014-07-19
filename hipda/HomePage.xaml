@@ -6,10 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="WhiteSmoke"
-    RequestedTheme="Light">
+    Style="{StaticResource PageStyle}">
 
-    <!--<Page.Transitions>
+    <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
                 <NavigationThemeTransition.DefaultNavigationTransitionInfo>
@@ -17,7 +16,7 @@
                 </NavigationThemeTransition.DefaultNavigationTransitionInfo>
             </NavigationThemeTransition>
         </TransitionCollection>
-    </Page.Transitions>-->
+    </Page.Transitions>
 
     <Page.Resources>
         <CollectionViewSource x:Name="cvsForumGroups" IsSourceGrouped="True" ItemsPath="Forums"/>
@@ -25,20 +24,12 @@
         <local:BackgroundStyleSelecterForForumItem x:Key="BackgroundStyleSelecterForForumItem"/>
         <local:ListGroupStyleSelector x:Key="listGroupStyleSelector"/>
 
-        <Style x:Key="listItemStyle" TargetType="ListViewItem">
-            <Setter Property="Padding" Value="10" />
-            <Setter Property="BorderThickness"  Value="{StaticResource AppBarBottomBorderThemeThickness}"/>
-            <Setter Property="BorderBrush" Value="LightGray"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        </Style>
-
         <DataTemplate x:Key="GroupItemTemplate">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         Text="{Binding Name}"
-                        TextWrapping="WrapWholeWords"
-                        FontSize="{ThemeResource ContentControlFontSize}">
+                        Style="{StaticResource Text1Style}">
                     </TextBlock>
                     <TextBlock
                         Text="{Binding TodayQuantity}"
@@ -56,12 +47,6 @@
                     Pivot.SlideInAnimationGroup="GroupOne"/>
             </StackPanel>
         </DataTemplate>
-
-        <Style x:Key="accountListItemStyle" TargetType="ListViewItem">
-            <Setter Property="BorderThickness"  Value="{StaticResource AppBarBottomBorderThemeThickness}"/>
-            <Setter Property="BorderBrush" Value="LightGray"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        </Style>
     </Page.Resources>
 
     <Grid>
@@ -84,7 +69,7 @@
                     ContinuumNavigationTransitionInfo.ExitElementContainer="True"
                     ItemTemplate="{StaticResource GroupItemTemplate}"
                     GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"
-                    ItemContainerStyle="{StaticResource listItemStyle}"/>
+                    ItemContainerStyle="{StaticResource ForumItemStyle}"/>
             </PivotItem>
             <PivotItem 
                 Header="账号" 
@@ -92,7 +77,7 @@
                 Margin="0">
                 <ListView x:Name="accountList" 
                           Padding="10,0,10,0" 
-                          ItemContainerStyle="{StaticResource accountListItemStyle}">
+                          ItemContainerStyle="{StaticResource AccountItemStyle}">
                     <ListView.Header>
                         <StackPanel x:Name="addAccountPanel">
                             <TextBox Grid.Row="0" x:Name="usernameTextBox" TabIndex="1" Header="输入账号" Background="White" BorderBrush="Black"/>
@@ -124,7 +109,7 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar ClosedDisplayMode="Minimal" Background="Silver" Opacity="0.9">
+        <CommandBar ClosedDisplayMode="Minimal" Style="{StaticResource CommandBarStyle}">
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openTabForApp" Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
