@@ -189,7 +189,6 @@ namespace hipda
             Run numbersTextBlockRun = (Run)layoutGrid.FindName("numbersTextBlockRun");
             TextBlock lastPostTextBlock = (TextBlock)layoutGrid.FindName("lastPostTextBlock");
 
-            avatarImageBorder.Opacity = 0;
             ownerInfoTextBlock.Opacity = 0;
             pictureIconTextBlockRun.Text = thread.AttachType == 1 ? "\uE158" : string.Empty;
             pagerclipTextBlockRun.Text = thread.AttachType == 2 ? "\uE16C" : string.Empty;
@@ -256,7 +255,6 @@ namespace hipda
                 imageBrush.Stretch = Stretch.UniformToFill;
 
                 avatarImageBorder.Background = imageBrush;
-                avatarImageBorder.Opacity = 1;
             }
         }
         #endregion
@@ -324,7 +322,6 @@ namespace hipda
             Button showMoreButton = (Button)layoutGrid.FindName("showMoreButton");
             MenuFlyoutItem modifyMenuFlyoutItem = (MenuFlyoutItem)layoutGrid.FindName("modifyMenuFlyoutItem");
             
-            avatarImageBorder.Opacity = 0;
             ownerNameTextBlock.Opacity = 0;
             createTimeTextBlock.Opacity = 0;
             menuButton.DataContext = reply;
@@ -411,7 +408,6 @@ namespace hipda
             imageBrush.Stretch = Stretch.UniformToFill;
 
             avatarImageBorder.Background = imageBrush;
-            avatarImageBorder.Opacity = 1;
         }
         #endregion
 
@@ -585,8 +581,8 @@ namespace hipda
                 Name = string.Format("threadsListView{0}", forumId),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
+                ItemContainerStyle = (Style)App.Current.Resources["ThreadItemStyle"],
                 ItemTemplate = ThreadListItemTemplate,
-                ItemContainerStyleSelector = new BackgroundStyleSelecterForThreadItem(),
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
 
@@ -694,7 +690,7 @@ namespace hipda
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,
-                ItemContainerStyleSelector = new BackgroundStyleSelecterForReplyItem(),
+                ItemContainerStyle = (Style)App.Current.Resources["ReplyItemStyle"],
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
 

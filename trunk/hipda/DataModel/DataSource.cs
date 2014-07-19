@@ -756,7 +756,7 @@ namespace hipda.Data
                     htmlContent = xamlContent = contentNode.InnerHtml;
 
                     // 用于正常显示
-                    xamlContent = HtmlToXaml(xamlContent, ref imageCount);
+                    xamlContent = HtmlToXaml(xamlContent.Trim(), ref imageCount);
                 }
                 else
                 {
