@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:hipda.Data"
     mc:Ignorable="d"
-    Style="{StaticResource PageStyle}">
+    Foreground="{ThemeResource PhoneForegroundBrush}"
+    Background="{StaticResource PageBgColor}">
 
     <Page.Transitions>
         <TransitionCollection>
@@ -21,6 +22,48 @@
 
     <Page.Resources>
         <ResourceDictionary>
+            <Style x:Name="ThreadItemStyle" TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Margin" Value="10,0,10,5" />
+                <Setter Property="Padding" Value="5,5,5,12" />
+                <Setter Property="BorderThickness"  Value="{ThemeResource AppBarTopBorderThemeThickness}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource CommandBarBgColor}"/>
+            </Style>
+
+            <Style x:Name="ReplyItemStyle" TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Margin" Value="5,0,5,10" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListViewItem">
+                            <Grid>
+                                <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                            ContentTransitions="{TemplateBinding ContentTransitions}" 
+                                            Content="{TemplateBinding Content}" 
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                            Margin="{TemplateBinding Padding}" 
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ReplyContainerStyle" TargetType="Border">
+                <Setter Property="Margin" Value="0,10,0,0"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="Background" Value="{StaticResource ItemBgColor}"/>
+                <Setter Property="CornerRadius" Value="3"/>
+            </Style>
+
+            
+
+            <Style x:Key="ReplyContentFontStyle" TargetType="ContentControl">
+                <Setter Property="Margin" Value="0,5,0,5"/>
+                <Setter Property="Foreground" Value="DimGray"/>
+                <Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}"/>
+            </Style>
+            
             <DataTemplate x:Name="ThreadListItemTemplate">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -78,37 +121,13 @@
                     <Border VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" />
 
                     <Border Grid.Row="0" Grid.Column="1" Padding="0,10,0,10">
-                        <Grid HorizontalAlignment="Stretch">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="56"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="3*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Row="0" Grid.Column="0" x:Name="authorStackPanel" Orientation="Vertical">
-                                <TextBlock x:Name="ownerNameTextBlock"
-                                        Text="{Binding OwnerName}"
-                                        HorizontalAlignment="Left"
-                                           FontWeight="Bold"
-                                        FontSize="{ThemeResource ContentControlFontSize}"
-                                        Foreground="{ThemeResource PhoneAccentBrush}" />
-
-                                <TextBlock x:Name="createTimeTextBlock"
-                                        Text="{Binding CreateTime}" 
-                                        HorizontalAlignment="Left"
-                                        Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
-                                        Foreground="Gray"/>
-                            </StackPanel>
-
-                            <TextBlock x:Name="floorNumTextBlock" Grid.Row="0" Grid.Column="1"
-                                Text="{Binding FloorNumStr}"
-                                HorizontalAlignment="Right" 
-                                Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
-
-                            <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ReplyContainerStyle}">
+                        <StackPanel HorizontalAlignment="Left">
+                            <TextBlock HorizontalAlignment="Left" Style="{StaticResource Text1Style}">
+                                <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" />
+                                <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
+                            </TextBlock>
+                            <TextBlock x:Name="floorNumTextBlock" Text="{Binding FloorNumStr}" Style="{StaticResource Text1Style}" />
+                            <Border Style="{StaticResource ReplyContainerStyle}">
                                 <StackPanel>
                                     <ContentControl x:Name="replyContent" Style="{StaticResource ReplyContentFontStyle}" />
                                     <Button x:Name="showMoreButton"
@@ -131,7 +150,7 @@
                                     </Button>
                                 </StackPanel>
                             </Border>
-                        </Grid>
+                        </StackPanel>
                     </Border>
 
                     <!--<Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
@@ -965,12 +984,12 @@
     </Page.Resources>
 
     <Grid>
-        <Pivot x:Name="Pivot" 
+        <Pivot x:Name="Pivot"
                CommonNavigationTransitionInfo.IsStaggerElement="True" 
                SelectionChanged="Pivot_SelectionChanged">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" Style="{StaticResource PivotItemHeaderTextBlockStyle}" />
+                    <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" Foreground="{ThemeResource PhoneForegroundBrush}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
@@ -1027,7 +1046,7 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar x:Name="tabPageCommandBar" Style="{StaticResource CommandBarStyle}">
+        <CommandBar x:Name="tabPageCommandBar" Style="{StaticResource CommandBar1Style}" Opacity="0.9">
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="openPostReplyPanelButton" Icon="Edit" Label="评论" Click="openPostReplyPanelButton_Click" Visibility="Collapsed" />
@@ -1043,6 +1062,8 @@
                 <AppBarButton x:Name="openTabForEink" Label="Eink 版" Click="openTabForEink_Click" />
                 <AppBarButton x:Name="closeTab" Label="关闭当前标签页" Click="closeTab_Click" />
                 <AppBarButton x:Name="openTabForApp" Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
+                <AppBarButton x:Name="dark1ModeToggle" Label="夜间模式" Click="dark1ModeToggle_Click" />
+                <AppBarButton x:Name="light1ModeToggle" Label="日间模式" Click="light1ModeToggle_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
