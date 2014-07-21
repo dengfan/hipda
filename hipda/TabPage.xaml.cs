@@ -314,19 +314,18 @@ namespace hipda
             Grid layoutGrid = (Grid)args.ItemContainer.ContentTemplateRoot;
 
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
-            TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
-            TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
-            Button menuButton = (Button)layoutGrid.FindName("menuButton");
+            Run ownerNameTextBlockRun = (Run)layoutGrid.FindName("ownerNameTextBlock");
+            Run createTimeTextBlockRun = (Run)layoutGrid.FindName("createTimeTextBlock");
             TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
+            Button menuButton = (Button)layoutGrid.FindName("menuButton");
             ContentControl replyContent = (ContentControl)layoutGrid.FindName("replyContent");
             Button showMoreButton = (Button)layoutGrid.FindName("showMoreButton");
             MenuFlyoutItem modifyMenuFlyoutItem = (MenuFlyoutItem)layoutGrid.FindName("modifyMenuFlyoutItem");
-            
-            ownerNameTextBlock.Opacity = 0;
-            createTimeTextBlock.Opacity = 0;
-            menuButton.DataContext = reply;
-            floorNumTextBlock.Opacity = 0;
 
+            ownerNameTextBlockRun.Text = reply.OwnerName;
+            createTimeTextBlockRun.Text = reply.CreateTime;
+            floorNumTextBlock.Text = reply.FloorNumStr;
+            menuButton.DataContext = reply;
             replyContent.Content = XamlReader.Load(reply.XamlContent);
 
             // 如果楼层内容的作者是当前账号，则显示编辑按钮
@@ -350,35 +349,6 @@ namespace hipda
                 showMoreButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
 
-            args.RegisterUpdateCallback(ShowAuthor);
-        }
-
-        private void ShowAuthor(
-                ListViewBase sender,
-                ContainerContentChangingEventArgs args)
-        {
-            if (args.Phase != 1)
-            {
-                throw new Exception("Not in phase 1.");
-            }
-
-            Reply reply = (Reply)args.Item;
-            SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
-            Grid layoutGrid = (Grid)itemContainer.ContentTemplateRoot;
-
-            TextBlock ownerNameTextBlock = (TextBlock)layoutGrid.FindName("ownerNameTextBlock");
-            TextBlock createTimeTextBlock = (TextBlock)layoutGrid.FindName("createTimeTextBlock");
-            TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
-
-            ownerNameTextBlock.Text = reply.OwnerName;
-            ownerNameTextBlock.Opacity = 1;
-
-            createTimeTextBlock.Text = reply.CreateTime;
-            createTimeTextBlock.Opacity = 1;
-
-            floorNumTextBlock.Text = reply.FloorNumStr;
-            floorNumTextBlock.Opacity = 1;
-
             args.RegisterUpdateCallback(ShowAuthorFace);
         }
 
@@ -386,9 +356,9 @@ namespace hipda
                 ListViewBase sender,
                 ContainerContentChangingEventArgs args)
         {
-            if (args.Phase != 2)
+            if (args.Phase != 1)
             {
-                throw new Exception("Not in phase 2.");
+                throw new Exception("Not in phase 1.");
             }
 
             Reply reply = (Reply)args.Item;
@@ -581,7 +551,7 @@ namespace hipda
                 Name = string.Format("threadsListView{0}", forumId),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
-                ItemContainerStyle = (Style)App.Current.Resources["ThreadItemStyle"],
+                ItemContainerStyle = ThreadItemStyle,
                 ItemTemplate = ThreadListItemTemplate,
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
@@ -690,7 +660,7 @@ namespace hipda
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,
-                ItemContainerStyle = (Style)App.Current.Resources["ReplyItemStyle"],
+                ItemContainerStyle = ReplyItemStyle,
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
 
@@ -1470,6 +1440,16 @@ namespace hipda
             string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
             ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
             await RefreshReplyListPage(listView, threadId);
+        }
+
+        private void dark1ModeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeHelper.Dark1();
+        }
+
+        private void light1ModeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeHelper.Light1();
         }
     }
 }

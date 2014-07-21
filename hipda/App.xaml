@@ -5,11 +5,69 @@
     xmlns:local="using:hipda">
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary x:Name="CommonStyle" Source="Styles/Dark1/CommonStyle.xaml"/>
-                <ResourceDictionary x:Name="HomePageStyle" Source="Styles/Dark1/HomePageStyle.xaml"/>
-                <ResourceDictionary x:Name="TabPageStyle" Source="Styles/Dark1/TabPageStyle.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+            <!--<ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <x:String x:Key="ProgressBarIndeterminateForegroundThemeBrush">Red</x:String>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>-->
+
+            
+            <!--<SolidColorBrush x:Key="PageBgColor" Color="#1D1D1D"/>
+            <SolidColorBrush x:Key="ItemBgColor" Color="#262626"/>
+            <SolidColorBrush x:Key="CommandBarBgColor" Color="#242424"/>
+            <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>-->
+
+            <SolidColorBrush x:Key="PageBgColor" Color="#F3F3F3"/>
+            <SolidColorBrush x:Key="ItemBgColor" Color="White"/>
+            <SolidColorBrush x:Key="CommandBarBgColor" Color="Black"/>
+            <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>
+
+            <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="Red" />
+            <SolidColorBrush x:Key="AppBarBorderThemeBrush" Color="Green" />
+
+            <x:Double x:Key="dd">0.3</x:Double>
+            
+            <Style x:Key="CommandBar1Style" TargetType="CommandBar">
+                <Setter Property="Background" Value="Silver"/>
+                <Setter Property="Opacity" Value="0.9"/>
+            </Style>
+
+            <Style x:Key="CommandBar2Style" TargetType="CommandBar">
+                <Setter Property="Background" Value="DimGray"/>
+                <Setter Property="Opacity" Value="0.9"/>
+            </Style>
+
+            <!--<Style x:Key="PageStyle" TargetType="Page">
+                <Setter Property="Foreground" Value="{StaticResource PageFgColor}"/>
+                <Setter Property="Background" Value="{StaticResource PageBgColor}"/>
+            </Style>-->
+
+            <Style x:Key="Text1Style" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource MainFontColor}"/>
+                <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+                <Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}"/>
+            </Style>
+
+            <Style x:Key="FaceIconStyle" TargetType="Border">
+                <Setter Property="Opacity" Value="1"/>
+                <Setter Property="Margin" Value="0,10,10,0"/>
+                <Setter Property="CornerRadius" Value="3"/>
+                <Setter Property="Width" Value="60"/>
+                <Setter Property="Height" Value="60"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+            </Style>
+
+            <Style x:Key="GroupHeaderStyle" TargetType="ListViewHeaderItem">
+                <Setter Property="Padding" Value="7"/>
+            </Style>
+
+            <GroupStyle x:Key="listViewGroupStyle" HeaderContainerStyle="{StaticResource GroupHeaderStyle}">
+                <GroupStyle.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Style="{ThemeResource GroupHeaderTextBlockStyle}" />
+                    </DataTemplate>
+                </GroupStyle.HeaderTemplate>
+            </GroupStyle>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

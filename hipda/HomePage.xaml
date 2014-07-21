@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Style="{StaticResource PageStyle}">
+    Foreground="{ThemeResource PhoneForegroundBrush}"
+    Background="{StaticResource PageBgColor}">
 
     <Page.Transitions>
         <TransitionCollection>
@@ -23,6 +24,19 @@
 
         <local:BackgroundStyleSelecterForForumItem x:Key="BackgroundStyleSelecterForForumItem"/>
         <local:ListGroupStyleSelector x:Key="listGroupStyleSelector"/>
+
+        <Style x:Key="ForumItemStyle" TargetType="ListViewItem">
+            <Setter Property="Padding" Value="5,10,5,10" />
+            <Setter Property="BorderThickness"  Value="{ThemeResource AppBarBottomBorderThemeThickness}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource CommandBarBgColor}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+
+        <Style x:Key="AccountItemStyle" TargetType="ListViewItem">
+            <Setter Property="BorderThickness"  Value="{ThemeResource AppBarBottomBorderThemeThickness}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource CommandBarBgColor}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
 
         <DataTemplate x:Key="GroupItemTemplate">
             <StackPanel>
@@ -54,7 +68,7 @@
                CommonNavigationTransitionInfo.IsStaggerElement="True">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
+                    <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" Foreground="{ThemeResource PhoneForegroundBrush}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem
@@ -104,12 +118,15 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </PivotItem>
+            <PivotItem Header="主题" CommonNavigationTransitionInfo.IsStaggerElement="True" Margin="0">
+                
+            </PivotItem>
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar ClosedDisplayMode="Minimal" Style="{StaticResource CommandBarStyle}">
+        <CommandBar ClosedDisplayMode="Minimal" Opacity="0.9">
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openTabForApp" Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
