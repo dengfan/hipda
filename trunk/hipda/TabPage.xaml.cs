@@ -187,14 +187,12 @@ namespace hipda
             Run pagerclipTextBlockRun = (Run)layoutGrid.FindName("pagerclipTextBlockRun");
             Run titleTextBlockRun = (Run)layoutGrid.FindName("titleTextBlockRun");
             Run numbersTextBlockRun = (Run)layoutGrid.FindName("numbersTextBlockRun");
-            TextBlock lastPostTextBlock = (TextBlock)layoutGrid.FindName("lastPostTextBlock");
-
+            
             ownerInfoTextBlock.Opacity = 0;
-            pictureIconTextBlockRun.Text = thread.AttachType == 1 ? "\uE158" : string.Empty;
+            pictureIconTextBlockRun.Text = thread.AttachType == 1 ? "\uE187" : string.Empty;
             pagerclipTextBlockRun.Text = thread.AttachType == 2 ? "\uE16C" : string.Empty;
             titleTextBlockRun.Text = thread.Title;
             numbersTextBlockRun.Text = thread.Numbers;
-            lastPostTextBlock.Opacity = 0;
 
             args.RegisterUpdateCallback(ShowThreadAuthor);
         }
@@ -215,14 +213,13 @@ namespace hipda
             TextBlock ownerInfoTextBlock = (TextBlock)layoutGrid.FindName("ownerInfoTextBlock");
             Run ownerNameTextBlockRun = (Run)layoutGrid.FindName("ownerNameTextBlockRun");
             Run createTimeTextBlockRun = (Run)layoutGrid.FindName("createTimeTextBlockRun");
-            TextBlock lastPostTextBlock = (TextBlock)layoutGrid.FindName("lastPostTextBlock");
+            Run lastPostTextBlockRun = (Run)layoutGrid.FindName("lastPostTextBlockRun");
 
             ownerNameTextBlockRun.Text = thread.OwnerName;
             createTimeTextBlockRun.Text = thread.CreateTime;
             ownerInfoTextBlock.Opacity = 1;
 
-            lastPostTextBlock.Text = thread.LastPostInfo;
-            lastPostTextBlock.Opacity = 1;
+            lastPostTextBlockRun.Text = thread.LastPostInfo;
 
             args.RegisterUpdateCallback(ShowThreadAuthorFace);
         }
@@ -316,7 +313,7 @@ namespace hipda
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
             Run ownerNameTextBlockRun = (Run)layoutGrid.FindName("ownerNameTextBlock");
             Run createTimeTextBlockRun = (Run)layoutGrid.FindName("createTimeTextBlock");
-            TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
+            //TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
             Button menuButton = (Button)layoutGrid.FindName("menuButton");
             ContentControl replyContent = (ContentControl)layoutGrid.FindName("replyContent");
             Button showMoreButton = (Button)layoutGrid.FindName("showMoreButton");
@@ -324,7 +321,7 @@ namespace hipda
 
             ownerNameTextBlockRun.Text = reply.OwnerName;
             createTimeTextBlockRun.Text = reply.CreateTime;
-            floorNumTextBlock.Text = reply.FloorNumStr;
+            //floorNumTextBlock.Text = reply.FloorNumStr;
             menuButton.DataContext = reply;
             replyContent.Content = XamlReader.Load(reply.XamlContent);
 
@@ -656,7 +653,6 @@ namespace hipda
             var listView = new ListView
             {
                 Name = string.Format("repliesListView{0}", threadId),
-                Padding = new Thickness(10, 0, 10, 0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,
@@ -1445,11 +1441,43 @@ namespace hipda
         private void dark1ModeToggle_Click(object sender, RoutedEventArgs e)
         {
             ThemeHelper.Dark1();
+            tabPage.RequestedTheme = ElementTheme.Dark;
+            tabPageCommandBar.Background = Application.Current.Resources["CommandBarBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Foreground = Application.Current.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
         private void light1ModeToggle_Click(object sender, RoutedEventArgs e)
         {
             ThemeHelper.Light1();
+            tabPage.RequestedTheme = ElementTheme.Light;
+            tabPageCommandBar.Background = Application.Current.Resources["CommandBarBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Foreground = Application.Current.Resources["CommandFontColor"] as SolidColorBrush;
+        }
+
+        private void Pivot_LoadedPivotItem_1(object sender, PivotItemEventArgs e)
+        {
+            var loadItem = e.Item;
+            if (loadItem == null)
+            {
+                return;
+            }
+            ClearItem(loadItem);
+        }
+
+        void ClearItem(PivotItem pi)
+        {
+            foreach (var item in Pivot.Items)
+            {
+                var pivotItem = item as PivotItem;
+                if (pi != pivotItem)
+                {
+                    (pivotItem.Content as UIElement).Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                }
+                else
+                {
+                    (pivotItem.Content as UIElement).Visibility = Windows.UI.Xaml.Visibility.Visible;
+                }
+            }
         }
     }
 }
