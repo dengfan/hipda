@@ -8,8 +8,9 @@
     xmlns:data="using:hipda.Data"
     mc:Ignorable="d"
     Foreground="{ThemeResource PhoneForegroundBrush}"
-    Background="{StaticResource PageBgColor}">
-
+    Background="{StaticResource PageBgColor}"
+    x:Name="tabPage">
+    
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
@@ -23,16 +24,11 @@
     <Page.Resources>
         <ResourceDictionary>
             <Style x:Name="ThreadItemStyle" TargetType="ListViewItem">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="Margin" Value="10,0,10,5" />
-                <Setter Property="Padding" Value="5,5,5,12" />
-                <Setter Property="BorderThickness"  Value="{ThemeResource AppBarTopBorderThemeThickness}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource CommandBarBgColor}"/>
+                <Setter Property="Margin" Value="10,8" />
             </Style>
 
             <Style x:Name="ReplyItemStyle" TargetType="ListViewItem">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="Margin" Value="5,0,5,10" />
+                <Setter Property="Margin" Value="10,8" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ListViewItem">
@@ -49,14 +45,11 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="ReplyContainerStyle" TargetType="Border">
-                <Setter Property="Margin" Value="0,10,0,0"/>
-                <Setter Property="Padding" Value="10"/>
+            <Style x:Key="ChatBubbleStyle" TargetType="Border">
+                <Setter Property="Padding" Value="10,7"/>
                 <Setter Property="Background" Value="{StaticResource ItemBgColor}"/>
-                <Setter Property="CornerRadius" Value="3"/>
+                <Setter Property="CornerRadius" Value="5"/>
             </Style>
-
-            
 
             <Style x:Key="ReplyContentFontStyle" TargetType="ContentControl">
                 <Setter Property="Margin" Value="0,5,0,5"/>
@@ -68,42 +61,49 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="18"/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock x:Name="titleTextBlock" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Pivot.SlideInAnimationGroup="GroupOne" FontWeight="Bold" Style="{StaticResource Text1Style}">
-                        <Run x:Name="pictureIconTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
-                        <Run x:Name="pagerclipTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
-                        <Run x:Name="titleTextBlockRun" Text="{Binding Title}" />
-                        <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" />
-                    </TextBlock>
+                    <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-                        <Border x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" />
-                        <TextBlock x:Name="ownerInfoTextBlock"
-                               TextWrapping="WrapWholeWords"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Bottom"
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
+                            Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
+
+                    <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}">
+                        <StackPanel>
+                            <TextBlock x:Name="ownerInfoTextBlock"
+                                    TextWrapping="WrapWholeWords"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}">
+                                    <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                                    <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
+                            </TextBlock>
+
+                            <TextBlock x:Name="titleTextBlock" FontWeight="Bold" Style="{StaticResource Text1Style}">
+                                    <Run x:Name="pictureIconTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
+                                    <Run x:Name="pagerclipTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
+                                    <Run x:Name="titleTextBlockRun" Text="{Binding Title}" />
+                                    <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" />
+                            </TextBlock>
+
+                            <TextBlock Pivot.SlideInAnimationGroup="GroupOne"
+                                       Margin="0,3,0,0"
+                               HorizontalAlignment="Right"
                                Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
                                FontFamily="Global User Interface">
-                        <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
-                        <LineBreak/>
-                        <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
-                        </TextBlock>
-                    </StackPanel>
+                                    <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
+                                    <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
 
-                    <TextBlock x:Name="lastPostTextBlock"  Grid.Row="1" Grid.Column="1"
-                           Text="{Binding LastPostInfo}"
-                           TextWrapping="WrapWholeWords"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom"
-                           Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+                    
                 </Grid>
             </DataTemplate>
 
@@ -111,48 +111,54 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="18"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <Border VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" />
+                    <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
 
-                    <Border Grid.Row="0" Grid.Column="1" Padding="0,10,0,10">
-                        <StackPanel HorizontalAlignment="Left">
-                            <TextBlock HorizontalAlignment="Left" Style="{StaticResource Text1Style}">
-                                <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" />
-                                <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
+                            Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
+
+                    <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}">
+                        <StackPanel>
+                            <TextBlock HorizontalAlignment="Left" Style="{StaticResource ListViewItemSubheaderTextBlockStyle}">
+                                    <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                                    <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
                             </TextBlock>
-                            <TextBlock x:Name="floorNumTextBlock" Text="{Binding FloorNumStr}" Style="{StaticResource Text1Style}" />
-                            <Border Style="{StaticResource ReplyContainerStyle}">
-                                <StackPanel>
-                                    <ContentControl x:Name="replyContent" Style="{StaticResource ReplyContentFontStyle}" />
-                                    <Button x:Name="showMoreButton"
+
+                            <ContentControl x:Name="replyContent" Style="{StaticResource ReplyContentFontStyle}" />
+                            
+                            <Button x:Name="showMoreButton"
                                         HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                         Click="viewFullContentButton_Click" Visibility="Collapsed" />
-                                    <Button x:Name="menuButton" HorizontalAlignment="Left" Pivot.SlideInAnimationGroup="GroupOne">
-                                        <Button.Template>
-                                            <ControlTemplate>
-                                                <TextBlock Text="&#xE0C2;" FontFamily="Segoe UI Symbol" Style="{StaticResource Text1Style}" HorizontalAlignment="Left" />
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Flyout>
-                                            <MenuFlyout x:Name="replyMenu" Opening="replyMenu_Opening">
-                                                <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
-                                                <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
-                                                <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" Click="modifyMenuFlyoutItem_Click" IsEnabled="False" />
-                                                <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" Click="viewFullContentMenuFlyoutItem_Click" />
-                                            </MenuFlyout>
-                                        </Button.Flyout>
-                                    </Button>
-                                </StackPanel>
-                            </Border>
                         </StackPanel>
                     </Border>
 
+                    <Button x:Name="menuButton" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" MinHeight="25" Pivot.SlideInAnimationGroup="GroupOne">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}" Padding="4" HorizontalAlignment="Left" FontFamily="Global User Interface">
+                                    <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
+                                    <Run Text="{Binding FloorNumStr}" />
+                                </TextBlock>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Flyout>
+                            <MenuFlyout x:Name="replyMenu" Opening="replyMenu_Opening">
+                                <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
+                                <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
+                                <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" Click="modifyMenuFlyoutItem_Click" IsEnabled="False" />
+                                <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" Click="viewFullContentMenuFlyoutItem_Click" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                    
                     <!--<Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                         X1="0" Y1="15"
                         X2="1000" Y2="15"
@@ -984,12 +990,12 @@
     </Page.Resources>
 
     <Grid>
-        <Pivot x:Name="Pivot"
+        <Pivot x:Name="Pivot" PivotItemLoaded="Pivot_LoadedPivotItem_1"
                CommonNavigationTransitionInfo.IsStaggerElement="True" 
                SelectionChanged="Pivot_SelectionChanged">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" Foreground="{ThemeResource PhoneForegroundBrush}" />
+                    <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
@@ -1046,7 +1052,7 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar x:Name="tabPageCommandBar" Style="{StaticResource CommandBar1Style}" Opacity="0.9">
+        <CommandBar x:Name="tabPageCommandBar" ClosedDisplayMode="Minimal" Background="{StaticResource CommandBarBgColor}">
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="openPostReplyPanelButton" Icon="Edit" Label="评论" Click="openPostReplyPanelButton_Click" Visibility="Collapsed" />

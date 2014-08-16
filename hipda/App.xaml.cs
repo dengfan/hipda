@@ -10,6 +10,7 @@ using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
@@ -197,6 +198,7 @@ namespace hipda
             StatusBar statusBar = StatusBar.GetForCurrentView();
             statusBar.BackgroundColor = Colors.Purple;
             statusBar.BackgroundOpacity = 100;
+            //statusBar.ForegroundColor = ((SolidColorBrush)Application.Current.Resources["MainFontColor"]).Color;
             statusBar.ForegroundColor = Colors.White;
             statusBar.ProgressIndicator.ProgressValue = 0;
             await statusBar.ShowAsync();
