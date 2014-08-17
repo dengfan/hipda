@@ -34,11 +34,11 @@
                         <ControlTemplate TargetType="ListViewItem">
                             <Grid>
                                 <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" 
-                                            ContentTransitions="{TemplateBinding ContentTransitions}" 
-                                            Content="{TemplateBinding Content}" 
-                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                            Margin="{TemplateBinding Padding}" 
-                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                  ContentTransitions="{TemplateBinding ContentTransitions}" 
+                                                  Content="{TemplateBinding Content}" 
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                  Margin="{TemplateBinding Padding}" 
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
@@ -72,33 +72,33 @@
                     <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
 
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
-                            Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
+                               Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
 
                     <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}">
                         <StackPanel>
                             <TextBlock x:Name="ownerInfoTextBlock"
-                                    TextWrapping="WrapWholeWords"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Bottom"
-                                    Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}">
-                                    <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
-                                    <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
+                                       TextWrapping="WrapWholeWords"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Bottom"
+                                       Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}">
+                                <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                                <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
                             </TextBlock>
 
                             <TextBlock x:Name="titleTextBlock" FontWeight="Bold" Style="{StaticResource Text1Style}">
-                                    <Run x:Name="pictureIconTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
-                                    <Run x:Name="pagerclipTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
-                                    <Run x:Name="titleTextBlockRun" Text="{Binding Title}" />
-                                    <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" />
+                                <Run x:Name="pictureIconTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
+                                <Run x:Name="pagerclipTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
+                                <Run x:Name="titleTextBlockRun" Text="{Binding Title}" />
+                                <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" />
                             </TextBlock>
 
                             <TextBlock Pivot.SlideInAnimationGroup="GroupOne"
                                        Margin="0,3,0,0"
-                               HorizontalAlignment="Right"
-                               Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
-                               FontFamily="Global User Interface">
-                                    <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
-                                    <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
+                                       HorizontalAlignment="Right"
+                                       Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
+                                       FontFamily="Global User Interface">
+                                <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
+                                <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
                             </TextBlock>
                         </StackPanel>
                     </Border>
@@ -123,20 +123,20 @@
                     <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
 
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
-                            Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
+                               Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
 
                     <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}">
                         <StackPanel>
                             <TextBlock HorizontalAlignment="Left" Style="{StaticResource ListViewItemSubheaderTextBlockStyle}">
-                                    <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
-                                    <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
+                                <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                                <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
                             </TextBlock>
 
                             <ContentControl x:Name="replyContent" Style="{StaticResource ReplyContentFontStyle}" />
                             
                             <Button x:Name="showMoreButton"
-                                        HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
-                                        Click="viewFullContentButton_Click" Visibility="Collapsed" />
+                                    HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
+                                    Click="viewFullContentButton_Click" Visibility="Collapsed" />
                         </StackPanel>
                     </Border>
 
@@ -160,9 +160,9 @@
                     </Button>
                     
                     <!--<Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                        X1="0" Y1="15"
-                        X2="1000" Y2="15"
-                        Stroke="Silver" StrokeDashArray="8,4" />-->
+                         X1="0" Y1="15"
+                         X2="1000" Y2="15"
+                         Stroke="Silver" StrokeDashArray="8,4" />-->
                 </Grid>
             </DataTemplate>
 
@@ -1017,7 +1017,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBox x:Name="postReplyContentTextBox" Grid.Row="0" Margin="15,15,15,0" Height="300"
-                        BorderThickness="0" Background="White" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容" />
+                             BorderThickness="0" Background="White" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容" />
 
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="WhiteSmoke">
                         <ContentControl Template="{StaticResource imageFaceGrid}" />
@@ -1039,7 +1039,7 @@
                     <TextBox x:Name="postNewTitleTextBox" Grid.Row="0" Margin="15" BorderThickness="0" Background="White" PlaceholderText="编辑标题" />
 
                     <TextBox x:Name="postNewContentTextBox" Grid.Row="1" Margin="15,0,15,0" Height="250"
-                        BorderThickness="0" Background="White" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑内容" />
+                             BorderThickness="0" Background="White" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑内容" />
 
                     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="WhiteSmoke">
                         <ContentControl Template="{StaticResource imageFaceGrid}" />
