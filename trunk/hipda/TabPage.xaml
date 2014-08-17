@@ -8,8 +8,11 @@
     xmlns:data="using:hipda.Data"
     mc:Ignorable="d"
     Foreground="{ThemeResource PhoneForegroundBrush}"
-    Background="{StaticResource PageBgColor}"
     x:Name="tabPage">
+    
+    <Page.Background>
+        <ImageBrush ImageSource="Assets/bg1.jpg"/>
+    </Page.Background>
     
     <Page.Transitions>
         <TransitionCollection>
@@ -24,11 +27,12 @@
     <Page.Resources>
         <ResourceDictionary>
             <Style x:Name="ThreadItemStyle" TargetType="ListViewItem">
-                <Setter Property="Margin" Value="10,8" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Margin" Value="10,10,10,0" />
             </Style>
 
             <Style x:Name="ReplyItemStyle" TargetType="ListViewItem">
-                <Setter Property="Margin" Value="10,8" />
+                <Setter Property="Margin" Value="10,10,10,0" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ListViewItem">
@@ -46,9 +50,9 @@
             </Style>
 
             <Style x:Key="ChatBubbleStyle" TargetType="Border">
-                <Setter Property="Padding" Value="10,7"/>
+                <Setter Property="Padding" Value="14,10"/>
                 <Setter Property="Background" Value="{StaticResource ItemBgColor}"/>
-                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="CornerRadius" Value="10"/>
             </Style>
 
             <Style x:Key="ReplyContentFontStyle" TargetType="ContentControl">
@@ -60,6 +64,7 @@
             <DataTemplate x:Name="ThreadListItemTemplate">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
@@ -74,7 +79,7 @@
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
                                Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
 
-                    <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}">
+                    <Border Grid.Row="0" Grid.Column="2" x:Name="chatBubbleBorder" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
                         <StackPanel>
                             <TextBlock x:Name="ownerInfoTextBlock"
                                        TextWrapping="WrapWholeWords"
@@ -91,19 +96,19 @@
                                 <Run x:Name="titleTextBlockRun" Text="{Binding Title}" />
                                 <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" />
                             </TextBlock>
-
-                            <TextBlock Pivot.SlideInAnimationGroup="GroupOne"
-                                       Margin="0,3,0,0"
-                                       HorizontalAlignment="Right"
-                                       Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
-                                       FontFamily="Global User Interface">
-                                <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
-                                <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
-                            </TextBlock>
                         </StackPanel>
                     </Border>
 
-                    
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Pivot.SlideInAnimationGroup="GroupOne" Opacity="0.6"
+                            Margin="0,10,0,0" Padding="8,2" HorizontalAlignment="Center" 
+                            Background="{StaticResource CommandBarBgColor}"
+                            CornerRadius="12">
+                        <TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
+                                   FontFamily="Global User Interface">
+                                    <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
+                                    <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
+                        </TextBlock>
+                    </Border>
                 </Grid>
             </DataTemplate>
 
