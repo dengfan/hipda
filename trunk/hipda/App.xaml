@@ -13,21 +13,22 @@
 
             <SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
             <SolidColorBrush x:Key="ItemBgColor" Color="White"/>
-            <SolidColorBrush x:Key="CommandBarBgColor" Color="Gainsboro"/>
+            <SolidColorBrush x:Key="CommandBarBgColor" Color="#3385B7"/>
             <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>
             <SolidColorBrush x:Key="CommandFontColor" Color="Black"/>
 
-            <x:Double x:Key="dd">0.3</x:Double>
+            
 
             <Style x:Key="Text1Style" TargetType="TextBlock">
                 <Setter Property="Foreground" Value="{StaticResource MainFontColor}"/>
                 <Setter Property="TextWrapping" Value="WrapWholeWords"/>
-                <Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}"/>
+                <Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
             </Style>
+
+            <x:Double x:Key="FaceIconOpacity">1.0</x:Double>
 
             <Style x:Key="FaceIconStyle" TargetType="Border">
                 <Setter Property="Opacity" Value="1"/>
-                <!--<Setter Property="Margin" Value="0,10,10,0"/>-->
                 <Setter Property="CornerRadius" Value="30"/>
                 <Setter Property="Width" Value="60"/>
                 <Setter Property="Height" Value="60"/>

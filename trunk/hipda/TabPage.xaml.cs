@@ -546,6 +546,7 @@ namespace hipda
             var listView = new ListView
             {
                 Name = string.Format("threadsListView{0}", forumId),
+                Padding = new Thickness(10,0,10,0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
                 ItemContainerStyle = ThreadItemStyle,
@@ -653,6 +654,7 @@ namespace hipda
             var listView = new ListView
             {
                 Name = string.Format("repliesListView{0}", threadId),
+                Padding = new Thickness(10, 0, 10, 0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,

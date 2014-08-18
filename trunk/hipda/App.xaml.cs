@@ -196,10 +196,10 @@ namespace hipda
             Window.Current.Activate();
 
             StatusBar statusBar = StatusBar.GetForCurrentView();
-            statusBar.BackgroundColor = Colors.Purple;
-            statusBar.BackgroundOpacity = 100;
+            statusBar.BackgroundColor = Colors.White;
+            statusBar.BackgroundOpacity = 0;
             //statusBar.ForegroundColor = ((SolidColorBrush)Application.Current.Resources["MainFontColor"]).Color;
-            statusBar.ForegroundColor = Colors.White;
+            statusBar.ForegroundColor = Colors.Black;
             statusBar.ProgressIndicator.ProgressValue = 0;
             await statusBar.ShowAsync();
 
