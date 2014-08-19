@@ -12,12 +12,10 @@
             <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>-->
 
             <SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
-            <SolidColorBrush x:Key="ItemBgColor" Color="White"/>
-            <SolidColorBrush x:Key="CommandBarBgColor" Color="#3385B7"/>
-            <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>
-            <SolidColorBrush x:Key="CommandFontColor" Color="Black"/>
-
-            
+            <SolidColorBrush x:Key="ItemBgColor" Color="#C4E5FE"/>
+            <SolidColorBrush x:Key="CommandBarBgColor" Color="Black"/>
+            <SolidColorBrush x:Key="MainFontColor" Color="#666666"/>
+            <SolidColorBrush x:Key="CommandFontColor" Color="WhiteSmoke"/>
 
             <Style x:Key="Text1Style" TargetType="TextBlock">
                 <Setter Property="Foreground" Value="{StaticResource MainFontColor}"/>
