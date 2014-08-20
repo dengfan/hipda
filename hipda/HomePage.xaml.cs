@@ -214,5 +214,17 @@ namespace hipda
 
             Refresh();
         }
+
+        private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Pivot.SelectedIndex == 1)
+            {
+                this.begin.Begin();
+            }
+            else
+            {
+                this.end.Begin();
+            }
+        }
     }
 }
