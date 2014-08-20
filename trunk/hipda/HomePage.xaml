@@ -6,8 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Foreground="{ThemeResource PhoneForegroundBrush}"
-    Background="{StaticResource PageBgColor}">
+    Foreground="{ThemeResource PhoneForegroundBrush}">
+
+    <Page.Background>
+        <ImageBrush ImageSource="Assets/bg1.jpg"/>
+    </Page.Background>
 
     <Page.Transitions>
         <TransitionCollection>
@@ -28,7 +31,7 @@
         <Style x:Key="ForumItemStyle" TargetType="ListViewItem">
             <Setter Property="Padding" Value="5,10,5,10" />
             <Setter Property="BorderThickness"  Value="{ThemeResource AppBarBottomBorderThemeThickness}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource CommandBarBgColor}"/>
+            <Setter Property="BorderBrush" Value="WhiteSmoke"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
 
@@ -61,11 +64,24 @@
                     Pivot.SlideInAnimationGroup="GroupOne"/>
             </StackPanel>
         </DataTemplate>
+
+        <Storyboard x:Name="begin">
+            <DoubleAnimation Duration="0:0:0.15" To="226" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="backgroundBorder"/>
+        </Storyboard>
+
+        <Storyboard x:Name="end">
+            <DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="backgroundBorder"/>
+        </Storyboard>
     </Page.Resources>
 
     <Grid>
+        <Grid x:Name="backgroundBorder" Margin="0,57,0,0" Background="White" Opacity="0.6">
+            <Grid.RenderTransform>
+                <CompositeTransform/>
+            </Grid.RenderTransform>
+        </Grid>
         <Pivot x:Name="Pivot"
-               CommonNavigationTransitionInfo.IsStaggerElement="True">
+               CommonNavigationTransitionInfo.IsStaggerElement="True" SelectionChanged="Pivot_SelectionChanged">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" Foreground="{ThemeResource PhoneForegroundBrush}" />
@@ -117,9 +133,6 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-            </PivotItem>
-            <PivotItem Header="主题" CommonNavigationTransitionInfo.IsStaggerElement="True" Margin="0">
-                
             </PivotItem>
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
