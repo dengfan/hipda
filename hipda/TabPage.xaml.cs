@@ -1455,31 +1455,5 @@ namespace hipda
             tabPageCommandBar.Background = Application.Current.Resources["CommandBarBgColor"] as SolidColorBrush;
             tabPageCommandBar.Foreground = Application.Current.Resources["CommandFontColor"] as SolidColorBrush;
         }
-
-        private void Pivot_LoadedPivotItem_1(object sender, PivotItemEventArgs e)
-        {
-            var loadItem = e.Item;
-            if (loadItem == null)
-            {
-                return;
-            }
-            ClearItem(loadItem);
-        }
-
-        void ClearItem(PivotItem pi)
-        {
-            foreach (var item in Pivot.Items)
-            {
-                var pivotItem = item as PivotItem;
-                if (pi != pivotItem)
-                {
-                    (pivotItem.Content as UIElement).Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                }
-                else
-                {
-                    (pivotItem.Content as UIElement).Visibility = Windows.UI.Xaml.Visibility.Visible;
-                }
-            }
-        }
     }
 }

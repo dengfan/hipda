@@ -1012,7 +1012,7 @@
     </Page.Resources>
 
     <Grid>
-        <Pivot x:Name="Pivot" PivotItemLoaded="Pivot_LoadedPivotItem_1"
+        <Pivot x:Name="Pivot"
                CommonNavigationTransitionInfo.IsStaggerElement="True" 
                SelectionChanged="Pivot_SelectionChanged">
             <Pivot.HeaderTemplate>
