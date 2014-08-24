@@ -1085,9 +1085,18 @@
             </AppBarToggleButton>
             <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="openTabForDiscovery" Label="地板" Click="openTabForDiscovery_Click" />
+                <AppBarButton x:Name="openForumTab" Label="打开...">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="打开 Discovery 版" Click="openTabForDiscovery_Click" />
+                            <MenuFlyoutItem Text="打开 Buy Sell 版" Click="openTabForBuyAndSell_Click" />
+                            <MenuFlyoutItem Text="打开 Eink 版" Click="openTabForEink_Click" />
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+                <!--<AppBarButton x:Name="openTabForDiscovery" Label="地板" Click="openTabForDiscovery_Click" />
                 <AppBarButton x:Name="openTabForBuyAndSell" Label="BS 版" Click="openTabForBuyAndSell_Click" />
-                <AppBarButton x:Name="openTabForEink" Label="Eink 版" Click="openTabForEink_Click" />
+                <AppBarButton x:Name="openTabForEink" Label="Eink 版" Click="openTabForEink_Click" />-->
                 <AppBarButton x:Name="closeTab" Label="关闭当前标签页" Click="closeTab_Click" />
                 <AppBarButton x:Name="openTabForApp" Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
                 <AppBarButton x:Name="dark1ModeToggle" Label="夜间模式" Click="dark1ModeToggle_Click" />
