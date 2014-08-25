@@ -26,6 +26,72 @@
 
     <Page.Resources>
         <ResourceDictionary>
+            <Page x:Key="threadListCommandBar">
+                <Page.BottomAppBar>
+                    <CommandBar x:Name="appbar1">
+                        <AppBarButton Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" />
+                        <AppBarButton Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" />
+                        <AppBarButton Label="夜间模式" Click="dark1ModeToggle_Click">
+                            <AppBarButton.Icon>
+                                <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.moon.first.quarter.png"/>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                        <CommandBar.SecondaryCommands>
+                            <AppBarButton Label="打开...">
+                                <AppBarButton.Flyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="打开 Discovery 版" Click="openTabForDiscovery_Click" />
+                                        <MenuFlyoutItem Text="打开 Buy Sell 版" Click="openTabForBuyAndSell_Click" />
+                                        <MenuFlyoutItem Text="打开 Eink 版" Click="openTabForEink_Click" />
+                                    </MenuFlyout>
+                                </AppBarButton.Flyout>
+                            </AppBarButton>
+                            <AppBarButton Label="关闭当前标签页" Click="closeTab_Click" />
+                            <AppBarButton Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
+                        </CommandBar.SecondaryCommands>
+                    </CommandBar>
+                </Page.BottomAppBar>
+            </Page>
+
+            <Page x:Key="replyListCommandBar">
+                <Page.BottomAppBar>
+                    <CommandBar x:Name="appbar2">
+                        <AppBarButton Icon="Edit" Label="评论" Click="openPostReplyPanelButton_Click" />
+                        <AppBarToggleButton Label="倒序看贴" Click="reverseListButton_Click">
+                            <AppBarToggleButton.Icon>
+                                <FontIcon FontFamily="Segoe UI Symbol" Glyph="&#xE169;"/>
+                            </AppBarToggleButton.Icon>
+                        </AppBarToggleButton>
+                        <AppBarButton Label="夜间模式" Click="dark1ModeToggle_Click">
+                            <AppBarButton.Icon>
+                                <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.moon.first.quarter.png"/>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                        <CommandBar.SecondaryCommands>
+                            <AppBarButton Label="打开...">
+                                <AppBarButton.Flyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="打开 Discovery 版" Click="openTabForDiscovery_Click" />
+                                        <MenuFlyoutItem Text="打开 Buy Sell 版" Click="openTabForBuyAndSell_Click" />
+                                        <MenuFlyoutItem Text="打开 Eink 版" Click="openTabForEink_Click" />
+                                    </MenuFlyout>
+                                </AppBarButton.Flyout>
+                            </AppBarButton>
+                            <AppBarButton Label="关闭当前标签页" Click="closeTab_Click" />
+                            <AppBarButton Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
+                        </CommandBar.SecondaryCommands>
+                    </CommandBar>
+                </Page.BottomAppBar>
+            </Page>
+
+            <Page x:Key="postCommandBar">
+                <Page.BottomAppBar>
+                    <CommandBar x:Name="appbar3">
+                        <AppBarButton Icon="Send" Label="发布" Click="sendButton_Click" />
+                    </CommandBar>
+                </Page.BottomAppBar>
+            </Page>
+
             <Style x:Name="ThreadItemStyle" TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 <Setter Property="Padding" Value="0,10,0,0" />
@@ -1073,17 +1139,8 @@
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
 
-    <Page.BottomAppBar>
+    <!--<Page.BottomAppBar>
         <CommandBar x:Name="tabPageCommandBar" ClosedDisplayMode="Minimal" Background="{StaticResource CommandBarBgColor}" Foreground="{StaticResource CommandFontColor}">
-            <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
-            <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
-            <AppBarButton x:Name="openPostReplyPanelButton" Icon="Edit" Label="评论" Click="openPostReplyPanelButton_Click" Visibility="Collapsed" />
-            <AppBarToggleButton x:Name="reverseListButton" Label="倒序看贴" Click="reverseListButton_Click" Visibility="Collapsed">
-                <AppBarToggleButton.Icon>
-                    <FontIcon FontFamily="Segoe UI Symbol" Glyph="&#xE169;"/>
-                </AppBarToggleButton.Icon>
-            </AppBarToggleButton>
-            <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openForumTab" Label="打开...">
                     <AppBarButton.Flyout>
@@ -1094,14 +1151,11 @@
                         </MenuFlyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>
-                <!--<AppBarButton x:Name="openTabForDiscovery" Label="地板" Click="openTabForDiscovery_Click" />
-                <AppBarButton x:Name="openTabForBuyAndSell" Label="BS 版" Click="openTabForBuyAndSell_Click" />
-                <AppBarButton x:Name="openTabForEink" Label="Eink 版" Click="openTabForEink_Click" />-->
                 <AppBarButton x:Name="closeTab" Label="关闭当前标签页" Click="closeTab_Click" />
                 <AppBarButton x:Name="openTabForApp" Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
                 <AppBarButton x:Name="dark1ModeToggle" Label="夜间模式" Click="dark1ModeToggle_Click" />
                 <AppBarButton x:Name="light1ModeToggle" Label="日间模式" Click="light1ModeToggle_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
-    </Page.BottomAppBar>
+    </Page.BottomAppBar>-->
 </Page>
