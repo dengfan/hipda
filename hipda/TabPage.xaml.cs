@@ -111,14 +111,16 @@ namespace hipda
 
             #region 读取当前账号的名称
             Account account = AccountSettings.GetDefault();
-            accountName = account != null ? account.Username : "未登录";
+            bool isLogin = account != null;
+            accountName = isLogin ? account.Username : "未登录";
             if (accountName.Length > 3)
             {
                 accountName = string.Format("{0}*{1}", accountName.Substring(0, 2), accountName.Last());
             }
             #endregion
 
-            if (e.PageState != null && e.PageState.Count > 0) // 从墓碑恢复
+            #region 从墓碑恢复
+            if (e.PageState != null && e.PageState.Count > 0)
             {
                 string tabStr = e.PageState["PivotItems"].ToString();
                 tabStr = tabStr.Substring(0, tabStr.Length - 1);
@@ -146,25 +148,37 @@ namespace hipda
                 int selectedIndex = Convert.ToInt16(e.PageState["PivotSelectedIndex"]);
                 Pivot.SelectedIndex = selectedIndex;
             }
-            else // 正常打开
-            {
-                if (e.NavigationParameter == null)
-                {
-                    CreateThreadListTab("14", "WIN版", false);
-                    CreateReplyListTab("1427253", "特别感谢 + 关于 + 反馈", false);
-                }
-                else
-                {
-                    string dataStr = (string)e.NavigationParameter;
-                    string[] dataAry = dataStr.Split(',');
-                    string forumId = dataAry[0];
-                    string forumName = dataAry[1];
+            #endregion
 
-                    CreateThreadListTab(forumId, forumName, false);
+            #region 正常打开
+            else
+            {
+                if (e.NavigationParameter == null || string.IsNullOrEmpty(e.NavigationParameter.ToString()))
+                {
+                    if (isLogin)
+                    {
+                        CreateThreadListTab("2", "地板", false);
+                    }
+                    else
+                    {
+                        CreateThreadListTab("14", "WIN版", false);
+                    }
+                    //CreateReplyListTab("1427253", "特别感谢 + 关于 + 反馈", false);
                 }
+                //else
+                //{
+                //    string dataStr = (string)e.NavigationParameter;
+                //    string[] dataAry = dataStr.Split(',');
+                //    string forumId = dataAry[0];
+                //    string forumName = dataAry[1];
+
+                //    CreateThreadListTab(forumId, forumName, false);
+                //}
 
                 await RefreshElementStatus();
             }
+            #endregion
+
         }
 
         #region 增量更新
@@ -440,6 +454,7 @@ namespace hipda
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // 更新顶部状态条
             await RefreshElementStatus();
 
             var pivot = (Pivot)sender;
@@ -461,27 +476,6 @@ namespace hipda
 
         private async Task RefreshElementStatus()
         {
-            #region 刷新 底部按钮
-            PivotItem item = (PivotItem)Pivot.SelectedItem;
-            string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
-            if (tabType.Equals("1")) // 主贴列表页
-            {
-                //tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
-
-                //refreshThreadsButton.Visibility = openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                //openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                //sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            }
-            else // 回复列表页
-            {
-                //tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
-
-                //refreshThreadsButton.Visibility = openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                //openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                //sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            }
-            #endregion
-
             #region 刷新 顶部状态栏
             StringBuilder navTextContainer = new StringBuilder();
 
@@ -1370,6 +1364,11 @@ namespace hipda
         {
             ThemeHelper.Light1();
             tabPage.RequestedTheme = ElementTheme.Light;
+        }
+
+        private void settingsAppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsPage));
         }
     }
 }

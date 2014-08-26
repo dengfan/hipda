@@ -47,6 +47,7 @@
                                 </AppBarButton.Flyout>
                             </AppBarButton>
                             <AppBarButton Label="关闭当前标签页" Click="closeTab_Click" />
+                            <AppBarButton Label="设置" Click="settingsAppBarButton_Click" />
                             <AppBarButton Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
                         </CommandBar.SecondaryCommands>
                     </CommandBar>
@@ -78,6 +79,7 @@
                                 </AppBarButton.Flyout>
                             </AppBarButton>
                             <AppBarButton Label="关闭当前标签页" Click="closeTab_Click" />
+                            <AppBarButton Label="设置" Click="settingsAppBarButton_Click" />
                             <AppBarButton Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
                         </CommandBar.SecondaryCommands>
                     </CommandBar>
