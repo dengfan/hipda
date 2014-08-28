@@ -101,26 +101,24 @@ namespace hipda
             #region 同步倒序看贴开关按钮之开关状态
             if (SortSettings.GetSortType == 1)
             {
-                //reverseListButton.IsChecked = true;
+                reverseListButton.IsChecked = true;
             }
             else
             {
-                //reverseListButton.IsChecked = false;
+                reverseListButton.IsChecked = false;
             }
             #endregion
 
             #region 读取当前账号的名称
             Account account = AccountSettings.GetDefault();
-            bool isLogin = account != null;
-            accountName = isLogin ? account.Username : "未登录";
+            accountName = account != null ? account.Username : "未登录";
             if (accountName.Length > 3)
             {
                 accountName = string.Format("{0}*{1}", accountName.Substring(0, 2), accountName.Last());
             }
             #endregion
 
-            #region 从墓碑恢复
-            if (e.PageState != null && e.PageState.Count > 0)
+            if (e.PageState != null && e.PageState.Count > 0) // 从墓碑恢复
             {
                 string tabStr = e.PageState["PivotItems"].ToString();
                 tabStr = tabStr.Substring(0, tabStr.Length - 1);
@@ -148,37 +146,25 @@ namespace hipda
                 int selectedIndex = Convert.ToInt16(e.PageState["PivotSelectedIndex"]);
                 Pivot.SelectedIndex = selectedIndex;
             }
-            #endregion
-
-            #region 正常打开
-            else
+            else // 正常打开
             {
-                if (e.NavigationParameter == null || string.IsNullOrEmpty(e.NavigationParameter.ToString()))
+                if (e.NavigationParameter == null)
                 {
-                    if (isLogin)
-                    {
-                        CreateThreadListTab("2", "地板", false);
-                    }
-                    else
-                    {
-                        CreateThreadListTab("14", "WIN版", false);
-                    }
-                    //CreateReplyListTab("1427253", "特别感谢 + 关于 + 反馈", false);
+                    CreateThreadListTab("14", "WIN版", false);
+                    CreateReplyListTab("1427253", "特别感谢 + 关于 + 反馈", false);
                 }
-                //else
-                //{
-                //    string dataStr = (string)e.NavigationParameter;
-                //    string[] dataAry = dataStr.Split(',');
-                //    string forumId = dataAry[0];
-                //    string forumName = dataAry[1];
+                else
+                {
+                    string dataStr = (string)e.NavigationParameter;
+                    string[] dataAry = dataStr.Split(',');
+                    string forumId = dataAry[0];
+                    string forumName = dataAry[1];
 
-                //    CreateThreadListTab(forumId, forumName, false);
-                //}
+                    CreateThreadListTab(forumId, forumName, false);
+                }
 
                 await RefreshElementStatus();
             }
-            #endregion
-
         }
 
         #region 增量更新
@@ -454,28 +440,32 @@ namespace hipda
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // 更新顶部状态条
             await RefreshElementStatus();
-
-            var pivot = (Pivot)sender;
-            PivotItem item = (PivotItem)pivot.SelectedItem;
-            string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
-
-            // thread list
-            if (tabType.Equals("1"))
-            {
-                BottomAppBar = ((Page)this.Resources["threadListCommandBar"]).BottomAppBar;
-            }
-
-            // reply list
-            else if (tabType.Equals("2"))
-            {
-                BottomAppBar = ((Page)this.Resources["replyListCommandBar"]).BottomAppBar;
-            }
         }
 
         private async Task RefreshElementStatus()
         {
+            #region 刷新 底部按钮
+            PivotItem item = (PivotItem)Pivot.SelectedItem;
+            string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
+            if (tabType.Equals("1")) // 主贴列表页
+            {
+                tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+
+                refreshThreadsButton.Visibility = openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+            else // 回复列表页
+            {
+                tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+
+                refreshThreadsButton.Visibility = openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+            #endregion
+
             #region 刷新 顶部状态栏
             StringBuilder navTextContainer = new StringBuilder();
 
@@ -816,13 +806,14 @@ namespace hipda
         {
             currentPostType = EnumPostType.Reply;
             currentEditType = EnumEditType.Add;
+            ShowPostReplyPanelAndButton();
         }
 
         private void openPostNewPanelButton_Click(object sender, RoutedEventArgs e)
         {
             currentPostType = EnumPostType.NewThread;
             currentEditType = EnumEditType.Add;
-            //ShowPostNewPanelAndButton();
+            ShowPostNewPanelAndButton();
         }
 
         private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
@@ -834,17 +825,19 @@ namespace hipda
 
                 if (currentEditType == EnumEditType.Add)
                 {
-                    //HidePostNewPanelAndButton();
+                    HidePostNewPanelAndButton();
                 }
                 else if (currentEditType == EnumEditType.Modify)
                 {
-                    //HidePostNewModifyPanelAndButton();
+                    HidePostNewModifyPanelAndButton();
                 }
             }
             else if (postReplyPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
             {
                 NavigationHelper.IsCanGoBack = false;
                 e.Handled = true;
+
+                HidePostReplyPanelAndButton();
             }
             else if (floorOriginalContentPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
             {
@@ -918,6 +911,8 @@ namespace hipda
                         return;
                     }
 
+                    HidePostReplyPanelAndButton();
+
                     postReplyContentTextBox.Text = string.Empty;
                     noticeauthor = string.Empty;
                     noticetrimstr = string.Empty;
@@ -976,7 +971,7 @@ namespace hipda
                         return;
                     }
 
-                    //HidePostNewPanelAndButton();
+                    HidePostNewPanelAndButton();
 
                     postNewTitleTextBox.Text = string.Empty;
                     postNewContentTextBox.Text = string.Empty;
@@ -1022,6 +1017,8 @@ namespace hipda
                     // 发布请求
                     string url = "http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=";
                     string resultContent = await httpClient.HttpPost(url, postData);
+
+                    HidePostReplyPanelAndButton();
 
                     postReplyContentTextBox.Text = string.Empty;
 
@@ -1069,7 +1066,7 @@ namespace hipda
                     string url = "http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=";
                     string resultContent = await httpClient.HttpPost(url, postData);
 
-                    //HidePostNewModifyPanelAndButton();
+                    HidePostNewModifyPanelAndButton();
 
                     postNewTitleTextBox.Text = string.Empty;
                     postNewContentTextBox.Text = string.Empty;
@@ -1088,6 +1085,94 @@ namespace hipda
             }
         }
 
+        #region 显示或隐藏回复或修改回复之输入面板
+        private void HidePostReplyPanelAndButton()
+        {
+            postReplyPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+
+            foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
+            {
+                btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+
+            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private void ShowPostReplyPanelAndButton()
+        {
+            postReplyPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+
+            foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
+            {
+                btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+
+            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            sendButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+        }
+        #endregion
+
+        #region 显示或隐藏发贴或修改发贴之输入面板
+        private void HidePostNewPanelAndButton()
+        {
+            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
+            {
+                btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+
+            refreshThreadsButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private void ShowPostNewPanelAndButton()
+        {
+            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
+            {
+                btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+
+            refreshThreadsButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            sendButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+        }
+
+        private void HidePostNewModifyPanelAndButton()
+        {
+            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
+            {
+                btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+
+            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private void ShowPostNewModifyPanelAndButton()
+        {
+            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
+            {
+                btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+
+            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            sendButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+        }
+        #endregion
+
         private void replyReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
@@ -1100,7 +1185,7 @@ namespace hipda
 
             currentPostType = EnumPostType.Reply;
             currentEditType = EnumEditType.Add;
-            //ShowPostReplyPanelAndButton();
+            ShowPostReplyPanelAndButton();
         }
 
         private void refReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -1115,6 +1200,7 @@ namespace hipda
 
             currentPostType = EnumPostType.Reply;
             currentEditType = EnumEditType.Add;
+            ShowPostReplyPanelAndButton();
         }
 
         private void viewFullContentMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
@@ -1215,7 +1301,7 @@ namespace hipda
 
         private void replyMenu_Opening(object sender, object e)
         {
-            //tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
         }
 
         private void replyListItemGrid_Holding(object sender, HoldingRoutedEventArgs e)
@@ -1325,7 +1411,7 @@ namespace hipda
                     postNewTitleTextBox.Text = contentForEdit.Subject;
                     postNewContentTextBox.Text = contentForEdit.Content;
 
-                    //ShowPostNewModifyPanelAndButton();
+                    ShowPostNewModifyPanelAndButton();
                 }
             }
             else
@@ -1338,7 +1424,7 @@ namespace hipda
                     // 设置数据到输入框
                     postReplyContentTextBox.Text = contentForEdit.Content;
 
-                    //ShowPostReplyPanelAndButton();
+                    ShowPostReplyPanelAndButton();
                 }
             }
         }
@@ -1358,17 +1444,16 @@ namespace hipda
         {
             ThemeHelper.Dark1();
             tabPage.RequestedTheme = ElementTheme.Dark;
+            tabPageCommandBar.Background = Application.Current.Resources["CommandBarBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Foreground = Application.Current.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
         private void light1ModeToggle_Click(object sender, RoutedEventArgs e)
         {
             ThemeHelper.Light1();
             tabPage.RequestedTheme = ElementTheme.Light;
-        }
-
-        private void settingsAppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(SettingsPage));
+            tabPageCommandBar.Background = Application.Current.Resources["CommandBarBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Foreground = Application.Current.Resources["CommandFontColor"] as SolidColorBrush;
         }
     }
 }

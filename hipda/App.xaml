@@ -32,15 +32,20 @@
                 <Setter Property="Height" Value="60"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
             </Style>
-
+            
+            
+            
+            
+            
+            <!--home page style-->
             <Style x:Key="GroupHeaderStyle" TargetType="ListViewHeaderItem">
-                <Setter Property="Padding" Value="7"/>
+                <Setter Property="Padding" Value="10,5"/>
             </Style>
 
             <GroupStyle x:Key="listViewGroupStyle" HeaderContainerStyle="{StaticResource GroupHeaderStyle}">
                 <GroupStyle.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}" Style="{ThemeResource GroupHeaderTextBlockStyle}" />
+                        <TextBlock Text="{Binding Name}" Style="{StaticResource GroupHeaderTextBlockStyle}" />
                     </DataTemplate>
                 </GroupStyle.HeaderTemplate>
             </GroupStyle>

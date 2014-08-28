@@ -29,7 +29,7 @@ namespace hipda
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SettingsPage : Page
+    public sealed partial class HomePage : Page
     {
         private const int maxHubSectionCount = 4;
         private const string FirstGroupName = "FirstGroup";
@@ -39,7 +39,7 @@ namespace hipda
         private ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         private HttpHandle httpClient = HttpHandle.getInstance();
 
-        public SettingsPage()
+        public HomePage()
         {
             this.InitializeComponent();
 
@@ -213,18 +213,6 @@ namespace hipda
             await AccountSettings.Delete(keyName);
 
             Refresh();
-        }
-
-        private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (Pivot.SelectedIndex == 1)
-            {
-                this.begin.Begin();
-            }
-            else
-            {
-                this.end.Begin();
-            }
         }
     }
 }
