@@ -148,7 +148,7 @@ namespace hipda
                 SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
 
                 // TODO: 将此值更改为适合您的应用程序的缓存大小。
-                rootFrame.CacheSize = 1;
+                //rootFrame.CacheSize = 1;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -186,7 +186,7 @@ namespace hipda
                 // 当导航堆栈尚未还原时，导航到第一页，
                 // 并通过将所需信息作为导航参数传入来配置
                 // 新页面。
-                if (!rootFrame.Navigate(typeof(TabPage), e.Arguments))
+                if (!rootFrame.Navigate(typeof(HomePage), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -196,10 +196,9 @@ namespace hipda
             Window.Current.Activate();
 
             StatusBar statusBar = StatusBar.GetForCurrentView();
-            statusBar.BackgroundColor = Colors.White;
-            statusBar.BackgroundOpacity = 0;
-            //statusBar.ForegroundColor = ((SolidColorBrush)Application.Current.Resources["MainFontColor"]).Color;
-            statusBar.ForegroundColor = Colors.Black;
+            statusBar.BackgroundColor = Colors.Purple;
+            statusBar.BackgroundOpacity = 255;
+            statusBar.ForegroundColor = Colors.White;
             statusBar.ProgressIndicator.ProgressValue = 0;
             await statusBar.ShowAsync();
 
