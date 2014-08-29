@@ -25,990 +25,1015 @@
     </Page.Transitions>
 
     <Page.Resources>
-        <ResourceDictionary>
-            <Style x:Name="ThreadItemStyle" TargetType="ListViewItem">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="Padding" Value="0,10,0,0" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ListViewItem">
-                            <Grid>
-                                <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" 
-                                                  ContentTransitions="{TemplateBinding ContentTransitions}" 
-                                                  Content="{TemplateBinding Content}" 
-                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                                  Margin="{TemplateBinding Padding}" 
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+        <!--<SolidColorBrush x:Key="PageBgColor" Color="#1D1D1D"/>
+        <SolidColorBrush x:Key="ItemBgColor" Color="#262626"/>
+        <SolidColorBrush x:Key="CommandBarBgColor" Color="#242424"/>
+        <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>-->
 
-            <Style x:Name="ReplyItemStyle" TargetType="ListViewItem">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="Padding" Value="0,10,0,0" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ListViewItem">
-                            <Grid>
-                                <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" 
-                                                  ContentTransitions="{TemplateBinding ContentTransitions}" 
-                                                  Content="{TemplateBinding Content}" 
-                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                                  Margin="{TemplateBinding Padding}" 
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+        <SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
+        <SolidColorBrush x:Key="ItemBgColor" Color="#C4E5FE"/>
+        <SolidColorBrush x:Key="CommandBarBgColor" Color="Black"/>
+        <SolidColorBrush x:Key="MainFontColor" Color="#666666"/>
+        <SolidColorBrush x:Key="CommandFontColor" Color="WhiteSmoke"/>
 
-            <Style x:Key="ChatBubbleStyle" TargetType="Border">
-                <Setter Property="Padding" Value="14,10"/>
-                <Setter Property="Background" Value="{StaticResource ItemBgColor}"/>
-                <Setter Property="CornerRadius" Value="9"/>
-            </Style>
+        <Style x:Key="Text1Style" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource MainFontColor}"/>
+            <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+            <Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
+        </Style>
 
-            <Style x:Key="ReplyContentFontStyle" TargetType="ContentControl">
-                <Setter Property="Foreground" Value="DimGray"/>
-                <Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
-            </Style>
+        <x:Double x:Key="FaceIconOpacity">1.0</x:Double>
+
+        <Style x:Key="FaceIconStyle" TargetType="Border">
+            <Setter Property="Opacity" Value="1"/>
+            <Setter Property="CornerRadius" Value="30"/>
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
             
-            <DataTemplate x:Name="ThreadListItemTemplate">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
+        <Style x:Name="ThreadItemStyle" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0,10,0,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Grid>
+                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                                ContentTransitions="{TemplateBinding ContentTransitions}" 
+                                                Content="{TemplateBinding Content}" 
+                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                Margin="{TemplateBinding Padding}" 
+                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="60"/>
-                        <ColumnDefinition Width="18"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+        <Style x:Name="ReplyItemStyle" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0,10,0,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Grid>
+                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                                ContentTransitions="{TemplateBinding ContentTransitions}" 
+                                                Content="{TemplateBinding Content}" 
+                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                Margin="{TemplateBinding Padding}" 
+                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-                    <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" 
-                            Opacity="{StaticResource FaceIconOpacity}" VerticalAlignment="Top" />
+        <Style x:Key="ChatBubbleStyle" TargetType="Border">
+            <Setter Property="Padding" Value="14,10"/>
+            <Setter Property="Background" Value="{StaticResource ItemBgColor}"/>
+            <Setter Property="CornerRadius" Value="9"/>
+        </Style>
 
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
-                               Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
+        <Style x:Key="ReplyContentFontStyle" TargetType="ContentControl">
+            <Setter Property="Foreground" Value="DimGray"/>
+            <Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
+        </Style>
+            
+        <DataTemplate x:Name="ThreadListItemTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
-                        <StackPanel>
-                            <TextBlock x:Name="ownerInfoTextBlock"
-                                       TextWrapping="WrapWholeWords"
-                                       HorizontalAlignment="Left"
-                                       Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}">
-                                <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
-                                <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
-                            </TextBlock>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-                            <TextBlock x:Name="titleTextBlock" FontWeight="Bold" Style="{StaticResource Text1Style}">
-                                <Run x:Name="pictureIconTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
-                                <Run x:Name="pagerclipTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
-                                <Run x:Name="titleTextBlockRun" Text="{Binding Title}" />
-                                <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" />
-                            </TextBlock>
-                        </StackPanel>
-                    </Border>
+                <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" 
+                        Opacity="{StaticResource FaceIconOpacity}" VerticalAlignment="Top" />
 
-                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Pivot.SlideInAnimationGroup="GroupOne" Opacity="0.5"
-                            Margin="0,12,0,2" Padding="8,2" HorizontalAlignment="Center" 
-                            Background="{StaticResource ItemBgColor}"
-                            CornerRadius="12">
-                        <TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
-                                   FontWeight="Bold"
-                                   FontFamily="Global User Interface">
-                                    <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
-                                    <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
+                            Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
+
+                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
+                    <StackPanel>
+                        <TextBlock x:Name="ownerInfoTextBlock"
+                                    TextWrapping="WrapWholeWords"
+                                    HorizontalAlignment="Left"
+                                    Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}">
+                            <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                            <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
                         </TextBlock>
-                    </Border>
-                </Grid>
-            </DataTemplate>
 
-            <DataTemplate x:Name="ReplyListItemTemplate">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
+                        <TextBlock x:Name="titleTextBlock" FontWeight="Bold" Style="{StaticResource Text1Style}">
+                            <Run x:Name="pictureIconTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
+                            <Run x:Name="pagerclipTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
+                            <Run x:Name="titleTextBlockRun" Text="{Binding Title}" />
+                            <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" />
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="60"/>
-                        <ColumnDefinition Width="18"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Pivot.SlideInAnimationGroup="GroupOne" Opacity="0.5"
+                        Margin="0,12,0,2" Padding="8,2" HorizontalAlignment="Center" 
+                        Background="{StaticResource ItemBgColor}"
+                        CornerRadius="12">
+                    <TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
+                                FontWeight="Bold"
+                                FontFamily="Global User Interface">
+                                <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
+                                <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
+                    </TextBlock>
+                </Border>
+            </Grid>
+        </DataTemplate>
 
-                    <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
+        <DataTemplate x:Name="ReplyListItemTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
-                               Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-                    <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
-                        <StackPanel>
-                            <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}">
-                                <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
-                                <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
-                            </TextBlock>
+                <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
 
-                            <ContentControl x:Name="replyContent" Style="{StaticResource ReplyContentFontStyle}" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
+                            Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
+
+                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}">
+                            <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                            <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
+                        </TextBlock>
+
+                        <ContentControl x:Name="replyContent" Style="{StaticResource ReplyContentFontStyle}" />
                             
-                            <Button x:Name="showMoreButton"
-                                    HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
-                                    Click="viewFullContentButton_Click" Visibility="Collapsed" />
-                        </StackPanel>
-                    </Border>
+                        <Button x:Name="showMoreButton"
+                                HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
+                                Click="viewFullContentButton_Click" Visibility="Collapsed" />
+                    </StackPanel>
+                </Border>
 
-                    <Button x:Name="menuButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" MinHeight="24" Pivot.SlideInAnimationGroup="GroupOne">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Border Opacity="0.5" Margin="0,12,0,2" Padding="8,2" HorizontalAlignment="Center" Background="{StaticResource ItemBgColor}" CornerRadius="12">
-                                    <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}" HorizontalAlignment="Center" FontFamily="Global User Interface">
-                                        <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
-                                        <Run Text="{Binding FloorNumStr}" />
-                                    </TextBlock>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Button.Flyout>
-                            <MenuFlyout x:Name="replyMenu" Opening="replyMenu_Opening">
-                                <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
-                                <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
-                                <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" Click="modifyMenuFlyoutItem_Click" IsEnabled="False" />
-                                <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" Click="viewFullContentMenuFlyoutItem_Click" />
-                            </MenuFlyout>
-                        </Button.Flyout>
-                    </Button>
+                <Button x:Name="menuButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" MinHeight="24" Pivot.SlideInAnimationGroup="GroupOne">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border Opacity="0.5" Margin="0,12,0,2" Padding="8,2" HorizontalAlignment="Center" Background="{StaticResource ItemBgColor}" CornerRadius="12">
+                                <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}" HorizontalAlignment="Center" FontFamily="Global User Interface">
+                                    <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
+                                    <Run Text="{Binding FloorNumStr}" />
+                                </TextBlock>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Flyout>
+                        <MenuFlyout x:Name="replyMenu" Opening="replyMenu_Opening">
+                            <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
+                            <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
+                            <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" Click="modifyMenuFlyoutItem_Click" IsEnabled="False" />
+                            <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" Click="viewFullContentMenuFlyoutItem_Click" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
                     
-                    <!--<Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                         X1="0" Y1="15"
-                         X2="1000" Y2="15"
-                         Stroke="Silver" StrokeDashArray="8,4" />-->
-                </Grid>
-            </DataTemplate>
-
-            <ControlTemplate x:Name="imageFaceGrid">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                        <RowDefinition Height="65"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Click="addPhotoButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/plus_48x48.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522171e4cb3f0eb26c192.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/1.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/140715221714976bc7d3962b5d.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/2.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522178f275b517a688ada.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/3.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="0" Grid.Column="4" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522170e1d99081ff30ca5.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/4.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217a3afef9be5dcd55b.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/5.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522173e67ecb8c2ec2a46.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/6.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217bbbfd48bc66f8f4a.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/7.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522173fd492dfd142a3d8.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/8.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217dbce21054c18bbbf.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/9.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217bb45c300842334b2.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/10.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217832ca03e9c8dd244.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/11.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217228e48fb9809157b.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/12.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217d29ee7ecdccfdf84.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/13.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/140715221793d8be3e189f26d1.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/14.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217e4db9fd2eae3c4c2.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/15.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522177803b63696b5a22d.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/16.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217715e829390952912.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/17.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522170cab30ad86198afe.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/18.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522172c6e90bdbd2df03e.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/19.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522173ed44c087d951af1.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/20.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522171757582bc9aefe54.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/21.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217a1934c5fda807e15.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/22.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522172c2407de0b4feaac.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/23.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="4" Grid.Column="4" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/140715221783463d4d07bdb661.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/24.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522172bd4de9ae043edab.png[/img]" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/25.png" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Content="3_57" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/01.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Content="3_58" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/02.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="5" Grid.Column="3" HorizontalAlignment="Center" Content="3_59" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/03.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="5" Grid.Column="4" HorizontalAlignment="Center" Content="3_60" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/04.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="6" Grid.Column="0" HorizontalAlignment="Center" Content="3_61" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/05.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Content="3_62" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/06.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" Content="3_63" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/07.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center" Content="3_64" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/08.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="6" Grid.Column="4" HorizontalAlignment="Center" Content="3_65" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/09.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center" Content="3_66" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/10.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Content="3_67" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/11.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="7" Grid.Column="2" HorizontalAlignment="Center" Content="3_68" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/12.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="7" Grid.Column="3" HorizontalAlignment="Center" Content="3_69" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/13.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="7" Grid.Column="4" HorizontalAlignment="Center" Content="3_70" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/14.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="8" Grid.Column="0" HorizontalAlignment="Center" Content="3_71" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/15.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="8" Grid.Column="1" HorizontalAlignment="Center" Content="3_72" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/16.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="8" Grid.Column="2" HorizontalAlignment="Center" Content="3_73" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/17.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="8" Grid.Column="3" HorizontalAlignment="Center" Content="3_74" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/18.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="8" Grid.Column="4" HorizontalAlignment="Center" Content="3_75" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/19.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="9" Grid.Column="0" HorizontalAlignment="Center" Content="3_76" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/20.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="9" Grid.Column="1" HorizontalAlignment="Center" Content="3_77" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/21.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="9" Grid.Column="2" HorizontalAlignment="Center" Content="3_78" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/22.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="9" Grid.Column="3" HorizontalAlignment="Center" Content="3_79" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/23.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="9" Grid.Column="4" HorizontalAlignment="Center" Content="3_80" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/24.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="10" Grid.Column="0" HorizontalAlignment="Center" Content="2_41" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/01.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="10" Grid.Column="1" HorizontalAlignment="Center" Content="2_42" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/02.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="10" Grid.Column="2" HorizontalAlignment="Center" Content="2_43" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/03.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="10" Grid.Column="3" HorizontalAlignment="Center" Content="2_44" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/04.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="10" Grid.Column="4" HorizontalAlignment="Center" Content="2_45" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/05.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="11" Grid.Column="0" HorizontalAlignment="Center" Content="2_46" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/06.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="11" Grid.Column="1" HorizontalAlignment="Center" Content="2_47" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/07.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="11" Grid.Column="2" HorizontalAlignment="Center" Content="2_48" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/08.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="11" Grid.Column="3" HorizontalAlignment="Center" Content="2_49" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/09.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="11" Grid.Column="4" HorizontalAlignment="Center" Content="2_50" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/10.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="12" Grid.Column="0" HorizontalAlignment="Center" Content="2_51" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/11.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="12" Grid.Column="1" HorizontalAlignment="Center" Content="2_52" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/12.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="12" Grid.Column="2" HorizontalAlignment="Center" Content="2_53" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/13.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="12" Grid.Column="3" HorizontalAlignment="Center" Content="2_54" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/14.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="12" Grid.Column="4" HorizontalAlignment="Center" Content="2_55" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/15.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Button Grid.Row="13" Grid.Column="0" HorizontalAlignment="Center" Content="2_56" Click="addFaceButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Image Stretch="None">
-                                    <Image.Source>
-                                        <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/16.gif" />
-                                    </Image.Source>
-                                </Image>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-                </Grid>
-            </ControlTemplate>
-        </ResourceDictionary>
+                <!--<Line HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                        X1="0" Y1="15"
+                        X2="1000" Y2="15"
+                        Stroke="Silver" StrokeDashArray="8,4" />-->
+            </Grid>
+        </DataTemplate>
+
+        <ControlTemplate x:Name="imageFaceGrid">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Click="addPhotoButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/plus_48x48.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522171e4cb3f0eb26c192.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/1.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/140715221714976bc7d3962b5d.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/2.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522178f275b517a688ada.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/3.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="0" Grid.Column="4" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522170e1d99081ff30ca5.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/4.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217a3afef9be5dcd55b.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/5.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522173e67ecb8c2ec2a46.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/6.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217bbbfd48bc66f8f4a.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/7.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522173fd492dfd142a3d8.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/8.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217dbce21054c18bbbf.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/9.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217bb45c300842334b2.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/10.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217832ca03e9c8dd244.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/11.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217228e48fb9809157b.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/12.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217d29ee7ecdccfdf84.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/13.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/140715221793d8be3e189f26d1.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/14.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217e4db9fd2eae3c4c2.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/15.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522177803b63696b5a22d.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/16.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217715e829390952912.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/17.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522170cab30ad86198afe.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/18.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522172c6e90bdbd2df03e.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/19.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522173ed44c087d951af1.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/20.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522171757582bc9aefe54.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/21.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/1407152217a1934c5fda807e15.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/22.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522172c2407de0b4feaac.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/23.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="4" Grid.Column="4" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/140715221783463d4d07bdb661.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/24.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" Content="[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522172bd4de9ae043edab.png[/img]" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/baoman/25.png" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Content="3_57" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/01.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Content="3_58" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/02.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="5" Grid.Column="3" HorizontalAlignment="Center" Content="3_59" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/03.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="5" Grid.Column="4" HorizontalAlignment="Center" Content="3_60" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/04.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="6" Grid.Column="0" HorizontalAlignment="Center" Content="3_61" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/05.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Content="3_62" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/06.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" Content="3_63" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/07.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center" Content="3_64" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/08.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="6" Grid.Column="4" HorizontalAlignment="Center" Content="3_65" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/09.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center" Content="3_66" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/10.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Content="3_67" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/11.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="7" Grid.Column="2" HorizontalAlignment="Center" Content="3_68" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/12.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="7" Grid.Column="3" HorizontalAlignment="Center" Content="3_69" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/13.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="7" Grid.Column="4" HorizontalAlignment="Center" Content="3_70" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/14.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="8" Grid.Column="0" HorizontalAlignment="Center" Content="3_71" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/15.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="8" Grid.Column="1" HorizontalAlignment="Center" Content="3_72" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/16.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="8" Grid.Column="2" HorizontalAlignment="Center" Content="3_73" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/17.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="8" Grid.Column="3" HorizontalAlignment="Center" Content="3_74" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/18.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="8" Grid.Column="4" HorizontalAlignment="Center" Content="3_75" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/19.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="9" Grid.Column="0" HorizontalAlignment="Center" Content="3_76" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/20.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="9" Grid.Column="1" HorizontalAlignment="Center" Content="3_77" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/21.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="9" Grid.Column="2" HorizontalAlignment="Center" Content="3_78" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/22.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="9" Grid.Column="3" HorizontalAlignment="Center" Content="3_79" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/23.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="9" Grid.Column="4" HorizontalAlignment="Center" Content="3_80" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/grapeman/24.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="10" Grid.Column="0" HorizontalAlignment="Center" Content="2_41" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/01.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="10" Grid.Column="1" HorizontalAlignment="Center" Content="2_42" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/02.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="10" Grid.Column="2" HorizontalAlignment="Center" Content="2_43" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/03.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="10" Grid.Column="3" HorizontalAlignment="Center" Content="2_44" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/04.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="10" Grid.Column="4" HorizontalAlignment="Center" Content="2_45" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/05.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="11" Grid.Column="0" HorizontalAlignment="Center" Content="2_46" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/06.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="11" Grid.Column="1" HorizontalAlignment="Center" Content="2_47" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/07.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="11" Grid.Column="2" HorizontalAlignment="Center" Content="2_48" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/08.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="11" Grid.Column="3" HorizontalAlignment="Center" Content="2_49" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/09.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="11" Grid.Column="4" HorizontalAlignment="Center" Content="2_50" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/10.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="12" Grid.Column="0" HorizontalAlignment="Center" Content="2_51" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/11.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="12" Grid.Column="1" HorizontalAlignment="Center" Content="2_52" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/12.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="12" Grid.Column="2" HorizontalAlignment="Center" Content="2_53" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/13.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="12" Grid.Column="3" HorizontalAlignment="Center" Content="2_54" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/14.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="12" Grid.Column="4" HorizontalAlignment="Center" Content="2_55" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/15.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Grid.Row="13" Grid.Column="0" HorizontalAlignment="Center" Content="2_56" Click="addFaceButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Stretch="None">
+                                <Image.Source>
+                                    <BitmapImage UriSource="ms-appx:///Assets/Faces/coolmonkey/16.gif" />
+                                </Image.Source>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </ControlTemplate>
     </Page.Resources>
 
     <Grid>
