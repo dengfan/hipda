@@ -39,9 +39,9 @@
 
         <DataTemplate x:Key="GroupItemTemplate">
             <StackPanel>
-                <TextBlock Foreground="DimGray" Style="{StaticResource BodyTextBlockStyle}">
-                        <Run Text="{Binding Name}" />
-                        <Run Text="{Binding TodayQuantity}" Foreground="{ThemeResource PhoneAccentBrush}" FontWeight="Bold" />
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}">
+                    <Run Text="{Binding Name}" />
+                    <Run Text="{Binding TodayQuantity}" Foreground="{ThemeResource PhoneAccentBrush}" FontWeight="Bold" />
                 </TextBlock>
 
                 <TextBlock
@@ -52,20 +52,20 @@
         </DataTemplate>
 
         <!--<Storyboard x:Name="begin">
-            <DoubleAnimation Duration="0:0:0.15" To="226" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="backgroundBorder"/>
-        </Storyboard>
-
-        <Storyboard x:Name="end">
-            <DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="backgroundBorder"/>
-        </Storyboard>-->
+             <DoubleAnimation Duration="0:0:0.15" To="226" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="backgroundBorder"/>
+             </Storyboard>
+             
+             <Storyboard x:Name="end">
+             <DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="backgroundBorder"/>
+             </Storyboard>-->
     </Page.Resources>
 
     <Grid>
         <!--<Grid x:Name="backgroundBorder" Margin="0,57,0,0" Background="White" Opacity="0.6">
-            <Grid.RenderTransform>
-                <CompositeTransform/>
-            </Grid.RenderTransform>
-        </Grid>-->
+             <Grid.RenderTransform>
+             <CompositeTransform/>
+             </Grid.RenderTransform>
+             </Grid>-->
         <Pivot x:Name="Pivot"
                CommonNavigationTransitionInfo.IsStaggerElement="True">
             <Pivot.HeaderTemplate>
@@ -105,7 +105,7 @@
 
                                 <TextBlock Padding="10" FontSize="{StaticResource ContentControlFontSize}">
                                     <Run Text="{Binding Username}"/>
-                                    <Run Text="{Binding Label}" Foreground="{StaticResource PhoneAccentBrush}" FontWeight="Bold"/>
+                                    <Run Text="{Binding Label}" Foreground="{StaticResource PhoneAccentBrush}"/>
                                 </TextBlock>
                             </Grid>
                         </DataTemplate>
@@ -116,16 +116,16 @@
                             <PasswordBox x:Name="passwordTextBox" Margin="0" TabIndex="2" PlaceholderText="输入密码" Padding="10"/>
                             <Button x:Name="loginButton" TabIndex="3" Click="loginButton_Click" Content="添加账号并登录" HorizontalAlignment="Stretch" BorderThickness="0" Background="{StaticResource PhoneAccentBrush}" Foreground="White" />
                             <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}" TextWrapping="Wrap">
-                                <Run Text="使用说明" />
+                                <Run Text="使用说明" FontWeight="Bold" />
                                 <LineBreak/>
                                 <Run Text="1. 论坛网址：" />
                                 <Hyperlink NavigateUri="http://www.hi-pda.com/forum">http://www.hi-pda.com/forum</Hyperlink>
                                 <LineBreak/>
                                 <Run Text="2. 如果您没有HiPDA论坛账号，请前往论坛页面" />
                                 <Hyperlink NavigateUri="http://www.hi-pda.com/forum/register.php">注册</Hyperlink>
-                                <Run Text="，并等待客理员审核，本应用暂不提供注册功能。" />
+                                <Run Text="，并等待管理员审核，本应用暂不提供注册功能。" />
                                 <LineBreak/>
-                                <Run Text="3. 如果您有多个账号，你可以长按账号名称进行马甲切换和管理。" />
+                                <Run Text="3. 如果您绑定了多个账号，你可以长按账号名称进行马甲切换和管理。" />
                                 <LineBreak/>
                                 <Run Text="4. 您的账号和密码均仅保存在您的手机本地，请放心使用。" />
                             </TextBlock>

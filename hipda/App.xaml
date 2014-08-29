@@ -6,32 +6,7 @@
     xmlns:local="using:hipda">
     <Application.Resources>
         <ResourceDictionary>
-            <!--<SolidColorBrush x:Key="PageBgColor" Color="#1D1D1D"/>
-            <SolidColorBrush x:Key="ItemBgColor" Color="#262626"/>
-            <SolidColorBrush x:Key="CommandBarBgColor" Color="#242424"/>
-            <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>-->
-
-            <SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
-            <SolidColorBrush x:Key="ItemBgColor" Color="#C4E5FE"/>
-            <SolidColorBrush x:Key="CommandBarBgColor" Color="Black"/>
-            <SolidColorBrush x:Key="MainFontColor" Color="#666666"/>
-            <SolidColorBrush x:Key="CommandFontColor" Color="WhiteSmoke"/>
-
-            <Style x:Key="Text1Style" TargetType="TextBlock">
-                <Setter Property="Foreground" Value="{StaticResource MainFontColor}"/>
-                <Setter Property="TextWrapping" Value="WrapWholeWords"/>
-                <Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
-            </Style>
-
-            <x:Double x:Key="FaceIconOpacity">1.0</x:Double>
-
-            <Style x:Key="FaceIconStyle" TargetType="Border">
-                <Setter Property="Opacity" Value="1"/>
-                <Setter Property="CornerRadius" Value="30"/>
-                <Setter Property="Width" Value="60"/>
-                <Setter Property="Height" Value="60"/>
-                <Setter Property="HorizontalAlignment" Value="Left"/>
-            </Style>
+            
             
             
             
