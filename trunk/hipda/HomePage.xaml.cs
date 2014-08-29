@@ -148,7 +148,7 @@ namespace hipda
                 }
                 else
                 {
-                    await new MessageDialog("1. 请确保账号密码正确，否则失败次数超过5次，会被禁止登录15分钟！\n2. 账号必须已激活。", "账号验证失败").ShowAsync();
+                    await new MessageDialog("1. 请确保账号密码正确，否则失败次数超过5次，会被禁止登录15分钟！\n2. 账号必须已通过管理员审核。", "账号验证失败").ShowAsync();
                 }
             }
 
