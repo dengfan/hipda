@@ -70,7 +70,7 @@
                CommonNavigationTransitionInfo.IsStaggerElement="True">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" />
+                    <TextBlock Text="{Binding}" FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem
@@ -112,10 +112,13 @@
                     </ListView.ItemTemplate>
                     <ListView.Footer>
                         <StackPanel x:Name="addAccountPanel" Margin="0,10,0,0">
-                            <TextBox x:Name="usernameTextBox" Margin="0" TabIndex="1" PlaceholderText="输入账号" Padding="10"/>
-                            <PasswordBox x:Name="passwordTextBox" Margin="0" TabIndex="2" PlaceholderText="输入密码" Padding="10"/>
-                            <Button x:Name="loginButton" TabIndex="3" Click="loginButton_Click" Content="添加账号并登录" HorizontalAlignment="Stretch" BorderThickness="0" Background="{StaticResource PhoneAccentBrush}" Foreground="White" />
-                            <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}" TextWrapping="Wrap">
+                            <TextBox x:Name="usernameTextBox" Margin="0" TabIndex="1" Foreground="{StaticResource PhoneAccentBrush}" PlaceholderText="输入账号" Padding="10"/>
+                            <PasswordBox x:Name="passwordTextBox" Margin="0" TabIndex="2" Foreground="{StaticResource PhoneAccentBrush}" PlaceholderText="输入密码" Padding="10"/>
+                            <Button x:Name="loginButton" TabIndex="3" Foreground="White"
+                                    HorizontalAlignment="Stretch" BorderThickness="0" Background="{StaticResource PhoneAccentBrush}"
+                                    Content="添加账号并登录"
+                                    Click="loginButton_Click" />
+                            <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}" TextWrapping="Wrap" Pivot.SlideInAnimationGroup="GroupOne">
                                 <Run Text="使用说明" FontWeight="Bold" />
                                 <LineBreak/>
                                 <Run Text="1. 论坛网址：" />
@@ -161,4 +164,13 @@
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Favorite" Label="我要给好评"/>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="openTabForApp" Label="关于" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>
