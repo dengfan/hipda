@@ -147,40 +147,15 @@
                     </ListView.Footer>
                 </ListView>
             </PivotItem>
-            <PivotItem 
-                Header="设置" 
-                CommonNavigationTransitionInfo.IsStaggerElement="True"
-                Margin="0">
-                <ListView Padding="10,0">
-                    <ListViewItem>
-                        <StackPanel>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0" Text="看贴样式" Style="{StaticResource BodyTextBlockStyle}"/>
-                            </Grid>
-                            
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem>
-                        <StackPanel>
-                            <TextBlock Text="看贴样式"/>
-                        </StackPanel>
-                    </ListViewItem>
-                </ListView>
-            </PivotItem>
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
 
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Favorite" Label="我要给好评"/>
+            <AppBarButton x:Name="marketplaceReviewAppBarButton" Icon="Favorite" Label="我要给好评" Click="marketplaceReviewAppBarButton_Click"/>
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="openTabForApp" Label="关于" />
+                <AppBarButton x:Name="openTabForApp" Label="关于" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
