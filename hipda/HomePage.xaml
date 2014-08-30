@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="WhiteSmoke">
+    RequestedTheme="Light"
+    Background="#F1F1F1">
 
     <Page.Transitions>
         <TransitionCollection>
@@ -152,7 +153,7 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar>
+        <CommandBar Background="LightGray">
             <AppBarButton x:Name="marketplaceReviewAppBarButton" Icon="Favorite" Label="我要给好评" Click="marketplaceReviewAppBarButton_Click"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openTabForApp" Label="关于" Click="openTabForApp_Click" />
