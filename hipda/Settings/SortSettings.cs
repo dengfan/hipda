@@ -10,20 +10,20 @@ namespace hipda.Settings
 {
     public static class SortSettings
     {
-        private static string sortTypeContainerKeyName = "sortTypeContainer";
-        private static string sortTypeDataKeyName = "sortTypeData";
+        private static string sortTypeContainerKeyName = "SortSettingsContainer";
+        private static string defaultSortKeyName = "DefaultSort";
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
         public static void Toggle()
         {
             ApplicationDataContainer container = localSettings.CreateContainer(sortTypeContainerKeyName, ApplicationDataCreateDisposition.Always);
             var sortTypeContainer = localSettings.Containers[sortTypeContainerKeyName];
-            if (!sortTypeContainer.Values.ContainsKey(sortTypeDataKeyName))
+            if (!sortTypeContainer.Values.ContainsKey(defaultSortKeyName))
             {
-                sortTypeContainer.Values[sortTypeDataKeyName] = DataSource.OrderType;
+                sortTypeContainer.Values[defaultSortKeyName] = DataSource.OrderType;
             }
 
-            if (sortTypeContainer.Values[sortTypeDataKeyName].ToString().Equals("1"))
+            if (sortTypeContainer.Values[defaultSortKeyName].ToString().Equals("1"))
             {
                 DataSource.OrderType = 2;
             }
@@ -32,7 +32,7 @@ namespace hipda.Settings
                 DataSource.OrderType = 1;
             }
 
-            sortTypeContainer.Values[sortTypeDataKeyName] = DataSource.OrderType;
+            sortTypeContainer.Values[defaultSortKeyName] = DataSource.OrderType;
         }
 
         public static int GetSortType
@@ -41,12 +41,12 @@ namespace hipda.Settings
             {
                 ApplicationDataContainer container = localSettings.CreateContainer(sortTypeContainerKeyName, ApplicationDataCreateDisposition.Always);
                 var sortTypeContainer = localSettings.Containers[sortTypeContainerKeyName];
-                if (!sortTypeContainer.Values.ContainsKey(sortTypeDataKeyName))
+                if (!sortTypeContainer.Values.ContainsKey(defaultSortKeyName))
                 {
-                    sortTypeContainer.Values[sortTypeDataKeyName] = DataSource.OrderType;
+                    sortTypeContainer.Values[defaultSortKeyName] = DataSource.OrderType;
                 }
 
-                return Convert.ToInt16(sortTypeContainer.Values[sortTypeDataKeyName]);
+                return Convert.ToInt16(sortTypeContainer.Values[defaultSortKeyName]);
             }
         }
     }

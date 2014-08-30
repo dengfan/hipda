@@ -12,8 +12,8 @@ namespace hipda.Settings
 {
     public class AccountSettings
     {
-        private static string accountDataKeyName = "accountData";
-        private static string defaultAccountKeyName = "defaultAccount";
+        private static string accountDataKeyName = "AccountSettingsContainer";
+        private static string defaultAccountKeyName = "DefaultAccount";
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
         private static AccountSettings _accountHelper = new AccountSettings();
@@ -39,13 +39,15 @@ namespace hipda.Settings
             foreach (var item in items)
             {
                 var accountData = (ApplicationDataCompositeValue)item.Value;
-                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
+                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password") && accountData.ContainsKey("questionid") && accountData.ContainsKey("answer"))
                 {
                     string key = item.Key;
                     string username = accountData["username"].ToString();
                     string password = accountData["password"].ToString();
+                    int questionid = Convert.ToInt16(accountData["questionid"]);
+                    string answer = accountData["answer"].ToString();
                     bool isDefault = key.Equals(defaultName);
-                    _list.Add(new Account(key, username, password, isDefault));
+                    _list.Add(new Account(key, username, password, questionid, answer, isDefault));
                 }
             }
         }
@@ -61,21 +63,25 @@ namespace hipda.Settings
                 string name = accountDataContainer.Values[defaultAccountKeyName].ToString();
 
                 var accountData = (ApplicationDataCompositeValue)accountDataContainer.Values[name];
-                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
+                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password") && accountData.ContainsKey("questionid") && accountData.ContainsKey("answer"))
                 {
                     string username = accountData["username"].ToString();
                     string password = accountData["password"].ToString();
+                    int questionid = Convert.ToInt16(accountData["questionid"]);
+                    string answer = accountData["answer"].ToString();
 
-                    await LoginAndAdd(username, password, false);
+                    await LoginAndAdd(username, password, questionid, answer, false);
                 }
             }
         }
 
-        public static async Task<bool> LoginAndAdd(string username, string password, bool isSave)
+        public static async Task<bool> LoginAndAdd(string username, string password, int questionId, string answer, bool isSave)
         {
             var postData = new Dictionary<string, object>();
             postData.Add("username", username);
             postData.Add("password", password);
+            postData.Add("questionid", questionId);
+            postData.Add("answer", answer);
 
             string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
             if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败") && !resultContent.Contains("非激活"))
@@ -86,6 +92,8 @@ namespace hipda.Settings
                     var accountData = new ApplicationDataCompositeValue();
                     accountData["username"] = username;
                     accountData["password"] = password;
+                    accountData["questionid"] = questionId;
+                    accountData["answer"] = answer;
 
                     ApplicationDataContainer container = localSettings.CreateContainer(accountDataKeyName, ApplicationDataCreateDisposition.Always);
                     var accountDataContainer = localSettings.Containers[accountDataKeyName];
@@ -99,7 +107,7 @@ namespace hipda.Settings
                         item.IsDefault = false;
                     }
 
-                    _accountHelper._list.Add(new Account(key, username, password, true));
+                    _accountHelper._list.Add(new Account(key, username, password, questionId, answer, true));
                 }
 
                 // 登录成功就获取一次 formhash/uid/hash，用于发布文本信息和上载图片
@@ -122,7 +130,7 @@ namespace hipda.Settings
             foreach (var item in items)
             {
                 var accountData = (ApplicationDataCompositeValue)item.Value;
-                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
+                if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password") && accountData.ContainsKey("questionid") && accountData.ContainsKey("answer"))
                 {
                     string key = item.Key;
                     accountDataContainer.Values[defaultAccountKeyName] = key;
@@ -138,13 +146,15 @@ namespace hipda.Settings
             // 切换到此账号登录，并设置为默认账号
             var accountDataContainer = localSettings.Containers[accountDataKeyName];
             var accountData = (ApplicationDataCompositeValue)accountDataContainer.Values[accountKeyName];
-            if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password"))
+            if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password") && accountData.ContainsKey("questionid") && accountData.ContainsKey("answer"))
             {
                 accountDataContainer.Values[defaultAccountKeyName] = accountKeyName;
                 string username = accountData["username"].ToString();
                 string password = accountData["password"].ToString();
+                int questionid = Convert.ToInt16(accountData["questionid"]);
+                string answer = accountData["answer"].ToString();
 
-                await LoginAndAdd(username, password, false);
+                await LoginAndAdd(username, password, questionid, answer, false);
             }
 
             foreach (var item in _accountHelper._list)
@@ -168,11 +178,13 @@ namespace hipda.Settings
 
     public class Account : INotifyPropertyChanged
     {
-        public Account(string key, string username, string password, bool isDefault)
+        public Account(string key, string username, string password, int questionId, string answer, bool isDefault)
         {
             this.Key = key;
             this.Username = username;
             this.Password = password;
+            this.QuestionId = questionId;
+            this.Answer = answer;
             this.IsDefault = isDefault;
         }
 
@@ -181,6 +193,10 @@ namespace hipda.Settings
         public string Username { get; set; }
 
         public string Password { get; set; }
+
+        public int QuestionId { get; set; }
+
+        public string Answer { get; set; }
 
         private bool isDefault;
 
