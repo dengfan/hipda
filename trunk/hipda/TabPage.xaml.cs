@@ -28,6 +28,14 @@ using Windows.ApplicationModel.Activation;
 
 namespace hipda
 {
+    public enum EnumThemeType
+    {
+        Classic,
+        Dark,
+        BlueSky,
+        StarSky
+    }
+
     public enum EnumPostType
     {
         Reply,
@@ -42,6 +50,8 @@ namespace hipda
 
     public sealed partial class TabPage : Page, IFileOpenPickerContinuable
     {
+        private int themeId = 0;
+
         HttpHandle httpClient = HttpHandle.getInstance();
 
         private const int maxHubSectionCount = 6;
@@ -79,6 +89,60 @@ namespace hipda
         /// </summary>
         private EnumEditType currentEditType = EnumEditType.Add;
 
+
+        private void ThemeClassic()
+        {
+            tabPage.RequestedTheme = ElementTheme.Light;
+            StatusBar.GetForCurrentView().BackgroundOpacity = 255;
+
+            ResourceDictionary r = tabPage.Resources;
+            ((SolidColorBrush)r["PageBgColor"]).Color = Color.FromArgb(255, 241, 241, 241);
+            ((SolidColorBrush)r["ItemBgColor"]).Color = Colors.Snow;
+            ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.LightGray;
+            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
+
+            tabPage.Background = r["PageBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Background = r["CommandBarBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Foreground = r["CommandFontColor"] as SolidColorBrush;
+        }
+
+        private void ThemeDark()
+        {
+            tabPage.RequestedTheme = ElementTheme.Dark;
+            StatusBar.GetForCurrentView().BackgroundOpacity = 0;
+
+            ResourceDictionary r = tabPage.Resources;
+            r["FaceIconOpacity"] = 0.3;
+            ((SolidColorBrush)r["PageBgColor"]).Color = Color.FromArgb(255, 29, 29, 29);
+            ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 38, 38, 38);
+            ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 36, 36, 36);
+            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
+
+            tabPage.Background = r["PageBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Background = r["CommandBarBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Foreground = r["CommandFontColor"] as SolidColorBrush;
+        }
+
+        private void ThemeBlueSky()
+        {
+            //ThemeHelper.Light1();
+            tabPage.RequestedTheme = ElementTheme.Light;
+            tabPage.Background = tabPage.Resources["PageBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
+        }
+
+        private void ThemeStarSky()
+        {
+            //ThemeHelper.Light1();
+            tabPage.RequestedTheme = ElementTheme.Light;
+            tabPage.Background = tabPage.Resources["PageBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
+        }
+
         public TabPage()
         {
             this.InitializeComponent();
@@ -89,6 +153,16 @@ namespace hipda
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+
+            switch (themeId)
+            {
+                case 0:
+                    ThemeClassic();
+                    break;
+                case 1:
+                    ThemeDark();
+                    break;
+            }
         }
 
         public NavigationHelper NavigationHelper
@@ -118,7 +192,8 @@ namespace hipda
             }
             #endregion
 
-            if (e.PageState != null && e.PageState.Count > 0) // 从墓碑恢复
+            #region 从墓碑恢复
+            if (e.PageState != null && e.PageState.Count > 0)
             {
                 string tabStr = e.PageState["PivotItems"].ToString();
                 tabStr = tabStr.Substring(0, tabStr.Length - 1);
@@ -146,7 +221,10 @@ namespace hipda
                 int selectedIndex = Convert.ToInt16(e.PageState["PivotSelectedIndex"]);
                 Pivot.SelectedIndex = selectedIndex;
             }
-            else // 正常打开
+            #endregion
+
+            #region 正常打开
+            else
             {
                 if (e.NavigationParameter == null)
                 {
@@ -165,6 +243,7 @@ namespace hipda
 
                 await RefreshElementStatus();
             }
+            #endregion
         }
 
         #region 增量更新
