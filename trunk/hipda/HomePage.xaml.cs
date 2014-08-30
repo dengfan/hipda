@@ -3,6 +3,7 @@ using hipda.Data;
 using hipda.Settings;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -132,28 +133,35 @@ namespace hipda
             StackPanel loginPanel = (StackPanel)accountList.FindName("addAccountPanel");
             TextBox usernameTextBox = ((TextBox)loginPanel.FindName("usernameTextBox"));
             PasswordBox passwordBox = ((PasswordBox)loginPanel.FindName("passwordTextBox"));
+            ComboBox questionComboBox = ((ComboBox)loginPanel.FindName("questionComboBox"));
+            TextBox answerTextBox = ((TextBox)loginPanel.FindName("answerTextBox"));
 
             string username = usernameTextBox.Text.Trim().ToLower();
             string password = passwordBox.Password.Trim();
+            int question = questionComboBox.SelectedIndex;
+            string answer = answerTextBox.Text.Trim();
 
             // 清除当前的登录cookie
             httpClient.ClearCookies();
-            
+
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                bool isOk = await AccountSettings.LoginAndAdd(username, password, true);
+                bool isOk = await AccountSettings.LoginAndAdd(username, password, question, answer, true);
                 if (isOk)
                 {
                     Refresh();
                 }
                 else
                 {
-                    await new MessageDialog("1. 请确保账号密码正确，否则失败次数超过5次，会被禁止登录15分钟！\n2. 账号必须已通过管理员审核。", "账号验证失败").ShowAsync();
+                    await new MessageDialog("1. 请确保账号密码正确，否则失败次数超过5次，会被禁止登录15分钟！\n2. 如果您的账号使用了安全问题，请确保问题及答案正确。\n3. 请确保您的账号已通过管理员审核。", "账号登录失败").ShowAsync();
                 }
             }
 
             usernameTextBox.Text = string.Empty;
             passwordBox.Password = string.Empty;
+            questionComboBox.SelectedIndex = 0;
+            answerTextBox.Text = string.Empty;
+            answerTextBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         #region NavigationHelper 注册
@@ -213,6 +221,15 @@ namespace hipda
             await AccountSettings.Delete(keyName);
 
             Refresh();
+        }
+
+        private void questionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            answerTextBox.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            if (((ComboBox)sender).SelectedIndex == 0)
+            {
+                answerTextBox.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
         }
     }
 }
