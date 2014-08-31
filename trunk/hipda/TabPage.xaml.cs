@@ -97,15 +97,12 @@ namespace hipda
             StatusBar.GetForCurrentView().BackgroundOpacity = 255;
 
             ResourceDictionary r = tabPage.Resources;
-            ((SolidColorBrush)r["PageBgColor"]).Color = Color.FromArgb(255, 241, 241, 241);
             ((SolidColorBrush)r["ItemBgColor"]).Color = Colors.Snow;
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
-            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.LightGray;
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 219, 219, 219);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
 
-            tabPage.Background = r["PageBgColor"] as SolidColorBrush;
-            tabPageCommandBar.Background = r["CommandBarBgColor"] as SolidColorBrush;
-            tabPageCommandBar.Foreground = r["CommandFontColor"] as SolidColorBrush;
+            tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 239, 239, 239));
         }
 
         private void ThemeDark()
@@ -114,17 +111,13 @@ namespace hipda
             tabPage.RequestedTheme = ElementTheme.Dark;
             StatusBar.GetForCurrentView().BackgroundOpacity = 0;
             
-
             ResourceDictionary r = tabPage.Resources;
-            ((SolidColorBrush)r["PageBgColor"]).Color = Color.FromArgb(255, 29, 29, 29);
             ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 38, 38, 38);
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 36, 36, 36);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
 
-            tabPage.Background = r["PageBgColor"] as SolidColorBrush;
-            tabPageCommandBar.Background = r["CommandBarBgColor"] as SolidColorBrush;
-            tabPageCommandBar.Foreground = r["CommandFontColor"] as SolidColorBrush;
+            tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 29, 29, 29));
         }
 
         private void ThemeBlueSky()
