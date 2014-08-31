@@ -50,7 +50,8 @@ namespace hipda
 
     public sealed partial class TabPage : Page, IFileOpenPickerContinuable
     {
-        private int themeId = 0;
+        private int themeId = 1;
+        private double imageOpacity = 1.0;
 
         HttpHandle httpClient = HttpHandle.getInstance();
 
@@ -89,9 +90,9 @@ namespace hipda
         /// </summary>
         private EnumEditType currentEditType = EnumEditType.Add;
 
-
         private void ThemeClassic()
         {
+            imageOpacity = 1.0;
             tabPage.RequestedTheme = ElementTheme.Light;
             StatusBar.GetForCurrentView().BackgroundOpacity = 255;
 
@@ -109,11 +110,12 @@ namespace hipda
 
         private void ThemeDark()
         {
+            imageOpacity = 0.3;
             tabPage.RequestedTheme = ElementTheme.Dark;
             StatusBar.GetForCurrentView().BackgroundOpacity = 0;
+            
 
             ResourceDictionary r = tabPage.Resources;
-            r["FaceIconOpacity"] = 0.3;
             ((SolidColorBrush)r["PageBgColor"]).Color = Color.FromArgb(255, 29, 29, 29);
             ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 38, 38, 38);
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
@@ -331,6 +333,7 @@ namespace hipda
                 imageBrush.Stretch = Stretch.UniformToFill;
 
                 avatarImageBorder.Background = imageBrush;
+                avatarImageBorder.Opacity = imageOpacity;
             }
         }
         #endregion
@@ -402,7 +405,7 @@ namespace hipda
             createTimeTextBlockRun.Text = reply.CreateTime;
             //floorNumTextBlock.Text = reply.FloorNumStr;
             menuButton.DataContext = reply;
-            replyContent.Content = XamlReader.Load(reply.XamlContent);
+            replyContent.Content = XamlReader.Load(reply.XamlContent.Replace("__IMAGEOPACITY__", imageOpacity.ToString()));
 
             // 如果楼层内容的作者是当前账号，则显示编辑按钮
             if (reply.OwnerId == DataSource.UserId)
@@ -454,6 +457,7 @@ namespace hipda
             imageBrush.Stretch = Stretch.UniformToFill;
 
             avatarImageBorder.Background = imageBrush;
+            avatarImageBorder.Opacity = imageOpacity;
         }
         #endregion
 
