@@ -136,7 +136,8 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\bg1.jpg" />
+    <Content Include="Assets\BackgroundImages\BlueSky.jpg" />
+    <Content Include="Assets\BackgroundImages\StarSky.jpg" />
     <Content Include="Assets\Faces\baoman\1.png" />
     <Content Include="Assets\Faces\baoman\10.png" />
     <Content Include="Assets\Faces\baoman\11.png" />
@@ -203,6 +204,7 @@
     <Content Include="Assets\Faces\grapeman\23.gif" />
     <Content Include="Assets\Faces\grapeman\24.gif" />
     <Content Include="Assets\Faces\plus_48x48.png" />
+    <Content Include="Assets\Icons\appbar.moon.first.quarter.png" />
     <Content Include="Assets\Icons\appbar.refresh.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
