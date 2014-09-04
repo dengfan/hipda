@@ -22,6 +22,7 @@ namespace hipda
     public sealed partial class App : Application
     {
         private TransitionCollection transitions;
+        public static int ThemeId = 0;
 
 #if WINDOWS_PHONE_APP
         ContinuationManager continuationManager;
@@ -35,6 +36,7 @@ namespace hipda
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            ThemeId = 0;
         }
 
         private Frame CreateRootFrame()
@@ -196,7 +198,21 @@ namespace hipda
             Window.Current.Activate();
 
             StatusBar statusBar = StatusBar.GetForCurrentView();
-            statusBar.BackgroundColor = Colors.Purple;
+            switch (ThemeId)
+            {
+                case 0:
+                    statusBar.BackgroundColor = Colors.Purple;
+                    break;
+                case 1:
+                    statusBar.BackgroundColor = Color.FromArgb(255, 29, 29, 29);
+                    break;
+                case 2:
+                    statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
+                    break;
+                case 3:
+                    statusBar.BackgroundColor = Color.FromArgb(255, 7, 18, 40);
+                    break;
+            }
             statusBar.BackgroundOpacity = 255;
             statusBar.ForegroundColor = Colors.White;
             statusBar.ProgressIndicator.ProgressValue = 0;

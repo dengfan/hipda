@@ -50,7 +50,6 @@ namespace hipda
 
     public sealed partial class TabPage : Page, IFileOpenPickerContinuable
     {
-        private int themeId = 1;
         private double imageOpacity = 1.0;
 
         HttpHandle httpClient = HttpHandle.getInstance();
@@ -90,26 +89,29 @@ namespace hipda
         /// </summary>
         private EnumEditType currentEditType = EnumEditType.Add;
 
+        #region 主题样式
         private void ThemeClassic()
         {
             imageOpacity = 1.0;
             tabPage.RequestedTheme = ElementTheme.Light;
-            StatusBar.GetForCurrentView().BackgroundOpacity = 255;
+            StatusBar.GetForCurrentView().BackgroundColor = Colors.Purple;
 
             ResourceDictionary r = tabPage.Resources;
-            ((SolidColorBrush)r["ItemBgColor"]).Color = Colors.Snow;
+            ((SolidColorBrush)r["ItemBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 219, 219, 219);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
 
             tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 239, 239, 239));
+            tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
         private void ThemeDark()
         {
             imageOpacity = 0.3;
             tabPage.RequestedTheme = ElementTheme.Dark;
-            StatusBar.GetForCurrentView().BackgroundOpacity = 0;
+            StatusBar.GetForCurrentView().BackgroundColor = Color.FromArgb(255, 29, 29, 29);
             
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 38, 38, 38);
@@ -118,25 +120,58 @@ namespace hipda
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
 
             tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 29, 29, 29));
+            tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
+            tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
         private void ThemeBlueSky()
         {
-            //ThemeHelper.Light1();
+            imageOpacity = 1.0;
             tabPage.RequestedTheme = ElementTheme.Light;
-            tabPage.Background = tabPage.Resources["PageBgColor"] as SolidColorBrush;
+            StatusBar.GetForCurrentView().BackgroundColor = Color.FromArgb(255, 108, 151, 193);
+
+            ResourceDictionary r = tabPage.Resources;
+            ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 196, 229, 254);
+            ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 102, 102, 102);
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Black;
+            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.WhiteSmoke;
+
+            var bgImageBrush = new ImageBrush
+            {
+                ImageSource = new BitmapImage
+                {
+                    UriSource = new Uri("ms-appx:///Assets/BackgroundImages/BlueSky.jpg")
+                }
+            };
+            tabPage.Background = bgImageBrush;
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
             tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
         private void ThemeStarSky()
         {
-            //ThemeHelper.Light1();
-            tabPage.RequestedTheme = ElementTheme.Light;
-            tabPage.Background = tabPage.Resources["PageBgColor"] as SolidColorBrush;
+            imageOpacity = 1.0;
+            tabPage.RequestedTheme = ElementTheme.Dark;
+            StatusBar.GetForCurrentView().BackgroundColor = Color.FromArgb(255, 7, 18, 40);
+
+            ResourceDictionary r = tabPage.Resources;
+            ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 5, 17, 36);
+            ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 102, 102, 102);
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Black;
+            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.WhiteSmoke;
+
+            var bgImageBrush = new ImageBrush
+            {
+                ImageSource = new BitmapImage
+                {
+                    UriSource = new Uri("ms-appx:///Assets/BackgroundImages/StarSky.jpg")
+                }
+            };
+            tabPage.Background = bgImageBrush;
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
             tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
+        #endregion
 
         public TabPage()
         {
@@ -149,13 +184,19 @@ namespace hipda
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
             Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 
-            switch (themeId)
+            switch (App.ThemeId)
             {
                 case 0:
                     ThemeClassic();
                     break;
                 case 1:
                     ThemeDark();
+                    break;
+                case 2:
+                    ThemeBlueSky();
+                    break;
+                case 3:
+                    ThemeStarSky();
                     break;
             }
         }
@@ -528,7 +569,7 @@ namespace hipda
             {
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
 
-                refreshThreadsButton.Visibility = openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                openPostNewPanelButton.Visibility = refreshThreadsButton.Visibility = changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
@@ -536,7 +577,7 @@ namespace hipda
             {
                 tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
 
-                refreshThreadsButton.Visibility = openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                openPostNewPanelButton.Visibility = refreshThreadsButton.Visibility = changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
@@ -1204,6 +1245,7 @@ namespace hipda
             }
 
             refreshThreadsButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
             openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
@@ -1218,6 +1260,7 @@ namespace hipda
             }
 
             refreshThreadsButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
@@ -1516,20 +1559,40 @@ namespace hipda
             await RefreshReplyListPage(listView, threadId);
         }
 
-        private void dark1ModeToggle_Click(object sender, RoutedEventArgs e)
+        private void changeThemeButton_Click(object sender, RoutedEventArgs e)
         {
-            ThemeHelper.Dark1();
-            tabPage.RequestedTheme = ElementTheme.Dark;
-            tabPageCommandBar.Background = Application.Current.Resources["CommandBarBgColor"] as SolidColorBrush;
-            tabPageCommandBar.Foreground = Application.Current.Resources["CommandFontColor"] as SolidColorBrush;
-        }
+            PivotItem item = (PivotItem)Pivot.SelectedItem;
+            ThreadData data = (ThreadData)item.DataContext;
+            string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
+            if (tabType.Equals("1"))
+            {
+                string tabId = data.ForumId;
+                ListView listView = (ListView)item.FindName("threadsListView" + tabId);
+                //var childs = VisualTreeHelper.GetChildrenCount(listView);
+                //await new MessageDialog(childs.ToString()).ShowAsync(); 
 
-        private void light1ModeToggle_Click(object sender, RoutedEventArgs e)
-        {
-            ThemeHelper.Light1();
-            tabPage.RequestedTheme = ElementTheme.Light;
-            tabPageCommandBar.Background = Application.Current.Resources["CommandBarBgColor"] as SolidColorBrush;
-            tabPageCommandBar.Foreground = Application.Current.Resources["CommandFontColor"] as SolidColorBrush;
+                App.ThemeId++;
+                if (App.ThemeId > 3)
+                {
+                    App.ThemeId = 0;
+                }
+
+                switch (App.ThemeId)
+                {
+                    case 0:
+                        ThemeClassic();
+                        break;
+                    case 1:
+                        ThemeDark();
+                        break;
+                    case 2:
+                        ThemeBlueSky();
+                        break;
+                    case 3:
+                        ThemeStarSky();
+                        break;
+                }
+            }
         }
     }
 }
