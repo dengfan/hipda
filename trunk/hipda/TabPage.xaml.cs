@@ -28,14 +28,6 @@ using Windows.ApplicationModel.Activation;
 
 namespace hipda
 {
-    public enum EnumThemeType
-    {
-        Classic,
-        Dark,
-        BlueSky,
-        StarSky
-    }
-
     public enum EnumPostType
     {
         Reply,
