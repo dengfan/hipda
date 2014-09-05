@@ -10,20 +10,20 @@ namespace hipda.Settings
 {
     public static class SortSettings
     {
-        private static string sortTypeContainerKeyName = "SortSettingsContainer";
-        private static string defaultSortKeyName = "DefaultSort";
+        private static string keyNameOfSortTypeContainer = "SortSettingsContainer";
+        private static string keyNameOfDefaultSort = "DefaultSort";
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
         public static void Toggle()
         {
-            ApplicationDataContainer container = localSettings.CreateContainer(sortTypeContainerKeyName, ApplicationDataCreateDisposition.Always);
-            var sortTypeContainer = localSettings.Containers[sortTypeContainerKeyName];
-            if (!sortTypeContainer.Values.ContainsKey(defaultSortKeyName))
+            ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfSortTypeContainer, ApplicationDataCreateDisposition.Always);
+            var sortTypeContainer = localSettings.Containers[keyNameOfSortTypeContainer];
+            if (!sortTypeContainer.Values.ContainsKey(keyNameOfDefaultSort))
             {
-                sortTypeContainer.Values[defaultSortKeyName] = DataSource.OrderType;
+                sortTypeContainer.Values[keyNameOfDefaultSort] = DataSource.OrderType;
             }
 
-            if (sortTypeContainer.Values[defaultSortKeyName].ToString().Equals("1"))
+            if (sortTypeContainer.Values[keyNameOfDefaultSort].ToString().Equals("1"))
             {
                 DataSource.OrderType = 2;
             }
@@ -32,21 +32,21 @@ namespace hipda.Settings
                 DataSource.OrderType = 1;
             }
 
-            sortTypeContainer.Values[defaultSortKeyName] = DataSource.OrderType;
+            sortTypeContainer.Values[keyNameOfDefaultSort] = DataSource.OrderType;
         }
 
         public static int GetSortType
         {
             get
             {
-                ApplicationDataContainer container = localSettings.CreateContainer(sortTypeContainerKeyName, ApplicationDataCreateDisposition.Always);
-                var sortTypeContainer = localSettings.Containers[sortTypeContainerKeyName];
-                if (!sortTypeContainer.Values.ContainsKey(defaultSortKeyName))
+                ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfSortTypeContainer, ApplicationDataCreateDisposition.Always);
+                var sortTypeContainer = localSettings.Containers[keyNameOfSortTypeContainer];
+                if (!sortTypeContainer.Values.ContainsKey(keyNameOfDefaultSort))
                 {
-                    sortTypeContainer.Values[defaultSortKeyName] = DataSource.OrderType;
+                    sortTypeContainer.Values[keyNameOfDefaultSort] = DataSource.OrderType;
                 }
 
-                return Convert.ToInt16(sortTypeContainer.Values[defaultSortKeyName]);
+                return Convert.ToInt16(sortTypeContainer.Values[keyNameOfDefaultSort]);
             }
         }
     }

@@ -36,7 +36,7 @@ namespace hipda
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
-            ThemeId = 0;
+            ThemeId = ThemeSettings.GetThemeId;
         }
 
         private Frame CreateRootFrame()

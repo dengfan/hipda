@@ -1576,6 +1576,7 @@ namespace hipda
                 {
                     App.ThemeId = 0;
                 }
+                ThemeSettings.SetThemeId(App.ThemeId);
 
                 switch (App.ThemeId)
                 {
