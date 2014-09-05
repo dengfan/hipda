@@ -57,13 +57,13 @@ namespace hipda
                     ((SolidColorBrush)r["BorderColor"]).Color = Colors.LightGray;
                     break;
                 case 1:
-                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 29, 29, 29);
+                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 161, 161, 161);
                     break;
                 case 2:
-                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 108, 151, 193);
+                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 158, 202, 241);
                     break;
                 case 3:
-                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 7, 18, 40);
+                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 124, 146, 157);
                     break;
             }
         }
