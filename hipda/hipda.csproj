@@ -124,6 +124,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Settings\SortSettings.cs" />
+    <Compile Include="Settings\ThemeSettings.cs" />
     <Compile Include="TabPage.xaml.cs">
       <DependentUpon>TabPage.xaml</DependentUpon>
     </Compile>

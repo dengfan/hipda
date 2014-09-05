@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    x:Name="homePage"
     RequestedTheme="Light"
     Background="#EFEFEF">
 
@@ -25,16 +26,18 @@
         <local:BackgroundStyleSelecterForForumItem x:Key="BackgroundStyleSelecterForForumItem"/>
         <local:ListGroupStyleSelector x:Key="listGroupStyleSelector"/>
 
+        <SolidColorBrush x:Key="BorderColor" Color="LightGray"/>
+
         <Style x:Key="ForumItemStyle" TargetType="ListViewItem">
             <Setter Property="Padding" Value="10" />
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
 
         <Style x:Key="AccountItemStyle" TargetType="ListViewItem">
             <Setter Property="BorderThickness"  Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
 

@@ -44,12 +44,28 @@ namespace hipda
         public HomePage()
         {
             this.InitializeComponent();
-
-            this.NavigationCacheMode = NavigationCacheMode.Required;
+            this.NavigationCacheMode = NavigationCacheMode.Disabled;
 
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+
+            ResourceDictionary r = homePage.Resources;
+            switch (App.ThemeId)
+            {
+                case 0:
+                    ((SolidColorBrush)r["BorderColor"]).Color = Colors.LightGray;
+                    break;
+                case 1:
+                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 29, 29, 29);
+                    break;
+                case 2:
+                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 108, 151, 193);
+                    break;
+                case 3:
+                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 7, 18, 40);
+                    break;
+            }
         }
 
         /// <summary>

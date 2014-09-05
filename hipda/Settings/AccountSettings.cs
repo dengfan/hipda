@@ -12,8 +12,8 @@ namespace hipda.Settings
 {
     public class AccountSettings
     {
-        private static string accountDataKeyName = "AccountSettingsContainer";
-        private static string defaultAccountKeyName = "DefaultAccount";
+        private static string keyNameOfAccountData = "AccountSettingsContainer";
+        private static string keyNameOfDefaultAccount = "DefaultAccount";
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
         private static AccountSettings _accountHelper = new AccountSettings();
@@ -29,13 +29,13 @@ namespace hipda.Settings
 
         public AccountSettings()
         {
-            if (!localSettings.Containers.ContainsKey(accountDataKeyName)) return;
+            if (!localSettings.Containers.ContainsKey(keyNameOfAccountData)) return;
 
-            var accountDataContainer = localSettings.Containers[accountDataKeyName];
-            if (!accountDataContainer.Values.ContainsKey(defaultAccountKeyName)) return;
+            var accountDataContainer = localSettings.Containers[keyNameOfAccountData];
+            if (!accountDataContainer.Values.ContainsKey(keyNameOfDefaultAccount)) return;
 
-            string defaultName = accountDataContainer.Values[defaultAccountKeyName].ToString();
-            var items = accountDataContainer.Values.Where(v => v.Key != defaultAccountKeyName);
+            string defaultName = accountDataContainer.Values[keyNameOfDefaultAccount].ToString();
+            var items = accountDataContainer.Values.Where(v => v.Key != keyNameOfDefaultAccount);
             foreach (var item in items)
             {
                 var accountData = (ApplicationDataCompositeValue)item.Value;
@@ -56,11 +56,11 @@ namespace hipda.Settings
 
         public static async Task AutoLogin()
         {
-            ApplicationDataContainer container = localSettings.CreateContainer(accountDataKeyName, ApplicationDataCreateDisposition.Always);
-            var accountDataContainer = localSettings.Containers[accountDataKeyName];
-            if (accountDataContainer.Values.ContainsKey(defaultAccountKeyName))
+            ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfAccountData, ApplicationDataCreateDisposition.Always);
+            var accountDataContainer = localSettings.Containers[keyNameOfAccountData];
+            if (accountDataContainer.Values.ContainsKey(keyNameOfDefaultAccount))
             {
-                string name = accountDataContainer.Values[defaultAccountKeyName].ToString();
+                string name = accountDataContainer.Values[keyNameOfDefaultAccount].ToString();
 
                 var accountData = (ApplicationDataCompositeValue)accountDataContainer.Values[name];
                 if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password") && accountData.ContainsKey("questionid") && accountData.ContainsKey("answer"))
@@ -95,12 +95,12 @@ namespace hipda.Settings
                     accountData["questionid"] = questionId;
                     accountData["answer"] = answer;
 
-                    ApplicationDataContainer container = localSettings.CreateContainer(accountDataKeyName, ApplicationDataCreateDisposition.Always);
-                    var accountDataContainer = localSettings.Containers[accountDataKeyName];
+                    ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfAccountData, ApplicationDataCreateDisposition.Always);
+                    var accountDataContainer = localSettings.Containers[keyNameOfAccountData];
 
                     string key = string.Format("user_{0:yyyyMMddHHmmss}", DateTime.Now);
                     accountDataContainer.Values[key] = accountData;
-                    accountDataContainer.Values[defaultAccountKeyName] = key;
+                    accountDataContainer.Values[keyNameOfDefaultAccount] = key;
 
                     foreach (var item in _accountHelper._list)
                     {
@@ -121,19 +121,19 @@ namespace hipda.Settings
 
         public static async Task Delete(string accountKeyName)
         {
-            var accountDataContainer = localSettings.Containers[accountDataKeyName];
+            var accountDataContainer = localSettings.Containers[keyNameOfAccountData];
             accountDataContainer.Values.Remove(accountKeyName);
             _accountHelper._list.Remove(_accountHelper._list.Single(a => a.Key == accountKeyName));
 
             // 删除后，取另一个为登录账号
-            var items = accountDataContainer.Values.Where(v => v.Key != defaultAccountKeyName);
+            var items = accountDataContainer.Values.Where(v => v.Key != keyNameOfDefaultAccount);
             foreach (var item in items)
             {
                 var accountData = (ApplicationDataCompositeValue)item.Value;
                 if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password") && accountData.ContainsKey("questionid") && accountData.ContainsKey("answer"))
                 {
                     string key = item.Key;
-                    accountDataContainer.Values[defaultAccountKeyName] = key;
+                    accountDataContainer.Values[keyNameOfDefaultAccount] = key;
 
                     await SetDefault(key);
                     break;
@@ -144,11 +144,11 @@ namespace hipda.Settings
         public static async Task SetDefault(string accountKeyName)
         {
             // 切换到此账号登录，并设置为默认账号
-            var accountDataContainer = localSettings.Containers[accountDataKeyName];
+            var accountDataContainer = localSettings.Containers[keyNameOfAccountData];
             var accountData = (ApplicationDataCompositeValue)accountDataContainer.Values[accountKeyName];
             if (accountData != null && accountData.ContainsKey("username") && accountData.ContainsKey("password") && accountData.ContainsKey("questionid") && accountData.ContainsKey("answer"))
             {
-                accountDataContainer.Values[defaultAccountKeyName] = accountKeyName;
+                accountDataContainer.Values[keyNameOfDefaultAccount] = accountKeyName;
                 string username = accountData["username"].ToString();
                 string password = accountData["password"].ToString();
                 int questionid = Convert.ToInt16(accountData["questionid"]);
