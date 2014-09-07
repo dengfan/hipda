@@ -204,7 +204,7 @@ namespace hipda
                     statusBar.BackgroundColor = Colors.Purple;
                     break;
                 case 1:
-                    statusBar.BackgroundColor = Color.FromArgb(255, 29, 29, 29);
+                    statusBar.BackgroundColor = Colors.Black;
                     break;
                 case 2:
                     statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);

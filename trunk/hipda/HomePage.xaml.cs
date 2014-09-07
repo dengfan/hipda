@@ -49,23 +49,6 @@ namespace hipda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-
-            ResourceDictionary r = homePage.Resources;
-            switch (App.ThemeId)
-            {
-                case 0:
-                    ((SolidColorBrush)r["BorderColor"]).Color = Colors.LightGray;
-                    break;
-                case 1:
-                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 161, 161, 161);
-                    break;
-                case 2:
-                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 158, 202, 241);
-                    break;
-                case 3:
-                    ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 124, 146, 157);
-                    break;
-            }
         }
 
         /// <summary>
