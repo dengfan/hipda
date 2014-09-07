@@ -42,8 +42,7 @@ namespace hipda
 
     public sealed partial class TabPage : Page, IFileOpenPickerContinuable
     {
-        private double imageOpacity = 1.0;
-
+        StatusBar statusBar = StatusBar.GetForCurrentView();
         HttpHandle httpClient = HttpHandle.getInstance();
 
         private const int maxHubSectionCount = 6;
@@ -84,9 +83,8 @@ namespace hipda
         #region 主题样式
         private void ThemeClassic()
         {
-            imageOpacity = 1.0;
             tabPage.RequestedTheme = ElementTheme.Light;
-            StatusBar.GetForCurrentView().BackgroundColor = Colors.Purple;
+            statusBar.BackgroundColor = Colors.Purple;
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["ItemBgColor"]).Color = Colors.White;
@@ -101,26 +99,24 @@ namespace hipda
 
         private void ThemeDark()
         {
-            imageOpacity = 0.3;
             tabPage.RequestedTheme = ElementTheme.Dark;
-            StatusBar.GetForCurrentView().BackgroundColor = Color.FromArgb(255, 29, 29, 29);
+            statusBar.BackgroundColor = Colors.Black;
             
             ResourceDictionary r = tabPage.Resources;
-            ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 38, 38, 38);
+            ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 12, 12, 12);
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
-            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 36, 36, 36);
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 16, 16, 16);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
 
-            tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 29, 29, 29));
+            tabPage.Background = new SolidColorBrush(Colors.Black);
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
             tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
         private void ThemeBlueSky()
         {
-            imageOpacity = 1.0;
             tabPage.RequestedTheme = ElementTheme.Light;
-            StatusBar.GetForCurrentView().BackgroundColor = Color.FromArgb(255, 108, 151, 193);
+            statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 196, 229, 254);
@@ -142,9 +138,8 @@ namespace hipda
 
         private void ThemeStarSky()
         {
-            imageOpacity = 1.0;
             tabPage.RequestedTheme = ElementTheme.Dark;
-            StatusBar.GetForCurrentView().BackgroundColor = Color.FromArgb(255, 7, 18, 40);
+            statusBar.BackgroundColor = Color.FromArgb(255, 7, 18, 40);
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 5, 17, 36);
@@ -359,7 +354,6 @@ namespace hipda
                 imageBrush.Stretch = Stretch.UniformToFill;
 
                 avatarImageBorder.Background = imageBrush;
-                avatarImageBorder.Opacity = imageOpacity;
             }
         }
         #endregion
@@ -421,7 +415,6 @@ namespace hipda
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
             Run ownerNameTextBlockRun = (Run)layoutGrid.FindName("ownerNameTextBlock");
             Run createTimeTextBlockRun = (Run)layoutGrid.FindName("createTimeTextBlock");
-            //TextBlock floorNumTextBlock = (TextBlock)layoutGrid.FindName("floorNumTextBlock");
             Button menuButton = (Button)layoutGrid.FindName("menuButton");
             ContentControl replyContent = (ContentControl)layoutGrid.FindName("replyContent");
             Button showMoreButton = (Button)layoutGrid.FindName("showMoreButton");
@@ -429,9 +422,17 @@ namespace hipda
 
             ownerNameTextBlockRun.Text = reply.OwnerName;
             createTimeTextBlockRun.Text = reply.CreateTime;
-            //floorNumTextBlock.Text = reply.FloorNumStr;
             menuButton.DataContext = reply;
-            replyContent.Content = XamlReader.Load(reply.XamlContent.Replace("__IMAGEOPACITY__", imageOpacity.ToString()));
+            try
+            {
+                replyContent.Content = XamlReader.Load(reply.XamlContent);
+            }
+            catch
+            {
+                string text = Regex.Replace(reply.TextContent, regexForTitle, "~");
+                string xaml = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>", text);
+                replyContent.Content = XamlReader.Load(xaml);
+            }
 
             // 如果楼层内容的作者是当前账号，则显示编辑按钮
             if (reply.OwnerId == DataSource.UserId)
@@ -483,7 +484,6 @@ namespace hipda
             imageBrush.Stretch = Stretch.UniformToFill;
 
             avatarImageBorder.Background = imageBrush;
-            avatarImageBorder.Opacity = imageOpacity;
         }
         #endregion
 
@@ -1333,7 +1333,7 @@ namespace hipda
                 .Replace(@" src=""images/smilies/", @" src=""http://www.hi-pda.com/forum/images/smilies/")
                 .Replace(@" src=""images/attachicons/", @" src=""http://www.hi-pda.com/forum/images/attachicons/");
 
-            // 移除任意连续50个的非文字字符
+            // 移除任意连续30个的非文字字符
             MatchCollection matchsForInvalidHtml2 = new Regex(@"\p{P}{30}").Matches(html);
             if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
             {

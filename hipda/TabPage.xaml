@@ -1101,7 +1101,6 @@
 
     <Page.BottomAppBar>
         <CommandBar x:Name="tabPageCommandBar" ClosedDisplayMode="Minimal" Background="{StaticResource CommandBarBgColor}" Foreground="{StaticResource CommandFontColor}">
-            
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="changeThemeButton" Label="样式切换" Click="changeThemeButton_Click" Visibility="Collapsed">
@@ -1117,15 +1116,9 @@
             </AppBarToggleButton>
             <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="openForumTab" Label="打开...">
-                    <AppBarButton.Flyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem Text="打开 Discovery 版" Click="openTabForDiscovery_Click" />
-                            <MenuFlyoutItem Text="打开 Buy Sell 版" Click="openTabForBuyAndSell_Click" />
-                            <MenuFlyoutItem Text="打开 Eink 版" Click="openTabForEink_Click" />
-                        </MenuFlyout>
-                    </AppBarButton.Flyout>
-                </AppBarButton>
+                <AppBarButton Label="Discovery 版" Click="openTabForDiscovery_Click" />
+                <AppBarButton Label="Buy &amp; Sell 版" Click="openTabForBuyAndSell_Click" />
+                <AppBarButton Label="Eink 版" Click="openTabForEink_Click" />
                 <AppBarButton x:Name="closeTab" Label="关闭当前标签页" Click="closeTab_Click" />
                 <AppBarButton x:Name="openTabForApp" Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
