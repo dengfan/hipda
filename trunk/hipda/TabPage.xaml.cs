@@ -784,6 +784,12 @@ namespace hipda
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
 
+            // 留点底边距
+            listView.Footer = new StackPanel
+            {
+                Margin = new Thickness(10)
+            };
+
             listView.ContainerContentChanging += ReplyListView_ContainerContentChanging;
             pivotItem.Content = listView;
 
@@ -1126,7 +1132,7 @@ namespace hipda
 
                     // 刷新当前贴子回复列表
                     ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    await RefreshRepliesListPage(threadId, listView);
+                    await RefreshReplyListPage(listView, threadId);
                 }
                 else if (currentPostType == EnumPostType.NewThread)
                 {
@@ -1178,7 +1184,7 @@ namespace hipda
 
                     // 刷新当前贴子回复列表
                     ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    await RefreshRepliesListPage(threadId, listView);
+                    await RefreshReplyListPage(listView, threadId);
                 }
                 #endregion
             }
