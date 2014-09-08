@@ -110,9 +110,9 @@ namespace hipda
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 16, 16, 16);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
-            ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 60, 60, 60);
-            ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.Black;
-            ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke; 
+            ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 150, 150, 150);
+            ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
+            ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
 
             tabPage.Background = new SolidColorBrush(Colors.Black);
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
@@ -156,7 +156,7 @@ namespace hipda
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Black;
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.WhiteSmoke;
             ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 13, 79, 112);
-            ((SolidColorBrush)r["PanelBgColor"]).Color = Color.FromArgb(255, 7, 18, 40);
+            ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
 
             var bgImageBrush = new ImageBrush
