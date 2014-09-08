@@ -550,6 +550,12 @@ namespace hipda
             listView.ItemsSource = cvs.View;
         }
 
+        /// <summary>
+        /// 先清空当前贴子所有回复数据，再全部重新加载
+        /// </summary>
+        /// <param name="listView"></param>
+        /// <param name="threadId"></param>
+        /// <returns></returns>
         private async Task RefreshReplyListPage(ListView listView, string threadId)
         {
             listView.ItemsSource = null;
@@ -1054,10 +1060,7 @@ namespace hipda
 
                     // 刷新数据
                     ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    ICollectionView view = (ICollectionView)listView.ItemsSource;
-
-                    // count = 1 表示是要刷新
-                    await view.LoadMoreItemsAsync(1);
+                    await RefreshRepliesList(threadId, listView);
                 }
                 else if (currentPostType == EnumPostType.NewThread)
                 {
@@ -1158,7 +1161,7 @@ namespace hipda
 
                     // 刷新当前贴子回复列表
                     ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    await RefreshReplyListPage(listView, threadId);
+                    await RefreshRepliesList(threadId, listView);
                 }
                 else if (currentPostType == EnumPostType.NewThread)
                 {
@@ -1210,7 +1213,7 @@ namespace hipda
 
                     // 刷新当前贴子回复列表
                     ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    await RefreshReplyListPage(listView, threadId);
+                    await RefreshRepliesList(threadId, listView);
                 }
                 #endregion
             }
@@ -1597,9 +1600,44 @@ namespace hipda
             }
         }
 
-        private void refreshRepliesButton_Click(object sender, RoutedEventArgs e)
+        private async void refreshRepliesButton_Click(object sender, RoutedEventArgs e)
         {
+            PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
+            string themeId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
+            ListView listView = (ListView)pivotItem.FindName("repliesListView" + themeId);
 
+            await RefreshRepliesList(themeId, listView);
+        }
+
+        /// <summary>
+        /// 此方法包含两种刷新方式
+        /// 一种是倒序清空刷新，即先清空当前贴子所有回复，再全部重新加载
+        /// 一种是顺序增量刷新，即先清空最后一页的所有回复数据，再重新加载最后一页的数据
+        /// </summary>
+        /// <param name="themeId"></param>
+        /// <param name="listView"></param>
+        /// <returns></returns>
+        private async Task RefreshRepliesList(string themeId, ListView listView)
+        {
+            refreshRepliesButton.IsEnabled = false;
+
+            #region 只在倒序看贴时允许全局刷新
+            if (SortSettings.GetSortType == 1)
+            {
+                // 刷新当前贴子回复列表
+                await RefreshReplyListPage(listView, themeId);
+            }
+            #endregion
+            #region 顺序看贴，只刷新最后一页
+            else
+            {
+
+                ICollectionView view = (ICollectionView)listView.ItemsSource;
+                await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
+            }
+            #endregion
+
+            refreshRepliesButton.IsEnabled = true;
         }
     }
 }
