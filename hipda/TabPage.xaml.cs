@@ -560,8 +560,7 @@ namespace hipda
         {
             listView.ItemsSource = null;
             await DataSource.RefreshReplyList(threadId);
-            Button refreshButton = (Button)listView.FindName(string.Format("refreshButton{0}", threadId));
-            var cvs = CreateDataViewForReplyListPage(threadId, refreshButton);
+            var cvs = CreateDataViewForReplyListPage(threadId);
             listView.ItemsSource = cvs.View;
         }
 
@@ -769,20 +768,10 @@ namespace hipda
 
             Pivot.SelectedItem = pivotItem;
 
-            Button refreshButton = new Button
-            {
-                Name = string.Format("refreshButton{0}", threadId),
-                BorderThickness = new Thickness(0),
-                Margin = new Thickness(0, 0, 0, 100),
-                Background = new SolidColorBrush(Colors.Green),
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                Height = 60
-            };
-
             // 在静态数据类中创建一个主贴容器，用来装载回复数据列表
             pivotItem.DataContext = DataSource.GetReply(threadId, threadTitle);
 
-            var cvs = CreateDataViewForReplyListPage(threadId, refreshButton);
+            var cvs = CreateDataViewForReplyListPage(threadId);
 
             var listView = new ListView
             {
@@ -794,28 +783,6 @@ namespace hipda
                 ItemContainerStyle = ReplyItemStyle,
                 IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
             };
-
-            #region 底部刷新按钮
-            Image refreshIcon = new Image
-            {
-                Source = new BitmapImage
-                {
-                    UriSource = new Uri("ms-appx:///Assets/Icons/appbar.refresh.png")
-                }
-            };
-            refreshIcon.Stretch = Stretch.Uniform;
-
-            refreshButton.Content = refreshIcon;
-
-            refreshButton.Tapped += async (s2, e2) =>
-            {
-                Button btn = (Button)s2;
-                ICollectionView view = (ICollectionView)listView.ItemsSource;
-                await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
-            };
-
-            listView.Footer = refreshButton;
-            #endregion
 
             listView.ContainerContentChanging += ReplyListView_ContainerContentChanging;
             pivotItem.Content = listView;
@@ -840,7 +807,7 @@ namespace hipda
             }
         }
 
-        private CollectionViewSource CreateDataViewForReplyListPage(string threadId, Button refreshButton)
+        private CollectionViewSource CreateDataViewForReplyListPage(string threadId)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<Reply>(50, async pageNo =>
@@ -849,11 +816,9 @@ namespace hipda
                 // 返回的是本次加载的数据量
                 return await DataSource.GetLoadRepliesCountAsync(threadId, pageNo, () =>
                 {
-                    refreshButton.IsEnabled = false;
                     replyProgressBar.Visibility = Visibility.Visible;
                 }, () =>
                 {
-                    refreshButton.IsEnabled = true;
                     replyProgressBar.Visibility = Visibility.Collapsed;
                 });
             }, (index) =>
@@ -1060,7 +1025,7 @@ namespace hipda
 
                     // 刷新数据
                     ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    await RefreshRepliesList(threadId, listView);
+                    await RefreshRepliesListPage(threadId, listView);
                 }
                 else if (currentPostType == EnumPostType.NewThread)
                 {
@@ -1161,7 +1126,7 @@ namespace hipda
 
                     // 刷新当前贴子回复列表
                     ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    await RefreshRepliesList(threadId, listView);
+                    await RefreshRepliesListPage(threadId, listView);
                 }
                 else if (currentPostType == EnumPostType.NewThread)
                 {
@@ -1213,7 +1178,7 @@ namespace hipda
 
                     // 刷新当前贴子回复列表
                     ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    await RefreshRepliesList(threadId, listView);
+                    await RefreshRepliesListPage(threadId, listView);
                 }
                 #endregion
             }
@@ -1606,7 +1571,7 @@ namespace hipda
             string themeId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
             ListView listView = (ListView)pivotItem.FindName("repliesListView" + themeId);
 
-            await RefreshRepliesList(themeId, listView);
+            await RefreshRepliesListPage(themeId, listView);
         }
 
         /// <summary>
@@ -1617,8 +1582,9 @@ namespace hipda
         /// <param name="themeId"></param>
         /// <param name="listView"></param>
         /// <returns></returns>
-        private async Task RefreshRepliesList(string themeId, ListView listView)
+        private async Task RefreshRepliesListPage(string themeId, ListView listView)
         {
+            replyProgressBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
             refreshRepliesButton.IsEnabled = false;
 
             #region 只在倒序看贴时允许全局刷新
@@ -1631,13 +1597,14 @@ namespace hipda
             #region 顺序看贴，只刷新最后一页
             else
             {
-
                 ICollectionView view = (ICollectionView)listView.ItemsSource;
                 await view.LoadMoreItemsAsync(1); // count = 1 表示是要刷新
+                listView.ScrollIntoView(view.Last());
             }
             #endregion
-
+            
             refreshRepliesButton.IsEnabled = true;
+            replyProgressBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
     }
 }
