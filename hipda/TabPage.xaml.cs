@@ -571,18 +571,24 @@ namespace hipda
             string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
             if (tabType.Equals("1")) // 主贴列表页
             {
-                tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
-
+                // 显示 贴子列表页底部按钮
                 openPostNewPanelButton.Visibility = refreshThreadsButton.Visibility = changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+                // 隐藏 回复列表页底部按钮
+                openPostReplyPanelButton.Visibility = refreshRepliesButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+                // 隐藏 发布信息状态之底部按钮
                 sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
             else // 回复列表页
             {
-                tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
-
+                // 隐藏 贴子列表页底部按钮
                 openPostNewPanelButton.Visibility = refreshThreadsButton.Visibility = changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+                // 显示 回复列表页底部按钮
+                openPostReplyPanelButton.Visibility = refreshRepliesButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+                // 隐藏 发布信息状态之底部按钮
                 sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
             #endregion
@@ -1015,7 +1021,7 @@ namespace hipda
                     var postData = new Dictionary<string, object>();
                     postData.Add("formhash", DataSource.FormHash);
                     postData.Add("subject", string.Empty);
-                    postData.Add("message", message.Trim() + "\n\n" + DataSource.MessageTail); // 客户端尾巴
+                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
                     postData.Add("usesig", "1");
                     postData.Add("noticeauthor", noticeauthor);
                     postData.Add("noticetrimstr", noticetrimstr);
@@ -1077,7 +1083,7 @@ namespace hipda
                     postData.Add("wysiwyg", "1");
                     postData.Add("iconid", "0");
                     postData.Add("subject", subject);
-                    postData.Add("message", message.Trim() + "\n\n" + DataSource.MessageTail); // 客户端尾巴
+                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
                     postData.Add("attention_add", "1");
                     postData.Add("usesig", "1");
 
@@ -1127,7 +1133,7 @@ namespace hipda
                     var postData = new Dictionary<string, object>();
                     postData.Add("formhash", DataSource.FormHash);
                     postData.Add("subject", string.Empty);
-                    postData.Add("message", message.Trim() + "\n\n" + DataSource.MessageTail);
+                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
                     postData.Add("wysiwyg", "1");
                     postData.Add("tid", threadId);
                     postData.Add("pid", DataSource.ContentForEdit.PostId);
@@ -1175,7 +1181,7 @@ namespace hipda
                     var postData = new Dictionary<string, object>();
                     postData.Add("formhash", DataSource.FormHash);
                     postData.Add("subject", subject);
-                    postData.Add("message", message.Trim() + "\n\n" + DataSource.MessageTail);
+                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
                     postData.Add("wysiwyg", "1");
                     postData.Add("tid", threadId);
                     postData.Add("pid", DataSource.ContentForEdit.PostId);
@@ -1213,90 +1219,82 @@ namespace hipda
         #region 显示或隐藏回复或修改回复之输入面板
         private void HidePostReplyPanelAndButton()
         {
-            postReplyPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
-            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
-
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
                 btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
 
-            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            postReplyPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            openPostReplyPanelButton.Visibility = refreshRepliesButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private void ShowPostReplyPanelAndButton()
         {
-            postReplyPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
-
-            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
-
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
                 btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
 
-            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            postReplyPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            openPostReplyPanelButton.Visibility = refreshRepliesButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
         #endregion
 
         #region 显示或隐藏发贴或修改发贴之输入面板
         private void HidePostNewPanelAndButton()
         {
-            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
                 btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
 
-            refreshThreadsButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            openPostNewPanelButton.Visibility = refreshThreadsButton.Visibility = changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private void ShowPostNewPanelAndButton()
         {
-            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
-
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
                 btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
 
-            refreshThreadsButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            openPostNewPanelButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            openPostNewPanelButton.Visibility = refreshThreadsButton.Visibility = changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         private void HidePostNewModifyPanelAndButton()
         {
-            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
                 btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
 
-            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+            openPostReplyPanelButton.Visibility = refreshRepliesButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
         }
 
         private void ShowPostNewModifyPanelAndButton()
         {
-            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
-
             foreach (AppBarButton btn in tabPageCommandBar.SecondaryCommands)
             {
                 btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
 
-            openPostReplyPanelButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+
+            openPostReplyPanelButton.Visibility = refreshRepliesButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
         #endregion
 
@@ -1424,11 +1422,6 @@ namespace hipda
                 int cursorPosition = postNewContentTextBox.SelectionStart + occurences;
                 postNewContentTextBox.Text = postNewContentTextBox.Text.Insert(cursorPosition, imageStr);
             }
-        }
-
-        private void replyMenu_Opening(object sender, object e)
-        {
-            tabPageCommandBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
         }
 
         private void replyListItemGrid_Holding(object sender, HoldingRoutedEventArgs e)
@@ -1602,6 +1595,11 @@ namespace hipda
                         break;
                 }
             }
+        }
+
+        private void refreshRepliesButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

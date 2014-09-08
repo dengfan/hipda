@@ -208,6 +208,7 @@
     <Content Include="Assets\Faces\plus_48x48.png" />
     <Content Include="Assets\Icons\appbar.moon.first.quarter.png" />
     <Content Include="Assets\Icons\appbar.refresh.png" />
+    <Content Include="Assets\Icons\appbar.sort.numeric.descending.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
     <Content Include="Assets\SplashScreen.scale-240.png" />

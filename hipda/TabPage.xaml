@@ -202,7 +202,7 @@
                         </ControlTemplate>
                     </Button.Template>
                     <Button.Flyout>
-                        <MenuFlyout x:Name="replyMenu" Opening="replyMenu_Opening">
+                        <MenuFlyout x:Name="replyMenu">
                             <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
                             <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
                             <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" Click="modifyMenuFlyoutItem_Click" IsEnabled="False" />
@@ -1179,7 +1179,8 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar x:Name="tabPageCommandBar" ClosedDisplayMode="Minimal" Background="{StaticResource CommandBarBgColor}" Foreground="{StaticResource CommandFontColor}">
+        <CommandBar x:Name="tabPageCommandBar" Background="{StaticResource CommandBarBgColor}" Foreground="{StaticResource CommandFontColor}">
+            <!--贴子列表页底部按钮-->
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="changeThemeButton" Label="样式切换" Click="changeThemeButton_Click" Visibility="Collapsed">
@@ -1187,13 +1188,19 @@
                     <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.moon.first.quarter.png" />
                 </AppBarButton.Icon>
             </AppBarButton>
+
+            <!--回复列表页底部按钮-->
             <AppBarButton x:Name="openPostReplyPanelButton" Icon="Edit" Label="评论" Click="openPostReplyPanelButton_Click" Visibility="Collapsed" />
+            <AppBarButton x:Name="refreshRepliesButton" Icon="Refresh" Label="刷新" Click="refreshRepliesButton_Click" Visibility="Collapsed" />
             <AppBarToggleButton x:Name="reverseListButton" Label="倒序看贴" Click="reverseListButton_Click" Visibility="Collapsed">
                 <AppBarToggleButton.Icon>
-                    <FontIcon FontFamily="Segoe UI Symbol" Glyph="&#xE169;"/>
+                    <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.sort.numeric.descending.png" />
                 </AppBarToggleButton.Icon>
             </AppBarToggleButton>
+
+            <!--发布信息状态之底部按钮-->
             <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />
+            
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="Discovery 版" Click="openTabForDiscovery_Click" />
                 <AppBarButton Label="Buy &amp; Sell 版" Click="openTabForBuyAndSell_Click" />
