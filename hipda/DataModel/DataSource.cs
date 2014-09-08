@@ -762,16 +762,18 @@ namespace hipda.Data
                 {
                     xamlContent = @"作者被禁止或删除&#160;内容自动屏蔽";
                 }
-
-                xamlContent = string.Format(@"[RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""][Paragraph]{0}[/Paragraph][/RichTextBlock]", xamlContent);
-                xamlContent = new Regex("<[^<]*>").Replace(xamlContent, string.Empty);
-                xamlContent = new Regex("\r\n").Replace(xamlContent, string.Empty);
-                xamlContent = new Regex("\r").Replace(xamlContent, string.Empty);
-                xamlContent = new Regex("\n").Replace(xamlContent, string.Empty);
-                xamlContent = new Regex(@"\^{1,}").Replace(xamlContent, "^");
-                xamlContent = xamlContent.Replace("^", "[LineBreak/]");
+                
+                xamlContent = new Regex("<[^<]*>").Replace(xamlContent, string.Empty); // 移除所有HTML标签
+                xamlContent = new Regex("\r\n").Replace(xamlContent, string.Empty); // 忽略源换行
+                xamlContent = new Regex("\r").Replace(xamlContent, string.Empty); // 忽略源换行
+                xamlContent = new Regex("\n").Replace(xamlContent, string.Empty); // 忽略源换行
+                xamlContent = new Regex(@"↵{1,}").Replace(xamlContent, "↵"); // 将多个换行符合并成一个
+                xamlContent = new Regex(@"^↵").Replace(xamlContent, string.Empty); // 移除行首的换行符
+                xamlContent = new Regex(@"↵$").Replace(xamlContent, string.Empty); // 移除行末的换行符
+                xamlContent = xamlContent.Replace("↵", "[LineBreak/]"); // 解析换行符
                 xamlContent = xamlContent.Replace("[", "<");
                 xamlContent = xamlContent.Replace("]", ">");
+                xamlContent = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>", xamlContent);
 
                 Reply reply = new Reply(i, floor, postId, pageNo, threadId, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
                 thread.Replies.Add(reply);
@@ -785,9 +787,10 @@ namespace hipda.Data
             var content = new StringBuilder(htmlContent);
             content.EnsureCapacity(htmlContent.Length * 2);
 
-            content = content.Replace("[", "［");
-            content = content.Replace("]", "］");
-            content = content.Replace("&nbsp;", "&#160;");
+            content = content.Replace("[", "&#8968;");
+            content = content.Replace("]", "&#8971;");
+            content = content.Replace("&nbsp;", " ");
+            content = content.Replace("↵", "&#8629;");
 
             // 移除无用的的日期信息 
             MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_smallfont"">[\d\s-:]*</div>").Matches(content.ToString());
@@ -836,13 +839,13 @@ namespace hipda.Data
                 }
             }
 
-            content = content.Replace(@"<div class=""postattachlist"">", "^^");
-            content = content.Replace("<br/>", "^");
-            content = content.Replace("<br />", "^");
-            content = content.Replace("<br>", "^");
+            content = content.Replace(@"<div class=""postattachlist"">", "↵");
+            content = content.Replace("<br/>", "↵"); // ↵符号表示换行符
+            content = content.Replace("<br />", "↵");
+            content = content.Replace("<br>", "↵");
 
             // 替换引用文字标签
-            content = content.Replace("<blockquote>", @"^[Span Foreground=""Gray""]");
+            content = content.Replace("<blockquote>", @"↵[Span Foreground=""Gray""]");
             content = content.Replace("</blockquote>", "[/Span]");
 
             // 移除无意义图片HTML
@@ -868,7 +871,7 @@ namespace hipda.Data
                     {
                         if (width > 300)
                         {
-                            imgXaml = @"^[InlineUIContainer][Image Stretch=""Uniform"" Width=""360""][Image.Source][BitmapImage DecodePixelWidth=""360"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]^";
+                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""360""][Image.Source][BitmapImage DecodePixelWidth=""360"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
                         }
 
                         imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -903,7 +906,7 @@ namespace hipda.Data
                         imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                         if (width > 300)
                         {
-                            imgXaml = @"^[InlineUIContainer][Image Stretch=""Uniform"" Width=""360""][Image.Source][BitmapImage DecodePixelWidth=""360"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]^";
+                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""360""][Image.Source][BitmapImage DecodePixelWidth=""360"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
                         }
 
                         if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -944,7 +947,7 @@ namespace hipda.Data
 
                         if (imageCount <= MaxImageCount)
                         {
-                            imgXaml = @"^[InlineUIContainer][Image Stretch=""Uniform"" Width=""360""][Image.Source][BitmapImage DecodePixelWidth=""360"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]^";
+                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""360""][Image.Source][BitmapImage DecodePixelWidth=""360"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
 
                             if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
                             imgXaml = string.Format(imgXaml, imgUrl);
