@@ -1198,8 +1198,8 @@
                 <AppBarButton Label="Discovery 版" Click="openTabForDiscovery_Click" />
                 <AppBarButton Label="Buy &amp; Sell 版" Click="openTabForBuyAndSell_Click" />
                 <AppBarButton Label="Eink 版" Click="openTabForEink_Click" />
-                <AppBarButton x:Name="closeTab" Label="关闭当前标签页" Click="closeTab_Click" />
-                <AppBarButton x:Name="openTabForApp" Label="特别感谢 + 关于 + 反馈" Click="openTabForApp_Click" />
+                <AppBarButton x:Name="closeTab" Label="关闭" Click="closeTab_Click" />
+                <AppBarButton x:Name="openTabForApp" Label="关于" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

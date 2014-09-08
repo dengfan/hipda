@@ -110,7 +110,7 @@ namespace hipda
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 16, 16, 16);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
-            ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 26, 26, 26);
+            ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 60, 60, 60);
             ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.Black;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke; 
 
@@ -155,8 +155,8 @@ namespace hipda
             ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 102, 102, 102);
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Black;
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.WhiteSmoke;
-            ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 26, 26, 26);
-            ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
+            ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 13, 79, 112);
+            ((SolidColorBrush)r["PanelBgColor"]).Color = Color.FromArgb(255, 7, 18, 40);
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
 
             var bgImageBrush = new ImageBrush
@@ -264,7 +264,7 @@ namespace hipda
                 if (e.NavigationParameter == null)
                 {
                     CreateThreadListTab("14", "WIN版", false);
-                    CreateReplyListTab("1427253", "特别感谢 + 关于 + 反馈", false);
+                    CreateReplyListTab("1427253", "关于", false);
                 }
                 else
                 {
@@ -883,7 +883,7 @@ namespace hipda
         #region 打开标签页菜单按钮
         private void openTabForApp_Click(object sender, RoutedEventArgs e)
         {
-            CreateReplyListTab("1427253", "特别感谢 + 关于 + 反馈", false);
+            CreateReplyListTab("1427253", "关于", false);
         }
 
         private async void openTabForDiscovery_Click(object sender, RoutedEventArgs e)
@@ -928,6 +928,8 @@ namespace hipda
             currentPostType = EnumPostType.Reply;
             currentEditType = EnumEditType.Add;
             ShowPostReplyPanelAndButton();
+
+            postReplyContentTextBox.Focus(FocusState.Programmatic);
         }
 
         private void openPostNewPanelButton_Click(object sender, RoutedEventArgs e)
@@ -935,6 +937,8 @@ namespace hipda
             currentPostType = EnumPostType.NewThread;
             currentEditType = EnumEditType.Add;
             ShowPostNewPanelAndButton();
+
+            postNewTitleTextBox.Focus(FocusState.Programmatic);
         }
 
         private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
