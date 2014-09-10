@@ -869,9 +869,9 @@ namespace hipda.Data
 
                     if (imageCount <= MaxImageCount)
                     {
-                        if (width > 300)
+                        if (width > 250)
                         {
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""300""][Image.Source][BitmapImage DecodePixelWidth=""300"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
+                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
                         }
 
                         imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -904,9 +904,9 @@ namespace hipda.Data
                     if (imageCount <= MaxImageCount)
                     {
                         imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
-                        if (width > 300)
+                        if (width > 250)
                         {
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""300""][Image.Source][BitmapImage DecodePixelWidth=""300"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
+                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
                         }
 
                         if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -947,7 +947,7 @@ namespace hipda.Data
 
                         if (imageCount <= MaxImageCount)
                         {
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""300""][Image.Source][BitmapImage DecodePixelWidth=""300"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
+                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
 
                             if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
                             imgXaml = string.Format(imgXaml, imgUrl);
