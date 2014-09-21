@@ -40,7 +40,7 @@ namespace hipda
         Modify
     }
 
-    public sealed partial class TabPage : Page, IFileOpenPickerContinuable
+    public sealed partial class TabBubblePage : Page, IFileOpenPickerContinuable
     {
         StatusBar statusBar = StatusBar.GetForCurrentView();
         HttpHandle httpClient = HttpHandle.getInstance();
@@ -172,7 +172,7 @@ namespace hipda
         }
         #endregion
 
-        public TabPage()
+        public TabBubblePage()
         {
             this.InitializeComponent();
 
