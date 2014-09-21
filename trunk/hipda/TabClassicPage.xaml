@@ -125,7 +125,6 @@
 
                         <TextBlock Pivot.SlideInAnimationGroup="GroupOne" HorizontalAlignment="Right"
                                    Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
-                                   FontWeight="Bold"
                                    FontFamily="Global User Interface">
                             <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
                             <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
