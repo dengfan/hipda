@@ -787,7 +787,7 @@ namespace hipda
             // 留点底边距
             listView.Footer = new StackPanel
             {
-                Margin = new Thickness(10)
+                Margin = new Thickness(0, 50, 0, 50)
             };
 
             listView.ContainerContentChanging += ReplyListView_ContainerContentChanging;
