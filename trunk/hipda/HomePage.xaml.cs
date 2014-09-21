@@ -114,7 +114,7 @@ namespace hipda
         {
             Forum forum = (Forum)e.ClickedItem;
             string data = string.Format("{0},{1}", forum.Id, forum.Alias);
-            if (!Frame.Navigate(typeof(TabBubblePage), data))
+            if (!Frame.Navigate(typeof(TabClassicPage), data))
             {
                 throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
             }
@@ -122,7 +122,7 @@ namespace hipda
 
         private void openTabForApp_Click(object sender, RoutedEventArgs e)
         {
-            if (!Frame.Navigate(typeof(TabBubblePage)))
+            if (!Frame.Navigate(typeof(TabClassicPage)))
             {
                 throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
             }

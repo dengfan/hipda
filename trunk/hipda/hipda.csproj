@@ -94,13 +94,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="TabClassicPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="BackgroundStyleSelecterForForumItem.cs" />
-    <Compile Include="DataModel\ThemeEnum.cs" />
+    <Compile Include="DataModel\Enum.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
@@ -130,6 +134,9 @@
       <DependentUpon>TabBubblePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TabClassicPage.xaml.cs">
+      <DependentUpon>TabClassicPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ThemeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
