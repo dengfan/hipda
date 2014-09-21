@@ -28,7 +28,7 @@ using Windows.ApplicationModel.Activation;
 
 namespace hipda
 {
-    public sealed partial class TabBubblePage : Page, IFileOpenPickerContinuable
+    public sealed partial class TabClassicPage : Page, IFileOpenPickerContinuable
     {
         StatusBar statusBar = StatusBar.GetForCurrentView();
         HttpHandle httpClient = HttpHandle.getInstance();
@@ -160,7 +160,7 @@ namespace hipda
         }
         #endregion
 
-        public TabBubblePage()
+        public TabClassicPage()
         {
             this.InitializeComponent();
 
@@ -415,6 +415,7 @@ namespace hipda
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
             Run ownerNameTextBlockRun = (Run)layoutGrid.FindName("ownerNameTextBlock");
             Run createTimeTextBlockRun = (Run)layoutGrid.FindName("createTimeTextBlock");
+            TextBlock floorNoTextBlock = (TextBlock)layoutGrid.FindName("floorNoTextBlock");
             Button menuButton = (Button)layoutGrid.FindName("menuButton");
             ContentControl replyContent = (ContentControl)layoutGrid.FindName("replyContent");
             Button showMoreButton = (Button)layoutGrid.FindName("showMoreButton");
@@ -422,6 +423,7 @@ namespace hipda
 
             ownerNameTextBlockRun.Text = reply.OwnerName;
             createTimeTextBlockRun.Text = reply.CreateTime;
+            floorNoTextBlock.Text = reply.FloorNumStr;
             menuButton.DataContext = reply;
             try
             {

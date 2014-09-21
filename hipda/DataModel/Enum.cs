@@ -13,4 +13,16 @@ namespace hipda
         BlueSky,
         StarSky
     }
+
+    public enum EnumPostType
+    {
+        Reply,
+        NewThread
+    }
+
+    public enum EnumEditType
+    {
+        Add,
+        Modify
+    }
 }
