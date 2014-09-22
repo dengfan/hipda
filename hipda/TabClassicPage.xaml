@@ -48,9 +48,8 @@
             
         <Style x:Name="ThreadItemStyle" TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Background" Value="{StaticResource ItemBgColor}" />
-            <Setter Property="Margin" Value="0,0,0,10" />
-            <Setter Property="Padding" Value="10" />
+            <!--<Setter Property="Background" Value="{StaticResource ItemBgColor}" />-->
+            <Setter Property="Padding" Value="0,10,0,0" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
@@ -69,9 +68,8 @@
 
         <Style x:Name="ReplyItemStyle" TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Background" Value="{StaticResource ItemBgColor}" />
-            <Setter Property="Margin" Value="0,0,0,10" />
-            <Setter Property="Padding" Value="10" />
+            <!--<Setter Property="Background" Value="{StaticResource ItemBgColor}" />-->
+            <Setter Property="Padding" Value="0,10,0,0" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
@@ -96,6 +94,7 @@
         <DataTemplate x:Name="ThreadListItemTemplate">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
@@ -131,6 +130,11 @@
                         </TextBlock>
                     </StackPanel>
                 </Border>
+
+                <Line Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
+                        X1="0" Y1="10"
+                        X2="1000" Y2="10"
+                        Stroke="{StaticResource CommandBarBgColor}" StrokeDashArray="9,3" />
             </Grid>
         </DataTemplate>
 
@@ -138,6 +142,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="70"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
@@ -182,6 +187,11 @@
                             HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                             Click="viewFullContentButton_Click" Visibility="Collapsed" />
                 </StackPanel>
+
+                <Line Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" 
+                        X1="0" Y1="10"
+                        X2="1000" Y2="10"
+                        Stroke="{StaticResource CommandBarBgColor}" StrokeDashArray="9,3" />
             </Grid>
         </DataTemplate>
 
