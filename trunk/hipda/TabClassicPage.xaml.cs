@@ -75,7 +75,6 @@ namespace hipda
             statusBar.BackgroundColor = Colors.Purple;
 
             ResourceDictionary r = tabPage.Resources;
-            ((SolidColorBrush)r["ItemBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 219, 219, 219);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
@@ -94,7 +93,6 @@ namespace hipda
             statusBar.BackgroundColor = Colors.Black;
             
             ResourceDictionary r = tabPage.Resources;
-            ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 12, 12, 12);
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 16, 16, 16);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
@@ -107,54 +105,38 @@ namespace hipda
             tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
-        private void ThemeBlueSky()
+        private void ThemeGrayBlue()
         {
-            tabPage.RequestedTheme = ElementTheme.Light;
-            statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
+            tabPage.RequestedTheme = ElementTheme.Dark;
+            statusBar.BackgroundColor = Color.FromArgb(255, 28, 34, 40);
 
             ResourceDictionary r = tabPage.Resources;
-            ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 196, 229, 254);
-            ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 102, 102, 102);
-            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Black;
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.WhiteSmoke;
+            ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 118, 121, 125);
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 22, 26, 30);
+            ((SolidColorBrush)r["CommandFontColor"]).Color = Color.FromArgb(255, 118, 121, 125);
             ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 196, 229, 254);
             ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
 
-            var bgImageBrush = new ImageBrush
-            {
-                ImageSource = new BitmapImage
-                {
-                    UriSource = new Uri("ms-appx:///Assets/BackgroundImages/BlueSky.jpg")
-                }
-            };
-            tabPage.Background = bgImageBrush;
+            tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 28, 34, 40));
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
             tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
-        private void ThemeStarSky()
+        private void ThemeDarkBlue()
         {
             tabPage.RequestedTheme = ElementTheme.Dark;
             statusBar.BackgroundColor = Color.FromArgb(255, 7, 18, 40);
 
             ResourceDictionary r = tabPage.Resources;
-            ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 5, 17, 36);
-            ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 102, 102, 102);
-            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Black;
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.WhiteSmoke;
+            ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 106, 113, 126);
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 4, 13, 27);
+            ((SolidColorBrush)r["CommandFontColor"]).Color = Color.FromArgb(255, 106, 113, 126);
             ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 13, 79, 112);
             ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
 
-            var bgImageBrush = new ImageBrush
-            {
-                ImageSource = new BitmapImage
-                {
-                    UriSource = new Uri("ms-appx:///Assets/BackgroundImages/StarSky.jpg")
-                }
-            };
-            tabPage.Background = bgImageBrush;
+            tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 7, 18, 40));
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
             tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
@@ -180,10 +162,10 @@ namespace hipda
                     ThemeDark();
                     break;
                 case 2:
-                    ThemeBlueSky();
+                    ThemeGrayBlue();
                     break;
                 case 3:
-                    ThemeStarSky();
+                    ThemeDarkBlue();
                     break;
             }
         }
@@ -1552,10 +1534,10 @@ namespace hipda
                         ThemeDark();
                         break;
                     case 2:
-                        ThemeBlueSky();
+                        ThemeGrayBlue();
                         break;
                     case 3:
-                        ThemeStarSky();
+                        ThemeDarkBlue();
                         break;
                 }
             }
