@@ -25,7 +25,6 @@
 
     <Page.Resources>
         <SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
-        <SolidColorBrush x:Key="ItemBgColor" Color="Snow"/>
         <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>
         <SolidColorBrush x:Key="CommandBarBgColor" Color="LightGray"/>
         <SolidColorBrush x:Key="CommandFontColor" Color="Black"/>
@@ -48,7 +47,6 @@
             
         <Style x:Name="ThreadItemStyle" TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <!--<Setter Property="Background" Value="{StaticResource ItemBgColor}" />-->
             <Setter Property="Padding" Value="0,10,0,0" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -68,7 +66,6 @@
 
         <Style x:Name="ReplyItemStyle" TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <!--<Setter Property="Background" Value="{StaticResource ItemBgColor}" />-->
             <Setter Property="Padding" Value="0,10,0,0" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -134,7 +131,7 @@
                 <Line Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
                         X1="0" Y1="10"
                         X2="1000" Y2="10"
-                        Stroke="{StaticResource CommandBarBgColor}" StrokeDashArray="9,3" />
+                        Stroke="{StaticResource CommandBarBgColor}" StrokeDashArray="2,1" />
             </Grid>
         </DataTemplate>
 
@@ -191,7 +188,7 @@
                 <Line Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" 
                         X1="0" Y1="10"
                         X2="1000" Y2="10"
-                        Stroke="{StaticResource CommandBarBgColor}" StrokeDashArray="9,3" />
+                        Stroke="{StaticResource CommandBarBgColor}" StrokeDashArray="2,1" />
             </Grid>
         </DataTemplate>
 
