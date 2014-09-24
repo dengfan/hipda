@@ -26,6 +26,7 @@
     <Page.Resources>
         <SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
         <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>
+        <SolidColorBrush x:Key="BorderColor" Color="LightGray"/>
         <SolidColorBrush x:Key="CommandBarBgColor" Color="LightGray"/>
         <SolidColorBrush x:Key="CommandFontColor" Color="Black"/>
         <SolidColorBrush x:Key="MaskBgColor" Color="LightGray"/>
@@ -131,7 +132,7 @@
                 <Line Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
                         X1="0" Y1="10"
                         X2="1000" Y2="10"
-                        Stroke="{StaticResource CommandBarBgColor}" StrokeDashArray="2,1" />
+                        Stroke="{StaticResource BorderColor}" StrokeDashArray="2,1" />
             </Grid>
         </DataTemplate>
 
@@ -188,7 +189,7 @@
                 <Line Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" 
                         X1="0" Y1="10"
                         X2="1000" Y2="10"
-                        Stroke="{StaticResource CommandBarBgColor}" StrokeDashArray="2,1" />
+                        Stroke="{StaticResource BorderColor}" StrokeDashArray="2,1" />
             </Grid>
         </DataTemplate>
 

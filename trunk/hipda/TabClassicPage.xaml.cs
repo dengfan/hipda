@@ -76,6 +76,7 @@ namespace hipda
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
+            ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 219, 219, 219);
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 219, 219, 219);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
             ((SolidColorBrush)r["MaskBgColor"]).Color = Colors.LightGray;
@@ -94,6 +95,7 @@ namespace hipda
             
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
+            ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 16, 16, 16);
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 16, 16, 16);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
             ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 150, 150, 150);
@@ -108,17 +110,18 @@ namespace hipda
         private void ThemeGrayBlue()
         {
             tabPage.RequestedTheme = ElementTheme.Dark;
-            statusBar.BackgroundColor = Color.FromArgb(255, 28, 34, 40);
+            statusBar.BackgroundColor = Colors.DarkRed;
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 118, 121, 125);
-            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 22, 26, 30);
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Color.FromArgb(255, 118, 121, 125);
+            ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 47, 57, 67);
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.DarkRed;
+            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Silver;
             ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 196, 229, 254);
             ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
 
-            tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 28, 34, 40));
+            tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 36, 44, 52));
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
             tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
@@ -126,12 +129,13 @@ namespace hipda
         private void ThemeDarkBlue()
         {
             tabPage.RequestedTheme = ElementTheme.Dark;
-            statusBar.BackgroundColor = Color.FromArgb(255, 7, 18, 40);
+            statusBar.BackgroundColor = Colors.Maroon;
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 106, 113, 126);
-            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 4, 13, 27);
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Color.FromArgb(255, 106, 113, 126);
+            ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 11, 28, 62);
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Maroon;
+            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Silver;
             ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 13, 79, 112);
             ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
