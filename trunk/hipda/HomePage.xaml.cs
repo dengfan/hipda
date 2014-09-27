@@ -93,6 +93,7 @@ namespace hipda
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             accountList.ItemsSource = AccountSettings.List;
+            layoutModeComboBox.SelectedIndex = LayoutModeSettings.GetLayoutModeId;
 
             Refresh();
         }
@@ -114,17 +115,51 @@ namespace hipda
         {
             Forum forum = (Forum)e.ClickedItem;
             string data = string.Format("{0},{1}", forum.Id, forum.Alias);
-            if (!Frame.Navigate(typeof(TabClassicPage), data))
+            switch (LayoutModeSettings.GetLayoutModeId)
             {
-                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+                case 1:
+                    if (!Frame.Navigate(typeof(TabBubblePage), data))
+                    {
+                        throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+                    }
+                    break;
+                case 2:
+                    if (!Frame.Navigate(typeof(TabBubblePage), data))
+                    {
+                        throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+                    }
+                    break;
+                default:
+                    if (!Frame.Navigate(typeof(TabClassicPage), data))
+                    {
+                        throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+                    }
+                    break;
             }
         }
 
         private void openTabForApp_Click(object sender, RoutedEventArgs e)
         {
-            if (!Frame.Navigate(typeof(TabClassicPage)))
+            switch (LayoutModeSettings.GetLayoutModeId)
             {
-                throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+                case 1:
+                    if (!Frame.Navigate(typeof(TabBubblePage)))
+                    {
+                        throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+                    }
+                    break;
+                case 2:
+                    if (!Frame.Navigate(typeof(TabBubblePage)))
+                    {
+                        throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+                    }
+                    break;
+                default:
+                    if (!Frame.Navigate(typeof(TabClassicPage)))
+                    {
+                        throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
+                    }
+                    break;
             }
         }
 
@@ -235,6 +270,11 @@ namespace hipda
         private async void marketplaceReviewAppBarButton_Click(object sender, RoutedEventArgs e)
         {
             await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));
+        }
+
+        private void layoutModeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LayoutModeSettings.SetLayoutModeId(((ComboBox)sender).SelectedIndex);
         }
     }
 }

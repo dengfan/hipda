@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace hipda
 {
-    public enum EnumThemeType
+    public enum EnumMode
     {
         Classic,
-        Dark,
-        BlueSky,
-        StarSky
+        Plain,
+        Bubble
     }
 
     public enum EnumPostType

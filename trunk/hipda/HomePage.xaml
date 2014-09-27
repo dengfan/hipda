@@ -91,6 +91,23 @@
                     GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"
                     ItemContainerStyle="{StaticResource ForumItemStyle}"/>
             </PivotItem>
+            <PivotItem
+                Header="设置" 
+                CommonNavigationTransitionInfo.IsStaggerElement="True"
+                Margin="0">
+                <ScrollViewer Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="排版模式" FontSize="{ThemeResource ContentControlFontSize}" />
+                        <TextBlock Text="小屏用户推荐使用经典或纯文本模式，大屏（如 Lumia 1320 / 1520）用户推荐使用气泡模式。" 
+                                   TextWrapping="Wrap" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
+                        <ComboBox x:Name="layoutModeComboBox" PlaceholderText="经典" SelectionChanged="layoutModeComboBox_SelectionChanged">
+                            <x:String>经典</x:String>
+                            <x:String>纯文本</x:String>
+                            <x:String>气泡</x:String>
+                        </ComboBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem>
             <PivotItem 
                 Header="账号" 
                 CommonNavigationTransitionInfo.IsStaggerElement="True"
@@ -151,6 +168,12 @@
                     </ListView.Footer>
                 </ListView>
             </PivotItem>
+            <PivotItem
+                Header="感谢" 
+                CommonNavigationTransitionInfo.IsStaggerElement="True"
+                Margin="0">
+
+            </PivotItem>
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
@@ -159,7 +182,7 @@
         <CommandBar Background="LightGray">
             <AppBarButton x:Name="marketplaceReviewAppBarButton" Icon="Favorite" Label="我要给好评" Click="marketplaceReviewAppBarButton_Click"/>
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="openTabForApp" Label="关于" Click="openTabForApp_Click" />
+                <AppBarButton x:Name="openTabForApp" Label="反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
