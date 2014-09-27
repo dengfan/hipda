@@ -252,7 +252,7 @@ namespace hipda
                 if (e.NavigationParameter == null)
                 {
                     CreateThreadListTab("14", "WIN版", false);
-                    CreateReplyListTab("1427253", "关于", false);
+                    CreateReplyListTab("1427253", "反馈", false);
                 }
                 else
                 {
@@ -854,7 +854,7 @@ namespace hipda
         #region 打开标签页菜单按钮
         private void openTabForApp_Click(object sender, RoutedEventArgs e)
         {
-            CreateReplyListTab("1427253", "关于", false);
+            CreateReplyListTab("1427253", "反馈", false);
         }
 
         private async void openTabForDiscovery_Click(object sender, RoutedEventArgs e)

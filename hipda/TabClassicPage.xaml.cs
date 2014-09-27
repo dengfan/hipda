@@ -128,19 +128,19 @@ namespace hipda
 
         private void ThemeDarkBlue()
         {
-            tabPage.RequestedTheme = ElementTheme.Dark;
-            statusBar.BackgroundColor = Colors.Maroon;
+            tabPage.RequestedTheme = ElementTheme.Light;
+            statusBar.BackgroundColor = Color.FromArgb(255, 138, 107, 121);
 
             ResourceDictionary r = tabPage.Resources;
-            ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 106, 113, 126);
-            ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 11, 28, 62);
-            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Maroon;
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Silver;
+            ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
+            ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 206, 196, 168);
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 138, 107, 121);
+            ((SolidColorBrush)r["CommandFontColor"]).Color = Color.FromArgb(255, 221, 214, 195);
             ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 13, 79, 112);
             ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
 
-            tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 7, 18, 40));
+            tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 221, 214, 195));
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
             tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
@@ -238,7 +238,7 @@ namespace hipda
                 if (e.NavigationParameter == null)
                 {
                     CreateThreadListTab("14", "WIN版", false);
-                    CreateReplyListTab("1427253", "关于", false);
+                    CreateReplyListTab("1427253", "反馈", false);
                 }
                 else
                 {
@@ -842,7 +842,7 @@ namespace hipda
         #region 打开标签页菜单按钮
         private void openTabForApp_Click(object sender, RoutedEventArgs e)
         {
-            CreateReplyListTab("1427253", "关于", false);
+            CreateReplyListTab("1427253", "反馈", false);
         }
 
         private async void openTabForDiscovery_Click(object sender, RoutedEventArgs e)
