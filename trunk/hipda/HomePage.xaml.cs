@@ -118,7 +118,7 @@ namespace hipda
             switch (LayoutModeSettings.GetLayoutModeId)
             {
                 case 1:
-                    if (!Frame.Navigate(typeof(TabBubblePage), data))
+                    if (!Frame.Navigate(typeof(TabPlainPage), data))
                     {
                         throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
                     }
@@ -143,7 +143,7 @@ namespace hipda
             switch (LayoutModeSettings.GetLayoutModeId)
             {
                 case 1:
-                    if (!Frame.Navigate(typeof(TabBubblePage)))
+                    if (!Frame.Navigate(typeof(TabPlainPage)))
                     {
                         throw new Exception(this.resourceLoader.GetString("NavigationFailedExceptionMessage"));
                     }
