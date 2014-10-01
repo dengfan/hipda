@@ -95,7 +95,9 @@
                                    HorizontalAlignment="Left"
                                    Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}">
                             <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                    <Run Text="," />
                             <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
+                    <Run Text="," />
                             <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
                             <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
                 </TextBlock>
@@ -107,36 +109,41 @@
                             <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" />
                 </TextBlock>
 
-                <TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
+                <TextBlock Foreground="{StaticResource BorderColor}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Name="ReplyListItemTemplate">
             <StackPanel>
-                <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}">
-                    <Run Text="{Binding FloorNumStr}"/>
-                    <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
-                    <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
-                </TextBlock>
-                <Button x:Name="menuButton" MinHeight="24">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}" FontFamily="Global User Interface">
-                                    <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
-                            </TextBlock>
-                        </ControlTemplate>
-                    </Button.Template>
-                    <Button.Flyout>
-                        <MenuFlyout x:Name="replyMenu">
-                            <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
-                            <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
-                            <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" Click="modifyMenuFlyoutItem_Click" IsEnabled="False" />
-                            <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" Click="viewFullContentMenuFlyoutItem_Click" />
-                        </MenuFlyout>
-                    </Button.Flyout>
-                </Button>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}">
+                        <Run Text="{Binding FloorNumStr}" FontWeight="Bold"/>
+                        <Run Text="," />
+                        <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                        <Run Text="," />
+                        <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
+                        <Run Text="," />
+                    </TextBlock>
+                    <Button Margin="10,0,0,0" x:Name="menuButton" MinHeight="24">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}" FontFamily="Global User Interface">
+                                        <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
+                                </TextBlock>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Flyout>
+                            <MenuFlyout x:Name="replyMenu">
+                                <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" Click="replyReplyMenuFlyoutItem_Click" />
+                                <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" Click="refReplyMenuFlyoutItem_Click" />
+                                <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" Click="modifyMenuFlyoutItem_Click" IsEnabled="False" />
+                                <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" Click="viewFullContentMenuFlyoutItem_Click" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
                 <TextBlock FontSize="{ThemeResource TextStyleLargeFontSize}" Foreground="{StaticResource MainFontColor}" TextWrapping="Wrap" Text="{Binding TextContent}" />
-                <TextBlock Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
+                <TextBlock Foreground="{StaticResource BorderColor}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
             </StackPanel>
         </DataTemplate>
 
