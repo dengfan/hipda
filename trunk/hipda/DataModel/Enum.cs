@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace hipda
 {
-    public enum EnumMode
+    public enum EnumLayoutMode
     {
         Classic,
         Plain,

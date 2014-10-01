@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Data.Html;
+using hipda.Settings;
 
 namespace hipda.Data
 {
@@ -564,6 +565,11 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
+        public static void ClearReplyList()
+        {
+            _dataSource._replyList.Clear();
+        }
+
         public static ReplyData GetReply(string threadId, string threadName)
         {
             var count = _dataSource.ReplyList.Count(t => t.ThreadId.Equals(threadId));
@@ -695,6 +701,8 @@ namespace hipda.Data
                 return;
             }
 
+            EnumLayoutMode layoutMode = (EnumLayoutMode)LayoutModeSettings.GetLayoutModeId;
+
             int i = thread.Replies.Count;
             foreach (var item in data)
             {
@@ -745,35 +753,26 @@ namespace hipda.Data
                 {
                     // 用于回复引用
                     textContent = contentNode.InnerText.Trim();
-                    textContent = new Regex("\r\n").Replace(textContent, string.Empty);
-                    textContent = new Regex("\r").Replace(textContent, string.Empty);
-                    textContent = new Regex("\n").Replace(textContent, string.Empty);
-                    textContent = new Regex(@"[\s]{2}").Replace(textContent, " ");
-                    textContent = textContent.Replace("&nbsp;", string.Empty);
-                    textContent = textContent.Length > 100 ? textContent.Substring(0, 97) + "..." : textContent;
-                    
-                    // 用于显示原始内容
-                    htmlContent = xamlContent = contentNode.InnerHtml;
+                    textContent = new Regex("\r\n").Replace(textContent, "↵");
+                    textContent = new Regex("\r").Replace(textContent, "↵");
+                    textContent = new Regex("\n").Replace(textContent, "↵");
+                    textContent = new Regex(@"↵{1,}").Replace(textContent, "\r\n");
+                    textContent = textContent.Replace("&nbsp;", "  ");
 
-                    // 用于正常显示
-                    xamlContent = HtmlToXaml(xamlContent.Trim(), ref imageCount);
+                    // 用于显示原始内容
+                    htmlContent = contentNode.InnerHtml;
+
+                    // 只在非纯文本模式下才转换，以提升在纯文本模式下的性能
+                    if (layoutMode != EnumLayoutMode.Plain)
+                    {
+                        xamlContent = HtmlToXaml(htmlContent.Trim(), ref imageCount);
+                    }
                 }
                 else
                 {
-                    xamlContent = @"作者被禁止或删除&#160;内容自动屏蔽";
+                    xamlContent = @"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>";
+                    xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
-                
-                xamlContent = new Regex("<[^<]*>").Replace(xamlContent, string.Empty); // 移除所有HTML标签
-                xamlContent = new Regex("\r\n").Replace(xamlContent, string.Empty); // 忽略源换行
-                xamlContent = new Regex("\r").Replace(xamlContent, string.Empty); // 忽略源换行
-                xamlContent = new Regex("\n").Replace(xamlContent, string.Empty); // 忽略源换行
-                xamlContent = new Regex(@"↵{1,}").Replace(xamlContent, "↵"); // 将多个换行符合并成一个
-                xamlContent = new Regex(@"^↵").Replace(xamlContent, string.Empty); // 移除行首的换行符
-                xamlContent = new Regex(@"↵$").Replace(xamlContent, string.Empty); // 移除行末的换行符
-                xamlContent = xamlContent.Replace("↵", "[LineBreak/]"); // 解析换行符
-                xamlContent = xamlContent.Replace("[", "<");
-                xamlContent = xamlContent.Replace("]", ">");
-                xamlContent = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>", xamlContent);
 
                 Reply reply = new Reply(i, floor, postId, pageNo, threadId, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
                 thread.Replies.Add(reply);
@@ -782,7 +781,7 @@ namespace hipda.Data
             }
         }
 
-        private static string HtmlToXaml(string htmlContent, ref int imageCount)
+        public static string HtmlToXaml(string htmlContent, ref int imageCount)
         {
             var content = new StringBuilder(htmlContent);
             content.EnsureCapacity(htmlContent.Length * 2);
@@ -963,7 +962,20 @@ namespace hipda.Data
                 }
             }
 
-            return content.ToString();
+            string xamlContent = content.ToString();
+            xamlContent = new Regex("<[^<]*>").Replace(xamlContent, string.Empty); // 移除所有HTML标签
+            xamlContent = new Regex("\r\n").Replace(xamlContent, string.Empty); // 忽略源换行
+            xamlContent = new Regex("\r").Replace(xamlContent, string.Empty); // 忽略源换行
+            xamlContent = new Regex("\n").Replace(xamlContent, string.Empty); // 忽略源换行
+            xamlContent = new Regex(@"↵{1,}").Replace(xamlContent, "↵"); // 将多个换行符合并成一个
+            xamlContent = new Regex(@"^↵").Replace(xamlContent, string.Empty); // 移除行首的换行符
+            xamlContent = new Regex(@"↵$").Replace(xamlContent, string.Empty); // 移除行末的换行符
+            xamlContent = xamlContent.Replace("↵", "[LineBreak/]"); // 解析换行符
+            xamlContent = xamlContent.Replace("[", "<");
+            xamlContent = xamlContent.Replace("]", ">");
+            xamlContent = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>", xamlContent);
+
+            return xamlContent;
         }
         #endregion
 

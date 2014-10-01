@@ -76,7 +76,7 @@ namespace hipda
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
-            ((SolidColorBrush)r["BorderColor"]).Color = Color.FromArgb(255, 219, 219, 219);
+            ((SolidColorBrush)r["BorderColor"]).Color = Colors.LightGray;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 219, 219, 219);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
             ((SolidColorBrush)r["MaskBgColor"]).Color = Colors.LightGray;
@@ -474,7 +474,7 @@ namespace hipda
             var listView = new ListView
             {
                 Name = string.Format("threadsListView{0}", forumId),
-                Padding = new Thickness(10,0,10,0),
+                Padding = new Thickness(15,0,15,0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
                 ItemContainerStyle = ThreadItemStyle,
@@ -571,7 +571,7 @@ namespace hipda
             var listView = new ListView
             {
                 Name = string.Format("repliesListView{0}", threadId),
-                Padding = new Thickness(10, 0, 10, 0),
+                Padding = new Thickness(15, 0, 15, 0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,
@@ -1069,10 +1069,12 @@ namespace hipda
         private void replyReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
+            string textContent = data.TextContent.Length > 100 ? data.TextContent.Substring(0, 97) + "..." : data.TextContent;
+            textContent = textContent.Trim();
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
             noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n\n", data.Floor, data.OwnerName);
-            noticeauthormsg = data.TextContent;
+            noticeauthormsg = textContent;
 
             postReplyContentTextBox.Text = noticetrimstr;
 
@@ -1084,10 +1086,12 @@ namespace hipda
         private void refReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
+            string textContent = data.TextContent.Length > 100 ? data.TextContent.Substring(0, 97) + "..." : data.TextContent;
+            textContent = textContent.Trim();
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
-            noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, data.TextContent);
-            noticeauthormsg = data.TextContent;
+            noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, textContent);
+            noticeauthormsg = textContent;
 
             postReplyContentTextBox.Text = noticetrimstr;
 

@@ -1263,10 +1263,12 @@ namespace hipda
         private void replyReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
+            string textContent = data.TextContent.Length > 100 ? data.TextContent.Substring(0, 97) + "..." : data.TextContent;
+            textContent = textContent.Trim();
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
             noticetrimstr = string.Format("[b]回复 {0}# [i]{1}[/i] [/b]\n\n", data.Floor, data.OwnerName);
-            noticeauthormsg = data.TextContent;
+            noticeauthormsg = textContent;
 
             postReplyContentTextBox.Text = noticetrimstr;
 
@@ -1278,10 +1280,12 @@ namespace hipda
         private void refReplyMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             Reply data = (sender as MenuFlyoutItem).DataContext as Reply;
+            string textContent = data.TextContent.Length > 100 ? data.TextContent.Substring(0, 97) + "..." : data.TextContent;
+            textContent = textContent.Trim();
 
             noticeauthor = string.Format("r|{0}|[i]{1}[/i]", data.OwnerId, data.OwnerName);
-            noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, data.TextContent);
-            noticeauthormsg = data.TextContent;
+            noticetrimstr = string.Format("[quote]回复 {0}# {1}\n{2}[/quote]\n\n", data.Floor, data.OwnerName, textContent);
+            noticeauthormsg = textContent;
 
             postReplyContentTextBox.Text = noticetrimstr;
 
