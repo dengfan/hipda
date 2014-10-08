@@ -108,6 +108,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="BackgroundStyleSelecterForForumItem.cs" />
+    <Compile Include="Common\HtmlHelper.cs" />
     <Compile Include="DataModel\Enum.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
