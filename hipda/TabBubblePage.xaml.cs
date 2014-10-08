@@ -409,6 +409,12 @@ namespace hipda
             }
 
             Reply reply = (Reply)args.Item;
+            if (string.IsNullOrEmpty(reply.XamlContent) && !string.IsNullOrEmpty(reply.HtmlContent))
+            {
+                int imageCount = 0;
+                reply.XamlContent = HtmlHelper.HtmlToXaml(reply.HtmlContent, DataSource.MaxImageCount, ref imageCount);
+                reply.ImageCount = imageCount;
+            }
 
             Grid layoutGrid = (Grid)args.ItemContainer.ContentTemplateRoot;
 
@@ -423,6 +429,7 @@ namespace hipda
             ownerNameTextBlockRun.Text = reply.OwnerName;
             createTimeTextBlockRun.Text = reply.CreateTime;
             menuButton.DataContext = reply;
+
             try
             {
                 replyContent.Content = XamlReader.Load(reply.XamlContent);
