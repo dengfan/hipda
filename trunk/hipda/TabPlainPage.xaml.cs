@@ -33,8 +33,11 @@ namespace hipda
         StatusBar statusBar = StatusBar.GetForCurrentView();
         HttpHandle httpClient = HttpHandle.getInstance();
 
-        private const int maxHubSectionCount = 6;
-        private const string regexForTitle = @"[^a-zA-Z\d\u4e00-\u9fa5]"; // 用于过滤掉无意义符号
+        // 用于限制允许显示标签页的总数量，2表示贴子列表页和当前回复列表页这两个页面的数量
+        private int maxHubSectionCount = AutoCloseOldTabSettings.GetValue == 1 ? 2 : 8;
+
+        // 用于过滤掉无意义符号
+        private string regexForTitle = @"[^a-zA-Z\d\u4e00-\u9fa5]";
 
         private readonly NavigationHelper navigationHelper;
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");

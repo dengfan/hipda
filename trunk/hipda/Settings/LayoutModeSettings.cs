@@ -27,7 +27,12 @@ namespace hipda.Settings
             {
                 ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfLayoutModeSettingsContainer, ApplicationDataCreateDisposition.Always);
                 var settingsContainer = localSettings.Containers[keyNameOfLayoutModeSettingsContainer];
-                return Convert.ToInt16(settingsContainer.Values[keyNameOfDefaultLayoutModeId]);
+                if (settingsContainer.Values.ContainsKey(keyNameOfDefaultLayoutModeId))
+                {
+                    return Convert.ToInt16(settingsContainer.Values[keyNameOfDefaultLayoutModeId]);
+                }
+
+                return 0;
             }
         }
     }

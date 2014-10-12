@@ -105,6 +105,13 @@
                             <x:String>纯文本</x:String>
                             <x:String>气泡</x:String>
                         </ComboBox>
+                        <TextBlock Text="自动关闭标签页" FontSize="{ThemeResource ContentControlFontSize}" Margin="0,5,0,0" />
+                        <TextBlock Text="您是否希望在新打开一个贴子时，自动关闭已浏览过的贴子？" 
+                                   TextWrapping="Wrap" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
+                        <ComboBox x:Name="autoCloseOldTabComboBox" PlaceholderText="否" SelectionChanged="autoCloseOldTabComboBox_SelectionChanged">
+                            <x:String>否</x:String>
+                            <x:String>是</x:String>
+                        </ComboBox>
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
