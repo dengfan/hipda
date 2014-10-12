@@ -134,6 +134,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Settings\LayoutModeSettings.cs" />
+    <Compile Include="Settings\AutoCloseOldTabSettings.cs" />
     <Compile Include="Settings\SortSettings.cs" />
     <Compile Include="Settings\ThemeSettings.cs" />
     <Compile Include="TabBubblePage.xaml.cs">
