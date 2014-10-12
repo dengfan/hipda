@@ -409,11 +409,11 @@ namespace hipda
             }
 
             Reply reply = (Reply)args.Item;
+
+            // 如果是从纯文本模式切换到非纯文本模式，则重新转换HTML为XAML
             if (string.IsNullOrEmpty(reply.XamlContent) && !string.IsNullOrEmpty(reply.HtmlContent))
             {
-                int imageCount = 0;
-                reply.XamlContent = HtmlHelper.HtmlToXaml(reply.HtmlContent, DataSource.MaxImageCount, ref imageCount);
-                reply.ImageCount = imageCount;
+                reply = DataSource.ReconvertReplyXamlContent(reply.Floor, reply.ThreadId);
             }
 
             Grid layoutGrid = (Grid)args.ItemContainer.ContentTemplateRoot;

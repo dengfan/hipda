@@ -566,9 +566,17 @@ namespace hipda.Data
         #endregion
 
         #region 读取指定贴子下所有回复
-        public static void ClearReplyList()
+        public static Reply ReconvertReplyXamlContent(int replyFloor, string threadId)
         {
-            _dataSource._replyList.Clear();
+            var reply = _dataSource
+                .ReplyList.Single(r => r.ThreadId.Equals(threadId))
+                .Replies.Single(r => r.Floor == replyFloor);
+
+            int imageCount = 0;
+            reply.XamlContent = HtmlHelper.HtmlToXaml(reply.HtmlContent, DataSource.MaxImageCount, ref imageCount);
+            reply.ImageCount = imageCount;
+
+            return reply;
         }
 
         public static ReplyData GetReply(string threadId, string threadName)
