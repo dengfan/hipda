@@ -35,13 +35,14 @@ namespace hipda.Data
 
     public class Reply
     {
-        public Reply(int index, int floor, string postId, int pageNo, string threadId, string ownerId, string ownerName, string textContent, string htmlContent, string xamlConent, int imageCount, string createTime)
+        public Reply(int index, int floor, string postId, int pageNo, string threadId, string threadTitle, string ownerId, string ownerName, string textContent, string htmlContent, string xamlConent, int imageCount, string createTime)
         {
             this.Index = index;
             this.Floor = floor;
             this.PostId = postId;
             this.PageNo = pageNo;
             this.ThreadId = threadId;
+            this.ThreadTitle = threadTitle;
             this.OwnerId = ownerId;
             this.OwnerName = ownerName;
             this.TextContent = textContent;
@@ -56,6 +57,7 @@ namespace hipda.Data
         public string PostId { get; private set; }
         public int PageNo { get; private set; }
         public string ThreadId { get; private set; }
+        public string ThreadTitle { get; private set; }
         public string OwnerName { get; private set; }
 
         public string OwnerId { get; private set; }
@@ -100,14 +102,14 @@ namespace hipda.Data
 
     public class ReplyData
     {
-        public ReplyData(string threadId, string threadName)
+        public ReplyData(string threadId, string threadTitle)
         {
             this.ThreadId = threadId;
-            this.ThreadName = threadName;
+            this.ThreadTitle = threadTitle;
             this.Replies = new ObservableCollection<Reply>();
         }
         public string ThreadId { get; private set; }
-        public string ThreadName { get; private set; }
+        public string ThreadTitle { get; private set; }
         public IList<Reply> Replies { get; private set; }
     }
 
@@ -742,6 +744,15 @@ namespace hipda.Data
                 string postId = floorLinkNode.Attributes["id"].Value.Replace("postnum", string.Empty);
                 var floorNumNode = floorLinkNode.ChildNodes[0]; // em
                 int floor = Convert.ToInt32(floorNumNode.InnerText);
+                string threadTitle = string.Empty;
+                if (floor == 1)
+                {
+                    var threadTitleNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("threadtitle"));
+                    if (threadTitleNode != null)
+                    {
+                        threadTitle = threadTitleNode.InnerText.Trim();
+                    }
+                }
 
                 string postTime = string.Empty;
                 var postTimeNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
@@ -783,7 +794,7 @@ namespace hipda.Data
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                Reply reply = new Reply(i, floor, postId, pageNo, threadId, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
+                Reply reply = new Reply(i, floor, postId, pageNo, threadId, threadTitle, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
                 thread.Replies.Add(reply);
 
                 i++;
