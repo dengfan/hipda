@@ -11,6 +11,8 @@ namespace hipda.Common
     {
         public static string HtmlToXaml(string htmlContent, int maxImageCount, ref int imageCount)
         {
+            string imagePlaceHolder = @"↵[Span Foreground=""Gray""]/* 为节省流量，图片{0}已被智能忽略 */[/Span]";
+
             var content = new StringBuilder(htmlContent);
             content.EnsureCapacity(htmlContent.Length * 2);
 
@@ -72,8 +74,8 @@ namespace hipda.Common
             content = content.Replace("<br>", "↵");
 
             // 替换引用文字标签
-            content = content.Replace("<blockquote>", @"↵[Span Foreground=""Gray""]");
-            content = content.Replace("</blockquote>", "[/Span]");
+            content = content.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""18,0,0,0"" Foreground=""Gray""][Span]");
+            content = content.Replace("</blockquote>", "[/Span][/Paragraph][Paragraph]");
 
             // 移除无意义图片HTML
             content = content.Replace(@"src=""images/default/attachimg.gif""", string.Empty);
@@ -98,7 +100,7 @@ namespace hipda.Common
                     {
                         if (width > 250)
                         {
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
+                            imgXaml = @"[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,8,0,5"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                         }
 
                         imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -106,7 +108,7 @@ namespace hipda.Common
                     }
                     else
                     {
-                        imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略 -[/Span]";
+                        imgXaml = imagePlaceHolder;
                         imgXaml = string.Format(imgXaml, imageCount);
                     }
 
@@ -133,7 +135,7 @@ namespace hipda.Common
                         imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                         if (width > 250)
                         {
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
+                            imgXaml = @"[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,8,0,5"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                         }
 
                         if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -141,7 +143,7 @@ namespace hipda.Common
                     }
                     else
                     {
-                        imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略 -[/Span]";
+                        imgXaml = imagePlaceHolder;
                         imgXaml = string.Format(imgXaml, imageCount);
                     }
 
@@ -174,14 +176,14 @@ namespace hipda.Common
 
                         if (imageCount <= maxImageCount)
                         {
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]↵";
+                            imgXaml = @"[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,8,0,5"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
 
                             if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
                             imgXaml = string.Format(imgXaml, imgUrl);
                         }
                         else
                         {
-                            imgXaml = @"[Span Foreground=""Gray""]- 为节省流量，图片{0}已被智能忽略 -[/Span]";
+                            imgXaml = imagePlaceHolder;
                             imgXaml = string.Format(imgXaml, imageCount);
                         }
                     }
