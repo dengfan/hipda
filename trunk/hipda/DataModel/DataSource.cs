@@ -258,7 +258,7 @@ namespace hipda.Data
         /// 每个楼层默认显示的图片数据
         /// 用于节省流量
         /// </summary>
-        public static int MaxImageCount { get { return 5; } }
+        public static int MaxImageCount { get { return ImageCountSettings.ImageCountSetting; } }
 
         public static int OrderType = 2;
 
@@ -720,7 +720,7 @@ namespace hipda.Data
                 return;
             }
 
-            EnumLayoutMode layoutMode = (EnumLayoutMode)LayoutModeSettings.GetLayoutModeId;
+            EnumLayoutMode layoutMode = (EnumLayoutMode)LayoutModeSettings.LayoutModeSetting;
 
             int i = thread.Replies.Count;
             foreach (var item in data)

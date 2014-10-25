@@ -105,6 +105,17 @@
                             <x:String>纯文本</x:String>
                             <x:String>气泡</x:String>
                         </ComboBox>
+                        <TextBlock Text="图片数量" FontSize="{ThemeResource ContentControlFontSize}" Margin="0,8,0,0" />
+                        <TextBlock Text="用于限制每个楼层的图片加载数量，以节省流量。（仅针对非纯文本模式生效）" 
+                                   TextWrapping="Wrap" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
+                        <ComboBox x:Name="imageCountComboBox" PlaceholderText="5" SelectionChanged="imageCountComboBox_SelectionChanged">
+                            <x:String>0（即无图模式）</x:String>
+                            <x:String>1</x:String>
+                            <x:String>2</x:String>
+                            <x:String>3</x:String>
+                            <x:String>4</x:String>
+                            <x:String>5</x:String>
+                        </ComboBox>
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>

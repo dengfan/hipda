@@ -133,6 +133,7 @@
     <Compile Include="ListGroupStyleSelector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Settings\ImageCountSettings.cs" />
     <Compile Include="Settings\LayoutModeSettings.cs" />
     <Compile Include="Settings\SortSettings.cs" />
     <Compile Include="Settings\ThemeSettings.cs" />
