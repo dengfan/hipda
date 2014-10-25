@@ -33,8 +33,8 @@ namespace hipda
         StatusBar statusBar = StatusBar.GetForCurrentView();
         HttpHandle httpClient = HttpHandle.getInstance();
 
-        // 用于限制允许显示标签页的总数量，2表示贴子列表页和当前回复列表页这两个页面的数量
-        private int maxHubSectionCount = AutoCloseOldTabSettings.GetValue == 1 ? 2 : 8;
+        // 用于限制允许显示标签页的总数量
+        private int maxHubSectionCount = 6;
 
         // 用于过滤掉无意义符号
         private string regexForTitle = @"[^a-zA-Z\d\u4e00-\u9fa5]";
@@ -477,7 +477,7 @@ namespace hipda
             var listView = new ListView
             {
                 Name = string.Format("threadsListView{0}", forumId),
-                Padding = new Thickness(15,0,15,0),
+                Padding = new Thickness(10, 22, 10, 0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
                 ItemContainerStyle = ThreadItemStyle,
@@ -498,7 +498,7 @@ namespace hipda
 
             // 由于在最后一个thread tab 打开一个 reply tab，会因超过 tab 数量而被删除，导致用户看不到
             // 所以如果发现最后一个 tab 是 thread tab，则删除之
-            if (Pivot.Items.Count == 6)
+            if (Pivot.Items.Count == maxHubSectionCount)
             {
                 PivotItem lastItem = (PivotItem)Pivot.Items.Last();
                 string tabType = lastItem.GetValue(PivotItemTabTypeProperty).ToString();
@@ -574,7 +574,7 @@ namespace hipda
             var listView = new ListView
             {
                 Name = string.Format("repliesListView{0}", threadId),
-                Padding = new Thickness(15, 0, 15, 0),
+                Padding = new Thickness(10, 22, 10, 0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,

@@ -98,19 +98,12 @@
                 <ScrollViewer Padding="15">
                     <StackPanel>
                         <TextBlock Text="排版模式" FontSize="{ThemeResource ContentControlFontSize}" />
-                        <TextBlock Text="小屏用户推荐使用经典或纯文本模式，大屏（如 Lumia 1320 / 1520）用户推荐使用气泡模式。" 
+                        <TextBlock Text="小屏用户推荐使用经典或纯文本模式，大屏（如 Lumia 1320 / 1520）用户推荐使用气泡模式，以获得最佳体验！" 
                                    TextWrapping="Wrap" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
                         <ComboBox x:Name="layoutModeComboBox" PlaceholderText="经典" SelectionChanged="layoutModeComboBox_SelectionChanged">
                             <x:String>经典</x:String>
                             <x:String>纯文本</x:String>
                             <x:String>气泡</x:String>
-                        </ComboBox>
-                        <TextBlock Text="自动关闭标签页" FontSize="{ThemeResource ContentControlFontSize}" Margin="0,5,0,0" />
-                        <TextBlock Text="您是否希望在新打开一个贴子时，自动关闭已浏览过的贴子？" 
-                                   TextWrapping="Wrap" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
-                        <ComboBox x:Name="autoCloseOldTabComboBox" PlaceholderText="否" SelectionChanged="autoCloseOldTabComboBox_SelectionChanged">
-                            <x:String>否</x:String>
-                            <x:String>是</x:String>
                         </ComboBox>
                     </StackPanel>
                 </ScrollViewer>

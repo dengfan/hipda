@@ -33,8 +33,8 @@ namespace hipda
         StatusBar statusBar = StatusBar.GetForCurrentView();
         HttpHandle httpClient = HttpHandle.getInstance();
 
-        // 用于限制允许显示标签页的总数量，2表示贴子列表页和当前回复列表页这两个页面的数量
-        private int maxHubSectionCount = AutoCloseOldTabSettings.GetValue == 1 ? 2 : 8;
+        // 用于限制允许显示标签页的总数量
+        private int maxHubSectionCount = 6;
 
         // 用于过滤掉无意义符号
         private string regexForTitle = @"[^a-zA-Z\d\u4e00-\u9fa5]";
@@ -391,8 +391,8 @@ namespace hipda
         {
             Thread thread = (Thread)e.ClickedItem;
             string threadId = thread.Id;
-            string threadTitle = thread.Title;
-            threadTitle = Regex.Replace(threadTitle, regexForTitle, string.Empty);
+            string threadFullTitle = thread.Title;
+            string threadTitle = Regex.Replace(threadFullTitle, regexForTitle, string.Empty);
             threadTitle = threadTitle.Length > 7 ? threadTitle.Substring(0, 7) : threadTitle;
             if (string.IsNullOrEmpty(threadTitle)) threadTitle = "无标题";
 
@@ -422,12 +422,23 @@ namespace hipda
             Grid layoutGrid = (Grid)args.ItemContainer.ContentTemplateRoot;
 
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+            TextBlock threadTitleTextBlock = (TextBlock)layoutGrid.FindName("threadTitleTextBlock");
             Run ownerNameTextBlockRun = (Run)layoutGrid.FindName("ownerNameTextBlock");
             Run createTimeTextBlockRun = (Run)layoutGrid.FindName("createTimeTextBlock");
             Button menuButton = (Button)layoutGrid.FindName("menuButton");
             ContentControl replyContent = (ContentControl)layoutGrid.FindName("replyContent");
             Button showMoreButton = (Button)layoutGrid.FindName("showMoreButton");
             MenuFlyoutItem modifyMenuFlyoutItem = (MenuFlyoutItem)layoutGrid.FindName("modifyMenuFlyoutItem");
+
+            if (reply.Floor == 1 && !string.IsNullOrEmpty(reply.ThreadTitle))
+            {
+                threadTitleTextBlock.Text = reply.ThreadTitle;
+                threadTitleTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+            else
+            {
+                threadTitleTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
 
             ownerNameTextBlockRun.Text = reply.OwnerName;
             createTimeTextBlockRun.Text = reply.CreateTime;
@@ -602,23 +613,29 @@ namespace hipda
             foreach (PivotItem pivotItem in Pivot.Items)
             {
                 string text = pivotItem.Header.ToString();
-                if (!"|BS版|G版|Win版|地板|E版|".Contains(text))
+                if (!string.IsNullOrEmpty(text))
                 {
-                    text = pivotItem.Header.ToString().Substring(0, 1);
-                }
+                    if (!"|BS版|G版|Win版|地板|E版|".Contains(text))
+                    {
+                        text = pivotItem.Header.ToString().Substring(0, 1);
+                    }
 
-                if (Pivot.SelectedItem == pivotItem)
-                {
-                    navTextContainer.Append(string.Format("{0}●-", text));
-                }
-                else
-                {
-                    navTextContainer.Append(string.Format("{0}-", text));
+                    if (Pivot.SelectedItem == pivotItem)
+                    {
+                        navTextContainer.Append(string.Format("{0}●-", text));
+                    }
+                    else
+                    {
+                        navTextContainer.Append(string.Format("{0}-", text));
+                    }
                 }
             }
 
             string navText = navTextContainer.ToString();
-            navText = navText.Substring(0, navText.Length - 1);
+            if (!string.IsNullOrEmpty(navText))
+            {
+                navText = navText.Substring(0, navText.Length - 1);
+            }
 
             StatusBar.GetForCurrentView().ProgressIndicator.Text = string.Format("{0} > {1}", accountName, navText);
             await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
@@ -676,7 +693,7 @@ namespace hipda
             var listView = new ListView
             {
                 Name = string.Format("threadsListView{0}", forumId),
-                Padding = new Thickness(10,0,10,0),
+                Padding = new Thickness(10,20,10,0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
                 ItemContainerStyle = ThreadItemStyle,
@@ -698,7 +715,7 @@ namespace hipda
 
             // 由于在最后一个thread tab 打开一个 reply tab，会因超过 tab 数量而被删除，导致用户看不到
             // 所以如果发现最后一个 tab 是 thread tab，则删除之
-            if (Pivot.Items.Count == 6)
+            if (Pivot.Items.Count == maxHubSectionCount)
             {
                 PivotItem lastItem = (PivotItem)Pivot.Items.Last();
                 string tabType = lastItem.GetValue(PivotItemTabTypeProperty).ToString();
@@ -774,7 +791,7 @@ namespace hipda
             var listView = new ListView
             {
                 Name = string.Format("repliesListView{0}", threadId),
-                Padding = new Thickness(10, 0, 10, 0),
+                Padding = new Thickness(10, 25, 10, 0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,

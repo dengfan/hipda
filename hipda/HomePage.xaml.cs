@@ -94,7 +94,6 @@ namespace hipda
         {
             accountList.ItemsSource = AccountSettings.List;
             layoutModeComboBox.SelectedIndex = LayoutModeSettings.GetLayoutModeId;
-            autoCloseOldTabComboBox.SelectedIndex = AutoCloseOldTabSettings.GetValue;
 
             Refresh();
         }
@@ -276,11 +275,6 @@ namespace hipda
         private void layoutModeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             LayoutModeSettings.SetLayoutModeId(((ComboBox)sender).SelectedIndex);
-        }
-
-        private void autoCloseOldTabComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            AutoCloseOldTabSettings.SetValue(((ComboBox)sender).SelectedIndex);
         }
     }
 }

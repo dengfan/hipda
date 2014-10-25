@@ -24,6 +24,8 @@
     </Page.Transitions>
 
     <Page.Resources>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        
         <SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
         <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>
         <SolidColorBrush x:Key="BorderColor" Color="LightGray"/>
@@ -66,7 +68,6 @@
 
         <Style x:Name="ReplyItemStyle" TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Padding" Value="0,5,0,5" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
@@ -109,7 +110,8 @@
                             <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" />
                 </TextBlock>
 
-                <TextBlock Foreground="{StaticResource BorderColor}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
+                <TextBlock Foreground="{StaticResource BorderColor}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" 
+                           Text="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
             </StackPanel>
         </DataTemplate>
 
@@ -142,8 +144,10 @@
                         </Button.Flyout>
                     </Button>
                 </StackPanel>
+                <TextBlock x:Name="threadTitleTextBlock" Style="{StaticResource Text1Style}" Margin="0,2,0,8" FontWeight="Bold" Text="{Binding ThreadTitle}" Visibility="{Binding HasThreadTitle, Converter={StaticResource ResourceKey=BooleanToVisibilityConverter}}" />
                 <TextBlock FontSize="{ThemeResource TextStyleLargeFontSize}" Foreground="{StaticResource MainFontColor}" TextWrapping="Wrap" Text="{Binding TextContent}" />
-                <TextBlock Foreground="{StaticResource BorderColor}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Text="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
+                <TextBlock Foreground="{StaticResource BorderColor}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" 
+                           Text="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
             </StackPanel>
         </DataTemplate>
 
@@ -1046,12 +1050,12 @@
     </Page.Resources>
 
     <Grid>
-        <Pivot x:Name="Pivot"
+        <Pivot x:Name="Pivot" Margin="0,-25,0,0"
                CommonNavigationTransitionInfo.IsStaggerElement="True" 
                SelectionChanged="Pivot_SelectionChanged">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" />
+                    <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" Visibility="Collapsed" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
