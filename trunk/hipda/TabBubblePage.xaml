@@ -181,9 +181,8 @@
                             <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
                             <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
                         </TextBlock>
-
+                        <TextBlock x:Name="threadTitleTextBlock" Style="{StaticResource Text1Style}" Margin="0,3,0,8" FontWeight="Bold" Visibility="Collapsed" />
                         <ContentControl x:Name="replyContent" Style="{StaticResource ReplyContentFontStyle}" Foreground="{StaticResource MainFontColor}" />
-                            
                         <Button x:Name="showMoreButton"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Click="viewFullContentButton_Click" Visibility="Collapsed" />
@@ -1117,12 +1116,12 @@
     </Page.Resources>
 
     <Grid>
-        <Pivot x:Name="Pivot"
+        <Pivot x:Name="Pivot" Margin="0,-25,0,0"
                CommonNavigationTransitionInfo.IsStaggerElement="True" 
                SelectionChanged="Pivot_SelectionChanged">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" />
+                    <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" Visibility="Collapsed" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>

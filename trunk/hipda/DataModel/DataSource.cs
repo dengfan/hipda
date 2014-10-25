@@ -72,6 +72,14 @@ namespace hipda.Data
 
         public string CreateTime { get; private set; }
 
+        public bool HasThreadTitle
+        {
+            get 
+            {
+                return Floor == 1;
+            }
+        }
+
         public override string ToString()
         {
             return this.HtmlContent;
