@@ -93,7 +93,8 @@ namespace hipda
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             accountList.ItemsSource = AccountSettings.List;
-            layoutModeComboBox.SelectedIndex = LayoutModeSettings.GetLayoutModeId;
+            layoutModeComboBox.SelectedIndex = LayoutModeSettings.LayoutModeSetting;
+            imageCountComboBox.SelectedIndex = ImageCountSettings.ImageCountSetting;
 
             Refresh();
         }
@@ -115,7 +116,7 @@ namespace hipda
         {
             Forum forum = (Forum)e.ClickedItem;
             string data = string.Format("{0},{1}", forum.Id, forum.Alias);
-            switch (LayoutModeSettings.GetLayoutModeId)
+            switch (LayoutModeSettings.LayoutModeSetting)
             {
                 case 1:
                     if (!Frame.Navigate(typeof(TabPlainPage), data))
@@ -140,7 +141,7 @@ namespace hipda
 
         private void openTabForApp_Click(object sender, RoutedEventArgs e)
         {
-            switch (LayoutModeSettings.GetLayoutModeId)
+            switch (LayoutModeSettings.LayoutModeSetting)
             {
                 case 1:
                     if (!Frame.Navigate(typeof(TabPlainPage)))
@@ -274,7 +275,12 @@ namespace hipda
 
         private void layoutModeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            LayoutModeSettings.SetLayoutModeId(((ComboBox)sender).SelectedIndex);
+            LayoutModeSettings.LayoutModeSetting = ((ComboBox)sender).SelectedIndex;
+        }
+
+        private void imageCountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ImageCountSettings.ImageCountSetting = ((ComboBox)sender).SelectedIndex;
         }
     }
 }

@@ -14,15 +14,14 @@ namespace hipda.Settings
         private static string keyNameOfDefaultThemeId = "DefaultThemeId";
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
-        public static void SetThemeId(int argThemeId)
+        public static int ThemeSetting
         {
-            ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfThemeSettingsContainer, ApplicationDataCreateDisposition.Always);
-            var themeSettingsContainer = localSettings.Containers[keyNameOfThemeSettingsContainer];
-            themeSettingsContainer.Values[keyNameOfDefaultThemeId] = argThemeId;
-        }
-
-        public static int GetThemeId
-        {
+            set
+            {
+                ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfThemeSettingsContainer, ApplicationDataCreateDisposition.Always);
+                var themeSettingsContainer = localSettings.Containers[keyNameOfThemeSettingsContainer];
+                themeSettingsContainer.Values[keyNameOfDefaultThemeId] = value;
+            }
             get
             {
                 ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfThemeSettingsContainer, ApplicationDataCreateDisposition.Always);

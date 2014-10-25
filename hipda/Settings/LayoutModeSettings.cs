@@ -14,15 +14,14 @@ namespace hipda.Settings
         private static string keyNameOfDefaultLayoutModeId = "DefaultLayoutModeModeId";
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
-        public static void SetLayoutModeId(int argLayoutModeId)
+        public static int LayoutModeSetting
         {
-            ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfLayoutModeSettingsContainer, ApplicationDataCreateDisposition.Always);
-            var settingsContainer = localSettings.Containers[keyNameOfLayoutModeSettingsContainer];
-            settingsContainer.Values[keyNameOfDefaultLayoutModeId] = argLayoutModeId;
-        }
-
-        public static int GetLayoutModeId
-        {
+            set
+            {
+                ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfLayoutModeSettingsContainer, ApplicationDataCreateDisposition.Always);
+                var settingsContainer = localSettings.Containers[keyNameOfLayoutModeSettingsContainer];
+                settingsContainer.Values[keyNameOfDefaultLayoutModeId] = value;
+            }
             get
             {
                 ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfLayoutModeSettingsContainer, ApplicationDataCreateDisposition.Always);
