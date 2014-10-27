@@ -179,12 +179,6 @@
                     </ListView.Footer>
                 </ListView>
             </PivotItem>
-            <PivotItem
-                Header="感谢" 
-                CommonNavigationTransitionInfo.IsStaggerElement="True"
-                Margin="0">
-
-            </PivotItem>
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
