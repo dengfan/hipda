@@ -1345,20 +1345,6 @@ namespace hipda
             return html;
         }
 
-        private async void closeTab_Click(object sender, RoutedEventArgs e)
-        {
-            // 获取当前tab页
-            if (Pivot.Items.Count > 1)
-            {
-                PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
-                Pivot.Items.Remove(pivotItem);
-            }
-            else
-            {
-                await new MessageDialog("您不能删除最后一个标签页！", "提示").ShowAsync();
-            }
-        }
-
         private void addFaceButton_Click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;

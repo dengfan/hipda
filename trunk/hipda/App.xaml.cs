@@ -23,6 +23,7 @@ namespace hipda
     {
         private TransitionCollection transitions;
         public static int ThemeId = 0;
+        private static int layoutModeId = 0;
 
 #if WINDOWS_PHONE_APP
         ContinuationManager continuationManager;
@@ -37,6 +38,7 @@ namespace hipda
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
             ThemeId = ThemeSettings.ThemeSetting;
+            layoutModeId = LayoutModeSettings.LayoutModeSetting;
         }
 
         private Frame CreateRootFrame()
@@ -198,21 +200,63 @@ namespace hipda
             Window.Current.Activate();
 
             StatusBar statusBar = StatusBar.GetForCurrentView();
-            switch (ThemeId)
+
+            switch (layoutModeId)
             {
-                case 0:
-                    statusBar.BackgroundColor = Colors.Purple;
+                case 0: // 经典模式
+                    switch (ThemeId)
+                    {
+                        case 0:
+                            statusBar.BackgroundColor = Colors.Purple;
+                            break;
+                        case 1:
+                            statusBar.BackgroundColor = Colors.Black;
+                            break;
+                        case 2:
+                            statusBar.BackgroundColor = Colors.DarkRed;
+                            break;
+                        case 3:
+                            statusBar.BackgroundColor = Color.FromArgb(255, 138, 107, 121);
+                            break;
+                    }
                     break;
-                case 1:
-                    statusBar.BackgroundColor = Colors.Black;
+                case 1: // 纯文本模式
+                    switch (ThemeId)
+                    {
+                        case 0:
+                            statusBar.BackgroundColor = Colors.Purple;
+                            break;
+                        case 1:
+                            statusBar.BackgroundColor = Colors.Black;
+                            break;
+                        case 2:
+                            statusBar.BackgroundColor = Colors.DarkRed;
+                            break;
+                        case 3:
+                            statusBar.BackgroundColor = Color.FromArgb(255, 138, 107, 121);
+                            break;
+                    }
                     break;
-                case 2:
-                    statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
-                    break;
-                case 3:
-                    statusBar.BackgroundColor = Color.FromArgb(255, 7, 18, 40);
+                case 2: // 气泡模式
+                    switch (ThemeId)
+                    {
+                        case 0:
+                            statusBar.BackgroundColor = Colors.Purple;
+                            break;
+                        case 1:
+                            statusBar.BackgroundColor = Colors.Black;
+                            break;
+                        case 2:
+                            statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
+                            break;
+                        case 3:
+                            statusBar.BackgroundColor = Color.FromArgb(255, 7, 18, 40);
+                            break;
+                    }
                     break;
             }
+            
+
             statusBar.BackgroundOpacity = 255;
             statusBar.ForegroundColor = Colors.White;
             statusBar.ProgressIndicator.ProgressValue = 0;
