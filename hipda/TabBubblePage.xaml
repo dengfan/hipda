@@ -96,9 +96,8 @@
         </Style>
 
         <Style x:Key="ChatBubbleStyle" TargetType="Border">
-            <Setter Property="Padding" Value="16,13"/>
+            <Setter Property="Padding" Value="13"/>
             <Setter Property="Background" Value="{StaticResource ItemBgColor}"/>
-            <Setter Property="CornerRadius" Value="9"/>
         </Style>
 
         <Style x:Key="ReplyContentFontStyle" TargetType="ContentControl">
@@ -115,15 +114,14 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="12"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
 
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
-                            Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
-
+                <Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 12,0 12,10" Fill="{StaticResource ItemBgColor}"/>
+                
                 <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
                     <StackPanel>
                         <TextBlock x:Name="ownerInfoTextBlock"
@@ -166,14 +164,13 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="12"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
 
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="&#xE2B5;" FontSize="20" Width="10" FontFamily="Segoe UI Symbol" 
-                            Margin="0,12,0,0" HorizontalAlignment="Right" Foreground="{StaticResource ItemBgColor}"/>
+                <Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 12,0 12,10" Fill="{StaticResource ItemBgColor}"/>
 
                 <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
                     <StackPanel>
