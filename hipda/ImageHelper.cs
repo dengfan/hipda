@@ -17,36 +17,17 @@ namespace hipda
 
         public async static Task<byte[]> LoadAsync(StorageFile image)
         {
-            Stream stream;
-
+            Stream stream = null;
             var property = await image.GetBasicPropertiesAsync();
             if (property.Size > ImageMaxiamSize)
             {
-                var ratio = (double)ImageMaxiamSize / property.Size;
-
-                var imageProperty = await image.Properties.GetImagePropertiesAsync();
-                var scaledWidth = Convert.ToUInt32(imageProperty.Width * ratio);
-                var scaledHeight = Convert.ToUInt32(imageProperty.Height * ratio);
-
-                using (var sourceStream = await image.OpenAsync(FileAccessMode.Read))
-                {
-                    var decoder = await BitmapDecoder.CreateAsync(sourceStream);
-                    var transform = new BitmapTransform { ScaledHeight = scaledHeight, ScaledWidth = scaledWidth, InterpolationMode = BitmapInterpolationMode.Cubic };
-                    var pixelData = await decoder.GetPixelDataAsync(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, transform, ExifOrientationMode.IgnoreExifOrientation, ColorManagementMode.DoNotColorManage);
-
-                    using (var destinationStream = new InMemoryRandomAccessStream())
-                    {
-                        var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, destinationStream);
-                        encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, scaledWidth, scaledHeight, 96, 96, pixelData.DetachPixelData());
-                        await encoder.FlushAsync();
-
-                        stream = destinationStream.CloneStream().AsStreamForRead();
-                    }
-                }
+                var data = await image.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.PicturesView);
+                stream = data.AsStreamForRead();
             }
             else
             {
-                stream = (await image.OpenSequentialReadAsync()).AsStreamForRead();
+                var data = await image.OpenSequentialReadAsync();
+                stream = data.AsStreamForRead();
             }
 
             if (null == stream)
