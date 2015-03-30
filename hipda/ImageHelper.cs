@@ -11,15 +11,13 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace hipda
 {
-    public class ImageHelper
+    public static class ImageHelper
     {
-        private const int ImageMaxiamSize = 307200;
-
         public async static Task<byte[]> LoadAsync(StorageFile image)
         {
             Stream stream = null;
             var property = await image.GetBasicPropertiesAsync();
-            if (property.Size > ImageMaxiamSize)
+            if (property.Size > 307200)
             {
                 var data = await image.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.PicturesView);
                 stream = data.AsStreamForRead();
