@@ -260,7 +260,8 @@ namespace hipda.Data
         /// </summary>
         public static int MaxImageCount { get { return ImageCountSettings.ImageCountSetting; } }
 
-        public static int OrderType = 2;
+        public static string ThreadListPageOrderBy = string.Empty;
+        public static int RelayListPageOrderType = 2;
 
         public static string MessageTail { get { return "[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]"; } }
 
@@ -487,7 +488,7 @@ namespace hipda.Data
             }
 
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&page={1}&r={2}", forumId, pageNo, DateTime.Now.ToString("HHmmss"));
+            string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&orderby={1}&page={2}&_={3}", forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.ToString("HHmmss"));
             string htmlContent = await httpClient.HttpGet(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
@@ -678,7 +679,7 @@ namespace hipda.Data
             #endregion
 
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&ordertype={2}&" + DateTime.Now.Second, threadId, pageNo, OrderType);
+            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&ordertype={2}&_={3}", threadId, pageNo, RelayListPageOrderType, DateTime.Now.ToString("HHmmss"));
             string htmlStr = await httpClient.HttpGet(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象

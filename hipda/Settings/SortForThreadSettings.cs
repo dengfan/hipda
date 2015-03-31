@@ -8,10 +8,10 @@ using Windows.Storage;
 
 namespace hipda.Settings
 {
-    public static class SortSettings
+    public static class SortForThreadSettings
     {
-        private static string keyNameOfSortTypeContainer = "SortSettingsContainer";
-        private static string keyNameOfDefaultSort = "DefaultSort";
+        private static string keyNameOfSortTypeContainer = "SortForThreadSettingsContainer";
+        private static string keyNameOfDefaultSort = "DefaultSortForThread";
         private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
         public static void Toggle()
@@ -20,22 +20,22 @@ namespace hipda.Settings
             var sortTypeContainer = localSettings.Containers[keyNameOfSortTypeContainer];
             if (!sortTypeContainer.Values.ContainsKey(keyNameOfDefaultSort))
             {
-                sortTypeContainer.Values[keyNameOfDefaultSort] = DataSource.OrderType;
+                sortTypeContainer.Values[keyNameOfDefaultSort] = DataSource.ThreadListPageOrderBy;
             }
 
-            if (sortTypeContainer.Values[keyNameOfDefaultSort].ToString().Equals("1"))
+            if (sortTypeContainer.Values[keyNameOfDefaultSort].ToString().ToLower().Equals("dateline"))
             {
-                DataSource.OrderType = 2;
+                DataSource.ThreadListPageOrderBy = string.Empty;
             }
             else
             {
-                DataSource.OrderType = 1;
+                DataSource.ThreadListPageOrderBy = "dateline";
             }
 
-            sortTypeContainer.Values[keyNameOfDefaultSort] = DataSource.OrderType;
+            sortTypeContainer.Values[keyNameOfDefaultSort] = DataSource.ThreadListPageOrderBy;
         }
 
-        public static int GetSortType
+        public static string GetSortType
         {
             get
             {
@@ -43,10 +43,10 @@ namespace hipda.Settings
                 var sortTypeContainer = localSettings.Containers[keyNameOfSortTypeContainer];
                 if (!sortTypeContainer.Values.ContainsKey(keyNameOfDefaultSort))
                 {
-                    sortTypeContainer.Values[keyNameOfDefaultSort] = DataSource.OrderType;
+                    sortTypeContainer.Values[keyNameOfDefaultSort] = DataSource.ThreadListPageOrderBy;
                 }
 
-                return Convert.ToInt16(sortTypeContainer.Values[keyNameOfDefaultSort]);
+                return sortTypeContainer.Values[keyNameOfDefaultSort].ToString();
             }
         }
     }

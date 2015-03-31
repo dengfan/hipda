@@ -136,8 +136,11 @@ namespace hipda
                 await new MessageDialog(err, "注意").ShowAsync();
             }
 
+            // 排序开关
+            DataSource.ThreadListPageOrderBy = SortForThreadSettings.GetSortType;
+
             // 倒序看贴
-            DataSource.OrderType = SortSettings.GetSortType;
+            DataSource.RelayListPageOrderType = SortForReplySettings.GetSortType;
 
             Frame rootFrame = Window.Current.Content as Frame;
 

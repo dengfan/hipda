@@ -1179,6 +1179,7 @@
             <!--贴子列表页底部按钮-->
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
+            <AppBarToggleButton x:Name="sortForThreadListButton" Icon="Sort" Label="排序开关" Click="sortForThreadListButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="changeThemeButton" Label="样式切换" Click="changeThemeButton_Click" Visibility="Collapsed">
                 <AppBarButton.Icon>
                     <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.moon.first.quarter.png" />

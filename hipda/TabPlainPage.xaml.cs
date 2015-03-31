@@ -184,15 +184,9 @@ namespace hipda
 
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            #region 同步倒序看贴开关按钮之开关状态
-            if (SortSettings.GetSortType == 1)
-            {
-                reverseListButton.IsChecked = true;
-            }
-            else
-            {
-                reverseListButton.IsChecked = false;
-            }
+            #region 同步开关按钮之开关状态
+            sortForThreadListButton.IsChecked = SortForThreadSettings.GetSortType.Equals("dateline");
+            reverseListButton.IsChecked = SortForReplySettings.GetSortType == 1;
             #endregion
 
             #region 读取当前账号的名称
@@ -324,29 +318,32 @@ namespace hipda
 
         private async Task RefreshThreadListPage(ListView listView, string forumId)
         {
-            listView.ItemsSource = null;
-
-            await DataSource.RefreshThreadList(forumId);
-
-            var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(DataSource.ThreadPageSize, async pageNo =>
+            if (replyProgressBar.Visibility == Visibility.Collapsed)
             {
-                // 加载分页数据，并写入静态类中
-                // 返回的是本次加载的数据量
-                return await DataSource.GetLoadThreadsCountAsync(forumId, pageNo, () =>
+                listView.ItemsSource = null;
+
+                await DataSource.RefreshThreadList(forumId);
+
+                var cvs = new CollectionViewSource();
+                cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(DataSource.ThreadPageSize, async pageNo =>
                 {
-                    replyProgressBar.Visibility = Visibility.Visible;
-                }, () =>
+                    // 加载分页数据，并写入静态类中
+                    // 返回的是本次加载的数据量
+                    return await DataSource.GetLoadThreadsCountAsync(forumId, pageNo, () =>
+                    {
+                        replyProgressBar.Visibility = Visibility.Visible;
+                    }, () =>
+                    {
+                        replyProgressBar.Visibility = Visibility.Collapsed;
+                    });
+                }, (index) =>
                 {
-                    replyProgressBar.Visibility = Visibility.Collapsed;
+                    // 从静态类中返回需要显示出来的数据
+                    return DataSource.GetThreadByIndex(forumId, index);
                 });
-            }, (index) =>
-            {
-                // 从静态类中返回需要显示出来的数据
-                return DataSource.GetThreadByIndex(forumId, index);
-            });
 
-            listView.ItemsSource = cvs.View;
+                listView.ItemsSource = cvs.View;
+            }
         }
 
         /// <summary>
@@ -357,10 +354,17 @@ namespace hipda
         /// <returns></returns>
         private async Task RefreshReplyListPage(ListView listView, string threadId)
         {
-            listView.ItemsSource = null;
-            await DataSource.RefreshReplyList(threadId);
-            var cvs = CreateDataViewForReplyListPage(threadId);
-            listView.ItemsSource = cvs.View;
+            if (replyProgressBar.Visibility == Visibility.Collapsed)
+            {
+                replyProgressBar.Visibility = Visibility.Visible;
+
+                listView.ItemsSource = null;
+                await DataSource.RefreshReplyList(threadId);
+                var cvs = CreateDataViewForReplyListPage(threadId);
+                listView.ItemsSource = cvs.View;
+
+                replyProgressBar.Visibility = Visibility.Collapsed;
+            }
         }
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -376,21 +380,35 @@ namespace hipda
             if (tabType.Equals("1")) // 主贴列表页
             {
                 // 显示 贴子列表页底部按钮
-                openPostNewPanelButton.Visibility = refreshThreadsButton.Visibility = changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                openPostNewPanelButton.Visibility =
+                    refreshThreadsButton.Visibility =
+                    sortForThreadListButton.Visibility =
+                    changeThemeButton.Visibility =
+                    Windows.UI.Xaml.Visibility.Visible;
 
                 // 隐藏 回复列表页底部按钮
-                openPostReplyPanelButton.Visibility = refreshRepliesButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                openPostReplyPanelButton.Visibility =
+                    refreshRepliesButton.Visibility =
+                    reverseListButton.Visibility =
+                    Windows.UI.Xaml.Visibility.Collapsed;
 
                 // 隐藏 发布信息状态之底部按钮
                 sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             }
             else // 回复列表页
             {
-                // 隐藏 贴子列表页底部按钮
-                openPostNewPanelButton.Visibility = refreshThreadsButton.Visibility = changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
                 // 显示 回复列表页底部按钮
-                openPostReplyPanelButton.Visibility = refreshRepliesButton.Visibility = reverseListButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                openPostReplyPanelButton.Visibility = 
+                    refreshRepliesButton.Visibility = 
+                    reverseListButton.Visibility = 
+                    Windows.UI.Xaml.Visibility.Visible;
+
+                // 隐藏 贴子列表页底部按钮
+                openPostNewPanelButton.Visibility =
+                    refreshThreadsButton.Visibility =
+                    sortForThreadListButton.Visibility =
+                    changeThemeButton.Visibility =
+                    Windows.UI.Xaml.Visibility.Collapsed;
 
                 // 隐藏 发布信息状态之底部按钮
                 sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -1026,7 +1044,11 @@ namespace hipda
             postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
-            openPostNewPanelButton.Visibility = refreshThreadsButton.Visibility = changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            openPostNewPanelButton.Visibility =
+                refreshThreadsButton.Visibility =
+                sortForThreadListButton.Visibility =
+                changeThemeButton.Visibility =
+                Windows.UI.Xaml.Visibility.Visible;
         }
 
         private void ShowPostNewPanelAndButton()
@@ -1039,7 +1061,11 @@ namespace hipda
             postNewPanel.Visibility = Windows.UI.Xaml.Visibility.Visible;
             sendButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
-            openPostNewPanelButton.Visibility = refreshThreadsButton.Visibility = changeThemeButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            openPostNewPanelButton.Visibility =
+                refreshThreadsButton.Visibility =
+                sortForThreadListButton.Visibility =
+                changeThemeButton.Visibility =
+                Windows.UI.Xaml.Visibility.Collapsed;
         }
 
         private void HidePostNewModifyPanelAndButton()
@@ -1310,9 +1336,20 @@ namespace hipda
             }
         }
 
+        private async void sortForThreadListButton_Click(object sender, RoutedEventArgs e)
+        {
+            SortForThreadSettings.Toggle();
+
+            // 刷新当前主题列表
+            PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
+            string forumId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
+            ListView listView = (ListView)pivotItem.FindName("threadsListView" + forumId);
+            await RefreshThreadListPage(listView, forumId);
+        }
+
         private async void reverseListButton_Click(object sender, RoutedEventArgs e)
         {
-            SortSettings.Toggle();
+            SortForReplySettings.Toggle();
 
             // 刷新当前贴子回复列表
             PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
@@ -1381,7 +1418,7 @@ namespace hipda
             refreshRepliesButton.IsEnabled = false;
 
             #region 只在倒序看贴时允许全局刷新
-            if (SortSettings.GetSortType == 1)
+            if (SortForReplySettings.GetSortType == 1)
             {
                 // 刷新当前贴子回复列表
                 await RefreshReplyListPage(listView, themeId);

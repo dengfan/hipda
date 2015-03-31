@@ -135,7 +135,8 @@
     </Compile>
     <Compile Include="Settings\ImageCountSettings.cs" />
     <Compile Include="Settings\LayoutModeSettings.cs" />
-    <Compile Include="Settings\SortSettings.cs" />
+    <Compile Include="Settings\SortForReplySettings.cs" />
+    <Compile Include="Settings\SortForThreadSettings.cs" />
     <Compile Include="Settings\ThemeSettings.cs" />
     <Compile Include="TabBubblePage.xaml.cs">
       <DependentUpon>TabBubblePage.xaml</DependentUpon>
