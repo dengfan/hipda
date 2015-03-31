@@ -172,20 +172,20 @@ namespace hipda.Common
                     }
                     else
                     {
-                        imageCount++;
+                        //imageCount++;
 
-                        if (imageCount <= maxImageCount)
-                        {
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,8,0,5"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                        //if (imageCount <= maxImageCount)
+                        //{
+                        //    imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,8,0,5"" Width=""250""][Image.Source][BitmapImage DecodePixelWidth=""250"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
 
-                            if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
-                            imgXaml = string.Format(imgXaml, imgUrl);
-                        }
-                        else
-                        {
+                        //    if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
+                        //    imgXaml = string.Format(imgXaml, imgUrl);
+                        //}
+                        //else
+                        //{
                             imgXaml = imagePlaceHolder;
-                            imgXaml = string.Format(imgXaml, imageCount);
-                        }
+                            imgXaml = string.Format(imgXaml, imageCount == 0 ? 1 : imageCount);
+                        //}
                     }
 
                     content = content.Replace(placeHolderLabel, imgXaml);
