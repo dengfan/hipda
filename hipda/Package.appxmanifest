@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="63653AppxKing.HiPDA" Publisher="CN=5C7BFBCC-D6D6-4906-A546-DE530049BD46" Version="1.1.0.21" />
+  <Identity Name="63653AppxKing.HiPDA" Publisher="CN=5C7BFBCC-D6D6-4906-A546-DE530049BD46" Version="1.1.0.22" />
   <mp:PhoneIdentity PhoneProductId="3bc4545e-7b5a-4680-91ba-786d9f63c44e" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Hi!PDA</DisplayName>
