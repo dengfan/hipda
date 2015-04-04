@@ -34,7 +34,7 @@ namespace hipda
         HttpHandle httpClient = HttpHandle.getInstance();
 
         // 最后发布消息时间，用于限制发布速度（30秒限制）
-        private TimeSpan lastPostTimeSpan = new TimeSpan(DateTime.Now.AddSeconds(-35).Ticks);
+        private TimeSpan lastPostTimeSpan = new TimeSpan(DateTime.Now.AddSeconds(-31).Ticks);
 
         // 用于限制允许显示标签页的总数量
         private int maxHubSectionCount = 6;

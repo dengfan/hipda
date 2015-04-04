@@ -466,7 +466,7 @@ namespace hipda.Data
             if (threadData != null)
             {
                 threadData.Threads.Clear();
-                await _dataSource.LoadThreadsDataAsync(keywords, forumId, 1);
+                await _dataSource.SearchThreadsDataAsync(keywords, forumId, 1);
 
                 return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count > 0;
             }
@@ -486,7 +486,7 @@ namespace hipda.Data
         public static async Task<int> SearchLoadThreadsCountAsync(string keywords, string forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
         {
             showProgressBar();
-            await _dataSource.LoadThreadsDataAsync(keywords, forumId, pageNo);
+            await _dataSource.SearchThreadsDataAsync(keywords, forumId, pageNo);
             hideProgressBar();
 
             return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count;
@@ -573,11 +573,11 @@ namespace hipda.Data
 
                 var authorName = string.Empty;
                 var authorId = string.Empty;
-                var authorNameNode = tdAuthor.ChildNodes[1]; // cite
+                var authorNameNode = tdAuthor.ChildNodes[1]; // cite 此节点有出“匿名”的可能
                 var authorNameLink = authorNameNode.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
                 if (authorNameLink == null)
                 {
-                    authorName = authorNameNode.InnerText;
+                    authorName = authorNameNode.InnerText.Trim();
                 }
                 else
                 {
@@ -591,13 +591,20 @@ namespace hipda.Data
 
                 var authorCreateTime = tdAuthor.ChildNodes[3].InnerText;
 
-                var replyNum = tdNums.ChildNodes[0].InnerText;
-                var viewNum = tdNums.ChildNodes[2].InnerText;
+                string[] nums = tdNums.InnerText.Split('/');
+                var replyNum = nums[0].Trim();
+                var viewNum = nums[1].Trim();
 
-                var lastPostAuthorName = tdLastPost.ChildNodes[1].ChildNodes[0].InnerText;
-                var lastPostTime = tdLastPost.ChildNodes[3].ChildNodes[0].InnerText
-                    .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
-                    .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
+                string lastPostAuthorName = "匿名";
+                string lastPostTime = string.Empty;
+                string[] lastPostInfo = tdLastPost.InnerText.Trim().Replace("\n", "@").Split('@');
+                if (lastPostInfo.Length == 2)
+                {
+                    lastPostAuthorName = lastPostInfo[0];
+                    lastPostTime = lastPostInfo[1]
+                        .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
+                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
+                }
 
                 Thread thread = new Thread(i, pageNo, forumId, id, title, attachType, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
                 forum.Threads.Add(thread);
@@ -606,7 +613,7 @@ namespace hipda.Data
             }
         }
 
-        private async Task LoadThreadsDataAsync(string keywords, string forumId, int pageNo)
+        private async Task SearchThreadsDataAsync(string keywords, string forumId, int pageNo)
         {
             // 载入过的页面不再载入
             var forum = _dataSource.ThreadList.FirstOrDefault(t => t.ForumId.Equals(forumId));
@@ -698,11 +705,11 @@ namespace hipda.Data
 
                 var authorName = string.Empty;
                 var authorId = string.Empty;
-                var authorNameNode = tdAuthor.ChildNodes[1]; // cite
+                var authorNameNode = tdAuthor.ChildNodes[1]; // cite 此节点有出“匿名”的可能
                 var authorNameLink = authorNameNode.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
                 if (authorNameLink == null)
                 {
-                    authorName = authorNameNode.InnerText;
+                    authorName = authorNameNode.InnerText.Trim();
                 }
                 else
                 {
@@ -720,12 +727,17 @@ namespace hipda.Data
                 var replyNum = nums[0].Trim();
                 var viewNum = nums[1].Trim();
 
+                string lastPostAuthorName = "匿名";
+                string lastPostTime = string.Empty;
                 string[] lastPostInfo = tdLastPost.InnerText.Trim().Replace("\n", "@").Split('@');
-                var lastPostAuthorName = lastPostInfo[0];
-                var lastPostTime = lastPostInfo[1]
-                    .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
-                    .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
-
+                if (lastPostInfo.Length == 2)
+                {
+                    lastPostAuthorName = lastPostInfo[0];
+                    lastPostTime = lastPostInfo[1]
+                        .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
+                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
+                }
+                
                 Thread thread = new Thread(i, pageNo, forumId, id, title, -1, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
                 forum.Threads.Add(thread);
 
