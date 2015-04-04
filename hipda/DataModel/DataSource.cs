@@ -340,7 +340,7 @@ namespace hipda.Data
 
             // 读取数据
             string url = "http://www.hi-pda.com/forum/index.php?r=" + DateTime.Now.Second;
-            string htmlContent = await httpClient.HttpGet(url);
+            string htmlContent = await httpClient.GetAsync(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
@@ -520,7 +520,7 @@ namespace hipda.Data
 
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&orderby={1}&page={2}&_={3}", forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.ToString("HHmmss"));
-            string htmlContent = await httpClient.HttpGet(url);
+            string htmlContent = await httpClient.GetAsync(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
@@ -635,8 +635,8 @@ namespace hipda.Data
             }
 
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/search.php?srchtype=title&searchsubmit=%CB%D1%CB%F7&st=on&srchuname=&srchfilter=all&srchfrom=0&before=&orderby={2}&ascdesc=desc&srchtxt={0}&srchfid%5B0%5D={1}&page={3}&_={4}", keywords, forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.ToString("HHmmss"));
-            string htmlContent = await httpClient.HttpGet(url);
+            string url = string.Format("http://www.hi-pda.com/forum/search.php?srchtype=title&&srchtxt={0}&searchsubmit=%CB%D1%CB%F7&st=on&srchuname=&srchfilter=all&srchfrom=0&before=&orderby={2}&ascdesc=desc&srchfid%5B0%5D={1}&page={3}&_={4}", httpClient.GetEncoding(keywords), forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.ToString("HHmmss"));
+            string htmlContent = await httpClient.GetAsync(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
@@ -838,7 +838,7 @@ namespace hipda.Data
 
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&ordertype={2}&_={3}", threadId, pageNo, RelayListPageOrderType, DateTime.Now.ToString("HHmmss"));
-            string htmlStr = await httpClient.HttpGet(url);
+            string htmlStr = await httpClient.GetAsync(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
@@ -978,7 +978,7 @@ namespace hipda.Data
         private async Task LoadHashAndUserId()
         {
             string url = "http://www.hi-pda.com/forum/post.php?action=newthread&fid=2&r=" + DateTime.Now.Second;
-            string htmlContent = await httpClient.HttpGet(url);
+            string htmlContent = await httpClient.GetAsync(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
@@ -1025,7 +1025,7 @@ namespace hipda.Data
         private async Task LoadContentForEdit(string threadId, string postId)
         {
             string url = string.Format("http://www.hi-pda.com/forum/post.php?action=edit&tid={0}&pid={1}&page=1&r=" + DateTime.Now.ToString("HHmmss"), threadId, postId);
-            string htmlContent = await httpClient.HttpGet(url);
+            string htmlContent = await httpClient.GetAsync(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
