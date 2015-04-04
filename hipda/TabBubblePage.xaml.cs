@@ -1101,7 +1101,7 @@ namespace hipda
                     string resultContent = await httpClient.PostAsync(url, postData);
                     if (!resultContent.Contains("您的回复已经发布"))
                     {
-                        await new MessageDialog("您的发布请求不成功！\n可能是你连续发布过快，请稍候再试。", "注意").ShowAsync();
+                        await new MessageDialog("您的发布请求不成功！\n请检查是否已登录或网络连接是否正常。", "注意").ShowAsync();
                         return;
                     }
 
