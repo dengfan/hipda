@@ -458,15 +458,16 @@ namespace hipda.Data
         /// 版内搜索
         /// </summary>
         /// <param name="keywords">关键字</param>
+        /// <param name="searchType">搜索类型，如按标题、按作者进行搜索</param>
         /// <param name="forumId">版块ID</param>
         /// <returns>是否有搜索到数据</returns>
-        public static async Task<bool> SearchThreadList(string keywords, string forumId)
+        public static async Task<bool> SearchThreadList(string keywords, int searchType, string forumId)
         {
             var threadData = _dataSource.ThreadList.FirstOrDefault(t => t.ForumId.Equals(forumId));
             if (threadData != null)
             {
                 threadData.Threads.Clear();
-                await _dataSource.SearchThreadsDataAsync(keywords, forumId, 1);
+                await _dataSource.SearchThreadsDataAsync(keywords, searchType, forumId, 1);
 
                 return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count > 0;
             }
@@ -483,10 +484,10 @@ namespace hipda.Data
             return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count;
         }
 
-        public static async Task<int> SearchLoadThreadsCountAsync(string keywords, string forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
+        public static async Task<int> SearchLoadThreadsCountAsync(string keywords, int searchType, string forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
         {
             showProgressBar();
-            await _dataSource.SearchThreadsDataAsync(keywords, forumId, pageNo);
+            await _dataSource.SearchThreadsDataAsync(keywords, searchType, forumId, pageNo);
             hideProgressBar();
 
             return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count;
@@ -613,7 +614,7 @@ namespace hipda.Data
             }
         }
 
-        private async Task SearchThreadsDataAsync(string keywords, string forumId, int pageNo)
+        private async Task SearchThreadsDataAsync(string keywords, int searchType, string forumId, int pageNo)
         {
             // 载入过的页面不再载入
             var forum = _dataSource.ThreadList.FirstOrDefault(t => t.ForumId.Equals(forumId));
@@ -642,7 +643,12 @@ namespace hipda.Data
             }
 
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/search.php?srchtype=title&&srchtxt={0}&searchsubmit=%CB%D1%CB%F7&st=on&srchuname=&srchfilter=all&srchfrom=0&before=&orderby={2}&ascdesc=desc&srchfid%5B0%5D={1}&page={3}&_={4}", httpClient.GetEncoding(keywords), forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.ToString("HHmmss"));
+            string url = "http://www.hi-pda.com/forum/search.php?srchtype=title&srchtxt={0}&searchsubmit=%CB%D1%CB%F7&st=on&srchuname=&srchfilter=all&srchfrom=0&before=&orderby={2}&ascdesc=desc&srchfid%5B0%5D={1}&page={3}&_={4}";
+            if (searchType == 2) // 按作者
+            {
+                url = "http://www.hi-pda.com/forum/search.php?srchtype=title&srchtxt=&searchsubmit=%CB%D1%CB%F7&st=on&srchuname={0}&srchfilter=all&srchfrom=0&before=&orderby={2}&ascdesc=desc&srchfid%5B0%5D={1}&page={3}&_={4}";
+            }
+            url = string.Format(url, httpClient.GetEncoding(keywords), forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.ToString("HHmmss"));
             string htmlContent = await httpClient.GetAsync(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
