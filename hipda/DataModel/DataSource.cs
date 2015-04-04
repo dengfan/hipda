@@ -252,6 +252,8 @@ namespace hipda.Data
     {
         public static int ThreadPageSize { get { return 75; } }
 
+        public static int SearchPageSize { get { return 50; } }
+
         public static int ReplyPageSize { get { return 50; } }
 
         /// <summary>
@@ -452,10 +454,39 @@ namespace hipda.Data
             }
         }
 
+        /// <summary>
+        /// 版内搜索
+        /// </summary>
+        /// <param name="keywords">关键字</param>
+        /// <param name="forumId">版块ID</param>
+        /// <returns>是否有搜索到数据</returns>
+        public static async Task<bool> SearchThreadList(string keywords, string forumId)
+        {
+            var threadData = _dataSource.ThreadList.FirstOrDefault(t => t.ForumId.Equals(forumId));
+            if (threadData != null)
+            {
+                threadData.Threads.Clear();
+                await _dataSource.LoadThreadsDataAsync(keywords, forumId, 1);
+
+                return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count > 0;
+            }
+
+            return false;
+        }
+
         public static async Task<int> GetLoadThreadsCountAsync(string forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
         {
             showProgressBar();
             await _dataSource.LoadThreadsDataAsync(forumId, pageNo);
+            hideProgressBar();
+
+            return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count;
+        }
+
+        public static async Task<int> SearchLoadThreadsCountAsync(string keywords, string forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
+        {
+            showProgressBar();
+            await _dataSource.LoadThreadsDataAsync(keywords, forumId, pageNo);
             hideProgressBar();
 
             return _dataSource.ThreadList.Single(f => f.ForumId.Equals(forumId)).Threads.Count;
@@ -574,6 +605,133 @@ namespace hipda.Data
                 i++;
             }
         }
+
+        private async Task LoadThreadsDataAsync(string keywords, string forumId, int pageNo)
+        {
+            // 载入过的页面不再载入
+            var forum = _dataSource.ThreadList.FirstOrDefault(t => t.ForumId.Equals(forumId));
+            if (forum == null)
+            {
+                return;
+            }
+
+            // 如果页面已存在，并且已载满数据，则不重新从网站拉取数据，以便节省流量， 
+            // 但最后一页（如果数据少于一页，那么第一页就是最后一页）由于随时可能会有新回复，所以对于最后一页的处理方式是先清除再重新加载
+            int threadCount = forum.Threads.Count(t => t.PageNo == pageNo);
+            if (threadCount > 0)
+            {
+                if (threadCount >= SearchPageSize) // 满页的不再加载，以便节省流量
+                {
+                    return;
+                }
+
+                // 再判断未满页的
+                // 第一页或最后一页的回复数量不足一页，表示此页随时可能有新回复，故删除
+                var lastPageData = forum.Threads.Where(t => t.PageNo == pageNo).ToList();
+                foreach (var item in lastPageData)
+                {
+                    forum.Threads.Remove(forum.Threads.Single(t => t.Id == item.Id));
+                }
+            }
+
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/search.php?srchtype=title&searchsubmit=%CB%D1%CB%F7&st=on&srchuname=&srchfilter=all&srchfrom=0&before=&orderby={2}&ascdesc=desc&srchtxt={0}&srchfid%5B0%5D={1}&page={3}&_={4}", keywords, forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.ToString("HHmmss"));
+            string htmlContent = await httpClient.HttpGet(url);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlContent);
+
+            #region 先判断页码是否已超过最大页码，以免造成重复加载
+            if (pageNo > 1)
+            {
+                var forumControlNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages_btns s_clear"));
+                // 找不到分页条，说明只有一页
+                if (forumControlNode == null)
+                {
+                    return;
+                }
+            }
+            #endregion
+
+            var dataTable = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
+            if (dataTable == null)
+            {
+                return;
+            }
+
+            // 如果置顶贴数过多，只取非置顶贴的话，第一页数据项过少，会导致不会自动触发加载下一页数据
+            var tbodies = dataTable.ChildNodes;
+            if (tbodies == null)
+            {
+                return;
+            }
+
+            int i = 0;
+            foreach (var item in tbodies)
+            {
+                if (item.Name != "tbody")
+                {
+                    continue;
+                }
+
+                if (item.InnerText.Equals("对不起，没有找到匹配结果。"))
+                {
+                    return;
+                }
+
+                var tr = item.ChildNodes[1];
+                var th = tr.ChildNodes[5];
+                var a = th.ChildNodes[3];
+                var tdAuthor = tr.ChildNodes[9];
+                var tdNums = tr.ChildNodes[11];
+                var tdLastPost = tr.ChildNodes[13];
+
+                string id = a.Attributes[0].Value.Substring("viewthread.php?tid=".Length);
+                if (id.Contains("&"))
+                {
+                    id = id.Split('&')[0];
+                }
+                string title = a.InnerHtml;
+
+                var authorName = string.Empty;
+                var authorId = string.Empty;
+                var authorNameNode = tdAuthor.ChildNodes[1]; // cite
+                var authorNameLink = authorNameNode.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
+                if (authorNameLink == null)
+                {
+                    authorName = authorNameNode.InnerText;
+                }
+                else
+                {
+                    authorName = authorNameLink.InnerText;
+                    authorId = authorNameLink.Attributes[0].Value.Substring("space.php?uid=".Length);
+                    if (authorId.Contains("&"))
+                    {
+                        authorId = authorId.Split('&')[0];
+                    }
+                }
+
+                var authorCreateTime = tdAuthor.ChildNodes[3].InnerText;
+
+                string[] nums = tdNums.InnerText.Split('/');
+                var replyNum = nums[0].Trim();
+                var viewNum = nums[1].Trim();
+
+                string[] lastPostInfo = tdLastPost.InnerText.Trim().Replace("\n", "@").Split('@');
+                var lastPostAuthorName = lastPostInfo[0];
+                var lastPostTime = lastPostInfo[1]
+                    .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
+                    .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
+
+                Thread thread = new Thread(i, pageNo, forumId, id, title, -1, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
+                forum.Threads.Add(thread);
+
+                i++;
+            }
+        }
         #endregion
 
         #region 读取指定贴子下所有回复
@@ -643,13 +801,13 @@ namespace hipda.Data
             //}
 
             #region 如果数据已存在，则不读取，以便节省流量
-            // 载入过的页面不再载入
             var thread = _dataSource.ReplyList.FirstOrDefault(t => t.ThreadId.Equals(threadId));
             if (thread == null)
             {
                 return;
             }
 
+            // 载入过的页面不再载入
             //// 现改为，只要当前页数据存在就不重新加载，让用户自己点击最底下的刷新按钮来刷新
             //// 此举可提高响应速度
             //int count = thread.Replies.Count(o => o.PageNo == pageNo);
