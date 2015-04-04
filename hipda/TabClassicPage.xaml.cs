@@ -548,13 +548,13 @@ namespace hipda
             }
         }
 
-        private async Task SearchThreadListPage(string keywords, ListView listView, string forumId)
+        private async Task SearchThreadListPage(string keywords, int searchType, ListView listView, string forumId)
         {
             if (replyProgressBar.Visibility == Visibility.Collapsed)
             {
                 listView.ItemsSource = null;
 
-                bool hasData = await DataSource.SearchThreadList(keywords, forumId);
+                bool hasData = await DataSource.SearchThreadList(keywords, searchType, forumId);
                 if (hasData == false)
                 {
                     var dialog = new MessageDialog("对不起，没有找到匹配结果。", "版内搜索");
@@ -568,7 +568,7 @@ namespace hipda
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await DataSource.SearchLoadThreadsCountAsync(keywords, forumId, pageNo, () =>
+                    return await DataSource.SearchLoadThreadsCountAsync(keywords, searchType, forumId, pageNo, () =>
                     {
                         replyProgressBar.Visibility = Visibility.Visible;
                     }, () =>
@@ -1700,7 +1700,7 @@ namespace hipda
             replyProgressBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
-        private async Task SearchThreadListPage()
+        private async Task SearchThreadListPage(int searchType)
         {
             openDialogForSearch.Flyout.Hide();
 
@@ -1709,19 +1709,24 @@ namespace hipda
             PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
             string forumId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
             ListView listView = (ListView)pivotItem.FindName("threadsListView" + forumId);
-            await SearchThreadListPage(keywords, listView, forumId);
+            await SearchThreadListPage(keywords, searchType, listView, forumId);
         }
 
-        private async void btnSearch_Click(object sender, RoutedEventArgs e)
+        private async void btnSearchTitle_Click(object sender, RoutedEventArgs e)
         {
-            await SearchThreadListPage();
+            await SearchThreadListPage(1);
+        }
+
+        private async void btnSearchAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            await SearchThreadListPage(2);
         }
 
         private async void txtKeyword_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                await SearchThreadListPage();
+                await SearchThreadListPage(1);
             }
 
         }

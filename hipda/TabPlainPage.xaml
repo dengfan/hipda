@@ -1149,7 +1149,15 @@
                         <Flyout FlyoutPresenterStyle="{StaticResource SearchFlyoutWrapStyle}">
                             <StackPanel Margin="20">
                                 <TextBox x:Name="txtKeyword" TabIndex="1" Header="请输入标题关键字" KeyDown="txtKeyword_KeyDown" />
-                                <Button x:Name="btnSearch" TabIndex="2" HorizontalAlignment="Stretch" Content="搜索" Click="btnSearch_Click" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" x:Name="btnSearchTitle" TabIndex="2" HorizontalAlignment="Stretch" Content="按标题搜索" Click="btnSearchTitle_Click" />
+                                    <Button Grid.Column="2" x:Name="btnSearchAuthor" TabIndex="3" HorizontalAlignment="Stretch" Content="按作者搜索" Click="btnSearchAuthor_Click" />
+                                </Grid>
                             </StackPanel>
                         </Flyout>
                     </Button.Flyout>
