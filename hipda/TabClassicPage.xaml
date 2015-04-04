@@ -1190,7 +1190,7 @@
                     <Button.Flyout>
                         <Flyout FlyoutPresenterStyle="{StaticResource SearchFlyoutWrapStyle}">
                             <StackPanel Margin="20">
-                                <TextBox x:Name="txtKeyword" TabIndex="1" Header="请输入标题关键字" KeyDown="txtKeyword_KeyDown" />
+                                <TextBox x:Name="txtKeyword" TabIndex="1" Header="请输入关键字" KeyDown="txtKeyword_KeyDown" />
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
