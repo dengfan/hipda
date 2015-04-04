@@ -294,25 +294,7 @@ namespace hipda
             pictureIconTextBlockRun.Text = thread.AttachType == 1 ? "\uE187" : string.Empty;
             pagerclipTextBlockRun.Text = thread.AttachType == 2 ? "\uE16C" : string.Empty;
 
-            string threadTitle = thread.Title;
-
-            // 替换搜索关键字，用于高亮关键字
-            MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(threadTitle);
-            if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
-            {
-                for (int i = 0; i < matchsForSearchKeywords.Count; i++)
-                {
-                    var m = matchsForSearchKeywords[i];
-
-                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string keywords = m.Groups[1].Value;
-
-                    string linkXaml = string.Format(@"  “{0}”  ", keywords);
-                    threadTitle = threadTitle.Replace(placeHolder, linkXaml);
-                }
-            }
-
-            titleTextBlockRun.Text = threadTitle;
+            titleTextBlockRun.Text = thread.Title;
             numbersTextBlockRun.Text = thread.Numbers;
 
             args.RegisterUpdateCallback(ShowThreadAuthor);
