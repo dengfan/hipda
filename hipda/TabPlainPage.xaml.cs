@@ -1493,12 +1493,11 @@ namespace hipda
             replyProgressBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
 
-        private async Task SearchThreadListPage(int searchType)
+        private async Task SearchThreadListPage(string keywords, int searchType)
         {
             openDialogForSearch.Flyout.Hide();
 
             // 在当前版区内进行搜索
-            string keywords = txtKeyword.Text.Trim();
             PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
             string forumId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
             ListView listView = (ListView)pivotItem.FindName("threadsListView" + forumId);
@@ -1507,19 +1506,22 @@ namespace hipda
 
         private async void btnSearchTitle_Click(object sender, RoutedEventArgs e)
         {
-            await SearchThreadListPage(1);
+            string keywords = txtKeyword.Text.Trim();
+            await SearchThreadListPage(keywords, 1);
         }
 
         private async void btnSearchAuthor_Click(object sender, RoutedEventArgs e)
         {
-            await SearchThreadListPage(2);
+            string keywords = txtKeyword.Text.Trim();
+            await SearchThreadListPage(keywords, 2);
         }
 
         private async void txtKeyword_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                await SearchThreadListPage(1);
+                string keywords = txtKeyword.Text.Trim();
+                await SearchThreadListPage(keywords, 1);
             }
 
         }
