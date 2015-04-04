@@ -187,7 +187,7 @@
         <CommandBar Background="LightGray">
             <AppBarButton x:Name="marketplaceReviewAppBarButton" Icon="Favorite" Label="我要给好评" Click="marketplaceReviewAppBarButton_Click"/>
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="openTabForApp" Label="反馈" Click="openTabForApp_Click" />
+                <AppBarButton x:Name="openTabForApp" Label="说明及反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

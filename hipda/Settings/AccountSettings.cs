@@ -83,7 +83,7 @@ namespace hipda.Settings
             postData.Add("questionid", questionId);
             postData.Add("answer", answer);
 
-            string resultContent = await httpClient.HttpPost("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
+            string resultContent = await httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
             if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败") && !resultContent.Contains("非激活"))
             {
                 if (isSave)
