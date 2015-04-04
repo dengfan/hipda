@@ -172,7 +172,7 @@ namespace hipda.Common
                     }
                     else
                     {
-                        //imageCount++;
+                        imageCount++;
 
                         //if (imageCount <= maxImageCount)
                         //{
