@@ -653,6 +653,7 @@ namespace hipda
                     refreshThreadsButton.Visibility =
                     sortForThreadListButton.Visibility = 
                     changeThemeButton.Visibility =
+                    openDialogForSearch.Visibility =
                     Windows.UI.Xaml.Visibility.Visible;
 
                 // 隐藏 回复列表页底部按钮
@@ -677,6 +678,7 @@ namespace hipda
                     refreshThreadsButton.Visibility =
                     sortForThreadListButton.Visibility =
                     changeThemeButton.Visibility =
+                    openDialogForSearch.Visibility =
                     Windows.UI.Xaml.Visibility.Collapsed;
 
                 // 隐藏 发布信息状态之底部按钮
@@ -1342,7 +1344,8 @@ namespace hipda
             openPostNewPanelButton.Visibility = 
                 refreshThreadsButton.Visibility =
                 sortForThreadListButton.Visibility =
-                changeThemeButton.Visibility = 
+                changeThemeButton.Visibility =
+                openDialogForSearch.Visibility =
                 Windows.UI.Xaml.Visibility.Visible;
         }
 
@@ -1359,7 +1362,8 @@ namespace hipda
             openPostNewPanelButton.Visibility = 
                 refreshThreadsButton.Visibility =
                 sortForThreadListButton.Visibility =
-                changeThemeButton.Visibility = 
+                changeThemeButton.Visibility =
+                openDialogForSearch.Visibility =
                 Windows.UI.Xaml.Visibility.Collapsed;
         }
 
