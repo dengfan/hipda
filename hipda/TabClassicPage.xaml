@@ -88,7 +88,12 @@
             <Setter Property="Foreground" Value="DimGray"/>
             <Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
         </Style>
-            
+
+        <Style x:Key="SearchFlyoutWrapStyle" TargetType="FlyoutPresenter">
+            <Setter Property="Background" Value="{StaticResource MaskBgColor}"/>
+            <Setter Property="Opacity" Value="0.95"/>
+        </Style>
+
         <DataTemplate x:Name="ThreadListItemTemplate">
             <Grid>
                 <Grid.RowDefinitions>
@@ -1181,7 +1186,17 @@
                 <AppBarButton Label="Discovery 版" Click="openTabForDiscovery_Click" />
                 <AppBarButton Label="Buy &amp; Sell 版" Click="openTabForBuyAndSell_Click" />
                 <AppBarButton Label="Eink 版" Click="openTabForEink_Click" />
-                <AppBarButton x:Name="openTabForApp" Label="反馈" Click="openTabForApp_Click" />
+                <AppBarButton x:Name="openDialogForSearch" Label="版内搜索">
+                    <Button.Flyout>
+                        <Flyout FlyoutPresenterStyle="{StaticResource SearchFlyoutWrapStyle}">
+                            <StackPanel Margin="20">
+                                <TextBox x:Name="txtKeyword" TabIndex="1" Header="请输入标题关键字" KeyDown="txtKeyword_KeyDown" />
+                                <Button x:Name="btnSearch" TabIndex="2" HorizontalAlignment="Stretch" Content="搜索" Click="btnSearch_Click" />
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </AppBarButton>
+                <AppBarButton x:Name="openTabForApp" Label="说明及反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

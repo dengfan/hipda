@@ -33,6 +33,9 @@ namespace hipda
         StatusBar statusBar = StatusBar.GetForCurrentView();
         HttpHandle httpClient = HttpHandle.getInstance();
 
+        // 最后发布消息时间，用于限制发布速度（30秒限制）
+        private TimeSpan lastPostTimeSpan = new TimeSpan(DateTime.Now.AddSeconds(-35).Ticks);
+
         // 用于限制允许显示标签页的总数量
         private int maxHubSectionCount = 6;
 
@@ -290,7 +293,26 @@ namespace hipda
             ownerInfoTextBlock.Opacity = 0;
             pictureIconTextBlockRun.Text = thread.AttachType == 1 ? "\uE187" : string.Empty;
             pagerclipTextBlockRun.Text = thread.AttachType == 2 ? "\uE16C" : string.Empty;
-            titleTextBlockRun.Text = thread.Title;
+
+            string threadTitle = thread.Title;
+
+            // 替换搜索关键字，用于高亮关键字
+            MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(threadTitle);
+            if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
+            {
+                for (int i = 0; i < matchsForSearchKeywords.Count; i++)
+                {
+                    var m = matchsForSearchKeywords[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string keywords = m.Groups[1].Value;
+
+                    string linkXaml = string.Format(@"  “{0}”  ", keywords);
+                    threadTitle = threadTitle.Replace(placeHolder, linkXaml);
+                }
+            }
+
+            titleTextBlockRun.Text = threadTitle;
             numbersTextBlockRun.Text = thread.Numbers;
 
             args.RegisterUpdateCallback(ShowThreadAuthor);
@@ -540,6 +562,43 @@ namespace hipda
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
                     return await DataSource.GetLoadThreadsCountAsync(forumId, pageNo, () =>
+                    {
+                        replyProgressBar.Visibility = Visibility.Visible;
+                    }, () =>
+                    {
+                        replyProgressBar.Visibility = Visibility.Collapsed;
+                    });
+                }, (index) =>
+                {
+                    // 从静态类中返回需要显示出来的数据
+                    return DataSource.GetThreadByIndex(forumId, index);
+                });
+
+                listView.ItemsSource = cvs.View;
+            }
+        }
+
+        private async Task SearchThreadListPage(string keywords, ListView listView, string forumId)
+        {
+            if (replyProgressBar.Visibility == Visibility.Collapsed)
+            {
+                listView.ItemsSource = null;
+
+                bool hasData = await DataSource.SearchThreadList(keywords, forumId);
+                if (hasData == false)
+                {
+                    var dialog = new MessageDialog("对不起，没有找到匹配结果。", "版内搜索");
+                    await dialog.ShowAsync();
+                    await RefreshThreadListPage(listView, forumId);
+                    return;
+                }
+
+                var cvs = new CollectionViewSource();
+                cvs.Source = new GeneratorIncrementalLoadingClass<Thread>(DataSource.SearchPageSize, async pageNo =>
+                {
+                    // 加载分页数据，并写入静态类中
+                    // 返回的是本次加载的数据量
+                    return await DataSource.SearchLoadThreadsCountAsync(keywords, forumId, pageNo, () =>
                     {
                         replyProgressBar.Visibility = Visibility.Visible;
                     }, () =>
@@ -1011,6 +1070,14 @@ namespace hipda
 
         private async void sendButton_Click(object sender, RoutedEventArgs e)
         {
+            TimeSpan nowTimeSpan = new TimeSpan(DateTime.Now.Ticks);
+            TimeSpan ts = nowTimeSpan.Subtract(lastPostTimeSpan).Duration();
+            if (ts.Seconds <= 30)
+            {
+                await new MessageDialog(string.Format("您的发布请求不成功！\n你发布速度过快，请于{0}秒后再发布。", 31 - ts.Seconds), "注意").ShowAsync();
+                return;
+            }
+
             PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
 
             if (currentEditType == EnumEditType.Add)
@@ -1028,10 +1095,12 @@ namespace hipda
                         return;
                     }
 
+                    string messageTail = message.Trim() + "\n \n" + DataSource.MessageTail; // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
+
                     var postData = new Dictionary<string, object>();
                     postData.Add("formhash", DataSource.FormHash);
                     postData.Add("subject", string.Empty);
-                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
+                    postData.Add("message", messageTail);
                     postData.Add("usesig", "1");
                     postData.Add("noticeauthor", noticeauthor);
                     postData.Add("noticetrimstr", noticetrimstr);
@@ -1045,7 +1114,7 @@ namespace hipda
 
                     // 发布请求
                     string url = string.Format("http://www.hi-pda.com/forum/post.php?action=reply&tid={0}&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", threadId);
-                    string resultContent = await httpClient.HttpPost(url, postData);
+                    string resultContent = await httpClient.PostAsync(url, postData);
                     if (!resultContent.Contains("您的回复已经发布"))
                     {
                         await new MessageDialog("您的发布请求不成功！\n可能是你连续发布过快，请稍候再试。", "注意").ShowAsync();
@@ -1102,7 +1171,7 @@ namespace hipda
 
                     // 发布请求
                     string url = string.Format("http://www.hi-pda.com/forum/post.php?action=newthread&fid={0}&extra=&topicsubmit=yes", forumId);
-                    string resultContent = await httpClient.HttpPost(url, postData);
+                    string resultContent = await httpClient.PostAsync(url, postData);
                     if (resultContent.Contains("对不起，您两次发表间隔少于"))
                     {
                         await new MessageDialog("您的发布请求不成功！\n可能是你连续发布过快，请稍候再试。", "注意").ShowAsync();
@@ -1154,7 +1223,7 @@ namespace hipda
 
                     // 发布请求
                     string url = "http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=";
-                    string resultContent = await httpClient.HttpPost(url, postData);
+                    await httpClient.PostAsync(url, postData);
 
                     HidePostReplyPanelAndButton();
 
@@ -1202,7 +1271,7 @@ namespace hipda
 
                     // 发布请求
                     string url = "http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=";
-                    string resultContent = await httpClient.HttpPost(url, postData);
+                    await httpClient.PostAsync(url, postData);
 
                     HidePostNewModifyPanelAndButton();
 
@@ -1221,6 +1290,8 @@ namespace hipda
                 }
                 #endregion
             }
+
+            lastPostTimeSpan = new TimeSpan(DateTime.Now.Ticks);
         }
 
         #region 显示或隐藏回复或修改回复之输入面板
@@ -1665,6 +1736,32 @@ namespace hipda
             
             refreshRepliesButton.IsEnabled = true;
             replyProgressBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
+
+        private async Task SearchThreadListPage()
+        {
+            openDialogForSearch.Flyout.Hide();
+
+            // 在当前版区内进行搜索
+            string keywords = txtKeyword.Text.Trim();
+            PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
+            string forumId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
+            ListView listView = (ListView)pivotItem.FindName("threadsListView" + forumId);
+            await SearchThreadListPage(keywords, listView, forumId);
+        }
+
+        private async void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            await SearchThreadListPage();
+        }
+
+        private async void txtKeyword_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                await SearchThreadListPage();
+            }
+
         }
     }
 }
