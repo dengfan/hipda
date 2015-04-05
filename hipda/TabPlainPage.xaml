@@ -1155,6 +1155,7 @@
                         <Flyout FlyoutPresenterStyle="{StaticResource SearchFlyoutWrapStyle}">
                             <StackPanel Margin="20">
                                 <TextBox x:Name="txtKeyword" TabIndex="1" Header="请输入关键字" KeyDown="txtKeyword_KeyDown" />
+                                <TextBlock Text="注：点击底部刷新按钮即可清除搜索结果并返回。" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
