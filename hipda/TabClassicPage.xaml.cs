@@ -270,6 +270,8 @@ namespace hipda
             Grid layoutGrid = (Grid)args.ItemContainer.ContentTemplateRoot;
 
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+            avatarImageBorder.DataContext = thread;
+
             TextBlock ownerInfoTextBlock = (TextBlock)layoutGrid.FindName("ownerInfoTextBlock");
             Run pictureIconTextBlockRun = (Run)layoutGrid.FindName("pictureIconTextBlockRun");
             Run pagerclipTextBlockRun = (Run)layoutGrid.FindName("pagerclipTextBlockRun");
@@ -1732,5 +1734,22 @@ namespace hipda
             }
 
         }
+
+        private void user_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            // If you need the clicked element:
+            // Item whichOne = senderElement.DataContext as Item;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
+        }
+
+        private async void menuItemViewHistory_Click(object sender, RoutedEventArgs e)
+        {
+            Thread datacontext = (e.OriginalSource as FrameworkElement).DataContext as Thread;
+            string keywords = txtKeyword.Text.Trim();
+            await SearchThreadListPage(datacontext.OwnerName, 2);
+        }
+
     }
 }

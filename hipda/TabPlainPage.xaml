@@ -95,7 +95,7 @@
         </Style>
 
         <DataTemplate x:Name="ThreadListItemTemplate">
-            <StackPanel>
+            <StackPanel Holding="threadListItem_Holding">
                 <TextBlock x:Name="ownerInfoTextBlock"
                                    TextWrapping="WrapWholeWords"
                                    HorizontalAlignment="Left"
@@ -117,6 +117,12 @@
 
                 <TextBlock Foreground="{StaticResource BorderColor}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" 
                            Text="++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"/>
+                
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看作者发贴记录" Click="menuItemViewHistory_Click" />
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
             </StackPanel>
         </DataTemplate>
 
