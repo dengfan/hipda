@@ -34,7 +34,7 @@ namespace hipda
         HttpHandle httpClient = HttpHandle.getInstance();
 
         // 最后发布消息时间，用于限制发布速度（30秒限制）
-        private TimeSpan lastPostTimeSpan = new TimeSpan(DateTime.Now.AddSeconds(-31).Ticks);
+        private DateTime lastPostTime = DateTime.Now.AddSeconds(-31);
 
         // 用于限制允许显示标签页的总数量
         private int maxHubSectionCount = 6;
@@ -1054,11 +1054,11 @@ namespace hipda
 
         private async void sendButton_Click(object sender, RoutedEventArgs e)
         {
-            TimeSpan nowTimeSpan = new TimeSpan(DateTime.Now.Ticks);
-            TimeSpan ts = nowTimeSpan.Subtract(lastPostTimeSpan).Duration();
-            if (ts.Seconds <= 30)
+            DateTime nowTime = DateTime.Now;
+            TimeSpan ts = (nowTime - lastPostTime);
+            if (ts.TotalSeconds <= 30)
             {
-                await new MessageDialog(string.Format("您的发布请求不成功！\n你发布速度过快，请于{0}秒后再发布。", 31 - ts.Seconds), "注意").ShowAsync();
+                await new MessageDialog(string.Format("您的发布请求不成功！\n你发布速度过快，请于{0}秒后再发布。", 31 - ts.TotalSeconds), "注意").ShowAsync();
                 return;
             }
 
@@ -1275,7 +1275,7 @@ namespace hipda
                 #endregion
             }
 
-            lastPostTimeSpan = new TimeSpan(DateTime.Now.Ticks);
+            lastPostTime = DateTime.Now;
         }
 
         #region 显示或隐藏回复或修改回复之输入面板
