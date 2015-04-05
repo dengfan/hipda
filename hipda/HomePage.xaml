@@ -98,7 +98,7 @@
                 <ScrollViewer Padding="15">
                     <StackPanel>
                         <TextBlock Text="排版模式" FontSize="{ThemeResource ContentControlFontSize}" />
-                        <TextBlock Text="小屏用户推荐使用经典或纯文本模式，大屏（如 Lumia 1320 / 1520）用户推荐使用气泡模式，以获得最佳体验！" 
+                        <TextBlock Text="推荐使用气泡模式，以获得最佳体验！" 
                                    TextWrapping="Wrap" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
                         <ComboBox x:Name="layoutModeComboBox" PlaceholderText="经典" SelectionChanged="layoutModeComboBox_SelectionChanged">
                             <x:String>经典</x:String>
