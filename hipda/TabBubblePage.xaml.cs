@@ -283,9 +283,6 @@ namespace hipda
 
             Grid layoutGrid = (Grid)args.ItemContainer.ContentTemplateRoot;
 
-            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
-            avatarImageBorder.DataContext = thread;
-
             TextBlock ownerInfoTextBlock = (TextBlock)layoutGrid.FindName("ownerInfoTextBlock");
             Run pictureIconTextBlockRun = (Run)layoutGrid.FindName("pictureIconTextBlockRun");
             Run pagerclipTextBlockRun = (Run)layoutGrid.FindName("pagerclipTextBlockRun");
@@ -345,17 +342,25 @@ namespace hipda
                 Grid layoutGrid = (Grid)itemContainer.ContentTemplateRoot;
 
                 Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+                avatarImageBorder.DataContext = thread;
 
-                var imageBrush = new ImageBrush()
+                var imageBrush = new ImageBrush
                 {
-                    ImageSource = new BitmapImage()
+                    ImageSource = new BitmapImage
                     {
                         DecodePixelWidth = 60, // natural px width of image source
                         UriSource = new Uri(thread.AvatarUrl)
                     }
                 };
+                imageBrush.ImageFailed += (sender2, e2) => {
+                    var imageBrush2 = sender2 as ImageBrush;
+                    imageBrush2.ImageSource = new BitmapImage
+                    {
+                        DecodePixelWidth = 60, // natural px width of image source
+                        UriSource = new Uri("ms-appx:///Assets/Faces/no_face.png")
+                    };
+                };
                 imageBrush.Stretch = Stretch.UniformToFill;
-
                 avatarImageBorder.Background = imageBrush;
             }
         }
@@ -494,16 +499,24 @@ namespace hipda
 
             Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
 
-            var imageBrush = new ImageBrush()
+            var imageBrush = new ImageBrush
             {
-                ImageSource = new BitmapImage()
+                ImageSource = new BitmapImage
                 {
                     DecodePixelWidth = 60, // natural px width of image source
                     UriSource = new Uri(reply.AvatarUrl)
                 }
             };
+            imageBrush.ImageFailed += (sender2, e2) =>
+            {
+                var imageBrush2 = sender2 as ImageBrush;
+                imageBrush2.ImageSource = new BitmapImage
+                {
+                    DecodePixelWidth = 60, // natural px width of image source
+                    UriSource = new Uri("ms-appx:///Assets/Faces/no_face.png")
+                };
+            };
             imageBrush.Stretch = Stretch.UniformToFill;
-
             avatarImageBorder.Background = imageBrush;
         }
         #endregion
