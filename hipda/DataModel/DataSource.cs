@@ -250,6 +250,8 @@ namespace hipda.Data
 
     public sealed class DataSource
     {
+        public static string LoginMessage = string.Empty;
+
         public static int ThreadPageSize { get { return 75; } }
 
         public static int SearchPageSize { get { return 50; } }

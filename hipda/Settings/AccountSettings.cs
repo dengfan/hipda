@@ -1,4 +1,5 @@
 ﻿using hipda.Data;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -84,7 +85,18 @@ namespace hipda.Settings
             postData.Add("answer", answer);
 
             string resultContent = await httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
-            if (resultContent.Contains("欢迎") && !resultContent.Contains("错误") && !resultContent.Contains("失败") && !resultContent.Contains("非激活"))
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+            
+            // 载入HTML
+            doc.LoadHtml(resultContent);
+
+            var root = doc.DocumentNode;
+            string loginMessage = root.InnerText.Replace("<![CDATA[", string.Empty).Replace("]]>", string.Empty);
+            DataSource.LoginMessage = loginMessage;
+
+            if (loginMessage.Contains("欢迎") && !loginMessage.Contains("错误") && !loginMessage.Contains("失败") && !loginMessage.Contains("非激活"))
             {
                 if (isSave)
                 {

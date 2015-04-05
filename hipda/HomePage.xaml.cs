@@ -189,7 +189,7 @@ namespace hipda
                 }
                 else
                 {
-                    await new MessageDialog("1. 请确保账号密码正确，否则失败次数超过5次，会被禁止登录15分钟！\n2. 如果您的账号使用了安全问题，请确保问题及答案正确。\n3. 请确保您的账号已通过管理员审核。", "账号登录失败").ShowAsync();
+                    await new MessageDialog(DataSource.LoginMessage, "账号登录失败").ShowAsync();
                 }
             }
 
