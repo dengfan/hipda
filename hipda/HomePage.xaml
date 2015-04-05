@@ -102,7 +102,7 @@
                                    TextWrapping="Wrap" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
                         <ComboBox x:Name="layoutModeComboBox" PlaceholderText="经典" SelectionChanged="layoutModeComboBox_SelectionChanged">
                             <x:String>经典</x:String>
-                            <x:String>纯文本</x:String>
+                            <x:String>纯文本（无图极速模式）</x:String>
                             <x:String>气泡</x:String>
                         </ComboBox>
                         <TextBlock Text="图片数量" FontSize="{ThemeResource ContentControlFontSize}" Margin="0,8,0,0" />
