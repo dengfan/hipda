@@ -110,7 +110,7 @@
     <Compile Include="BackgroundStyleSelecterForForumItem.cs" />
     <Compile Include="Common\HtmlHelper.cs" />
     <Compile Include="DataModel\Enum.cs" />
-    <Compile Include="ImageHelper.cs" />
+    <Compile Include="Common\ImageHelper.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
