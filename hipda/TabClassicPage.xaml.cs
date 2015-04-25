@@ -1061,7 +1061,7 @@ namespace hipda
             TimeSpan ts = (nowTime - lastPostTime);
             if (ts.TotalSeconds <= 30)
             {
-                await new MessageDialog(string.Format("您的发布请求不成功！\n你发布速度过快，请于{0}秒后再发布。", 31 - ts.TotalSeconds), "注意").ShowAsync();
+                await new MessageDialog(string.Format("您的发布请求不成功！\n您发布速度过快，请于{0:f1}秒后再发布。", 31 - ts.TotalSeconds), "注意").ShowAsync();
                 return;
             }
 
