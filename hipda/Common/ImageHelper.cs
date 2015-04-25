@@ -20,7 +20,6 @@ namespace hipda
             if (property.Size > 307200)
             {
                 var data = await image.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.PicturesView);
-                data.Size = data.Size > 307200 ? 307200 : data.Size;
                 stream = data.AsStreamForRead();
             }
             else
