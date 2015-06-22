@@ -8,12 +8,13 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace hipda
 {
     class HttpHandle
     {
-        private CookieContainer cookieJar = new CookieContainer();
+        private CookieContainer cookieContainer = new CookieContainer();
         private Encoding encode = null;
         private Encoding gbk = null;
         private static HttpHandle instance = null;
@@ -44,67 +45,21 @@ namespace hipda
         {
             get
             {
-                return cookieJar.Count > 0;
+                return cookieContainer.Count > 0;
             }
         }
 
         public void ClearCookies()
         {
-            cookieJar = new CookieContainer();
+            cookieContainer = new CookieContainer();
         }
-
-        //public async Task<string> GetAsync(string url)
-        //{
-        //    HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
-        //    request.Method = "GET";
-        //    request.CookieContainer = cookieJar;
-        //    var response = (HttpWebResponse)(await request.GetResponseAsync());
-        //    byte[] data = new byte[1024000];
-        //    int length = 0;
-        //    int cnt = 1;
-        //    while (cnt > 0)
-        //    {
-        //        cnt = response.GetResponseStream().Read(data, length, 1024000 - length);
-        //        length += cnt;
-        //    }
-        //    Encoding ut = Encoding.UTF8;
-        //    Encoding encode = this.encode;
-        //    Match m = Regex.Match(response.ContentType, @"charset=([\w\-]+)");
-        //    string charset = m.Groups[1].ToString().ToLower();
-        //    if (!string.IsNullOrEmpty(charset))
-        //    {
-        //        if (charset == "utf-8")
-        //        {
-        //            encode = null;
-        //        }
-        //        else if (charset == "gbk" || charset == "gb2312")
-        //        {
-        //            encode = gbk;
-        //        }
-        //    }
-        //    if (encode != null)
-        //    {
-        //        byte[] utbyte = Encoding.Convert(encode, ut, data, 0, length);
-        //        char[] utChars = new char[encode.GetCharCount(utbyte, 0, utbyte.Length)];
-        //        ut.GetChars(utbyte, 0, utbyte.Length, utChars, 0);
-        //        string res = new string(utChars);
-        //        return res;
-        //    }
-        //    else
-        //    {
-        //        char[] utChars = new char[ut.GetCharCount(data, 0, length)];
-        //        ut.GetChars(data, 0, length, utChars, 0);
-        //        string res = new string(utChars);
-        //        return res;
-        //    }
-        //}
-
+        
         public async Task<string> GetAsync(string url)
         {
             var handler = new HttpClientHandler();
+            handler.CookieContainer = cookieContainer;
             if (handler.SupportsAutomaticDecompression)
             {
-                handler.CookieContainer = cookieJar;
                 handler.AutomaticDecompression = DecompressionMethods.GZip;
             }
 
@@ -114,8 +69,8 @@ namespace hipda
                 // Call asynchronous network methods in a try/catch block to handle exceptions 
                 try
                 {
-                    HttpResponseMessage response = await client.GetAsync(url);
-                    Stream responseStream = await response.Content.ReadAsStreamAsync();
+                    HttpResponseMessage responseMessage = await client.GetAsync(url);
+                    Stream responseStream = await responseMessage.Content.ReadAsStreamAsync();
 
                     byte[] data = new byte[1024000];
                     int length = 0;
@@ -127,7 +82,7 @@ namespace hipda
                     }
                     Encoding ut = Encoding.UTF8;
                     Encoding encode = this.encode;
-                    string charset = response.Content.Headers.ContentType.CharSet;
+                    string charset = responseMessage.Content.Headers.ContentType.CharSet;
                     if (!string.IsNullOrEmpty(charset))
                     {
                         charset = charset.ToLower();
@@ -165,78 +120,12 @@ namespace hipda
             }
         }
 
-        //public async Task<string> PostAsync(string url, IDictionary<string, object> toPost)
-        //{
-        //    HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
-        //    request.CookieContainer = cookieJar;
-        //    request.Method = "POST";
-        //    request.ContentType = "application/x-www-form-urlencoded";
-        //    string postData = "";
-        //    bool first = true;
-        //    foreach (KeyValuePair<string, object> kvp in toPost)
-        //    {
-        //        if (first)
-        //        {
-        //            first = false;
-        //            postData += GetEncoding(kvp.Key) + "=" + GetEncoding(kvp.Value.ToString());
-        //        }
-        //        else
-        //        {
-        //            postData += "&" + GetEncoding(kvp.Key) + "=" + GetEncoding(kvp.Value.ToString());
-        //        }
-        //    }
-        //    Encoding ut = Encoding.UTF8;
-        //    byte[] byte1 = ut.GetBytes(postData);
-        //    using (Stream newStream = await request.GetRequestStreamAsync())
-        //    {
-        //        await newStream.WriteAsync(byte1, 0, byte1.Length);
-        //    }
-
-        //    var response = (HttpWebResponse)(await request.GetResponseAsync());
-        //    byte[] data = new byte[1024000];
-        //    int length = 0;
-        //    int cnt = 1;
-        //    while (cnt > 0)
-        //    {
-        //        cnt = response.GetResponseStream().Read(data, length, 1024000 - length);
-        //        length += cnt;
-        //    }
-        //    Encoding encode = this.encode;
-        //    Match m = Regex.Match(response.ContentType, @"charset=([\w\-]+)");
-        //    string charset = m.Groups[1].ToString().ToLower();
-        //    if (!string.IsNullOrEmpty(charset))
-        //    {
-        //        if (charset == "utf-8")
-        //        {
-        //            encode = null;
-        //        }
-        //        else if (charset == "gbk" || charset == "gb2312")
-        //        {
-        //            encode = gbk;
-        //        }
-        //    }
-
-        //    if (encode != null)
-        //    {
-        //        byte[] utbyte = Encoding.Convert(encode, ut, data, 0, length);
-        //        char[] utChars = new char[encode.GetCharCount(utbyte, 0, utbyte.Length)];
-        //        ut.GetChars(utbyte, 0, utbyte.Length, utChars, 0);
-        //        return new string(utChars);
-        //    }
-        //    else
-        //    {
-        //        char[] utChars = new char[ut.GetCharCount(data, 0, length)];
-        //        ut.GetChars(data, 0, length, utChars, 0);
-        //        return new string(utChars);
-        //    }
-        //}
-
         public async Task<string> PostAsync(string url, IDictionary<string, object> toPost)
         {
             var handler = new HttpClientHandler();
+            handler.CookieContainer = cookieContainer;
             if (handler.SupportsAutomaticDecompression)
             {
-                handler.CookieContainer = cookieJar;
                 handler.AutomaticDecompression = DecompressionMethods.GZip;
             }
 
@@ -271,8 +160,8 @@ namespace hipda
 
                     httpContent.Headers.ContentType.CharSet = "utf-8";
                     httpContent.Headers.ContentType.MediaType = "application/x-www-form-urlencoded";
-                    HttpResponseMessage response = await client.PostAsync(url, httpContent);
-                    Stream responseStream = await response.Content.ReadAsStreamAsync();
+                    HttpResponseMessage responseMessage = await client.PostAsync(url, httpContent);
+                    Stream responseStream = await responseMessage.Content.ReadAsStreamAsync();
 
                     byte[] data = new byte[1024000];
                     int length = 0;
@@ -284,7 +173,7 @@ namespace hipda
                     }
                     Encoding ut = Encoding.UTF8;
                     Encoding encode = this.encode;
-                    string charset = response.Content.Headers.ContentType.CharSet;
+                    string charset = responseMessage.Content.Headers.ContentType.CharSet;
                     if (!string.IsNullOrEmpty(charset))
                     {
                         if (charset == "utf-8")
@@ -320,83 +209,159 @@ namespace hipda
             }
         }
 
-        public IAsyncOperation<string> HttpPostFile(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer)
+        //public IAsyncOperation<string> HttpPostFile(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer)
+        //{
+        //    return Task.Run<string>(async () =>
+        //    {
+        //        string boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x");
+        //        Encoding ascii = Encoding.UTF8;
+        //        byte[] boundarybytes = ascii.GetBytes("\r\n--" + boundary + "\r\n");
+
+        //        HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
+        //        request.CookieContainer = cookieContainer;
+        //        request.Method = "POST";
+        //        request.ContentType = "multipart/form-data; boundary=" + boundary;
+        //        string formdataTemplate = "Content-Disposition: form-data; name=\"{0}\"\r\n\r\n{1}";
+        //        using (Stream newStream = await request.GetRequestStreamAsync())
+        //        {
+        //            foreach (KeyValuePair<string, object> kvp in toPost)
+        //            {
+        //                newStream.Write(boundarybytes, 0, boundarybytes.Length);
+        //                string formitem = string.Format(formdataTemplate, kvp.Key, kvp.Value.ToString());
+        //                byte[] formitembytes = Encoding.UTF8.GetBytes(formitem);
+        //                newStream.Write(formitembytes, 0, formitembytes.Length);
+        //            }
+        //            newStream.Write(boundarybytes, 0, boundarybytes.Length);
+        //            string headerTemplate = "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n";
+        //            string header = string.Format(headerTemplate, fieldname, filename, filetype);
+        //            byte[] headerbytes = Encoding.UTF8.GetBytes(header);
+        //            newStream.Write(headerbytes, 0, headerbytes.Length);
+
+        //            // File binary array
+        //            newStream.Write(buffer, 0, buffer.Length);
+
+        //            // footer
+        //            byte[] trailer = ascii.GetBytes("\r\n--" + boundary + "--\r\n");
+        //            newStream.Write(trailer, 0, trailer.Length);
+        //        }
+
+        //        Task<WebResponse> taskresponse = request.GetResponseAsync();
+        //        HttpWebResponse response = (HttpWebResponse)await taskresponse;
+        //        byte[] data = new byte[1024000];
+        //        int length = 0;
+        //        int cnt = 1;
+        //        while (cnt > 0)
+        //        {
+        //            cnt = await response.GetResponseStream().ReadAsync(data, length, 1024000 - length);
+        //            length += cnt;
+        //        }
+        //        Encoding ut = Encoding.UTF8;
+        //        Encoding encode = this.encode;
+        //        Match m = Regex.Match(response.ContentType, @"charset=([\w\-]+)");
+        //        string charset = m.Groups[1].ToString().ToLower();
+        //        if (!string.IsNullOrEmpty(charset))
+        //        {
+        //            if (charset == "utf-8")
+        //            {
+        //                encode = null;
+        //            }
+        //            else if (charset == "gbk" || charset == "gb2312")
+        //            {
+        //                encode = gbk;
+        //            }
+        //        }
+        //        if (encode != null)
+        //        {
+        //            byte[] utbyte = Encoding.Convert(encode, ut, data, 0, length);
+        //            char[] utChars = new char[encode.GetCharCount(utbyte, 0, utbyte.Length)];
+        //            ut.GetChars(utbyte, 0, utbyte.Length, utChars, 0);
+        //            string res = new string(utChars);
+        //            return res;
+        //        }
+        //        else
+        //        {
+        //            char[] utChars = new char[ut.GetCharCount(data, 0, length)];
+        //            ut.GetChars(data, 0, length, utChars, 0);
+        //            string res = new string(utChars);
+        //            return res;
+        //        }
+        //    }).AsAsyncOperation();
+        //}
+
+        public async Task<string> HttpPostFile(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer)
         {
-            return Task.Run<string>(async () =>
+            var handler = new HttpClientHandler();
+            handler.CookieContainer = cookieContainer;
+            if (handler.SupportsAutomaticDecompression)
             {
-                string boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x");
-                Encoding ascii = Encoding.UTF8;
-                byte[] boundarybytes = ascii.GetBytes("\r\n--" + boundary + "\r\n");
+                handler.AutomaticDecompression = DecompressionMethods.GZip;
+            }
 
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
-                request.CookieContainer = cookieJar;
-                request.Method = "POST";
-                request.ContentType = "multipart/form-data; boundary=" + boundary;
-                string formdataTemplate = "Content-Disposition: form-data; name=\"{0}\"\r\n\r\n{1}";
-                using (Stream newStream = await request.GetRequestStreamAsync())
+            // Create a New HttpClient object.
+            using (var client = new HttpClient(handler))
+            {
+                // Call asynchronous network methods in a try/catch block to handle exceptions 
+                try
                 {
-                    foreach (KeyValuePair<string, object> kvp in toPost)
+                    string boundary = "---------------------" + DateTime.Now.Ticks.ToString("x");
+
+                    var httpContent = new MultipartFormDataContent(boundary);
+
+                    foreach (var item in toPost)
                     {
-                        newStream.Write(boundarybytes, 0, boundarybytes.Length);
-                        string formitem = string.Format(formdataTemplate, kvp.Key, kvp.Value.ToString());
-                        byte[] formitembytes = Encoding.UTF8.GetBytes(formitem);
-                        newStream.Write(formitembytes, 0, formitembytes.Length);
+                        httpContent.Add(new StringContent(item.Value.ToString(), Encoding.UTF8), item.Key);
                     }
-                    newStream.Write(boundarybytes, 0, boundarybytes.Length);
-                    string headerTemplate = "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n";
-                    string header = string.Format(headerTemplate, fieldname, filename, filetype);
-                    byte[] headerbytes = Encoding.UTF8.GetBytes(header);
-                    newStream.Write(headerbytes, 0, headerbytes.Length);
 
-                    // File binary array
-                    newStream.Write(buffer, 0, buffer.Length);
+                    var imageContent = new ByteArrayContent(buffer);
+                    httpContent.Add(imageContent, fieldname, filename);
 
-                    // footer
-                    byte[] trailer = ascii.GetBytes("\r\n--" + boundary + "--\r\n");
-                    newStream.Write(trailer, 0, trailer.Length);
-                }
+                    HttpResponseMessage responseMessage = await client.PostAsync(url, httpContent);
+                    Stream responseStream = await responseMessage.Content.ReadAsStreamAsync();
 
-                Task<WebResponse> taskresponse = request.GetResponseAsync();
-                HttpWebResponse response = (HttpWebResponse)await taskresponse;
-                byte[] data = new byte[1024000];
-                int length = 0;
-                int cnt = 1;
-                while (cnt > 0)
-                {
-                    cnt = await response.GetResponseStream().ReadAsync(data, length, 1024000 - length);
-                    length += cnt;
-                }
-                Encoding ut = Encoding.UTF8;
-                Encoding encode = this.encode;
-                Match m = Regex.Match(response.ContentType, @"charset=([\w\-]+)");
-                string charset = m.Groups[1].ToString().ToLower();
-                if (!string.IsNullOrEmpty(charset))
-                {
-                    if (charset == "utf-8")
+                    byte[] data = new byte[1024000];
+                    int length = 0;
+                    int cnt = 1;
+                    while (cnt > 0)
                     {
-                        encode = null;
+                        cnt = responseStream.Read(data, length, 1024000 - length);
+                        length += cnt;
                     }
-                    else if (charset == "gbk" || charset == "gb2312")
+                    Encoding ut = Encoding.UTF8;
+                    Encoding encode = this.encode;
+                    string charset = responseMessage.Content.Headers.ContentType.CharSet;
+                    if (!string.IsNullOrEmpty(charset))
                     {
-                        encode = gbk;
+                        if (charset == "utf-8")
+                        {
+                            encode = null;
+                        }
+                        else if (charset == "gbk" || charset == "gb2312")
+                        {
+                            encode = gbk;
+                        }
+                    }
+
+                    if (encode != null)
+                    {
+                        byte[] utbyte = Encoding.Convert(encode, ut, data, 0, length);
+                        char[] utChars = new char[encode.GetCharCount(utbyte, 0, utbyte.Length)];
+                        ut.GetChars(utbyte, 0, utbyte.Length, utChars, 0);
+                        return new string(utChars);
+                    }
+                    else
+                    {
+                        char[] utChars = new char[ut.GetCharCount(data, 0, length)];
+                        ut.GetChars(data, 0, length, utChars, 0);
+                        return new string(utChars);
                     }
                 }
-                if (encode != null)
+                catch (HttpRequestException e)
                 {
-                    byte[] utbyte = Encoding.Convert(encode, ut, data, 0, length);
-                    char[] utChars = new char[encode.GetCharCount(utbyte, 0, utbyte.Length)];
-                    ut.GetChars(utbyte, 0, utbyte.Length, utChars, 0);
-                    string res = new string(utChars);
-                    return res;
+
                 }
-                else
-                {
-                    char[] utChars = new char[ut.GetCharCount(data, 0, length)];
-                    ut.GetChars(data, 0, length, utChars, 0);
-                    string res = new string(utChars);
-                    return res;
-                }
-            }).AsAsyncOperation();
+
+                return string.Empty;
+            }
         }
 
         public string GetEncoding(string wgg)
