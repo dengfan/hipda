@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
+using Windows.UI.Popups;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
 
@@ -43,15 +44,14 @@ namespace hipda
             }
         }
 
-        public async Task<string> GetAsync(string url, Action<string> cancelHandler)
+        public async Task<string> GetAsync(string url)
         {
             var result = string.Empty;
+            var cts = new CancellationTokenSource();
 
-            using (var client = new HttpClient())
+            try
             {
-                var cts = new CancellationTokenSource();
-
-                try
+                using (var client = new HttpClient())
                 {
                     // 在异步任务中加入进度监控
                     var response = await client.GetAsync(new Uri(url)).AsTask(cts.Token);
@@ -59,27 +59,25 @@ namespace hipda
                     byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
                     result = gbk.GetString(bytes, 0, bytes.Length);
                 }
-                catch (Exception ex)
-                {
-                    cts.Cancel();
-                    cancelHandler(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                cts.Cancel();
+                await new MessageDialog(ex.Message + "\n\n请尝试刷新或检查网络连接是否正常！", "GET请求失败").ShowAsync();
             }
 
             return result;
         }
 
-        public async Task<string> PostAsync(string url, IDictionary<string, object> toPost, Action<string> cancelHandler)
+        public async Task<string> PostAsync(string url, IDictionary<string, object> toPost)
         {
             var result = string.Empty;
+            string postData = GetQueryString(toPost);
+            var cts = new CancellationTokenSource();
 
-            using (var client = new HttpClient())
+            try
             {
-                string postData = GetQueryString(toPost);
-
-                var cts = new CancellationTokenSource();
-
-                try
+                using (var client = new HttpClient())
                 {
                     var httpContent = new HttpStringContent(postData, Windows.Storage.Streams.UnicodeEncoding.Utf8);
                     httpContent.Headers.ContentType.MediaType = "application/x-www-form-urlencoded";
@@ -89,25 +87,24 @@ namespace hipda
                     byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
                     result = gbk.GetString(bytes, 0, bytes.Length);
                 }
-                catch (Exception ex)
-                {
-                    cts.Cancel();
-                    cancelHandler(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                cts.Cancel();
+                await new MessageDialog(ex.Message + "\n\n请尝试刷新或检查网络连接是否正常！", "POST请求失败").ShowAsync();
             }
 
             return result;
         }
 
-        public async Task<string> PostFileAsync(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer, Action<string> cancelHandler)
+        public async Task<string> PostFileAsync(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer)
         {
             var result = string.Empty;
+            var cts = new CancellationTokenSource();
 
-            using (var client = new HttpClient())
+            try
             {
-                var cts = new CancellationTokenSource();
-
-                try
+                using (var client = new HttpClient())
                 {
                     string boundary = "---------------------" + DateTime.Now.Ticks.ToString("x");
 
@@ -126,13 +123,13 @@ namespace hipda
                     byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
                     result = gbk.GetString(bytes, 0, bytes.Length);
                 }
-                catch (Exception ex)
-                {
-                    cts.Cancel();
-                    cancelHandler(ex.Message);
-                }
             }
-
+            catch (Exception ex)
+            {
+                cts.Cancel();
+                await new MessageDialog(ex.Message + "\n\n请尝试刷新或检查网络连接是否正常！", "POSTFILE请求失败").ShowAsync();
+            }
+            
             return result;
         }
 
