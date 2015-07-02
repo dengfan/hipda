@@ -84,7 +84,7 @@ namespace hipda.Settings
             postData.Add("questionid", questionId);
             postData.Add("answer", answer);
 
-            string resultContent = await httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
+            string resultContent = await httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData, DataSource.cancelHandler);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();

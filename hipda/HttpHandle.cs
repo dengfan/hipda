@@ -3,304 +3,182 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using Windows.Storage.Streams;
+using Windows.Web.Http;
+using Windows.Web.Http.Filters;
 
 namespace hipda
 {
-    class HttpHandle
+    public class HttpHandle
     {
-        private CookieContainer cookieContainer = new CookieContainer();
-        private Encoding encode = null;
         private Encoding gbk = null;
         private static HttpHandle instance = null;
-
-        public static HttpHandle getInstance()
-        {
-            if (instance == null)
-            {
-                instance = new HttpHandle();
-                instance.setEncoding("gb2312");
-            }
-
-            return instance;
-        }
 
         public HttpHandle()
         {
             gbk = DBCSEncoding.GetDBCSEncoding("gb2312");
         }
 
-        public void setEncoding(string code)
+        public static HttpHandle getInstance()
         {
-            if (code == "gbk" || code == "gb2312") encode = DBCSEncoding.GetDBCSEncoding("gb2312");
-            else encode = null;
-        }
-
-        public bool HasCookies
-        {
-            get
+            if (instance == null)
             {
-                return cookieContainer.Count > 0;
+                instance = new HttpHandle();
             }
+
+            return instance;
         }
 
         public void ClearCookies()
         {
-            cookieContainer = new CookieContainer();
-        }
-        
-        public async Task<string> GetAsync(string url)
-        {
-            var handler = new HttpClientHandler();
-            handler.CookieContainer = cookieContainer;
-            if (handler.SupportsAutomaticDecompression)
+            var filter = new HttpBaseProtocolFilter();
+            var cookieCollection = filter.CookieManager.GetCookies(new Uri("http://www.hi-pda.com"));
+            foreach (var item in cookieCollection)
             {
-                handler.AutomaticDecompression = DecompressionMethods.GZip;
-            }
-
-            // Create a New HttpClient object.
-            using (var client = new HttpClient(handler))
-            {
-                // Call asynchronous network methods in a try/catch block to handle exceptions 
-                try
-                {
-                    HttpResponseMessage responseMessage = await client.GetAsync(url);
-                    Stream responseStream = await responseMessage.Content.ReadAsStreamAsync();
-
-                    byte[] data = new byte[1024000];
-                    int length = 0;
-                    int cnt = 1;
-                    while (cnt > 0)
-                    {
-                        cnt = responseStream.Read(data, length, 1024000 - length);
-                        length += cnt;
-                    }
-                    Encoding ut = Encoding.UTF8;
-                    Encoding encode = this.encode;
-                    string charset = responseMessage.Content.Headers.ContentType.CharSet;
-                    if (!string.IsNullOrEmpty(charset))
-                    {
-                        charset = charset.ToLower();
-                        if (charset == "utf-8")
-                        {
-                            encode = null;
-                        }
-                        else if (charset == "gbk" || charset == "gb2312")
-                        {
-                            encode = gbk;
-                        }
-                    }
-                    if (encode != null)
-                    {
-                        byte[] utbyte = Encoding.Convert(encode, ut, data, 0, length);
-                        char[] utChars = new char[encode.GetCharCount(utbyte, 0, utbyte.Length)];
-                        ut.GetChars(utbyte, 0, utbyte.Length, utChars, 0);
-                        string res = new string(utChars);
-                        return res;
-                    }
-                    else
-                    {
-                        char[] utChars = new char[ut.GetCharCount(data, 0, length)];
-                        ut.GetChars(data, 0, length, utChars, 0);
-                        string res = new string(utChars);
-                        return res;
-                    }
-                }
-                catch (HttpRequestException e)
-                {
-
-                }
-
-                return string.Empty;
+                filter.CookieManager.DeleteCookie(item);
             }
         }
 
-        public async Task<string> PostAsync(string url, IDictionary<string, object> toPost)
+        public async Task<string> GetAsync(string url, Action<string> cancelHandler)
         {
-            var handler = new HttpClientHandler();
-            handler.CookieContainer = cookieContainer;
-            if (handler.SupportsAutomaticDecompression)
-            {
-                handler.AutomaticDecompression = DecompressionMethods.GZip;
-            }
+            var result = string.Empty;
 
-            // Create a New HttpClient object.
-            using (var client = new HttpClient(handler))
+            using (var client = new HttpClient())
             {
-                // Call asynchronous network methods in a try/catch block to handle exceptions 
+                var cts = new CancellationTokenSource();
+
                 try
                 {
-                    string postData = string.Empty;
-                    bool first = true;
-                    foreach (KeyValuePair<string, object> kvp in toPost)
-                    {
-                        if (first)
-                        {
-                            first = false;
-                            postData += GetEncoding(kvp.Key) + "=" + GetEncoding(kvp.Value.ToString());
-                        }
-                        else
-                        {
-                            postData += "&" + GetEncoding(kvp.Key) + "=" + GetEncoding(kvp.Value.ToString());
-                        }
-                    }
-                    HttpContent httpContent = new StringContent(postData, Encoding.UTF8);
+                    // 在异步任务中加入进度监控
+                    var response = await client.GetAsync(new Uri(url)).AsTask(cts.Token);
+                    var buf = await response.Content.ReadAsBufferAsync();
+                    byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
+                    result = gbk.GetString(bytes, 0, bytes.Length);
+                }
+                catch (Exception ex)
+                {
+                    cts.Cancel();
+                    cancelHandler(ex.Message);
+                }
+            }
 
-                    //var dic = new Dictionary<string, string>();
-                    //foreach (var item in toPost)
-                    //{
-                    //    dic.Add(item.Key, item.Value.ToString());
-                    //}
-                    //HttpContent httpContent = new FormUrlEncodedContent(dic);
+            return result;
+        }
 
+        public async Task<string> PostAsync(string url, IDictionary<string, object> toPost, Action<string> cancelHandler)
+        {
+            var result = string.Empty;
+
+            using (var client = new HttpClient())
+            {
+                string postData = GetQueryString(toPost);
+
+                var cts = new CancellationTokenSource();
+
+                try
+                {
+                    var httpContent = new HttpStringContent(postData, Windows.Storage.Streams.UnicodeEncoding.Utf8);
                     httpContent.Headers.ContentType.MediaType = "application/x-www-form-urlencoded";
-                    HttpResponseMessage responseMessage = await client.PostAsync(url, httpContent);
-                    Stream responseStream = await responseMessage.Content.ReadAsStreamAsync();
 
-                    byte[] data = new byte[1024000];
-                    int length = 0;
-                    int cnt = 1;
-                    while (cnt > 0)
-                    {
-                        cnt = responseStream.Read(data, length, 1024000 - length);
-                        length += cnt;
-                    }
-                    Encoding ut = Encoding.UTF8;
-                    Encoding encode = this.encode;
-                    string charset = responseMessage.Content.Headers.ContentType.CharSet;
-                    if (!string.IsNullOrEmpty(charset))
-                    {
-                        if (charset == "utf-8")
-                        {
-                            encode = null;
-                        }
-                        else if (charset == "gbk" || charset == "gb2312")
-                        {
-                            encode = gbk;
-                        }
-                    }
-
-                    if (encode != null)
-                    {
-                        byte[] utbyte = Encoding.Convert(encode, ut, data, 0, length);
-                        char[] utChars = new char[encode.GetCharCount(utbyte, 0, utbyte.Length)];
-                        ut.GetChars(utbyte, 0, utbyte.Length, utChars, 0);
-                        return new string(utChars);
-                    }
-                    else
-                    {
-                        char[] utChars = new char[ut.GetCharCount(data, 0, length)];
-                        ut.GetChars(data, 0, length, utChars, 0);
-                        return new string(utChars);
-                    }
+                    var response = await client.PostAsync(new Uri(url), httpContent).AsTask(cts.Token);
+                    var buf = await response.Content.ReadAsBufferAsync();
+                    byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
+                    result = gbk.GetString(bytes, 0, bytes.Length);
                 }
-                catch (HttpRequestException e)
+                catch (Exception ex)
                 {
-
+                    cts.Cancel();
+                    cancelHandler(ex.Message);
                 }
-
-                return string.Empty;
             }
+
+            return result;
         }
 
-        public async Task<string> HttpPostFile(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer)
+        public async Task<string> PostFileAsync(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer, Action<string> cancelHandler)
         {
-            var handler = new HttpClientHandler();
-            handler.CookieContainer = cookieContainer;
-            if (handler.SupportsAutomaticDecompression)
-            {
-                handler.AutomaticDecompression = DecompressionMethods.GZip;
-            }
+            var result = string.Empty;
 
-            // Create a New HttpClient object.
-            using (var client = new HttpClient(handler))
+            using (var client = new HttpClient())
             {
-                // Call asynchronous network methods in a try/catch block to handle exceptions 
+                var cts = new CancellationTokenSource();
+
                 try
                 {
                     string boundary = "---------------------" + DateTime.Now.Ticks.ToString("x");
 
-                    var httpContent = new MultipartFormDataContent(boundary);
+                    var httpContent = new HttpMultipartFormDataContent(boundary);
 
                     foreach (var item in toPost)
                     {
-                        httpContent.Add(new StringContent(item.Value.ToString(), Encoding.UTF8), item.Key);
+                        httpContent.Add(new HttpStringContent(item.Value.ToString(), Windows.Storage.Streams.UnicodeEncoding.Utf8), item.Key);
                     }
 
-                    var imageContent = new ByteArrayContent(buffer);
+                    var imageContent = new HttpBufferContent(WindowsRuntimeBufferExtensions.AsBuffer(buffer));
                     httpContent.Add(imageContent, fieldname, filename);
 
-                    HttpResponseMessage responseMessage = await client.PostAsync(url, httpContent);
-                    Stream responseStream = await responseMessage.Content.ReadAsStreamAsync();
-
-                    byte[] data = new byte[1024000];
-                    int length = 0;
-                    int cnt = 1;
-                    while (cnt > 0)
-                    {
-                        cnt = responseStream.Read(data, length, 1024000 - length);
-                        length += cnt;
-                    }
-                    Encoding ut = Encoding.UTF8;
-                    Encoding encode = this.encode;
-                    string charset = responseMessage.Content.Headers.ContentType.CharSet;
-                    if (!string.IsNullOrEmpty(charset))
-                    {
-                        if (charset == "utf-8")
-                        {
-                            encode = null;
-                        }
-                        else if (charset == "gbk" || charset == "gb2312")
-                        {
-                            encode = gbk;
-                        }
-                    }
-
-                    if (encode != null)
-                    {
-                        byte[] utbyte = Encoding.Convert(encode, ut, data, 0, length);
-                        char[] utChars = new char[encode.GetCharCount(utbyte, 0, utbyte.Length)];
-                        ut.GetChars(utbyte, 0, utbyte.Length, utChars, 0);
-                        return new string(utChars);
-                    }
-                    else
-                    {
-                        char[] utChars = new char[ut.GetCharCount(data, 0, length)];
-                        ut.GetChars(data, 0, length, utChars, 0);
-                        return new string(utChars);
-                    }
+                    var response = await client.PostAsync(new Uri(url), httpContent).AsTask(cts.Token);
+                    var buf = await response.Content.ReadAsBufferAsync();
+                    byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
+                    result = gbk.GetString(bytes, 0, bytes.Length);
                 }
-                catch (HttpRequestException e)
+                catch (Exception ex)
                 {
-
+                    cts.Cancel();
+                    cancelHandler(ex.Message);
                 }
-
-                return string.Empty;
             }
+
+            return result;
         }
 
-        public string GetEncoding(string wgg)
+        /// <summary>
+        /// 将字典数据转换为QueryString
+        /// </summary>
+        /// <param name="toPost">字典数据</param>
+        /// <returns>QueryString</returns>
+        public string GetQueryString(IDictionary<string, object> toPost)
         {
-            if (encode != null)
+            string queryStr = string.Empty;
+
+            bool first = true;
+            foreach (var item in toPost)
             {
-                Encoding ut = Encoding.UTF8;
-                byte[] utbyte = ut.GetBytes(wgg);
-                byte[] gbbyte = Encoding.Convert(ut, encode, utbyte);
-                byte[] enn = WebUtility.UrlEncodeToBytes(gbbyte, 0, gbbyte.Length);
-                char[] gbChars = new char[ut.GetCharCount(enn, 0, enn.Length)];
-                ut.GetChars(enn, 0, enn.Length, gbChars, 0);
-                string res = new string(gbChars);
-                return res;
+                if (first)
+                {
+                    first = false;
+                    queryStr += GetEncoding(item.Key.Trim()) + "=" + GetEncoding(item.Value.ToString().Trim());
+                }
+                else
+                {
+                    queryStr += "&" + GetEncoding(item.Key.Trim()) + "=" + GetEncoding(item.Value.ToString().Trim());
+                }
             }
-            else
-            {
-                return WebUtility.UrlEncode(wgg);
-            }
+
+            return queryStr;
+        }
+
+        /// <summary>
+        /// 将字符串由UTF8转为GB2312，再进行UrlEncode编码
+        /// 用于POST中文字符数据
+        /// </summary>
+        /// <param name="str">要编码的字符串</param>
+        /// <returns>编码后的字符串</returns>
+        public string GetEncoding(string str)
+        {
+            Encoding ut = Encoding.UTF8;
+            var gb = DBCSEncoding.GetDBCSEncoding("gb2312");
+            byte[] utbyte = ut.GetBytes(str);
+            byte[] gbbyte = Encoding.Convert(ut, gb, utbyte);
+            byte[] enn = WebUtility.UrlEncodeToBytes(gbbyte, 0, gbbyte.Length);
+            char[] gbChars = new char[ut.GetCharCount(enn, 0, enn.Length)];
+            ut.GetChars(enn, 0, enn.Length, gbChars, 0);
+            string result = new string(gbChars);
+            return result;
         }
     }
 }
