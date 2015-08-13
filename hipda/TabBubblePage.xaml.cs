@@ -1057,7 +1057,7 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             if (postNewPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
             {
                 NavigationHelper.IsCanGoBack = false;
-                //e.Handled = true;
+                e.Handled = true;
 
                 if (currentEditType == EnumEditType.Add)
                 {
@@ -1071,14 +1071,14 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             else if (postReplyPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
             {
                 NavigationHelper.IsCanGoBack = false;
-                //e.Handled = true;
+                e.Handled = true;
 
                 HidePostReplyPanelAndButton();
             }
             else if (floorOriginalContentPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
             {
                 NavigationHelper.IsCanGoBack = false;
-                //e.Handled = true;
+                e.Handled = true;
 
                 floorOriginalContentPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
@@ -1090,12 +1090,11 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
                 if (Pivot.SelectedIndex > 0)
                 {
                     NavigationHelper.IsCanGoBack = false;
-                    //e.Handled = true;
+                    e.Handled = true;
                     Pivot.SelectedIndex = 0;
                 }
                 else
                 {
-                    NavigationHelper.IsCanGoBack = true;
                     if (NavigationHelper.GoBackCommand.CanExecute(null))
                     {
                         NavigationHelper.GoBackCommand.Execute(null);
