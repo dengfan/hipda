@@ -30,7 +30,6 @@ namespace hipda
 {
     public sealed partial class TabPlainPage : Page, IFileOpenPickerContinuable
     {
-        StatusBar statusBar = StatusBar.GetForCurrentView();
         HttpHandle httpClient = HttpHandle.getInstance();
 
         // 最后发布消息时间，用于限制发布速度（30秒限制）
@@ -78,7 +77,12 @@ namespace hipda
         private void ThemeClassic()
         {
             tabPage.RequestedTheme = ElementTheme.Light;
-            statusBar.BackgroundColor = Colors.Purple;
+
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar statusBar = StatusBar.GetForCurrentView();
+                statusBar.BackgroundColor = Colors.Purple;
+            }
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
@@ -97,7 +101,12 @@ namespace hipda
         private void ThemeDark()
         {
             tabPage.RequestedTheme = ElementTheme.Dark;
-            statusBar.BackgroundColor = Colors.Black;
+
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar statusBar = StatusBar.GetForCurrentView();
+                statusBar.BackgroundColor = Colors.Black;
+            }
             
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
@@ -116,7 +125,12 @@ namespace hipda
         private void ThemeGrayBlue()
         {
             tabPage.RequestedTheme = ElementTheme.Dark;
-            statusBar.BackgroundColor = Colors.DarkRed;
+
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar statusBar = StatusBar.GetForCurrentView();
+                statusBar.BackgroundColor = Colors.DarkRed;
+            }
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 118, 121, 125);
@@ -135,7 +149,12 @@ namespace hipda
         private void ThemeDarkBlue()
         {
             tabPage.RequestedTheme = ElementTheme.Light;
-            statusBar.BackgroundColor = Color.FromArgb(255, 138, 107, 121);
+
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar statusBar = StatusBar.GetForCurrentView();
+                statusBar.BackgroundColor = Color.FromArgb(255, 138, 107, 121);
+            }
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
@@ -161,7 +180,11 @@ namespace hipda
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
-            Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            {
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            }
 
             switch (App.ThemeId)
             {
@@ -481,8 +504,11 @@ namespace hipda
             string navText = navTextContainer.ToString();
             navText = navText.Substring(0, navText.Length - 1);
 
-            StatusBar.GetForCurrentView().ProgressIndicator.Text = string.Format("{0} > {1}", accountName, navText);
-            await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar.GetForCurrentView().ProgressIndicator.Text = string.Format("{0} > {1}", accountName, navText);
+                await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
+            }
             #endregion
         }
 

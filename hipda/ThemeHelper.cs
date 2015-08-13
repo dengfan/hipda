@@ -28,7 +28,10 @@ namespace hipda
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Gainsboro;
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
 
-            StatusBar.GetForCurrentView().BackgroundColor = Colors.Purple;
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar.GetForCurrentView().BackgroundColor = Colors.Purple;
+            }
         }
 
         public static void Light2()
@@ -41,7 +44,10 @@ namespace hipda
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Gainsboro;
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
 
-            StatusBar.GetForCurrentView().BackgroundColor = Colors.Purple;
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar.GetForCurrentView().BackgroundColor = Colors.Purple;
+            }
         }
 
         public static void Dark1()
@@ -54,7 +60,10 @@ namespace hipda
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 32, 32, 32);
             ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
 
-            StatusBar.GetForCurrentView().BackgroundColor = Color.FromArgb(255, 94, 0, 94);
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar.GetForCurrentView().BackgroundColor = Color.FromArgb(255, 94, 0, 94);
+            }
         }
     }
 }

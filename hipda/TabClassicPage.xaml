@@ -119,8 +119,8 @@
                         <TextBlock x:Name="ownerInfoTextBlock"
                                    TextWrapping="WrapWholeWords"
                                    HorizontalAlignment="Left"
-                                   Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}">
-                            <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                                  >
+                            <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontFamily="Global User Interface" />
                             <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
                         </TextBlock>
 
@@ -128,11 +128,11 @@
                             <Run x:Name="pictureIconTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
                             <Run x:Name="pagerclipTextBlockRun" FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
                             <Run x:Name="titleTextBlockRun" Text="{Binding Title}" />
-                            <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource PhoneAccentBrush}" />
+                            <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                         </TextBlock>
 
                         <TextBlock Pivot.SlideInAnimationGroup="GroupOne" HorizontalAlignment="Right"
-                                   Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
+                                  
                                    FontFamily="Global User Interface">
                             <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
                             <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
@@ -164,14 +164,14 @@
                 <Border x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 
                 <StackPanel Grid.Row="0" Grid.Column="1">
-                    <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}">
-                        <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource PhoneAccentBrush}" FontFamily="Global User Interface" />
+                    <TextBlock >
+                        <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontFamily="Global User Interface" />
                         <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
                     </TextBlock>
                     <Button x:Name="menuButton" MinHeight="24">
                         <Button.Template>
                             <ControlTemplate>
-                                <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}" FontFamily="Global User Interface">
+                                <TextBlock  FontFamily="Global User Interface">
                                     <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
                                 </TextBlock>
                             </ControlTemplate>
@@ -187,7 +187,7 @@
                     </Button>
                 </StackPanel>
 
-                <TextBlock Grid.Row="0" Grid.Column="2" x:Name="floorNoTextBlock" HorizontalAlignment="Right" Style="{StaticResource ListViewItemSubheaderTextBlockStyle}" Text="{Binding FloorNumStr}" />
+                <TextBlock Grid.Row="0" Grid.Column="2" x:Name="floorNoTextBlock" HorizontalAlignment="Right"  Text="{Binding FloorNumStr}" />
 
                 <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
                     <TextBlock x:Name="threadTitleTextBlock" Style="{StaticResource Text1Style}" Margin="0,3,0,8" FontWeight="Bold" Visibility="Collapsed" />
@@ -1092,7 +1092,7 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                             <Border x:Name="BorderElement" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Row="1"/>
-                            <ContentPresenter x:Name="HeaderContentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Margin="{ThemeResource TextControlHeaderMarginThemeThickness}" Grid.Row="0" Style="{StaticResource HeaderContentPresenterStyle}"/>
+                            <ContentPresenter x:Name="HeaderContentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Row="0"/>
                             <ScrollViewer x:Name="ContentElement" AutomationProperties.AccessibilityView="Raw" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" IsTabStop="False" IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}" IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" Margin="{TemplateBinding BorderThickness}" MinHeight="{ThemeResource TextControlThemeMinHeight}" Padding="{TemplateBinding Padding}" Grid.Row="1" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="Disabled"/>
                             <ContentControl x:Name="PlaceholderTextContentPresenter" Content="{TemplateBinding PlaceholderText}" Foreground="{ThemeResource TextBoxPlaceholderTextThemeBrush}" FontSize="{ThemeResource ContentControlFontSize}" IsTabStop="False" Margin="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" Grid.Row="1"/>
                         </Grid>
@@ -1108,7 +1108,7 @@
                SelectionChanged="Pivot_SelectionChanged">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{ThemeResource TextStyleExtraExtraLargeFontSize}" Visibility="Collapsed" />
+                    <TextBlock Text="{Binding}" Visibility="Collapsed" />
                 </DataTemplate>
             </Pivot.HeaderTemplate>
         </Pivot>
@@ -1197,7 +1197,7 @@
                         <Flyout FlyoutPresenterStyle="{StaticResource SearchFlyoutWrapStyle}">
                             <StackPanel Margin="20">
                                 <TextBox x:Name="txtKeyword" TabIndex="1" Header="请输入关键字" KeyDown="txtKeyword_KeyDown" />
-                                <TextBlock Text="注：点击底部刷新按钮即可清除搜索结果并返回。" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" />
+                                <TextBlock Text="注：点击底部刷新按钮即可清除搜索结果并返回。" />
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>

@@ -67,7 +67,6 @@ namespace hipda
             replyProgressBar.Visibility = Visibility.Collapsed;
 
             // 刷新顶部状态栏
-            StatusBar statusBar = StatusBar.GetForCurrentView();
             Account account = AccountSettings.GetDefault();
             string accountName = account != null ? account.Username : "未登录";
             if (accountName.Length > 3)
@@ -75,8 +74,12 @@ namespace hipda
                 accountName = string.Format("{0}*{1}", accountName.Substring(0, 2), accountName.Last());
             }
 
-            statusBar.ProgressIndicator.Text = string.Format("Hi!PDA > {0}", accountName);
-            await statusBar.ProgressIndicator.ShowAsync();
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                StatusBar statusBar = StatusBar.GetForCurrentView();
+                statusBar.ProgressIndicator.Text = string.Format("Hi!PDA > {0}", accountName);
+                await statusBar.ProgressIndicator.ShowAsync();
+            }
         }
 
         /// <summary>

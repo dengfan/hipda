@@ -20,7 +20,7 @@
             <GroupStyle x:Key="listViewGroupStyle" HeaderContainerStyle="{StaticResource GroupHeaderStyle}">
                 <GroupStyle.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}" Style="{StaticResource GroupHeaderTextBlockStyle}" />
+                        <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
                 </GroupStyle.HeaderTemplate>
             </GroupStyle>

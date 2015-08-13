@@ -116,7 +116,7 @@ namespace hipda
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                this.DebugSettings.EnableFrameRateCounter = true;
+                this.DebugSettings.EnableFrameRateCounter = false;
             }
 #endif
 
@@ -202,73 +202,76 @@ namespace hipda
             // 确保当前窗口处于活动状态。
             Window.Current.Activate();
 
-            StatusBar statusBar = StatusBar.GetForCurrentView();
-
-            switch (layoutModeId)
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                case 0: // 经典模式
-                    switch (ThemeId)
-                    {
-                        case 0:
-                            statusBar.BackgroundColor = Colors.Purple;
-                            break;
-                        case 1:
-                            statusBar.BackgroundColor = Colors.Black;
-                            break;
-                        case 2:
-                            statusBar.BackgroundColor = Colors.DarkRed;
-                            break;
-                        case 3:
-                            statusBar.BackgroundColor = Color.FromArgb(255, 138, 107, 121);
-                            break;
-                    }
-                    break;
-                case 1: // 纯文本模式
-                    switch (ThemeId)
-                    {
-                        case 0:
-                            statusBar.BackgroundColor = Colors.Purple;
-                            break;
-                        case 1:
-                            statusBar.BackgroundColor = Colors.Black;
-                            break;
-                        case 2:
-                            statusBar.BackgroundColor = Colors.DarkRed;
-                            break;
-                        case 3:
-                            statusBar.BackgroundColor = Color.FromArgb(255, 138, 107, 121);
-                            break;
-                    }
-                    break;
-                case 2: // 气泡模式
-                    switch (ThemeId)
-                    {
-                        case 0:
-                            statusBar.BackgroundColor = Colors.Purple;
-                            break;
-                        case 1:
-                            statusBar.BackgroundColor = Colors.Black;
-                            break;
-                        case 2:
-                            statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
-                            break;
-                        case 3:
-                            statusBar.BackgroundColor = Color.FromArgb(255, 7, 18, 40);
-                            break;
-                    }
-                    break;
-            }
-            
+                StatusBar statusBar = StatusBar.GetForCurrentView();
 
-            statusBar.BackgroundOpacity = 255;
-            statusBar.ForegroundColor = Colors.White;
-            statusBar.ProgressIndicator.ProgressValue = 0;
-            await statusBar.ShowAsync();
+                switch (layoutModeId)
+                {
+                    case 0: // 经典模式
+                        switch (ThemeId)
+                        {
+                            case 0:
+                                statusBar.BackgroundColor = Colors.Purple;
+                                break;
+                            case 1:
+                                statusBar.BackgroundColor = Colors.Black;
+                                break;
+                            case 2:
+                                statusBar.BackgroundColor = Colors.DarkRed;
+                                break;
+                            case 3:
+                                statusBar.BackgroundColor = Color.FromArgb(255, 138, 107, 121);
+                                break;
+                        }
+                        break;
+                    case 1: // 纯文本模式
+                        switch (ThemeId)
+                        {
+                            case 0:
+                                statusBar.BackgroundColor = Colors.Purple;
+                                break;
+                            case 1:
+                                statusBar.BackgroundColor = Colors.Black;
+                                break;
+                            case 2:
+                                statusBar.BackgroundColor = Colors.DarkRed;
+                                break;
+                            case 3:
+                                statusBar.BackgroundColor = Color.FromArgb(255, 138, 107, 121);
+                                break;
+                        }
+                        break;
+                    case 2: // 气泡模式
+                        switch (ThemeId)
+                        {
+                            case 0:
+                                statusBar.BackgroundColor = Colors.Purple;
+                                break;
+                            case 1:
+                                statusBar.BackgroundColor = Colors.Black;
+                                break;
+                            case 2:
+                                statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
+                                break;
+                            case 3:
+                                statusBar.BackgroundColor = Color.FromArgb(255, 7, 18, 40);
+                                break;
+                        }
+                        break;
+                }
 
-            if (e.PreviousExecutionState == ApplicationExecutionState.NotRunning)
-            {
-                statusBar.ProgressIndicator.Text = string.Concat("Hi!PDA");
-                await statusBar.ProgressIndicator.ShowAsync();
+
+                statusBar.BackgroundOpacity = 255;
+                statusBar.ForegroundColor = Colors.White;
+                statusBar.ProgressIndicator.ProgressValue = 0;
+                await statusBar.ShowAsync();
+
+                if (e.PreviousExecutionState == ApplicationExecutionState.NotRunning)
+                {
+                    statusBar.ProgressIndicator.Text = string.Concat("Hi!PDA");
+                    await statusBar.ProgressIndicator.ShowAsync();
+                }
             }
         }
 
