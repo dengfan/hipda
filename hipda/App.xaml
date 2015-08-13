@@ -6,12 +6,6 @@
     xmlns:local="using:hipda">
     <Application.Resources>
         <ResourceDictionary>
-            
-            
-            
-            
-            
-            
             <!--home page style-->
             <Style x:Key="GroupHeaderStyle" TargetType="ListViewHeaderItem">
                 <Setter Property="Padding" Value="10,5"/>

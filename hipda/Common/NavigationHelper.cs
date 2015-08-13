@@ -77,6 +77,28 @@ namespace hipda.Common
             // 2) Handle hardware navigation requests
             this.Page.Loaded += (sender, e) =>
             {
+                // 在导航到每一页的时候，显示或隐藏后退按钮
+                if (this.IsCanGoBack)
+                {
+                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                }
+                else
+                {
+                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+                }
+
+                // 注册后退按钮事件，在程序启动时调用
+                //SystemNavigationManager.GetForCurrentView().BackRequested += (s, e2) =>
+                //{
+                //    if (this.IsCanGoBack)
+                //    {
+                //        if (this.GoBackCommand.CanExecute(null))
+                //        {
+                //            this.GoBackCommand.Execute(null);
+                //        }
+                //    }
+                //};
+
 #if WINDOWS_PHONE_APP
                 if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
                 {

@@ -1124,14 +1124,9 @@
     </Page.Resources>
 
     <Grid>
-        <Pivot x:Name="Pivot" Margin="0,-25,0,0"
+        <Pivot x:Name="Pivot"
                CommonNavigationTransitionInfo.IsStaggerElement="True" 
                SelectionChanged="Pivot_SelectionChanged">
-            <Pivot.HeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" Visibility="Collapsed" />
-                </DataTemplate>
-            </Pivot.HeaderTemplate>
         </Pivot>
 
         <Grid x:Name="floorOriginalContentPanel" Visibility="Collapsed">

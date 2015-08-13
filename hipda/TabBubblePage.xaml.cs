@@ -25,6 +25,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.Core;
 
 namespace hipda
 {
@@ -198,11 +199,6 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
 
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
-            {
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-            }
-
             switch (App.ThemeId)
             {
                 case 0:
@@ -227,6 +223,12 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
 
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            SystemNavigationManager.GetForCurrentView().BackRequested += TitleBackButton_BackRequested;
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            {
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            }
+
             #region 同步开关按钮之开关状态
             sortForThreadListButton.IsChecked = SortForThreadSettings.GetSortType.Equals("dateline");
             reverseListButton.IsChecked = SortForReplySettings.GetSortType == 1;
@@ -394,6 +396,12 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
 
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            SystemNavigationManager.GetForCurrentView().BackRequested -= TitleBackButton_BackRequested;
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            {
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+            }
+
             // 获取当前 pivot item 用于从墓碑状态恢复
             StringBuilder tabStr = new StringBuilder();
             int i = 0;
@@ -798,7 +806,7 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             var listView = new ListView
             {
                 Name = string.Format("threadsListView{0}", forumId),
-                Padding = new Thickness(10,20,10,0),
+                Padding = new Thickness(10, 0, 10, 0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = true,
                 ItemContainerStyle = ThreadItemStyle,
@@ -1042,6 +1050,62 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             ShowPostNewPanelAndButton();
 
             postNewTitleTextBox.Focus(FocusState.Programmatic);
+        }
+
+        private void TitleBackButton_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            if (postNewPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            {
+                NavigationHelper.IsCanGoBack = false;
+                //e.Handled = true;
+
+                if (currentEditType == EnumEditType.Add)
+                {
+                    HidePostNewPanelAndButton();
+                }
+                else if (currentEditType == EnumEditType.Modify)
+                {
+                    HidePostNewModifyPanelAndButton();
+                }
+            }
+            else if (postReplyPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            {
+                NavigationHelper.IsCanGoBack = false;
+                //e.Handled = true;
+
+                HidePostReplyPanelAndButton();
+            }
+            else if (floorOriginalContentPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            {
+                NavigationHelper.IsCanGoBack = false;
+                //e.Handled = true;
+
+                floorOriginalContentPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+                // 清空内容
+                webView.NavigateToString(string.Empty);
+            }
+            else
+            {
+                if (Pivot.SelectedIndex > 0)
+                {
+                    NavigationHelper.IsCanGoBack = false;
+                    //e.Handled = true;
+                    Pivot.SelectedIndex = 0;
+                }
+                else
+                {
+                    NavigationHelper.IsCanGoBack = true;
+                    if (NavigationHelper.GoBackCommand.CanExecute(null))
+                    {
+                        NavigationHelper.GoBackCommand.Execute(null);
+                    }
+                }
+            }
+
+            // 清除针对回复的数据
+            postReplyContentTextBox.Text = string.Empty;
+            noticeauthor = noticetrimstr = noticeauthormsg = string.Empty;
         }
 
         private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
