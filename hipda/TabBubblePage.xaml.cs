@@ -1097,10 +1097,16 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
                 }
                 else
                 {
-                    if (NavigationHelper.GoBackCommand.CanExecute(null))
-                    {
-                        NavigationHelper.GoBackCommand.Execute(null);
-                    }
+                    NavigationHelper.IsCanGoBack = true;
+                    
+                }
+            }
+
+            if (navigationHelper.IsCanGoBack)
+            {
+                if (NavigationHelper.GoBackCommand.CanExecute(null))
+                {
+                    NavigationHelper.GoBackCommand.Execute(null);
                 }
             }
 

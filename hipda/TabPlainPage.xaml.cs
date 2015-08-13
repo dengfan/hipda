@@ -860,10 +860,16 @@ namespace hipda
                 }
                 else
                 {
-                    if (NavigationHelper.GoBackCommand.CanExecute(null))
-                    {
-                        NavigationHelper.GoBackCommand.Execute(null);
-                    }
+                    NavigationHelper.IsCanGoBack = true;
+
+                }
+            }
+
+            if (navigationHelper.IsCanGoBack)
+            {
+                if (NavigationHelper.GoBackCommand.CanExecute(null))
+                {
+                    NavigationHelper.GoBackCommand.Execute(null);
                 }
             }
 
