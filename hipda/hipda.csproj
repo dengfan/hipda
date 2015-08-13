@@ -102,7 +102,6 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="ContinuationManager.cs" />
     <Compile Include="Settings\AccountSettings.cs" />
     <Compile Include="DataModel\DataSource.cs" />
     <Compile Include="DataModel\GeneratorIncrementalLoadingClass.cs">

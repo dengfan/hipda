@@ -1078,14 +1078,14 @@
             <Border x:Name="postPanelGrid" BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="25,0,25,0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-
-                    <TextBox x:Name="postReplyContentTextBox" Grid.Row="0" Style="{StaticResource TextBoxStyle1}" Margin="15,15,15,0" Height="300"
+                    <TextBox Grid.Row="0" x:Name="postReplyContentTextBox" Style="{StaticResource TextBoxStyle1}" Margin="15,15,15,0" Height="300"
                              BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容" />
-
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="{StaticResource Panel2BgColor}">
+                    <TextBlock Grid.Row="1" x:Name="uploadStateInfo" Padding="6" Text="点击 + 号可批量上传任何文件。" Foreground="Gray" TextWrapping="Wrap" />
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="{StaticResource Panel2BgColor}">
                         <ContentControl Template="{StaticResource imageFaceGrid}" />
                     </ScrollViewer>
                 </Grid>

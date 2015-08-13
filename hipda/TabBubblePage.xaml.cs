@@ -26,10 +26,12 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
+using Windows.Storage.Streams;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace hipda
 {
-    public sealed partial class TabBubblePage : Page, IFileOpenPickerContinuable
+    public sealed partial class TabBubblePage : Page
     {
         HttpHandle httpClient = HttpHandle.getInstance();
 
@@ -1161,6 +1163,8 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
 
         private async void sendButton_Click(object sender, RoutedEventArgs e)
         {
+            uploadStateInfo.Text = "点击 + 号可批量上传任何文件。";
+
             DateTime nowTime = DateTime.Now;
             TimeSpan ts = (nowTime - lastPostTime);
             if (ts.TotalSeconds <= 30)
@@ -1613,39 +1617,45 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             flyoutBase.ShowAt(senderElement);
         }
 
-        private void addPhotoButton_Click(object sender, RoutedEventArgs e)
+        private async void addPhotoButton_Click(object sender, RoutedEventArgs e)
         {
+            string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
+
             FileOpenPicker openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.Thumbnail;
             openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-            openPicker.FileTypeFilter.Add(".jpg");
-            openPicker.FileTypeFilter.Add(".jpeg");
-            openPicker.FileTypeFilter.Add(".png");
+            openPicker.FileTypeFilter.Add("*");
 
-            // Launch file open picker and caller app is suspended and may be terminated if required
-            openPicker.PickSingleFileAndContinue();
-        }
-
-        /// <summary>
-        /// Handle the returned files from file picker
-        /// This method is triggered by ContinuationManager based on ActivationKind
-        /// </summary>
-        /// <param name="args">File open picker continuation activation argment. It cantains the list of files user selected with file open picker </param>
-        public async void ContinueFileOpenPicker(FileOpenPickerContinuationEventArgs args)
-        {
-            if (args.Files.Count > 0)
+            var files = await openPicker.PickMultipleFilesAsync();
+            if (files != null)
             {
-                StorageFile file = args.Files[0];
-                if (file != null)
+                sendButton.IsEnabled = false;
+
+                int fileIndex = 1;
+                foreach (var file in files)
                 {
-                    imageNameList.Add(file.Name);
-                    byte[] image = await ImageHelper.LoadAsync(file);
+                    string fileName = file.Name;
+                    uploadStateInfo.Text = string.Format("请稍候，正在为您上传第 {0}/{1} 个文件（{2}）。", fileIndex, files.Count, fileName);
+                    imageNameList.Add(fileName);
+                    byte[] imageBuffer;
+
+                    if (deviceFamily.Equals("Windows.Mobile"))
+                    {
+                        imageBuffer = await ImageHelper.LoadAsync(file);
+                    }
+                    else
+                    {
+                        IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read);
+                        IBuffer buffer = new Windows.Storage.Streams.Buffer((uint)stream.Size);
+                        buffer = await stream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.None);
+                        imageBuffer = WindowsRuntimeBufferExtensions.ToArray(buffer, 0, (int)buffer.Length);
+                    }
 
                     var data = new Dictionary<string, object>();
                     data.Add("uid", DataSource.UserId);
                     data.Add("hash", DataSource.Hash);
-
-                    string result = await httpClient.PostFileAsync("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1&type=image", data, file.Name, "image/jpg", "Filedata", image);
+                    
+                    string result = await httpClient.PostFileAsync("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1&type=image", data, fileName, "image/jpg", "Filedata", imageBuffer);
                     if (result.Contains("DISCUZUPLOAD|"))
                     {
                         string value = result.Split('|')[2];
@@ -1680,8 +1690,13 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
                             int cursorPosition = postNewContentTextBox.SelectionStart + occurences;
                             postNewContentTextBox.Text = postNewContentTextBox.Text.Insert(cursorPosition, value);
                         }
+
+                        fileIndex++;
                     }
                 }
+
+                sendButton.IsEnabled = true;
+                uploadStateInfo.Text = string.Format("文件上传已完成，共上传 {0} 个文件。", files.Count);
             }
         }
 

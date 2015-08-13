@@ -25,10 +25,6 @@ namespace hipda
         public static int ThemeId = 0;
         private static int layoutModeId = 0;
 
-#if WINDOWS_PHONE_APP
-        ContinuationManager continuationManager;
-#endif
-
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
         /// 逻辑上等同于 main() 或 WinMain()。
@@ -91,15 +87,8 @@ namespace hipda
         {
             base.OnActivated(e);
 
-            continuationManager = new ContinuationManager();
-
             Frame rootFrame = CreateRootFrame();
             await RestoreStatusAsync(e.PreviousExecutionState);
-
-            //Check if this is a continuation
-            var continuationEventArgs = e as IContinuationActivatedEventArgs;
-            if (continuationEventArgs != null)
-                continuationManager.Continue(continuationEventArgs);
 
             Window.Current.Activate();
         }

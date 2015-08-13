@@ -17,7 +17,7 @@ namespace hipda
         {
             Stream stream = null;
             var property = await image.GetBasicPropertiesAsync();
-            if (property.Size > 307200)
+            if (property.Size > (307200 * 4))
             {
                 var data = await image.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.PicturesView);
                 stream = data.AsStreamForRead();
