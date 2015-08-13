@@ -1,31 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" IgnorableNamespaces="uap mp">
-  <Identity Name="63653AppxKing.HiPDA" Publisher="CN=5C7BFBCC-D6D6-4906-A546-DE530049BD46" Version="1.1.0.28" />
-  <mp:PhoneIdentity PhoneProductId="3bc4545e-7b5a-4680-91ba-786d9f63c44e" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+  <Identity Name="658a74dd-e8d0-49d8-8186-518e4c4fea7a" Publisher="CN=appxking" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="658a74dd-e8d0-49d8-8186-518e4c4fea7a" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>hipdauwplite</DisplayName>
-    <PublisherDisplayName>AppxKing</PublisherDisplayName>
+    <DisplayName>Hi!PDA UWP lite</DisplayName>
+    <PublisherDisplayName>appxking</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+  </Dependencies>
   <Resources>
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="hipda.App">
-      <uap:VisualElements DisplayName="Hi!PDA UWP lite" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="http://www.hi-pda.com/forum" BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\WideLogo.png" Square71x71Logo="Assets\Square71x71Logo.png">
+      <uap:VisualElements DisplayName="Hi!PDA UWP lite" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Hi!PDA UWP lite" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="Hi!PDA UWP lite">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="purple" />
-        <!--Used in XAML Designer. DO NOT REMOVE-->
       </uap:VisualElements>
     </Application>
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
-    <uap:Capability Name="documentsLibrary" />
     <uap:Capability Name="removableStorage" />
   </Capabilities>
-  <Dependencies>
-    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10069.0" MaxVersionTested="10.0.10069.0" />
-  </Dependencies>
 </Package>
