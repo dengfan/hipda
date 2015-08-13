@@ -78,7 +78,7 @@ namespace hipda.Common
             this.Page.Loaded += (sender, e) =>
             {
                 // 在导航到每一页的时候，显示或隐藏后退按钮
-                if (this.IsCanGoBack)
+                if (Frame.CanGoBack)
                 {
                     SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
                 }
