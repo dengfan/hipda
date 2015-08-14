@@ -29,9 +29,7 @@
         <SolidColorBrush x:Key="BorderColor" Color="LightGray"/>
 
         <Style x:Key="ForumItemStyle" TargetType="ListViewItem">
-            <Setter Property="Padding" Value="10" />
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="Margin" Value="8,4"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
 
@@ -47,11 +45,7 @@
                     <Run Text="{Binding Name}" />
                     <Run Text="{Binding TodayQuantity}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontWeight="Bold" />
                 </TextBlock>
-
-                <TextBlock
-                    Text="{Binding Info}"
-                   
-                    Pivot.SlideInAnimationGroup="GroupOne"/>
+                <TextBlock Text="{Binding Info}" Pivot.SlideInAnimationGroup="GroupOne" FontSize="11" Foreground="{ThemeResource ListViewItemPointerOverBackgroundThemeBrush}" TextWrapping="Wrap"/>
             </StackPanel>
         </DataTemplate>
 
@@ -70,20 +64,11 @@
              <CompositeTransform/>
              </Grid.RenderTransform>
              </Grid>-->
-        <Pivot x:Name="Pivot"
-               CommonNavigationTransitionInfo.IsStaggerElement="True">
-            <Pivot.HeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" />
-                </DataTemplate>
-            </Pivot.HeaderTemplate>
-            <PivotItem
-                Header="版区" 
-                CommonNavigationTransitionInfo.IsStaggerElement="True"
-                Margin="0">
+        <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
+            <PivotItem Header="版区" CommonNavigationTransitionInfo.IsStaggerElement="True" Margin="0">
                 <ListView
-                    Padding="10,0"
                     ItemsSource="{Binding Source={StaticResource cvsForumGroups}}"
+                    SelectionMode="None"
                     IsItemClickEnabled="True"
                     ItemClick="ForumItem_ItemClick"
                     ContinuumNavigationTransitionInfo.ExitElementContainer="True"
