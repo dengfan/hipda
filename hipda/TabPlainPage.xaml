@@ -1069,6 +1069,54 @@
                SelectionChanged="Pivot_SelectionChanged">
         </Pivot>
 
+        <Grid x:Name="floorOriginalContentPanel" Visibility="Collapsed">
+            <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
+            <Border BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="20,0,20,0" Padding="10,0,10,0">
+                <WebView x:Name="webView" />
+            </Border>
+        </Grid>
+
+        <Grid x:Name="postReplyPanel" Visibility="Collapsed">
+            <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
+            <Border x:Name="postPanelGrid" BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="20,0,20,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Row="0" x:Name="postReplyContentTextBox" Style="{StaticResource TextBoxStyle1}" Margin="0,10,0,0" Height="180"
+                             BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容" />
+                    <TextBlock Grid.Row="1" x:Name="uploadStateInfo" Padding="10" Text="点击 + 号图标可批量上传任何文件。" Foreground="Gray" TextWrapping="Wrap" />
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="{StaticResource Panel2BgColor}">
+                        <ContentControl Template="{StaticResource imageFaceGrid}" />
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid x:Name="postNewPanel" Visibility="Collapsed">
+            <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
+            <Border x:Name="postNewPanelGrid" BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="20,0,20,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBox x:Name="postNewTitleTextBox" Grid.Row="0" Style="{StaticResource TextBoxStyle1}" Margin="0,10,0,0" BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" PlaceholderText="编辑标题" />
+                    <TextBox x:Name="postNewContentTextBox" Grid.Row="1" Style="{StaticResource TextBoxStyle1}" Margin="0" Height="120"
+                             BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑内容" />
+                    <TextBlock Grid.Row="2" x:Name="uploadStateInfo2" Padding="10" Text="点击 + 号图标可批量上传任何文件。" Foreground="Gray" TextWrapping="Wrap" />
+                    <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="{StaticResource Panel2BgColor}">
+                        <ContentControl Template="{StaticResource imageFaceGrid}" />
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
         <CommandBar Grid.Row="0" x:Name="tabPageCommandBar" Background="{StaticResource CommandBarBgColor}">
             <!--贴子列表页底部按钮-->
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
@@ -1118,54 +1166,6 @@
                 <AppBarButton x:Name="openTabForApp" Label="说明及反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
-
-        <Grid x:Name="floorOriginalContentPanel" Visibility="Collapsed">
-            <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
-            <Border BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="20,0,20,0" Padding="10,0,10,0">
-                <WebView x:Name="webView" />
-            </Border>
-        </Grid>
-
-        <Grid x:Name="postReplyPanel" Visibility="Collapsed">
-            <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
-            <Border x:Name="postPanelGrid" BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="20,0,20,0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBox Grid.Row="0" x:Name="postReplyContentTextBox" Style="{StaticResource TextBoxStyle1}" Margin="0,10,0,0" Height="180"
-                             BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容" />
-                    <TextBlock Grid.Row="1" x:Name="uploadStateInfo" Padding="10" Text="点击 + 号图标可批量上传任何文件。" Foreground="Gray" TextWrapping="Wrap" />
-                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="{StaticResource Panel2BgColor}">
-                        <ContentControl Template="{StaticResource imageFaceGrid}" />
-                    </ScrollViewer>
-                </Grid>
-            </Border>
-        </Grid>
-
-        <Grid x:Name="postNewPanel" Visibility="Collapsed">
-            <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
-            <Border x:Name="postNewPanelGrid" BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="20,0,20,0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBox x:Name="postNewTitleTextBox" Grid.Row="0" Style="{StaticResource TextBoxStyle1}" Margin="0,10,0,0" BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" PlaceholderText="编辑标题" />
-                    <TextBox x:Name="postNewContentTextBox" Grid.Row="1" Style="{StaticResource TextBoxStyle1}" Margin="0" Height="120"
-                             BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑内容" />
-                    <TextBlock Grid.Row="2" x:Name="uploadStateInfo2" Padding="10" Text="点击 + 号图标可批量上传任何文件。" Foreground="Gray" TextWrapping="Wrap" />
-                    <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="{StaticResource Panel2BgColor}">
-                        <ContentControl Template="{StaticResource imageFaceGrid}" />
-                    </ScrollViewer>
-                </Grid>
-            </Border>
-        </Grid>
 
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
