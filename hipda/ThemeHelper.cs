@@ -29,7 +29,7 @@ namespace hipda
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                StatusBar.GetForCurrentView().BackgroundColor = Colors.Purple;
+                StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)r["SystemControlBackgroundAccentBrush"]).Color;
             }
         }
 
@@ -44,7 +44,7 @@ namespace hipda
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                StatusBar.GetForCurrentView().BackgroundColor = Colors.Purple;
+                StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)r["SystemControlBackgroundAccentBrush"]).Color;
             }
         }
 

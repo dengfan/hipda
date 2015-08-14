@@ -84,7 +84,7 @@ namespace hipda
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
                 StatusBar statusBar = StatusBar.GetForCurrentView();
-                statusBar.BackgroundColor = Colors.Purple;
+                statusBar.BackgroundColor = ((SolidColorBrush)this.Resources["SystemControlBackgroundAccentBrush"]).Color;
             }
 
             ResourceDictionary r = tabPage.Resources;

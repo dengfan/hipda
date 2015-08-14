@@ -1141,20 +1141,12 @@
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
             <AppBarToggleButton x:Name="sortForThreadListButton" Icon="Sort" Label="排序开关" Click="sortForThreadListButton_Click" Visibility="Collapsed" />
-            <AppBarButton x:Name="changeThemeButton" Label="样式切换" Click="changeThemeButton_Click" Visibility="Collapsed">
-                <AppBarButton.Icon>
-                    <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.moon.first.quarter.png" />
-                </AppBarButton.Icon>
-            </AppBarButton>
+            <AppBarButton x:Name="changeThemeButton" Icon="OtherUser" Label="样式切换" Click="changeThemeButton_Click" Visibility="Collapsed"/>
 
             <!--回复列表页底部按钮-->
             <AppBarButton x:Name="openPostReplyPanelButton" Icon="Edit" Label="评论" Click="openPostReplyPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="refreshRepliesButton" Icon="Refresh" Label="刷新" Click="refreshRepliesButton_Click" Visibility="Collapsed" />
-            <AppBarToggleButton x:Name="reverseListButton" Label="倒序看贴" Click="reverseListButton_Click" Visibility="Collapsed">
-                <AppBarToggleButton.Icon>
-                    <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.sort.numeric.descending.png" />
-                </AppBarToggleButton.Icon>
-            </AppBarToggleButton>
+            <AppBarToggleButton x:Name="reverseListButton" Icon="Filter" Label="倒序看贴" Click="reverseListButton_Click" Visibility="Collapsed"/>
 
             <!--发布信息状态之底部按钮-->
             <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />

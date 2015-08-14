@@ -201,7 +201,7 @@ namespace hipda
                         switch (ThemeId)
                         {
                             case 0:
-                                statusBar.BackgroundColor = Colors.Purple;
+                                statusBar.BackgroundColor = ((SolidColorBrush)this.Resources["SystemControlBackgroundAccentBrush"]).Color;
                                 break;
                             case 1:
                                 statusBar.BackgroundColor = Colors.Black;
@@ -218,7 +218,7 @@ namespace hipda
                         switch (ThemeId)
                         {
                             case 0:
-                                statusBar.BackgroundColor = Colors.Purple;
+                                statusBar.BackgroundColor = ((SolidColorBrush)this.Resources["SystemControlBackgroundAccentBrush"]).Color;
                                 break;
                             case 1:
                                 statusBar.BackgroundColor = Colors.Black;
@@ -235,7 +235,7 @@ namespace hipda
                         switch (ThemeId)
                         {
                             case 0:
-                                statusBar.BackgroundColor = Colors.Purple;
+                                statusBar.BackgroundColor = ((SolidColorBrush)this.Resources["SystemControlBackgroundAccentBrush"]).Color;
                                 break;
                             case 1:
                                 statusBar.BackgroundColor = Colors.Black;
