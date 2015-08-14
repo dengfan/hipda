@@ -179,7 +179,7 @@
                         </TextBlock>
                         <TextBlock x:Name="threadTitleTextBlock" Style="{StaticResource Text1Style}" Margin="0,3,0,8" FontWeight="Bold" Visibility="Collapsed" />
                         <ContentControl x:Name="replyContent" Style="{StaticResource ReplyContentFontStyle}" Foreground="{StaticResource MainFontColor}" />
-                        <Button x:Name="showMoreButton"
+                        <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Click="viewFullContentButton_Click" Visibility="Collapsed" />
                     </StackPanel>
