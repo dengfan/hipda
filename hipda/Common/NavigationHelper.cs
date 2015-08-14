@@ -87,18 +87,6 @@ namespace hipda.Common
                     SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
                 }
 
-                // 注册后退按钮事件，在程序启动时调用
-                //SystemNavigationManager.GetForCurrentView().BackRequested += (s, e2) =>
-                //{
-                //    if (this.IsCanGoBack)
-                //    {
-                //        if (this.GoBackCommand.CanExecute(null))
-                //        {
-                //            this.GoBackCommand.Execute(null);
-                //        }
-                //    }
-                //};
-
                 // 仅当占用整个窗口时，键盘和鼠标导航才适用
                 if (this.Page.ActualHeight == Window.Current.Bounds.Height &&
                     this.Page.ActualWidth == Window.Current.Bounds.Width)
