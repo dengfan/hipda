@@ -378,7 +378,7 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
                 {
                     ImageSource = new BitmapImage
                     {
-                        DecodePixelWidth = 60, // natural px width of image source
+                        DecodePixelWidth = 50, // natural px width of image source
                         UriSource = new Uri(thread.AvatarUrl)
                     }
                 };
@@ -539,7 +539,7 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             {
                 ImageSource = new BitmapImage
                 {
-                    DecodePixelWidth = 60, // natural px width of image source
+                    DecodePixelWidth = 50, // natural px width of image source
                     UriSource = new Uri(reply.AvatarUrl)
                 }
             };
@@ -548,7 +548,7 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
                 var imageBrush2 = sender2 as ImageBrush;
                 imageBrush2.ImageSource = new BitmapImage
                 {
-                    DecodePixelWidth = 60, // natural px width of image source
+                    DecodePixelWidth = 50, // natural px width of image source
                     UriSource = new Uri("ms-appx:///Assets/Faces/no_face.png")
                 };
             };
@@ -906,7 +906,7 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             var listView = new ListView
             {
                 Name = string.Format("repliesListView{0}", threadId),
-                Padding = new Thickness(10, 25, 10, 0),
+                Padding = new Thickness(10, 0, 10, 0),
                 ItemsSource = cvs.View,
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,
@@ -1169,7 +1169,8 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
 
         private async void sendButton_Click(object sender, RoutedEventArgs e)
         {
-            uploadStateInfo.Text = "点击 + 号可批量上传任何文件。";
+            uploadStateInfo.Text = "点击 + 号图标可批量上传任何文件。";
+            uploadStateInfo2.Text = "点击 + 号图标可批量上传任何文件。";
 
             DateTime nowTime = DateTime.Now;
             TimeSpan ts = (nowTime - lastPostTime);
@@ -1642,6 +1643,7 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
                 {
                     string fileName = file.Name;
                     uploadStateInfo.Text = string.Format("请稍候，正在为您上传第 {0}/{1} 个文件（{2}）。", fileIndex, files.Count, fileName);
+                    uploadStateInfo2.Text = string.Format("请稍候，正在为您上传第 {0}/{1} 个文件（{2}）。", fileIndex, files.Count, fileName);
                     imageNameList.Add(fileName);
                     byte[] imageBuffer;
 
@@ -1703,6 +1705,7 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
 
                 sendButton.IsEnabled = true;
                 uploadStateInfo.Text = string.Format("文件上传已完成，共上传 {0} 个文件。", files.Count);
+                uploadStateInfo2.Text = string.Format("文件上传已完成，共上传 {0} 个文件。", files.Count);
             }
         }
 

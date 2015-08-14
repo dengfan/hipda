@@ -8,11 +8,7 @@
     xmlns:data="using:hipda.Data"
     mc:Ignorable="d"
     x:Name="tabPage">
-    
-    <!--<Page.Background>
-        <ImageBrush ImageSource="Assets/bg1.jpg"/>
-    </Page.Background>-->
-    
+
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
@@ -47,13 +43,12 @@
         <Style x:Key="Text1Style" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{StaticResource MainFontColor}"/>
             <Setter Property="TextWrapping" Value="WrapWholeWords"/>
-            <Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
         </Style>
 
         <Style x:Key="FaceIconStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="30"/>
-            <Setter Property="Width" Value="60"/>
-            <Setter Property="Height" Value="60"/>
+            <Setter Property="CornerRadius" Value="25"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="50"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
             
@@ -96,13 +91,12 @@
         </Style>
 
         <Style x:Key="ChatBubbleStyle" TargetType="Border">
-            <Setter Property="Padding" Value="13"/>
+            <Setter Property="Padding" Value="10"/>
             <Setter Property="Background" Value="{StaticResource ItemBgColor}"/>
         </Style>
 
         <Style x:Key="ReplyContentFontStyle" TargetType="ContentControl">
             <Setter Property="Foreground" Value="DimGray"/>
-            <Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
         </Style>
         
         <Style x:Key="SearchFlyoutWrapStyle" TargetType="FlyoutPresenter">
@@ -113,14 +107,14 @@
         <DataTemplate x:Name="ThreadListItemTemplate">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="12"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Holding="user_Holding">
@@ -131,16 +125,13 @@
                     </FlyoutBase.AttachedFlyout>
                 </Border>
 
-                <Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 12,0 12,10" Fill="{StaticResource ItemBgColor}"/>
+                <Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 10,0 10,8" Fill="{StaticResource ItemBgColor}"/>
                 
                 <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
                     <StackPanel>
-                        <TextBlock x:Name="ownerInfoTextBlock"
-                                    TextWrapping="WrapWholeWords"
-                                    HorizontalAlignment="Left"
-                                    >
-                            <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontFamily="Global User Interface" />
-                            <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" FontFamily="Global User Interface" />
+                        <TextBlock x:Name="ownerInfoTextBlock" TextWrapping="WrapWholeWords" HorizontalAlignment="Left">
+                            <Run x:Name="ownerNameTextBlockRun" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            <Run x:Name="createTimeTextBlockRun" Text="{Binding CreateTime}" />
                         </TextBlock>
 
                         <TextBlock x:Name="titleTextBlock" FontWeight="Bold" Style="{StaticResource Text1Style}">
@@ -153,14 +144,12 @@
                 </Border>
 
                 <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Pivot.SlideInAnimationGroup="GroupOne" Opacity="0.5"
-                        Margin="0,12,0,2" Padding="8,2" HorizontalAlignment="Center" 
+                        Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" 
                         Background="{StaticResource ItemBgColor}"
-                        CornerRadius="12">
-                    <TextBlock 
-                                FontWeight="Bold"
-                                FontFamily="Global User Interface">
-                                <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
-                                <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
+                        CornerRadius="10">
+                    <TextBlock FontSize="11">
+                        <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
+                        <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
                     </TextBlock>
                 </Border>
             </Grid>
@@ -169,24 +158,24 @@
         <DataTemplate x:Name="ReplyListItemTemplate">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="10"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
 
-                <Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 12,0 12,10" Fill="{StaticResource ItemBgColor}"/>
+                <Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 10,0 10,8" Fill="{StaticResource ItemBgColor}"/>
 
                 <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
                     <StackPanel>
                         <TextBlock>
-                            <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontFamily="Global User Interface" />
+                            <Run x:Name="ownerNameTextBlock" Text="{Binding OwnerName}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                             <Run x:Name="createTimeTextBlock" Text="{Binding CreateTime}" />
                         </TextBlock>
                         <TextBlock x:Name="threadTitleTextBlock" Style="{StaticResource Text1Style}" Margin="0,3,0,8" FontWeight="Bold" Visibility="Collapsed" />
@@ -197,11 +186,11 @@
                     </StackPanel>
                 </Border>
 
-                <Button x:Name="menuButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" MinHeight="24" Pivot.SlideInAnimationGroup="GroupOne">
+                <Button x:Name="menuButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Pivot.SlideInAnimationGroup="GroupOne">
                     <Button.Template>
                         <ControlTemplate>
-                            <Border Opacity="0.5" Margin="0,12,0,2" Padding="8,2" HorizontalAlignment="Center" Background="{StaticResource ItemBgColor}" CornerRadius="12">
-                                <TextBlock HorizontalAlignment="Center" FontFamily="Global User Interface">
+                            <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="{StaticResource ItemBgColor}" CornerRadius="10">
+                                <TextBlock HorizontalAlignment="Center" FontSize="11">
                                     <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
                                     <Run Text="{Binding FloorNumStr}" />
                                 </TextBlock>
@@ -228,20 +217,20 @@
         <ControlTemplate x:Name="imageFaceGrid">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
-                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
+                    <RowDefinition Height="54"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -1131,23 +1120,23 @@
 
         <Grid x:Name="floorOriginalContentPanel" Visibility="Collapsed">
             <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
-            <Border BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="25,0,25,0" Padding="10,0,10,0">
+            <Border BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="20,0,20,0" Padding="10,0,10,0">
                 <WebView x:Name="webView" />
             </Border>
         </Grid>
 
         <Grid x:Name="postReplyPanel" Visibility="Collapsed">
             <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
-            <Border x:Name="postPanelGrid" BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="25,0,25,0">
+            <Border x:Name="postPanelGrid" BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="20,0,20,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBox Grid.Row="0" x:Name="postReplyContentTextBox" Style="{StaticResource TextBoxStyle1}" Margin="15,15,15,0" Height="300"
+                    <TextBox Grid.Row="0" x:Name="postReplyContentTextBox" Style="{StaticResource TextBoxStyle1}" Margin="0,10,0,0" Height="180"
                              BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容" />
-                    <TextBlock Grid.Row="1" x:Name="uploadStateInfo" Padding="6" Text="点击 + 号可批量上传任何文件。" Foreground="Gray" TextWrapping="Wrap" />
+                    <TextBlock Grid.Row="1" x:Name="uploadStateInfo" Padding="10" Text="点击 + 号图标可批量上传任何文件。" Foreground="Gray" TextWrapping="Wrap" />
                     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="{StaticResource Panel2BgColor}">
                         <ContentControl Template="{StaticResource imageFaceGrid}" />
                     </ScrollViewer>
@@ -1157,20 +1146,20 @@
 
         <Grid x:Name="postNewPanel" Visibility="Collapsed">
             <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
-            <Border x:Name="postNewPanelGrid" BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="25,0,25,0">
+            <Border x:Name="postNewPanelGrid" BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="20,0,20,0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBox x:Name="postNewTitleTextBox" Grid.Row="0" Style="{StaticResource TextBoxStyle1}" Margin="15" BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" PlaceholderText="编辑标题" />
-
-                    <TextBox x:Name="postNewContentTextBox" Grid.Row="1" Style="{StaticResource TextBoxStyle1}" Margin="15,0,15,0" Height="250"
+                    <TextBox x:Name="postNewTitleTextBox" Grid.Row="0" Style="{StaticResource TextBoxStyle1}" Margin="0,10,0,0" BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" PlaceholderText="编辑标题" />
+                    <TextBox x:Name="postNewContentTextBox" Grid.Row="1" Style="{StaticResource TextBoxStyle1}" Margin="0" Height="120"
                              BorderThickness="0" Background="Transparent" Foreground="{StaticResource MainFontColor}" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑内容" />
-
-                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="{StaticResource Panel2BgColor}">
+                    <TextBlock Grid.Row="2" x:Name="uploadStateInfo2" Padding="10" Text="点击 + 号图标可批量上传任何文件。" Foreground="Gray" TextWrapping="Wrap" />
+                    <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Background="{StaticResource Panel2BgColor}">
                         <ContentControl Template="{StaticResource imageFaceGrid}" />
                     </ScrollViewer>
                 </Grid>
