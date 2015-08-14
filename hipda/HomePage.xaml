@@ -154,7 +154,9 @@
                         <LineBreak/>
                         <Run Text="4. 本应用为HIPDA论坛第三方应用，同时您的账号和密码均仅保存在您的手机本地，不会被作者收集，请放心使用！" />
                         <LineBreak/>
-                        <Run Text="5. 如果您有建议或意见，请到菜单中的“说明及反馈”页面中进行反馈。" />
+                        <Run Text="5. 本应用为WIN10通用应用，同时兼容WIN10电脑及手机等WIN10设备。" />
+                        <LineBreak/>
+                        <Run Text="6. 如果您有建议或意见，请到菜单中的“说明及反馈”页面中进行反馈。" />
                     </TextBlock>
                 </StackPanel>
             </PivotItem>
