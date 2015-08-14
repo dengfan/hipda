@@ -1178,10 +1178,15 @@
                 <AppBarButton x:Name="openDialogForSearch" Label="版内搜索">
                     <Button.Flyout>
                         <Flyout FlyoutPresenterStyle="{StaticResource SearchFlyoutWrapStyle}">
-                            <StackPanel Margin="20">
-                                <TextBox x:Name="txtKeyword" TabIndex="1" Header="请输入关键字" KeyDown="txtKeyword_KeyDown" />
-                                <TextBlock Text="注：点击底部刷新按钮即可清除搜索结果并返回。"  />
-                                <Grid>
+                            <Grid Padding="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBox Grid.Row="0" x:Name="txtKeyword" TabIndex="1" Header="请输入关键字" KeyDown="txtKeyword_KeyDown" />
+                                <TextBlock Grid.Row="1" Text="注：点击底部刷新按钮即可清除搜索结果并返回。" FontSize="11" Foreground="{ThemeResource ListViewItemPointerOverBackgroundThemeBrush}" VerticalAlignment="Center" />
+                                <Grid Grid.Row="2">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="20"/>
@@ -1190,7 +1195,7 @@
                                     <Button Grid.Column="0" x:Name="btnSearchTitle" TabIndex="2" HorizontalAlignment="Stretch" Content="按标题搜索" Click="btnSearchTitle_Click" />
                                     <Button Grid.Column="2" x:Name="btnSearchAuthor" TabIndex="3" HorizontalAlignment="Stretch" Content="按作者搜索" Click="btnSearchAuthor_Click" />
                                 </Grid>
-                            </StackPanel>
+                            </Grid>
                         </Flyout>
                     </Button.Flyout>
                 </AppBarButton>

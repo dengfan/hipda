@@ -58,26 +58,7 @@
     </Page.Resources>
 
     <Grid>
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="AdaptiveStates">
-                <VisualState x:Name="MobileState">
-                    <VisualState.StateTriggers>
-                        <t:DeviceFamilyTrigger DeviceFamily="Windows.Mobile" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="cmdBar.(Grid.Row)" Value="2" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-        
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <Pivot Grid.Row="1" x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
+        <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
             <PivotItem Header="版区" CommonNavigationTransitionInfo.IsStaggerElement="True" Margin="0">
                 <ListView
                     ItemsSource="{Binding Source={StaticResource cvsForumGroups}}"
@@ -177,13 +158,15 @@
             </PivotItem>
         </Pivot>
 
-        <CommandBar Grid.Row="0" x:Name="cmdBar" Background="LightGray">
+        <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
+    </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar x:Name="cmdBar" Background="LightGray">
             <AppBarButton x:Name="marketplaceReviewAppBarButton" Icon="Favorite" Label="求五星好评" Click="marketplaceReviewAppBarButton_Click"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openTabForApp" Label="说明及反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
-
-        <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
-    </Grid>
+    </Page.BottomAppBar>
 </Page>
