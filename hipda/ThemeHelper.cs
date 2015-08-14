@@ -26,7 +26,6 @@ namespace hipda
             ((SolidColorBrush)r["PageBgColor"]).Color = Color.FromArgb(255, 243, 243, 243);
             ((SolidColorBrush)r["ItemBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Gainsboro;
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
@@ -42,7 +41,6 @@ namespace hipda
             ((SolidColorBrush)r["PageBgColor"]).Color = Color.FromArgb(255, 243, 243, 243);
             ((SolidColorBrush)r["ItemBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Gainsboro;
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
@@ -58,7 +56,6 @@ namespace hipda
             ((SolidColorBrush)r["PageBgColor"]).Color = Color.FromArgb(255, 29, 29, 29);
             ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 38, 38, 38);
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 32, 32, 32);
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {

@@ -91,14 +91,12 @@ namespace hipda
             ((SolidColorBrush)r["ItemBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 219, 219, 219);
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.Black;
             ((SolidColorBrush)r["MaskBgColor"]).Color = Colors.LightGray;
             ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
 
             tabPage.Background = new SolidColorBrush(Color.FromArgb(255, 239, 239, 239));
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
-            tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
         private void ThemeDark()
@@ -108,22 +106,19 @@ namespace hipda
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
                 StatusBar statusBar = StatusBar.GetForCurrentView();
-statusBar.BackgroundColor = Colors.Black;
+                statusBar.BackgroundColor = Colors.Black;
             }
-            
             
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 12, 12, 12);
             ((SolidColorBrush)r["MainFontColor"]).Color = Colors.DimGray;
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Color.FromArgb(255, 16, 16, 16);
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.DimGray;
             ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 150, 150, 150);
             ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
 
             tabPage.Background = new SolidColorBrush(Colors.Black);
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
-            tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
         private void ThemeBlueSky()
@@ -133,15 +128,13 @@ statusBar.BackgroundColor = Colors.Black;
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
                 StatusBar statusBar = StatusBar.GetForCurrentView();
-statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
+                statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             }
-            
 
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 196, 229, 254);
             ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 102, 102, 102);
-            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Black;
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.WhiteSmoke;
+            ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.WhiteSmoke;
             ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 196, 229, 254);
             ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
@@ -155,7 +148,6 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             };
             tabPage.Background = bgImageBrush;
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
-            tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
 
         private void ThemeStarSky()
@@ -168,12 +160,10 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
                 statusBar.BackgroundColor = Color.FromArgb(255, 7, 18, 40);
             }
             
-
             ResourceDictionary r = tabPage.Resources;
             ((SolidColorBrush)r["ItemBgColor"]).Color = Color.FromArgb(255, 5, 17, 36);
             ((SolidColorBrush)r["MainFontColor"]).Color = Color.FromArgb(255, 102, 102, 102);
             ((SolidColorBrush)r["CommandBarBgColor"]).Color = Colors.Black;
-            ((SolidColorBrush)r["CommandFontColor"]).Color = Colors.WhiteSmoke;
             ((SolidColorBrush)r["MaskBgColor"]).Color = Color.FromArgb(255, 13, 79, 112);
             ((SolidColorBrush)r["PanelBgColor"]).Color = Colors.White;
             ((SolidColorBrush)r["Panel2BgColor"]).Color = Colors.WhiteSmoke;
@@ -187,7 +177,6 @@ statusBar.BackgroundColor = Color.FromArgb(255, 108, 151, 193);
             };
             tabPage.Background = bgImageBrush;
             tabPageCommandBar.Background = tabPage.Resources["CommandBarBgColor"] as SolidColorBrush;
-            tabPageCommandBar.Foreground = tabPage.Resources["CommandFontColor"] as SolidColorBrush;
         }
         #endregion
 

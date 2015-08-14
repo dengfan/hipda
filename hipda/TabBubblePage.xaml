@@ -29,14 +29,12 @@
         <!--<SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
         <SolidColorBrush x:Key="ItemBgColor" Color="#C4E5FE"/>
         <SolidColorBrush x:Key="CommandBarBgColor" Color="Black"/>
-        <SolidColorBrush x:Key="MainFontColor" Color="#666666"/>
-        <SolidColorBrush x:Key="CommandFontColor" Color="WhiteSmoke"/>-->
+        <SolidColorBrush x:Key="MainFontColor" Color="#666666"/>-->
 
         <SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
         <SolidColorBrush x:Key="ItemBgColor" Color="Snow"/>
         <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>
         <SolidColorBrush x:Key="CommandBarBgColor" Color="LightGray"/>
-        <SolidColorBrush x:Key="CommandFontColor" Color="Black"/>
         <SolidColorBrush x:Key="MaskBgColor" Color="LightGray"/>
         <SolidColorBrush x:Key="PanelBgColor" Color="White"/>
         <SolidColorBrush x:Key="Panel2BgColor" Color="WhiteSmoke"/>
@@ -1138,7 +1136,7 @@
                SelectionChanged="Pivot_SelectionChanged">
         </Pivot>
 
-        <CommandBar Grid.Row="0" x:Name="tabPageCommandBar" Background="{StaticResource CommandBarBgColor}" Foreground="{StaticResource CommandFontColor}">
+        <CommandBar Grid.Row="0" x:Name="tabPageCommandBar" Background="{StaticResource CommandBarBgColor}">
             <!--贴子列表页底部按钮-->
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
