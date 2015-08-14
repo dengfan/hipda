@@ -230,7 +230,7 @@ namespace hipda
 
         #endregion
 
-        private void accountItem_Holding(object sender, HoldingRoutedEventArgs e)
+        private void accountItem_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
             FrameworkElement senderElement = sender as FrameworkElement;
             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
@@ -285,5 +285,7 @@ namespace hipda
         {
             ImageCountSettings.ImageCountSetting = ((ComboBox)sender).SelectedIndex;
         }
+
+        
     }
 }

@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     x:Name="homePage"
-    RequestedTheme="Light"
-    Background="#EFEFEF">
+    RequestedTheme="Light">
 
     <Page.Transitions>
         <TransitionCollection>
@@ -83,17 +82,17 @@
                 <ScrollViewer Padding="15">
                     <StackPanel>
                         <TextBlock Text="排版模式" FontSize="{ThemeResource ContentControlFontSize}" />
-                        <TextBlock Text="推荐使用气泡模式，以获得最佳体验！" 
+                        <TextBlock Text="推荐使用气泡模式，以获得最佳体验！" Margin="0,5" FontSize="11" Foreground="{ThemeResource ListViewItemPointerOverBackgroundThemeBrush}"
                                    TextWrapping="Wrap" />
-                        <ComboBox x:Name="layoutModeComboBox" PlaceholderText="经典" SelectionChanged="layoutModeComboBox_SelectionChanged">
+                        <ComboBox x:Name="layoutModeComboBox" PlaceholderText="经典" SelectionChanged="layoutModeComboBox_SelectionChanged" HorizontalAlignment="Stretch">
                             <x:String>经典</x:String>
                             <x:String>纯文本（无图极速模式）</x:String>
                             <x:String>气泡</x:String>
                         </ComboBox>
-                        <TextBlock Text="图片数量" FontSize="{ThemeResource ContentControlFontSize}" Margin="0,8,0,0" />
-                        <TextBlock Text="用于限制每个楼层的图片加载数量，以节省流量。（仅针对非纯文本模式生效）" 
+                        <TextBlock Text="图片数量" FontSize="{ThemeResource ContentControlFontSize}" Margin="0,10,0,0" />
+                        <TextBlock Text="用于限制每个楼层的图片加载数量，以节省流量。（仅针对非纯文本模式生效）" Margin="0,5" FontSize="11" Foreground="{ThemeResource ListViewItemPointerOverBackgroundThemeBrush}"
                                    TextWrapping="Wrap" />
-                        <ComboBox x:Name="imageCountComboBox" PlaceholderText="5" SelectionChanged="imageCountComboBox_SelectionChanged">
+                        <ComboBox x:Name="imageCountComboBox" PlaceholderText="5" SelectionChanged="imageCountComboBox_SelectionChanged" HorizontalAlignment="Stretch">
                             <x:String>0（即无图模式）</x:String>
                             <x:String>1</x:String>
                             <x:String>2</x:String>
@@ -104,65 +103,65 @@
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
-            <PivotItem 
-                Header="账号" 
-                CommonNavigationTransitionInfo.IsStaggerElement="True"
-                Margin="0">
-                <ListView x:Name="accountList" Padding="10,0"
-                          ItemContainerStyle="{StaticResource AccountItemStyle}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid x:Name="accountItem" Holding="accountItem_Holding" Pivot.SlideInAnimationGroup="GroupOne">
-                                <FlyoutBase.AttachedFlyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem x:Name="setDefaultItem" Text="切换到此账号" Click="setDefaultItem_Click" />
-                                        <MenuFlyoutItem x:Name="deleteItem" Text="删除" Click="deleteItem_Click" />
-                                    </MenuFlyout>
-                                </FlyoutBase.AttachedFlyout>
+            <PivotItem Header="账号" CommonNavigationTransitionInfo.IsStaggerElement="True">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" x:Name="addAccountPanel" Margin="0,10,0,0">
+                        <TextBox x:Name="usernameTextBox" TabIndex="1" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" PlaceholderText="输入账号（必填）"/>
+                        <PasswordBox x:Name="passwordTextBox" TabIndex="2" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" PlaceholderText="输入密码（必填）" Margin="0,8,0,0"/>
+                        <ComboBox x:Name="questionComboBox" TabIndex="3" PlaceholderText="安全提问（选填）" SelectionChanged="questionComboBox_SelectionChanged" HorizontalAlignment="Stretch" Margin="0,8,0,0">
+                            <x:String>安全提问（选填）</x:String>
+                            <x:String>母亲的名字</x:String>
+                            <x:String>爷爷的名字</x:String>
+                            <x:String>父亲出生的城市</x:String>
+                            <x:String>您其中一位老师的名字</x:String>
+                            <x:String>您个人计算机的型号</x:String>
+                            <x:String>您最喜欢的餐馆名称</x:String>
+                            <x:String>驾驶执照的最后四位数字</x:String>
+                        </ComboBox>
+                        <TextBox Visibility="Collapsed" x:Name="answerTextBox" TabIndex="4" Foreground="{StaticResource SystemControlBackgroundAccentBrush}" PlaceholderText="输入答案（注意区分大小写）" Margin="0,8,0,0" />
+                        <Button x:Name="loginButton" TabIndex="5" HorizontalAlignment="Stretch" Content="添加账号并登录" Click="loginButton_Click" Margin="0,8,0,0" />
+                    </StackPanel>
+                    
+                    <ListView Grid.Row="1" x:Name="accountList" ItemContainerStyle="{StaticResource AccountItemStyle}" SelectionMode="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="accountItem" PointerReleased="accountItem_PointerReleased" Pivot.SlideInAnimationGroup="GroupOne">
+                                    <FlyoutBase.AttachedFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem x:Name="setDefaultItem" Text="切换到此账号" Click="setDefaultItem_Click" />
+                                            <MenuFlyoutItem x:Name="deleteItem" Text="删除" Click="deleteItem_Click" />
+                                        </MenuFlyout>
+                                    </FlyoutBase.AttachedFlyout>
 
-                                <TextBlock Padding="10" FontSize="{StaticResource ContentControlFontSize}">
-                                    <Run Text="{Binding Username}"/>
-                                    <Run Text="{Binding Label}" Foreground="{StaticResource SystemControlBackgroundAccentBrush}"/>
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                    <ListView.Footer>
-                        <StackPanel x:Name="addAccountPanel" Margin="0,10,0,0">
-                            <TextBox x:Name="usernameTextBox" Margin="0" TabIndex="1" Foreground="{StaticResource SystemControlBackgroundAccentBrush}" PlaceholderText="输入账号" Padding="10"/>
-                            <PasswordBox x:Name="passwordTextBox" Margin="0" TabIndex="2" Foreground="{StaticResource SystemControlBackgroundAccentBrush}" PlaceholderText="输入密码" Padding="10"/>
-                            <ComboBox x:Name="questionComboBox" Margin="0" TabIndex="3" BorderThickness="0" PlaceholderText="安全提问" SelectionChanged="questionComboBox_SelectionChanged">
-                                <x:String>安全提问</x:String>
-                                <x:String>母亲的名字</x:String>
-                                <x:String>爷爷的名字</x:String>
-                                <x:String>父亲出生的城市</x:String>
-                                <x:String>您其中一位老师的名字</x:String>
-                                <x:String>您个人计算机的型号</x:String>
-                                <x:String>您最喜欢的餐馆名称</x:String>
-                                <x:String>驾驶执照的最后四位数字</x:String>
-                            </ComboBox>
-                            <TextBox Visibility="Collapsed" x:Name="answerTextBox" Margin="0" TabIndex="4" Foreground="{StaticResource SystemControlBackgroundAccentBrush}" PlaceholderText="输入答案（注意区分大小写）" Padding="10" />
-                            <Button x:Name="loginButton" TabIndex="5" Foreground="White"
-                                    HorizontalAlignment="Stretch" BorderThickness="0" Background="{StaticResource SystemControlBackgroundAccentBrush}"
-                                    Content="添加账号并登录"
-                                    Click="loginButton_Click" />
-                            <TextBlock  TextWrapping="Wrap">
-                                <Run Text="使用说明" FontWeight="Bold" />
-                                <LineBreak/>
-                                <Run Text="1. 论坛网址：" />
-                                <Hyperlink NavigateUri="http://www.hi-pda.com/forum">http://www.hi-pda.com/forum</Hyperlink>
-                                <LineBreak/>
-                                <Run Text="2. 如果您没有HiPDA论坛账号，请前往论坛页面" />
-                                <Hyperlink NavigateUri="http://www.hi-pda.com/forum/register.php">注册</Hyperlink>
-                                <Run Text="，并等待管理员审核，本应用暂不提供注册功能。" />
-                                <LineBreak/>
-                                <Run Text="3. 如果您绑定了多个账号，你可以长按账号名称进行马甲切换和管理。" />
-                                <LineBreak/>
-                                <Run Text="4. 您的账号和密码均仅保存在您的手机本地，请放心使用。" />
-                            </TextBlock>
-                        </StackPanel>
-                    </ListView.Footer>
-                </ListView>
+                                    <TextBlock Padding="10">
+                                        <Run Text="{Binding Username}"/>
+                                        <Run Text="{Binding Label}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="说明" CommonNavigationTransitionInfo.IsStaggerElement="True">
+                <TextBlock TextWrapping="Wrap" FontSize="14" LineHeight="22">
+                    <Run Text="使用说明" FontWeight="Bold" />
+                    <LineBreak/>
+                    <Run Text="1. 论坛网址：" />
+                    <Hyperlink NavigateUri="http://www.hi-pda.com/forum">http://www.hi-pda.com/forum</Hyperlink>
+                    <LineBreak/>
+                    <Run Text="2. 如果您没有HiPDA论坛账号，请前往论坛页面" />
+                    <Hyperlink NavigateUri="http://www.hi-pda.com/forum/register.php">注册</Hyperlink>
+                    <Run Text="，并等待管理员审核，本应用暂不提供注册功能。" />
+                    <LineBreak/>
+                    <Run Text="3. 如果您绑定了多个账号，你可以点击账号名称进行马甲切换和管理。" />
+                    <LineBreak/>
+                    <Run Text="4. 您的账号和密码均仅保存在您的手机本地，请放心使用。" />
+                </TextBlock>
             </PivotItem>
         </Pivot>
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
