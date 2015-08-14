@@ -104,7 +104,7 @@ namespace hipda.Common
                         {
                             if (width > 220)
                             {
-                                imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" Width=""220""][Image.Source][BitmapImage DecodePixelWidth=""220"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                                imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,5,0,5"" Width=""220""][Image.Source][BitmapImage DecodePixelWidth=""220"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                             }
 
                             imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -139,7 +139,7 @@ namespace hipda.Common
                             imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                             if (width > 220)
                             {
-                                imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" Width=""220""][Image.Source][BitmapImage DecodePixelWidth=""220"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                                imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,5,0,5"" Width=""220""][Image.Source][BitmapImage DecodePixelWidth=""220"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                             }
 
                             if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -300,9 +300,9 @@ namespace hipda.Common
 
                         if (imageCount <= maxImageCount)
                         {
-                            if (width > 720)
+                            if (width >= 600)
                             {
-                                imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" Width=""720""][Image.Source][BitmapImage DecodePixelWidth=""720"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                                imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,5,0,5"" Width=""600""][Image.Source][BitmapImage DecodePixelWidth=""600"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                             }
 
                             imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
@@ -335,9 +335,9 @@ namespace hipda.Common
                         if (imageCount <= maxImageCount)
                         {
                             imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
-                            if (width > 720)
+                            if (width >= 600)
                             {
-                                imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" Width=""720""][Image.Source][BitmapImage DecodePixelWidth=""720"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                                imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,5,0,5"" Width=""600""][Image.Source][BitmapImage DecodePixelWidth=""600"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                             }
 
                             if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
