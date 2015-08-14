@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:hipda"
+    xmlns:t="using:HipdaUwpLite.Client.Triggers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:hipda.Data"
@@ -121,7 +122,7 @@
                             <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                         </TextBlock>
 
-                        <TextBlock Pivot.SlideInAnimationGroup="GroupOne" HorizontalAlignment="Right" FontSize="11">
+                        <TextBlock Pivot.SlideInAnimationGroup="GroupOne" Margin="0,0,10,0" HorizontalAlignment="Right" FontSize="11">
                             <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
                             <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
                         </TextBlock>
@@ -1091,10 +1092,79 @@
     </Page.Resources>
 
     <Grid>
-        <Pivot x:Name="Pivot"
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveStates">
+                <VisualState x:Name="MobileState">
+                    <VisualState.StateTriggers>
+                        <t:DeviceFamilyTrigger DeviceFamily="Windows.Mobile" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="tabPageCommandBar.(Grid.Row)" Value="2" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Pivot Grid.Row="1" x:Name="Pivot"
                CommonNavigationTransitionInfo.IsStaggerElement="True" 
                SelectionChanged="Pivot_SelectionChanged">
         </Pivot>
+
+        <CommandBar Grid.Row="0" x:Name="tabPageCommandBar" Background="{StaticResource CommandBarBgColor}" Foreground="{StaticResource CommandFontColor}">
+            <!--贴子列表页底部按钮-->
+            <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
+            <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
+            <AppBarToggleButton x:Name="sortForThreadListButton" Icon="Sort" Label="排序开关" Click="sortForThreadListButton_Click" Visibility="Collapsed"></AppBarToggleButton>
+            <AppBarButton x:Name="changeThemeButton" Label="样式切换" Click="changeThemeButton_Click" Visibility="Collapsed">
+                <AppBarButton.Icon>
+                    <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.moon.first.quarter.png" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+
+            <!--回复列表页底部按钮-->
+            <AppBarButton x:Name="openPostReplyPanelButton" Icon="Edit" Label="评论" Click="openPostReplyPanelButton_Click" Visibility="Collapsed" />
+            <AppBarButton x:Name="refreshRepliesButton" Icon="Refresh" Label="刷新" Click="refreshRepliesButton_Click" Visibility="Collapsed" />
+            <AppBarToggleButton x:Name="reverseListButton" Label="倒序看贴" Click="reverseListButton_Click" Visibility="Collapsed">
+                <AppBarToggleButton.Icon>
+                    <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.sort.numeric.descending.png" />
+                </AppBarToggleButton.Icon>
+            </AppBarToggleButton>
+
+            <!--发布信息状态之底部按钮-->
+            <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Discovery 版" Click="openTabForDiscovery_Click" />
+                <AppBarButton Label="Buy &amp; Sell 版" Click="openTabForBuyAndSell_Click" />
+                <AppBarButton Label="Eink 版" Click="openTabForEink_Click" />
+                <AppBarButton x:Name="openDialogForSearch" Label="版内搜索">
+                    <Button.Flyout>
+                        <Flyout FlyoutPresenterStyle="{StaticResource SearchFlyoutWrapStyle}">
+                            <StackPanel Margin="20">
+                                <TextBox x:Name="txtKeyword" TabIndex="1" Header="请输入关键字" KeyDown="txtKeyword_KeyDown" />
+                                <TextBlock Text="注：点击底部刷新按钮即可清除搜索结果并返回。" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" x:Name="btnSearchTitle" TabIndex="2" HorizontalAlignment="Stretch" Content="按标题搜索" Click="btnSearchTitle_Click" />
+                                    <Button Grid.Column="2" x:Name="btnSearchAuthor" TabIndex="3" HorizontalAlignment="Stretch" Content="按作者搜索" Click="btnSearchAuthor_Click" />
+                                </Grid>
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </AppBarButton>
+                <AppBarButton x:Name="openTabForApp" Label="说明及反馈" Click="openTabForApp_Click" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
 
         <Grid x:Name="floorOriginalContentPanel" Visibility="Collapsed">
             <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
@@ -1146,56 +1216,4 @@
 
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>
-
-    <Page.BottomAppBar>
-        <CommandBar x:Name="tabPageCommandBar" Background="{StaticResource CommandBarBgColor}" Foreground="{StaticResource CommandFontColor}">
-            <!--贴子列表页底部按钮-->
-            <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
-            <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
-            <AppBarToggleButton x:Name="sortForThreadListButton" Icon="Sort" Label="排序开关" Click="sortForThreadListButton_Click" Visibility="Collapsed"></AppBarToggleButton>
-            <AppBarButton x:Name="changeThemeButton" Label="样式切换" Click="changeThemeButton_Click" Visibility="Collapsed">
-                <AppBarButton.Icon>
-                    <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.moon.first.quarter.png" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-
-            <!--回复列表页底部按钮-->
-            <AppBarButton x:Name="openPostReplyPanelButton" Icon="Edit" Label="评论" Click="openPostReplyPanelButton_Click" Visibility="Collapsed" />
-            <AppBarButton x:Name="refreshRepliesButton" Icon="Refresh" Label="刷新" Click="refreshRepliesButton_Click" Visibility="Collapsed" />
-            <AppBarToggleButton x:Name="reverseListButton" Label="倒序看贴" Click="reverseListButton_Click" Visibility="Collapsed">
-                <AppBarToggleButton.Icon>
-                    <BitmapIcon UriSource="ms-appx:///Assets/Icons/appbar.sort.numeric.descending.png" />
-                </AppBarToggleButton.Icon>
-            </AppBarToggleButton>
-
-            <!--发布信息状态之底部按钮-->
-            <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />
-            
-            <CommandBar.SecondaryCommands>
-                <AppBarButton Label="Discovery 版" Click="openTabForDiscovery_Click" />
-                <AppBarButton Label="Buy &amp; Sell 版" Click="openTabForBuyAndSell_Click" />
-                <AppBarButton Label="Eink 版" Click="openTabForEink_Click" />
-                <AppBarButton x:Name="openDialogForSearch" Label="版内搜索">
-                    <Button.Flyout>
-                        <Flyout FlyoutPresenterStyle="{StaticResource SearchFlyoutWrapStyle}">
-                            <StackPanel Margin="20">
-                                <TextBox x:Name="txtKeyword" TabIndex="1" Header="请输入关键字" KeyDown="txtKeyword_KeyDown" />
-                                <TextBlock Text="注：点击底部刷新按钮即可清除搜索结果并返回。" />
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="20"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Button Grid.Column="0" x:Name="btnSearchTitle" TabIndex="2" HorizontalAlignment="Stretch" Content="按标题搜索" Click="btnSearchTitle_Click" />
-                                    <Button Grid.Column="2" x:Name="btnSearchAuthor" TabIndex="3" HorizontalAlignment="Stretch" Content="按作者搜索" Click="btnSearchAuthor_Click" />
-                                </Grid>
-                            </StackPanel>
-                        </Flyout>
-                    </Button.Flyout>
-                </AppBarButton>
-                <AppBarButton x:Name="openTabForApp" Label="说明及反馈" Click="openTabForApp_Click" />
-            </CommandBar.SecondaryCommands>
-        </CommandBar>
-    </Page.BottomAppBar>
 </Page>
