@@ -142,8 +142,7 @@
             </PivotItem>
             <PivotItem Header="说明" CommonNavigationTransitionInfo.IsStaggerElement="True">
                 <StackPanel>
-                    <TextBlock Text="使用说明" />
-                    <TextBlock TextWrapping="Wrap" Margin="5,5,0,0" FontSize="14" LineHeight="24">
+                    <TextBlock TextWrapping="Wrap" LineHeight="28">
                         <Run Text="1. 论坛网址：" />
                         <Hyperlink NavigateUri="http://www.hi-pda.com/forum">http://www.hi-pda.com/forum</Hyperlink>
                         <LineBreak/>
@@ -154,6 +153,8 @@
                         <Run Text="3. 如果您绑定了多个账号，你可以点击账号名称进行马甲切换和管理。" />
                         <LineBreak/>
                         <Run Text="4. 您的账号和密码均仅保存在您的手机本地，请放心使用。" />
+                        <LineBreak/>
+                        <Run Text="5. 如果您有建议或意见，请到菜单中的“说明及反馈”页面中进行反馈。" />
                     </TextBlock>
                 </StackPanel>
             </PivotItem>
