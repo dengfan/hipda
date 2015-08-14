@@ -300,7 +300,10 @@ namespace hipda.Common
 
                         if (imageCount <= maxImageCount)
                         {
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""None"" Margin=""0,10,0,5""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                            if (width > 720)
+                            {
+                                imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" Width=""720""][Image.Source][BitmapImage DecodePixelWidth=""720"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                            }
 
                             imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
                             imgXaml = string.Format(imgXaml, imgUrl);
@@ -332,7 +335,10 @@ namespace hipda.Common
                         if (imageCount <= maxImageCount)
                         {
                             imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""None"" Margin=""0,10,0,5""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                            if (width > 720)
+                            {
+                                imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" Width=""720""][Image.Source][BitmapImage DecodePixelWidth=""720"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                            }
 
                             if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
                             imgXaml = string.Format(imgXaml, imgUrl);
