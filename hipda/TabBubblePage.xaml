@@ -21,16 +21,6 @@
     </Page.Transitions>
 
     <Page.Resources>
-        <!--<SolidColorBrush x:Key="PageBgColor" Color="#1D1D1D"/>
-        <SolidColorBrush x:Key="ItemBgColor" Color="#262626"/>
-        <SolidColorBrush x:Key="CommandBarBgColor" Color="#242424"/>
-        <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>-->
-
-        <!--<SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
-        <SolidColorBrush x:Key="ItemBgColor" Color="#C4E5FE"/>
-        <SolidColorBrush x:Key="CommandBarBgColor" Color="Black"/>
-        <SolidColorBrush x:Key="MainFontColor" Color="#666666"/>-->
-
         <SolidColorBrush x:Key="PageBgColor" Color="#F1F1F1"/>
         <SolidColorBrush x:Key="ItemBgColor" Color="Snow"/>
         <SolidColorBrush x:Key="MainFontColor" Color="DimGray"/>
@@ -1112,32 +1102,8 @@
     </Page.Resources>
 
     <Grid>
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="AdaptiveStates">
-                <VisualState x:Name="MobileState">
-                    <VisualState.StateTriggers>
-                        <t:DeviceFamilyTrigger DeviceFamily="Windows.Mobile" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="tabPageCommandBar.(Grid.Row)" Value="2" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+        <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True" SelectionChanged="Pivot_SelectionChanged"/>
         
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <Pivot Grid.Row="1" x:Name="Pivot"
-               CommonNavigationTransitionInfo.IsStaggerElement="True" 
-               SelectionChanged="Pivot_SelectionChanged">
-        </Pivot>
-
-        
-
         <Grid x:Name="floorOriginalContentPanel" Visibility="Collapsed">
             <Rectangle Canvas.ZIndex="0" Fill="{StaticResource MaskBgColor}" Opacity="0.7" />
             <Border BorderThickness="0" Background="{StaticResource PanelBgColor}" Margin="20,0,20,0" Padding="10,0,10,0">
@@ -1186,7 +1152,11 @@
             </Border>
         </Grid>
 
-        <CommandBar Grid.Row="0" x:Name="tabPageCommandBar" Background="{StaticResource CommandBarBgColor}">
+        <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
+    </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar x:Name="tabPageCommandBar" Background="{StaticResource CommandBarBgColor}">
             <!--贴子列表页底部按钮-->
             <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
@@ -1227,7 +1197,5 @@
                 <AppBarButton x:Name="openTabForApp" Label="说明及反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
-
-        <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
-    </Grid>
+    </Page.BottomAppBar>
 </Page>
