@@ -166,7 +166,7 @@
 
     <Page.BottomAppBar>
         <CommandBar Background="LightGray">
-            <AppBarButton x:Name="marketplaceReviewAppBarButton" Icon="Favorite" Label="我要给好评" Click="marketplaceReviewAppBarButton_Click"/>
+            <AppBarButton x:Name="marketplaceReviewAppBarButton" Icon="Favorite" Label="求五星好评" Click="marketplaceReviewAppBarButton_Click"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openTabForApp" Label="说明及反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
