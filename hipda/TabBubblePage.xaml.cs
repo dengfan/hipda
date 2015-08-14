@@ -1091,17 +1091,18 @@ namespace hipda
                 }
             }
 
-            if (navigationHelper.IsCanGoBack)
-            {
-                if (NavigationHelper.GoBackCommand.CanExecute(null))
-                {
-                    NavigationHelper.GoBackCommand.Execute(null);
-                }
-            }
-
             // 清除针对回复的数据
             postReplyContentTextBox.Text = string.Empty;
             noticeauthor = noticetrimstr = noticeauthormsg = string.Empty;
+
+            if (navigationHelper.IsCanGoBack)
+            {
+                e.Handled = true;
+                if (navigationHelper.GoBackCommand.CanExecute(null))
+                {
+                    navigationHelper.GoBackCommand.Execute(null);
+                }
+            }
         }
 
         private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
@@ -1154,6 +1155,15 @@ namespace hipda
             // 清除针对回复的数据
             postReplyContentTextBox.Text = string.Empty;
             noticeauthor = noticetrimstr = noticeauthormsg = string.Empty;
+
+            if (navigationHelper.IsCanGoBack)
+            {
+                e.Handled = true;
+                if (navigationHelper.GoBackCommand.CanExecute(null))
+                {
+                    navigationHelper.GoBackCommand.Execute(null);
+                }
+            }
         }
 
         private async void sendButton_Click(object sender, RoutedEventArgs e)

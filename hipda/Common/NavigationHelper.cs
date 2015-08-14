@@ -99,12 +99,6 @@ namespace hipda.Common
                 //    }
                 //};
 
-#if WINDOWS_PHONE_APP
-                if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
-                {
-                    Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-                }
-#else
                 // 仅当占用整个窗口时，键盘和鼠标导航才适用
                 if (this.Page.ActualHeight == Window.Current.Bounds.Height &&
                     this.Page.ActualWidth == Window.Current.Bounds.Width)
@@ -115,23 +109,15 @@ namespace hipda.Common
                     Window.Current.CoreWindow.PointerPressed +=
                         this.CoreWindow_PointerPressed;
                 }
-#endif
             };
 
             // 当页不再可见时，撤消相同更改
             this.Page.Unloaded += (sender, e) =>
             {
-#if WINDOWS_PHONE_APP
-                if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
-                {
-                    Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
-                }
-#else
                 Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated -=
-                    CoreDispatcher_AcceleratorKeyActivated;
+                                    CoreDispatcher_AcceleratorKeyActivated;
                 Window.Current.CoreWindow.PointerPressed -=
                     this.CoreWindow_PointerPressed;
-#endif
             };
         }
 
@@ -230,21 +216,6 @@ namespace hipda.Common
             if (this.Frame != null && this.Frame.CanGoForward) this.Frame.GoForward();
         }
 
-#if WINDOWS_PHONE_APP
-        /// <summary>
-        /// Invoked when the hardware back button is pressed. For Windows Phone only.
-        /// </summary>
-        /// <param name="sender">触发事件的实例。</param>
-        /// <param name="e">描述导致事件的条件的事件数据。</param>
-        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
-        {
-            if (this.GoBackCommand.CanExecute(null))
-            {
-                e.Handled = true;
-                this.GoBackCommand.Execute(null);
-            }
-        }
-#else
         /// <summary>
         /// 当此页处于活动状态并占用整个窗口时，在每次
         /// 击键(包括系统键，如 Alt 组合键)时调用。    用于检测页之间的键盘
@@ -315,7 +286,6 @@ namespace hipda.Common
                 if (forwardPressed) this.GoForwardCommand.Execute(null);
             }
         }
-#endif
 
         #endregion
 
