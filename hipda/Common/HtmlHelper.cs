@@ -39,7 +39,7 @@ namespace hipda.Common
                 }
 
                 // 移除无用的下载提示信息 
-                MatchCollection matchsForInvalidHtml2 = new Regex(@"<strong>下载</strong></a>[()\d\sKB.]*<br[^>]*>").Matches(content.ToString());
+                MatchCollection matchsForInvalidHtml2 = new Regex(@"<strong>下载</strong></a>[()\d\s(K|M)B.]*<br[^>]*>").Matches(content.ToString());
                 if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
                 {
                     for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
@@ -237,7 +237,7 @@ namespace hipda.Common
                 }
 
                 // 移除无用的下载提示信息 
-                MatchCollection matchsForInvalidHtml2 = new Regex(@"<strong>下载</strong></a>[()\d\sKB.]*<br[^>]*>").Matches(content.ToString());
+                MatchCollection matchsForInvalidHtml2 = new Regex(@"<strong>下载</strong></a>[()\d\s(K|M)B.]*<br[^>]*>").Matches(content.ToString());
                 if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
                 {
                     for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
