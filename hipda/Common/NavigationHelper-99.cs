@@ -309,8 +309,6 @@ namespace hipda.Common
 
         #region 进程生命期管理
 
-        private String _pageKey;
-
         /// <summary>
         /// 在当前页上注册此事件以向该页填入
         /// 在导航过程中传递的内容以及任何
