@@ -55,20 +55,7 @@ namespace hipda
 #endif
 
             // 自动登录
-            string err = string.Empty;
-            try
-            {
-                await AccountSettings.AutoLogin();
-            }
-            catch (System.Net.WebException we)
-            {
-                err = string.Format("请检查网络设置 :( \n", we.Message);
-            }
-
-            if (!string.IsNullOrEmpty(err))
-            {
-                await new MessageDialog(err, "注意").ShowAsync();
-            }
+            AutoLogin();
 
             // 排序开关
             DataSource.ThreadListPageOrderBy = SortForThreadSettings.GetSortType;
@@ -224,7 +211,27 @@ namespace hipda
 
         private void OnResuming(object sender, object e)
         {
+            AutoLogin();
+        }
 
+        private async void AutoLogin()
+        {
+            #region 每次恢复时自动登录一下
+            string err = string.Empty;
+            try
+            {
+                await AccountSettings.AutoLogin();
+            }
+            catch (System.Net.WebException we)
+            {
+                err = string.Format("请检查网络设置 :( \n", we.Message);
+            }
+
+            if (!string.IsNullOrEmpty(err))
+            {
+                await new MessageDialog(err, "注意").ShowAsync();
+            }
+            #endregion
         }
     }
 }
