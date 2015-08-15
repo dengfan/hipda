@@ -162,7 +162,7 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar x:Name="cmdBar" Background="LightGray">
+        <CommandBar x:Name="cmdBar">
             <AppBarButton x:Name="marketplaceReviewAppBarButton" Icon="Favorite" Label="求五星好评" Click="marketplaceReviewAppBarButton_Click"/>
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openTabForApp" Label="说明及反馈" Click="openTabForApp_Click" />
