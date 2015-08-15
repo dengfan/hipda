@@ -321,6 +321,29 @@ namespace hipda
             #endregion
         }
 
+        private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        {
+            // 获取当前 pivot item 用于从墓碑状态恢复
+            StringBuilder tabStr = new StringBuilder();
+            int i = 0;
+            int selectedIndex = 0;
+            foreach (PivotItem item in Pivot.Items)
+            {
+                string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
+                string tabId = item.GetValue(PivotItemTabIdProperty).ToString();
+                string tabTitle = item.Header.ToString();
+                tabStr.Append(string.Format("{0},{1},{2};", tabId, tabTitle, tabType));
+                if (Pivot.SelectedItem.Equals(item))
+                {
+                    selectedIndex = i;
+                }
+                i++;
+            }
+
+            e.PageState["PivotItems"] = tabStr.ToString();
+            e.PageState["PivotSelectedIndex"] = selectedIndex;
+        }
+
         #region 增量更新
         private void ThemeListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
@@ -340,7 +363,7 @@ namespace hipda
             Run pagerclipTextBlockRun = (Run)layoutGrid.FindName("pagerclipTextBlockRun");
             Run titleTextBlockRun = (Run)layoutGrid.FindName("titleTextBlockRun");
             Run numbersTextBlockRun = (Run)layoutGrid.FindName("numbersTextBlockRun");
-            
+
             ownerInfoTextBlock.Opacity = 0;
             pictureIconTextBlockRun.Text = thread.AttachType == 1 ? "\uE187" : string.Empty;
             pagerclipTextBlockRun.Text = thread.AttachType == 2 ? "\uE16C" : string.Empty;
@@ -417,29 +440,6 @@ namespace hipda
             }
         }
         #endregion
-
-        private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
-        {
-            // 获取当前 pivot item 用于从墓碑状态恢复
-            StringBuilder tabStr = new StringBuilder();
-            int i = 0;
-            int selectedIndex = 0;
-            foreach (PivotItem item in Pivot.Items)
-            {
-                string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
-                string tabId = item.GetValue(PivotItemTabIdProperty).ToString();
-                string tabTitle = item.Header.ToString();
-                tabStr.Append(string.Format("{0},{1},{2};", tabId, tabTitle, tabType));
-                if (Pivot.SelectedItem.Equals(item))
-                {
-                    selectedIndex = i;
-                }
-                i++;
-            }
-
-            e.PageState["PivotItems"] = tabStr.ToString();
-            e.PageState["PivotSelectedIndex"] = selectedIndex;
-        }
 
         /// <summary>
         /// 在贴子项上单击时调用

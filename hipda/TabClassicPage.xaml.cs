@@ -198,14 +198,47 @@ namespace hipda
             get { return this.navigationHelper; }
         }
 
-        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        #region NavigationHelper 注册
+
+        /// <summary>
+        /// 此部分中提供的方法只是用于使
+        /// NavigationHelper 可响应页面的导航方法。
+        /// <para>
+        /// 应将页面特有的逻辑放入用于
+        /// <see cref="NavigationHelper.LoadState"/>
+        /// 和 <see cref="NavigationHelper.SaveState"/> 的事件处理程序中。
+        /// 除了在会话期间保留的页面状态之外
+        /// LoadState 方法中还提供导航参数。
+        /// </para>
+        /// </summary>
+        /// <param name="e">提供导航方法数据和
+        /// 无法取消导航请求的事件处理程序。</param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            this.navigationHelper.OnNavigatedTo(e);
+
             SystemNavigationManager.GetForCurrentView().BackRequested += TitleBackButton_BackRequested;
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
             {
                 Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
             }
+        }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            this.navigationHelper.OnNavigatedFrom(e);
+
+            SystemNavigationManager.GetForCurrentView().BackRequested -= TitleBackButton_BackRequested;
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            {
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+            }
+        }
+
+        #endregion
+
+        private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        {
             #region 同步开关按钮之开关状态
             sortForThreadListButton.IsChecked = SortForThreadSettings.GetSortType.Equals("dateline");
             reverseListButton.IsChecked = SortForReplySettings.GetSortType == 1;
@@ -272,6 +305,29 @@ namespace hipda
                 await RefreshElementStatus();
             }
             #endregion
+        }
+
+        private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        {
+            // 获取当前 pivot item 用于从墓碑状态恢复
+            StringBuilder tabStr = new StringBuilder();
+            int i = 0;
+            int selectedIndex = 0;
+            foreach (PivotItem item in Pivot.Items)
+            {
+                string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
+                string tabId = item.GetValue(PivotItemTabIdProperty).ToString();
+                string tabTitle = item.Header.ToString();
+                tabStr.Append(string.Format("{0},{1},{2};", tabId, tabTitle, tabType));
+                if (Pivot.SelectedItem.Equals(item))
+                {
+                    selectedIndex = i;
+                }
+                i++;
+            }
+
+            e.PageState["PivotItems"] = tabStr.ToString();
+            e.PageState["PivotSelectedIndex"] = selectedIndex;
         }
 
         #region 增量更新
@@ -371,35 +427,6 @@ namespace hipda
             }
         }
         #endregion
-
-        private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
-        {
-            SystemNavigationManager.GetForCurrentView().BackRequested -= TitleBackButton_BackRequested;
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
-            {
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
-            }
-
-            // 获取当前 pivot item 用于从墓碑状态恢复
-            StringBuilder tabStr = new StringBuilder();
-            int i = 0;
-            int selectedIndex = 0;
-            foreach (PivotItem item in Pivot.Items)
-            {
-                string tabType = item.GetValue(PivotItemTabTypeProperty).ToString();
-                string tabId = item.GetValue(PivotItemTabIdProperty).ToString();
-                string tabTitle = item.Header.ToString();
-                tabStr.Append(string.Format("{0},{1},{2};", tabId, tabTitle, tabType));
-                if (Pivot.SelectedItem.Equals(item))
-                {
-                    selectedIndex = i;
-                }
-                i++;
-            }
-
-            e.PageState["PivotItems"] = tabStr.ToString();
-            e.PageState["PivotSelectedIndex"] = selectedIndex;
-        }
 
         /// <summary>
         /// 在贴子项上单击时调用
@@ -941,33 +968,6 @@ namespace hipda
             });
             return cvs;
         }
-        #endregion
-
-        #region NavigationHelper 注册
-
-        /// <summary>
-        /// 此部分中提供的方法只是用于使
-        /// NavigationHelper 可响应页面的导航方法。
-        /// <para>
-        /// 应将页面特有的逻辑放入用于
-        /// <see cref="NavigationHelper.LoadState"/>
-        /// 和 <see cref="NavigationHelper.SaveState"/> 的事件处理程序中。
-        /// 除了在会话期间保留的页面状态之外
-        /// LoadState 方法中还提供导航参数。
-        /// </para>
-        /// </summary>
-        /// <param name="e">提供导航方法数据和
-        /// 无法取消导航请求的事件处理程序。</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            this.navigationHelper.OnNavigatedTo(e);
-        }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            this.navigationHelper.OnNavigatedFrom(e);
-        }
-
         #endregion
 
         #region 打开标签页菜单按钮
