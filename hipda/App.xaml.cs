@@ -33,66 +33,11 @@ namespace hipda
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            this.Resuming += this.OnResuming;
+
             ThemeId = ThemeSettings.ThemeSetting;
             layoutModeId = LayoutModeSettings.LayoutModeSetting;
         }
-
-        private Frame CreateRootFrame()
-        {
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
-            if (rootFrame == null)
-            {
-                // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new Frame();
-
-                // Set the default language
-                rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
-                rootFrame.NavigationFailed += OnNavigationFailed;
-
-                // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
-            }
-
-            return rootFrame;
-        }
-
-        private async Task RestoreStatusAsync(ApplicationExecutionState previousExecutionState)
-        {
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
-            if (previousExecutionState == ApplicationExecutionState.Terminated)
-            {
-                // Restore the saved session state only when appropriate
-                try
-                {
-                    await SuspensionManager.RestoreAsync();
-                }
-                catch (SuspensionManagerException)
-                {
-                    //Something went wrong restoring state.
-                    //Assume there is no state and continue
-                }
-            }
-        }
-
-#if WINDOWS_PHONE_APP
-        /// <summary>
-        /// Handle OnActivated event to deal with File Open/Save continuation activation kinds
-        /// </summary>
-        /// <param name="e">Application activated event arguments, it can be casted to proper sub-type based on ActivationKind</param>
-        protected async override void OnActivated(IActivatedEventArgs e)
-        {
-            base.OnActivated(e);
-
-            Frame rootFrame = CreateRootFrame();
-            await RestoreStatusAsync(e.PreviousExecutionState);
-
-            Window.Current.Activate();
-        }
-#endif
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
@@ -139,26 +84,6 @@ namespace hipda
             {
                 // 创建要充当导航上下文的框架，并导航到第一页。
                 rootFrame = new Frame();
-
-                // 将框架与 SuspensionManager 键关联。
-                SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
-
-                // TODO: 将此值更改为适合您的应用程序的缓存大小。
-                //rootFrame.CacheSize = 1;
-
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    // 仅当合适时才还原保存的会话状态。
-                    try
-                    {
-                        await SuspensionManager.RestoreAsync();
-                    }
-                    catch (SuspensionManagerException)
-                    {
-                        // 还原状态时出现问题。
-                        // 假定没有状态并继续。
-                    }
-                }
 
                 // 将框架放在当前窗口中。
                 Window.Current.Content = rootFrame;
@@ -291,11 +216,15 @@ namespace hipda
         /// </summary>
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
-        private async void OnSuspending(object sender, SuspendingEventArgs e)
+        private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            await SuspensionManager.SaveAsync();
             deferral.Complete();
+        }
+
+        private void OnResuming(object sender, object e)
+        {
+
         }
     }
 }
