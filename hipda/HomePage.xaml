@@ -146,7 +146,7 @@
                         <Hyperlink NavigateUri="http://www.hi-pda.com/forum/register.php">注册</Hyperlink>
                         <Run Text="，并等待管理员审核，本应用暂不提供注册功能。" />
                         <LineBreak/>
-                        <Run Text="3. 如果您绑定了多个账号，你可以点击账号名称进行马甲切换和管理。" />
+                        <Run Text="3. 如果您绑定了多个账号，你可以长按账号名称进行马甲切换和管理。" />
                         <LineBreak/>
                         <Run Text="4. 本应用为HIPDA论坛第三方应用，同时您的账号和密码均仅保存在您的手机本地，不会被作者收集，请放心使用！" />
                         <LineBreak/>
