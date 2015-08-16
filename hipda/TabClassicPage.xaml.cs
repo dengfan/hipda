@@ -1872,7 +1872,7 @@ namespace hipda
             await SearchThreadListPage(datacontext.OwnerName, 2);
         }
 
-        private void avatarImageBorder_PointerPressed(object sender, PointerRoutedEventArgs e)
+        private void avatarImageBorder_Holding(object sender, HoldingRoutedEventArgs e)
         {
             FrameworkElement senderElement = sender as FrameworkElement;
             // If you need the clicked element:
