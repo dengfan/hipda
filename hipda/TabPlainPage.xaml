@@ -81,7 +81,7 @@
         </Style>
 
         <DataTemplate x:Name="ThreadListItemTemplate">
-            <StackPanel PointerPressed="threadListItem_PointerPressed">
+            <StackPanel Holding="threadListItem_Holding" RightTapped="threadListItem_RightTapped">
                 <TextBlock x:Name="ownerInfoTextBlock"
                                    TextWrapping="WrapWholeWords"
                                    HorizontalAlignment="Left"
