@@ -25,26 +25,13 @@ namespace hipda.Common
                 content = content.Replace("&nbsp;", " ");
                 content = content.Replace("↵", "&#8629;");
 
-                // 移除无用的的日期信息 
-                MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_smallfont"">[\d\s-:]*</div>").Matches(content.ToString());
+                // 移除无用的图片附加信息
+                MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n\s*<div class=""t_smallfont"">.*").Matches(content.ToString());
                 if (matchsForInvalidHtml1 != null && matchsForInvalidHtml1.Count > 0)
                 {
                     for (int i = 0; i < matchsForInvalidHtml1.Count; i++)
                     {
                         var m = matchsForInvalidHtml1[i];
-
-                        string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                        content = content.Replace(placeHolder, string.Empty);
-                    }
-                }
-
-                // 移除无用的下载提示信息 
-                MatchCollection matchsForInvalidHtml2 = new Regex(@"<strong>下载</strong></a>[()\d\s(K|M)B.]*<br[^>]*>").Matches(content.ToString());
-                if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
-                {
-                    for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
-                    {
-                        var m = matchsForInvalidHtml2[i];
 
                         string placeHolder = m.Groups[0].Value; // 要被替换的元素
                         content = content.Replace(placeHolder, string.Empty);
@@ -225,26 +212,13 @@ namespace hipda.Common
                 content = content.Replace("&nbsp;", " ");
                 content = content.Replace("↵", "&#8629;");
 
-                // 移除无用的的日期信息 
-                MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_smallfont"">[\d\s-:]*</div>").Matches(content.ToString());
+                // 移除无用的图片附加信息
+                MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n\s*<div class=""t_smallfont"">.*").Matches(content.ToString());
                 if (matchsForInvalidHtml1 != null && matchsForInvalidHtml1.Count > 0)
                 {
                     for (int i = 0; i < matchsForInvalidHtml1.Count; i++)
                     {
                         var m = matchsForInvalidHtml1[i];
-
-                        string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                        content = content.Replace(placeHolder, string.Empty);
-                    }
-                }
-
-                // 移除无用的下载提示信息 
-                MatchCollection matchsForInvalidHtml2 = new Regex(@"<strong>下载</strong></a>[()\d\s(K|M)B.]*<br[^>]*>").Matches(content.ToString());
-                if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
-                {
-                    for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
-                    {
-                        var m = matchsForInvalidHtml2[i];
 
                         string placeHolder = m.Groups[0].Value; // 要被替换的元素
                         content = content.Replace(placeHolder, string.Empty);
