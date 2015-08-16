@@ -76,6 +76,8 @@ namespace hipda.Common
                 content = content.Replace("<br/>", "↵"); // ↵符号表示换行符
                 content = content.Replace("<br />", "↵");
                 content = content.Replace("<br>", "↵");
+                content = content.Replace("</div>", "↵");
+                content = content.Replace("</p>", "↵");
 
                 // 替换引用文字标签
                 content = content.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""18,0,0,0"" Foreground=""Gray""][Span]");
@@ -274,6 +276,8 @@ namespace hipda.Common
                 content = content.Replace("<br/>", "↵"); // ↵符号表示换行符
                 content = content.Replace("<br />", "↵");
                 content = content.Replace("<br>", "↵");
+                content = content.Replace("</div>", "↵");
+                content = content.Replace("</p>", "↵");
 
                 // 替换引用文字标签
                 content = content.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""18,0,0,0"" Foreground=""Gray""][Span]");
