@@ -829,7 +829,8 @@ namespace hipda
                 IsItemClickEnabled = true,
                 ItemContainerStyle = ThreadItemStyle,
                 ItemTemplate = ThreadListItemTemplate,
-                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
+                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge,
+                SelectionMode = ListViewSelectionMode.None
             };
 
             ContinuumNavigationTransitionInfo.SetExitElementContainer(listView, true);
@@ -927,7 +928,8 @@ namespace hipda
                 IsItemClickEnabled = false,
                 ItemTemplate = ReplyListItemTemplate,
                 ItemContainerStyle = ReplyItemStyle,
-                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge
+                IncrementalLoadingTrigger = IncrementalLoadingTrigger.Edge,
+                SelectionMode = ListViewSelectionMode.None
             };
 
             // 留点底边距
