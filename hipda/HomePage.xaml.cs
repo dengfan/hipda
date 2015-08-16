@@ -230,14 +230,6 @@ namespace hipda
 
         #endregion
 
-        private void accountItem_PointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            FrameworkElement senderElement = sender as FrameworkElement;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-
-            flyoutBase.ShowAt(senderElement);
-        }
-
         private async void setDefaultItem_Click(object sender, RoutedEventArgs e)
         {
             // 清除登录cookies
@@ -286,6 +278,20 @@ namespace hipda
             ImageCountSettings.ImageCountSetting = ((ComboBox)sender).SelectedIndex;
         }
 
-        
+        private void accountItem_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+
+            flyoutBase.ShowAt(senderElement);
+        }
+
+        private void accountItem_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+
+            flyoutBase.ShowAt(senderElement);
+        }
     }
 }

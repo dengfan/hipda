@@ -118,7 +118,7 @@
                     <ListView Grid.Row="1" x:Name="accountList" ItemContainerStyle="{StaticResource AccountItemStyle}" SelectionMode="None">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid x:Name="accountItem" PointerReleased="accountItem_PointerReleased" Pivot.SlideInAnimationGroup="GroupOne">
+                                <Grid x:Name="accountItem" Holding="accountItem_Holding" RightTapped="accountItem_RightTapped" Pivot.SlideInAnimationGroup="GroupOne">
                                     <FlyoutBase.AttachedFlyout>
                                         <MenuFlyout>
                                             <MenuFlyoutItem x:Name="setDefaultItem" Text="切换到此账号" Click="setDefaultItem_Click" />
