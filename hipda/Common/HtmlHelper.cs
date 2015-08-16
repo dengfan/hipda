@@ -100,7 +100,7 @@ namespace hipda.Common
                         string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
                         int width = Convert.ToInt16(matchsForImage1[i].Groups[2].Value); // 图片宽度
 
-                        string imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                        string imgXaml = @"[InlineUIContainer][Image Stretch=""None"" Margin=""0,10,0,5""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
 
                         if (imageCount <= maxImageCount)
                         {
@@ -138,7 +138,7 @@ namespace hipda.Common
 
                         if (imageCount <= maxImageCount)
                         {
-                            imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                            imgXaml = @"[InlineUIContainer][Image Stretch=""None"" Margin=""0,10,0,5""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                             if (width > 220)
                             {
                                 imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" Width=""220""][Image.Source][BitmapImage DecodePixelWidth=""220"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
@@ -300,7 +300,7 @@ namespace hipda.Common
                         string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
                         int width = Convert.ToInt16(matchsForImage1[i].Groups[2].Value); // 图片宽度
 
-                        string imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                        string imgXaml = @"[InlineUIContainer][Image Stretch=""None"" Margin=""0,10,0,5""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
 
                         if (imageCount <= maxImageCount)
                         {
@@ -338,7 +338,7 @@ namespace hipda.Common
 
                         if (imageCount <= maxImageCount)
                         {
-                            imgXaml = @"[InlineUIContainer][Image Stretch=""None""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                            imgXaml = @"[InlineUIContainer][Image Stretch=""None"" Margin=""0,10,0,5""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
                             if (width >= 600)
                             {
                                 imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" Width=""600""][Image.Source][BitmapImage DecodePixelWidth=""600"" UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
