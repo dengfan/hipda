@@ -1888,15 +1888,6 @@ namespace hipda
 
         }
 
-        private void user_Holding(object sender, HoldingRoutedEventArgs e)
-        {
-            FrameworkElement senderElement = sender as FrameworkElement;
-            // If you need the clicked element:
-            // Item whichOne = senderElement.DataContext as Item;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-            flyoutBase.ShowAt(senderElement);
-        }
-
         private async void menuItemViewHistory_Click(object sender, RoutedEventArgs e)
         {
             Thread datacontext = (e.OriginalSource as FrameworkElement).DataContext as Thread;
@@ -1904,5 +1895,13 @@ namespace hipda
             await SearchThreadListPage(datacontext.OwnerName, 2);
         }
 
+        private void avatarImageBorder_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            // If you need the clicked element:
+            // Item whichOne = senderElement.DataContext as Item;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
+        }
     }
 }

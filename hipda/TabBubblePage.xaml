@@ -106,7 +106,10 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Holding="user_Holding">
+                <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder"
+                        Style="{StaticResource FaceIconStyle}"
+                        VerticalAlignment="Top"
+                        PointerPressed="avatarImageBorder_PointerPressed">
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout>
                             <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看发贴记录" Click="menuItemViewHistory_Click" />
