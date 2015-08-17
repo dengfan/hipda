@@ -1,10 +1,12 @@
-﻿using System;
+﻿using HipdaUwpPro.Client.Views;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,9 +24,30 @@ namespace HipdaUwpPro.Client
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public Frame AppFrame { get { return this.MainFrame; } }
+
         public MainPage()
         {
             this.InitializeComponent();
+
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundOpacity = 1;
+                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)Resources["SystemControlBackgroundAccentBrush"]).Color;
+                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
+            }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            AppFrame.Navigate(typeof(ThreadListPage));
+        }
+
+        private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
+        {
+            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
         }
     }
 }
