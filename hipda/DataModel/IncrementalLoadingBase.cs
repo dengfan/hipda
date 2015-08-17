@@ -19,7 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
 
-namespace hipda.Data
+namespace HipdaUwpLite.Data
 {
     // This class can used as a jumpstart for implementing ISupportIncrementalLoading. 
     // Implementing the ISupportIncrementalLoading interfaces allows you to create a list that loads

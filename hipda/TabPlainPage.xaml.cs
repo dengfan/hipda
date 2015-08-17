@@ -1,6 +1,6 @@
-﻿using hipda.Common;
-using hipda.Data;
-using hipda.Settings;
+﻿using HipdaUwpLite.Common;
+using HipdaUwpLite.Data;
+using HipdaUwpLite.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +29,7 @@ using Windows.UI.Core;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
 
-namespace hipda
+namespace HipdaUwpLite.Client
 {
     public sealed partial class TabPlainPage : Page
     {

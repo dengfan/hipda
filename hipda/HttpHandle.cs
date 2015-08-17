@@ -12,7 +12,7 @@ using Windows.UI.Popups;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
 
-namespace hipda
+namespace HipdaUwpLite.Client
 {
     public class HttpHandle
     {

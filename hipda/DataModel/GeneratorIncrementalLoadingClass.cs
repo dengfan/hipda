@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hipda.Data
+namespace HipdaUwpLite.Data
 {
     // This class implements IncrementalLoadingBase. 
     // To create your own Infinite List, you can create a class like this one that doesn't have 'generator' or 'maxcount', 

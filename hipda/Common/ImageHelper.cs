@@ -9,7 +9,7 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace hipda
+namespace HipdaUwpLite.Client
 {
     public static class ImageHelper
     {

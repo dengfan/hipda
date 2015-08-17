@@ -1,4 +1,4 @@
-﻿using hipda.Data;
+﻿using HipdaUwpLite.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
-namespace hipda
+namespace HipdaUwpLite.Client
 {
     public class BackgroundStyleSelecterForForumItem : StyleSelector
     {

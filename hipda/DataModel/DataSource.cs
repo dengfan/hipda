@@ -8,11 +8,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Data.Html;
-using hipda.Settings;
-using hipda.Common;
+using HipdaUwpLite.Settings;
+using HipdaUwpLite.Common;
 using Windows.UI.Popups;
+using HipdaUwpLite.Client;
 
-namespace hipda.Data
+namespace HipdaUwpLite.Data
 {
     #region 实体类
     public class ContentForEdit

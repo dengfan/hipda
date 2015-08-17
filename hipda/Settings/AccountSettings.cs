@@ -1,4 +1,5 @@
-﻿using hipda.Data;
+﻿using HipdaUwpLite.Client;
+using HipdaUwpLite.Data;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace hipda.Settings
+namespace HipdaUwpLite.Settings
 {
     public class AccountSettings
     {

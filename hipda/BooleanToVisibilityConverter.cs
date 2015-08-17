@@ -2,7 +2,7 @@
 using System.Globalization;
 using Windows.UI.Xaml.Data;
 
-namespace hipda
+namespace HipdaUwpLite.Client
 {
     public class BooleanToVisibilityConverter : IValueConverter
     {

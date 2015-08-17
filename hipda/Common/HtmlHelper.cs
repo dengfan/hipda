@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace hipda.Common
+namespace HipdaUwpLite.Common
 {
     public static class HtmlHelper
     {

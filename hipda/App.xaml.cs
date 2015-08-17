@@ -1,6 +1,6 @@
-﻿using hipda.Common;
-using hipda.Data;
-using hipda.Settings;
+﻿using HipdaUwpLite.Common;
+using HipdaUwpLite.Data;
+using HipdaUwpLite.Settings;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-namespace hipda
+namespace HipdaUwpLite.Client
 {
     /// <summary>
     /// 提供特定于应用程序的行为，以补充默认的应用程序类。
