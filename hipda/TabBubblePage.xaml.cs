@@ -1627,7 +1627,7 @@ namespace HipdaUwpLite.Client
 
         private async void addPhotoButton_Click(object sender, RoutedEventArgs e)
         {
-            string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
+            //string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
 
             FileOpenPicker openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.Thumbnail;
@@ -1648,17 +1648,17 @@ namespace HipdaUwpLite.Client
                     imageNameList.Add(fileName);
                     byte[] imageBuffer;
 
-                    if (deviceFamily.Equals("Windows.Mobile"))
-                    {
-                        imageBuffer = await ImageHelper.LoadAsync(file);
-                    }
-                    else
-                    {
-                        IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read);
-                        IBuffer buffer = new Windows.Storage.Streams.Buffer((uint)stream.Size);
-                        buffer = await stream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.None);
-                        imageBuffer = WindowsRuntimeBufferExtensions.ToArray(buffer, 0, (int)buffer.Length);
-                    }
+                    //if (deviceFamily.Equals("Windows.Mobile"))
+                    //{
+                    //    imageBuffer = await ImageHelper.LoadAsync(file);
+                    //}
+                    //else
+                    //{
+                    IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read);
+                    IBuffer buffer = new Windows.Storage.Streams.Buffer((uint)stream.Size);
+                    buffer = await stream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.None);
+                    imageBuffer = WindowsRuntimeBufferExtensions.ToArray(buffer, 0, (int)buffer.Length);
+                    //}
 
                     var data = new Dictionary<string, object>();
                     data.Add("uid", DataSource.UserId);
