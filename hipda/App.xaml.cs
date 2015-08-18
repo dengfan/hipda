@@ -55,7 +55,7 @@ namespace HipdaUwpLite.Client
 #endif
 
             // 自动登录
-            AutoLogin();
+            await AutoLogin();
 
             // 排序开关
             DataSource.ThreadListPageOrderBy = SortForThreadSettings.GetSortType;
@@ -209,12 +209,12 @@ namespace HipdaUwpLite.Client
             deferral.Complete();
         }
 
-        private void OnResuming(object sender, object e)
+        private async void OnResuming(object sender, object e)
         {
-            AutoLogin();
+            await AutoLogin();
         }
 
-        private async void AutoLogin()
+        private async Task AutoLogin()
         {
             #region 每次恢复时自动登录一下
             string err = string.Empty;
