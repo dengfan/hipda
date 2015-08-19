@@ -31,7 +31,7 @@ namespace HipdaUwpLite.Settings
                     return Convert.ToInt16(settingsContainer.Values[keyNameOfDefaultImageCountId]);
                 }
 
-                return 5;
+                return 6;
             }
         }
     }

@@ -81,15 +81,15 @@
                         <x:String>气泡</x:String>
                     </ComboBox>
                     <TextBlock Text="图片数量" FontSize="{ThemeResource ContentControlFontSize}" Margin="0,10,0,0" />
-                    <TextBlock Text="用于限制每个楼层的图片加载数量，以节省流量。（仅针对非纯文本模式生效）" Margin="0,5" FontSize="11" Foreground="{ThemeResource ListViewItemPointerOverBackgroundThemeBrush}"
+                    <TextBlock Text="用于限制每个楼层的图片加载数量，以节省流量。" Margin="0,5" FontSize="11" Foreground="{ThemeResource ListViewItemPointerOverBackgroundThemeBrush}"
                                    TextWrapping="Wrap" Pivot.SlideInAnimationGroup="GroupOne" />
-                    <ComboBox x:Name="imageCountComboBox" PlaceholderText="5" SelectionChanged="imageCountComboBox_SelectionChanged" HorizontalAlignment="Stretch">
-                        <x:String>0（即无图模式）</x:String>
-                        <x:String>1</x:String>
-                        <x:String>2</x:String>
-                        <x:String>3</x:String>
-                        <x:String>4</x:String>
-                        <x:String>5</x:String>
+                    <ComboBox x:Name="imageCountComboBox" PlaceholderText="6" SelectionChanged="imageCountComboBox_SelectionChanged" HorizontalAlignment="Stretch">
+                        <x:Int32>0</x:Int32>
+                        <x:Int32>2</x:Int32>
+                        <x:Int32>4</x:Int32>
+                        <x:Int32>6</x:Int32>
+                        <x:Int32>10</x:Int32>
+                        <x:Int32>20</x:Int32>
                     </ComboBox>
                 </StackPanel>
             </PivotItem>

@@ -87,7 +87,16 @@ namespace HipdaUwpLite.Client
         {
             accountList.ItemsSource = AccountSettings.List;
             layoutModeComboBox.SelectedIndex = LayoutModeSettings.LayoutModeSetting;
-            imageCountComboBox.SelectedIndex = ImageCountSettings.ImageCountSetting;
+
+            for (int i = 0; i < imageCountComboBox.Items.Count; i++)
+            {
+                int val = (int)imageCountComboBox.Items[i];
+                if (val == ImageCountSettings.ImageCountSetting)
+                {
+                    imageCountComboBox.SelectedIndex = i;
+                    break;
+                }
+            }
 
             Refresh();
         }
@@ -265,7 +274,8 @@ namespace HipdaUwpLite.Client
 
         private void imageCountComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ImageCountSettings.ImageCountSetting = ((ComboBox)sender).SelectedIndex;
+            int maxCount = (int)(((ComboBox)sender).SelectedItem);
+            ImageCountSettings.ImageCountSetting = maxCount;
         }
 
         private void accountItem_Holding(object sender, HoldingRoutedEventArgs e)
