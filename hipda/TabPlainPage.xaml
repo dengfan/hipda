@@ -1045,6 +1045,19 @@
     </Page.Resources>
 
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <t:DeviceFamilyTrigger DeviceFamily="Windows.Mobile" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="btnBack.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
         <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True" SelectionChanged="Pivot_SelectionChanged"/>
 
         <Grid x:Name="floorOriginalContentPanel" Visibility="Collapsed">
@@ -1094,6 +1107,10 @@
                 </Grid>
             </Border>
         </Grid>
+
+        <Border x:Name="btnBack" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,50,50" CornerRadius="24" Width="48" Height="48" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Opacity="0.6" Tapped="btnBack_Tapped">
+            <SymbolIcon Symbol="Back" Foreground="White"/>
+        </Border>
 
         <ProgressBar x:Name="replyProgressBar" IsIndeterminate="True" Visibility="Collapsed" />
     </Grid>

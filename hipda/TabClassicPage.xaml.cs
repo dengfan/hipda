@@ -1033,6 +1033,67 @@ namespace HipdaUwpLite.Client
             postNewTitleTextBox.Focus(FocusState.Programmatic);
         }
 
+        private void btnBack_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (postNewPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            {
+                NavigationHelper.IsCanGoBack = false;
+                e.Handled = true;
+
+                if (currentEditType == EnumEditType.Add)
+                {
+                    HidePostNewPanelAndButton();
+                }
+                else if (currentEditType == EnumEditType.Modify)
+                {
+                    HidePostNewModifyPanelAndButton();
+                }
+            }
+            else if (postReplyPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            {
+                NavigationHelper.IsCanGoBack = false;
+                e.Handled = true;
+
+                HidePostReplyPanelAndButton();
+            }
+            else if (floorOriginalContentPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
+            {
+                NavigationHelper.IsCanGoBack = false;
+                e.Handled = true;
+
+                floorOriginalContentPanel.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+                // 清空内容
+                webView.NavigateToString(string.Empty);
+            }
+            else
+            {
+                if (Pivot.SelectedIndex > 0)
+                {
+                    NavigationHelper.IsCanGoBack = false;
+                    e.Handled = true;
+                    Pivot.SelectedIndex = 0;
+                }
+                else
+                {
+                    NavigationHelper.IsCanGoBack = true;
+                }
+            }
+
+            // 清除针对回复的数据
+            postReplyContentTextBox.Text = string.Empty;
+            noticeauthor = noticetrimstr = noticeauthormsg = string.Empty;
+
+            if (navigationHelper.IsCanGoBack)
+            {
+                e.Handled = true;
+                if (navigationHelper.GoBackCommand.CanExecute(null))
+                {
+                    navigationHelper.GoBackCommand.Execute(null);
+                }
+            }
+        }
+
         private void TitleBackButton_BackRequested(object sender, BackRequestedEventArgs e)
         {
             if (postNewPanel.Visibility == Windows.UI.Xaml.Visibility.Visible)
