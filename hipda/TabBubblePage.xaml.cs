@@ -321,14 +321,26 @@ namespace HipdaUwpLite.Client
 
             #region 生成按账号发布信息之菜单
             var accList = AccountSettings.List;
-            foreach (var acc in accList)
+            if (accList.Count > 1)
             {
-                MenuFlyoutItem m = new MenuFlyoutItem();
-                m.Text = string.Format("使用 {0} 账号发布", acc.Username);
-                m.DataContext = new AccountForSend { AccountUsername = acc.Username, AccountKeyName = acc.Key };
-                m.Click += AccountForSend_Click;
-                sendButtonForUser.Items.Add(m);
+                var mf = new MenuFlyout();
+                foreach (var acc in accList)
+                {
+                    MenuFlyoutItem m = new MenuFlyoutItem();
+                    m.Text = string.Format("使用 {0} 账号发布", acc.Username);
+                    m.DataContext = new AccountForSend { AccountUsername = acc.Username, AccountKeyName = acc.Key };
+                    m.Click += AccountForSend_Click;
+                    mf.Items.Add(m);
+                }
+                sendButton.Flyout = mf;
             }
+            else
+            {
+                sendButton.Click += async (s, args) => {
+                    await Send();
+                };
+            }
+            
             #endregion
         }
 
@@ -339,6 +351,11 @@ namespace HipdaUwpLite.Client
             string accUsername = data.AccountUsername;
             await AccountSettings.SetDefault(data.AccountKeyName);
 
+            await Send();
+        }
+
+        private async Task Send()
+        {
             uploadStateInfo.Text = "点击 + 号图标可批量上传任何文件。";
             uploadStateInfo2.Text = "点击 + 号图标可批量上传任何文件。";
 
