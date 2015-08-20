@@ -154,7 +154,7 @@
                         <LineBreak/>
                         <Run Text="6. 如果您有建议或意见，请到菜单中的“说明及反馈”页面中进行反馈。" />
                         <LineBreak/>
-                        <Run Text="7. v201508182045" />
+                        <Run Text="7. v201508200910" />
                     </TextBlock>
                 </StackPanel>
             </PivotItem>

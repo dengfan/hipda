@@ -652,7 +652,7 @@ namespace HipdaUwpLite.Data
             {
                 url = "http://www.hi-pda.com/forum/search.php?srchtype=title&srchtxt=&searchsubmit=%CB%D1%CB%F7&st=on&srchuname={0}&srchfilter=all&srchfrom=0&before=&orderby={2}&ascdesc=desc&srchfid%5B0%5D={1}&page={3}&_={4}";
             }
-            url = string.Format(url, httpClient.GetEncoding(keywords), forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.Ticks.ToString("x"));
+            url = string.Format(url, httpClient.GetEncoding(keywords), "all", ThreadListPageOrderBy, pageNo, DateTime.Now.Ticks.ToString("x"));
             string htmlContent = await httpClient.GetAsync(url);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
