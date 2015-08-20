@@ -1189,7 +1189,11 @@
             <AppBarToggleButton x:Name="reverseListButton" Icon="Filter" Label="倒序看贴" Click="reverseListButton_Click" Visibility="Collapsed"/>
 
             <!--发布信息状态之底部按钮-->
-            <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />
+            <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Visibility="Collapsed">
+                <Button.Flyout>
+                    <MenuFlyout x:Name="sendButtonForUser"/>
+                </Button.Flyout>
+            </AppBarButton>
 
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openMyThreads" Label="我的贴子" Click="openMyThreads_Click" />

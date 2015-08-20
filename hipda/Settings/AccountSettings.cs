@@ -79,6 +79,8 @@ namespace HipdaUwpLite.Settings
 
         public static async Task<bool> LoginAndAdd(string username, string password, int questionId, string answer, bool isSave)
         {
+            httpClient.ClearCookies();
+
             var postData = new Dictionary<string, object>();
             postData.Add("username", username);
             postData.Add("password", password);
@@ -89,7 +91,7 @@ namespace HipdaUwpLite.Settings
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
-            
+
             // 载入HTML
             doc.LoadHtml(resultContent);
 
@@ -238,7 +240,7 @@ namespace HipdaUwpLite.Settings
             }
         }
 
-        
+
 
         #region INotifyPropertyChanged Members
 
@@ -254,5 +256,11 @@ namespace HipdaUwpLite.Settings
         }
 
         #endregion
+    }
+
+    public class AccountForSend
+    {
+        public string AccountUsername { get; set; }
+        public string AccountKeyName { get; set; }
     }
 }

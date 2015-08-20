@@ -305,6 +305,252 @@ namespace HipdaUwpLite.Client
                 await RefreshElementStatus();
             }
             #endregion
+
+            #region 生成按账号发布信息之菜单
+            var accList = AccountSettings.List;
+            foreach (var acc in accList)
+            {
+                MenuFlyoutItem m = new MenuFlyoutItem();
+                m.Text = string.Format("使用 {0} 账号发布", acc.Username);
+                m.DataContext = new AccountForSend { AccountUsername = acc.Username, AccountKeyName = acc.Key };
+                m.Click += AccountForSend_Click;
+                sendButtonForUser.Items.Add(m);
+            }
+            #endregion
+        }
+
+        private async void AccountForSend_Click(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutItem item = sender as MenuFlyoutItem;
+            AccountForSend data = item.DataContext as AccountForSend;
+            string accUsername = data.AccountUsername;
+            await AccountSettings.SetDefault(data.AccountKeyName);
+
+            uploadStateInfo.Text = "点击 + 号图标可批量上传任何文件。";
+            uploadStateInfo2.Text = "点击 + 号图标可批量上传任何文件。";
+
+            DateTime nowTime = DateTime.Now;
+            TimeSpan ts = (nowTime - lastPostTime);
+            if (ts.TotalSeconds <= 30)
+            {
+                await new MessageDialog(string.Format("您的发布请求不成功！\n您发布速度过快，请于{0:f1}秒后再发布。", 31 - ts.TotalSeconds), "注意").ShowAsync();
+                return;
+            }
+
+            PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
+
+            if (currentEditType == EnumEditType.Add)
+            {
+                #region 新增回复或话题
+                if (currentPostType == EnumPostType.Reply)
+                {
+                    // 获取当前主贴ID
+                    string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
+
+                    string message = postReplyContentTextBox.Text;
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        await new MessageDialog("您的发布请求不成功！\n内容不能为空。", "注意").ShowAsync();
+                        return;
+                    }
+
+                    string messageTail = message.Trim() + "\n \n" + DataSource.MessageTail; // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
+
+                    var postData = new Dictionary<string, object>();
+                    postData.Add("formhash", DataSource.FormHash);
+                    postData.Add("subject", string.Empty);
+                    postData.Add("message", messageTail);
+                    postData.Add("usesig", "1");
+                    postData.Add("noticeauthor", noticeauthor);
+                    postData.Add("noticetrimstr", noticetrimstr);
+                    postData.Add("noticeauthormsg", noticeauthormsg);
+
+                    // 图片信息
+                    foreach (var imageName in imageNameList)
+                    {
+                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+                    }
+
+                    // 发布请求
+                    string url = string.Format("http://www.hi-pda.com/forum/post.php?action=reply&tid={0}&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", threadId);
+                    string resultContent = await httpClient.PostAsync(url, postData);
+                    if (!resultContent.Contains("您的回复已经发布"))
+                    {
+                        await new MessageDialog("您的发布请求不成功！\n请检查是否已登录或网络连接是否正常。", "注意").ShowAsync();
+                        return;
+                    }
+
+                    HidePostReplyPanelAndButton();
+
+                    postReplyContentTextBox.Text = string.Empty;
+                    noticeauthor = string.Empty;
+                    noticetrimstr = string.Empty;
+                    noticeauthormsg = string.Empty;
+
+                    // 清空上载图片记录之集合
+                    imageNameList.Clear();
+
+                    // 刷新数据
+                    ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
+                    await RefreshRepliesListPage(threadId, listView);
+                }
+                else if (currentPostType == EnumPostType.NewThread)
+                {
+                    // 获取当前版块ID
+                    string forumId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
+
+                    string subject = postNewTitleTextBox.Text;
+                    if (string.IsNullOrEmpty(subject))
+                    {
+                        await new MessageDialog("您的发布请求不成功！\n标题不能为空。", "注意").ShowAsync();
+                        return;
+                    }
+
+                    string message = postNewContentTextBox.Text;
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        await new MessageDialog("您的发布请求不成功！\n内容不能为空。", "注意").ShowAsync();
+                        return;
+                    }
+
+                    var postData = new Dictionary<string, object>();
+                    postData.Add("formhash", DataSource.FormHash);
+                    postData.Add("wysiwyg", "1");
+                    postData.Add("iconid", "0");
+                    postData.Add("subject", subject);
+                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
+                    postData.Add("attention_add", "1");
+                    postData.Add("usesig", "1");
+
+                    // 图片信息
+                    foreach (var imageName in imageNameList)
+                    {
+                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+                    }
+
+                    // 发布请求
+                    string url = string.Format("http://www.hi-pda.com/forum/post.php?action=newthread&fid={0}&extra=&topicsubmit=yes", forumId);
+                    string resultContent = await httpClient.PostAsync(url, postData);
+                    if (resultContent.Contains("对不起，您两次发表间隔少于"))
+                    {
+                        await new MessageDialog("您的发布请求不成功！\n可能是你连续发布过快，请稍候再试。", "注意").ShowAsync();
+                        return;
+                    }
+
+                    HidePostNewPanelAndButton();
+
+                    postNewTitleTextBox.Text = string.Empty;
+                    postNewContentTextBox.Text = string.Empty;
+
+                    // 清空上载图片记录之集合
+                    imageNameList.Clear();
+
+                    // 刷新数据
+                    ListView listView = (ListView)pivotItem.FindName("threadsListView" + forumId);
+                    await RefreshThreadListPage(listView, forumId);
+                }
+                #endregion
+            }
+            else if (currentEditType == EnumEditType.Modify)
+            {
+                #region 修改回复或话题
+                if (currentPostType == EnumPostType.Reply)
+                {
+                    string threadId = DataSource.ContentForEdit.ThreadId;
+
+                    string message = postReplyContentTextBox.Text;
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        await new MessageDialog("您的修改请求不成功！\n内容不能为空。", "注意").ShowAsync();
+                        return;
+                    }
+
+                    var postData = new Dictionary<string, object>();
+                    postData.Add("formhash", DataSource.FormHash);
+                    postData.Add("subject", string.Empty);
+                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
+                    postData.Add("wysiwyg", "1");
+                    postData.Add("tid", threadId);
+                    postData.Add("pid", DataSource.ContentForEdit.PostId);
+                    postData.Add("iconid", "0");
+
+                    // 图片信息
+                    foreach (var imageName in imageNameList)
+                    {
+                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+                    }
+
+                    // 发布请求
+                    string url = "http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=";
+                    await httpClient.PostAsync(url, postData);
+
+                    HidePostReplyPanelAndButton();
+
+                    postReplyContentTextBox.Text = string.Empty;
+
+                    // 清空上载图片记录之集合
+                    imageNameList.Clear();
+
+                    // 刷新当前贴子回复列表
+                    ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
+                    await RefreshReplyListPage(listView, threadId);
+                }
+                else if (currentPostType == EnumPostType.NewThread)
+                {
+                    string threadId = DataSource.ContentForEdit.ThreadId;
+
+                    string subject = postNewTitleTextBox.Text;
+                    if (string.IsNullOrEmpty(subject))
+                    {
+                        await new MessageDialog("您的修改请求不成功！\n标题不能为空。", "注意").ShowAsync();
+                        return;
+                    }
+
+                    string message = postNewContentTextBox.Text;
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        await new MessageDialog("您的修改请求不成功！\n内容不能为空。", "注意").ShowAsync();
+                        return;
+                    }
+
+                    var postData = new Dictionary<string, object>();
+                    postData.Add("formhash", DataSource.FormHash);
+                    postData.Add("subject", subject);
+                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
+                    postData.Add("wysiwyg", "1");
+                    postData.Add("tid", threadId);
+                    postData.Add("pid", DataSource.ContentForEdit.PostId);
+                    postData.Add("iconid", "0");
+
+                    // 图片信息
+                    foreach (var imageName in imageNameList)
+                    {
+                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+                    }
+
+                    // 发布请求
+                    string url = "http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=";
+                    await httpClient.PostAsync(url, postData);
+
+                    HidePostNewModifyPanelAndButton();
+
+                    postNewTitleTextBox.Text = string.Empty;
+                    postNewContentTextBox.Text = string.Empty;
+
+                    // 清空上载图片记录之集合
+                    imageNameList.Clear();
+
+                    // 使用新的tab标题
+                    pivotItem.Header = Regex.Replace(subject, regexForTitle, string.Empty);
+
+                    // 刷新当前贴子回复列表
+                    ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
+                    await RefreshReplyListPage(listView, threadId);
+                }
+                #endregion
+            }
+
+            lastPostTime = DateTime.Now;
         }
 
         private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -1219,234 +1465,6 @@ namespace HipdaUwpLite.Client
             }
         }
 
-        private async void sendButton_Click(object sender, RoutedEventArgs e)
-        {
-            uploadStateInfo.Text = "点击 + 号图标可批量上传任何文件。";
-            uploadStateInfo2.Text = "点击 + 号图标可批量上传任何文件。";
-
-            DateTime nowTime = DateTime.Now;
-            TimeSpan ts = (nowTime - lastPostTime);
-            if (ts.TotalSeconds <= 30)
-            {
-                await new MessageDialog(string.Format("您的发布请求不成功！\n您发布速度过快，请于{0:f1}秒后再发布。", 31 - ts.TotalSeconds), "注意").ShowAsync();
-                return;
-            }
-
-            PivotItem pivotItem = (PivotItem)Pivot.SelectedItem;
-
-            if (currentEditType == EnumEditType.Add)
-            {
-                #region 新增回复或话题
-                if (currentPostType == EnumPostType.Reply)
-                {
-                    // 获取当前主贴ID
-                    string threadId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
-
-                    string message = postReplyContentTextBox.Text;
-                    if (string.IsNullOrEmpty(message))
-                    {
-                        await new MessageDialog("您的发布请求不成功！\n内容不能为空。", "注意").ShowAsync();
-                        return;
-                    }
-
-                    string messageTail = message.Trim() + "\n \n" + DataSource.MessageTail; // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
-
-                    var postData = new Dictionary<string, object>();
-                    postData.Add("formhash", DataSource.FormHash);
-                    postData.Add("subject", string.Empty);
-                    postData.Add("message", messageTail);
-                    postData.Add("usesig", "1");
-                    postData.Add("noticeauthor", noticeauthor);
-                    postData.Add("noticetrimstr", noticetrimstr);
-                    postData.Add("noticeauthormsg", noticeauthormsg);
-
-                    // 图片信息
-                    foreach (var imageName in imageNameList)
-                    {
-                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
-                    }
-
-                    // 发布请求
-                    string url = string.Format("http://www.hi-pda.com/forum/post.php?action=reply&tid={0}&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", threadId);
-                    string resultContent = await httpClient.PostAsync(url, postData);
-                    if (!resultContent.Contains("您的回复已经发布"))
-                    {
-                        await new MessageDialog("您的发布请求不成功！\n请检查是否已登录或网络连接是否正常。", "注意").ShowAsync();
-                        return;
-                    }
-
-                    HidePostReplyPanelAndButton();
-
-                    postReplyContentTextBox.Text = string.Empty;
-                    noticeauthor = string.Empty;
-                    noticetrimstr = string.Empty;
-                    noticeauthormsg = string.Empty;
-
-                    // 清空上载图片记录之集合
-                    imageNameList.Clear();
-
-                    // 刷新数据
-                    ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    await RefreshRepliesListPage(threadId, listView);
-                }
-                else if (currentPostType == EnumPostType.NewThread)
-                {
-                    // 获取当前版块ID
-                    string forumId = pivotItem.GetValue(PivotItemTabIdProperty).ToString();
-
-                    string subject = postNewTitleTextBox.Text;
-                    if (string.IsNullOrEmpty(subject))
-                    {
-                        await new MessageDialog("您的发布请求不成功！\n标题不能为空。", "注意").ShowAsync();
-                        return;
-                    }
-
-                    string message = postNewContentTextBox.Text;
-                    if (string.IsNullOrEmpty(message))
-                    {
-                        await new MessageDialog("您的发布请求不成功！\n内容不能为空。", "注意").ShowAsync();
-                        return;
-                    }
-
-                    var postData = new Dictionary<string, object>();
-                    postData.Add("formhash", DataSource.FormHash);
-                    postData.Add("wysiwyg", "1");
-                    postData.Add("iconid", "0");
-                    postData.Add("subject", subject);
-                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
-                    postData.Add("attention_add", "1");
-                    postData.Add("usesig", "1");
-
-                    // 图片信息
-                    foreach (var imageName in imageNameList)
-                    {
-                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
-                    }
-
-                    // 发布请求
-                    string url = string.Format("http://www.hi-pda.com/forum/post.php?action=newthread&fid={0}&extra=&topicsubmit=yes", forumId);
-                    string resultContent = await httpClient.PostAsync(url, postData);
-                    if (resultContent.Contains("对不起，您两次发表间隔少于"))
-                    {
-                        await new MessageDialog("您的发布请求不成功！\n可能是你连续发布过快，请稍候再试。", "注意").ShowAsync();
-                        return;
-                    }
-
-                    HidePostNewPanelAndButton();
-
-                    postNewTitleTextBox.Text = string.Empty;
-                    postNewContentTextBox.Text = string.Empty;
-
-                    // 清空上载图片记录之集合
-                    imageNameList.Clear();
-
-                    // 刷新数据
-                    ListView listView = (ListView)pivotItem.FindName("threadsListView" + forumId);
-                    await RefreshThreadListPage(listView, forumId);
-                }
-                #endregion
-            }
-            else if (currentEditType == EnumEditType.Modify)
-            {
-                #region 修改回复或话题
-                if (currentPostType == EnumPostType.Reply)
-                {
-                    string threadId = DataSource.ContentForEdit.ThreadId;
-
-                    string message = postReplyContentTextBox.Text;
-                    if (string.IsNullOrEmpty(message))
-                    {
-                        await new MessageDialog("您的修改请求不成功！\n内容不能为空。", "注意").ShowAsync();
-                        return;
-                    }
-
-                    var postData = new Dictionary<string, object>();
-                    postData.Add("formhash", DataSource.FormHash);
-                    postData.Add("subject", string.Empty);
-                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
-                    postData.Add("wysiwyg", "1");
-                    postData.Add("tid", threadId);
-                    postData.Add("pid", DataSource.ContentForEdit.PostId);
-                    postData.Add("iconid", "0");
-
-                    // 图片信息
-                    foreach (var imageName in imageNameList)
-                    {
-                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
-                    }
-
-                    // 发布请求
-                    string url = "http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=";
-                    string resultContent = await httpClient.PostAsync(url, postData);
-
-                    HidePostReplyPanelAndButton();
-
-                    postReplyContentTextBox.Text = string.Empty;
-
-                    // 清空上载图片记录之集合
-                    imageNameList.Clear();
-
-                    // 刷新当前贴子回复列表
-                    ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    await RefreshReplyListPage(listView, threadId);
-                }
-                else if (currentPostType == EnumPostType.NewThread)
-                {
-                    string  threadId = DataSource.ContentForEdit.ThreadId;
-
-                    string subject = postNewTitleTextBox.Text;
-                    if (string.IsNullOrEmpty(subject))
-                    {
-                        await new MessageDialog("您的修改请求不成功！\n标题不能为空。", "注意").ShowAsync();
-                        return;
-                    }
-
-                    string message = postNewContentTextBox.Text;
-                    if (string.IsNullOrEmpty(message))
-                    {
-                        await new MessageDialog("您的修改请求不成功！\n内容不能为空。", "注意").ShowAsync();
-                        return;
-                    }
-
-                    var postData = new Dictionary<string, object>();
-                    postData.Add("formhash", DataSource.FormHash);
-                    postData.Add("subject", subject);
-                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
-                    postData.Add("wysiwyg", "1");
-                    postData.Add("tid", threadId);
-                    postData.Add("pid", DataSource.ContentForEdit.PostId);
-                    postData.Add("iconid", "0");
-
-                    // 图片信息
-                    foreach (var imageName in imageNameList)
-                    {
-                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
-                    }
-
-                    // 发布请求
-                    string url = "http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=";
-                    string resultContent = await httpClient.PostAsync(url, postData);
-
-                    HidePostNewModifyPanelAndButton();
-
-                    postNewTitleTextBox.Text = string.Empty;
-                    postNewContentTextBox.Text = string.Empty;
-
-                    // 清空上载图片记录之集合
-                    imageNameList.Clear();
-
-                    // 使用新的tab标题
-                    pivotItem.Header = Regex.Replace(subject, regexForTitle, string.Empty);
-
-                    // 刷新当前贴子回复列表
-                    ListView listView = (ListView)pivotItem.FindName("repliesListView" + threadId);
-                    await RefreshReplyListPage(listView, threadId);
-                }
-                #endregion
-            }
-
-            lastPostTime = DateTime.Now;
-        }
 
         #region 显示或隐藏回复或修改回复之输入面板
         private void HidePostReplyPanelAndButton()
