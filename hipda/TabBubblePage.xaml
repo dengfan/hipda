@@ -1168,7 +1168,7 @@
             </Border>
         </Grid>
 
-        <Border x:Name="btnBack" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,50,50" CornerRadius="24" Width="48" Height="48" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Opacity="0.6" Tapped="btnBack_Tapped">
+        <Border x:Name="btnBack" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,50,50" CornerRadius="24" Width="48" Height="48" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Opacity="0.6" Tapped="btnBack_Tapped" PointerEntered="btnBack_PointerEntered" PointerExited="btnBack_PointerExited">
             <SymbolIcon Symbol="Back" Foreground="White"/>
         </Border>
 

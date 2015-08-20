@@ -1986,5 +1986,17 @@ namespace HipdaUwpLite.Client
             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
             flyoutBase.ShowAt(senderElement);
         }
+
+        private void btnBack_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            Border b = sender as Border;
+            b.Opacity = 1;
+        }
+
+        private void btnBack_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            Border b = sender as Border;
+            b.Opacity = 0.6;
+        }
     }
 }
