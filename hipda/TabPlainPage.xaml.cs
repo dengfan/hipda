@@ -477,6 +477,7 @@ namespace HipdaUwpLite.Client
                     sortForThreadListButton.Visibility =
                     changeThemeButton.Visibility =
                     openDialogForSearch.Visibility =
+                    openMyThreads.Visibility =
                     Windows.UI.Xaml.Visibility.Visible;
 
                 // 隐藏 回复列表页底部按钮
@@ -502,6 +503,7 @@ namespace HipdaUwpLite.Client
                     sortForThreadListButton.Visibility =
                     changeThemeButton.Visibility =
                     openDialogForSearch.Visibility =
+                    openMyThreads.Visibility =
                     Windows.UI.Xaml.Visibility.Collapsed;
 
                 // 隐藏 发布信息状态之底部按钮
@@ -1268,6 +1270,7 @@ namespace HipdaUwpLite.Client
                 sortForThreadListButton.Visibility =
                 changeThemeButton.Visibility =
                 openDialogForSearch.Visibility =
+                openMyThreads.Visibility =
                 Windows.UI.Xaml.Visibility.Visible;
         }
 
@@ -1286,6 +1289,7 @@ namespace HipdaUwpLite.Client
                 sortForThreadListButton.Visibility =
                 changeThemeButton.Visibility =
                 openDialogForSearch.Visibility =
+                openMyThreads.Visibility =
                 Windows.UI.Xaml.Visibility.Collapsed;
         }
 
@@ -1702,6 +1706,20 @@ namespace HipdaUwpLite.Client
                 await SearchThreadListPage(keywords, 1);
             }
 
+        }
+
+        private async void openMyThreads_Click(object sender, RoutedEventArgs e)
+        {
+            if (!accountName.Equals("未登录"))
+            {
+                var acc = AccountSettings.GetDefault();
+                string accUsername = acc.Username;
+                await SearchThreadListPage(accUsername, 2);
+            }
+            else
+            {
+                await new MessageDialog("请先登录您的账号！", "提示").ShowAsync();
+            }
         }
 
         private async void menuItemViewHistory_Click(object sender, RoutedEventArgs e)

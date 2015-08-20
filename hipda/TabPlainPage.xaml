@@ -1118,7 +1118,7 @@
     <Page.BottomAppBar>
         <CommandBar x:Name="tabPageCommandBar" Background="{StaticResource CommandBarBgColor}">
             <!--贴子列表页底部按钮-->
-            <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
+            <AppBarButton x:Name="openPostNewPanelButton" Icon="Add" Label="发表新贴" Click="openPostNewPanelButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="refreshThreadsButton" Icon="Refresh" Label="刷新" Click="refreshThreadsButton_Click" Visibility="Collapsed" />
             <AppBarToggleButton x:Name="sortForThreadListButton" Icon="Sort" Label="排序开关" Click="sortForThreadListButton_Click" Visibility="Collapsed" />
             <AppBarButton x:Name="changeThemeButton" Icon="OtherUser" Label="样式切换" Click="changeThemeButton_Click" Visibility="Collapsed"/>
@@ -1132,6 +1132,7 @@
             <AppBarButton x:Name="sendButton" Icon="Send" Label="发布" Click="sendButton_Click" Visibility="Collapsed" />
 
             <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="openMyThreads" Label="我的贴子" Click="openMyThreads_Click" />
                 <AppBarButton Label="Discovery 版" Click="openTabForDiscovery_Click" />
                 <AppBarButton Label="Buy &amp; Sell 版" Click="openTabForBuyAndSell_Click" />
                 <AppBarButton Label="Eink 版" Click="openTabForEink_Click" />
