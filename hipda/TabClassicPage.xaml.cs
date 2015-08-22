@@ -29,7 +29,7 @@ using Windows.UI.Core;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
 
-namespace HipdaUwpLite.Client
+namespace HipdaUwp.Client.Lite
 {
     public sealed partial class TabClassicPage : Page
     {

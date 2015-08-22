@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
-namespace HipdaUwpLite.Client
+namespace HipdaUwp.Client.Lite
 {
     public class ListGroupStyleSelector : GroupStyleSelector
     {

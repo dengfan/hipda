@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HipdaUwpLite.Client
+namespace HipdaUwp.Client.Lite
 {
     public enum EnumLayoutMode
     {

@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
-namespace HipdaUwpLite.Client
+namespace HipdaUwp.Client.Lite
 {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
