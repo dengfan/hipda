@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HipdaUwpPro.Client.ViewModels
+namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ReplyItem : INotifyPropertyChanged
     {

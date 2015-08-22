@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 // “用户控件”项模板在 http://go.microsoft.com/fwlink/?LinkId=234236 上提供
 
-namespace HipdaUwp.Client.Lite
+namespace Hipda.Client.Uwp.Lite
 {
     public sealed partial class FaceIconGrid : UserControl
     {

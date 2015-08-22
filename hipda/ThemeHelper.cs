@@ -9,7 +9,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
-namespace HipdaUwp.Client.Lite
+namespace Hipda.Client.Uwp.Lite
 {
     public static class ThemeHelper
     {

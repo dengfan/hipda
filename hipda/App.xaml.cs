@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-namespace HipdaUwp.Client.Lite
+namespace Hipda.Client.Uwp.Lite
 {
     /// <summary>
     /// 提供特定于应用程序的行为，以补充默认的应用程序类。

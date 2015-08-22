@@ -29,7 +29,7 @@ using Windows.UI.Core;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
 
-namespace HipdaUwp.Client.Lite
+namespace Hipda.Client.Uwp.Lite
 {
     public sealed partial class TabPlainPage : Page
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{D385E860-3223-4452-8EAA-AEFCC0313400}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HipdaUwp.Client.Lite</RootNamespace>
-    <AssemblyName>HipdaUwp.Client.Lite</AssemblyName>
+    <RootNamespace>Hipda.Client.Uwp.Lite</RootNamespace>
+    <AssemblyName>Hipda.Client.Uwp.Lite</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>

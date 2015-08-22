@@ -1,4 +1,4 @@
-﻿using HipdaUwp.Client.Lite;
+﻿using Hipda.Client.Uwp.Lite;
 using HipdaUwpLite.Data;
 using HtmlAgilityPack;
 using System;

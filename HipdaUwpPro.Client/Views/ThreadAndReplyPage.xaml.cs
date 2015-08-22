@@ -1,4 +1,4 @@
-﻿using HipdaUwpPro.Client.ViewModels;
+﻿using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,24 +17,24 @@ using Windows.UI.Xaml.Navigation;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
-namespace HipdaUwpPro.Client.Views
+namespace Hipda.Client.Uwp.Pro.Views
 {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ThreadListPage : Page
+    public sealed partial class ThreadAndReplyPage : Page
     {
-        public List<ThreadItem> ThreadListProp
+        public List<ThreadAndReplyViewModels> ThreadListProp
         {
-            get { return (List<ThreadItem>)GetValue(ThreadListPropProperty); }
+            get { return (List<ThreadAndReplyViewModels>)GetValue(ThreadListPropProperty); }
             set { SetValue(ThreadListPropProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ThreadListProp.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ThreadListPropProperty =
-            DependencyProperty.Register("ThreadListProp", typeof(List<ThreadItem>), typeof(ThreadListPage), new PropertyMetadata(null));
+            DependencyProperty.Register("ThreadListProp", typeof(List<ThreadAndReplyViewModels>), typeof(ThreadAndReplyPage), new PropertyMetadata(null));
 
-        public ThreadListPage()
+        public ThreadAndReplyPage()
         {
             this.InitializeComponent();
         }
@@ -101,7 +101,7 @@ namespace HipdaUwpPro.Client.Views
 
         private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var data = (ThreadItem)e.ClickedItem;
+            var data = (ThreadAndReplyViewModels)e.ClickedItem;
             data.GetReplyList();
             RightWrap.DataContext = data;
 
@@ -113,9 +113,9 @@ namespace HipdaUwpPro.Client.Views
             }
         }
 
-        private List<ThreadItem> GetThreadList()
+        private List<ThreadAndReplyViewModels> GetThreadList()
         {
-            var threadList = new List<ThreadItem>();
+            var threadList = new List<ThreadAndReplyViewModels>();
             for (int i = 0; i < 50; i++)
             {
                 threadList.Add(new ThreadItem { Id = i, Name = "功率" + i, Title = "法灯电动车工，夺不地工地城示灯影jfis不煤类时是革夺地且，夺城工在地肝苦不困kdfd不裁夺地夺萘在地载。" + i });

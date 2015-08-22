@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HipdaUwpPro.Client.ViewModels
+namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    class NotificationObject : INotifyPropertyChanged
+    public class NotificationObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

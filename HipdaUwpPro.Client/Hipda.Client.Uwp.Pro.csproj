@@ -7,8 +7,8 @@
     <ProjectGuid>{E7FDC7C0-96C6-4F0C-9394-1168D6C2276B}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HipdaUwpPro.Client</RootNamespace>
-    <AssemblyName>HipdaUwpPro.Client</AssemblyName>
+    <RootNamespace>Hipda.Client.Uwp.Pro</RootNamespace>
+    <AssemblyName>Hipda.Client.Uwp.Pro</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
@@ -99,17 +99,22 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\Class1.cs" />
+    <Compile Include="Models\ForumDataModel.cs" />
+    <Compile Include="Models\ThreadItemModel.cs" />
+    <Compile Include="Models\ThreadPageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Class1.cs" />
+    <Compile Include="Services\DataService.cs" />
+    <Compile Include="Services\IDataService.cs" />
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
+    <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\ReplyItem.cs" />
-    <Compile Include="ViewModels\ThreadItem.cs" />
-    <Compile Include="Views\ThreadListPage.xaml.cs">
-      <DependentUpon>ThreadListPage.xaml</DependentUpon>
+    <Compile Include="ViewModels\ThreadAndReplyViewModels.cs" />
+    <Compile Include="Views\ThreadAndReplyPage.xaml.cs">
+      <DependentUpon>ThreadAndReplyPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -137,7 +142,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ThreadListPage.xaml">
+    <Page Include="Views\ThreadAndReplyPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

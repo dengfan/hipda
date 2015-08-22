@@ -11,7 +11,7 @@ using Windows.Data.Html;
 using HipdaUwpLite.Settings;
 using HipdaUwpLite.Common;
 using Windows.UI.Popups;
-using HipdaUwp.Client.Lite;
+using Hipda.Client.Uwp.Lite;
 
 namespace HipdaUwpLite.Data
 {

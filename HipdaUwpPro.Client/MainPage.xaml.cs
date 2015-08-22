@@ -1,4 +1,4 @@
-﻿using HipdaUwpPro.Client.Views;
+﻿using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 //“空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 上有介绍
 
-namespace HipdaUwpPro.Client
+namespace Hipda.Client.Uwp.Pro
 {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
@@ -42,7 +42,7 @@ namespace HipdaUwpPro.Client
         {
             base.OnNavigatedTo(e);
 
-            AppFrame.Navigate(typeof(ThreadListPage));
+            AppFrame.Navigate(typeof(ThreadAndReplyPage));
         }
 
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)

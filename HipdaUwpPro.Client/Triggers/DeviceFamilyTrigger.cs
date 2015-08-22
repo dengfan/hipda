@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.System.Profile;
 using Windows.UI.Xaml;
 
-namespace HipdaUwpPro.Client.Triggers
+namespace Hipda.Client.Uwp.Pro.Triggers
 {
     public class DeviceFamilyTrigger : StateTriggerBase
     {
