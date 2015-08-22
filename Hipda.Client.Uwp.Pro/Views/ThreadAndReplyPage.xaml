@@ -1,0 +1,107 @@
+﻿<Page
+    x:Class="HipdaUwpPro.Client.Views.ThreadAndReplyPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HipdaUwpPro.Client.Views"
+    xmlns:vm="using:HipdaUwpPro.Client.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">
+                <VisualState x:Name="DefaultState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="LeftColumn.Width" Value="*" />
+                        <Setter Target="RightColumn.Width" Value="1.25*" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <!--<VisualState.Setters>
+                        <Setter Target="LeftColumn.Width" Value="*" />
+                        <Setter Target="RightColumn.Width" Value="0" />
+                    </VisualState.Setters>-->
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="LeftColumn" Width="320" />
+            <ColumnDefinition x:Name="RightColumn" Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="LeftWrap" Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                <AppBarButton Icon="Edit" Label="Edit"/>
+                <AppBarButton Icon="Delete" Label="Delete"/>
+                <AppBarToggleButton Icon="Sort" Label="Sort"/>
+                <CommandBar.SecondaryCommands>
+                    <AppBarButton Label="Menu Item 1"/>
+                    <AppBarButton Label="Menu Item 2"/>
+                    <AppBarButton Label="Menu Item 3"/>
+                </CommandBar.SecondaryCommands>
+            </CommandBar>
+
+            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" ItemClick="ThreadListView_ItemClick" VerticalAlignment="Top">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ThreadItem">
+                        <StackPanel>
+                            <TextBlock Text="{x:Bind Name}" TextWrapping="Wrap"/>
+                            <TextBlock Text="{x:Bind Title}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <Grid x:Name="RightWrap"
+              Grid.Column="1"
+              Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
+              BorderThickness="1,0,0,0" 
+              BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                <AppBarButton Icon="Edit" Label="Edit"/>
+                <AppBarButton Icon="Delete" Label="Delete"/>
+                <AppBarSeparator/>
+                <AppBarToggleButton Icon="Sort" Label="Sort"/>
+                <CommandBar.SecondaryCommands>
+                    <AppBarButton Label="Menu Item 1"/>
+                    <AppBarButton Label="Menu Item 2"/>
+                    <AppBarButton Label="Menu Item 3"/>
+                </CommandBar.SecondaryCommands>
+            </CommandBar>
+
+            <ListView Grid.Row="1" x:Name="ReplyListView" ItemsSource="{Binding ReplyList}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding Content}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+</Page>

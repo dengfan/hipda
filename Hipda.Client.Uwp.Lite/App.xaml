@@ -1,0 +1,18 @@
+﻿<Application
+    x:Class="Hipda.Client.Uwp.Lite.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    RequestedTheme="Light"
+    xmlns:local="using:Hipda.Client.Uwp.Lite">
+    <Application.Resources>
+        <ResourceDictionary>
+            <GroupStyle x:Key="listViewGroupStyle">
+                <GroupStyle.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </GroupStyle.HeaderTemplate>
+            </GroupStyle>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
