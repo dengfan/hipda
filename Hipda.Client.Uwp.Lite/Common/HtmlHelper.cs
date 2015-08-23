@@ -41,6 +41,19 @@ namespace HipdaUwpLite.Common
                     }
                 }
 
+                // 移除无用的图片附加信息2
+                MatchCollection matchsForInvalidHtml2 = new Regex(@"<p class=""imgtitle"">\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*").Matches(content.ToString());
+                if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
+                {
+                    for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
+                    {
+                        var m = matchsForInvalidHtml2[i];
+
+                        string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                        content = content.Replace(placeHolder, string.Empty);
+                    }
+                }
+
                 // 替换链接
                 MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^>#]*)</a>").Matches(content.ToString());
                 if (matchsForLink != null && matchsForLink.Count > 0)
@@ -214,6 +227,19 @@ namespace HipdaUwpLite.Common
                     for (int i = 0; i < matchsForInvalidHtml1.Count; i++)
                     {
                         var m = matchsForInvalidHtml1[i];
+
+                        string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                        content = content.Replace(placeHolder, string.Empty);
+                    }
+                }
+
+                // 移除无用的图片附加信息2
+                MatchCollection matchsForInvalidHtml2 = new Regex(@"<p class=""imgtitle"">\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*").Matches(content.ToString());
+                if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
+                {
+                    for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
+                    {
+                        var m = matchsForInvalidHtml2[i];
 
                         string placeHolder = m.Groups[0].Value; // 要被替换的元素
                         content = content.Replace(placeHolder, string.Empty);
