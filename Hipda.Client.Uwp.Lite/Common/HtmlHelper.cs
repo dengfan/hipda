@@ -29,7 +29,7 @@ namespace HipdaUwpLite.Common
                 content = content.Replace("↵", "&#8629;");
 
                 // 移除无用的图片附加信息
-                MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n\s*<div class=""t_smallfont"">.*").Matches(content.ToString());
+                MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n*.*").Matches(content.ToString());
                 if (matchsForInvalidHtml1 != null && matchsForInvalidHtml1.Count > 0)
                 {
                     for (int i = 0; i < matchsForInvalidHtml1.Count; i++)
@@ -221,7 +221,7 @@ namespace HipdaUwpLite.Common
                 content = content.Replace("↵", "&#8629;");
 
                 // 移除无用的图片附加信息
-                MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n\s*<div class=""t_smallfont"">.*").Matches(content.ToString());
+                MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n*.*").Matches(content.ToString());
                 if (matchsForInvalidHtml1 != null && matchsForInvalidHtml1.Count > 0)
                 {
                     for (int i = 0; i < matchsForInvalidHtml1.Count; i++)
