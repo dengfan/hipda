@@ -80,7 +80,7 @@
                         <x:String>纯文本（无图极速模式）</x:String>
                         <x:String>气泡</x:String>
                     </ComboBox>
-                    <TextBlock Text="图片数量" FontSize="{ThemeResource ContentControlFontSize}" Margin="0,10,0,0" />
+                    <TextBlock Text="图片数量（仅限移动端）" FontSize="{ThemeResource ContentControlFontSize}" Margin="0,10,0,0" />
                     <TextBlock Text="用于限制每个楼层的图片加载数量，以节省流量。" Margin="0,5" FontSize="11" Foreground="{ThemeResource ListViewItemPointerOverBackgroundThemeBrush}"
                                    TextWrapping="Wrap" Pivot.SlideInAnimationGroup="GroupOne" />
                     <ComboBox x:Name="imageCountComboBox" PlaceholderText="6" SelectionChanged="imageCountComboBox_SelectionChanged" HorizontalAlignment="Stretch">
@@ -154,7 +154,7 @@
                         <LineBreak/>
                         <Run Text="6. 如果您有建议或意见，请到菜单中的“说明及反馈”页面中进行反馈。" />
                         <LineBreak/>
-                        <Run Text="7. v201508202143" />
+                        <Run Text="7. v201508232239" />
                     </TextBlock>
                 </StackPanel>
             </PivotItem>

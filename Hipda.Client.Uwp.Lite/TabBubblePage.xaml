@@ -1193,9 +1193,6 @@
 
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="openMyThreads" Label="我的贴子" Click="openMyThreads_Click" />
-                <AppBarButton Label="Discovery 版" Click="openTabForDiscovery_Click" />
-                <AppBarButton Label="Buy &amp; Sell 版" Click="openTabForBuyAndSell_Click" />
-                <AppBarButton Label="Eink 版" Click="openTabForEink_Click" />
                 <AppBarButton x:Name="openDialogForSearch" Label="版内搜索">
                     <Button.Flyout>
                         <Flyout FlyoutPresenterStyle="{StaticResource SearchFlyoutWrapStyle}">
@@ -1220,6 +1217,9 @@
                         </Flyout>
                     </Button.Flyout>
                 </AppBarButton>
+                <AppBarButton Label="Discovery 版" Click="openTabForDiscovery_Click" />
+                <AppBarButton Label="Buy &amp; Sell 版" Click="openTabForBuyAndSell_Click" />
+                <AppBarButton Label="Eink 版" Click="openTabForEink_Click" />
                 <AppBarButton x:Name="openTabForApp" Label="说明及反馈" Click="openTabForApp_Click" />
             </CommandBar.SecondaryCommands>
         </CommandBar>
