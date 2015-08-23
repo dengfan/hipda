@@ -22,6 +22,7 @@
 
     <Page.Resources>
         <CollectionViewSource x:Name="cvsForumGroups" IsSourceGrouped="True" ItemsPath="Forums"/>
+        <CollectionViewSource x:Name="cvsFullForumGroups" IsSourceGrouped="True" ItemsPath="Forums"/>
 
         <local:BackgroundStyleSelecterForForumItem x:Key="BackgroundStyleSelecterForForumItem"/>
         <local:ListGroupStyleSelector x:Key="listGroupStyleSelector"/>
@@ -45,6 +46,12 @@
                     <Run Text="{Binding TodayQuantity}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontWeight="Bold" />
                 </TextBlock>
                 <TextBlock Text="{Binding Info}" Pivot.SlideInAnimationGroup="GroupOne" FontSize="11" Foreground="{ThemeResource ListViewItemPointerOverBackgroundThemeBrush}" TextWrapping="Wrap"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GroupItemTemplate2">
+            <StackPanel>
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{Binding Name}"/>
             </StackPanel>
         </DataTemplate>
 
@@ -157,6 +164,17 @@
                         <Run Text="7. v201508232239" />
                     </TextBlock>
                 </StackPanel>
+            </PivotItem>
+            <PivotItem Header="完整版区" CommonNavigationTransitionInfo.IsStaggerElement="True" Margin="0">
+                <ListView
+                    ItemsSource="{Binding Source={StaticResource cvsFullForumGroups}}"
+                    SelectionMode="None"
+                    IsItemClickEnabled="True"
+                    ItemClick="ForumItem_ItemClick"
+                    ContinuumNavigationTransitionInfo.ExitElementContainer="True"
+                    ItemTemplate="{StaticResource GroupItemTemplate2}"
+                    GroupStyleSelector="{StaticResource ResourceKey=listGroupStyleSelector}"
+                    ItemContainerStyle="{StaticResource ForumItemStyle}"/>
             </PivotItem>
         </Pivot>
 

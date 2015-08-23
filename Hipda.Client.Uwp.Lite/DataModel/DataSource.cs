@@ -306,6 +306,12 @@ namespace HipdaUwpLite.Data
             get { return this._forumGroups; }
         }
 
+        private ObservableCollection<ForumGroup> _fullForumGroups = new ObservableCollection<ForumGroup>();
+        public ObservableCollection<ForumGroup> FullForumGroups
+        {
+            get { return this._fullForumGroups; }
+        }
+
         private ObservableCollection<ThreadData> _threadList = new ObservableCollection<ThreadData>();
         public ObservableCollection<ThreadData> ThreadList
         {
@@ -431,6 +437,92 @@ namespace HipdaUwpLite.Data
                 }
 
                 this.ForumGroups.Add(forumGroup);
+            }
+        }
+
+        public static async Task<IEnumerable<ForumGroup>> GetFullForumGroupsAsync()
+        {
+            await _dataSource.LoadFullForumGroupDataAsync();
+
+            return _dataSource.FullForumGroups;
+        }
+
+        // 读取所以版区列表数据
+        public async Task LoadFullForumGroupDataAsync()
+        {
+            if (this._fullForumGroups.Count > 0)
+            {
+                this.FullForumGroups.Clear();
+            }
+
+            // 读取数据
+            string url = "http://www.hi-pda.com/forum/search.php";
+            var cts = new CancellationTokenSource();
+            string htmlContent = await httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlContent);
+            var data = doc.DocumentNode;
+
+            var content = data.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("srchfid"));
+            if (content == null)
+            {
+                return;
+            }
+
+            var groups = content.Descendants().Where(n => n.Name.Equals("optgroup"));
+            if (groups == null)
+            {
+                return;
+            }
+
+            foreach (var group in groups)
+            {
+                string forumGroupName = group.Attributes[0].Value.Replace("--", string.Empty);
+                ForumGroup forumGroup = new ForumGroup(forumGroupName);
+
+                var groupItems = group.Descendants().Where(n => n.Name.Equals("option"));
+                if (groupItems == null)
+                {
+                    return;
+                }
+
+                foreach (var item in groupItems)
+                {
+                    string forumId = item.Attributes[0].Value;
+                    string forumName = item.NextSibling.InnerText;
+                    forumName = forumName.Replace("&nbsp;", string.Empty);
+                    forumName = forumName.Trim();
+                    string forumAlias = forumName;
+                    switch (forumId)
+                    {
+                        case "6":
+                            forumAlias = "BS版";
+                            break;
+                        case "7":
+                            forumAlias = "G版";
+                            break;
+                        case "14":
+                            forumAlias = "Win版";
+                            break;
+                        case "2":
+                            forumAlias = "地板";
+                            break;
+                        case "59":
+                            forumAlias = "E版";
+                            break;
+                        default:
+                            forumAlias = string.Format("{0}版", forumAlias.Substring(0, 1));
+                            break;
+                    }
+
+                    forumGroup.Forums.Add(new Forum(forumId, forumName, forumAlias, string.Empty, string.Empty));
+                }
+
+                this.FullForumGroups.Add(forumGroup);
             }
         }
         #endregion

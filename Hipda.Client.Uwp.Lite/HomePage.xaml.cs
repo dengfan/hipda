@@ -55,6 +55,7 @@ namespace Hipda.Client.Uwp.Lite
             // 刷新版块列表
             replyProgressBar.Visibility = Visibility.Visible;
             cvsForumGroups.Source = await DataSource.GetForumGroupsAsync();
+            cvsFullForumGroups.Source = await DataSource.GetFullForumGroupsAsync();
             replyProgressBar.Visibility = Visibility.Collapsed;
 
             // 刷新顶部状态栏
