@@ -136,14 +136,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataModel\IncrementalLoadingBase.cs" />
-    <Compile Include="DBCSEncoding.cs" />
     <Compile Include="FaceIconGrid.xaml.cs">
       <DependentUpon>FaceIconGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HttpHandle.cs" />
     <Compile Include="ListGroupStyleSelector.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -270,12 +268,15 @@
     </PRIResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="gb2312.bin" />
-  </ItemGroup>
-  <ItemGroup>
     <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Hipda.Http\Hipda.Http.csproj">
+      <Project>{3f1933da-688f-4d67-a5e9-22b4f667c3b9}</Project>
+      <Name>Hipda.Http</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

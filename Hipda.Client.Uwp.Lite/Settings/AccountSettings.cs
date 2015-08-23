@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Lite;
+using Hipda.Http;
 using HipdaUwpLite.Data;
 using HtmlAgilityPack;
 using System;
@@ -7,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -87,7 +89,8 @@ namespace HipdaUwpLite.Settings
             postData.Add("questionid", questionId);
             postData.Add("answer", answer);
 
-            string resultContent = await httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData);
+            var cts = new CancellationTokenSource();
+            string resultContent = await httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();

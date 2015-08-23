@@ -28,6 +28,8 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Hipda.Http;
+using System.Threading;
 
 namespace Hipda.Client.Uwp.Lite
 {
@@ -390,7 +392,8 @@ namespace Hipda.Client.Uwp.Lite
 
                     // 发布请求
                     string url = string.Format("http://www.hi-pda.com/forum/post.php?action=reply&tid={0}&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", threadId);
-                    string resultContent = await httpClient.PostAsync(url, postData);
+                    var cts = new CancellationTokenSource();
+                    string resultContent = await httpClient.PostAsync(url, postData, cts);
                     if (!resultContent.Contains("您的回复已经发布"))
                     {
                         await new MessageDialog("您的发布请求不成功！\n请检查是否已登录或网络连接是否正常。", "注意").ShowAsync();
@@ -447,7 +450,8 @@ namespace Hipda.Client.Uwp.Lite
 
                     // 发布请求
                     string url = string.Format("http://www.hi-pda.com/forum/post.php?action=newthread&fid={0}&extra=&topicsubmit=yes", forumId);
-                    string resultContent = await httpClient.PostAsync(url, postData);
+                    var cts = new CancellationTokenSource();
+                    string resultContent = await httpClient.PostAsync(url, postData, cts);
                     if (resultContent.Contains("对不起，您两次发表间隔少于"))
                     {
                         await new MessageDialog("您的发布请求不成功！\n可能是你连续发布过快，请稍候再试。", "注意").ShowAsync();
@@ -499,7 +503,8 @@ namespace Hipda.Client.Uwp.Lite
 
                     // 发布请求
                     string url = "http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=";
-                    await httpClient.PostAsync(url, postData);
+                    var cts = new CancellationTokenSource();
+                    await httpClient.PostAsync(url, postData, cts);
 
                     HidePostReplyPanelAndButton();
 
@@ -547,7 +552,8 @@ namespace Hipda.Client.Uwp.Lite
 
                     // 发布请求
                     string url = "http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=";
-                    await httpClient.PostAsync(url, postData);
+                    var cts = new CancellationTokenSource();
+                    await httpClient.PostAsync(url, postData, cts);
 
                     HidePostNewModifyPanelAndButton();
 
@@ -1740,7 +1746,8 @@ namespace Hipda.Client.Uwp.Lite
                     data.Add("uid", DataSource.UserId);
                     data.Add("hash", DataSource.Hash);
 
-                    string result = await httpClient.PostFileAsync("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1&type=image", data, fileName, "image/jpg", "Filedata", imageBuffer);
+                    var cts = new CancellationTokenSource();
+                    string result = await httpClient.PostFileAsync("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1&type=image", data, fileName, "image/jpg", "Filedata", imageBuffer, cts);
                     if (result.Contains("DISCUZUPLOAD|"))
                     {
                         string value = result.Split('|')[2];

@@ -63,7 +63,7 @@ namespace Hipda.Http
             catch (Exception ex)
             {
                 cts.Cancel();
-                await new MessageDialog(ex.Message + "\n\n请尝试刷新或检查网络连接是否正常！", "GET请求失败").ShowAsync();
+                //await new MessageDialog(ex.Message + "\n\n请尝试刷新或检查网络连接是否正常！", "GET请求失败").ShowAsync();
             }
 
             return result;

@@ -1,4 +1,5 @@
-﻿using HipdaUwpLite.Common;
+﻿using Hipda.Http;
+using HipdaUwpLite.Common;
 using HipdaUwpLite.Data;
 using HipdaUwpLite.Settings;
 using System;

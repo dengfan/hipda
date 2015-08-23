@@ -1,17 +1,15 @@
-﻿using HtmlAgilityPack;
+﻿using Hipda.Client.Uwp.Lite;
+using Hipda.Http;
+using HipdaUwpLite.Common;
+using HipdaUwpLite.Settings;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
-using Windows.Data.Html;
-using HipdaUwpLite.Settings;
-using HipdaUwpLite.Common;
-using Windows.UI.Popups;
-using Hipda.Client.Uwp.Lite;
 
 namespace HipdaUwpLite.Data
 {
@@ -344,7 +342,8 @@ namespace HipdaUwpLite.Data
 
             // 读取数据
             string url = "http://www.hi-pda.com/forum/index.php?_=" + DateTime.Now.Ticks.ToString("x");
-            string htmlContent = await httpClient.GetAsync(url);
+            var cts = new CancellationTokenSource();
+            string htmlContent = await httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
@@ -525,7 +524,8 @@ namespace HipdaUwpLite.Data
 
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&orderby={1}&page={2}&_={3}", forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.Ticks.ToString("x"));
-            string htmlContent = await httpClient.GetAsync(url);
+            var cts = new CancellationTokenSource();
+            string htmlContent = await httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
@@ -653,7 +653,8 @@ namespace HipdaUwpLite.Data
                 url = "http://www.hi-pda.com/forum/search.php?srchtype=title&srchtxt=&searchsubmit=%CB%D1%CB%F7&st=on&srchuname={0}&srchfilter=all&srchfrom=0&before=&orderby={2}&ascdesc=desc&srchfid%5B0%5D={1}&page={3}&_={4}";
             }
             url = string.Format(url, httpClient.GetEncoding(keywords), "all", ThreadListPageOrderBy, pageNo, DateTime.Now.Ticks.ToString("x"));
-            string htmlContent = await httpClient.GetAsync(url);
+            var cts = new CancellationTokenSource();
+            string htmlContent = await httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
@@ -877,7 +878,8 @@ namespace HipdaUwpLite.Data
 
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&ordertype={2}&_={3}", threadId, pageNo, RelayListPageOrderType, DateTime.Now.Ticks.ToString("x"));
-            string htmlStr = await httpClient.GetAsync(url);
+            var cts = new CancellationTokenSource();
+            string htmlStr = await httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
@@ -1017,7 +1019,8 @@ namespace HipdaUwpLite.Data
         private async Task LoadHashAndUserId()
         {
             string url = "http://www.hi-pda.com/forum/post.php?action=newthread&fid=2&_=" + DateTime.Now.Ticks.ToString("x");
-            string htmlContent = await httpClient.GetAsync(url);
+            var cts = new CancellationTokenSource();
+            string htmlContent = await httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
@@ -1064,7 +1067,8 @@ namespace HipdaUwpLite.Data
         private async Task LoadContentForEdit(string threadId, string postId)
         {
             string url = string.Format("http://www.hi-pda.com/forum/post.php?action=edit&tid={0}&pid={1}&page=1&_=" + DateTime.Now.Ticks.ToString("x"), threadId, postId);
-            string htmlContent = await httpClient.GetAsync(url);
+            var cts = new CancellationTokenSource();
+            string htmlContent = await httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
             HtmlDocument doc = new HtmlDocument();
