@@ -133,7 +133,7 @@
 
                 <Line Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
                         X1="0" Y1="10"
-                        X2="1000" Y2="10"
+                        X2="1920" Y2="10"
                         Stroke="{StaticResource BorderColor}" StrokeDashArray="2,1" />
             </Grid>
         </DataTemplate>
@@ -190,7 +190,7 @@
 
                 <Line Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" 
                         X1="0" Y1="10"
-                        X2="1000" Y2="10"
+                        X2="1920" Y2="10"
                         Stroke="{StaticResource BorderColor}" StrokeDashArray="2,1" />
             </Grid>
         </DataTemplate>
