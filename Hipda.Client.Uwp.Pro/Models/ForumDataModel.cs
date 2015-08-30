@@ -9,7 +9,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ForumDataModel
     {
-        public int ForumId { get; set; }
+        public string ForumId { get; set; }
 
         public ObservableCollection<ThreadPageModel> ThreadData { get; set; }
     }

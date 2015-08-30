@@ -24,16 +24,6 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ThreadAndReplyPage : Page
     {
-        public List<ThreadAndReplyViewModels> ThreadListProp
-        {
-            get { return (List<ThreadAndReplyViewModels>)GetValue(ThreadListPropProperty); }
-            set { SetValue(ThreadListPropProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for ThreadListProp.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ThreadListPropProperty =
-            DependencyProperty.Register("ThreadListProp", typeof(List<ThreadAndReplyViewModels>), typeof(ThreadAndReplyPage), new PropertyMetadata(null));
-
         public ThreadAndReplyPage()
         {
             this.InitializeComponent();
@@ -65,8 +55,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            ThreadListProp = GetThreadList();
-            ThreadListView.ItemsSource = ThreadListProp;
 
             // 初次载入，
             if (AdaptiveStates.CurrentState == NarrowState)
@@ -102,7 +90,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var data = (ThreadAndReplyViewModels)e.ClickedItem;
-            data.GetReplyList();
             RightWrap.DataContext = data;
 
             if (AdaptiveStates.CurrentState == NarrowState)
@@ -111,17 +98,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                 LeftColumn.Width = new GridLength(0);
                 RightColumn.Width = new GridLength(1, GridUnitType.Star);
             }
-        }
-
-        private List<ThreadAndReplyViewModels> GetThreadList()
-        {
-            var threadList = new List<ThreadAndReplyViewModels>();
-            for (int i = 0; i < 50; i++)
-            {
-                threadList.Add(new ThreadItem { Id = i, Name = "功率" + i, Title = "法灯电动车工，夺不地工地城示灯影jfis不煤类时是革夺地且，夺城工在地肝苦不困kdfd不裁夺地夺萘在地载。" + i });
-            }
-
-            return threadList;
         }
 
         private void AdaptiveStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
