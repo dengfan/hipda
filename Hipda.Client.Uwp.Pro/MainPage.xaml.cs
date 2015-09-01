@@ -49,5 +49,9 @@ namespace Hipda.Client.Uwp.Pro
         {
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
         }
+
+        private void btnMore_Click(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }
