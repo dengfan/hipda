@@ -9,45 +9,12 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <Style x:Key="SplitViewTogglePaneButtonStyle"
-               TargetType="ToggleButton">
-            <Setter Property="Background"
-                    Value="Transparent" />
-            <Setter Property="Foreground"
-                    Value="White" />
-            <Setter Property="BorderBrush"
-                    Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-            <Setter Property="BorderThickness"
-                    Value="0" />
-            <Setter Property="Padding"
-                    Value="0" />
-            <Setter Property="HorizontalAlignment"
-                    Value="Left" />
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Center" />
-            <Setter Property="VerticalAlignment"
-                    Value="Top" />
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center" />
-            <Setter Property="UseSystemFocusVisuals"
-                    Value="True" />
-
-            <Setter Property="FontFamily"
-                    Value="{ThemeResource SymbolThemeFontFamily}" />
-            <Setter Property="Content"
-                    Value="&#xE700;" />
-            <Setter Property="Height"
-                    Value="48" />
-            <Setter Property="Width"
-                    Value="48" />
-
-            <Setter Property="FontWeight"
-                    Value="Normal" />
-            <Setter Property="FontSize"
-                    Value="20" />
+        <Style x:Key="SplitViewPaneButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="ToggleButton">
+                    <ControlTemplate TargetType="Button">
                         <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
@@ -58,22 +25,6 @@
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
-                                        <VisualState.Setters>
-                                            <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled">
-                                        <VisualState.Setters>
-                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlForegroundBaseLowBrush}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="Checked"  />
-                                    <VisualState x:Name="CheckedPointerOver">
-                                        <VisualState.Setters>
-                                            <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="CheckedPressed">
                                         <VisualState.Setters>
                                             <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" />
                                         </VisualState.Setters>
@@ -156,44 +107,80 @@
         <SplitView x:Name="MainSplitView" PaneBackground="#2B2B2B" OpenPaneLength="225">
             <SplitView.Pane>
                 <Grid>
-                    <ListView Margin="0 48 0 0">
-                        <ListViewItem>
-                            <StackPanel Orientation="Horizontal">
-                                <FontIcon Glyph="AA" Foreground="White" FontFamily="Consolas" />
-                                <TextBlock Text="Discovery"
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Margin="0 48 0 0">
+                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <FontIcon Glyph="AA" Foreground="White" FontFamily="Consolas" />
+                                    <TextBlock Text="Discovery"
                                            Margin="24,0,0,0"
                                            Foreground="White"
                                            VerticalAlignment="Center" />
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem>
-                            <StackPanel Orientation="Horizontal" >
-                                <FontIcon Glyph="BS" Foreground="White" FontFamily="Consolas" />
-                                <TextBlock Text="Buy &amp; Sell"
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Padding="5 0 0 0" Orientation="Horizontal" >
+                                    <FontIcon Glyph="BS" Foreground="White" FontFamily="Consolas" />
+                                    <TextBlock Text="Buy &amp; Sell"
                                            Margin="24,0,0,0"
                                            Foreground="White"
                                            VerticalAlignment="Center" />
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem>
-                            <StackPanel Orientation="Horizontal" >
-                                <FontIcon Glyph="EI" Foreground="White" FontFamily="Consolas" />
-                                <TextBlock Text="Eink"
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Padding="5 0 0 0" Orientation="Horizontal" >
+                                    <FontIcon Glyph="EI" Foreground="White" FontFamily="Consolas" />
+                                    <TextBlock Text="Eink"
                                            Margin="24,0,0,0"
                                            Foreground="White"
                                            VerticalAlignment="Center" />
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem>
-                            <StackPanel Orientation="Horizontal" >
-                                <SymbolIcon Symbol="More" Foreground="White" />
-                                <TextBlock Text="更多"
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Padding="5 0 0 0" Orientation="Horizontal" >
+                                    <SymbolIcon Symbol="More" Foreground="White" />
+                                    <TextBlock Text="更多"
                                            Margin="24,0,0,0"
                                            Foreground="White"
                                            VerticalAlignment="Center" />
-                            </StackPanel>
-                        </ListViewItem>
-                    </ListView>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Height="96">
+                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <SymbolIcon Symbol="Memo" Foreground="White" />
+                                    <TextBlock Text="提醒"
+                                           Margin="24,0,0,0"
+                                           Foreground="White"
+                                           VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <SymbolIcon Symbol="Message" Foreground="White" />
+                                    <TextBlock Text="消息"
+                                           Margin="24,0,0,0"
+                                           Foreground="White"
+                                           VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </SplitView.Pane>
 
@@ -219,6 +206,10 @@
             </Grid>
         </SplitView>
 
-        <ToggleButton x:Name="MainSplitViewToggle" Style="{StaticResource SplitViewTogglePaneButtonStyle}" Click="MainSplitViewToggle_Click" />
+        <Button x:Name="MainSplitViewToggle" Style="{StaticResource SplitViewPaneButtonStyle}" Width="48" Height="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
+            <Button.Content>
+                <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+            </Button.Content>
+        </Button>
     </Grid>
 </Page>
