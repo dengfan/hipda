@@ -56,12 +56,12 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" ItemClick="ThreadListView_ItemClick" VerticalAlignment="Top">
+            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" ItemClick="ThreadListView_ItemClick" VerticalAlignment="Top" ItemsSource="{Binding ThreadItemList}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <TextBlock Text="" TextWrapping="Wrap"/>
-                            <TextBlock Text="" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding AuthorUsername}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -8,11 +8,11 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ThreadItemModel
     {
-        public ThreadItemModel(int pageNo, string forumId, string threadId, string title, int attachFileType, string replyCount, string viewCount, string authorUsername, string authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
+        public ThreadItemModel(int forumId, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, string authorUsername, string authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
         {
-            this.PageNo = pageNo;
             this.ForumId = forumId;
             this.ThreadId = threadId;
+            this.PageNo = pageNo;
             this.Title = title;
             this.AttachFileType = attachFileType;
             this.ReplyCount = replyCount;
@@ -24,11 +24,11 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.LastReplyTime = lastReplyTime;
         }
 
+        public int ForumId { get; private set; }
+
+        public int ThreadId { get; private set; }
+
         public int PageNo { get; private set; }
-
-        public string ForumId { get; private set; }
-
-        public string ThreadId { get; private set; }
 
         public string Title { get; private set; }
 

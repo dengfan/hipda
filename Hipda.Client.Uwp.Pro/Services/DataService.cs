@@ -11,51 +11,23 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public class DataService
+    public class DataService : IDataService
     {
         private static HttpHandle httpClient = HttpHandle.getInstance();
 
-        public static ObservableCollection<ForumDataModel> DataBase { get; private set; }
+        private static List<ThreadItemModel> Db = new List<ThreadItemModel>();
 
-        /// <summary>
-        /// 获取指定版区的贴子列表数据
-        /// </summary>
-        /// <param name="argForumId">版区ID</param>
-        /// <returns>贴子列表</returns>
-        public async Task<ThreadPageModel> GetThreadPageListByForumId(string forumId, int pageNo, CancellationTokenSource cts)
+        private async Task GetThreadsDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
-            await GetThreadsDataAsync(forumId, pageNo, cts);
-
-            var forum = DataBase.FirstOrDefault(t => t.ForumId.Equals(forumId));
-            var threadPage = forum.ThreadData.FirstOrDefault(t => t.PageNo == pageNo);
-            return threadPage;
-        }
-
-        private async Task GetThreadsDataAsync(string forumId, int pageNo, CancellationTokenSource cts)
-        {
-            // 如果数据库中不存在该版，则创建之
-            var forum = DataBase.FirstOrDefault(t => t.ForumId.Equals(forumId));
-            if (forum == null)
+            // 如果该页贴子已存在，且贴子数量为满页，则不作请求
+            var count = Db.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
+            if (count == 50)
             {
-                forum = new ForumDataModel();
-                forum.ForumId = forumId;
-                DataBase.Add(forum);
-            }
-
-            // 如果该页贴子已存在，且贴子数量为满页，则返回
-            var threadPage = forum.ThreadData.FirstOrDefault(t => t.PageNo == pageNo);
-            if (threadPage != null)
-            {
-                if (threadPage.ThreadItems.Count == 50)
-                {
-                    return;
-                }
+                return;
             }
             else
             {
-                threadPage = new ThreadPageModel();
-                threadPage.PageNo = pageNo;
-                threadPage.ThreadItems = new ObservableCollection<ThreadItemModel>();
+                Db.RemoveAll(t => t.ForumId == forumId && t.PageNo == pageNo);
             }
 
             // 读取数据
@@ -93,7 +65,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var tdNums = tr.ChildNodes[9];
                 var tdLastPost = tr.ChildNodes[11];
 
-                string id = span.Attributes[0].Value.Substring("thread_".Length);
+                int threadId = Convert.ToInt32(span.Attributes[0].Value.Substring("thread_".Length));
                 string title = a.InnerText;
 
                 int attachType = -1;
@@ -147,11 +119,22 @@ namespace Hipda.Client.Uwp.Pro.Services
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
-                ThreadItemModel threadItem = new ThreadItemModel(pageNo, forumId, id, title, attachType, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
-                threadPage.ThreadItems.Add(threadItem);
+                var threadItem = new ThreadItemModel(forumId, threadId, pageNo, title, attachType, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
+                Db.Add(threadItem);
 
                 i++;
             }
+        }
+
+        /// <summary>
+        /// 获取指定版区的贴子列表数据
+        /// </summary>
+        /// <param name="argForumId">版区ID</param>
+        /// <returns>贴子列表</returns>
+        public async Task<IEnumerable<ThreadItemModel>> GetThreadPageListByForumId(int forumId, int pageNo, CancellationTokenSource cts)
+        {
+            await GetThreadsDataAsync(forumId, pageNo, cts);
+            return Db.Where(t => t.ForumId == forumId && t.PageNo == pageNo);
         }
     }
 }

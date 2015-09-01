@@ -12,18 +12,18 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadAndReplyViewModels : NotificationObject
+    public class ThreadAndReplyViewModel : NotificationObject
     {
 
-        private ObservableCollection<ThreadItemModel> threadPageList;
+        private IEnumerable<ThreadItemModel> _threadItemList;
 
-        public ObservableCollection<ThreadItemModel> ThreadPageList
+        public IEnumerable<ThreadItemModel> ThreadItemList
         {
-            get { return threadPageList; }
+            get { return _threadItemList; }
             set
             {
-                threadPageList = value;
-                this.RaisePropertyChanged("ThreadPageList");
+                _threadItemList = value;
+                this.RaisePropertyChanged("ThreadItemList");
             }
         }
 
@@ -31,9 +31,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             var ds = new DataService();
             var cts = new CancellationTokenSource();
-            await ds.GetThreadPageListByForumId("2", 1, cts);
+            ThreadItemList = await ds.GetThreadPageListByForumId(14, 1, cts);
         }
 
+        public ThreadAndReplyViewModel()
+        {
+            Initialize();
+        }
 
+        private async void Initialize()
+        {
+            await LoadThreadPageList();
+        }
     }
 }

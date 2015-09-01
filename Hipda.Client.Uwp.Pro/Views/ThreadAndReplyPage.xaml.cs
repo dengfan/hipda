@@ -24,9 +24,17 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ThreadAndReplyPage : Page
     {
+        public ThreadAndReplyViewModel ThreadAndReplyViewModel
+        {
+            get { return _threadAndReplyViewModel; }
+        }
+        private readonly ThreadAndReplyViewModel _threadAndReplyViewModel = new ThreadAndReplyViewModel();
+
         public ThreadAndReplyPage()
         {
             this.InitializeComponent();
+
+            DataContext = ThreadAndReplyViewModel;
         }
 
         #region 后退事件
@@ -71,6 +79,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                 Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed; ;
             }
             #endregion
+
+
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -89,15 +99,15 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var data = (ThreadAndReplyViewModels)e.ClickedItem;
-            RightWrap.DataContext = data;
+            //var data = (ThreadAndReplyViewModels)e.ClickedItem;
+            //RightWrap.DataContext = data;
 
-            if (AdaptiveStates.CurrentState == NarrowState)
-            {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-                LeftColumn.Width = new GridLength(0);
-                RightColumn.Width = new GridLength(1, GridUnitType.Star);
-            }
+            //if (AdaptiveStates.CurrentState == NarrowState)
+            //{
+            //    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            //    LeftColumn.Width = new GridLength(0);
+            //    RightColumn.Width = new GridLength(1, GridUnitType.Star);
+            //}
         }
 
         private void AdaptiveStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
