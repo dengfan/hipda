@@ -50,8 +50,15 @@ namespace Hipda.Client.Uwp.Pro
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
         }
 
+        private void pageGrid_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            CloseView.Begin();
+        }
+
         private void btnMore_Click(object sender, RoutedEventArgs e)
         {
+            FullSebjectPanel.Visibility = Visibility.Visible;
+            OpenView.Begin();
         }
     }
 }

@@ -47,10 +47,23 @@
             </Setter>
         </Style>
 
-        
+        <Storyboard x:Name="OpenView">
+            <DoubleAnimation Duration="0:0:0.2" To="300" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="FullSebjectPanel">
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseIn" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Name="CloseView">
+            <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="FullSebjectPanel">
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </Page.Resources>
 
-    <Grid x:Name="pageGrid">
+    <Grid x:Name="pageGrid" Tapped="pageGrid_Tapped">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
@@ -222,7 +235,7 @@
                     </Frame>
                 </Grid>
 
-                <Grid x:Name="FullSebjectPanel" Background="White" HorizontalAlignment="Left"  Width="300">
+                <Grid x:Name="FullSebjectPanel" Background="White" HorizontalAlignment="Left" Margin="-300,0,0,0" Width="300" Visibility="Collapsed">
                     <Grid.RenderTransform>
                         <CompositeTransform/>
                     </Grid.RenderTransform>
