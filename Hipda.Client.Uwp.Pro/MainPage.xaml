@@ -154,7 +154,7 @@
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="EI" Foreground="White" FontFamily="Consolas" />
-                                        <TextBlock Text="Eink 版"
+                                        <TextBlock Text="E-Ink 版"
                                            Margin="24,0,0,0"
                                            Foreground="White"
                                            VerticalAlignment="Center" />
