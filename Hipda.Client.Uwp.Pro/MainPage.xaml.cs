@@ -55,10 +55,17 @@ namespace Hipda.Client.Uwp.Pro
             CloseView.Begin();
         }
 
-        private void btnMore_Click(object sender, RoutedEventArgs e)
+        private void btnMore_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            e.Handled = true;
+
             FullSebjectPanel.Visibility = Visibility.Visible;
             OpenView.Begin();
+        }
+
+        private void FullSebjectPanel_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

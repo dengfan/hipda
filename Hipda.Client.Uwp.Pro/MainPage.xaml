@@ -161,7 +161,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button x:Name="btnMore" Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="btnMore_Click">
+                            <Button x:Name="btnMore" Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnMore_Tapped">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <SymbolIcon Symbol="More" Foreground="White" />
@@ -235,7 +235,7 @@
                     </Frame>
                 </Grid>
 
-                <Grid x:Name="FullSebjectPanel" Background="White" HorizontalAlignment="Left" Margin="-300,0,0,0" Width="300" Visibility="Collapsed">
+                <Grid x:Name="FullSebjectPanel" Background="White" HorizontalAlignment="Left" Margin="-300,0,0,0" Width="300" Visibility="Collapsed" Tapped="FullSebjectPanel_Tapped">
                     <Grid.RenderTransform>
                         <CompositeTransform/>
                     </Grid.RenderTransform>
