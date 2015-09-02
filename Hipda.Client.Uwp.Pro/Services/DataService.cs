@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
@@ -54,7 +55,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return;
             }
 
-            int i = 0;
+            int i = Db.Count;
             foreach (var item in tbodies)
             {
                 var tr = item.ChildNodes[1];
@@ -119,22 +120,57 @@ namespace Hipda.Client.Uwp.Pro.Services
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
-                var threadItem = new ThreadItemModel(forumId, threadId, pageNo, title, attachType, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
+                var threadItem = new ThreadItemModel(i, forumId, threadId, pageNo, title, attachType, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
                 Db.Add(threadItem);
 
                 i++;
             }
         }
 
-        /// <summary>
-        /// 获取指定版区的贴子列表数据
-        /// </summary>
-        /// <param name="argForumId">版区ID</param>
-        /// <returns>贴子列表</returns>
-        public async Task<IEnumerable<ThreadItemModel>> GetThreadPageListByForumId(int forumId, int pageNo, CancellationTokenSource cts)
+        public CollectionViewSource GetViewForThreadPage(int forumId)
         {
+            var cvs = new CollectionViewSource();
+            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemModel>(50,
+                async pageNo =>
+                {
+                    // 加载分页数据，并写入静态类中
+                    // 返回的是本次加载的数据量
+                    return await LoadMoreThreadItemsAsync(forumId, pageNo, 
+                        () => {
+                            //replyProgressBar.Visibility = Visibility.Visible;
+                        },
+                        () => {
+                            //replyProgressBar.Visibility = Visibility.Collapsed;
+                        });
+                },
+                    (index) =>
+                {
+                    // 从静态类中返回需要显示出来的数据
+                    return GetThreadItemByIndex(forumId, index);
+                });
+
+            return cvs;
+        }
+
+        private async Task<int> LoadMoreThreadItemsAsync(int forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
+        {
+            if (showProgressBar != null) showProgressBar();
+            var cts = new CancellationTokenSource();
             await GetThreadsDataAsync(forumId, pageNo, cts);
-            return Db.Where(t => t.ForumId == forumId && t.PageNo == pageNo);
+            if (hideProgressBar != null) hideProgressBar();
+
+            return Db.Count(t => t.ForumId == forumId);
+        }
+
+        /// <summary>
+        /// 用于增量加载来控制要显示哪几项
+        /// </summary>
+        /// <param name="forumId"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private static ThreadItemModel GetThreadItemByIndex(int forumId, int index)
+        {
+            return Db.Single(t => t.ForumId == forumId && t.Index == index);
         }
     }
 }

@@ -9,29 +9,47 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ThreadAndReplyViewModel : NotificationObject
     {
 
-        private IEnumerable<ThreadItemModel> _threadItemList;
+        //private IEnumerable<ThreadItemModel> _threadItemList;
 
-        public IEnumerable<ThreadItemModel> ThreadItemList
+        //public IEnumerable<ThreadItemModel> ThreadItemList
+        //{
+        //    get { return _threadItemList; }
+        //    set
+        //    {
+        //        _threadItemList = value;
+        //        this.RaisePropertyChanged("ThreadItemList");
+        //    }
+        //}
+
+        private ICollectionView _threadItemCollection;
+
+        public ICollectionView ThreadItemCollection
         {
-            get { return _threadItemList; }
+            get { return _threadItemCollection; }
             set
             {
-                _threadItemList = value;
-                this.RaisePropertyChanged("ThreadItemList");
+                _threadItemCollection = value;
+                this.RaisePropertyChanged("ItemCollection");
             }
         }
 
-        private async Task LoadThreadPageList()
+
+        private void LoadThreadPageList()
         {
             var ds = new DataService();
             var cts = new CancellationTokenSource();
-            ThreadItemList = await ds.GetThreadPageListByForumId(14, 1, cts);
+            var cvs = ds.GetViewForThreadPage(14);
+            if (cvs != null)
+            {
+                ThreadItemCollection = cvs.View;
+            }
         }
 
         public ThreadAndReplyViewModel()
@@ -39,9 +57,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             Initialize();
         }
 
-        private async void Initialize()
+        private void Initialize()
         {
-            await LoadThreadPageList();
+            LoadThreadPageList();
         }
     }
 }

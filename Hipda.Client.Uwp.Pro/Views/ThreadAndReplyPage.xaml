@@ -56,7 +56,9 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" ItemClick="ThreadListView_ItemClick" VerticalAlignment="Top" ItemsSource="{Binding ThreadItemList}">
+            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" 
+                      ItemClick="ThreadListView_ItemClick" VerticalAlignment="Top" 
+                      ItemsSource="{Binding ThreadItemCollection}" IncrementalLoadingTrigger="Edge">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>

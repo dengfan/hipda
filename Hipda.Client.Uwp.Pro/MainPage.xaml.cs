@@ -53,6 +53,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private void pageGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            e.Handled = true;
             CloseView.Begin();
         }
 
@@ -60,14 +61,13 @@ namespace Hipda.Client.Uwp.Pro
         {
             e.Handled = true;
 
-            this.FindName(nameof(FullSebjectPanel));
-
             if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
             {
                 // 以免 pane 挡住 full sebject panel
                 MainSplitView.IsPaneOpen = false;
             }
-            
+
+            this.FindName(nameof(FullSebjectPanel));
             OpenView.Begin();
         }
 
