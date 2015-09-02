@@ -59,7 +59,14 @@ namespace Hipda.Client.Uwp.Pro
         {
             e.Handled = true;
 
-            FullSebjectPanel.Visibility = Visibility.Visible;
+            this.FindName(nameof(FullSebjectPanel));
+
+            if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
+            {
+                // 以免 pane 挡住 full sebject panel
+                MainSplitView.IsPaneOpen = false;
+            }
+            
             OpenView.Begin();
         }
 

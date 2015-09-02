@@ -55,7 +55,7 @@
             </DoubleAnimation>
         </Storyboard>
         <Storyboard x:Name="CloseView">
-            <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="FullSebjectPanel">
+            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="FullSebjectPanel">
                 <DoubleAnimation.EasingFunction>
                     <ExponentialEase EasingMode="EaseOut" />
                 </DoubleAnimation.EasingFunction>
@@ -235,7 +235,7 @@
                     </Frame>
                 </Grid>
 
-                <Grid x:Name="FullSebjectPanel" Background="White" HorizontalAlignment="Left" Margin="-300,0,0,0" Width="300" Visibility="Collapsed" Tapped="FullSebjectPanel_Tapped">
+                <Grid x:Name="FullSebjectPanel" x:DeferLoadStrategy="Lazy" Background="White" HorizontalAlignment="Left" Margin="-300,0,0,0" Width="300" Tapped="FullSebjectPanel_Tapped">
                     <Grid.RenderTransform>
                         <CompositeTransform/>
                     </Grid.RenderTransform>
