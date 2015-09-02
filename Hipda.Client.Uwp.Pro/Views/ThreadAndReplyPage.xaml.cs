@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -19,6 +20,40 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Hipda.Client.Uwp.Pro.Views
 {
+    public static class ItemClickCommand
+    {
+        public static readonly DependencyProperty CommandProperty =
+            DependencyProperty.RegisterAttached("Command", typeof(ICommand),
+            typeof(ItemClickCommand), new PropertyMetadata(null, OnCommandPropertyChanged));
+
+        public static void SetCommand(DependencyObject d, ICommand value)
+        {
+            d.SetValue(CommandProperty, value);
+        }
+
+        public static ICommand GetCommand(DependencyObject d)
+        {
+            return (ICommand)d.GetValue(CommandProperty);
+        }
+
+        private static void OnCommandPropertyChanged(DependencyObject d,
+            DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as ListViewBase;
+            if (control != null)
+                control.ItemClick += OnItemClick;
+        }
+
+        private static void OnItemClick(object sender, ItemClickEventArgs e)
+        {
+            var control = sender as ListViewBase;
+            var command = GetCommand(control);
+
+            if (command != null && command.CanExecute(e.ClickedItem))
+                command.Execute(e.ClickedItem);
+        }
+    }
+
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
@@ -101,19 +136,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                 Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed; ;
             }
             #endregion
-        }
-
-        private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            //var data = (ThreadAndReplyViewModels)e.ClickedItem;
-            //RightWrap.DataContext = data;
-
-            //if (AdaptiveStates.CurrentState == NarrowState)
-            //{
-            //    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-            //    LeftColumn.Width = new GridLength(0);
-            //    RightColumn.Width = new GridLength(1, GridUnitType.Star);
-            //}
         }
 
         private void AdaptiveStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.ViewModels;
 using Hipda.Http;
 using HtmlAgilityPack;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
@@ -14,15 +16,19 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public class DataService : IDataService
     {
-        private static HttpHandle httpClient = HttpHandle.getInstance();
+        private static int ThreadPageSize = 75;
+        private static int ReplyPageSize = 50;
+        private static int SearchPageSize = 50;
 
+        private static HttpHandle httpClient = HttpHandle.getInstance();
         private static List<ThreadItemModel> Db = new List<ThreadItemModel>();
 
-        private async Task GetThreadsDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
+        #region 加载主题数据
+        private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
             // 如果该页贴子已存在，且贴子数量为满页，则不作请求
             var count = Db.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
-            if (count == 50)
+            if (count == ThreadPageSize)
             {
                 return;
             }
@@ -127,30 +133,11 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        public ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad)
-        {
-            var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemModel>(50,
-                async pageNo =>
-                {
-                    // 加载分页数据，并写入静态类中
-                    // 返回的是本次加载的数据量
-                    return await LoadMoreThreadItemsAsync(forumId, pageNo, beforeLoad, afterLoad);
-                },
-                    (index) =>
-                {
-                    // 从静态类中返回需要显示出来的数据
-                    return GetThreadItemByIndex(forumId, index);
-                });
-
-            return cvs.View;
-        }
-
         private async Task<int> LoadMoreThreadItemsAsync(int forumId, int pageNo, Action beforeLoad, Action afterLoad)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
-            await GetThreadsDataAsync(forumId, pageNo, cts);
+            await LoadThreadDataAsync(forumId, pageNo, cts);
             if (afterLoad != null) afterLoad();
 
             return Db.Count(t => t.ForumId == forumId);
@@ -162,9 +149,234 @@ namespace Hipda.Client.Uwp.Pro.Services
         /// <param name="forumId"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        private static ThreadItemModel GetThreadItemByIndex(int forumId, int index)
+        private ThreadItemViewModel GetThreadItemByIndex(int forumId, int index)
         {
-            return Db.Single(t => t.ForumId == forumId && t.Index == index);
+            var threadItem = Db.FirstOrDefault(t => t.ForumId == forumId && t.Index == index);
+            if (threadItem == null)
+            {
+                return null;
+            }
+
+            var threadItemViewModel = new ThreadItemViewModel
+            {
+                ThreadItem = threadItem,
+            };
+
+            return threadItemViewModel;
+        }
+
+        public ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad)
+        {
+            var cvs = new CollectionViewSource();
+            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemViewModel>(
+                ThreadPageSize,
+                async pageNo =>
+                {
+                    // 加载分页数据，并写入静态类中
+                    // 返回的是本次加载的数据量
+                    return await LoadMoreThreadItemsAsync(forumId, pageNo, beforeLoad, afterLoad);
+                },
+                (index) =>
+                {
+                    // 从静态类中返回需要显示出来的数据
+                    return GetThreadItemByIndex(forumId, index);
+                });
+
+            return cvs.View;
+        }
+        #endregion
+
+        #region 加载回复数据
+        private async Task LoadReplyDataAsync(int threadId, int pageNo, CancellationTokenSource cts)
+        {
+            #region 如果数据已存在，则不读取，以便节省流量
+            var threadItem = Db.FirstOrDefault(t => t.ThreadId == threadId);
+            if (threadItem == null) // 如果主题不存在，则返回
+            {
+                return;
+            }
+
+            // 如果页面已存在，并且已载满数据，则不重新从网站拉取数据，以便节省流量， 
+            // 但最后一页（如果数据少于一页，那么第一页就是最后一页）由于随时可能会有新回复，所以对于最后一页的处理方式是先清除再重新加载
+            int count = threadItem.Replies.Count(o => o.PageNo == pageNo);
+            if (count > 0)
+            {
+                if (count >= ReplyPageSize) // 满页的不再加载，以便节省流量
+                {
+                    return;
+                }
+
+                // 再判断未满页的
+                // 第一页或最后一页的回复数量不足一页，表示此页随时可能有新回复，故删除
+                var lastPageData = threadItem.Replies.Where(r => r.PageNo == pageNo).ToList();
+                foreach (var item in lastPageData)
+                {
+                    threadItem.Replies.Remove(threadItem.Replies.Single(r => r.FloorNo == item.FloorNo));
+                }
+            }
+            #endregion
+
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&ordertype={2}&_={3}", threadId, pageNo, string.Empty, DateTime.Now.Ticks.ToString("x"));
+            string htmlStr = await httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlStr);
+
+            #region 先判断页码是否已超过最大页码，以免造成重复加载
+            if (pageNo > 1)
+            {
+                var forumControlNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forumcontrol s_clear"));
+                var pagesNode = forumControlNode.ChildNodes[1] // table
+                    .ChildNodes[1] // tr
+                    .ChildNodes[3] // td
+                    .Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+                if (pagesNode == null) // 没有超过两页
+                {
+                    return;
+                }
+                else
+                {
+                    var actualCurrentPageNode = pagesNode.Descendants().SingleOrDefault(n => n.NodeType == HtmlNodeType.Element && n.Name == "strong");
+                    if (actualCurrentPageNode != null)
+                    {
+                        int currentPage = Convert.ToInt32(actualCurrentPageNode.InnerText);
+                        if (pageNo > currentPage)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            var data = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
+            if (data == null)
+            {
+                return;
+            }
+
+            int i = threadItem.Replies.Count;
+            foreach (var item in data)
+            {
+                var postAuthorNode = item.ChildNodes[0] // table
+                        .ChildNodes[1] // tr
+                        .ChildNodes[1]; // td.postauthor
+
+                var postContentNode = item.ChildNodes[0] // table
+                        .ChildNodes[1] // tr
+                        .ChildNodes[3]; // td.postcontent
+
+                string authorId = string.Empty;
+                string ownerName = string.Empty;
+                var authorNode = postAuthorNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
+                if (authorNode != null)
+                {
+                    authorNode = authorNode.ChildNodes[1]; // a
+                    authorId = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
+                    if (authorId.Contains("&"))
+                    {
+                        authorId = authorId.Split('&')[0];
+                    }
+                    ownerName = authorNode.InnerText;
+                }
+
+                var floorPostInfoNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
+                var floorLinkNode = floorPostInfoNode.ChildNodes[1].ChildNodes[0]; // a
+                string postId = floorLinkNode.Attributes["id"].Value.Replace("postnum", string.Empty);
+                var floorNumNode = floorLinkNode.ChildNodes[0]; // em
+                int floor = Convert.ToInt32(floorNumNode.InnerText);
+                string threadTitle = string.Empty;
+                if (floor == 1)
+                {
+                    var threadTitleNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("threadtitle"));
+                    if (threadTitleNode != null)
+                    {
+                        threadTitle = threadTitleNode.InnerText.Trim();
+                    }
+                }
+
+                string postTime = string.Empty;
+                var postTimeNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
+                if (postTimeNode != null)
+                {
+                    postTime = postTimeNode.InnerText
+                        .Replace("发表于 ", string.Empty)
+                        .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
+                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
+                }
+
+                string textContent = string.Empty;
+                string htmlContent = string.Empty;
+                string xamlContent = string.Empty;
+                int imageCount = 0;
+                var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
+                if (contentNode != null)
+                {
+                    // 用于回复引用
+                    textContent = contentNode.InnerText.Trim();
+                    textContent = new Regex("\r\n").Replace(textContent, "↵");
+                    textContent = new Regex("\r").Replace(textContent, "↵");
+                    textContent = new Regex("\n").Replace(textContent, "↵");
+                    textContent = new Regex(@"↵{1,}").Replace(textContent, "\r\n");
+                    textContent = textContent.Replace("&nbsp;", "  ");
+
+                    // 用于显示原始内容
+                    htmlContent = contentNode.InnerHtml.Trim();
+
+                    // 转换HTML为XAML
+                    xamlContent = Html.HtmlToXaml.Convert(htmlContent, 20, ref imageCount);
+                }
+                else
+                {
+                    xamlContent = @"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>";
+                    xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
+                }
+
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
+                threadItem.Replies.Add(reply);
+
+                i++;
+            }
+        }
+
+        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int pageNo, Action beforeLoad, Action afterLoad)
+        {
+            if (beforeLoad != null) beforeLoad();
+            var cts = new CancellationTokenSource();
+            await LoadReplyDataAsync(threadId, pageNo, cts);
+            if (afterLoad != null) afterLoad();
+
+            return Db.First(t => t.ThreadId == threadId).Replies.Count;
+        }
+
+        public static ReplyItemModel GetReplyItemByIndex(int threadId, int index)
+        {
+            return Db.First(t => t.ThreadId == threadId).Replies[index];
+        }
+
+        public ICollectionView GetViewForReplyPage(int threadId, Action beforeLoad, Action afterLoad)
+        {
+            var cvs = new CollectionViewSource();
+            cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
+                ReplyPageSize,
+                async pageNo =>
+                {
+                    // 加载分页数据，并写入静态类中
+                    // 返回的是本次加载的数据量
+                    return await LoadMoreReplyItemsAsync(threadId, pageNo, beforeLoad, afterLoad);
+                }, (index) =>
+                {
+                    // 从静态类中返回需要显示出来的数据
+                    return GetReplyItemByIndex(threadId, index);
+                });
+
+            return cvs.View;
         }
     }
+    #endregion
+
 }

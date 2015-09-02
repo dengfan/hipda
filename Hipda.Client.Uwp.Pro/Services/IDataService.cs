@@ -13,5 +13,7 @@ namespace Hipda.Client.Uwp.Pro.Services
     public interface IDataService
     {
         ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad);
+
+        ICollectionView GetViewForReplyPage(int threadId, Action beforeLoad, Action afterLoad);
     }
 }

@@ -56,14 +56,13 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" 
-                      ItemClick="ThreadListView_ItemClick" VerticalAlignment="Top" 
-                      ItemsSource="{Binding ThreadItemCollection}" IncrementalLoadingTrigger="Edge">
+            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" VerticalAlignment="Top" 
+                      ItemsSource="{Binding ThreadItemCollection}" IncrementalLoadingTrigger="Edge" local:ItemClickCommand.Command="{Binding ThreadItem.SelectThreadItemCommand}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <TextBlock Text="{Binding AuthorUsername}" TextWrapping="Wrap" />
-                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding ThreadItem.AuthorUsername}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding ThreadItem.Title}" TextWrapping="Wrap"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -94,12 +93,12 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ReplyListView" ItemsSource="{Binding ReplyList}">
+            <ListView Grid.Row="1" x:Name="ReplyListView" ItemsSource="{Binding ThreadItem.ReplyItemCollection}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
-                            <TextBlock Text="{Binding Content}" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding AuthorUsername}" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding TextContent}" TextWrapping="Wrap"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -91,5 +91,7 @@ namespace Hipda.Client.Uwp.Pro.Models
                 return string.Format("{0} {1}", LastReplyUsername, LastReplyTime);
             }
         }
+
+        public List<ReplyItemModel> Replies { get; set; }
     }
 }

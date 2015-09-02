@@ -15,31 +15,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ThreadAndReplyViewModel : NotificationObject
     {
-        private ICollectionView _threadItemCollection;
+        public ICollectionView ThreadItemCollection { get; set; }
 
-        public ICollectionView ThreadItemCollection
-        {
-            get { return _threadItemCollection; }
-            set
-            {
-                _threadItemCollection = value;
-                this.RaisePropertyChanged("ItemCollection");
-            }
-        }
-
-        private void LoadThreadPageList(Action showProgressBar, Action hideProgressBar)
+        private void LoadThreadPageList(Action beforeLoad, Action afterLoad)
         {
             var ds = new DataService();
-            var cv = ds.GetViewForThreadPage(14, showProgressBar, hideProgressBar);
+            var cv = ds.GetViewForThreadPage(14, beforeLoad, afterLoad);
             if (cv != null)
             {
                 ThreadItemCollection = cv;
             }
         }
 
-        public ThreadAndReplyViewModel(Action showProgressBar, Action hideProgressBar)
+        public ThreadAndReplyViewModel(Action beforeLoad, Action afterLoad)
         {
-            LoadThreadPageList(showProgressBar, hideProgressBar);
+            LoadThreadPageList(beforeLoad, afterLoad);
         }
     }
 }

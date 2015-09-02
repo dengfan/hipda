@@ -191,7 +191,7 @@
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <SymbolIcon Symbol="Message" Foreground="White" />
-                                    <TextBlock Text="消息"
+                                    <TextBlock Text="短消息"
                                            Margin="24,0,0,0"
                                            Foreground="White"
                                            VerticalAlignment="Center" />

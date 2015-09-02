@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Hipda.Client.Uwp.Pro.Commands
 {
-    class DelegateCommand : ICommand
+    public class DelegateCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
 
