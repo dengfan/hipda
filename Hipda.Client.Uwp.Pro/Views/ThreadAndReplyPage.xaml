@@ -68,6 +68,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
 
         <Grid x:Name="RightWrap"
@@ -102,6 +104,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <ProgressRing x:Name="rightProgress" Visibility="Collapsed" />
         </Grid>
     </Grid>
 </Page>

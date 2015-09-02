@@ -127,7 +127,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        public CollectionViewSource GetViewForThreadPage(int forumId)
+        public ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemModel>(50,
@@ -135,13 +135,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await LoadMoreThreadItemsAsync(forumId, pageNo, 
-                        () => {
-                            //replyProgressBar.Visibility = Visibility.Visible;
-                        },
-                        () => {
-                            //replyProgressBar.Visibility = Visibility.Collapsed;
-                        });
+                    return await LoadMoreThreadItemsAsync(forumId, pageNo, beforeLoad, afterLoad);
                 },
                     (index) =>
                 {
@@ -149,15 +143,15 @@ namespace Hipda.Client.Uwp.Pro.Services
                     return GetThreadItemByIndex(forumId, index);
                 });
 
-            return cvs;
+            return cvs.View;
         }
 
-        private async Task<int> LoadMoreThreadItemsAsync(int forumId, int pageNo, Action showProgressBar, Action hideProgressBar)
+        private async Task<int> LoadMoreThreadItemsAsync(int forumId, int pageNo, Action beforeLoad, Action afterLoad)
         {
-            if (showProgressBar != null) showProgressBar();
+            if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
             await GetThreadsDataAsync(forumId, pageNo, cts);
-            if (hideProgressBar != null) hideProgressBar();
+            if (afterLoad != null) afterLoad();
 
             return Db.Count(t => t.ForumId == forumId);
         }

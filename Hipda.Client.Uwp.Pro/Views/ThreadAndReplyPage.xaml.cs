@@ -24,17 +24,23 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ThreadAndReplyPage : Page
     {
-        public ThreadAndReplyViewModel ThreadAndReplyViewModel
-        {
-            get { return _threadAndReplyViewModel; }
-        }
-        private readonly ThreadAndReplyViewModel _threadAndReplyViewModel = new ThreadAndReplyViewModel();
+        private ThreadAndReplyViewModel _threadAndReplyViewModel;
 
         public ThreadAndReplyPage()
         {
             this.InitializeComponent();
 
-            DataContext = ThreadAndReplyViewModel;
+            _threadAndReplyViewModel = new ThreadAndReplyViewModel(
+                () => {
+                    leftProgress.IsActive = true;
+                    leftProgress.Visibility = Visibility.Visible;
+                }, 
+                () => {
+                    leftProgress.IsActive = false;
+                    leftProgress.Visibility = Visibility.Collapsed;
+                });
+
+            DataContext = _threadAndReplyViewModel;
         }
 
         #region 后退事件

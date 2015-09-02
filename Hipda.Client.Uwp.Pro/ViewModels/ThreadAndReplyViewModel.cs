@@ -15,19 +15,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ThreadAndReplyViewModel : NotificationObject
     {
-
-        //private IEnumerable<ThreadItemModel> _threadItemList;
-
-        //public IEnumerable<ThreadItemModel> ThreadItemList
-        //{
-        //    get { return _threadItemList; }
-        //    set
-        //    {
-        //        _threadItemList = value;
-        //        this.RaisePropertyChanged("ThreadItemList");
-        //    }
-        //}
-
         private ICollectionView _threadItemCollection;
 
         public ICollectionView ThreadItemCollection
@@ -40,26 +27,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-
-        private void LoadThreadPageList()
+        private void LoadThreadPageList(Action showProgressBar, Action hideProgressBar)
         {
             var ds = new DataService();
-            var cts = new CancellationTokenSource();
-            var cvs = ds.GetViewForThreadPage(14);
-            if (cvs != null)
+            var cv = ds.GetViewForThreadPage(14, showProgressBar, hideProgressBar);
+            if (cv != null)
             {
-                ThreadItemCollection = cvs.View;
+                ThreadItemCollection = cv;
             }
         }
 
-        public ThreadAndReplyViewModel()
+        public ThreadAndReplyViewModel(Action showProgressBar, Action hideProgressBar)
         {
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            LoadThreadPageList();
+            LoadThreadPageList(showProgressBar, hideProgressBar);
         }
     }
 }
