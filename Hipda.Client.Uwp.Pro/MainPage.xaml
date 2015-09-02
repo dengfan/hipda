@@ -119,7 +119,7 @@
             <ImageBrush ImageSource="Assets/bg.jpg" />
         </Grid.Background>-->
 
-        <SplitView x:Name="MainSplitView" PaneBackground="#2B2B2B" OpenPaneLength="200">
+        <SplitView x:Name="MainSplitView" PaneBackground="#2B2B2B" OpenPaneLength="190">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -176,7 +176,7 @@
                     </ScrollViewer>
                     
                     <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
-                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <Button x:Name="btnNotice" Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnNotice_Tapped">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <SymbolIcon Symbol="Memo" Foreground="White" />

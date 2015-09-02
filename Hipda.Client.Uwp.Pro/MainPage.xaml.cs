@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -73,6 +74,11 @@ namespace Hipda.Client.Uwp.Pro
         private void FullSebjectPanel_Tapped(object sender, TappedRoutedEventArgs e)
         {
             e.Handled = true;
+        }
+
+        private void btnNotice_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
         }
     }
 }

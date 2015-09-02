@@ -38,7 +38,7 @@
             <ColumnDefinition x:Name="RightColumn" Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="LeftWrap" Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid x:Name="LeftWrap" Grid.Column="0" Background="WhiteSmoke">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
@@ -70,9 +70,7 @@
 
         <Grid x:Name="RightWrap"
               Grid.Column="1"
-              Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
-              BorderThickness="1,0,0,0" 
-              BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}">
+              Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
