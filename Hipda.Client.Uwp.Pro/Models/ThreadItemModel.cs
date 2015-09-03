@@ -23,6 +23,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.AuthorCreateTime = authorCreateTime;
             this.LastReplyUsername = lastReplyUsername;
             this.LastReplyTime = lastReplyTime;
+            this.Replies = new List<ReplyItemModel>();
         }
 
         public int Index { get; private set; }

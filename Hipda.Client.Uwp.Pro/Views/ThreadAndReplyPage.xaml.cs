@@ -165,5 +165,12 @@ namespace Hipda.Client.Uwp.Pro.Views
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
             }
         }
+
+        private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            ThreadItemViewModel data = e.ClickedItem as ThreadItemViewModel;
+            data.SelectThreadItem();
+            ReplyListView.ItemsSource = data.ReplyItemCollection;
+        }
     }
 }

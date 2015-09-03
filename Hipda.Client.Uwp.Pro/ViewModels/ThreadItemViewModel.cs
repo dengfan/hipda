@@ -12,19 +12,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ThreadItemViewModel : NotificationObject
     {
-        public DelegateCommand SelectThreadItemCommand { get; set; }
-
         public ThreadItemModel ThreadItem { get; set; }
 
         public ICollectionView ReplyItemCollection { get; set; }
 
-        public ThreadItemViewModel()
-        {
-            SelectThreadItemCommand = new DelegateCommand();
-            SelectThreadItemCommand.ExecuteAction = new Action<object>(SelectThreadItemExecute);
-        }
-
-        private void SelectThreadItemExecute(object parameter)
+        public void SelectThreadItem()
         {
             var ds = new DataService();
             var cv = ds.GetViewForReplyPage(ThreadItem.ThreadId, null, null);

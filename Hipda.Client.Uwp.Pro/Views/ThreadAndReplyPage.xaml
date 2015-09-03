@@ -57,7 +57,7 @@
             </CommandBar>
 
             <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" VerticalAlignment="Top" 
-                      ItemsSource="{Binding ThreadItemCollection}" IncrementalLoadingTrigger="Edge" local:ItemClickCommand.Command="{Binding ThreadItem.SelectThreadItemCommand}">
+                      ItemsSource="{Binding ThreadItemCollection}" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -93,7 +93,7 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ReplyListView" ItemsSource="{Binding ThreadItem.ReplyItemCollection}">
+            <ListView Grid.Row="1" x:Name="ReplyListView">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
