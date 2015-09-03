@@ -112,7 +112,7 @@
     <Compile Include="Services\IncrementalLoadingBase.cs" />
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
-    <Compile Include="ViewModels\ReplyItem.cs" />
+    <Compile Include="ViewModels\ReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemViewModel.cs" />
     <Compile Include="Views\ThreadAndReplyPage.xaml.cs">

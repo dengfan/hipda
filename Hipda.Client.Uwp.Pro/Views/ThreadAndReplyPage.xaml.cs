@@ -171,6 +171,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             ThreadItemViewModel data = e.ClickedItem as ThreadItemViewModel;
             data.SelectThreadItem();
             ReplyListView.ItemsSource = data.ReplyItemCollection;
+
+            if (AdaptiveStates.CurrentState == NarrowState)
+            {
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                LeftColumn.Width = new GridLength(0);
+                RightColumn.Width = new GridLength(1, GridUnitType.Star);
+            }
         }
     }
 }

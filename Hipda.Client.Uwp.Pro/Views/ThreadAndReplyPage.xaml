@@ -93,7 +93,7 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ReplyListView">
+            <ListView Grid.Row="1" x:Name="ReplyListView" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
