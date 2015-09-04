@@ -76,7 +76,7 @@
 
             <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" IsHoldingEnabled="False" IsMultiSelectCheckBoxEnabled="False" IsSwipeEnabled="False"
                       VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
-                      ItemsSource="{Binding ThreadItemCollection}" >
+                      ItemsSource="{Binding ThreadItemCollection}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
