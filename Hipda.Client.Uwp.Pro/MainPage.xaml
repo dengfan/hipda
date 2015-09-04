@@ -132,7 +132,7 @@
                             <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
-                                        <SymbolIcon Symbol="Account" Foreground="White" />
+                                        <SymbolIcon Symbol="ContactInfo" Foreground="White" />
                                         <TextBlock Text="我的贴子"
                                            Margin="24,0,0,0"
                                            Foreground="White"
@@ -202,7 +202,7 @@
                         <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnNotice_Tapped">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
-                                    <SymbolIcon Symbol="Favorite" Foreground="White" />
+                                    <SymbolIcon Symbol="OutlineStar" Foreground="White" />
                                     <TextBlock Text="收藏"
                                            Margin="24,0,0,0"
                                            Foreground="White"
