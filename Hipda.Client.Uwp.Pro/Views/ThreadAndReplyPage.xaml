@@ -93,7 +93,7 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ReplyListView" SelectionMode="None">
+            <ListView Grid.Row="1" x:Name="ReplyListView" SelectionMode="None" ItemsSource="{Binding ReplyItemCollection}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -104,7 +104,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <ProgressRing x:Name="rightProgress" Visibility="Collapsed" />
+            <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
     </Grid>
 </Page>

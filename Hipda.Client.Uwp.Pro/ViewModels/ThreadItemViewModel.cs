@@ -16,10 +16,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ICollectionView ReplyItemCollection { get; set; }
 
-        public void SelectThreadItem()
+        public void SelectThreadItem(Action beforeLoad, Action afterLoad)
         {
             var ds = new DataService();
-            var cv = ds.GetViewForReplyPage(ThreadItem.ThreadId, null, null);
+            var cv = ds.GetViewForReplyPage(ThreadItem.ThreadId, beforeLoad, afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;

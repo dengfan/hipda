@@ -168,9 +168,19 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            ReplyListView.DataContext = null;
+
             ThreadItemViewModel data = e.ClickedItem as ThreadItemViewModel;
-            data.SelectThreadItem();
-            ReplyListView.ItemsSource = data.ReplyItemCollection;
+            data.SelectThreadItem(
+                () => {
+                    rightProgress.IsActive = true;
+                    rightProgress.Visibility = Visibility.Visible;
+                },
+                () => {
+                    rightProgress.IsActive = false;
+                    rightProgress.Visibility = Visibility.Collapsed;
+                });
+            ReplyListView.DataContext = data;
 
             if (AdaptiveStates.CurrentState == NarrowState)
             {
