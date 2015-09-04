@@ -74,7 +74,8 @@
                 <AppBarToggleButton Icon="Sort" Label="按发布时间倒序排列"/>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
+            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" IsHoldingEnabled="False" IsMultiSelectCheckBoxEnabled="False" IsSwipeEnabled="False"
+                      VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
                       ItemsSource="{Binding ThreadItemCollection}" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
