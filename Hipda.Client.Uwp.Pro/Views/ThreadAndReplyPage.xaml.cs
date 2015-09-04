@@ -170,6 +170,13 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             ReplyListView.DataContext = null;
 
+            if (AdaptiveStates.CurrentState == NarrowState)
+            {
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                LeftColumn.Width = new GridLength(0);
+                RightColumn.Width = new GridLength(1, GridUnitType.Star);
+            }
+
             ThreadItemViewModel data = e.ClickedItem as ThreadItemViewModel;
             data.SelectThreadItem(
                 () => {
@@ -181,13 +188,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                     rightProgress.Visibility = Visibility.Collapsed;
                 });
             ReplyListView.DataContext = data;
-
-            if (AdaptiveStates.CurrentState == NarrowState)
-            {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-                LeftColumn.Width = new GridLength(0);
-                RightColumn.Width = new GridLength(1, GridUnitType.Star);
-            }
         }
     }
 }

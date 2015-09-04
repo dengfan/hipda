@@ -174,19 +174,8 @@
                             </Button>
                         </StackPanel>
                     </ScrollViewer>
-                    
+
                     <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
-                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnNotice_Tapped">
-                            <Button.Content>
-                                <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
-                                    <SymbolIcon Symbol="BlockContact" Foreground="White" />
-                                    <TextBlock Text="屏蔽"
-                                           Margin="24,0,0,0"
-                                           Foreground="White"
-                                           VerticalAlignment="Center" />
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
                         <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnNotice_Tapped">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
