@@ -46,14 +46,9 @@
             </Grid.RowDefinitions>
 
             <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
-                <AppBarButton Icon="Edit" Label="Edit"/>
-                <AppBarButton Icon="Delete" Label="Delete"/>
-                <AppBarToggleButton Icon="Sort" Label="Sort"/>
-                <CommandBar.SecondaryCommands>
-                    <AppBarButton Label="Menu Item 1"/>
-                    <AppBarButton Label="Menu Item 2"/>
-                    <AppBarButton Label="Menu Item 3"/>
-                </CommandBar.SecondaryCommands>
+                <AppBarButton Icon="Add" Label="发表新贴"/>
+                <AppBarButton Icon="Refresh" Label="刷新"/>
+                <AppBarToggleButton Icon="Sort" Label="按发布时间倒序排列"/>
             </CommandBar>
 
             <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" VerticalAlignment="Top" 

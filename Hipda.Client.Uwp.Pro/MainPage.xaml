@@ -10,6 +10,7 @@
 
     <Page.Resources>
         <Style x:Key="SplitViewPaneButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="48"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
@@ -128,7 +129,29 @@
                     </Grid.RowDefinitions>
                     <ScrollViewer Grid.Row="0" Margin="0 48 0 0" VerticalScrollBarVisibility="Hidden">
                         <StackPanel>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                                <Button.Content>
+                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                        <SymbolIcon Symbol="Account" Foreground="White" />
+                                        <TextBlock Text="我的贴子"
+                                           Margin="24,0,0,0"
+                                           Foreground="White"
+                                           VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                                <Button.Content>
+                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                        <SymbolIcon Symbol="Zoom" Foreground="White" />
+                                        <TextBlock Text="搜索贴子"
+                                           Margin="24,0,0,0"
+                                           Foreground="White"
+                                           VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="DI" Foreground="White" FontFamily="Consolas" />
@@ -139,7 +162,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="BS" Foreground="White" FontFamily="Consolas" />
@@ -150,7 +173,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="EI" Foreground="White" FontFamily="Consolas" />
@@ -161,7 +184,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button x:Name="btnMore" Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnMore_Tapped">
+                            <Button x:Name="btnMore" Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnMore_Tapped">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <SymbolIcon Symbol="More" Foreground="White" />
@@ -176,7 +199,7 @@
                     </ScrollViewer>
 
                     <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
-                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnNotice_Tapped">
+                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnNotice_Tapped">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <SymbolIcon Symbol="Favorite" Foreground="White" />
@@ -187,10 +210,10 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <Button x:Name="btnNotice" Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnNotice_Tapped">
+                        <Button x:Name="btnNotice" Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnNotice_Tapped">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
-                                    <SymbolIcon Symbol="Memo" Foreground="White" />
+                                    <SymbolIcon Symbol="Mail" Foreground="White" />
                                     <TextBlock Text="提醒"
                                            Margin="24,0,0,0"
                                            Foreground="White"
@@ -198,7 +221,7 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <SymbolIcon Symbol="Message" Foreground="White" />
@@ -209,7 +232,7 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" Height="48" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <SymbolIcon Symbol="Setting" Foreground="White" />
@@ -231,7 +254,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <StackPanel x:Name="topWrapForMobile" Grid.Row="0" Height="48" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Visibility="Collapsed"></StackPanel>
+                    <StackPanel x:Name="topWrapForMobile" Grid.Row="0" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Visibility="Collapsed"></StackPanel>
 
                     <Frame x:Name="MainFrame" Grid.Row="1">
                         <Frame.ContentTransitions>
@@ -259,7 +282,7 @@
             
         </SplitView>
 
-        <Button x:Name="MainSplitViewToggle" Style="{StaticResource SplitViewPaneButtonStyle}" Width="48" Height="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
+        <Button x:Name="MainSplitViewToggle" Style="{StaticResource SplitViewPaneButtonStyle}" Width="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
             <Button.Content>
                 <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
             </Button.Content>
