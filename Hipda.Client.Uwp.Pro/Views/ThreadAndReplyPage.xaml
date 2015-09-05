@@ -70,7 +70,7 @@
 
             <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
                 <AppBarButton Icon="Add" Label="发表新贴"/>
-                <AppBarButton Icon="Refresh" Label="刷新"/>
+                <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshCommand}"/>
                 <AppBarToggleButton Icon="Sort" Label="按发布时间倒序排列"/>
             </CommandBar>
 

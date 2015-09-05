@@ -9,27 +9,51 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ThreadAndReplyViewModel : NotificationObject
     {
+        private ListView _threadListView { get; set; }
+        private ListView _replyListView { get; set; }
+        private Action _beforeLoad { get; set; }
+        private Action _afterLoad { get; set; }
+        private DataService _ds { get; set; }
+
+        public DelegateCommand RefreshCommand { get; set; }
+
         public ICollectionView ThreadItemCollection { get; set; }
 
-        private void LoadThreadPageList(Action beforeLoad, Action afterLoad)
+        private void LoadThreadPageList()
         {
-            var ds = new DataService();
-            var cv = ds.GetViewForThreadPage(14, beforeLoad, afterLoad);
+            var cv = _ds.GetViewForThreadPage(14, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ThreadItemCollection = cv;
             }
         }
 
-        public ThreadAndReplyViewModel(Action beforeLoad, Action afterLoad)
+        public ThreadAndReplyViewModel(ListView threadListView, ListView replyListView, Action beforeLoad, Action afterLoad)
         {
-            LoadThreadPageList(beforeLoad, afterLoad);
+            _threadListView = threadListView;
+            _replyListView = replyListView;
+            _beforeLoad = beforeLoad;
+            _afterLoad = afterLoad;
+            _ds = new DataService();
+
+            RefreshCommand = new DelegateCommand();
+            RefreshCommand.ExecuteAction = new Action<object>(RefreshExecute);
+
+            LoadThreadPageList();
+        }
+
+        private async void RefreshExecute(object parameter)
+        {
+            _threadListView.ItemsSource = null;
+            await _ds.RefreshThreadData(14, new CancellationTokenSource());
+            _threadListView.ItemsSource = ThreadItemCollection;
         }
     }
 }

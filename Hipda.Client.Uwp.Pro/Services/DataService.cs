@@ -23,7 +23,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         private static HttpHandle httpClient = HttpHandle.getInstance();
         private static List<ThreadItemModel> Db = new List<ThreadItemModel>();
 
-        #region 加载主题数据
+        #region 主题数据的处理
         private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
             // 如果该页贴子已存在，且贴子数量为满页，则不作请求
@@ -184,9 +184,15 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             return cvs.View;
         }
+
+        public async Task RefreshThreadData(int forumId, CancellationTokenSource cts)
+        {
+            Db.RemoveAll(t => t.ForumId == forumId);
+            await LoadThreadDataAsync(forumId, 1, cts);
+        }
         #endregion
 
-        #region 加载回复数据
+        #region 回复数据的处理
         private async Task LoadReplyDataAsync(int threadId, int pageNo, CancellationTokenSource cts)
         {
             #region 如果数据已存在，则不读取，以便节省流量
