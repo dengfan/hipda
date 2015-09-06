@@ -9,7 +9,7 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <Style x:Key="ReplyItemStyle" TargetType="ListViewItem">
+        <Style x:Key="ReplyItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
             <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -17,7 +17,7 @@
             <Setter Property="TabNavigation" Value="Local"/>
             <Setter Property="IsHoldingEnabled" Value="False"/>
             <Setter Property="Padding" Value="12,4,12,4"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}"/>
             <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}"/>
@@ -29,6 +29,72 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="FaceIconStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="25"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
+        <Style x:Key="ChatBubbleStyle" TargetType="Border">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="LightCyan"/>
+        </Style>
+
+        <DataTemplate x:Name="ReplyListItemTemplate">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
+
+                <!--<Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 10,0 10,8" Fill="LightBlue"/>-->
+
+                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
+                    <StackPanel>
+                        <TextBlock>
+                            <Run x:Name="ownerNameTextBlock" Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            <Run x:Name="createTimeTextBlock" Text="{Binding AuthorCreateTime}" />
+                        </TextBlock>
+                        <TextBlock x:Name="threadTitleTextBlock" Margin="0,3,0,8" FontWeight="Bold" Visibility="Collapsed" />
+                        <ContentControl x:Name="replyContent" />
+                        <Button x:Name="showMoreButton" Margin="0,10,0,0"
+                                HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
+                                Visibility="Collapsed" />
+                    </StackPanel>
+                </Border>
+
+                <Button x:Name="menuButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Pivot.SlideInAnimationGroup="GroupOne">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
+                                <TextBlock HorizontalAlignment="Center" FontSize="11">
+                                    <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
+                                    <Run Text="{Binding FloorNoStr}" />
+                                </TextBlock>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Flyout>
+                        <MenuFlyout x:Name="replyMenu">
+                            <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" />
+                            <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" />
+                            <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" IsEnabled="False" />
+                            <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -107,15 +173,10 @@
             </CommandBar>
 
             <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="False"
-                      ItemContainerStyle="{StaticResource ReplyItemStyle}" ItemsSource="{Binding ReplyItemCollection}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding AuthorUsername}" TextWrapping="Wrap"/>
-                            <TextBlock Text="{Binding TextContent}" TextWrapping="Wrap"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+                      ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
+                      ItemTemplate="{StaticResource ReplyListItemTemplate}"
+                      ItemsSource="{Binding ReplyItemCollection}"
+                      ContainerContentChanging="ReplyListView_ContainerContentChanging">
             </ListView>
 
             <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />

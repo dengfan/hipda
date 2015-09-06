@@ -72,7 +72,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
-        public string FloorNumStr
+        public string FloorNoStr
         {
             get
             {

@@ -1,9 +1,11 @@
-﻿using Hipda.Client.Uwp.Pro.ViewModels;
+﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -12,8 +14,11 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
@@ -159,5 +164,116 @@ namespace Hipda.Client.Uwp.Pro.Views
             RightWrap.DataContext = data;
             ReplyListView.ItemsSource = data.ReplyItemCollection;
         }
+
+        #region 增量更新
+        void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            args.Handled = true;
+
+            if (args.Phase != 0)
+            {
+                throw new Exception("Not in phase 0.");
+            }
+
+            ReplyItemModel reply = (ReplyItemModel)args.Item;
+
+            Grid layoutGrid = (Grid)args.ItemContainer.ContentTemplateRoot;
+
+            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+            TextBlock threadTitleTextBlock = (TextBlock)layoutGrid.FindName("threadTitleTextBlock");
+            Run ownerNameTextBlockRun = (Run)layoutGrid.FindName("ownerNameTextBlock");
+            Run createTimeTextBlockRun = (Run)layoutGrid.FindName("createTimeTextBlock");
+            Button menuButton = (Button)layoutGrid.FindName("menuButton");
+            ContentControl replyContent = (ContentControl)layoutGrid.FindName("replyContent");
+            Button showMoreButton = (Button)layoutGrid.FindName("showMoreButton");
+            MenuFlyoutItem modifyMenuFlyoutItem = (MenuFlyoutItem)layoutGrid.FindName("modifyMenuFlyoutItem");
+
+            if (reply.FloorNo == 1 && !string.IsNullOrEmpty(reply.ThreadTitle))
+            {
+                threadTitleTextBlock.Text = reply.ThreadTitle;
+                threadTitleTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            }
+            else
+            {
+                threadTitleTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            }
+
+            ownerNameTextBlockRun.Text = reply.AuthorUsername;
+            createTimeTextBlockRun.Text = reply.AuthorCreateTime;
+            menuButton.DataContext = reply;
+
+            try
+            {
+                replyContent.Content = XamlReader.Load(reply.XamlContent);
+            }
+            catch
+            {
+                // 用于过滤掉无意义符号
+                string regexForTitle = @"[^a-zA-Z\d\u4e00-\u9fa5]";
+                string text = Regex.Replace(reply.TextContent, regexForTitle, "~");
+                string xaml = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>", text);
+                replyContent.Content = XamlReader.Load(xaml);
+            }
+
+            // 如果楼层内容的作者是当前账号，则显示编辑按钮
+            //if (reply.AuthorUserId == DataSource.UserId)
+            //{
+            //    modifyMenuFlyoutItem.IsEnabled = true;
+            //}
+            //else
+            //{
+            //    modifyMenuFlyoutItem.IsEnabled = false;
+            //}
+
+            //if (reply.ImageCount > DataSource.MaxImageCount)
+            //{
+            //    showMoreButton.DataContext = reply;
+            //    showMoreButton.Content = string.Format("查看本楼层完整原始内容 ({0}P)", reply.ImageCount);
+            //    showMoreButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            //}
+            //else
+            //{
+            //    showMoreButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            //}
+
+            args.RegisterUpdateCallback(ShowAuthorFace);
+        }
+
+        private void ShowAuthorFace(
+                ListViewBase sender,
+                ContainerContentChangingEventArgs args)
+        {
+            if (args.Phase != 1)
+            {
+                throw new Exception("Not in phase 1.");
+            }
+
+            ReplyItemModel reply = (ReplyItemModel)args.Item;
+            SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
+            Grid layoutGrid = (Grid)itemContainer.ContentTemplateRoot;
+
+            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
+
+            var imageBrush = new ImageBrush
+            {
+                ImageSource = new BitmapImage
+                {
+                    DecodePixelWidth = 50, // natural px width of image source
+                    UriSource = new Uri(reply.AvatarUrl)
+                }
+            };
+            imageBrush.ImageFailed += (sender2, e2) =>
+            {
+                var imageBrush2 = sender2 as ImageBrush;
+                imageBrush2.ImageSource = new BitmapImage
+                {
+                    DecodePixelWidth = 50, // natural px width of image source
+                    UriSource = new Uri("ms-appx:///Assets/Faces/no_face.png")
+                };
+            };
+            imageBrush.Stretch = Stretch.UniformToFill;
+            avatarImageBorder.Background = imageBrush;
+        }
+        #endregion
     }
 }
