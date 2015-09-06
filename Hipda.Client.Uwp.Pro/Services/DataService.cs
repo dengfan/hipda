@@ -21,20 +21,21 @@ namespace Hipda.Client.Uwp.Pro.Services
         private static int SearchPageSize = 50;
 
         private static HttpHandle httpClient = HttpHandle.getInstance();
-        private static List<ThreadItemModel> Db = new List<ThreadItemModel>();
+        private static List<ThreadItemModel> ThreadData = new List<ThreadItemModel>();
+        private static List<ReplyPageModel> ReplyData = new List<ReplyPageModel>();
 
         #region 主题数据的处理
         private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
             // 如果该页贴子已存在，且贴子数量为满页，则不作请求
-            var count = Db.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
+            var count = ThreadData.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
             if (count == ThreadPageSize)
             {
                 return;
             }
             else
             {
-                Db.RemoveAll(t => t.ForumId == forumId && t.PageNo == pageNo);
+                ThreadData.RemoveAll(t => t.ForumId == forumId && t.PageNo == pageNo);
             }
 
             // 读取数据
@@ -61,7 +62,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return;
             }
 
-            int i = Db.Count;
+            int i = ThreadData.Count;
             foreach (var item in tbodies)
             {
                 var tr = item.ChildNodes[1];
@@ -127,7 +128,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 var threadItem = new ThreadItemModel(i, forumId, threadId, pageNo, title, attachType, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
-                Db.Add(threadItem);
+                ThreadData.Add(threadItem);
 
                 i++;
             }
@@ -140,7 +141,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             await LoadThreadDataAsync(forumId, pageNo, cts);
             if (afterLoad != null) afterLoad();
 
-            return Db.Count(t => t.ForumId == forumId);
+            return ThreadData.Count(t => t.ForumId == forumId);
         }
 
         /// <summary>
@@ -151,7 +152,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         /// <returns></returns>
         private ThreadItemViewModel GetThreadItemByIndex(int forumId, int index)
         {
-            var threadItem = Db.FirstOrDefault(t => t.ForumId == forumId && t.Index == index);
+            var threadItem = ThreadData.FirstOrDefault(t => t.ForumId == forumId && t.Index == index);
             if (threadItem == null)
             {
                 return null;
@@ -187,7 +188,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public async Task RefreshThreadData(int forumId, CancellationTokenSource cts)
         {
-            Db.RemoveAll(t => t.ForumId == forumId);
+            ThreadData.RemoveAll(t => t.ForumId == forumId);
             await LoadThreadDataAsync(forumId, 1, cts);
         }
         #endregion
@@ -196,7 +197,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         private async Task LoadReplyDataAsync(int threadId, int pageNo, CancellationTokenSource cts)
         {
             #region 如果数据已存在，则不读取，以便节省流量
-            var threadItem = Db.FirstOrDefault(t => t.ThreadId == threadId);
+            var threadItem = ThreadData.FirstOrDefault(t => t.ThreadId == threadId);
             if (threadItem == null) // 如果主题不存在，则返回
             {
                 return;
@@ -204,21 +205,26 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 如果页面已存在，并且已载满数据，则不重新从网站拉取数据，以便节省流量， 
             // 但最后一页（如果数据少于一页，那么第一页就是最后一页）由于随时可能会有新回复，所以对于最后一页的处理方式是先清除再重新加载
-            int count = threadItem.Replies.Count(o => o.PageNo == pageNo);
-            if (count > 0)
+            var threadReply = ReplyData.FirstOrDefault(r => r.ThreadId == threadId);
+            if (threadReply != null)
             {
-                if (count >= ReplyPageSize) // 满页的不再加载，以便节省流量
+                int count = threadReply.Replies.Count(r => r.PageNo == pageNo);
+                if (count > 0)
                 {
-                    return;
-                }
+                    if (count >= ReplyPageSize) // 满页的不再加载，以便节省流量
+                    {
+                        return;
+                    }
 
-                // 再判断未满页的
-                // 第一页或最后一页的回复数量不足一页，表示此页随时可能有新回复，故删除
-                var lastPageData = threadItem.Replies.Where(r => r.PageNo == pageNo).ToList();
-                foreach (var item in lastPageData)
-                {
-                    threadItem.Replies.Remove(threadItem.Replies.Single(r => r.FloorNo == item.FloorNo));
+                    // 再判断未满页的
+                    // 第一页或最后一页的回复数量不足一页，表示此页随时可能有新回复，故删除
+                    threadReply.Replies.RemoveAll(r => r.PageNo == pageNo);
                 }
+            }
+            else
+            {
+                threadReply = new ReplyPageModel { ThreadId = threadId, Replies = new List<ReplyItemModel>() };
+                ReplyData.Add(threadReply);
             }
             #endregion
 
@@ -265,7 +271,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return;
             }
 
-            int i = threadItem.Replies.Count;
+            int i = threadReply.Replies.Count();
             foreach (var item in data)
             {
                 var postAuthorNode = item.ChildNodes[0] // table
@@ -343,7 +349,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
-                threadItem.Replies.Add(reply);
+                threadReply.Replies.Add(reply);
 
                 i++;
             }
@@ -356,12 +362,12 @@ namespace Hipda.Client.Uwp.Pro.Services
             await LoadReplyDataAsync(threadId, pageNo, cts);
             if (afterLoad != null) afterLoad();
 
-            return Db.First(t => t.ThreadId == threadId).Replies.Count;
+            return ReplyData.Single(t => t.ThreadId == threadId).Replies.Count;
         }
 
         public static ReplyItemModel GetReplyItemByIndex(int threadId, int index)
         {
-            return Db.First(t => t.ThreadId == threadId).Replies[index];
+            return ReplyData.Single(t => t.ThreadId == threadId).Replies[index];
         }
 
         public ICollectionView GetViewForReplyPage(int threadId, Action beforeLoad, Action afterLoad)
@@ -381,6 +387,12 @@ namespace Hipda.Client.Uwp.Pro.Services
                 });
 
             return cvs.View;
+        }
+
+        public async Task RefreshReplyData(int threadId, CancellationTokenSource cts)
+        {
+            ReplyData.RemoveAll(t => t.ThreadId == threadId);
+            await LoadReplyDataAsync(threadId, 1, cts);
         }
     }
     #endregion

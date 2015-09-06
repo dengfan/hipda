@@ -17,30 +17,32 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     public class ThreadAndReplyViewModel : NotificationObject
     {
         private ListView _threadListView { get; set; }
-        private ListView _replyListView { get; set; }
         private Action _beforeLoad { get; set; }
         private Action _afterLoad { get; set; }
         private DataService _ds { get; set; }
 
-        public DelegateCommand RefreshCommand { get; set; }
+        public DelegateCommand RefreshThreadCommand { get; set; }
 
         public ICollectionView ThreadItemCollection { get; set; }
 
-        public ThreadAndReplyViewModel(ListView threadListView, ListView replyListView, Action beforeLoad, Action afterLoad)
+        public ThreadAndReplyViewModel(ListView threadListView, Action beforeLoad, Action afterLoad)
         {
             _threadListView = threadListView;
-            _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _ds = new DataService();
 
-            RefreshCommand = new DelegateCommand();
-            RefreshCommand.ExecuteAction = new Action<object>(RefreshExecute);
+            RefreshThreadCommand = new DelegateCommand();
+            RefreshThreadCommand.ExecuteAction = new Action<object>(RefreshThreadExecute);
 
-            ThreadItemCollection = _ds.GetViewForThreadPage(14, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForThreadPage(14, _beforeLoad, _afterLoad);
+            if (cv != null)
+            {
+                ThreadItemCollection = cv;
+            }
         }
 
-        private async void RefreshExecute(object parameter)
+        private async void RefreshThreadExecute(object parameter)
         {
             _threadListView.ItemsSource = null;
             await _ds.RefreshThreadData(14, new CancellationTokenSource());

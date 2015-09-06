@@ -33,7 +33,6 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             _threadAndReplyViewModel = new ThreadAndReplyViewModel(
                 ThreadListView,
-                ReplyListView,
                 () => {
                     leftProgress.IsActive = true;
                     leftProgress.Visibility = Visibility.Visible;
@@ -136,7 +135,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ReplyListView.DataContext = null;
+            RightWrap.DataContext = null;
 
             if (AdaptiveStates.CurrentState == NarrowState)
             {
@@ -147,6 +146,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             ThreadItemViewModel data = e.ClickedItem as ThreadItemViewModel;
             data.SelectThreadItem(
+                ReplyListView,
                 () => {
                     rightProgress.IsActive = true;
                     rightProgress.Visibility = Visibility.Visible;
@@ -155,7 +155,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                     rightProgress.IsActive = false;
                     rightProgress.Visibility = Visibility.Collapsed;
                 });
-            ReplyListView.DataContext = data;
+
+            RightWrap.DataContext = data;
+            ReplyListView.ItemsSource = data.ReplyItemCollection;
         }
     }
 }

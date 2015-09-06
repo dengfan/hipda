@@ -70,7 +70,7 @@
 
             <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
                 <AppBarButton Icon="Add" Label="发表新贴"/>
-                <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshCommand}"/>
+                <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
                 <AppBarToggleButton Icon="Sort" Label="按发布时间倒序排列"/>
             </CommandBar>
 
@@ -101,15 +101,9 @@
             </Grid.RowDefinitions>
 
             <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
-                <AppBarButton Icon="Edit" Label="Edit"/>
-                <AppBarButton Icon="Delete" Label="Delete"/>
-                <AppBarSeparator/>
-                <AppBarToggleButton Icon="Sort" Label="Sort"/>
-                <CommandBar.SecondaryCommands>
-                    <AppBarButton Label="Menu Item 1"/>
-                    <AppBarButton Label="Menu Item 2"/>
-                    <AppBarButton Label="Menu Item 3"/>
-                </CommandBar.SecondaryCommands>
+                <AppBarButton Icon="Edit" Label="评论"/>
+                <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshRelplyCommand}"/>
+                <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
             </CommandBar>
 
             <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="False"
