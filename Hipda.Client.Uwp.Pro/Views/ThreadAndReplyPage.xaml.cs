@@ -258,7 +258,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 ImageSource = new BitmapImage
                 {
-                    DecodePixelWidth = 50, // natural px width of image source
+                    DecodePixelWidth = 40, // natural px width of image source
                     UriSource = new Uri(reply.AvatarUrl)
                 }
             };
@@ -267,7 +267,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 var imageBrush2 = sender2 as ImageBrush;
                 imageBrush2.ImageSource = new BitmapImage
                 {
-                    DecodePixelWidth = 50, // natural px width of image source
+                    DecodePixelWidth = 40, // natural px width of image source
                     UriSource = new Uri("ms-appx:///Assets/Faces/no_face.png")
                 };
             };

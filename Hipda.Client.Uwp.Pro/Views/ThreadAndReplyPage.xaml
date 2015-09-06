@@ -16,7 +16,7 @@
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
             <Setter Property="TabNavigation" Value="Local"/>
             <Setter Property="IsHoldingEnabled" Value="False"/>
-            <Setter Property="Padding" Value="12,4,12,4"/>
+            <Setter Property="Padding" Value="12,12,12,4"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}"/>
@@ -31,15 +31,15 @@
         </Style>
 
         <Style x:Key="FaceIconStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="25"/>
-            <Setter Property="Width" Value="50"/>
-            <Setter Property="Height" Value="50"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
 
         <Style x:Key="ChatBubbleStyle" TargetType="Border">
             <Setter Property="Padding" Value="10"/>
-            <Setter Property="Background" Value="LightCyan"/>
+            <Setter Property="Background" Value="White"/>
         </Style>
 
         <DataTemplate x:Name="ReplyListItemTemplate">
@@ -50,14 +50,14 @@
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="40"/>
                     <ColumnDefinition Width="10"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
 
-                <!--<Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 10,0 10,8" Fill="LightBlue"/>-->
+                <Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 10,0 10,8" Fill="White"/>
 
                 <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
                     <StackPanel>
@@ -100,13 +100,23 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1024" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="LeftColumn.Width" Value="420" />
+                        <Setter Target="RightColumn.Width" Value="*" />
+                    </VisualState.Setters>
+                </VisualState>
+                
                 <VisualState x:Name="DefaultState">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="720" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="LeftColumn.Width" Value="*" />
-                        <Setter Target="RightColumn.Width" Value="1.25*" />
+                        <Setter Target="RightColumn.Width" Value="1.3*" />
                     </VisualState.Setters>
                 </VisualState>
 
@@ -127,7 +137,7 @@
             <ColumnDefinition x:Name="RightColumn" Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="LeftWrap" Grid.Column="0" Background="WhiteSmoke">
+        <Grid x:Name="LeftWrap" Grid.Column="0" Background="#F8F9FA">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
@@ -158,7 +168,7 @@
 
         <Grid x:Name="RightWrap"
               Grid.Column="1"
-              Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+              Background="#E9EEF4">
             
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

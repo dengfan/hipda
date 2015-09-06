@@ -70,10 +70,9 @@
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1366" />
+                        <AdaptiveTrigger MinWindowWidth="1024" />
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState>
@@ -120,7 +119,7 @@
             <ImageBrush ImageSource="Assets/bg.jpg" />
         </Grid.Background>-->
 
-        <SplitView x:Name="MainSplitView" PaneBackground="#2B2B2B" OpenPaneLength="190">
+        <SplitView x:Name="MainSplitView" PaneBackground="{ThemeResource SystemControlBackgroundAccentBrush}" OpenPaneLength="190">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -282,9 +281,9 @@
             
         </SplitView>
 
-        <Button x:Name="MainSplitViewToggle" Style="{StaticResource SplitViewPaneButtonStyle}" Width="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
+        <Button x:Name="MainSplitViewToggle" Style="{StaticResource SplitViewPaneButtonStyle}" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Width="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
             <Button.Content>
-                <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+                <FontIcon Glyph="&#xE700;" Foreground="White" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
             </Button.Content>
         </Button>
     </Grid>
