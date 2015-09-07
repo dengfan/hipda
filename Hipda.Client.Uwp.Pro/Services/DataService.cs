@@ -108,6 +108,10 @@ namespace Hipda.Client.Uwp.Pro.Services
                     {
                         authorUserId = Convert.ToInt32(authorUserIdStr.Split('&')[0]);
                     }
+                    else
+                    {
+                        authorUserId = Convert.ToInt32(authorUserIdStr);
+                    }
                 }
 
                 var authorCreateTime = tdAuthor.ChildNodes[3].InnerText;
@@ -292,6 +296,10 @@ namespace Hipda.Client.Uwp.Pro.Services
                     if (authorUserIdStr.Contains("&"))
                     {
                         authorUserId = Convert.ToInt32(authorUserIdStr.Split('&')[0]);
+                    }
+                    else
+                    {
+                        authorUserId = Convert.ToInt32(authorUserIdStr);
                     }
                     authorUsername = authorNode.InnerText;
                 }

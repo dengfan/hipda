@@ -59,7 +59,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return ThreadAuthorUserId.Equals(AuthorUserId);
+                return ThreadAuthorUserId == AuthorUserId;
             }
         }
 
