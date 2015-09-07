@@ -8,7 +8,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ReplyItemModel
     {
-        public ReplyItemModel(int index, int floorNo, string postId, int pageNo, int threadId, string threadTitle, string authorUserId, string authorUsername, string textContent, string htmlContent, string xamlConent, int imageCount, string authorCreateTime)
+        public ReplyItemModel(int index, int floorNo, string postId, int pageNo, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string htmlContent, string xamlConent, int imageCount, string authorCreateTime)
         {
             this.Index = index;
             this.FloorNo = floorNo;
@@ -16,6 +16,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.PageNo = pageNo;
             this.ThreadId = threadId;
             this.ThreadTitle = threadTitle;
+            this.ThreadAuthorUserId = threadAuthorUserId;
             this.AuthorUserId = authorUserId;
             this.AuthorUsername = authorUsername;
             this.TextContent = textContent;
@@ -31,9 +32,10 @@ namespace Hipda.Client.Uwp.Pro.Models
         public int PageNo { get; private set; }
         public int ThreadId { get; private set; }
         public string ThreadTitle { get; private set; }
+        public int ThreadAuthorUserId { get; private set; }
         public string AuthorUsername { get; private set; }
 
-        public string AuthorUserId { get; private set; }
+        public int AuthorUserId { get; private set; }
 
         public string TextContent { get; private set; }
 
@@ -50,6 +52,14 @@ namespace Hipda.Client.Uwp.Pro.Models
             get
             {
                 return FloorNo == 1;
+            }
+        }
+
+        public bool IsTopicStarter
+        {
+            get
+            {
+                return ThreadAuthorUserId.Equals(AuthorUserId);
             }
         }
 

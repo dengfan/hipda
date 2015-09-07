@@ -8,7 +8,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ThreadItemModel
     {
-        public ThreadItemModel(int index, int forumId, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, string authorUsername, string authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
+        public ThreadItemModel(int index, int forumId, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
         {
             this.Index = index;
             this.ForumId = forumId;
@@ -43,7 +43,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public string AuthorUsername { get; private set; }
 
-        public string AuthorUserId { get; private set; }
+        public int AuthorUserId { get; private set; }
 
         public string AuthorCreateTime { get; private set; }
 
@@ -60,7 +60,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                if (string.IsNullOrEmpty(AuthorUserId))
+                if (AuthorUserId == 0)
                 {
                     return string.Empty;
                 }

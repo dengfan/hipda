@@ -42,7 +42,7 @@
             <Setter Property="Background" Value="White"/>
         </Style>
 
-        <DataTemplate x:Name="ReplyListItemTemplate">
+        <DataTemplate x:Name="ReplyListLeftItemTemplate">
             <Grid HorizontalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -57,7 +57,61 @@
 
                 <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
 
-                <Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 10,0 10,8" Fill="White"/>
+                <!--<Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 10,0 10,8" Fill="White"/>-->
+
+                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
+                    <StackPanel>
+                        <TextBlock>
+                            <Run x:Name="ownerNameTextBlock" Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            <Run x:Name="createTimeTextBlock" Text="{Binding AuthorCreateTime}" />
+                        </TextBlock>
+                        <TextBlock x:Name="threadTitleTextBlock" Margin="0,3,0,8" FontWeight="Bold" Visibility="Collapsed" />
+                        <ContentControl x:Name="replyContent" />
+                        <Button x:Name="showMoreButton" Margin="0,10,0,0"
+                                HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
+                                Visibility="Collapsed" />
+                    </StackPanel>
+                </Border>
+
+                <Button x:Name="menuButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Pivot.SlideInAnimationGroup="GroupOne">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
+                                <TextBlock HorizontalAlignment="Center" FontSize="11">
+                                    <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
+                                    <Run Text="{Binding FloorNoStr}" />
+                                </TextBlock>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Flyout>
+                        <MenuFlyout x:Name="replyMenu">
+                            <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" />
+                            <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" />
+                            <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" IsEnabled="False" />
+                            <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="ReplyListRightItemTemplate">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
+
+                <!--<Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 10,0 10,8" Fill="White"/>-->
 
                 <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ChatBubbleStyle}" HorizontalAlignment="Left">
                     <StackPanel>
@@ -184,7 +238,7 @@
 
             <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="False"
                       ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-                      ItemTemplate="{StaticResource ReplyListItemTemplate}"
+                      ItemTemplate="{StaticResource ReplyListLeftItemTemplate}"
                       ItemsSource="{Binding ReplyItemCollection}"
                       ContainerContentChanging="ReplyListView_ContainerContentChanging">
             </ListView>

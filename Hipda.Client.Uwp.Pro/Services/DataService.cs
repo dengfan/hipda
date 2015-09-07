@@ -93,7 +93,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 var authorName = string.Empty;
-                var authorId = string.Empty;
+                int authorUserId = 0;
                 var authorNameNode = tdAuthor.ChildNodes[1]; // cite 此节点有出“匿名”的可能
                 var authorNameLink = authorNameNode.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
                 if (authorNameLink == null)
@@ -103,10 +103,10 @@ namespace Hipda.Client.Uwp.Pro.Services
                 else
                 {
                     authorName = authorNameLink.InnerText;
-                    authorId = authorNameLink.Attributes[0].Value.Substring("space.php?uid=".Length);
-                    if (authorId.Contains("&"))
+                    string authorUserIdStr = authorNameLink.Attributes[0].Value.Substring("space.php?uid=".Length);
+                    if (authorUserIdStr.Contains("&"))
                     {
-                        authorId = authorId.Split('&')[0];
+                        authorUserId = Convert.ToInt32(authorUserIdStr.Split('&')[0]);
                     }
                 }
 
@@ -127,7 +127,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
-                var threadItem = new ThreadItemModel(i, forumId, threadId, pageNo, title, attachType, replyNum, viewNum, authorName, authorId, authorCreateTime, lastPostAuthorName, lastPostTime);
+                var threadItem = new ThreadItemModel(i, forumId, threadId, pageNo, title, attachType, replyNum, viewNum, authorName, authorUserId, authorCreateTime, lastPostAuthorName, lastPostTime);
                 ThreadData.Add(threadItem);
 
                 i++;
@@ -194,7 +194,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region 回复数据的处理
-        private async Task LoadReplyDataAsync(int threadId, int pageNo, CancellationTokenSource cts)
+        private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, CancellationTokenSource cts)
         {
             #region 如果数据已存在，则不读取，以便节省流量
             var threadItem = ThreadData.FirstOrDefault(t => t.ThreadId == threadId);
@@ -282,18 +282,18 @@ namespace Hipda.Client.Uwp.Pro.Services
                         .ChildNodes[1] // tr
                         .ChildNodes[3]; // td.postcontent
 
-                string authorId = string.Empty;
-                string ownerName = string.Empty;
+                int authorUserId = 0;
+                string authorUsername = string.Empty;
                 var authorNode = postAuthorNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
                 if (authorNode != null)
                 {
                     authorNode = authorNode.ChildNodes[1]; // a
-                    authorId = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
-                    if (authorId.Contains("&"))
+                    string authorUserIdStr = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
+                    if (authorUserIdStr.Contains("&"))
                     {
-                        authorId = authorId.Split('&')[0];
+                        authorUserId = Convert.ToInt32(authorUserIdStr.Split('&')[0]);
                     }
-                    ownerName = authorNode.InnerText;
+                    authorUsername = authorNode.InnerText;
                 }
 
                 var floorPostInfoNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
@@ -348,18 +348,18 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, authorId, ownerName, textContent, htmlContent, xamlContent, imageCount, postTime);
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, imageCount, postTime);
                 threadReply.Replies.Add(reply);
 
                 i++;
             }
         }
 
-        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int pageNo, Action beforeLoad, Action afterLoad)
+        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int threadAuthorUserId, int pageNo, Action beforeLoad, Action afterLoad)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
-            await LoadReplyDataAsync(threadId, pageNo, cts);
+            await LoadReplyDataAsync(threadId, threadAuthorUserId, pageNo, cts);
             if (afterLoad != null) afterLoad();
 
             return ReplyData.Single(t => t.ThreadId == threadId).Replies.Count;
@@ -370,7 +370,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return ReplyData.Single(t => t.ThreadId == threadId).Replies[index];
         }
 
-        public ICollectionView GetViewForReplyPage(int threadId, Action beforeLoad, Action afterLoad)
+        public ICollectionView GetViewForReplyPage(int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
@@ -379,7 +379,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await LoadMoreReplyItemsAsync(threadId, pageNo, beforeLoad, afterLoad);
+                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad);
                 }, (index) =>
                 {
                     // 从静态类中返回需要显示出来的数据
@@ -389,10 +389,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public async Task RefreshReplyData(int threadId, CancellationTokenSource cts)
+        public async Task RefreshReplyData(int threadId, int threadAuthorUserId, CancellationTokenSource cts)
         {
             ReplyData.RemoveAll(t => t.ThreadId == threadId);
-            await LoadReplyDataAsync(threadId, 1, cts);
+            await LoadReplyDataAsync(threadId, threadAuthorUserId, 1, cts);
         }
     }
     #endregion
