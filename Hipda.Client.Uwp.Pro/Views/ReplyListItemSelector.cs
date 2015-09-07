@@ -11,21 +11,25 @@ namespace Hipda.Client.Uwp.Pro.Views
 {
     public class ReplyListItemSelector : DataTemplateSelector
     {
+        public DataTemplate TopTemplate { get; set; }
         public DataTemplate LeftTemplate { get; set; }
         public DataTemplate RightTemplate { get; set; }
 
-        protected override DataTemplate SelectTemplateCore
-            (object item, DependencyObject container)
+        protected override DataTemplate SelectTemplateCore (object item, DependencyObject container)
         {
             ReplyItemModel data = (ReplyItemModel)item;
 
-            if (data.IsTopicStarter)
+            if (data.FloorNo == 1)
             {
-                return LeftTemplate;
+                return TopTemplate;
+            }
+            else if (data.IsTopicStarter)
+            {
+                return RightTemplate;
             }
             else
             {
-                return RightTemplate;
+                return LeftTemplate;
             }
         }
 

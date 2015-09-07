@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Markup;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
@@ -19,9 +20,9 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.ThreadAuthorUserId = threadAuthorUserId;
             this.AuthorUserId = authorUserId;
             this.AuthorUsername = authorUsername;
-            this.TextContent = textContent;
-            this.HtmlContent = htmlContent;
-            this.XamlContent = xamlConent;
+            this.TextStr = textContent;
+            this.HtmlStr = htmlContent;
+            this.XamlStr = xamlConent;
             this.ImageCount = imageCount;
             this.AuthorCreateTime = authorCreateTime;
         }
@@ -37,11 +38,11 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public int AuthorUserId { get; private set; }
 
-        public string TextContent { get; private set; }
+        public string TextStr { get; private set; }
 
-        public string HtmlContent { get; private set; }
+        public string HtmlStr { get; private set; }
 
-        public string XamlContent { get; set; }
+        public string XamlStr { get; set; }
 
         public int ImageCount { get; set; }
 
@@ -65,9 +66,9 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public override string ToString()
         {
-            return this.HtmlContent;
+            return this.HtmlStr;
         }
-        public string AvatarUrl
+        public Uri AvatarUrl
         {
             get
             {
@@ -78,7 +79,7 @@ namespace Hipda.Client.Uwp.Pro.Models
                     s[i] = uid % 10;
                     uid = (uid - s[i]) / 10;
                 }
-                return "http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg";
+                return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg");
             }
         }
 
@@ -87,6 +88,14 @@ namespace Hipda.Client.Uwp.Pro.Models
             get
             {
                 return string.Format("{0}#", FloorNo);
+            }
+        }
+
+        public object XamlContent
+        {
+            get
+            {
+                return XamlReader.Load(XamlStr);
             }
         }
     }

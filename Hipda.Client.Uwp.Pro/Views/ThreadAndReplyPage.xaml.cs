@@ -188,15 +188,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             Button showMoreButton = (Button)layoutGrid.FindName("showMoreButton");
             MenuFlyoutItem modifyMenuFlyoutItem = (MenuFlyoutItem)layoutGrid.FindName("modifyMenuFlyoutItem");
 
-            if (reply.FloorNo == 1 && !string.IsNullOrEmpty(reply.ThreadTitle))
-            {
-                threadTitleTextBlock.Text = reply.ThreadTitle;
-                threadTitleTextBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            }
-            else
-            {
-                threadTitleTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            }
+
 
             ownerNameTextBlockRun.Text = reply.AuthorUsername;
             createTimeTextBlockRun.Text = reply.AuthorCreateTime;
@@ -204,13 +196,13 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             try
             {
-                replyContent.Content = XamlReader.Load(reply.XamlContent);
+                replyContent.Content = XamlReader.Load(reply.XamlStr);
             }
             catch
             {
                 // 用于过滤掉无意义符号
                 string regexForTitle = @"[^a-zA-Z\d\u4e00-\u9fa5]";
-                string text = Regex.Replace(reply.TextContent, regexForTitle, "~");
+                string text = Regex.Replace(reply.TextStr, regexForTitle, "~");
                 string xaml = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>", text);
                 replyContent.Content = XamlReader.Load(xaml);
             }
@@ -236,44 +228,17 @@ namespace Hipda.Client.Uwp.Pro.Views
             //    showMoreButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             //}
 
-            args.RegisterUpdateCallback(ShowAuthorFace);
-        }
-
-        private void ShowAuthorFace(
-                ListViewBase sender,
-                ContainerContentChangingEventArgs args)
-        {
-            if (args.Phase != 1)
-            {
-                throw new Exception("Not in phase 1.");
-            }
-
-            ReplyItemModel reply = (ReplyItemModel)args.Item;
-            SelectorItem itemContainer = (SelectorItem)args.ItemContainer;
-            Grid layoutGrid = (Grid)itemContainer.ContentTemplateRoot;
-
-            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
-
-            var imageBrush = new ImageBrush
-            {
-                ImageSource = new BitmapImage
-                {
-                    DecodePixelWidth = 40, // natural px width of image source
-                    UriSource = new Uri(reply.AvatarUrl)
-                }
-            };
-            imageBrush.ImageFailed += (sender2, e2) =>
-            {
-                var imageBrush2 = sender2 as ImageBrush;
-                imageBrush2.ImageSource = new BitmapImage
-                {
-                    DecodePixelWidth = 40, // natural px width of image source
-                    UriSource = new Uri("ms-appx:///Assets/Faces/no_face.png")
-                };
-            };
-            imageBrush.Stretch = Stretch.UniformToFill;
-            avatarImageBorder.Background = imageBrush;
         }
         #endregion
+
+        //private void avatarImage_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        //{
+        //    var imageBrush = sender as ImageBrush;
+        //    imageBrush.ImageSource = new BitmapImage
+        //    {
+        //        DecodePixelWidth = 40, // natural px width of image source
+        //        UriSource = new Uri("ms-appx:///Assets/Faces/no_face.png")
+        //    };
+        //}
     }
 }
