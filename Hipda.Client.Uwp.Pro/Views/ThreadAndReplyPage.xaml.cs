@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -30,6 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ThreadAndReplyPage : Page
     {
+        private ThreadItemViewModel _lastSelectedItem;
         private ThreadAndReplyViewModel _threadAndReplyViewModel;
 
         public ThreadAndReplyPage()
@@ -78,11 +80,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             base.OnNavigatedTo(e);
 
             // 初次载入，
-            if (AdaptiveStates.CurrentState == NarrowState)
-            {
-                LeftColumn.Width = new GridLength(1, GridUnitType.Star); 
-                RightColumn.Width = new GridLength(0);
-            }
+            //if (AdaptiveStates.CurrentState == NarrowState)
+            //{
+            //    LeftColumn.Width = new GridLength(1, GridUnitType.Star); 
+            //    RightColumn.Width = new GridLength(0);
+            //}
+
+            UpdateForVisualState(AdaptiveStates.CurrentState);
 
             #region 注册后退按钮事件
             SystemNavigationManager.GetForCurrentView().BackRequested += ThreadListPage_BackRequested;
@@ -118,19 +122,10 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
         {
             var isNarrow = newState == NarrowState;
-            if (isNarrow && oldState == DefaultState)
+            if (isNarrow && oldState == DefaultState && _lastSelectedItem != null)
             {
-                //if (RightWrap.DataContext != null)
-                //{
-                //    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-                //    LeftColumn.Width = new GridLength(0);
-                //    RightColumn.Width = new GridLength(1, GridUnitType.Star);
-                //}
-                //else
-                //{
-                //    LeftColumn.Width = new GridLength(1, GridUnitType.Star);
-                //    RightColumn.Width = new GridLength(0);
-                //}
+                // Resize down to the detail item. Don't play a transition.
+                Frame.Navigate(typeof(ReplyListPage), _lastSelectedItem.ThreadItem.ThreadId, new SuppressNavigationTransitionInfo());
             }
             else
             {
@@ -140,22 +135,34 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            RightWrap.DataContext = null;
+            var clickedItem = (ThreadItemViewModel)e.ClickedItem;
+            _lastSelectedItem = clickedItem;
 
-            ThreadItemViewModel data = e.ClickedItem as ThreadItemViewModel;
-            data.SelectThreadItem(
-                ReplyListView,
-                () => {
-                    rightProgress.IsActive = true;
-                    rightProgress.Visibility = Visibility.Visible;
-                },
-                () => {
-                    rightProgress.IsActive = false;
-                    rightProgress.Visibility = Visibility.Collapsed;
-                });
+            if (AdaptiveStates.CurrentState == NarrowState)
+            {
+                // Use "drill in" transition for navigating from master list to detail view
+                Frame.Navigate(typeof(ReplyListPage), clickedItem.ThreadItem.ThreadId, new DrillInNavigationTransitionInfo());
+            }
+            else
+            {
+                RightWrap.DataContext = null;
 
-            RightWrap.DataContext = data;
-            ReplyListView.ItemsSource = data.ReplyItemCollection;
+                ThreadItemViewModel data = e.ClickedItem as ThreadItemViewModel;
+                data.SelectThreadItem(
+                    ReplyListView,
+                    () => {
+                        rightProgress.IsActive = true;
+                        rightProgress.Visibility = Visibility.Visible;
+                    },
+                    () => {
+                        rightProgress.IsActive = false;
+                        rightProgress.Visibility = Visibility.Collapsed;
+                    });
+
+                _lastSelectedItem = data;
+                RightWrap.DataContext = data;
+                ReplyListView.ItemsSource = data.ReplyItemCollection;
+            }
         }
     }
 }
