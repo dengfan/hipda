@@ -13,6 +13,7 @@ namespace Hipda.Client.Uwp.Pro.Views
     {
         public DataTemplate TopTemplate { get; set; }
         public DataTemplate LeftTemplate { get; set; }
+        public DataTemplate Left2Template { get; set; }
         public DataTemplate RightTemplate { get; set; }
 
         protected override DataTemplate SelectTemplateCore (object item, DependencyObject container)
@@ -25,7 +26,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
             else if (data.IsTopicStarter)
             {
-                return RightTemplate;
+                return Left2Template;
             }
             else
             {
