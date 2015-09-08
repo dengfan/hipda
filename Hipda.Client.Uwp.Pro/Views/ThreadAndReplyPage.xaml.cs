@@ -120,17 +120,17 @@ namespace Hipda.Client.Uwp.Pro.Views
             var isNarrow = newState == NarrowState;
             if (isNarrow && oldState == DefaultState)
             {
-                if (RightWrap.DataContext != null)
-                {
-                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-                    LeftColumn.Width = new GridLength(0);
-                    RightColumn.Width = new GridLength(1, GridUnitType.Star);
-                }
-                else
-                {
-                    LeftColumn.Width = new GridLength(1, GridUnitType.Star);
-                    RightColumn.Width = new GridLength(0);
-                }
+                //if (RightWrap.DataContext != null)
+                //{
+                //    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                //    LeftColumn.Width = new GridLength(0);
+                //    RightColumn.Width = new GridLength(1, GridUnitType.Star);
+                //}
+                //else
+                //{
+                //    LeftColumn.Width = new GridLength(1, GridUnitType.Star);
+                //    RightColumn.Width = new GridLength(0);
+                //}
             }
             else
             {
@@ -141,13 +141,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             RightWrap.DataContext = null;
-
-            if (AdaptiveStates.CurrentState == NarrowState)
-            {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-                LeftColumn.Width = new GridLength(0);
-                RightColumn.Width = new GridLength(1, GridUnitType.Star);
-            }
 
             ThreadItemViewModel data = e.ClickedItem as ThreadItemViewModel;
             data.SelectThreadItem(
@@ -164,81 +157,5 @@ namespace Hipda.Client.Uwp.Pro.Views
             RightWrap.DataContext = data;
             ReplyListView.ItemsSource = data.ReplyItemCollection;
         }
-
-        #region 增量更新
-        void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
-        {
-            args.Handled = true;
-
-            if (args.Phase != 0)
-            {
-                throw new Exception("Not in phase 0.");
-            }
-
-            ReplyItemModel reply = (ReplyItemModel)args.Item;
-
-            Grid layoutGrid = (Grid)args.ItemContainer.ContentTemplateRoot;
-
-            Border avatarImageBorder = (Border)layoutGrid.FindName("avatarImageBorder");
-            TextBlock threadTitleTextBlock = (TextBlock)layoutGrid.FindName("threadTitleTextBlock");
-            Run ownerNameTextBlockRun = (Run)layoutGrid.FindName("ownerNameTextBlock");
-            Run createTimeTextBlockRun = (Run)layoutGrid.FindName("createTimeTextBlock");
-            Button menuButton = (Button)layoutGrid.FindName("menuButton");
-            ContentControl replyContent = (ContentControl)layoutGrid.FindName("replyContent");
-            Button showMoreButton = (Button)layoutGrid.FindName("showMoreButton");
-            MenuFlyoutItem modifyMenuFlyoutItem = (MenuFlyoutItem)layoutGrid.FindName("modifyMenuFlyoutItem");
-
-
-
-            ownerNameTextBlockRun.Text = reply.AuthorUsername;
-            createTimeTextBlockRun.Text = reply.AuthorCreateTime;
-            menuButton.DataContext = reply;
-
-            try
-            {
-                replyContent.Content = XamlReader.Load(reply.XamlStr);
-            }
-            catch
-            {
-                // 用于过滤掉无意义符号
-                string regexForTitle = @"[^a-zA-Z\d\u4e00-\u9fa5]";
-                string text = Regex.Replace(reply.TextStr, regexForTitle, "~");
-                string xaml = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>", text);
-                replyContent.Content = XamlReader.Load(xaml);
-            }
-
-            // 如果楼层内容的作者是当前账号，则显示编辑按钮
-            //if (reply.AuthorUserId == DataSource.UserId)
-            //{
-            //    modifyMenuFlyoutItem.IsEnabled = true;
-            //}
-            //else
-            //{
-            //    modifyMenuFlyoutItem.IsEnabled = false;
-            //}
-
-            //if (reply.ImageCount > DataSource.MaxImageCount)
-            //{
-            //    showMoreButton.DataContext = reply;
-            //    showMoreButton.Content = string.Format("查看本楼层完整原始内容 ({0}P)", reply.ImageCount);
-            //    showMoreButton.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            //}
-            //else
-            //{
-            //    showMoreButton.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            //}
-
-        }
-        #endregion
-
-        //private void avatarImage_ImageFailed(object sender, ExceptionRoutedEventArgs e)
-        //{
-        //    var imageBrush = sender as ImageBrush;
-        //    imageBrush.ImageSource = new BitmapImage
-        //    {
-        //        DecodePixelWidth = 40, // natural px width of image source
-        //        UriSource = new Uri("ms-appx:///Assets/Faces/no_face.png")
-        //    };
-        //}
     }
 }

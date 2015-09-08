@@ -318,10 +318,10 @@
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
-                    <!--<VisualState.Setters>
+                    <VisualState.Setters>
                         <Setter Target="LeftColumn.Width" Value="*" />
                         <Setter Target="RightColumn.Width" Value="0" />
-                    </VisualState.Setters>-->
+                    </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
