@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Markup;
 
@@ -95,7 +96,15 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return XamlReader.Load(XamlStr);
+                try
+                {
+                    return XamlReader.Load(XamlStr);
+                }
+                catch
+                {
+                    XamlStr = Regex.Replace(XamlStr, @"[^\p{P}<>=a-zA-Z\d\u4e00-\u9fa5]", " ");
+                    return XamlReader.Load(XamlStr);
+                }
             }
         }
     }

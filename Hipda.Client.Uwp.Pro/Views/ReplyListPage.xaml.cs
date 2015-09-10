@@ -1,5 +1,6 @@
 ﻿using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -25,6 +26,9 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             base.OnNavigatedTo(e);
 
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;
+
             string[] p = e.Parameter.ToString().Split(',');
             int threadId = Convert.ToInt32(p[0]);
             int threadAuthorUserId = Convert.ToInt32(p[1]);
@@ -43,6 +47,18 @@ namespace Hipda.Client.Uwp.Pro.Views
                 });
 
             DataContext = _replyViewModel;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            SystemNavigationManager.GetForCurrentView().BackRequested -= BackRequested;
+        }
+
+        private void BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            Frame.GoBack(new SuppressNavigationTransitionInfo());
         }
 
         void NavigateBackForWideState(bool useTransition)
