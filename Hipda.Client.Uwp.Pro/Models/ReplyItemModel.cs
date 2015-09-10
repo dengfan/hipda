@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.System;
 using Windows.UI.Xaml.Markup;
 
 namespace Hipda.Client.Uwp.Pro.Models
@@ -102,8 +103,10 @@ namespace Hipda.Client.Uwp.Pro.Models
                 }
                 catch
                 {
-                    XamlStr = Regex.Replace(XamlStr, @"[^\p{P}<>=a-zA-Z\d\u4e00-\u9fa5]", " ");
-                    return XamlReader.Load(XamlStr);
+                    string errorReport = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}#{1}", ThreadId, FloorNo);
+                    Uri uri = new Uri("mailto:appxking@outlook.com?subject=hipdauwppro_error_report&body=" + errorReport, UriKind.Absolute);
+                    Launcher.LaunchUriAsync(uri);
+                    return null;
                 }
             }
         }
