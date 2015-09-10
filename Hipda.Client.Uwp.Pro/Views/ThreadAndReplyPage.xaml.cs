@@ -1,25 +1,8 @@
-﻿using Hipda.Client.Uwp.Pro.Models;
-using Hipda.Client.Uwp.Pro.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text.RegularExpressions;
-using System.Windows.Input;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+﻿using Hipda.Client.Uwp.Pro.ViewModels;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Documents;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
@@ -79,13 +62,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             base.OnNavigatedTo(e);
 
-            // 初次载入，
-            //if (AdaptiveStates.CurrentState == NarrowState)
-            //{
-            //    LeftColumn.Width = new GridLength(1, GridUnitType.Star); 
-            //    RightColumn.Width = new GridLength(0);
-            //}
-
             UpdateForVisualState(AdaptiveStates.CurrentState);
 
             #region 注册后退按钮事件
@@ -96,8 +72,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                 Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed; ;
             }
             #endregion
-
-
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -125,7 +99,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (isNarrow && oldState == DefaultState && _lastSelectedItem != null)
             {
                 // Resize down to the detail item. Don't play a transition.
-                Frame.Navigate(typeof(ReplyListPage), _lastSelectedItem.ThreadItem.ThreadId, new SuppressNavigationTransitionInfo());
+                string p = string.Format("{0},{1}", _lastSelectedItem.ThreadItem.ThreadId, _lastSelectedItem.ThreadItem.AuthorUserId);
+                Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
             }
             else
             {
@@ -141,7 +116,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (AdaptiveStates.CurrentState == NarrowState)
             {
                 // Use "drill in" transition for navigating from master list to detail view
-                Frame.Navigate(typeof(ReplyListPage), clickedItem.ThreadItem.ThreadId, new DrillInNavigationTransitionInfo());
+                string p = string.Format("{0},{1}", clickedItem.ThreadItem.ThreadId, clickedItem.ThreadItem.AuthorUserId);
+                Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
             }
             else
             {

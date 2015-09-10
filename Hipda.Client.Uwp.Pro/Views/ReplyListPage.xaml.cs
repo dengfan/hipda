@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+﻿using Hipda.Client.Uwp.Pro.ViewModels;
+using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
@@ -23,9 +14,35 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ReplyListPage : Page
     {
+        private ReplyViewModel _replyViewModel;
+
         public ReplyListPage()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            string[] p = e.Parameter.ToString().Split(',');
+            int threadId = Convert.ToInt32(p[0]);
+            int threadAuthorUserId = Convert.ToInt32(p[1]);
+
+            _replyViewModel = new ReplyViewModel(
+                threadId,
+                threadAuthorUserId,
+                ReplyListView,
+                () => {
+                    rightProgress.IsActive = true;
+                    rightProgress.Visibility = Visibility.Visible;
+                },
+                () => {
+                    rightProgress.IsActive = false;
+                    rightProgress.Visibility = Visibility.Collapsed;
+                });
+
+            DataContext = _replyViewModel;
         }
 
         void NavigateBackForWideState(bool useTransition)
@@ -59,7 +76,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             else
             {
                 // Realize the main page content.
-                FindName("RootPanel");
+                FindName("RightWrap");
             }
 
             Window.Current.SizeChanged += Window_SizeChanged;
