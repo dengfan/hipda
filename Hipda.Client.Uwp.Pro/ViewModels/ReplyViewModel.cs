@@ -14,6 +14,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ReplyViewModel : NotificationObject
     {
+        private int _threadId;
+        private int _threadAuthorUserId;
         private ListView _replyListView { get; set; }
         private Action _beforeLoad { get; set; }
         private Action _afterLoad { get; set; }
@@ -23,8 +25,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ICollectionView ReplyItemCollection { get; set; }
 
+        private void LoadData()
+        {
+            var cv = _ds.GetViewForReplyPage(_threadId, _threadAuthorUserId, _beforeLoad, _afterLoad);
+            if (cv != null)
+            {
+                ReplyItemCollection = cv;
+            }
+        }
+
         public ReplyViewModel(int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
         {
+            _threadId = threadId;
+            _threadAuthorUserId = threadAuthorUserId;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
@@ -33,17 +46,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
 
-            var cv = _ds.GetViewForReplyPage(threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
-            if (cv != null)
-            {
-                ReplyItemCollection = cv;
-            }
+            LoadData();
         }
 
-        private async void RefreshReplyExecute(object parameter)
+        private void RefreshReplyExecute(object parameter)
         {
             _replyListView.ItemsSource = null;
-            await _ds.RefreshThreadData(14, new CancellationTokenSource());
+            _ds.ClearReplyData(_threadId);
+
+            LoadData();
             _replyListView.ItemsSource = ReplyItemCollection;
         }
     }

@@ -188,10 +188,9 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public async Task RefreshThreadData(int forumId, CancellationTokenSource cts)
+        public void ClearThreadData(int forumId)
         {
             _threadData.RemoveAll(t => t.ForumId == forumId);
-            await LoadThreadDataAsync(forumId, 1, cts);
         }
 
         public ThreadItemModel GetThreadItem(int threadId)
@@ -400,10 +399,9 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public async Task RefreshReplyData(int threadId, int threadAuthorUserId, CancellationTokenSource cts)
+        public void ClearReplyData(int threadId)
         {
             _replyData.RemoveAll(t => t.ThreadId == threadId);
-            await LoadReplyDataAsync(threadId, threadAuthorUserId, 1, cts);
         }
         #endregion
     }

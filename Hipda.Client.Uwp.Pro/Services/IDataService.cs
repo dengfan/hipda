@@ -14,12 +14,12 @@ namespace Hipda.Client.Uwp.Pro.Services
     {
         ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad);
 
-        Task RefreshThreadData(int forumId, CancellationTokenSource cts);
+        void ClearThreadData(int forumId);
 
         ThreadItemModel GetThreadItem(int threadId);
 
         ICollectionView GetViewForReplyPage(int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad);
 
-        Task RefreshReplyData(int threadId, int threadAuthorUserId, CancellationTokenSource cts);
+        void ClearReplyData(int threadId);
     }
 }

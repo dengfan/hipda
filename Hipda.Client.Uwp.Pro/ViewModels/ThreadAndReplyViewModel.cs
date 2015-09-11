@@ -25,6 +25,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ICollectionView ThreadItemCollection { get; set; }
 
+        private void LoadData()
+        {
+            var cv = _ds.GetViewForThreadPage(14, _beforeLoad, _afterLoad);
+            if (cv != null)
+            {
+                ThreadItemCollection = cv;
+            }
+        }
+
         public ThreadAndReplyViewModel(ListView threadListView, Action beforeLoad, Action afterLoad)
         {
             _threadListView = threadListView;
@@ -35,17 +44,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshThreadCommand = new DelegateCommand();
             RefreshThreadCommand.ExecuteAction = new Action<object>(RefreshThreadExecute);
 
-            var cv = _ds.GetViewForThreadPage(14, _beforeLoad, _afterLoad);
-            if (cv != null)
-            {
-                ThreadItemCollection = cv;
-            }
+            LoadData();
         }
 
-        private async void RefreshThreadExecute(object parameter)
+        private void RefreshThreadExecute(object parameter)
         {
             _threadListView.ItemsSource = null;
-            await _ds.RefreshThreadData(14, new CancellationTokenSource());
+            _ds.ClearThreadData(14);
+
+            LoadData();
             _threadListView.ItemsSource = ThreadItemCollection;
         }
     }

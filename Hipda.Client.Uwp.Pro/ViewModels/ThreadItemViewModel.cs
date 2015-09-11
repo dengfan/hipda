@@ -25,6 +25,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ICollectionView ReplyItemCollection { get; set; }
 
+        private void LoadData()
+        {
+            var cv = _ds.GetViewForReplyPage(ThreadItem.ThreadId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad);
+            if (cv != null)
+            {
+                ReplyItemCollection = cv;
+            }
+        }
+
         public ThreadItemViewModel(ThreadItemModel threadItem)
         {
             ThreadItem = threadItem;
@@ -59,17 +68,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshRelplyCommand = new DelegateCommand();
             RefreshRelplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
 
-            var cv = _ds.GetViewForReplyPage(ThreadItem.ThreadId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad);
-            if (cv != null)
-            {
-                ReplyItemCollection = cv;
-            }
+            LoadData();
         }
 
-        private async void RefreshReplyExecute(object parameter)
+        private void RefreshReplyExecute(object parameter)
         {
             _replyListView.ItemsSource = null;
-            await _ds.RefreshReplyData(ThreadItem.ThreadId, ThreadItem.AuthorUserId, new CancellationTokenSource());
+            _ds.ClearReplyData(ThreadItem.ThreadId);
+
+            LoadData();
             _replyListView.ItemsSource = ReplyItemCollection;
         }
     }
