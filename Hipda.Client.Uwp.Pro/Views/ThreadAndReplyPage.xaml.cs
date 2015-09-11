@@ -60,12 +60,12 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
         {
             var isNarrow = newState == NarrowState;
-            if (isNarrow && oldState == DefaultState && _lastSelectedItem != null)
+            if (isNarrow && oldState == DefaultState && _lastSelectedItem != null) // 如果是窄视图，则跳转到 reply list page 页面
             {
                 string p = string.Format("{0},{1}", _lastSelectedItem.ThreadItem.ThreadId, _lastSelectedItem.ThreadItem.AuthorUserId);
                 Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
             }
-            else
+            else // 如果是宽视图，则载入回复数据，只要 _lastSelectedItem.ReplyItemCollection == null 条件下才载入
             {
                 if (_lastSelectedItem != null)
                 {
