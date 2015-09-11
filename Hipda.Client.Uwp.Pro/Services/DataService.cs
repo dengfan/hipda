@@ -164,11 +164,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return null;
             }
 
-            var threadItemViewModel = new ThreadItemViewModel
-            {
-                ThreadItem = threadItem,
-            };
-
+            var threadItemViewModel = new ThreadItemViewModel(threadItem);
             return threadItemViewModel;
         }
 
@@ -196,6 +192,11 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             _threadData.RemoveAll(t => t.ForumId == forumId);
             await LoadThreadDataAsync(forumId, 1, cts);
+        }
+
+        public ThreadItemModel GetThreadItem(int threadId)
+        {
+            return _threadData.FirstOrDefault(t => t.ThreadId == threadId);
         }
         #endregion
 

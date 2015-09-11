@@ -302,14 +302,13 @@
 
         <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
             <AppBarButton Icon="Edit" Label="评论"/>
-            <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshRelplyCommand}"/>
+            <AppBarButton Icon="Refresh" Label="刷新" x:Name="btnRefresh"/>
             <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
         </CommandBar>
 
         <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="False"
                       ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-                      ItemTemplateSelector="{StaticResource replyListItemSelector}"
-                      ItemsSource="{Binding ReplyItemCollection}">
+                      ItemTemplateSelector="{StaticResource replyListItemSelector}">
         </ListView>
 
         <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />

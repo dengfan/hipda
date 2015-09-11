@@ -16,6 +16,8 @@ namespace Hipda.Client.Uwp.Pro.Views
     public sealed partial class ReplyListPage : Page
     {
         private ReplyViewModel _replyViewModel;
+        private int _threadId;
+        private int _threadAuthorUserId;
 
         public ReplyListPage()
         {
@@ -30,23 +32,28 @@ namespace Hipda.Client.Uwp.Pro.Views
             SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;
 
             string[] p = e.Parameter.ToString().Split(',');
-            int threadId = Convert.ToInt32(p[0]);
-            int threadAuthorUserId = Convert.ToInt32(p[1]);
+            _threadId = Convert.ToInt32(p[0]);
+            _threadAuthorUserId = Convert.ToInt32(p[1]);
 
-            _replyViewModel = new ReplyViewModel(
-                threadId,
-                threadAuthorUserId,
-                ReplyListView,
-                () => {
-                    rightProgress.IsActive = true;
-                    rightProgress.Visibility = Visibility.Visible;
-                },
-                () => {
-                    rightProgress.IsActive = false;
-                    rightProgress.Visibility = Visibility.Collapsed;
-                });
+            #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
+            var backStack = Frame.BackStack;
+            var backStackCount = backStack.Count;
 
-            DataContext = _replyViewModel;
+            if (backStackCount > 0)
+            {
+                var masterPageEntry = backStack[backStackCount - 1];
+                backStack.RemoveAt(backStackCount - 1);
+
+                // Doctor the navigation parameter for the master page so it
+                // will show the correct item in the side-by-side view.
+                var modifiedEntry = new PageStackEntry(
+                    masterPageEntry.SourcePageType,
+                    string.Format("{0},{1}", _threadId, _threadAuthorUserId),
+                    masterPageEntry.NavigationTransitionInfo
+                    );
+                backStack.Add(modifiedEntry);
+            }
+            #endregion
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -94,6 +101,22 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 // Realize the main page content.
                 FindName("RightWrap");
+
+                _replyViewModel = new ReplyViewModel(
+                    _threadId,
+                    _threadAuthorUserId,
+                    ReplyListView,
+                    () => {
+                        rightProgress.IsActive = true;
+                        rightProgress.Visibility = Visibility.Visible;
+                    },
+                    () => {
+                        rightProgress.IsActive = false;
+                        rightProgress.Visibility = Visibility.Collapsed;
+                    });
+                DataContext = _replyViewModel;
+                ReplyListView.ItemsSource = _replyViewModel.ReplyItemCollection;
+                btnRefresh.Command = _replyViewModel.RefreshReplyCommand;
             }
 
             Window.Current.SizeChanged += Window_SizeChanged;

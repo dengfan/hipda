@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Pro.ViewModels;
+using System;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -44,6 +45,30 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             base.OnNavigatedTo(e);
 
+            if (e.Parameter != null)
+            {
+                RightWrap.DataContext = null;
+
+                string[] p = e.Parameter.ToString().Split(',');
+                int threadId = Convert.ToInt32(p[0]);
+                int threadAuthorUserId = Convert.ToInt32(p[1]);
+
+                _lastSelectedItem = new ThreadItemViewModel(threadId, threadAuthorUserId, ReplyListView, 
+                    () =>
+                    {
+                        rightProgress.IsActive = true;
+                        rightProgress.Visibility = Visibility.Visible;
+                    },
+                    () =>
+                    {
+                        rightProgress.IsActive = false;
+                        rightProgress.Visibility = Visibility.Collapsed;
+                    });
+
+                RightWrap.DataContext = _lastSelectedItem;
+                ReplyListView.ItemsSource = _lastSelectedItem.ReplyItemCollection;
+            }
+
             UpdateForVisualState(AdaptiveStates.CurrentState);
         }
 
@@ -65,27 +90,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                 string p = string.Format("{0},{1}", _lastSelectedItem.ThreadItem.ThreadId, _lastSelectedItem.ThreadItem.AuthorUserId);
                 Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
             }
-            else // 如果是宽视图，则载入回复数据，只要 _lastSelectedItem.ReplyItemCollection == null 条件下才载入
-            {
-                if (_lastSelectedItem != null)
-                {
-                    if (_lastSelectedItem.ReplyItemCollection == null)
-                    {
-                        _lastSelectedItem.SelectThreadItem(
-                            ReplyListView,
-                            () => {
-                                rightProgress.IsActive = true;
-                                rightProgress.Visibility = Visibility.Visible;
-                            },
-                            () => {
-                                rightProgress.IsActive = false;
-                                rightProgress.Visibility = Visibility.Collapsed;
-                            });
-
-                        RightWrap.DataContext = _lastSelectedItem;
-                    }
-                }
-            }
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(ThreadListView, isNarrow);
         }
@@ -104,8 +108,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 RightWrap.DataContext = null;
 
-                ThreadItemViewModel data = e.ClickedItem as ThreadItemViewModel;
-                data.SelectThreadItem(
+                _lastSelectedItem = e.ClickedItem as ThreadItemViewModel;
+                _lastSelectedItem.SelectThreadItem(
                     ReplyListView,
                     () => {
                         rightProgress.IsActive = true;
@@ -116,9 +120,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                         rightProgress.Visibility = Visibility.Collapsed;
                     });
 
-                _lastSelectedItem = data;
-                RightWrap.DataContext = data;
-                ReplyListView.ItemsSource = data.ReplyItemCollection;
+                RightWrap.DataContext = _lastSelectedItem;
+                ReplyListView.ItemsSource = _lastSelectedItem.ReplyItemCollection;
             }
         }
     }

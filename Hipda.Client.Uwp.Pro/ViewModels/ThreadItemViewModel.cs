@@ -25,6 +25,30 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ICollectionView ReplyItemCollection { get; set; }
 
+        public ThreadItemViewModel(ThreadItemModel threadItem)
+        {
+            ThreadItem = threadItem;
+        }
+
+        public ThreadItemViewModel(int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
+        {
+            _replyListView = replyListView;
+            _beforeLoad = beforeLoad;
+            _afterLoad = afterLoad;
+            _ds = new DataService();
+
+            ThreadItem = _ds.GetThreadItem(threadId);
+
+            RefreshRelplyCommand = new DelegateCommand();
+            RefreshRelplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
+
+            var cv = _ds.GetViewForReplyPage(threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
+            if (cv != null)
+            {
+                ReplyItemCollection = cv;
+            }
+        }
+
         public void SelectThreadItem(ListView replyListView, Action beforeLoad, Action afterLoad)
         {
             _replyListView = replyListView;

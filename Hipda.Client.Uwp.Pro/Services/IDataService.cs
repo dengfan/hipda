@@ -16,6 +16,8 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         Task RefreshThreadData(int forumId, CancellationTokenSource cts);
 
+        ThreadItemModel GetThreadItem(int threadId);
+
         ICollectionView GetViewForReplyPage(int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad);
 
         Task RefreshReplyData(int threadId, int threadAuthorUserId, CancellationTokenSource cts);
