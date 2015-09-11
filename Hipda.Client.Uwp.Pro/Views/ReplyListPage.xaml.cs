@@ -53,6 +53,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             base.OnNavigatedFrom(e);
 
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
             SystemNavigationManager.GetForCurrentView().BackRequested -= BackRequested;
         }
 

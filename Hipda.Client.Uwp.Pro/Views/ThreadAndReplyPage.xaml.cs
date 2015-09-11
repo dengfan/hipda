@@ -35,57 +35,21 @@ namespace Hipda.Client.Uwp.Pro.Views
             DataContext = _threadAndReplyViewModel;
         }
 
-        #region 后退事件
-        private void OnBackRequested()
+        private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
         {
-            if (RightWrap.DataContext != null)
-            {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-                LeftColumn.Width = new GridLength(1, GridUnitType.Star);
-                RightColumn.Width = new GridLength(0);
-            }
+            ThreadListView.SelectedItem = _lastSelectedItem;
         }
-
-        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
-        {
-            e.Handled = true;
-            OnBackRequested();
-        }
-
-        private void ThreadListPage_BackRequested(object sender, BackRequestedEventArgs e)
-        {
-            OnBackRequested();
-        }
-        #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
             UpdateForVisualState(AdaptiveStates.CurrentState);
-
-            #region 注册后退按钮事件
-            SystemNavigationManager.GetForCurrentView().BackRequested += ThreadListPage_BackRequested;
-
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
-            {
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed; ;
-            }
-            #endregion
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             base.OnNavigatingFrom(e);
-
-            #region 注销后退按钮事件
-            SystemNavigationManager.GetForCurrentView().BackRequested -= ThreadListPage_BackRequested; ;
-
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
-            {
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed; ;
-            }
-            #endregion
         }
 
         private void AdaptiveStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
@@ -98,14 +62,32 @@ namespace Hipda.Client.Uwp.Pro.Views
             var isNarrow = newState == NarrowState;
             if (isNarrow && oldState == DefaultState && _lastSelectedItem != null)
             {
-                // Resize down to the detail item. Don't play a transition.
                 string p = string.Format("{0},{1}", _lastSelectedItem.ThreadItem.ThreadId, _lastSelectedItem.ThreadItem.AuthorUserId);
                 Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
             }
             else
             {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+                if (_lastSelectedItem != null)
+                {
+                    if (_lastSelectedItem.ReplyItemCollection == null)
+                    {
+                        _lastSelectedItem.SelectThreadItem(
+                            ReplyListView,
+                            () => {
+                                rightProgress.IsActive = true;
+                                rightProgress.Visibility = Visibility.Visible;
+                            },
+                            () => {
+                                rightProgress.IsActive = false;
+                                rightProgress.Visibility = Visibility.Collapsed;
+                            });
+
+                        RightWrap.DataContext = _lastSelectedItem;
+                    }
+                }
             }
+
+            EntranceNavigationTransitionInfo.SetIsTargetElement(ThreadListView, isNarrow);
         }
 
         private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -115,7 +97,6 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             if (AdaptiveStates.CurrentState == NarrowState)
             {
-                // Use "drill in" transition for navigating from master list to detail view
                 string p = string.Format("{0},{1}", clickedItem.ThreadItem.ThreadId, clickedItem.ThreadItem.AuthorUserId);
                 Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
             }
