@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace Hipda.Client.Uwp.Pro.Views
+namespace Hipda.Client.Uwp.Pro
 {
     public class ReplyListItemSelector : DataTemplateSelector
     {

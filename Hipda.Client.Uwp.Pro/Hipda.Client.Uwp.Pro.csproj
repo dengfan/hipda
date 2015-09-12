@@ -107,7 +107,7 @@
     <Compile Include="Models\ReplyPageModel.cs" />
     <Compile Include="Models\ThreadItemModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\ReplyListItemSelector.cs" />
+    <Compile Include="ReplyListItemSelector.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\GeneratorIncrementalLoadingClass.cs" />
     <Compile Include="Services\IDataService.cs" />
