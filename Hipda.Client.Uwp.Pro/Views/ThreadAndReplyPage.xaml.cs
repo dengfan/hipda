@@ -1,8 +1,10 @@
 ﻿using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
@@ -123,6 +125,10 @@ namespace Hipda.Client.Uwp.Pro.Views
                 RightWrap.DataContext = _lastSelectedItem;
                 ReplyListView.ItemsSource = _lastSelectedItem.ReplyItemCollection;
             }
+
+            //var listItem = sender as ListView;
+            //var itemStatusBar = listItem.FindName("ItemStatusBar") as Border;
+            //itemStatusBar.Background = new SolidColorBrush(Colors.Transparent);
         }
     }
 }
