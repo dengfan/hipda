@@ -43,7 +43,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" x:Name="avatarImageBorder" Width="80" Height="80" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                <Border Grid.Row="0" Width="80" Height="80" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
                     <Grid>
                         <Grid.Background>
                             <ImageBrush Stretch="Uniform">
@@ -59,11 +59,11 @@
                     <Border>
                         <StackPanel>
                             <TextBlock>
-                                <Run x:Name="ownerNameTextBlock" Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                                <Run x:Name="createTimeTextBlock" Text="{Binding AuthorCreateTime}" />
+                                <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                                <Run Text="{Binding AuthorCreateTime}" />
                             </TextBlock>
 
-                            <ContentControl x:Name="replyContent" Content="{Binding XamlContent}" />
+                            <ContentControl Content="{Binding XamlContent}" />
                             <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                     HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                     Visibility="Collapsed" />
@@ -107,7 +107,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
                     <Grid CornerRadius="20">
                         <Grid.Background>
                             <ImageBrush Stretch="UniformToFill">
@@ -124,11 +124,11 @@
                 <Border Grid.Row="0" Grid.Column="2" Margin="0 0 60 0" Padding="10" Background="White" HorizontalAlignment="Left" CornerRadius="12">
                     <StackPanel>
                         <TextBlock>
-                            <Run x:Name="ownerNameTextBlock" Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                            <Run x:Name="createTimeTextBlock" Text="{Binding AuthorCreateTime}" />
+                            <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl x:Name="replyContent" Content="{Binding XamlContent}" />
+                        <ContentControl Content="{Binding XamlContent}" />
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />
@@ -171,7 +171,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
                     <Grid CornerRadius="20">
                         <Grid.Background>
                             <ImageBrush Stretch="UniformToFill">
@@ -189,11 +189,11 @@
                     <StackPanel>
                         <TextBlock>
                             <Run Text="楼主 " Foreground="Green" FontSize="11" />
-                            <Run x:Name="ownerNameTextBlock" Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                            <Run x:Name="createTimeTextBlock" Text="{Binding AuthorCreateTime}" />
+                            <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl x:Name="replyContent" Content="{Binding XamlContent}" />
+                        <ContentControl Content="{Binding XamlContent}" />
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />
@@ -236,7 +236,7 @@
                     <ColumnDefinition Width="44"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="2" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
                     <Grid CornerRadius="20">
                         <Grid.Background>
                             <ImageBrush Stretch="UniformToFill">
@@ -253,11 +253,11 @@
                 <Border Grid.Row="0" Grid.Column="0" Margin="60 0 0 0" Padding="10" Background="White" BorderThickness="2" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}" HorizontalAlignment="Right" CornerRadius="12">
                     <StackPanel>
                         <TextBlock>
-                            <Run x:Name="ownerNameTextBlock" Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                            <Run x:Name="createTimeTextBlock" Text="{Binding AuthorCreateTime}" />
+                            <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl x:Name="replyContent" Content="{Binding XamlContent}" />
+                        <ContentControl Content="{Binding XamlContent}" />
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />

@@ -8,6 +8,48 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
+    
+    <Page.Resources>
+        <DataTemplate x:Name="ThreadListItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <Border x:Name="avatarImageBorder" Background="{StaticResource SystemControlHighlightListAccentLowBrush}" CornerRadius="25" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid CornerRadius="25">
+                        <Grid.Background>
+                            <ImageBrush Stretch="UniformToFill">
+                                <ImageBrush.ImageSource>
+                                    <BitmapImage DecodePixelWidth="50" UriSource="{Binding ThreadItem.AvatarUrl}"/>
+                                </ImageBrush.ImageSource>
+                            </ImageBrush>
+                        </Grid.Background>
+                    </Grid>
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看发贴记录" />
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
+                </Border>
+
+                <StackPanel>
+                    <TextBlock TextWrapping="WrapWholeWords" HorizontalAlignment="Left">
+                        <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                        <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
+                    </TextBlock>
+
+                    <TextBlock FontWeight="Bold">
+                        <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
+                        <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
+                        <Run Text="{Binding ThreadItem.Title}" />
+                        <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                    </TextBlock>
+
+                    <TextBlock Pivot.SlideInAnimationGroup="GroupOne" HorizontalAlignment="Right" FontSize="11">
+                        <Run Text="&#xE25C;" FontFamily="Segoe UI Symbol" />
+                        <Run x:Name="lastPostTextBlockRun" Text="{Binding ThreadItem.LastPostInfo}"/>
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="LayoutRoot_Loaded">
         <VisualStateManager.VisualStateGroups>
@@ -66,16 +108,8 @@
             </CommandBar>
 
             <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" IsHoldingEnabled="False" IsMultiSelectCheckBoxEnabled="False" IsSwipeEnabled="False"
-                      VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
+                      VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick" ItemTemplate="{StaticResource ThreadListItemTemplate}"
                       ItemsSource="{Binding ThreadItemCollection}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding ThreadItem.AuthorUsername}" TextWrapping="Wrap" />
-                            <TextBlock Text="{Binding ThreadItem.Title}" TextWrapping="Wrap"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
             </ListView>
 
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
