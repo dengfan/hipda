@@ -217,14 +217,16 @@ namespace Hipda.Client.Uwp.Pro.Services
                 int count = threadReply.Replies.Count(r => r.PageNo == pageNo);
                 if (count > 0)
                 {
-                    if (count >= _replyPageSize) // 满页的不再加载，以便节省流量
-                    {
-                        return;
-                    }
+                    return;
 
-                    // 再判断未满页的
-                    // 第一页或最后一页的回复数量不足一页，表示此页随时可能有新回复，故删除
-                    threadReply.Replies.RemoveAll(r => r.PageNo == pageNo);
+                    //if (count >= _replyPageSize) // 满页的不再加载，以便节省流量
+                    //{
+                    //    return;
+                    //}
+
+                    //// 再判断未满页的
+                    //// 第一页或最后一页的回复数量不足一页，表示此页随时可能有新回复，故删除
+                    //threadReply.Replies.RemoveAll(r => r.PageNo == pageNo);
                 }
             }
             else
