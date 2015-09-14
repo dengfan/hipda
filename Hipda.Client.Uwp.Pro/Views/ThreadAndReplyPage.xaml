@@ -94,7 +94,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Border x:Name="ItemStatusBar" Margin="1,0,0,0" Width="2" Background="#3ED086"/>
+                            <Border x:Name="ItemStatusBar" Margin="1,0,0,0" Width="2" Background="{Binding StatusColor}"/>
 
                             <Border Margin="8,8,8,8" Background="{StaticResource SystemControlHighlightListAccentLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
                                 <Grid CornerRadius="20">

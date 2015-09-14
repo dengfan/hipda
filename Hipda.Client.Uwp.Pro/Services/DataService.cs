@@ -10,7 +10,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
@@ -23,6 +25,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         private static HttpHandle _httpClient = HttpHandle.getInstance();
         private static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
         private static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
+        private static List<int> _read = new List<int>();
 
         public int MyUserId { get; set; }
 
@@ -163,8 +166,14 @@ namespace Hipda.Client.Uwp.Pro.Services
             {
                 return null;
             }
-
+            
             var threadItemViewModel = new ThreadItemViewModel(threadItem);
+            threadItemViewModel.StatusColor = new SolidColorBrush(Color.FromArgb(255, 62, 208, 134));
+            if (_read.Contains(threadItem.ThreadId))
+            {
+                threadItemViewModel.StatusColor = new SolidColorBrush(Colors.White);
+            }
+
             return threadItemViewModel;
         }
 
@@ -196,6 +205,19 @@ namespace Hipda.Client.Uwp.Pro.Services
         public ThreadItemModel GetThreadItem(int threadId)
         {
             return _threadData.FirstOrDefault(t => t.ThreadId == threadId);
+        }
+
+        public void SetRead(int threadId)
+        {
+            if (!_read.Contains(threadId))
+            {
+                _read.Add(threadId);
+            }
+        }
+
+        public bool IsRead(int threadId)
+        {
+            return _read.Contains(threadId);
         }
         #endregion
 

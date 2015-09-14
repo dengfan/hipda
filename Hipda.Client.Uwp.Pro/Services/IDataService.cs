@@ -12,14 +12,22 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public interface IDataService
     {
+        #region thread
         ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad);
 
         void ClearThreadData(int forumId);
 
         ThreadItemModel GetThreadItem(int threadId);
 
+        void SetRead(int threadId);
+
+        bool IsRead(int threadId);
+        #endregion
+
+        #region reply
         ICollectionView GetViewForReplyPage(int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad);
 
         void ClearReplyData(int threadId);
+        #endregion
     }
 }

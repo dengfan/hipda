@@ -9,6 +9,8 @@ using Hipda.Client.Uwp.Pro.Commands;
 using Hipda.Client.Uwp.Pro.Services;
 using Windows.UI.Xaml.Controls;
 using System.Threading;
+using Windows.UI.Xaml.Media;
+using Windows.UI;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -19,11 +21,33 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private Action _afterLoad { get; set; }
         private DataService _ds { get; set; }
 
+        private Brush _statusColor;
+
+        public Brush StatusColor
+        {
+            get { return _statusColor; }
+            set
+            {
+                _statusColor = value;
+                this.RaisePropertyChanged("StatusColor");
+            }
+        }
+
         public DelegateCommand RefreshRelplyCommand { get; set; }
 
         public ThreadItemModel ThreadItem { get; set; }
 
-        public ICollectionView ReplyItemCollection { get; set; }
+        private ICollectionView _replyItemCollection;
+
+        public ICollectionView ReplyItemCollection
+        {
+            get { return _replyItemCollection; }
+            set
+            {
+                _replyItemCollection = value;
+                this.RaisePropertyChanged("ReplyItemCollection");
+            }
+        }
 
         private void LoadData()
         {
@@ -69,6 +93,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshRelplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
 
             LoadData();
+
+            _ds.SetRead(ThreadItem.ThreadId);
+            StatusColor = new SolidColorBrush(Colors.White);
         }
 
         private void RefreshReplyExecute(object parameter)

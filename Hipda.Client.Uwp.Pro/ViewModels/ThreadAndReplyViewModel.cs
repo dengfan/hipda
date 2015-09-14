@@ -23,7 +23,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand RefreshThreadCommand { get; set; }
 
-        public ICollectionView ThreadItemCollection { get; set; }
+        private ICollectionView _threadItemCollection;
+
+        public ICollectionView ThreadItemCollection
+        {
+            get { return _threadItemCollection; }
+            set
+            {
+                _threadItemCollection = value;
+                this.RaisePropertyChanged("ThreadItemCollection");
+            }
+        }
 
         private void LoadData()
         {
