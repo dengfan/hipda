@@ -114,12 +114,15 @@
                             </Border>
 
                             <StackPanel Margin="0,8,0,0">
-                                <TextBlock TextWrapping="WrapWholeWords" HorizontalAlignment="Left" FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                                <TextBlock HorizontalAlignment="Left" FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                                     <Run Text="{Binding ThreadItem.AuthorUsername}" />
                                     <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                                 </TextBlock>
 
                                 <TextBlock>
+                                    <ToolTipService.ToolTip>
+                                        <ToolTip Content="{Binding ThreadItem.TitleForToolTip}"></ToolTip>
+                                    </ToolTipService.ToolTip>
                                     <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
                                     <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
                                     <Run Text="{Binding ThreadItem.Title}" />
