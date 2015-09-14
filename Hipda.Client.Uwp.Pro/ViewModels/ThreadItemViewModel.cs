@@ -93,7 +93,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshRelplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
 
             LoadData();
+        }
 
+        public void SetRead()
+        {
+            _ds = new DataService();
             _ds.SetRead(ThreadItem.ThreadId);
             StatusColor = new SolidColorBrush(Colors.White);
         }

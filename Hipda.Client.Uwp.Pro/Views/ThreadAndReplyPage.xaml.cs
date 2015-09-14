@@ -98,19 +98,19 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var clickedItem = (ThreadItemViewModel)e.ClickedItem;
-            _lastSelectedItem = clickedItem;
+            _lastSelectedItem = (ThreadItemViewModel)e.ClickedItem;
 
             if (AdaptiveStates.CurrentState == NarrowState)
             {
-                string p = string.Format("{0},{1}", clickedItem.ThreadItem.ThreadId, clickedItem.ThreadItem.AuthorUserId);
+                _lastSelectedItem.SetRead();
+                string p = string.Format("{0},{1}", _lastSelectedItem.ThreadItem.ThreadId, _lastSelectedItem.ThreadItem.AuthorUserId);
                 Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
             }
             else
             {
                 RightWrap.DataContext = null;
 
-                _lastSelectedItem = e.ClickedItem as ThreadItemViewModel;
+                _lastSelectedItem.SetRead();
                 _lastSelectedItem.SelectThreadItem(
                     ReplyListView,
                     () => {
