@@ -103,11 +103,12 @@ namespace Hipda.Client.Uwp.Pro.Models
                 }
                 catch
                 {
-                    string errorReport = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0} 楼层{1}内容解析出错。", ThreadId, FloorNo);
-                    Uri uri = new Uri("mailto:appxking@outlook.com?subject=发送出错信息给开发者，以帮助开发者更好的解决问题&body=" + errorReport, UriKind.Absolute);
-                    Launcher.LaunchUriAsync(uri);
+                    //string errorReport = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0} 楼层{1}内容解析出错。", ThreadId, FloorNo);
+                    //Uri uri = new Uri("mailto:appxking@outlook.com?subject=发送出错信息给开发者，以帮助开发者更好的解决问题&body=" + errorReport, UriKind.Absolute);
+                    //Launcher.LaunchUriAsync(uri);
 
-                    XamlStr = "<RichTextBlock xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"><Paragraph Foreground=\"Red\" FontSize=\"11\">对不起，本楼层内容解析出错，暂无法为您呈现！<LineBreak/>请尝试以“查看本楼层原始内容”方式浏览！</Paragraph></RichTextBlock>";
+                    string text = Regex.Replace(TextStr, @"[^a-zA-Z\d\u4e00-\u9fa5]", " ");
+                    XamlStr = string.Format("<RichTextBlock xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"><Paragraph>{0}</Paragraph></RichTextBlock>", text);
                     return XamlReader.Load(XamlStr);
                 }
             }
