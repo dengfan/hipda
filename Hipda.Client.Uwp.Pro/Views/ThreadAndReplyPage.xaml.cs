@@ -4,6 +4,7 @@ using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
@@ -129,6 +130,15 @@ namespace Hipda.Client.Uwp.Pro.Views
             //var listItem = sender as ListView;
             //var itemStatusBar = listItem.FindName("ItemStatusBar") as Border;
             //itemStatusBar.Background = new SolidColorBrush(Colors.Transparent);
+        }
+
+        private void ThreadItem_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+        {
+            FrameworkElement senderElement = sender as FrameworkElement;
+            // If you need the clicked element:
+            // Item whichOne = senderElement.DataContext as Item;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
+            flyoutBase.ShowAt(senderElement);
         }
     }
 }
