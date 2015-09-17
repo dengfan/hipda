@@ -51,7 +51,7 @@
                 <Button x:Name="loginButton" TabIndex="3" Margin="0,20,0,0" HorizontalAlignment="Center" Click="loginButton_Click">
                     <Button.Template>
                         <ControlTemplate>
-                            <Grid x:Name="ButtonGrid" Width="50" Height="50" CornerRadius="25" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}">
+                            <Grid x:Name="ButtonGrid" Width="60" Height="60" CornerRadius="30" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup x:Name="CommonStates">
                                         <VisualState x:Name="Normal" />
