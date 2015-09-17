@@ -8,6 +8,75 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0" Background="{ThemeResource SystemControlBackgroundAccentBrush}">
+            <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Assets/Images/hipdabg1.png" Stretch="UniformToFill"/>
+                </Grid.Background>
+                <StackPanel x:Name="infoPanel" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Center" MaxWidth="600">
+                    <TextBlock Text="首先您需要登录一个账号" FontSize="30" Foreground="White"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Assets/Images/hipdabg2.png" Stretch="UniformToFill"/>
+            </Grid.Background>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel x:Name="loginPanel" Grid.Row="0" Margin="20" VerticalAlignment="Top" MaxWidth="600">
+                <TextBox x:Name="usernameTextBox" TabIndex="1" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" PlaceholderText="输入账号（必填）"/>
+                <PasswordBox x:Name="passwordTextBox" TabIndex="2" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" PlaceholderText="输入密码（必填）" Margin="0,8,0,0"/>
+                <ComboBox x:Name="questionComboBox" PlaceholderText="安全提问（选填）" HorizontalAlignment="Stretch" Margin="0,8,0,0" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}">
+                    <x:String>安全提问（选填）</x:String>
+                    <x:String>母亲的名字</x:String>
+                    <x:String>爷爷的名字</x:String>
+                    <x:String>父亲出生的城市</x:String>
+                    <x:String>您其中一位老师的名字</x:String>
+                    <x:String>您个人计算机的型号</x:String>
+                    <x:String>您最喜欢的餐馆名称</x:String>
+                    <x:String>驾驶执照的最后四位数字</x:String>
+                </ComboBox>
+                <TextBox x:Name="answerTextBox" Foreground="{StaticResource SystemControlBackgroundAccentBrush}" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" PlaceholderText="输入答案（注意区分大小写）" Margin="0,8,0,0" />
+                <Button x:Name="loginButton" TabIndex="3" Margin="0,20,0,0" HorizontalAlignment="Center" Click="loginButton_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Grid x:Name="ButtonGrid" Width="50" Height="50" CornerRadius="25" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="ButtonGrid.BorderBrush" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                                <Setter Target="ButtonIcon.Foreground" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="ButtonGrid.BorderBrush" Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" />
+                                                <Setter Target="ButtonIcon.Foreground" Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <FontIcon x:Name="ButtonIcon" Glyph="&#xE09F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+
+            <HyperlinkButton Grid.Row="1" HorizontalAlignment="Center" NavigateUri="http://www.hi-pda.com/forum/tobenew.php">没有账号？前往注册！</HyperlinkButton>
+        </Grid>
     </Grid>
 </Page>

@@ -15,21 +15,16 @@ using Windows.UI.Xaml.Navigation;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
-namespace Hipda.Client.Uwp.Pro
+namespace Hipda.Client.Uwp.Pro.Views
 {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class LoginPage : Page
+    public sealed partial class BlankPage1 : Page
     {
-        public LoginPage()
+        public BlankPage1()
         {
             this.InitializeComponent();
-        }
-
-        private void loginButton_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(MainPage));
         }
     }
 }

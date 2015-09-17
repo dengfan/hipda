@@ -120,6 +120,9 @@
     <Compile Include="ViewModels\ReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemViewModel.cs" />
+    <Compile Include="Views\BlankPage1.xaml.cs">
+      <DependentUpon>BlankPage1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReplyListPage.xaml.cs">
       <DependentUpon>ReplyListPage.xaml</DependentUpon>
     </Compile>
@@ -222,6 +225,9 @@
     <Content Include="Assets\Faces\grapeman\24.gif" />
     <Content Include="Assets\Faces\no_face.png" />
     <Content Include="Assets\Faces\plus_48x48.png" />
+    <Content Include="Assets\Images\bg1.png" />
+    <Content Include="Assets\Images\hipdabg1.png" />
+    <Content Include="Assets\Images\hipdabg2.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -243,6 +249,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BlankPage1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReplyListPage.xaml">
       <Generator>MSBuild:Compile</Generator>
