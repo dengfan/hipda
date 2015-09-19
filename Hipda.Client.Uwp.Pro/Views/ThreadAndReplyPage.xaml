@@ -142,7 +142,7 @@
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
 
-        <Grid x:Name="RightWrap" Grid.Column="1" Background="#E9EEF4" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="1,0,0,0">
+        <Grid x:Name="RightWrap" Grid.Column="1" Background="#E9EEF4" BorderBrush="#EAEAEA" BorderThickness="1,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
