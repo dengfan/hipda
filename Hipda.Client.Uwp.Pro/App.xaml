@@ -43,7 +43,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" Width="80" Height="80" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                <Border Grid.Row="0" Width="80" Height="80" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
                     <Grid>
                         <Grid.Background>
                             <ImageBrush Stretch="Uniform">
@@ -107,7 +107,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
                     <Grid CornerRadius="20">
                         <Grid.Background>
                             <ImageBrush Stretch="UniformToFill">
@@ -171,7 +171,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
                     <Grid CornerRadius="20">
                         <Grid.Background>
                             <ImageBrush Stretch="UniformToFill">
@@ -236,7 +236,7 @@
                     <ColumnDefinition Width="44"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
                     <Grid CornerRadius="20">
                         <Grid.Background>
                             <ImageBrush Stretch="UniformToFill">

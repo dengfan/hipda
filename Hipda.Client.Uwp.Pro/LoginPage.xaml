@@ -36,7 +36,7 @@
             
             <StackPanel x:Name="loginPanel" Grid.Row="0" Margin="20" VerticalAlignment="Top" MaxWidth="600">
                 <TextBox x:Name="usernameTextBox" TabIndex="1" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" PlaceholderText="输入账号（必填）"/>
-                <PasswordBox x:Name="passwordTextBox" TabIndex="2" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" PlaceholderText="输入密码（必填）" Margin="0,8,0,0"/>
+                <PasswordBox x:Name="passwordBox" TabIndex="2" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" PlaceholderText="输入密码（必填）" Margin="0,8,0,0"/>
                 <ComboBox x:Name="questionComboBox" PlaceholderText="安全提问（选填）" HorizontalAlignment="Stretch" Margin="0,8,0,0" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}">
                     <x:String>安全提问（选填）</x:String>
                     <x:String>母亲的名字</x:String>

@@ -104,7 +104,7 @@
 
                             <Border Margin="1,0,0,0" Width="2" Background="{Binding StatusColor}"/>
 
-                            <Border Margin="8,8,8,8" Background="{StaticResource SystemControlHighlightListAccentLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Border Margin="8,8,8,8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
                                 <Grid CornerRadius="20">
                                     <Grid.Background>
                                         <ImageBrush Stretch="UniformToFill">

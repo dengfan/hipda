@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hipda.Http;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,28 @@ namespace Hipda.Client.Uwp.Pro
 
         private void loginButton_Click(object sender, RoutedEventArgs e)
         {
+            HttpHandle httpClient = HttpHandle.getInstance();
+            string username = usernameTextBox.Text.Trim().ToLower();
+            string password = passwordBox.Password.Trim();
+            int question = questionComboBox.SelectedIndex;
+            string answer = answerTextBox.Text.Trim();
+
+            // 清除当前的登录cookie
+            httpClient.ClearCookies();
+
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            {
+                //bool isOk = await AccountSettings.LoginAndAdd(username, password, question, answer, true);
+                //if (isOk)
+                //{
+                //    Refresh();
+                //}
+                //else
+                //{
+                //    await new MessageDialog(DataSource.LoginMessage, "账号登录失败").ShowAsync();
+                //}
+            }
+
             Frame.Navigate(typeof(MainPage));
         }
     }

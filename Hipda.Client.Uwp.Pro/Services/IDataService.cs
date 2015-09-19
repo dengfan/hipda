@@ -12,6 +12,10 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public interface IDataService
     {
+        #region account
+        //Task AutoLogin();
+        #endregion
+
         #region thread
         ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad);
 

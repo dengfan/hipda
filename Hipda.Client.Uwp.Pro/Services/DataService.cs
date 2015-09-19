@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
@@ -29,7 +30,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public int MyUserId { get; set; }
 
-        #region 主题数据的处理
+        #region account
+        //public async Task AutoLogin()
+        //{
+        //    ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfAccountData, ApplicationDataCreateDisposition.Always);
+        //}
+        #endregion
+
+        #region thread
         private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
             // 如果该页贴子已存在，且贴子数量为满页，则不作请求
@@ -221,7 +229,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         }
         #endregion
 
-        #region 回复数据的处理
+        #region reply
         private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, CancellationTokenSource cts)
         {
             #region 如果数据已存在，则不读取，以便节省流量
