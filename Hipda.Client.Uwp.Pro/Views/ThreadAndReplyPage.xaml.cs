@@ -24,19 +24,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         public ThreadAndReplyPage()
         {
             this.InitializeComponent();
-
-            _threadAndReplyViewModel = new ThreadAndReplyViewModel(
-                ThreadListView,
-                () => {
-                    leftProgress.IsActive = true;
-                    leftProgress.Visibility = Visibility.Visible;
-                }, 
-                () => {
-                    leftProgress.IsActive = false;
-                    leftProgress.Visibility = Visibility.Collapsed;
-                });
-
-            DataContext = _threadAndReplyViewModel;
         }
 
         private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
@@ -50,26 +37,49 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             if (e.Parameter != null)
             {
-                RightWrap.DataContext = null;
+                string param = e.Parameter.ToString();
 
-                string[] p = e.Parameter.ToString().Split(',');
-                int threadId = Convert.ToInt32(p[0]);
-                int threadAuthorUserId = Convert.ToInt32(p[1]);
+                if (param.Contains(",")) // 表示要加载指定的回复列表页
+                {
+                    string[] p = param.Split(',');
+                    int threadId = Convert.ToInt32(p[0]);
+                    int threadAuthorUserId = Convert.ToInt32(p[1]);
 
-                _lastSelectedItem = new ThreadItemViewModel(threadId, threadAuthorUserId, ReplyListView, 
-                    () =>
-                    {
-                        rightProgress.IsActive = true;
-                        rightProgress.Visibility = Visibility.Visible;
-                    },
-                    () =>
-                    {
-                        rightProgress.IsActive = false;
-                        rightProgress.Visibility = Visibility.Collapsed;
-                    });
+                    RightWrap.DataContext = null;
 
-                RightWrap.DataContext = _lastSelectedItem;
-                ReplyListView.ItemsSource = _lastSelectedItem.ReplyItemCollection;
+                    _lastSelectedItem = new ThreadItemViewModel(threadId, threadAuthorUserId, ReplyListView,
+                        () =>
+                        {
+                            rightProgress.IsActive = true;
+                            rightProgress.Visibility = Visibility.Visible;
+                        },
+                        () =>
+                        {
+                            rightProgress.IsActive = false;
+                            rightProgress.Visibility = Visibility.Collapsed;
+                        });
+
+                    RightWrap.DataContext = _lastSelectedItem;
+                    ReplyListView.ItemsSource = _lastSelectedItem.ReplyItemCollection;
+                }
+                else // 表示要加载指定的贴子列表页
+                {
+                    int fid = Convert.ToInt32(param);
+
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(
+                        fid,
+                        ThreadListView,
+                        () => {
+                            leftProgress.IsActive = true;
+                            leftProgress.Visibility = Visibility.Visible;
+                        },
+                        () => {
+                            leftProgress.IsActive = false;
+                            leftProgress.Visibility = Visibility.Collapsed;
+                        });
+
+                    DataContext = _threadAndReplyViewModel;
+                }
             }
 
             UpdateForVisualState(AdaptiveStates.CurrentState);

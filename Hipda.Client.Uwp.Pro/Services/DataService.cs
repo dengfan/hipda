@@ -30,13 +30,6 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public int MyUserId { get; set; }
 
-        #region account
-        //public async Task AutoLogin()
-        //{
-        //    ApplicationDataContainer container = localSettings.CreateContainer(keyNameOfAccountData, ApplicationDataCreateDisposition.Always);
-        //}
-        #endregion
-
         #region thread
         private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {

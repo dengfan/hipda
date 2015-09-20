@@ -1,4 +1,5 @@
-﻿using Hipda.Http;
+﻿using Hipda.Client.Uwp.Pro.Services;
+using Hipda.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -28,7 +30,7 @@ namespace Hipda.Client.Uwp.Pro
             this.InitializeComponent();
         }
 
-        private void loginButton_Click(object sender, RoutedEventArgs e)
+        private async void loginButton_Click(object sender, RoutedEventArgs e)
         {
             HttpHandle httpClient = HttpHandle.getInstance();
             string username = usernameTextBox.Text.Trim().ToLower();
@@ -41,18 +43,22 @@ namespace Hipda.Client.Uwp.Pro
 
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                //bool isOk = await AccountSettings.LoginAndAdd(username, password, question, answer, true);
-                //if (isOk)
-                //{
-                //    Refresh();
-                //}
-                //else
-                //{
-                //    await new MessageDialog(DataSource.LoginMessage, "账号登录失败").ShowAsync();
-                //}
+                var accountService = new AccountService();
+                bool isOk = await accountService.LoginAndSave(username, password, question, answer, true);
+                if (isOk)
+                {
+                    int fid = 2;
+                    Frame.Navigate(typeof(MainPage), fid);
+                }
+                else
+                {
+                    await new MessageDialog(accountService.LoginResultMessage, "登录失败").ShowAsync();
+                }
             }
-
-            Frame.Navigate(typeof(MainPage));
+            else
+            {
+                await new MessageDialog("请输入账号密码！", "温馨提示").ShowAsync();
+            }
         }
     }
 }

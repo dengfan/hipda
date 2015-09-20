@@ -16,6 +16,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ThreadAndReplyViewModel : NotificationObject
     {
+        private int _forumId { get; set; }
         private ListView _threadListView { get; set; }
         private Action _beforeLoad { get; set; }
         private Action _afterLoad { get; set; }
@@ -37,15 +38,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData()
         {
-            var cv = _ds.GetViewForThreadPage(14, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForThreadPage(_forumId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ThreadItemCollection = cv;
             }
         }
 
-        public ThreadAndReplyViewModel(ListView threadListView, Action beforeLoad, Action afterLoad)
+        public ThreadAndReplyViewModel(int forumId, ListView threadListView, Action beforeLoad, Action afterLoad)
         {
+            _forumId = forumId;
             _threadListView = threadListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
@@ -60,7 +62,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private void RefreshThreadExecute(object parameter)
         {
             _threadListView.ItemsSource = null;
-            _ds.ClearThreadData(14);
+            _ds.ClearThreadData(_forumId);
 
             LoadData();
             _threadListView.ItemsSource = ThreadItemCollection;

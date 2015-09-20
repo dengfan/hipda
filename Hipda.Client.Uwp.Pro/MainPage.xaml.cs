@@ -43,7 +43,8 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnNavigatedTo(e);
 
-            AppFrame.Navigate(typeof(ThreadAndReplyPage));
+            int fid = (int)e.Parameter;
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), fid);
         }
 
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
