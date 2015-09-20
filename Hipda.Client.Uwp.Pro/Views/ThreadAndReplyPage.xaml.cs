@@ -126,10 +126,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                 RightWrap.DataContext = _lastSelectedItem;
                 ReplyListView.ItemsSource = _lastSelectedItem.ReplyItemCollection;
             }
-
-            //var listItem = sender as ListView;
-            //var itemStatusBar = listItem.FindName("ItemStatusBar") as Border;
-            //itemStatusBar.Background = new SolidColorBrush(Colors.Transparent);
         }
 
         private void ThreadItem_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
