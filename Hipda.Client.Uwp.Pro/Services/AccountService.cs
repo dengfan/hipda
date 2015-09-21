@@ -83,13 +83,16 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        public async Task AutoLogin()
+        public async Task<bool> AutoLogin()
         {
             var accountItem = _accountData.FirstOrDefault(a => a.IsDefault);
             if (accountItem != null)
             {
                 await LoginAndSave(accountItem.Username, accountItem.Password, accountItem.QuestionId, accountItem.Answer, false);
+                return true;
             }
+
+            return false;
         }
 
         public async Task<bool> LoginAndSave(string username, string password, int questionId, string answer, bool isSave)
@@ -120,16 +123,14 @@ namespace Hipda.Client.Uwp.Pro.Services
             {
                 if (isSave)
                 {
-                    string key = string.Format("user_{0:yyyyMMddHHmmss}", DateTime.Now);
-                    var accountItem = new AccountItemModel(key, username, password, questionId, answer, true);
-
                     _accountData.RemoveAll(a => a.Username.Equals(username));
+
                     foreach (var item in _accountData)
                     {
                         item.IsDefault = false;
                     }
 
-                    _accountData.Add(accountItem);
+                    _accountData.Add(new AccountItemModel(username, password, questionId, answer, true));
 
                     // 序列化并保存
                     string jsonStr = JsonConvert.SerializeObject(_accountData);

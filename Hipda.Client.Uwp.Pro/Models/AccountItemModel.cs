@@ -8,17 +8,14 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class AccountItemModel
     {
-        public AccountItemModel(string key, string username, string password, int questionId, string answer, bool isDefault)
+        public AccountItemModel(string username, string password, int questionId, string answer, bool isDefault)
         {
-            this.Key = key;
             this.Username = username;
             this.Password = password;
             this.QuestionId = questionId;
             this.Answer = answer;
-            this.IsDefault = IsDefault;
+            this.IsDefault = isDefault;
         }
-
-        public string Key { get; set; }
 
         public string Username { get; set; }
 

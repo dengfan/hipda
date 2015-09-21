@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hipda.Client.Uwp.Pro.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -40,7 +42,7 @@ namespace Hipda.Client.Uwp.Pro
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
 
 #if DEBUG
@@ -49,6 +51,10 @@ namespace Hipda.Client.Uwp.Pro
                 //this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+
+            // 自动登录
+            var accountService = new AccountService();
+            bool isLogin = await accountService.AutoLogin();
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -75,10 +81,23 @@ namespace Hipda.Client.Uwp.Pro
                 // 当导航堆栈尚未还原时，导航到第一页，
                 // 并通过将所需信息作为导航参数传入来配置
                 // 参数
-                rootFrame.Navigate(typeof(LoginPage), e.Arguments);
+                if (isLogin)
+                {
+                    int fid = 2;
+                    rootFrame.Navigate(typeof(MainPage), fid);
+                }
+                else
+                {
+                    rootFrame.Navigate(typeof(LoginPage));
+                }
             }
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
+
+            var c = ((SolidColorBrush)Resources["SystemControlBackgroundChromeMediumBrush"]).Color;
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.BackgroundColor = c;
+            titleBar.ButtonBackgroundColor = c;
         }
 
         /// <summary>
