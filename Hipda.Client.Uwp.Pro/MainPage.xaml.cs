@@ -81,5 +81,23 @@ namespace Hipda.Client.Uwp.Pro
         {
 
         }
+
+        private void Button1_Click(object sender, RoutedEventArgs e)
+        {
+            int fid = 2;
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), fid);
+        }
+
+        private void Button2_Click(object sender, RoutedEventArgs e)
+        {
+            int fid = 6;
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), fid);
+        }
+
+        private void Button3_Click(object sender, RoutedEventArgs e)
+        {
+            int fid = 57;
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), fid);
+        }
     }
 }

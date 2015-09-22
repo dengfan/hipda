@@ -25,9 +25,9 @@ namespace Hipda.Client.Uwp.Pro.Services
         private List<AccountItemModel> _accountData = new List<AccountItemModel>();
 
         public string LoginResultMessage { get; private set; }
-        public string FormHash { get; private set; }
-        public string UserId { get; private set; }
-        public string Hash { get; private set; }
+        public static string FormHash { get; private set; }
+        public static int UserId { get; private set; }
+        public static string Hash { get; private set; }
 
         public AccountService()
         {
@@ -61,7 +61,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var formHashInputNode = postNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
                 if (formHashInputNode != null)
                 {
-                    this.FormHash = formHashInputNode.Attributes[3].Value.ToString();
+                    FormHash = formHashInputNode.Attributes[3].Value.ToString();
                 }
             }
 
@@ -72,13 +72,13 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var userIdNode = imgAttachNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("uid"));
                 if (userIdNode != null)
                 {
-                    this.UserId = userIdNode.Attributes[2].Value;
+                    UserId = Convert.ToInt32(userIdNode.Attributes[2].Value);
                 }
 
                 var hashNode = imgAttachNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("hash"));
                 if (hashNode != null)
                 {
-                    this.Hash = hashNode.Attributes[2].Value;
+                    Hash = hashNode.Attributes[2].Value;
                 }
             }
         }
@@ -88,8 +88,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var accountItem = _accountData.FirstOrDefault(a => a.IsDefault);
             if (accountItem != null)
             {
-                await LoginAndSave(accountItem.Username, accountItem.Password, accountItem.QuestionId, accountItem.Answer, false);
-                return true;
+                return await LoginAndSave(accountItem.Username, accountItem.Password, accountItem.QuestionId, accountItem.Answer, false);
             }
 
             return false;

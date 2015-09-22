@@ -150,7 +150,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button1_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="Di" Foreground="White" FontFamily="Consolas" />
@@ -161,7 +161,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button2_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="BS" Foreground="White" FontFamily="Consolas" />
@@ -172,7 +172,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button3_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="EI" Foreground="White" FontFamily="Consolas" />

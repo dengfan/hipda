@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,10 @@ namespace Hipda.Client.Uwp.Pro
             if (data.FloorNo == 1)
             {
                 return TopTemplate;
+            }
+            else if (data.AuthorUserId == AccountService.UserId)
+            {
+                return RightTemplate;
             }
             else if (data.IsTopicStarter)
             {
