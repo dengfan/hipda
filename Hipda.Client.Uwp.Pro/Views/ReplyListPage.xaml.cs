@@ -109,10 +109,12 @@ namespace Hipda.Client.Uwp.Pro.Views
                     () => {
                         rightProgress.IsActive = true;
                         rightProgress.Visibility = Visibility.Visible;
+                        btnRefresh.IsEnabled = false;
                     },
                     () => {
                         rightProgress.IsActive = false;
                         rightProgress.Visibility = Visibility.Collapsed;
+                        btnRefresh.IsEnabled = true;
                     });
                 DataContext = _replyViewModel;
                 ReplyListView.ItemsSource = _replyViewModel.ReplyItemCollection;
