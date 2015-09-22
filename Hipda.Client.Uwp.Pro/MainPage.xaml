@@ -69,7 +69,7 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
+                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1366" />
@@ -283,7 +283,7 @@
 
         <Button x:Name="MainSplitViewToggle" Style="{StaticResource SplitViewPaneButtonStyle}" Width="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
             <Button.Content>
-                <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+                <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="White"/>
             </Button.Content>
         </Button>
     </Grid>

@@ -6,8 +6,10 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -94,10 +96,14 @@ namespace Hipda.Client.Uwp.Pro
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
 
-            var c = ((SolidColorBrush)Resources["SystemControlBackgroundChromeMediumBrush"]).Color;
+            var c = ((SolidColorBrush)Resources["SystemControlBackgroundAccentBrush"]).Color;
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
             titleBar.BackgroundColor = c;
+            titleBar.InactiveBackgroundColor = c;
             titleBar.ButtonBackgroundColor = c;
+            titleBar.ButtonInactiveBackgroundColor = c;
+            titleBar.ForegroundColor = Colors.White;
+            titleBar.ButtonForegroundColor = Colors.White;
         }
 
         /// <summary>

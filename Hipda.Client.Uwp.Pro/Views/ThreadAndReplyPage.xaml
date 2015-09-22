@@ -56,10 +56,10 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
-                <AppBarButton Icon="Add" Label="发表新贴"/>
-                <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
-                <AppBarToggleButton Icon="Sort" Label="按发布时间倒序排列"/>
+            <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Foreground="White">
+                <AppBarButton Icon="Add" Label="发表新贴" Style="{StaticResource AppBarButtonStyle}"/>
+                <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}" Style="{StaticResource AppBarButtonStyle}"/>
+                <AppBarToggleButton Icon="Sort" Label="按发布时间倒序排列" Style="{StaticResource AppBarButtonStyle2}"/>
                 <CommandBar.SecondaryCommands>
                     <AppBarButton Icon="Globe" Label="在浏览器中打开"/>
                 </CommandBar.SecondaryCommands>
@@ -85,7 +85,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListViewItem">
-                                    <ListViewItemPresenter ContentMargin="{TemplateBinding Padding}" ContentTransitions="{TemplateBinding ContentTransitions}" FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}" FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" PointerOverForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}" PressedBackground="{ThemeResource SystemControlBackgroundListLowBrush}" PlaceholderBackground="#F8F9FA" PointerOverBackground="{ThemeResource SystemControlBackgroundListLowBrush}" ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}" SelectedPressedBackground="{ThemeResource SystemControlBackgroundListLowBrush}" SelectionCheckMarkVisualEnabled="True" SelectedForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}" SelectedPointerOverBackground="{ThemeResource SystemControlBackgroundListLowBrush}" SelectedBackground="{ThemeResource SystemControlBackgroundChromeMediumBrush}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    <ListViewItemPresenter ContentMargin="{TemplateBinding Padding}" ContentTransitions="{TemplateBinding ContentTransitions}" FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}" FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" PointerOverForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}" PressedBackground="{ThemeResource SystemControlBackgroundListLowBrush}" PlaceholderBackground="#F8F9FA" PointerOverBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}" SelectedPressedBackground="{ThemeResource SystemControlBackgroundListLowBrush}" SelectionCheckMarkVisualEnabled="True" SelectedForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}" SelectedPointerOverBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" SelectedBackground="#E9EEF4" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -142,17 +142,17 @@
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
 
-        <Grid x:Name="RightWrap" Grid.Column="1" Background="#E9EEF4" BorderBrush="#EAEAEA" BorderThickness="1,0,0,0">
+        <Grid x:Name="RightWrap" Grid.Column="1" Background="#E9EEF4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
-                <AppBarButton Icon="Edit" Label="评论"/>
-                <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshRelplyCommand}"/>
-                <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
+            <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Foreground="White">
+                <AppBarButton Icon="Edit" Label="评论" Style="{StaticResource AppBarButtonStyle}"/>
+                <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshRelplyCommand}" Style="{StaticResource AppBarButtonStyle}"/>
+                <AppBarToggleButton Icon="Sort" Label="倒序看贴" Style="{StaticResource AppBarButtonStyle2}"/>
                 <CommandBar.SecondaryCommands>
                     <AppBarButton Icon="Globe" Label="在浏览器中打开"/>
                 </CommandBar.SecondaryCommands>

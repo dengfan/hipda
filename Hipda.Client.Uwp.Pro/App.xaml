@@ -6,7 +6,19 @@
     RequestedTheme="Light">
 
     <Application.Resources>
-        <local:ReplyListItemSelector x:Key="replyListItemSelector" TopTemplate="{StaticResource ReplyListTopItemTemplate}" LeftTemplate="{StaticResource ReplyListLeftItemTemplate}" Left2Template="{StaticResource ReplyListLeft2ItemTemplate}" RightTemplate="{StaticResource ReplyListRightItemTemplate}" />
+        <local:ReplyListItemSelector x:Key="replyListItemSelector" 
+                                     TopTemplate="{StaticResource ReplyListTopItemTemplate}" 
+                                     LeftTemplate="{StaticResource ReplyListLeftItemTemplate}" 
+                                     Left2Template="{StaticResource ReplyListLeft2ItemTemplate}" 
+                                     RightTemplate="{StaticResource ReplyListRightItemTemplate}" />
+        
+        <Style x:Key="AppBarButtonStyle" TargetType="AppBarButton">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="AppBarButtonStyle2" TargetType="AppBarToggleButton">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
 
         <Style x:Key="ReplyItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
