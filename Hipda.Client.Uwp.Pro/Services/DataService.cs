@@ -31,18 +31,6 @@ namespace Hipda.Client.Uwp.Pro.Services
         #region thread
         private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
-            // 如果该页贴子已存在，且贴子数量为满页，则不作请求
-            var count = _threadData.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
-            if (count == _threadPageSize)
-            {
-                return;
-            }
-            else
-            {
-                // 清空，以便重新加载
-                _threadData.RemoveAll(t => t.ForumId == forumId && t.PageNo == pageNo);
-            }
-
             // 读取数据
             string ThreadListPageOrderBy = string.Empty;
             string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&orderby={1}&page={2}&_={3}", forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.Ticks.ToString("x"));
@@ -67,7 +55,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return;
             }
 
-            int i = _threadData.Count;
+            int i = _threadData.Count(t => t.ForumId == forumId);
             foreach (var item in tbodies)
             {
                 var tr = item.ChildNodes[1];
