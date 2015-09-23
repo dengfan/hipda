@@ -28,8 +28,6 @@ namespace Hipda.Client.Uwp.Pro.Services
         private static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
         private static List<int> _read = new List<int>();
 
-        public int MyUserId { get; set; }
-
         #region thread
         private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
@@ -41,6 +39,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             else
             {
+                // 清空，以便重新加载
                 _threadData.RemoveAll(t => t.ForumId == forumId && t.PageNo == pageNo);
             }
 
@@ -169,7 +168,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             
             var threadItemViewModel = new ThreadItemViewModel(threadItem);
-            //threadItemViewModel.StatusColor = new SolidColorBrush(Color.FromArgb(255, 62, 208, 134));
             threadItemViewModel.StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlBackgroundAccentBrush"];
             if (_read.Contains(threadItem.ThreadId))
             {
