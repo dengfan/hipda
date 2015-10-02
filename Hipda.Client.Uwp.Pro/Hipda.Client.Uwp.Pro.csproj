@@ -114,7 +114,7 @@
     <Compile Include="ReplyListItemSelector.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\DataService.cs" />
-    <Compile Include="Services\GeneratorIncrementalLoadingClass.cs" />
+    <Compile Include="Services\GeneratorIncrementalLoadingClass2.cs" />
     <Compile Include="Services\IDataService.cs" />
     <Compile Include="Services\IncrementalLoadingBase.cs" />
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />

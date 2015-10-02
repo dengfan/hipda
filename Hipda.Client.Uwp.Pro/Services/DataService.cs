@@ -31,6 +31,16 @@ namespace Hipda.Client.Uwp.Pro.Services
         #region thread
         private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
+            int count = _threadData.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
+            if (count == _threadPageSize)
+            {
+                return;
+            }
+            else
+            {
+                _threadData.RemoveAll(t => t.ForumId == forumId && t.PageNo == pageNo);
+            }
+
             // 读取数据
             string ThreadListPageOrderBy = string.Empty;
             string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&orderby={1}&page={2}&_={3}", forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.Ticks.ToString("x"));
@@ -49,7 +59,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 如果置顶贴数过多，只取非置顶贴的话，第一页数据项过少，会导致不会自动触发加载下一页数据
-            var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("normalthread_"));
+            var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").Contains("stickthread_") || n.GetAttributeValue("id", "").Contains("normalthread_"));
             if (tbodies == null)
             {
                 return;
@@ -168,8 +178,8 @@ namespace Hipda.Client.Uwp.Pro.Services
         public ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemViewModel>(
-                _threadPageSize,
+            cvs.Source = new GeneratorIncrementalLoadingClass2<ThreadItemViewModel>(
+                1,
                 async pageNo =>
                 {
                     // 加载分页数据，并写入静态类中
@@ -395,14 +405,15 @@ namespace Hipda.Client.Uwp.Pro.Services
         public ICollectionView GetViewForReplyPage(int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
-                _replyPageSize,
+            cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
+                1,
                 async pageNo =>
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
                     return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad);
-                }, (index) =>
+                },
+                (index) =>
                 {
                     // 从静态类中返回需要显示出来的数据
                     return GetReplyItemByIndex(threadId, index);
