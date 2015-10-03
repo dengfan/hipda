@@ -5,6 +5,7 @@
     xmlns:local="using:Hipda.Client.Uwp.Pro.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pr="using:PullToRefresh.UWP"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled"
     Loaded="PageRoot_Loaded"
@@ -23,10 +24,12 @@
             <AppBarToggleButton Icon="Sort" Label="倒序看贴" Style="{StaticResource AppBarButtonStyle2}"/>
         </CommandBar>
 
-        <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="False" 
+        <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
+            <ListView x:Name="ReplyListView" IsItemClickEnabled="False" 
                   ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-                  ItemTemplateSelector="{StaticResource replyListItemSelector}">
-        </ListView>
+                  ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}">
+            </ListView>
+        </pr:PullToRefreshBox>
 
         <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
     </Grid>

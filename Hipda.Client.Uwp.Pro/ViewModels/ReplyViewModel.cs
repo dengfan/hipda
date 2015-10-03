@@ -57,5 +57,18 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             LoadData(1);
             _replyListView.ItemsSource = ReplyItemCollection;
         }
+
+        public void RefreshReplyDataFromPrevPage()
+        {
+            // 先获取当前数据中已存在的最小页码
+            int minPageNo = _ds.GetReplyMinPageNoInLoadedData(_threadId);
+            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
+
+            _replyListView.ItemsSource = null;
+            _ds.ClearReplyData(_threadId);
+
+            LoadData(1);
+            _replyListView.ItemsSource = ReplyItemCollection;
+        }
     }
 }

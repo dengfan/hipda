@@ -66,7 +66,7 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <pr:PullToRefreshBox x:Name="leftPr" Grid.Row="1" RefreshInvoked="leftPr_RefreshInvoked">
+            <pr:PullToRefreshBox x:Name="leftPr" Grid.Row="1" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
                 <ListView x:Name="ThreadListView" IsItemClickEnabled="True" IsHoldingEnabled="False" IsMultiSelectCheckBoxEnabled="False" IsSwipeEnabled="False" 
                           VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
                           ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
@@ -116,7 +116,7 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked">
+            <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
                 <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
                       ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                       ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"

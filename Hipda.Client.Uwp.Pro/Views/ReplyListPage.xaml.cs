@@ -117,6 +117,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                         rightProgress.Visibility = Visibility.Collapsed;
                         btnRefresh.IsEnabled = true;
                     });
+
                 DataContext = _replyViewModel;
                 ReplyListView.ItemsSource = _replyViewModel.ReplyItemCollection;
                 btnRefresh.Command = _replyViewModel.RefreshReplyCommand;
@@ -140,6 +141,11 @@ namespace Hipda.Client.Uwp.Pro.Views
                 // We shouldn't see this page since we are in "wide master-detail" mode.
                 NavigateBackForWideState(useTransition: false);
             }
+        }
+
+        private void rightPr_RefreshInvoked(DependencyObject sender, object args)
+        {
+            _replyViewModel.RefreshReplyDataFromPrevPage();
         }
     }
 }
