@@ -243,9 +243,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         #region reply
         private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, CancellationTokenSource cts)
         {
-            #region 如果数据已存在，则不读取，以便节省流量
-            // 如果页面已存在，并且已载满数据，则不重新从网站拉取数据，以便节省流量， 
-            // 但最后一页（如果数据少于一页，那么第一页就是最后一页）由于随时可能会有新回复，所以对于最后一页的处理方式是先清除再重新加载
+            // 如果页面已存在，则不重新从网站拉取数据，以便节省流量， 
             var threadReply = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
             if (threadReply != null)
             {
@@ -253,15 +251,6 @@ namespace Hipda.Client.Uwp.Pro.Services
                 if (count > 0)
                 {
                     return;
-
-                    //if (count >= _replyPageSize) // 满页的不再加载，以便节省流量
-                    //{
-                    //    return;
-                    //}
-
-                    //// 再判断未满页的
-                    //// 第一页或最后一页的回复数量不足一页，表示此页随时可能有新回复，故删除
-                    //threadReply.Replies.RemoveAll(r => r.PageNo == pageNo);
                 }
             }
             else
@@ -269,7 +258,6 @@ namespace Hipda.Client.Uwp.Pro.Services
                 threadReply = new ReplyPageModel { ThreadId = threadId, Replies = new List<ReplyItemModel>() };
                 _replyData.Add(threadReply);
             }
-            #endregion
 
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&ordertype={2}&_={3}", threadId, pageNo, string.Empty, DateTime.Now.Ticks.ToString("x"));
