@@ -154,7 +154,7 @@
 
             <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Foreground="White">
                 <AppBarButton Icon="Edit" Label="评论" Style="{StaticResource AppBarButtonStyle}"/>
-                <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshRelplyCommand}" Style="{StaticResource AppBarButtonStyle}"/>
+                <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}" Style="{StaticResource AppBarButtonStyle}"/>
                 <AppBarToggleButton Icon="Sort" Label="倒序看贴" Style="{StaticResource AppBarButtonStyle2}"/>
                 <CommandBar.SecondaryCommands>
                     <AppBarButton Icon="Globe" Label="在浏览器中打开"/>
