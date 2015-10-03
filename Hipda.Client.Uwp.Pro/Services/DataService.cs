@@ -164,7 +164,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         }
 
         /// <summary>
-        /// 用于增量加载来控制要显示哪几项
+        /// 用于增量加载来控制要显示哪一项
         /// </summary>
         /// <param name="forumId"></param>
         /// <param name="index"></param>
