@@ -15,6 +15,8 @@ namespace Hipda.Client.Uwp.Pro.Services
         #region thread
         ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad);
 
+        int GetThreadMaxPageNo();
+
         void ClearThreadData(int forumId);
 
         ThreadItemModel GetThreadItem(int threadId);
@@ -26,6 +28,8 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         #region reply
         ICollectionView GetViewForReplyPage(int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad);
+
+        int GetReplyMaxPageNo();
 
         void ClearReplyData(int threadId);
         #endregion

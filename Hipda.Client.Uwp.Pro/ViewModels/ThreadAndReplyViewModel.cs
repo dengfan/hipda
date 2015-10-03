@@ -67,5 +67,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             LoadData();
             _threadListView.ItemsSource = ThreadItemCollection;
         }
+
+        public void LoadPrevPage()
+        {
+            // 先获取当前数据中已存在的最小页码
+
+        }
     }
 }

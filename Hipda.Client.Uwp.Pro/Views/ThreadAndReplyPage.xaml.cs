@@ -52,12 +52,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                         {
                             rightProgress.IsActive = true;
                             rightProgress.Visibility = Visibility.Visible;
+                            ThreadRefreshButton.IsEnabled = false;
                             ReplyRefreshButton.IsEnabled = false;
                         },
                         () =>
                         {
                             rightProgress.IsActive = false;
                             rightProgress.Visibility = Visibility.Collapsed;
+                            ThreadRefreshButton.IsEnabled = true;
                             ReplyRefreshButton.IsEnabled = true;
                         });
 
@@ -75,11 +77,13 @@ namespace Hipda.Client.Uwp.Pro.Views
                             leftProgress.IsActive = true;
                             leftProgress.Visibility = Visibility.Visible;
                             ThreadRefreshButton.IsEnabled = false;
+                            ReplyRefreshButton.IsEnabled = false;
                         },
                         () => {
                             leftProgress.IsActive = false;
                             leftProgress.Visibility = Visibility.Collapsed;
                             ThreadRefreshButton.IsEnabled = true;
+                            ReplyRefreshButton.IsEnabled = true;
                         });
 
                     DataContext = _threadAndReplyViewModel;
@@ -131,11 +135,13 @@ namespace Hipda.Client.Uwp.Pro.Views
                     () => {
                         rightProgress.IsActive = true;
                         rightProgress.Visibility = Visibility.Visible;
+                        ThreadRefreshButton.IsEnabled = false;
                         ReplyRefreshButton.IsEnabled = false;
                     },
                     () => {
                         rightProgress.IsActive = false;
                         rightProgress.Visibility = Visibility.Collapsed;
+                        ThreadRefreshButton.IsEnabled = true;
                         ReplyRefreshButton.IsEnabled = true;
                     });
 
@@ -151,6 +157,16 @@ namespace Hipda.Client.Uwp.Pro.Views
             // Item whichOne = senderElement.DataContext as Item;
             FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
             flyoutBase.ShowAt(senderElement);
+        }
+
+        private void leftPr_RefreshInvoked(DependencyObject sender, object args)
+        {
+            //_threadAndReplyViewModel.RefreshThreadCommand;
+        }
+
+        private void rightPr_RefreshInvoked(DependencyObject sender, object args)
+        {
+
         }
     }
 }

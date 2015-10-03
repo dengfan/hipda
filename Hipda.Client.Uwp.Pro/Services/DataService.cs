@@ -25,7 +25,9 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         private static HttpHandle _httpClient = HttpHandle.getInstance();
         private static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
+        private static int _threadMaxPageNo = 1;
         private static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
+        private static int _replyMaxPageNo = 1;
         private static List<int> _read = new List<int>();
 
         #region thread
@@ -56,6 +58,16 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (dataTable == null)
             {
                 return;
+            }
+
+            // 读取最大页码
+            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+            if (pagesNode != null)
+            {
+                var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
+                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
+                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
+                _threadMaxPageNo = Convert.ToInt32(lastPageNodeValue);
             }
 
             // 如果置顶贴数过多，只取非置顶贴的话，第一页数据项过少，会导致不会自动触发加载下一页数据
@@ -190,9 +202,18 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 从静态类中返回需要显示出来的数据
                     return GetThreadItemByIndex(forumId, index);
+                },
+                () =>
+                {
+                    return GetThreadMaxPageNo();
                 });
 
             return cvs.View;
+        }
+
+        public int GetThreadMaxPageNo()
+        {
+            return _threadMaxPageNo;
         }
 
         public void ClearThreadData(int forumId)
@@ -270,10 +291,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (pageNo > 1)
             {
                 var forumControlNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forumcontrol s_clear"));
-                var pagesNode = forumControlNode.ChildNodes[1] // table
-                    .ChildNodes[1] // tr
-                    .ChildNodes[3] // td
-                    .Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+                var pagesNode = forumControlNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
                 if (pagesNode == null) // 没有超过两页
                 {
                     return;
@@ -297,6 +315,16 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (data == null)
             {
                 return;
+            }
+
+            // 读取最大页码
+            var pagesNode2 = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+            if (pagesNode2 != null)
+            {
+                var nodeList = pagesNode2.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
+                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
+                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
+                _replyMaxPageNo = Convert.ToInt32(lastPageNodeValue);
             }
 
             int i = threadReply.Replies.Count();
@@ -417,9 +445,18 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 从静态类中返回需要显示出来的数据
                     return GetReplyItemByIndex(threadId, index);
+                },
+                () =>
+                {
+                    return GetReplyMaxPageNo();
                 });
 
             return cvs.View;
+        }
+
+        public int GetReplyMaxPageNo()
+        {
+            return _replyMaxPageNo;
         }
 
         public void ClearReplyData(int threadId)

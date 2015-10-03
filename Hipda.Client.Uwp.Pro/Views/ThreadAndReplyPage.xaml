@@ -6,6 +6,7 @@
     xmlns:vm="using:Hipda.Client.Uwp.Pro.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pr="using:PullToRefresh.UWP"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
 
@@ -65,66 +66,67 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" IsHoldingEnabled="False" IsMultiSelectCheckBoxEnabled="False" IsSwipeEnabled="False"
+            <pr:PullToRefreshBox x:Name="leftPr" Grid.Row="1" RefreshInvoked="leftPr_RefreshInvoked">
+                <ListView x:Name="ThreadListView" IsItemClickEnabled="True" IsHoldingEnabled="False" IsMultiSelectCheckBoxEnabled="False" IsSwipeEnabled="False"
                       VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
                       ItemsSource="{Binding ThreadItemCollection}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-                        <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
-                        <Setter Property="TabNavigation" Value="Local"/>
-                        <Setter Property="IsHoldingEnabled" Value="True"/>
-                        <Setter Property="Padding" Value="0,0,12,0"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                        <Setter Property="VerticalContentAlignment" Value="Center"/>
-                        <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}"/>
-                        <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListViewItem">
-                                    <ListViewItemPresenter ContentMargin="{TemplateBinding Padding}" ContentTransitions="{TemplateBinding ContentTransitions}" FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}" FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" PointerOverForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}" PressedBackground="{ThemeResource SystemControlBackgroundListLowBrush}" PlaceholderBackground="#F8F9FA" PointerOverBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}" SelectedPressedBackground="{ThemeResource SystemControlBackgroundListLowBrush}" SelectionCheckMarkVisualEnabled="True" SelectedForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}" SelectedPointerOverBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" SelectedBackground="#E9EEF4" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" RightTapped="ThreadItem_RightTapped">
-                            <FlyoutBase.AttachedFlyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看作者发贴记录" />
-                                    <MenuFlyoutItem x:Name="menuItemBlockAuthor" Text="屏蔽作者" />
-                                    <MenuFlyoutItem x:Name="menuItemBlockThread" Text="屏蔽此主题" />
-                                </MenuFlyout>
-                            </FlyoutBase.AttachedFlyout>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+                            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+                            <Setter Property="TabNavigation" Value="Local"/>
+                            <Setter Property="IsHoldingEnabled" Value="True"/>
+                            <Setter Property="Padding" Value="0,0,12,0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}"/>
+                            <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <ListViewItemPresenter ContentMargin="{TemplateBinding Padding}" ContentTransitions="{TemplateBinding ContentTransitions}" FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}" FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" PointerOverForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}" PressedBackground="{ThemeResource SystemControlBackgroundListLowBrush}" PlaceholderBackground="#F8F9FA" PointerOverBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}" SelectedPressedBackground="{ThemeResource SystemControlBackgroundListLowBrush}" SelectionCheckMarkVisualEnabled="True" SelectedForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}" SelectedPointerOverBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" SelectedBackground="#E9EEF4" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" RightTapped="ThreadItem_RightTapped">
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看作者发贴记录" />
+                                        <MenuFlyoutItem x:Name="menuItemBlockAuthor" Text="屏蔽作者" />
+                                        <MenuFlyoutItem x:Name="menuItemBlockThread" Text="屏蔽此主题" />
+                                    </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
 
-                            <Border Width="3" Background="{Binding StatusColor}"/>
+                                <Border Width="3" Background="{Binding StatusColor}"/>
 
-                            <Border Margin="8,8,8,8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                                <Grid CornerRadius="20">
-                                    <Grid.Background>
-                                        <ImageBrush Stretch="UniformToFill">
-                                            <ImageBrush.ImageSource>
-                                                <BitmapImage DecodePixelWidth="40" UriSource="{Binding ThreadItem.AvatarUrl}"/>
-                                            </ImageBrush.ImageSource>
-                                        </ImageBrush>
-                                    </Grid.Background>
-                                </Grid>
-                            </Border>
+                                <Border Margin="8,8,8,8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <Grid CornerRadius="20">
+                                        <Grid.Background>
+                                            <ImageBrush Stretch="UniformToFill">
+                                                <ImageBrush.ImageSource>
+                                                    <BitmapImage DecodePixelWidth="40" UriSource="{Binding ThreadItem.AvatarUrl}"/>
+                                                </ImageBrush.ImageSource>
+                                            </ImageBrush>
+                                        </Grid.Background>
+                                    </Grid>
+                                </Border>
 
-                            <StackPanel Margin="0,8,0,0">
-                                <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                                <StackPanel Margin="0,8,0,0">
+                                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                                         <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
                                         <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                                         <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
                                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
-                                </TextBlock>
+                                    </TextBlock>
 
-                                <TextBlock Margin="0,4,0,0">
+                                    <TextBlock Margin="0,4,0,0">
                                         <ToolTipService.ToolTip>
                                             <ToolTip Content="{Binding ThreadItem.TitleForToolTip}"></ToolTip>
                                         </ToolTipService.ToolTip>
@@ -132,12 +134,13 @@
                                         <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
                                         <Run Text="{Binding ThreadItem.Title}" />
                                         <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                                </TextBlock>
+                                    </TextBlock>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </pr:PullToRefreshBox>
 
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
@@ -158,11 +161,13 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="False"
+            <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked">
+                <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
                       ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                       ItemTemplateSelector="{StaticResource replyListItemSelector}"
                       ItemsSource="{Binding ReplyItemCollection}">
-            </ListView>
+                </ListView>
+            </pr:PullToRefreshBox>
 
             <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
