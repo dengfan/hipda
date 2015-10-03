@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.Uwp.Pro
 {
-    public class ReplyListItemSelector : DataTemplateSelector
+    public class ReplyListItemTemplateSelector : DataTemplateSelector
     {
         public DataTemplate TopTemplate { get; set; }
         public DataTemplate LeftTemplate { get; set; }

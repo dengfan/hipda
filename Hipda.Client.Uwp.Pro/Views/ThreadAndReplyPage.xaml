@@ -67,9 +67,10 @@
             </CommandBar>
 
             <pr:PullToRefreshBox x:Name="leftPr" Grid.Row="1" RefreshInvoked="leftPr_RefreshInvoked">
-                <ListView x:Name="ThreadListView" IsItemClickEnabled="True" IsHoldingEnabled="False" IsMultiSelectCheckBoxEnabled="False" IsSwipeEnabled="False"
-                      VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
-                      ItemsSource="{Binding ThreadItemCollection}">
+                <ListView x:Name="ThreadListView" IsItemClickEnabled="True" IsHoldingEnabled="False" IsMultiSelectCheckBoxEnabled="False" IsSwipeEnabled="False" 
+                          VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
+                          ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
+                          ItemsSource="{Binding ThreadItemCollection}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
@@ -93,52 +94,6 @@
                             </Setter>
                         </Style>
                     </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" RightTapped="ThreadItem_RightTapped">
-                                <FlyoutBase.AttachedFlyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看作者发贴记录" />
-                                        <MenuFlyoutItem x:Name="menuItemBlockAuthor" Text="屏蔽作者" />
-                                        <MenuFlyoutItem x:Name="menuItemBlockThread" Text="屏蔽此主题" />
-                                    </MenuFlyout>
-                                </FlyoutBase.AttachedFlyout>
-
-                                <Border Width="3" Background="{Binding StatusColor}"/>
-
-                                <Border Margin="8,8,8,8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                                    <Grid CornerRadius="20">
-                                        <Grid.Background>
-                                            <ImageBrush Stretch="UniformToFill">
-                                                <ImageBrush.ImageSource>
-                                                    <BitmapImage DecodePixelWidth="40" UriSource="{Binding ThreadItem.AvatarUrl}"/>
-                                                </ImageBrush.ImageSource>
-                                            </ImageBrush>
-                                        </Grid.Background>
-                                    </Grid>
-                                </Border>
-
-                                <StackPanel Margin="0,8,0,0">
-                                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                                        <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
-                                        <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
-                                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
-                                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
-                                    </TextBlock>
-
-                                    <TextBlock Margin="0,4,0,0">
-                                        <ToolTipService.ToolTip>
-                                            <ToolTip Content="{Binding ThreadItem.TitleForToolTip}"></ToolTip>
-                                        </ToolTipService.ToolTip>
-                                        <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
-                                        <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
-                                        <Run Text="{Binding ThreadItem.Title}" />
-                                        <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                                    </TextBlock>
-                                </StackPanel>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
                 </ListView>
             </pr:PullToRefreshBox>
 
@@ -164,7 +119,7 @@
             <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked">
                 <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
                       ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-                      ItemTemplateSelector="{StaticResource replyListItemSelector}"
+                      ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                       ItemsSource="{Binding ReplyItemCollection}">
                 </ListView>
             </pr:PullToRefreshBox>
