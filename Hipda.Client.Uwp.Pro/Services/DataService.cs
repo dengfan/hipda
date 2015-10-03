@@ -244,12 +244,6 @@ namespace Hipda.Client.Uwp.Pro.Services
         private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, CancellationTokenSource cts)
         {
             #region 如果数据已存在，则不读取，以便节省流量
-            var threadItem = _threadData.FirstOrDefault(t => t.ThreadId == threadId);
-            if (threadItem == null) // 如果主题不存在，则返回
-            {
-                return;
-            }
-
             // 如果页面已存在，并且已载满数据，则不重新从网站拉取数据，以便节省流量， 
             // 但最后一页（如果数据少于一页，那么第一页就是最后一页）由于随时可能会有新回复，所以对于最后一页的处理方式是先清除再重新加载
             var threadReply = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
