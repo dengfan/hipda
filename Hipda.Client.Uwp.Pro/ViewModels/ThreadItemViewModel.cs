@@ -92,7 +92,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
 
-            LoadData(4);
+            LoadData(1);
         }
 
         public void SetRead()
