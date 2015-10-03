@@ -33,7 +33,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public DelegateCommand RefreshRelplyCommand { get; set; }
+        public DelegateCommand RefreshReplyCommand { get; set; }
 
         public ThreadItemModel ThreadItem { get; set; }
 
@@ -72,8 +72,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             ThreadItem = _ds.GetThreadItem(threadId);
 
-            RefreshRelplyCommand = new DelegateCommand();
-            RefreshRelplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
+            RefreshReplyCommand = new DelegateCommand();
+            RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
 
             var cv = _ds.GetViewForReplyPage(threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
@@ -89,8 +89,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _afterLoad = afterLoad;
             _ds = new DataService();
 
-            RefreshRelplyCommand = new DelegateCommand();
-            RefreshRelplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
+            RefreshReplyCommand = new DelegateCommand();
+            RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
 
             LoadData();
         }
