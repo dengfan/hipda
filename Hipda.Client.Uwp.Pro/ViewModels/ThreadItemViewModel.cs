@@ -49,9 +49,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private void LoadData()
+        private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(ThreadItem.ThreadId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -63,7 +63,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = threadItem;
         }
 
-        public ThreadItemViewModel(int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
+        public ThreadItemViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
         {
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
@@ -75,7 +75,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
 
-            var cv = _ds.GetViewForReplyPage(threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -92,7 +92,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
 
-            LoadData();
+            LoadData(4);
         }
 
         public void SetRead()
@@ -107,7 +107,20 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _replyListView.ItemsSource = null;
             _ds.ClearReplyData(ThreadItem.ThreadId);
 
-            LoadData();
+            LoadData(1);
+            _replyListView.ItemsSource = ReplyItemCollection;
+        }
+
+        public void RefreshReplyDataFromPrevPage()
+        {
+            // 先获取当前数据中已存在的最小页码
+            int minPageNo = _ds.GetReplyMinPageNoInLoadedData(ThreadItem.ThreadId);
+            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
+
+            _replyListView.ItemsSource = null;
+            _ds.ClearReplyData(ThreadItem.ThreadId);
+
+            LoadData(startPageNo);
             _replyListView.ItemsSource = ReplyItemCollection;
         }
     }

@@ -187,11 +187,11 @@ namespace Hipda.Client.Uwp.Pro.Services
             return threadItemViewModel;
         }
 
-        public ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad)
+        public ICollectionView GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ThreadItemViewModel>(
-                1,
+                startPageNo,
                 async pageNo =>
                 {
                     // 加载分页数据，并写入静态类中
@@ -214,6 +214,11 @@ namespace Hipda.Client.Uwp.Pro.Services
         public int GetThreadMaxPageNo()
         {
             return _threadMaxPageNo;
+        }
+
+        public int GetThreadMinPageNoInLoadedData()
+        {
+            return _threadData.Min(t => t.PageNo);
         }
 
         public void ClearThreadData(int forumId)
@@ -412,11 +417,11 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _replyData.Single(t => t.ThreadId == threadId).Replies[index];
         }
 
-        public ICollectionView GetViewForReplyPage(int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
-                1,
+                startPageNo,
                 async pageNo =>
                 {
                     // 加载分页数据，并写入静态类中
@@ -439,6 +444,12 @@ namespace Hipda.Client.Uwp.Pro.Services
         public int GetReplyMaxPageNo()
         {
             return _replyMaxPageNo;
+        }
+
+        public int GetReplyMinPageNoInLoadedData(int threadId)
+        {
+            var data = _replyData.Single(d => d.ThreadId == threadId);
+            return data.Replies.Min(r => r.PageNo);
         }
 
         public void ClearReplyData(int threadId)

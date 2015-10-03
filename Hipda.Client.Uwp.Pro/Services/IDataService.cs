@@ -13,9 +13,11 @@ namespace Hipda.Client.Uwp.Pro.Services
     public interface IDataService
     {
         #region thread
-        ICollectionView GetViewForThreadPage(int forumId, Action beforeLoad, Action afterLoad);
+        ICollectionView GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad);
 
         int GetThreadMaxPageNo();
+
+        int GetThreadMinPageNoInLoadedData();
 
         void ClearThreadData(int forumId);
 
@@ -27,9 +29,11 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region reply
-        ICollectionView GetViewForReplyPage(int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad);
+        ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad);
 
         int GetReplyMaxPageNo();
+
+        int GetReplyMinPageNoInLoadedData(int threadId);
 
         void ClearReplyData(int threadId);
         #endregion

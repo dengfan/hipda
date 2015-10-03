@@ -47,7 +47,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     RightWrap.DataContext = null;
 
-                    _lastSelectedItem = new ThreadItemViewModel(threadId, threadAuthorUserId, ReplyListView,
+                    _lastSelectedItem = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView,
                         () =>
                         {
                             rightProgress.IsActive = true;
@@ -71,6 +71,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     int fid = Convert.ToInt32(param);
 
                     _threadAndReplyViewModel = new ThreadAndReplyViewModel(
+                        1,
                         fid,
                         ThreadListView,
                         () => {
@@ -161,12 +162,12 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void leftPr_RefreshInvoked(DependencyObject sender, object args)
         {
-            //_threadAndReplyViewModel.RefreshThreadCommand;
+            _threadAndReplyViewModel.RefreshThreadDataFromPrevPage();
         }
 
         private void rightPr_RefreshInvoked(DependencyObject sender, object args)
         {
-
+            _lastSelectedItem.RefreshReplyDataFromPrevPage();
         }
     }
 }

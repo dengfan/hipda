@@ -36,16 +36,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private void LoadData()
+        private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForThreadPage(_forumId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForThreadPage(pageNo, _forumId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ThreadItemCollection = cv;
             }
         }
 
-        public ThreadAndReplyViewModel(int forumId, ListView threadListView, Action beforeLoad, Action afterLoad)
+        public ThreadAndReplyViewModel(int pageNo, int forumId, ListView threadListView, Action beforeLoad, Action afterLoad)
         {
             _forumId = forumId;
             _threadListView = threadListView;
@@ -56,7 +56,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshThreadCommand = new DelegateCommand();
             RefreshThreadCommand.ExecuteAction = new Action<object>(RefreshThreadExecute);
 
-            LoadData();
+            LoadData(pageNo);
         }
 
         private void RefreshThreadExecute(object parameter)
@@ -64,14 +64,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _threadListView.ItemsSource = null;
             _ds.ClearThreadData(_forumId);
 
-            LoadData();
+            LoadData(1);
             _threadListView.ItemsSource = ThreadItemCollection;
         }
 
-        public void LoadPrevPage()
+        public void RefreshThreadDataFromPrevPage()
         {
             // 先获取当前数据中已存在的最小页码
+            int minPageNo = _ds.GetThreadMinPageNoInLoadedData();
+            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
 
+            _threadListView.ItemsSource = null;
+            _ds.ClearThreadData(_forumId);
+
+            LoadData(startPageNo);
+            _threadListView.ItemsSource = ThreadItemCollection;
         }
     }
 }

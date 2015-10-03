@@ -103,6 +103,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 FindName("RightWrap");
 
                 _replyViewModel = new ReplyViewModel(
+                    1,
                     _threadId,
                     _threadAuthorUserId,
                     ReplyListView,
