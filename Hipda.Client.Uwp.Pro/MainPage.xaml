@@ -142,6 +142,17 @@
                             <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                        <SymbolIcon Symbol="Tag" Foreground="White" />
+                                        <TextBlock Text="我的回复"
+                                           Margin="24,0,0,0"
+                                           Foreground="White"
+                                           VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                                <Button.Content>
+                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <SymbolIcon Symbol="Zoom" Foreground="White" />
                                         <TextBlock Text="搜索贴子"
                                            Margin="24,0,0,0"
