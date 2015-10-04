@@ -70,7 +70,6 @@
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1366" />
