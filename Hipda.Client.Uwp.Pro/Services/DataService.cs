@@ -28,6 +28,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         private static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
         private static List<ThreadItemForMyThreadsModel> _threadDataForMyThreads = new List<ThreadItemForMyThreadsModel>();
         private static List<ThreadItemForMyPostsModel> _threadDataForMyPosts = new List<ThreadItemForMyPostsModel>();
+
         private static int _threadMaxPageNo = 1;
         private static int _threadMaxPageNoForMyThreads = 1;
         private static int _threadMaxPageNoForMyPosts = 1;
@@ -172,7 +173,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/my.php?item=threads&_={0}", DateTime.Now.Ticks.ToString("x"));
+            string url = string.Format("http://www.hi-pda.com/forum/my.php?item=threads&page={0}&_={1}", pageNo, DateTime.Now.Ticks.ToString("x"));
             string htmlContent = await _httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
@@ -194,7 +195,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
                 nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
                 string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
-                _threadMaxPageNo = Convert.ToInt32(lastPageNodeValue);
+                _threadMaxPageNoForMyThreads = Convert.ToInt32(lastPageNodeValue);
             }
 
             // 如果置顶贴数过多，只取非置顶贴的话，第一页数据项过少，会导致不会自动触发加载下一页数据
@@ -334,7 +335,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 },
                 () =>
                 {
-                    return GetThreadMaxPageNo();
+                    return GetThreadMaxPageNoForMyThreads();
                 });
 
             return cvs.View;
@@ -343,6 +344,11 @@ namespace Hipda.Client.Uwp.Pro.Services
         public int GetThreadMaxPageNo()
         {
             return _threadMaxPageNo;
+        }
+
+        public int GetThreadMaxPageNoForMyThreads()
+        {
+            return _threadMaxPageNoForMyThreads;
         }
 
         public int GetThreadMinPageNoInLoadedData()
