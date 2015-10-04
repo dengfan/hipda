@@ -14,7 +14,7 @@ using Windows.UI;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadItemViewModel : ThreadItemViewModelBase
+    public class ThreadItemForMyThreadsViewModel : ThreadItemViewModelBase
     {
         private ListView _replyListView { get; set; }
         private Action _beforeLoad { get; set; }
@@ -35,7 +35,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand RefreshReplyCommand { get; set; }
 
-        public ThreadItemModel ThreadItem { get; set; }
+        public ThreadItemForMyThreadsModel ThreadItem { get; set; }
 
         private ICollectionView _replyItemCollection;
 
@@ -51,28 +51,28 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
             }
         }
 
-        public ThreadItemViewModel(ThreadItemModel threadItem)
+        public ThreadItemForMyThreadsViewModel(ThreadItemForMyThreadsModel threadItem)
         {
-            ThreadDataType = ThreadDataType.Normal;
+            ThreadDataType = ThreadDataType.MyThreads;
             ThreadItem = threadItem;
         }
 
-        public ThreadItemViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
+        public ThreadItemForMyThreadsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
         {
-            ThreadDataType = ThreadDataType.Normal;
+            ThreadDataType = ThreadDataType.MyThreads;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _ds = new DataService();
 
-            ThreadItem = _ds.GetThreadItem(threadId);
+            ThreadItem = _ds.GetThreadItemForMyThreads(threadId);
 
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);

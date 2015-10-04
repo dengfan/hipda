@@ -15,6 +15,8 @@ namespace Hipda.Client.Uwp.Pro.Services
         #region thread
         ICollectionView GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad);
 
+        ICollectionView GetViewForThreadPageForMyThreads(int startPageNo, Action beforeLoad, Action afterLoad);
+
         int GetThreadMaxPageNo();
 
         int GetThreadMinPageNoInLoadedData();

@@ -39,7 +39,76 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 string param = e.Parameter.ToString();
 
-                if (param.Contains(",")) // 表示要加载指定的回复列表页
+                if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
+                {
+                    int fid = Convert.ToInt32(param.Substring(4));
+
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(
+                        1,
+                        fid,
+                        ThreadListView,
+                        () => {
+                            leftProgress.IsActive = true;
+                            leftProgress.Visibility = Visibility.Visible;
+                            ThreadRefreshButton.IsEnabled = false;
+                            ReplyRefreshButton.IsEnabled = false;
+                        },
+                        () => {
+                            leftProgress.IsActive = false;
+                            leftProgress.Visibility = Visibility.Collapsed;
+                            ThreadRefreshButton.IsEnabled = true;
+                            ReplyRefreshButton.IsEnabled = true;
+                        });
+
+                    DataContext = _threadAndReplyViewModel;
+                }
+                else if (param.StartsWith("item="))
+                {
+                    string itemType = param.Substring(5);
+                    if (itemType.Equals("threads"))
+                    {
+                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(
+                        1,
+                        itemType,
+                        ThreadListView,
+                        () => {
+                            leftProgress.IsActive = true;
+                            leftProgress.Visibility = Visibility.Visible;
+                            ThreadRefreshButton.IsEnabled = false;
+                            ReplyRefreshButton.IsEnabled = false;
+                        },
+                        () => {
+                            leftProgress.IsActive = false;
+                            leftProgress.Visibility = Visibility.Collapsed;
+                            ThreadRefreshButton.IsEnabled = true;
+                            ReplyRefreshButton.IsEnabled = true;
+                        });
+
+                        DataContext = _threadAndReplyViewModel;
+                    }
+                    else if (itemType.Equals("posts"))
+                    {
+                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(
+                        1,
+                        itemType,
+                        ThreadListView,
+                        () => {
+                            leftProgress.IsActive = true;
+                            leftProgress.Visibility = Visibility.Visible;
+                            ThreadRefreshButton.IsEnabled = false;
+                            ReplyRefreshButton.IsEnabled = false;
+                        },
+                        () => {
+                            leftProgress.IsActive = false;
+                            leftProgress.Visibility = Visibility.Collapsed;
+                            ThreadRefreshButton.IsEnabled = true;
+                            ReplyRefreshButton.IsEnabled = true;
+                        });
+
+                        DataContext = _threadAndReplyViewModel;
+                    }
+                }
+                else if (param.Contains(",")) // 表示要加载指定的回复列表页
                 {
                     string[] p = param.Split(',');
                     int threadId = Convert.ToInt32(p[0]);
@@ -65,29 +134,6 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     RightWrap.DataContext = _lastSelectedItem;
                     ReplyListView.ItemsSource = _lastSelectedItem.ReplyItemCollection;
-                }
-                else // 表示要加载指定的贴子列表页
-                {
-                    int fid = Convert.ToInt32(param);
-
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(
-                        1,
-                        fid,
-                        ThreadListView,
-                        () => {
-                            leftProgress.IsActive = true;
-                            leftProgress.Visibility = Visibility.Visible;
-                            ThreadRefreshButton.IsEnabled = false;
-                            ReplyRefreshButton.IsEnabled = false;
-                        },
-                        () => {
-                            leftProgress.IsActive = false;
-                            leftProgress.Visibility = Visibility.Collapsed;
-                            ThreadRefreshButton.IsEnabled = true;
-                            ReplyRefreshButton.IsEnabled = true;
-                        });
-
-                    DataContext = _threadAndReplyViewModel;
                 }
             }
 

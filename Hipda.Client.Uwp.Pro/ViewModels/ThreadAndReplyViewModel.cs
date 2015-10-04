@@ -45,6 +45,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        private void LoadDataForMyThreads(int pageNo)
+        {
+            var cv = _ds.GetViewForThreadPageForMyThreads(pageNo, _beforeLoad, _afterLoad);
+            if (cv != null)
+            {
+                ThreadItemCollection = cv;
+            }
+        }
+
         public ThreadAndReplyViewModel(int pageNo, int forumId, ListView threadListView, Action beforeLoad, Action afterLoad)
         {
             _forumId = forumId;
@@ -54,18 +63,34 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds = new DataService();
 
             RefreshThreadCommand = new DelegateCommand();
-            RefreshThreadCommand.ExecuteAction = new Action<object>(RefreshThreadExecute);
+            RefreshThreadCommand.ExecuteAction = (p) => {
+                _threadListView.ItemsSource = null;
+                _ds.ClearThreadData(_forumId);
+
+                LoadData(1);
+                _threadListView.ItemsSource = ThreadItemCollection;
+            };
 
             LoadData(pageNo);
         }
 
-        private void RefreshThreadExecute(object parameter)
+        public ThreadAndReplyViewModel(int pageNo, string itemType, ListView threadListView, Action beforeLoad, Action afterLoad)
         {
-            _threadListView.ItemsSource = null;
-            _ds.ClearThreadData(_forumId);
+            _threadListView = threadListView;
+            _beforeLoad = beforeLoad;
+            _afterLoad = afterLoad;
+            _ds = new DataService();
 
-            LoadData(1);
-            _threadListView.ItemsSource = ThreadItemCollection;
+            if (itemType.Equals("threads"))
+            {
+                RefreshThreadCommand = new DelegateCommand();
+                RefreshThreadCommand.ExecuteAction = (p) => {
+
+                };
+
+                LoadDataForMyThreads(pageNo);
+            }
+            
         }
 
         public void RefreshThreadDataFromPrevPage()

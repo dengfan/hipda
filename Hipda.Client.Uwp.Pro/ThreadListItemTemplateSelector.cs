@@ -11,22 +11,36 @@ namespace Hipda.Client.Uwp.Pro
 {
     public class ThreadListItemTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate TopTemplate { get; set; }
-        public DataTemplate PageTemplate { get; set; }
         public DataTemplate NormalTemplate { get; set; }
+        public DataTemplate NormalTemplate2 { get; set; }
+
+        public DataTemplate MyThreadsTemplate { get; set; }
+        public DataTemplate MyPostsTemplate { get; set; }
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
-            ThreadItemViewModel data = (ThreadItemViewModel)item;
-
-            //if (data.ThreadItem.Index % 75 == 0)
-            //{
-            //    return PageTemplate;
-            //}
-            //else
-            //{
-                return NormalTemplate;
-            //}
+            ThreadItemViewModelBase b = (ThreadItemViewModelBase)item;
+            switch (b.ThreadDataType)
+            {
+                case ThreadDataType.Normal:
+                    //var data1 = (ThreadItemViewModel)item;
+                    //if (data1.ThreadItem.Index % 75 == 0)
+                    //{
+                    //    return PageTemplate;
+                    //}
+                    //else
+                    //{
+                    return NormalTemplate;
+                    //}
+                case ThreadDataType.MyThreads:
+                    //var data2 = (ThreadItemViewModel)item;
+                    return MyThreadsTemplate;
+                case ThreadDataType.MyPosts:
+                    //var data3 = (ThreadItemViewModel)item;
+                    return MyPostsTemplate;
+                default:
+                    return NormalTemplate;
+            }
         }
     }
 }

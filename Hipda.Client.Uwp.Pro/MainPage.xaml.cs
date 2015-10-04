@@ -43,8 +43,8 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnNavigatedTo(e);
 
-            int fid = (int)e.Parameter;
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), fid);
+            string param = string.Format("fid={0}", e.Parameter);
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
         }
 
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
@@ -84,20 +84,27 @@ namespace Hipda.Client.Uwp.Pro
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            int fid = 2;
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), fid);
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=2");
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            int fid = 6;
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), fid);
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=6");
         }
 
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
-            int fid = 57;
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), fid);
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=57");
+        }
+
+        private void Button4_Click(object sender, RoutedEventArgs e)
+        {
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=threads");
+        }
+
+        private void Button5_Click(object sender, RoutedEventArgs e)
+        {
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=posts");
         }
     }
 }

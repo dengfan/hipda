@@ -12,10 +12,11 @@
                                      Left2Template="{StaticResource ReplyListLeft2ItemTemplate}" 
                                      RightTemplate="{StaticResource ReplyListRightItemTemplate}" />
 
-        <local:ThreadListItemTemplateSelector x:Key="threadListItemTemplateSelector" 
-                                     TopTemplate="{StaticResource ThreadListTopItemTemplate}" 
-                                     PageTemplate="{StaticResource ThreadListPageItemTemplate}" 
-                                     NormalTemplate="{StaticResource ThreadListNormalItemTemplate}" />
+        <local:ThreadListItemTemplateSelector x:Key="threadListItemTemplateSelector"
+                                              NormalTemplate="{StaticResource ThreadListNormalItemTemplate}" 
+                                              NormalTemplate2="{StaticResource ThreadListNormalItemTemplate2}" 
+                                              MyThreadsTemplate="{StaticResource ThreadListMyThreadsItemTemplate}"
+                                              MyPostsTemplate="{StaticResource ThreadListMyPostsItemTemplate}"/>
 
         <Style x:Key="AppBarButtonStyle" TargetType="AppBarButton">
             <Setter Property="Foreground" Value="White"/>
@@ -304,7 +305,52 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="ThreadListTopItemTemplate">
+        <DataTemplate x:Name="ThreadListNormalItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看作者发贴记录" />
+                        <MenuFlyoutItem x:Name="menuItemBlockAuthor" Text="屏蔽作者" />
+                        <MenuFlyoutItem x:Name="menuItemBlockThread" Text="屏蔽此主题" />
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+
+                <Border Width="3" Background="{Binding StatusColor}"/>
+
+                <Border Margin="8,8,8,8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid CornerRadius="20">
+                        <Grid.Background>
+                            <ImageBrush Stretch="UniformToFill">
+                                <ImageBrush.ImageSource>
+                                    <BitmapImage DecodePixelWidth="40" UriSource="{Binding ThreadItem.AvatarUrl}"/>
+                                </ImageBrush.ImageSource>
+                            </ImageBrush>
+                        </Grid.Background>
+                    </Grid>
+                </Border>
+
+                <StackPanel Margin="0,8,0,0">
+                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                                        <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
+                                        <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
+                                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
+                                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
+                    </TextBlock>
+
+                    <TextBlock Margin="0,4,0,0">
+                                        <ToolTipService.ToolTip>
+                                            <ToolTip Content="{Binding ThreadItem.TitleForToolTip}"></ToolTip>
+                                        </ToolTipService.ToolTip>
+                                        <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
+                                        <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
+                                        <Run Text="{Binding ThreadItem.Title}" />
+                                        <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Name="ThreadListNormalItemTemplate2">
             <StackPanel Orientation="Horizontal">
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
@@ -349,43 +395,27 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Name="ThreadListPageItemTemplate">
-            <StackPanel>
-                <StackPanel Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-                    <TextBlock Text="{Binding ThreadItem.PageNo}" HorizontalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <FlyoutBase.AttachedFlyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看作者发贴记录" />
-                            <MenuFlyoutItem x:Name="menuItemBlockAuthor" Text="屏蔽作者" />
-                            <MenuFlyoutItem x:Name="menuItemBlockThread" Text="屏蔽此主题" />
-                        </MenuFlyout>
-                    </FlyoutBase.AttachedFlyout>
+        <DataTemplate x:Name="ThreadListMyThreadsItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看作者发贴记录" />
+                        <MenuFlyoutItem x:Name="menuItemBlockAuthor" Text="屏蔽作者" />
+                        <MenuFlyoutItem x:Name="menuItemBlockThread" Text="屏蔽此主题" />
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
 
-                    <Border Width="3" Background="{Binding StatusColor}"/>
+                <Border Width="3" Background="{Binding StatusColor}"/>
 
-                    <Border Margin="8,8,8,8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Grid CornerRadius="20">
-                            <Grid.Background>
-                                <ImageBrush Stretch="UniformToFill">
-                                    <ImageBrush.ImageSource>
-                                        <BitmapImage DecodePixelWidth="40" UriSource="{Binding ThreadItem.AvatarUrl}"/>
-                                    </ImageBrush.ImageSource>
-                                </ImageBrush>
-                            </Grid.Background>
-                        </Grid>
-                    </Border>
-
-                    <StackPanel Margin="0,8,0,0">
-                        <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                <StackPanel Margin="8">
+                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                                         <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
                                         <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                                         <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
                                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
-                        </TextBlock>
+                    </TextBlock>
 
-                        <TextBlock Margin="0,4,0,0">
+                    <TextBlock Margin="0,4,0,0">
                                         <ToolTipService.ToolTip>
                                             <ToolTip Content="{Binding ThreadItem.TitleForToolTip}"></ToolTip>
                                         </ToolTipService.ToolTip>
@@ -393,13 +423,12 @@
                                         <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
                                         <Run Text="{Binding ThreadItem.Title}" />
                                         <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                        </TextBlock>
-                    </StackPanel>
+                    </TextBlock>
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Name="ThreadListNormalItemTemplate">
+        <DataTemplate x:Name="ThreadListMyPostsItemTemplate">
             <StackPanel Orientation="Horizontal">
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
