@@ -69,7 +69,8 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1366" />
@@ -77,7 +78,7 @@
                 </VisualState>
                 <VisualState>
                     <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="720" />
@@ -119,7 +120,7 @@
             <ImageBrush ImageSource="Assets/bg.jpg" />
         </Grid.Background>-->
 
-        <SplitView x:Name="MainSplitView" PaneBackground="#2B2B2B" OpenPaneLength="220">
+        <SplitView x:Name="MainSplitView" PaneBackground="{ThemeResource SystemControlBackgroundAccentBrush}" OpenPaneLength="220">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>

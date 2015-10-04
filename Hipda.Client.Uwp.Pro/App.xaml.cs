@@ -96,14 +96,14 @@ namespace Hipda.Client.Uwp.Pro
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
 
-            var c = ((SolidColorBrush)Resources["SystemControlBackgroundAccentBrush"]).Color;
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.BackgroundColor = c;
-            titleBar.InactiveBackgroundColor = c;
-            titleBar.ButtonBackgroundColor = c;
-            titleBar.ButtonInactiveBackgroundColor = c;
-            titleBar.ForegroundColor = Colors.White;
-            titleBar.ButtonForegroundColor = Colors.White;
+            //var c = ((SolidColorBrush)Resources["SystemControlBackgroundAccentBrush"]).Color;
+            //var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            //titleBar.BackgroundColor = c;
+            //titleBar.InactiveBackgroundColor = c;
+            //titleBar.ButtonBackgroundColor = c;
+            //titleBar.ButtonInactiveBackgroundColor = c;
+            //titleBar.ForegroundColor = Colors.White;
+            //titleBar.ButtonForegroundColor = Colors.White;
         }
 
         /// <summary>

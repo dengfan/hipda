@@ -57,10 +57,10 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Foreground="White">
-                <AppBarButton Icon="Add" Label="发表新贴" Style="{StaticResource AppBarButtonStyle}"/>
-                <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}" Style="{StaticResource AppBarButtonStyle}"/>
-                <AppBarToggleButton Icon="Sort" Label="按发布时间倒序排列" Style="{StaticResource AppBarButtonStyle2}"/>
+            <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                <AppBarButton Icon="Add" Label="发表新贴"/>
+                <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
+                <AppBarToggleButton Icon="Sort" Label="按发布时间倒序排列"/>
                 <CommandBar.SecondaryCommands>
                     <AppBarButton Icon="Globe" Label="在浏览器中打开"/>
                 </CommandBar.SecondaryCommands>
@@ -107,10 +107,10 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Foreground="White">
-                <AppBarButton Icon="Edit" Label="评论" Style="{StaticResource AppBarButtonStyle}"/>
-                <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}" Style="{StaticResource AppBarButtonStyle}"/>
-                <AppBarToggleButton Icon="Sort" Label="倒序看贴" Style="{StaticResource AppBarButtonStyle2}"/>
+            <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                <AppBarButton Icon="Edit" Label="评论"/>
+                <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
+                <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
                 <CommandBar.SecondaryCommands>
                     <AppBarButton Icon="Globe" Label="在浏览器中打开"/>
                 </CommandBar.SecondaryCommands>
