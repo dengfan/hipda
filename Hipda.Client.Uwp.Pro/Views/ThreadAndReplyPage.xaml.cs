@@ -164,36 +164,46 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            _lastSelectedItem = (ThreadItemViewModel)e.ClickedItem;
-
-            if (AdaptiveStates.CurrentState == NarrowState)
+            var b = e.ClickedItem as ThreadItemViewModelBase;
+            switch (b.ThreadDataType)
             {
-                _lastSelectedItem.SetRead();
-                string p = string.Format("{0},{1}", _lastSelectedItem.ThreadItem.ThreadId, _lastSelectedItem.ThreadItem.AuthorUserId);
-                Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
-            }
-            else
-            {
-                RightWrap.DataContext = null;
+                case ThreadDataType.MyThreads:
+                    break;
+                case ThreadDataType.MyPosts:
+                    break;
+                default:
+                    _lastSelectedItem = (ThreadItemViewModel)e.ClickedItem;
 
-                _lastSelectedItem.SetRead();
-                _lastSelectedItem.SelectThreadItem(
-                    ReplyListView,
-                    () => {
-                        rightProgress.IsActive = true;
-                        rightProgress.Visibility = Visibility.Visible;
-                        ThreadRefreshButton.IsEnabled = false;
-                        ReplyRefreshButton.IsEnabled = false;
-                    },
-                    () => {
-                        rightProgress.IsActive = false;
-                        rightProgress.Visibility = Visibility.Collapsed;
-                        ThreadRefreshButton.IsEnabled = true;
-                        ReplyRefreshButton.IsEnabled = true;
-                    });
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        _lastSelectedItem.SetRead();
+                        string p = string.Format("{0},{1}", _lastSelectedItem.ThreadItem.ThreadId, _lastSelectedItem.ThreadItem.AuthorUserId);
+                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        RightWrap.DataContext = null;
 
-                RightWrap.DataContext = _lastSelectedItem;
-                ReplyListView.ItemsSource = _lastSelectedItem.ReplyItemCollection;
+                        _lastSelectedItem.SetRead();
+                        _lastSelectedItem.SelectThreadItem(
+                            ReplyListView,
+                            () => {
+                                rightProgress.IsActive = true;
+                                rightProgress.Visibility = Visibility.Visible;
+                                ThreadRefreshButton.IsEnabled = false;
+                                ReplyRefreshButton.IsEnabled = false;
+                            },
+                            () => {
+                                rightProgress.IsActive = false;
+                                rightProgress.Visibility = Visibility.Collapsed;
+                                ThreadRefreshButton.IsEnabled = true;
+                                ReplyRefreshButton.IsEnabled = true;
+                            });
+
+                        RightWrap.DataContext = _lastSelectedItem;
+                        ReplyListView.ItemsSource = _lastSelectedItem.ReplyItemCollection;
+                    }
+                    break;
             }
         }
 

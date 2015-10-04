@@ -22,16 +22,6 @@ namespace Hipda.Client.Uwp.Pro
             ThreadItemViewModelBase b = (ThreadItemViewModelBase)item;
             switch (b.ThreadDataType)
             {
-                case ThreadDataType.Normal:
-                    //var data1 = (ThreadItemViewModel)item;
-                    //if (data1.ThreadItem.Index % 75 == 0)
-                    //{
-                    //    return PageTemplate;
-                    //}
-                    //else
-                    //{
-                    return NormalTemplate;
-                    //}
                 case ThreadDataType.MyThreads:
                     //var data2 = (ThreadItemViewModel)item;
                     return MyThreadsTemplate;
