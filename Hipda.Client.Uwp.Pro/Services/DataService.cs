@@ -286,12 +286,12 @@ namespace Hipda.Client.Uwp.Pro.Services
             for (int j = 0; j < _threadPageSize * 2; j += 2)
             {
                 var tr = rows[j];
-                var tr2 = rows[j += 1];
+                var tr2 = rows[j + 1];
 
                 var th = tr.Descendants().FirstOrDefault(n => n.Name.Equals("th"));
                 var a = th.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
                 string threadName = a.InnerText.Trim();
-                string[] pramaStr = a.GetAttributeValue("href", "").Substring("redirect.php?goto=findpost&pid=".Length).Replace("&ptid=", ",").Split(',');
+                string[] pramaStr = a.GetAttributeValue("href", "").Substring("redirect.php?goto=findpost&amp;pid=".Length).Replace("&amp;ptid=", ",").Split(',');
                 int threadId = Convert.ToInt32(pramaStr[1]);
                 int postId = Convert.ToInt32(pramaStr[0]);
 
@@ -457,6 +457,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             return cvs.View;
         }
+
 
         public int GetThreadMaxPageNo()
         {

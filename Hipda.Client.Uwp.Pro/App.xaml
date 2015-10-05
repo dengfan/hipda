@@ -352,16 +352,16 @@
             <Grid>
                 <StackPanel Margin="8,4,0,4">
                     <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                                        <Run Text="{Binding ThreadItem.ForumName}" />
+                        <Run Text="{Binding ThreadItem.ForumName}" />
                     </TextBlock>
 
                     <TextBlock Margin="2" TextWrapping="Wrap">
-                                        <Run Text="{Binding ThreadItem.Title}" />
+                        <Run Text="{Binding ThreadItem.Title}" />
                     </TextBlock>
 
                     <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
-                                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
-                                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
+                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
+                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
                 </StackPanel>
             </Grid>
@@ -371,18 +371,18 @@
             <Grid>
                 <StackPanel Margin="8,4,0,4">
                     <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                                        <Run Text="{Binding ThreadItem.ForumName}" />
+                        <Run Text="{Binding ThreadItem.ForumName}" />
                     </TextBlock>
 
                     <TextBlock Margin="2" TextWrapping="Wrap">
                         <Run Text="{Binding ThreadItem.Title}" />
                         <LineBreak/>
-                        <Run Text="{Binding ThreadItem.LastReplyContent}" />
+                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="12" />
+                        <Run Text="{Binding ThreadItem.LastReplyContent}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="12" />
                     </TextBlock>
 
                     <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
-                                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
-                                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
+                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
                 </StackPanel>
             </Grid>
