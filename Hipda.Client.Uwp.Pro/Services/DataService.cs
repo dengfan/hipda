@@ -95,8 +95,10 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var tdNums = tr.ChildNodes[9];
                 var tdLastPost = tr.ChildNodes[11];
 
+                bool isTop = item.GetAttributeValue("id", "").StartsWith("stickthread_");
+
                 int threadId = Convert.ToInt32(span.Attributes[0].Value.Substring("thread_".Length));
-                string title = a.InnerText;
+                string title = a.InnerText.Trim();
 
                 int attachType = -1;
                 var attachIconNode = th.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("attach"));
@@ -153,7 +155,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
-                var threadItem = new ThreadItemModel(i, forumId, threadId, pageNo, title, attachType, replyNum, viewNum, authorName, authorUserId, authorCreateTime, lastPostAuthorName, lastPostTime);
+                var threadItem = new ThreadItemModel(i, forumId, threadId, pageNo, title, attachType, replyNum, viewNum, isTop, authorName, authorUserId, authorCreateTime, lastPostAuthorName, lastPostTime);
                 _threadData.Add(threadItem);
 
                 i++;

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Text;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ThreadItemModel
     {
-        public ThreadItemModel(int index, int forumId, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
+        public ThreadItemModel(int index, int forumId, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, bool isTop, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
         {
             this.Index = index;
             this.ForumId = forumId;
@@ -18,6 +19,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.AttachFileType = attachFileType;
             this.ReplyCount = replyCount;
             this.ViewCount = viewCount;
+            this.IsTop = isTop;
             this.AuthorUsername = authorUsername;
             this.AuthorUserId = authorUserId;
             this.AuthorCreateTime = authorCreateTime;
@@ -38,6 +40,8 @@ namespace Hipda.Client.Uwp.Pro.Models
         public string ReplyCount { get; private set; }
 
         public string ViewCount { get; private set; }
+
+        public bool IsTop { get; private set; }
 
         public int AttachFileType { get; private set; }
 
@@ -108,6 +112,20 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
+        public string TopFontIcon
+        {
+            get
+            {
+                return IsTop ? "\uE11C" : string.Empty;
+            }
+        }
 
+        public FontWeight TitleFontWeight
+        {
+            get
+            {
+                return IsTop ? FontWeights.Bold : FontWeights.Normal;
+            }
+        }
     }
 }
