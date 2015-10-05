@@ -298,7 +298,7 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ThreadListNormalItemTemplate">
-            <StackPanel Orientation="Horizontal" BorderThickness="0,0,0,1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+            <StackPanel Orientation="Horizontal">
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看作者发贴记录" />
