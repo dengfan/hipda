@@ -29,9 +29,9 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public int ForumId { get; private set; }
 
-        public int ThreadId { get; private set; }
-
         public int PageNo { get; private set; }
+
+        public int ThreadId { get; private set; }
 
         public string Title { get; private set; }
 
@@ -92,12 +92,22 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
-        public string TitleForToolTip
+        public string ImageFontIcon
         {
             get
             {
-                return string.Format("{0} {1}", Title, ViewInfo);
+                return AttachFileType == 1 ? "\uE187" : string.Empty;
             }
         }
+
+        public string FileFontIcon
+        {
+            get
+            {
+                return AttachFileType == 2 ? "\uE16C" : string.Empty;
+            }
+        }
+
+
     }
 }

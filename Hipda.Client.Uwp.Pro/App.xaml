@@ -333,9 +333,9 @@
                                         <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                     </TextBlock>
 
-                    <TextBlock Margin="4" TextWrapping="Wrap">
-                                        <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
-                                        <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
+                    <TextBlock Margin="2" TextWrapping="Wrap">
+                                        <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
+                                        <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
                                         <Run Text="{Binding ThreadItem.Title}" />
                                         <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     </TextBlock>
