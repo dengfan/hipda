@@ -21,18 +21,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private Action _afterLoad { get; set; }
         private DataService _ds { get; set; }
 
-        private Brush _statusColor;
-
-        public Brush StatusColor
-        {
-            get { return _statusColor; }
-            set
-            {
-                _statusColor = value;
-                this.RaisePropertyChanged("StatusColor");
-            }
-        }
-
         public DelegateCommand RefreshReplyCommand { get; set; }
 
         public ThreadItemForMyThreadsModel ThreadItem { get; set; }
@@ -95,13 +83,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
 
             LoadData(1);
-        }
-
-        public void SetRead()
-        {
-            _ds = new DataService();
-            _ds.SetRead(ThreadItem.ThreadId);
-            StatusColor = new SolidColorBrush(Colors.White);
         }
 
         private void RefreshReplyExecute(object parameter)
