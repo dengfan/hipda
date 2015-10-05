@@ -12,8 +12,6 @@ namespace Hipda.Client.Uwp.Pro
     public class ThreadListItemTemplateSelector : DataTemplateSelector
     {
         public DataTemplate NormalTemplate { get; set; }
-        public DataTemplate NormalTemplate2 { get; set; }
-
         public DataTemplate MyThreadsTemplate { get; set; }
         public DataTemplate MyPostsTemplate { get; set; }
 
@@ -23,10 +21,8 @@ namespace Hipda.Client.Uwp.Pro
             switch (b.ThreadDataType)
             {
                 case ThreadDataType.MyThreads:
-                    //var data2 = (ThreadItemViewModel)item;
                     return MyThreadsTemplate;
                 case ThreadDataType.MyPosts:
-                    //var data3 = (ThreadItemViewModel)item;
                     return MyPostsTemplate;
                 default:
                     return NormalTemplate;
