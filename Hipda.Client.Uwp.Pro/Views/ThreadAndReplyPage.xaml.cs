@@ -32,6 +32,38 @@ namespace Hipda.Client.Uwp.Pro.Views
             ThreadListView.SelectedItem = _lastSelectedItem;
         }
 
+        private void LeftBeforeLoad()
+        {
+            leftProgress.IsActive = true;
+            leftProgress.Visibility = Visibility.Visible;
+            ThreadRefreshButton.IsEnabled = false;
+            ReplyRefreshButton.IsEnabled = false;
+        }
+
+        private void LeftAfterLoad()
+        {
+            leftProgress.IsActive = false;
+            leftProgress.Visibility = Visibility.Collapsed;
+            ThreadRefreshButton.IsEnabled = true;
+            ReplyRefreshButton.IsEnabled = true;
+        }
+
+        private void RightBeforeLoad()
+        {
+            rightProgress.IsActive = true;
+            rightProgress.Visibility = Visibility.Visible;
+            ThreadRefreshButton.IsEnabled = false;
+            ReplyRefreshButton.IsEnabled = false;
+        }
+
+        private void RightAfterLoad()
+        {
+            rightProgress.IsActive = false;
+            rightProgress.Visibility = Visibility.Collapsed;
+            ThreadRefreshButton.IsEnabled = true;
+            ReplyRefreshButton.IsEnabled = true;
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -43,24 +75,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
                     int fid = Convert.ToInt32(param.Substring(4));
-
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(
-                        1,
-                        fid,
-                        ThreadListView,
-                        () => {
-                            leftProgress.IsActive = true;
-                            leftProgress.Visibility = Visibility.Visible;
-                            ThreadRefreshButton.IsEnabled = false;
-                            ReplyRefreshButton.IsEnabled = false;
-                        },
-                        () => {
-                            leftProgress.IsActive = false;
-                            leftProgress.Visibility = Visibility.Collapsed;
-                            ThreadRefreshButton.IsEnabled = true;
-                            ReplyRefreshButton.IsEnabled = true;
-                        });
-
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, LeftBeforeLoad, LeftAfterLoad);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("item="))
@@ -68,44 +83,12 @@ namespace Hipda.Client.Uwp.Pro.Views
                     string itemType = param.Substring(5);
                     if (itemType.Equals("threads"))
                     {
-                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(
-                        1,
-                        itemType,
-                        ThreadListView,
-                        () => {
-                            leftProgress.IsActive = true;
-                            leftProgress.Visibility = Visibility.Visible;
-                            ThreadRefreshButton.IsEnabled = false;
-                            ReplyRefreshButton.IsEnabled = false;
-                        },
-                        () => {
-                            leftProgress.IsActive = false;
-                            leftProgress.Visibility = Visibility.Collapsed;
-                            ThreadRefreshButton.IsEnabled = true;
-                            ReplyRefreshButton.IsEnabled = true;
-                        });
-
+                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoad, LeftAfterLoad);
                         DataContext = _threadAndReplyViewModel;
                     }
                     else if (itemType.Equals("posts"))
                     {
-                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(
-                        1,
-                        itemType,
-                        ThreadListView,
-                        () => {
-                            leftProgress.IsActive = true;
-                            leftProgress.Visibility = Visibility.Visible;
-                            ThreadRefreshButton.IsEnabled = false;
-                            ReplyRefreshButton.IsEnabled = false;
-                        },
-                        () => {
-                            leftProgress.IsActive = false;
-                            leftProgress.Visibility = Visibility.Collapsed;
-                            ThreadRefreshButton.IsEnabled = true;
-                            ReplyRefreshButton.IsEnabled = true;
-                        });
-
+                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoad, LeftAfterLoad);
                         DataContext = _threadAndReplyViewModel;
                     }
                 }
@@ -121,64 +104,22 @@ namespace Hipda.Client.Uwp.Pro.Views
                     switch (itemBase.ThreadDataType)
                     {
                         case ThreadDataType.MyThreads:
-                            _lastSelectedItem = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView,
-                                () =>
-                                {
-                                    rightProgress.IsActive = true;
-                                    rightProgress.Visibility = Visibility.Visible;
-                                    ThreadRefreshButton.IsEnabled = false;
-                                    ReplyRefreshButton.IsEnabled = false;
-                                },
-                                () =>
-                                {
-                                    rightProgress.IsActive = false;
-                                    rightProgress.Visibility = Visibility.Collapsed;
-                                    ThreadRefreshButton.IsEnabled = true;
-                                    ReplyRefreshButton.IsEnabled = true;
-                                });
-
-                            RightWrap.DataContext = ((ThreadItemForMyThreadsViewModel)_lastSelectedItem);
-                            ReplyListView.ItemsSource = ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).ReplyItemCollection;
+                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoad, RightAfterLoad);
+                            _lastSelectedItem = itemForMyThreads;
+                            RightWrap.DataContext = itemForMyThreads;
+                            ReplyListView.ItemsSource = itemForMyThreads.ReplyItemCollection;
                             break;
                         case ThreadDataType.MyPosts:
-                            _lastSelectedItem = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView,
-                                () =>
-                                {
-                                    rightProgress.IsActive = true;
-                                    rightProgress.Visibility = Visibility.Visible;
-                                    ThreadRefreshButton.IsEnabled = false;
-                                    ReplyRefreshButton.IsEnabled = false;
-                                },
-                                () =>
-                                {
-                                    rightProgress.IsActive = false;
-                                    rightProgress.Visibility = Visibility.Collapsed;
-                                    ThreadRefreshButton.IsEnabled = true;
-                                    ReplyRefreshButton.IsEnabled = true;
-                                });
-
-                            RightWrap.DataContext = ((ThreadItemForMyPostsViewModel)_lastSelectedItem);
-                            ReplyListView.ItemsSource = ((ThreadItemForMyPostsViewModel)_lastSelectedItem).ReplyItemCollection;
+                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoad, RightAfterLoad);
+                            _lastSelectedItem = itemForMyPosts;
+                            RightWrap.DataContext = itemForMyPosts;
+                            ReplyListView.ItemsSource = itemForMyPosts.ReplyItemCollection;
                             break;
                         default:
-                            _lastSelectedItem = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView,
-                                () =>
-                                {
-                                    rightProgress.IsActive = true;
-                                    rightProgress.Visibility = Visibility.Visible;
-                                    ThreadRefreshButton.IsEnabled = false;
-                                    ReplyRefreshButton.IsEnabled = false;
-                                },
-                                () =>
-                                {
-                                    rightProgress.IsActive = false;
-                                    rightProgress.Visibility = Visibility.Collapsed;
-                                    ThreadRefreshButton.IsEnabled = true;
-                                    ReplyRefreshButton.IsEnabled = true;
-                                });
-
-                            RightWrap.DataContext = ((ThreadItemViewModel)_lastSelectedItem);
-                            ReplyListView.ItemsSource = ((ThreadItemViewModel)_lastSelectedItem).ReplyItemCollection;
+                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoad, RightAfterLoad);
+                            _lastSelectedItem = item;
+                            RightWrap.DataContext = item;
+                            ReplyListView.ItemsSource = item.ReplyItemCollection;
                             break;
                     }
                 }
@@ -234,9 +175,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             switch (b.ThreadDataType)
             {
                 case ThreadDataType.MyThreads:
-                    _lastSelectedItem = (ThreadItemForMyThreadsViewModel)e.ClickedItem;
-
-                    ThreadItemForMyThreadsViewModel itemForMyThreads = (ThreadItemForMyThreadsViewModel)e.ClickedItem;
+                    var itemForMyThreads = (ThreadItemForMyThreadsViewModel)e.ClickedItem;
+                    _lastSelectedItem = itemForMyThreads;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
@@ -246,32 +186,31 @@ namespace Hipda.Client.Uwp.Pro.Views
                     else
                     {
                         RightWrap.DataContext = null;
-
-                        itemForMyThreads.SelectThreadItem(
-                            ReplyListView,
-                            () => {
-                                rightProgress.IsActive = true;
-                                rightProgress.Visibility = Visibility.Visible;
-                                ThreadRefreshButton.IsEnabled = false;
-                                ReplyRefreshButton.IsEnabled = false;
-                            },
-                            () => {
-                                rightProgress.IsActive = false;
-                                rightProgress.Visibility = Visibility.Collapsed;
-                                ThreadRefreshButton.IsEnabled = true;
-                                ReplyRefreshButton.IsEnabled = true;
-                            });
-
+                        itemForMyThreads.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
                         RightWrap.DataContext = itemForMyThreads;
                         ReplyListView.ItemsSource = itemForMyThreads.ReplyItemCollection;
                     }
                     break;
                 case ThreadDataType.MyPosts:
+                    var itemForMyPosts = (ThreadItemForMyPostsViewModel)e.ClickedItem;
+                    _lastSelectedItem = itemForMyPosts;
+
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        string p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, AccountService.UserId);
+                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        RightWrap.DataContext = null;
+                        itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
+                        RightWrap.DataContext = itemForMyPosts;
+                        ReplyListView.ItemsSource = itemForMyPosts.ReplyItemCollection;
+                    }
                     break;
                 default:
-                    _lastSelectedItem = (ThreadItemViewModel)e.ClickedItem;
-
-                    ThreadItemViewModel item = (ThreadItemViewModel)e.ClickedItem;
+                    var item = (ThreadItemViewModel)e.ClickedItem;
+                    _lastSelectedItem = item;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
@@ -284,20 +223,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                         RightWrap.DataContext = null;
 
                         item.SetRead();
-                        item.SelectThreadItem(
-                            ReplyListView,
-                            () => {
-                                rightProgress.IsActive = true;
-                                rightProgress.Visibility = Visibility.Visible;
-                                ThreadRefreshButton.IsEnabled = false;
-                                ReplyRefreshButton.IsEnabled = false;
-                            },
-                            () => {
-                                rightProgress.IsActive = false;
-                                rightProgress.Visibility = Visibility.Collapsed;
-                                ThreadRefreshButton.IsEnabled = true;
-                                ReplyRefreshButton.IsEnabled = true;
-                            });
+                        item.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
 
                         RightWrap.DataContext = item;
                         ReplyListView.ItemsSource = item.ReplyItemCollection;
