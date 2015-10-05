@@ -113,7 +113,7 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="44"/>
-                    <ColumnDefinition Width="6"/>
+                    <ColumnDefinition Width="8"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
@@ -129,9 +129,9 @@
                     </Grid>
                 </Border>
 
-                <Polygon Grid.Row="0" Grid.Column="1" Margin="0 12 0 0" Points="0,6 6,12 6,0" Fill="White"/>
+                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="White" VerticalAlignment="Top"/>
 
-                <Border Grid.Row="0" Grid.Column="2" Margin="0 0 60 0" Padding="10" Background="White" HorizontalAlignment="Left" CornerRadius="12">
+                <Border Grid.Row="0" Grid.Column="2" Margin="0 0 60 0" Padding="10" Background="White" HorizontalAlignment="Left">
                     <StackPanel>
                         <TextBlock>
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
@@ -177,7 +177,7 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="44"/>
-                    <ColumnDefinition Width="6"/>
+                    <ColumnDefinition Width="8"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
@@ -193,7 +193,7 @@
                     </Grid>
                 </Border>
 
-                <Polygon Grid.Row="0" Grid.Column="1" Margin="0 12 0 0" Points="0,6 6,12 6,0" Fill="{ThemeResource SystemControlHighlightListAccentLowBrush}"/>
+                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlHighlightListAccentLowBrush}" VerticalAlignment="Top"/>
 
                 <Border Grid.Row="0" Grid.Column="2" Margin="0 0 60 0" Padding="10" Background="White" HorizontalAlignment="Left" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}">
                     <StackPanel>
@@ -242,7 +242,7 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="6"/>
+                    <ColumnDefinition Width="8"/>
                     <ColumnDefinition Width="44"/>
                 </Grid.ColumnDefinitions>
 
@@ -258,7 +258,7 @@
                     </Grid>
                 </Border>
 
-                <Polygon Grid.Row="0" Grid.Column="1" Margin="0 12 0 0" Points="0,0 6,6 0,12" Fill="{ThemeResource SystemControlHighlightListAccentLowBrush}"/>
+                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlHighlightListAccentLowBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
 
                 <Border Grid.Row="0" Grid.Column="0" Margin="60 0 0 0" Padding="10" Background="White" BorderThickness="2" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}" HorizontalAlignment="Right" CornerRadius="12">
                     <StackPanel>
@@ -298,7 +298,13 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ThreadListNormalItemTemplate">
-            <StackPanel Orientation="Horizontal">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4"/>
+                    <ColumnDefinition Width="56"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看作者发贴记录" />
@@ -307,9 +313,9 @@
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
 
-                <Border Margin="1,0,0,0" Width="3" Background="{Binding StatusColor}"/>
+                <Border Grid.Column="0" Margin="1,0,0,0" Width="3" Background="{Binding StatusColor}"/>
 
-                <Border Margin="8,8,8,8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Border Grid.Column="1" Margin="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid CornerRadius="20">
                         <Grid.Background>
                             <ImageBrush Stretch="UniformToFill">
@@ -321,25 +327,25 @@
                     </Grid>
                 </Border>
 
-                <StackPanel Margin="0,8,0,0">
+                <StackPanel Grid.Column="2" Margin="0,4">
                     <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                                         <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
                                         <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
-                                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
-                                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
 
-                    <TextBlock Margin="0,4,0,0">
-                                        <ToolTipService.ToolTip>
-                                            <ToolTip Content="{Binding ThreadItem.TitleForToolTip}"></ToolTip>
-                                        </ToolTipService.ToolTip>
+                    <TextBlock Margin="4" TextWrapping="Wrap">
                                         <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
                                         <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
                                         <Run Text="{Binding ThreadItem.Title}" />
                                         <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     </TextBlock>
+
+                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
+                                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
+                                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
+                    </TextBlock>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
         </DataTemplate>
         
         <DataTemplate x:Name="ThreadListNormalItemTemplate2">
@@ -374,10 +380,7 @@
                                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
 
-                    <TextBlock Margin="0,4,0,0">
-                                        <ToolTipService.ToolTip>
-                                            <ToolTip Content="{Binding ThreadItem.TitleForToolTip}"></ToolTip>
-                                        </ToolTipService.ToolTip>
+                    <TextBlock Margin="0,4,0,0" TextWrapping="Wrap">
                                         <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
                                         <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
                                         <Run Text="{Binding ThreadItem.Title}" />
