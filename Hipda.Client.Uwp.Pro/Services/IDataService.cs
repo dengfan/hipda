@@ -17,13 +17,36 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         ICollectionView GetViewForThreadPageForMyThreads(int startPageNo, Action beforeLoad, Action afterLoad);
 
+        ICollectionView GetViewForThreadPageForMyPosts(int startPageNo, Action beforeLoad, Action afterLoad);
+
+
         int GetThreadMaxPageNo();
+
+        int GetThreadMaxPageNoForMyThreads();
+
+        int GetThreadMaxPageNoForMyPosts();
+
 
         int GetThreadMinPageNoInLoadedData();
 
+        int GetThreadMinPageNoForMyThreadsInLoadedData();
+
+        int GetThreadMinPageNoForMyPostsInLoadedData();
+
+
         void ClearThreadData(int forumId);
 
+        void ClearThreadDataForMyThreads();
+
+        void ClearThreadDataForMyPosts();
+
+
         ThreadItemModel GetThreadItem(int threadId);
+
+        ThreadItemForMyThreadsModel GetThreadItemForMyThreads(int threadId);
+
+        ThreadItemForMyPostsModel GetThreadItemForMyPosts(int threadId);
+
 
         void SetRead(int threadId);
 

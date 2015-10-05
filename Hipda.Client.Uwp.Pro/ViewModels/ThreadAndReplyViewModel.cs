@@ -54,6 +54,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        private void LoadDataForMyPosts(int pageNo)
+        {
+            var cv = _ds.GetViewForThreadPageForMyPosts(pageNo, _beforeLoad, _afterLoad);
+            if (cv != null)
+            {
+                ThreadItemCollection = cv;
+            }
+        }
+
         public ThreadAndReplyViewModel(int pageNo, int forumId, ListView threadListView, Action beforeLoad, Action afterLoad)
         {
             _forumId = forumId;
@@ -85,12 +94,28 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 RefreshThreadCommand = new DelegateCommand();
                 RefreshThreadCommand.ExecuteAction = (p) => {
+                    _threadListView.ItemsSource = null;
+                    _ds.ClearThreadDataForMyThreads();
 
+                    LoadDataForMyThreads(1);
+                    _threadListView.ItemsSource = ThreadItemCollection;
                 };
 
                 LoadDataForMyThreads(pageNo);
             }
-            
+            else if (itemType.Equals("posts"))
+            {
+                RefreshThreadCommand = new DelegateCommand();
+                RefreshThreadCommand.ExecuteAction = (p) => {
+                    _threadListView.ItemsSource = null;
+                    _ds.ClearThreadDataForMyPosts();
+
+                    LoadDataForMyPosts(1);
+                    _threadListView.ItemsSource = ThreadItemCollection;
+                };
+
+                LoadDataForMyPosts(pageNo);
+            }
         }
 
         public void RefreshThreadDataFromPrevPage()
@@ -103,6 +128,32 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds.ClearThreadData(_forumId);
 
             LoadData(startPageNo);
+            _threadListView.ItemsSource = ThreadItemCollection;
+        }
+
+        public void RefreshThreadDataForMyThreadsFromPrevPage()
+        {
+            // 先获取当前数据中已存在的最小页码
+            int minPageNo = _ds.GetThreadMinPageNoForMyThreadsInLoadedData();
+            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
+
+            _threadListView.ItemsSource = null;
+            _ds.ClearThreadDataForMyThreads();
+
+            LoadDataForMyThreads(startPageNo);
+            _threadListView.ItemsSource = ThreadItemCollection;
+        }
+
+        public void RefreshThreadDataForMyPostsFromPrevPage()
+        {
+            // 先获取当前数据中已存在的最小页码
+            int minPageNo = _ds.GetThreadMinPageNoForMyPostsInLoadedData();
+            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
+
+            _threadListView.ItemsSource = null;
+            _ds.ClearThreadDataForMyPosts();
+
+            LoadDataForMyPosts(startPageNo);
             _threadListView.ItemsSource = ThreadItemCollection;
         }
     }

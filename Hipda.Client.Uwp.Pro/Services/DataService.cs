@@ -237,7 +237,83 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        
+        private async Task LoadThreadDataForMyPostsAsync(int pageNo, CancellationTokenSource cts)
+        {
+            int count = _threadDataForMyPosts.Count(t => t.PageNo == pageNo);
+            if (count == _threadPageSize)
+            {
+                return;
+            }
+            else
+            {
+                _threadDataForMyPosts.RemoveAll(t => t.PageNo == pageNo);
+            }
+
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/my.php?item=posts&page={0}&_={1}", pageNo, DateTime.Now.Ticks.ToString("x"));
+            string htmlContent = await _httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlContent);
+
+            var dataTable = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
+            if (dataTable == null)
+            {
+                return;
+            }
+
+            // 读取最大页码
+            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+            if (pagesNode != null)
+            {
+                var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
+                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
+                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
+                _threadMaxPageNoForMyPosts = Convert.ToInt32(lastPageNodeValue);
+            }
+
+            // 如果置顶贴数过多，只取非置顶贴的话，第一页数据项过少，会导致不会自动触发加载下一页数据
+            var rows = dataTable.ChildNodes[3].Descendants().Where(n => n.Name.Equals("tr")).ToList();
+            if (rows == null)
+            {
+                return;
+            }
+
+            int i = _threadDataForMyPosts.Count;
+            for (int j = 0; j < _threadPageSize * 2; j += 2)
+            {
+                var tr = rows[j];
+                var tr2 = rows[j += 1];
+
+                var th = tr.Descendants().FirstOrDefault(n => n.Name.Equals("th"));
+                var a = th.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
+                string threadName = a.InnerText.Trim();
+                string[] pramaStr = a.GetAttributeValue("href", "").Substring("redirect.php?goto=findpost&pid=".Length).Replace("&ptid=", ",").Split(',');
+                int threadId = Convert.ToInt32(pramaStr[1]);
+                int postId = Convert.ToInt32(pramaStr[0]);
+
+                var th2 = tr2.Descendants().FirstOrDefault(n => n.Name.Equals("th"));
+                string lastPostContent = th2.InnerText.Trim();
+
+                var forumNameNode = tr.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forum"));
+                string forumName = forumNameNode.InnerText.Trim();
+
+                var lastPostNode = tr.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("lastpost"));
+                string lastPostTime = lastPostNode.InnerText.Trim();
+                lastPostTime = lastPostTime
+                        .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
+                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
+
+                var threadItem = new ThreadItemForMyPostsModel(i, forumName, threadId, pageNo, threadName, lastPostContent, lastPostTime);
+                _threadDataForMyPosts.Add(threadItem);
+
+                i++;
+            }
+        }
+
 
         private async Task<int> GetMoreThreadItemsAsync(int forumId, int pageNo, Action beforeLoad, Action afterLoad)
         {
@@ -288,6 +364,28 @@ namespace Hipda.Client.Uwp.Pro.Services
             return new ThreadItemForMyThreadsViewModel(threadItem);
         }
 
+        private async Task<int> GetMoreThreadItemsForMyPostsAsync(int pageNo, Action beforeLoad, Action afterLoad)
+        {
+            if (beforeLoad != null) beforeLoad();
+            var cts = new CancellationTokenSource();
+            await LoadThreadDataForMyPostsAsync(pageNo, cts);
+            if (afterLoad != null) afterLoad();
+
+            return _threadDataForMyPosts.Count;
+        }
+
+        private ThreadItemForMyPostsViewModel GetOneThreadItemForMyPosts(int index)
+        {
+            var threadItem = _threadDataForMyPosts.FirstOrDefault(t => t.Index == index);
+            if (threadItem == null)
+            {
+                return null;
+            }
+
+            return new ThreadItemForMyPostsViewModel(threadItem);
+        }
+
+
         public ICollectionView GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
@@ -336,6 +434,30 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
+        public ICollectionView GetViewForThreadPageForMyPosts(int startPageNo, Action beforeLoad, Action afterLoad)
+        {
+            var cvs = new CollectionViewSource();
+            cvs.Source = new GeneratorIncrementalLoadingClass2<ThreadItemForMyPostsViewModel>(
+                startPageNo,
+                async pageNo =>
+                {
+                    // 加载分页数据，并写入静态类中
+                    // 返回的是本次加载的数据量
+                    return await GetMoreThreadItemsForMyPostsAsync(pageNo, beforeLoad, afterLoad);
+                },
+                (index) =>
+                {
+                    // 从静态类中返回需要显示出来的数据
+                    return GetOneThreadItemForMyPosts(index);
+                },
+                () =>
+                {
+                    return GetThreadMaxPageNoForMyPosts();
+                });
+
+            return cvs.View;
+        }
+
         public int GetThreadMaxPageNo()
         {
             return _threadMaxPageNo;
@@ -346,15 +468,43 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadMaxPageNoForMyThreads;
         }
 
+        public int GetThreadMaxPageNoForMyPosts()
+        {
+            return _threadMaxPageNoForMyPosts;
+        }
+
+
         public int GetThreadMinPageNoInLoadedData()
         {
             return _threadData.Min(t => t.PageNo);
         }
 
+        public int GetThreadMinPageNoForMyThreadsInLoadedData()
+        {
+            return _threadDataForMyThreads.Min(t => t.PageNo);
+        }
+
+        public int GetThreadMinPageNoForMyPostsInLoadedData()
+        {
+            return _threadDataForMyPosts.Min(t => t.PageNo);
+        }
+
+
         public void ClearThreadData(int forumId)
         {
             _threadData.RemoveAll(t => t.ForumId == forumId);
         }
+
+        public void ClearThreadDataForMyThreads()
+        {
+            _threadDataForMyThreads.Clear();
+        }
+
+        public void ClearThreadDataForMyPosts()
+        {
+            _threadDataForMyPosts.Clear();
+        }
+
 
         public ThreadItemModel GetThreadItem(int threadId)
         {
@@ -370,6 +520,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             return _threadDataForMyPosts.FirstOrDefault(t => t.ThreadId == threadId);
         }
+
 
         public void SetRead(int threadId)
         {

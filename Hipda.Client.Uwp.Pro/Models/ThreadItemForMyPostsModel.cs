@@ -8,21 +8,18 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ThreadItemForMyPostsModel
     {
-        public ThreadItemForMyPostsModel(int index, int forumId, string forumName, int threadId, int pageNo, string title, string lastReplyUsername, string lastReplyTime)
+        public ThreadItemForMyPostsModel(int index, string forumName, int threadId, int pageNo, string title, string lastReplyContent, string lastReplyTime)
         {
             this.Index = index;
-            this.ForumId = forumId;
             this.ForumName = forumName;
             this.ThreadId = threadId;
             this.PageNo = pageNo;
             this.Title = title;
-            this.LastReplyUsername = lastReplyUsername;
+            this.LastReplyContent = lastReplyContent;
             this.LastReplyTime = lastReplyTime;
         }
 
         public int Index { get; private set; }
-
-        public int ForumId { get; private set; }
 
         public string ForumName { get; private set; }
 
@@ -32,13 +29,21 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public string Title { get; private set; }
 
-        public string LastReplyUsername { get; private set; }
+        public string LastReplyContent { get; private set; }
 
         public string LastReplyTime { get; private set; }
 
         public override string ToString()
         {
             return this.Title;
+        }
+
+        public string LastReplyInfo
+        {
+            get
+            {
+                return LastReplyTime;
+            }
         }
     }
 }
