@@ -79,7 +79,7 @@
                             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
                             <Setter Property="TabNavigation" Value="Local"/>
                             <Setter Property="IsHoldingEnabled" Value="True"/>
-                            <Setter Property="Padding" Value="0,0,20,0"/>
+                            <Setter Property="Padding" Value="0,0,16,0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             <Setter Property="HorizontalAlignment" Value="Stretch"/>
                             <Setter Property="VerticalContentAlignment" Value="Center"/>

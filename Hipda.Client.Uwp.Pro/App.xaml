@@ -349,36 +349,22 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ThreadListMyThreadsItemTemplate">
-            <StackPanel Orientation="Horizontal">
-                <FlyoutBase.AttachedFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem x:Name="menuItemViewHistory" Text="查看作者发贴记录" />
-                        <MenuFlyoutItem x:Name="menuItemBlockAuthor" Text="屏蔽作者" />
-                        <MenuFlyoutItem x:Name="menuItemBlockThread" Text="屏蔽此主题" />
-                    </MenuFlyout>
-                </FlyoutBase.AttachedFlyout>
-
-                <Border Width="3" Background="{Binding StatusColor}"/>
-
-                <StackPanel Margin="8">
+            <Grid>
+                <StackPanel Margin="8,4,0,4">
                     <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                                        <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
-                                        <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
+                                        <Run Text="{Binding ThreadItem.ForumName}" />
+                    </TextBlock>
+
+                    <TextBlock Margin="2" TextWrapping="Wrap">
+                                        <Run Text="{Binding ThreadItem.Title}" />
+                    </TextBlock>
+
+                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
                                         <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
                                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
-
-                    <TextBlock Margin="0,4,0,0">
-                                        <ToolTipService.ToolTip>
-                                            <ToolTip Content="{Binding ThreadItem.TitleForToolTip}"></ToolTip>
-                                        </ToolTipService.ToolTip>
-                                        <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" />
-                                        <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" />
-                                        <Run Text="{Binding ThreadItem.Title}" />
-                                        <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                    </TextBlock>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
         </DataTemplate>
 
         <DataTemplate x:Name="ThreadListMyPostsItemTemplate">

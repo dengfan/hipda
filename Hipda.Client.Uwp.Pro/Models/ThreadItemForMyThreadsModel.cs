@@ -37,5 +37,13 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             return this.Title;
         }
+
+        public string LastReplyInfo
+        {
+            get
+            {
+                return string.Format("{0} {1}", LastReplyUsername, LastReplyTime);
+            }
+        }
     }
 }
