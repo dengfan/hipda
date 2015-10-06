@@ -116,11 +116,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             int minPageNo = _ds.GetThreadMinPageNoInLoadedData();
             int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
 
-            _threadListView.ItemsSource = null;
             _ds.ClearThreadData(_forumId);
-
             LoadData(startPageNo);
-            _threadListView.ItemsSource = ThreadItemCollection;
         }
 
         public void RefreshThreadDataForMyThreadsFromPrevPage()
@@ -129,11 +126,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             int minPageNo = _ds.GetThreadMinPageNoForMyThreadsInLoadedData();
             int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
 
-            _threadListView.ItemsSource = null;
             _ds.ClearThreadDataForMyThreads();
-
             LoadDataForMyThreads(startPageNo);
-            _threadListView.ItemsSource = ThreadItemCollection;
         }
 
         public void RefreshThreadDataForMyPostsFromPrevPage()
@@ -142,11 +136,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             int minPageNo = _ds.GetThreadMinPageNoForMyPostsInLoadedData();
             int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
 
-            _threadListView.ItemsSource = null;
             _ds.ClearThreadDataForMyPosts();
-
             LoadDataForMyPosts(startPageNo);
-            _threadListView.ItemsSource = ThreadItemCollection;
         }
         #endregion
     }
