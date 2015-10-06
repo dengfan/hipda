@@ -75,7 +75,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = _ds.GetThreadItemForMyPosts(threadId);
 
             RefreshReplyCommand = new DelegateCommand();
-            RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
+            RefreshReplyCommand.ExecuteAction = (p) =>
+            {
+                _ds.ClearReplyData(threadId);
+                LoadData(1);
+            };
 
             var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
@@ -92,25 +96,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds = new DataService();
 
             RefreshReplyCommand = new DelegateCommand();
-            RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
+            RefreshReplyCommand.ExecuteAction = (p) =>
+            {
+                _ds.ClearReplyData(ThreadItem.ThreadId);
+                LoadData(1);
+            };
 
             LoadData(1);
-        }
-
-        public void SetRead()
-        {
-            _ds = new DataService();
-            _ds.SetRead(ThreadItem.ThreadId);
-            StatusColor = new SolidColorBrush(Colors.White);
-        }
-
-        private void RefreshReplyExecute(object parameter)
-        {
-            _replyListView.ItemsSource = null;
-            _ds.ClearReplyData(ThreadItem.ThreadId);
-
-            LoadData(1);
-            _replyListView.ItemsSource = ReplyItemCollection;
         }
 
         public void RefreshReplyDataFromPrevPage()
@@ -119,11 +111,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             int minPageNo = _ds.GetReplyMinPageNoInLoadedData(ThreadItem.ThreadId);
             int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
 
-            _replyListView.ItemsSource = null;
             _ds.ClearReplyData(ThreadItem.ThreadId);
-
             LoadData(startPageNo);
-            _replyListView.ItemsSource = ReplyItemCollection;
         }
     }
 }

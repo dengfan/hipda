@@ -117,11 +117,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             int minPageNo = _ds.GetReplyMinPageNoInLoadedData(ThreadItem.ThreadId);
             int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
 
-            _replyListView.ItemsSource = null;
             _ds.ClearReplyData(ThreadItem.ThreadId);
-
             LoadData(startPageNo);
-            _replyListView.ItemsSource = ReplyItemCollection;
         }
     }
 }
