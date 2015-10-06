@@ -75,7 +75,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = _ds.GetThreadItem(threadId);
 
             RefreshReplyCommand = new DelegateCommand();
-            RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
+            RefreshReplyCommand.ExecuteAction = (p) =>
+            {
+                _ds.ClearReplyData(threadId);
+                LoadData(1);
+            };
 
             var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
@@ -92,7 +96,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds = new DataService();
 
             RefreshReplyCommand = new DelegateCommand();
-            RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
+            RefreshReplyCommand.ExecuteAction = (p) => {
+                _ds.ClearReplyData(ThreadItem.ThreadId);
+                LoadData(1);
+            };
 
             LoadData(1);
         }
@@ -102,15 +109,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds = new DataService();
             _ds.SetRead(ThreadItem.ThreadId);
             StatusColor = new SolidColorBrush(Colors.White);
-        }
-
-        private void RefreshReplyExecute(object parameter)
-        {
-            _replyListView.ItemsSource = null;
-            _ds.ClearReplyData(ThreadItem.ThreadId);
-
-            LoadData(1);
-            _replyListView.ItemsSource = ReplyItemCollection;
         }
 
         public void RefreshReplyDataFromPrevPage()

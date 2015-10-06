@@ -56,6 +56,8 @@ namespace Hipda.Client.Uwp.Pro.Services
         #region reply
         ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad);
 
+        ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad, Action listViewScroll);
+
         int GetReplyMaxPageNo();
 
         int GetReplyMinPageNoInLoadedData(int threadId);

@@ -733,6 +733,32 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad, Action listViewScroll)
+        {
+            var cvs = new CollectionViewSource();
+            cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
+                startPageNo,
+                async pageNo =>
+                {
+                    // 加载分页数据，并写入静态类中
+                    // 返回的是本次加载的数据量
+                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad);
+                },
+                (index) =>
+                {
+                    if (listViewScroll != null) listViewScroll();
+
+                    // 从静态类中返回需要显示出来的数据
+                    return GetReplyItemByIndex(threadId, index);
+                },
+                () =>
+                {
+                    return GetReplyMaxPageNo();
+                });
+
+            return cvs.View;
+        }
+
         public int GetReplyMaxPageNo()
         {
             return _replyMaxPageNo;

@@ -64,6 +64,21 @@ namespace Hipda.Client.Uwp.Pro.Views
             ReplyRefreshButton.IsEnabled = true;
         }
 
+        private async void ListViewScroll()
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                if (ThreadListView.Items.Count > 0 && ThreadListView.Items.Count < 74)
+                {
+                    ThreadListView.ScrollIntoView(ThreadListView.Items[ThreadListView.Items.Count - 1], ScrollIntoViewAlignment.Leading);
+                }
+
+                if (ThreadListView.Items.Count > 74)
+                {
+                    ThreadListView.ScrollIntoView(ThreadListView.Items[74 - 1], ScrollIntoViewAlignment.Leading);
+                }
+            });
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -98,8 +113,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                     int threadId = Convert.ToInt32(p[0]);
                     int threadAuthorUserId = Convert.ToInt32(p[1]);
 
-                    RightWrap.DataContext = null;
-
                     ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
                     switch (itemBase.ThreadDataType)
                     {
@@ -107,19 +120,16 @@ namespace Hipda.Client.Uwp.Pro.Views
                             var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoad, RightAfterLoad);
                             _lastSelectedItem = itemForMyThreads;
                             RightWrap.DataContext = itemForMyThreads;
-                            ReplyListView.ItemsSource = itemForMyThreads.ReplyItemCollection;
                             break;
                         case ThreadDataType.MyPosts:
                             var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoad, RightAfterLoad);
                             _lastSelectedItem = itemForMyPosts;
                             RightWrap.DataContext = itemForMyPosts;
-                            ReplyListView.ItemsSource = itemForMyPosts.ReplyItemCollection;
                             break;
                         default:
                             var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoad, RightAfterLoad);
                             _lastSelectedItem = item;
                             RightWrap.DataContext = item;
-                            ReplyListView.ItemsSource = item.ReplyItemCollection;
                             break;
                     }
                 }
@@ -185,10 +195,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        RightWrap.DataContext = null;
                         itemForMyThreads.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
                         RightWrap.DataContext = itemForMyThreads;
-                        ReplyListView.ItemsSource = itemForMyThreads.ReplyItemCollection;
                     }
                     break;
                 case ThreadDataType.MyPosts:
@@ -202,10 +210,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        RightWrap.DataContext = null;
                         itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
                         RightWrap.DataContext = itemForMyPosts;
-                        ReplyListView.ItemsSource = itemForMyPosts.ReplyItemCollection;
                     }
                     break;
                 default:
@@ -220,13 +226,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        RightWrap.DataContext = null;
-
                         item.SetRead();
                         item.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
-
                         RightWrap.DataContext = item;
-                        ReplyListView.ItemsSource = item.ReplyItemCollection;
                     }
                     break;
             }
