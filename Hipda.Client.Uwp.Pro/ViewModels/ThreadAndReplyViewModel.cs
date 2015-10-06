@@ -73,11 +73,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             RefreshThreadCommand = new DelegateCommand();
             RefreshThreadCommand.ExecuteAction = (p) => {
-                _threadListView.ItemsSource = null;
                 _ds.ClearThreadData(_forumId);
-
                 LoadData(1);
-                _threadListView.ItemsSource = ThreadItemCollection;
             };
 
             LoadData(pageNo);
@@ -94,11 +91,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 RefreshThreadCommand = new DelegateCommand();
                 RefreshThreadCommand.ExecuteAction = (p) => {
-                    _threadListView.ItemsSource = null;
                     _ds.ClearThreadDataForMyThreads();
-
                     LoadDataForMyThreads(1);
-                    _threadListView.ItemsSource = ThreadItemCollection;
                 };
 
                 LoadDataForMyThreads(pageNo);
@@ -107,17 +101,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 RefreshThreadCommand = new DelegateCommand();
                 RefreshThreadCommand.ExecuteAction = (p) => {
-                    _threadListView.ItemsSource = null;
                     _ds.ClearThreadDataForMyPosts();
-
                     LoadDataForMyPosts(1);
-                    _threadListView.ItemsSource = ThreadItemCollection;
                 };
 
                 LoadDataForMyPosts(pageNo);
             }
         }
 
+        #region 从上一页开始加载
         public void RefreshThreadDataFromPrevPage()
         {
             // 先获取当前数据中已存在的最小页码
@@ -156,5 +148,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             LoadDataForMyPosts(startPageNo);
             _threadListView.ItemsSource = ThreadItemCollection;
         }
+        #endregion
     }
 }
