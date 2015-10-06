@@ -6,11 +6,11 @@
     RequestedTheme="Light">
 
     <Application.Resources>
-        <local:ReplyListItemTemplateSelector x:Key="replyListItemTemplateSelector" 
-                                     TopTemplate="{StaticResource ReplyListTopItemTemplate}" 
-                                     LeftTemplate="{StaticResource ReplyListLeftItemTemplate}" 
-                                     Left2Template="{StaticResource ReplyListLeft2ItemTemplate}" 
-                                     RightTemplate="{StaticResource ReplyListRightItemTemplate}" />
+        <local:ReplyListItemTemplateSelector x:Key="replyListItemTemplateSelector"
+                                             TopTemplate="{StaticResource ReplyListTopItemTemplate}"
+                                             LeftTemplate="{StaticResource ReplyListLeftItemTemplate}"
+                                             Left2Template="{StaticResource ReplyListLeft2ItemTemplate}"
+                                             RightTemplate="{StaticResource ReplyListRightItemTemplate}" />
 
         <local:ThreadListItemTemplateSelector x:Key="threadListItemTemplateSelector"
                                               NormalTemplate="{StaticResource ThreadListNormalItemTemplate}" 
