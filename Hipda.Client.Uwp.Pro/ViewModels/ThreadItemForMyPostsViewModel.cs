@@ -21,18 +21,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private Action _afterLoad { get; set; }
         private DataService _ds { get; set; }
 
-        private Brush _statusColor;
-
-        public Brush StatusColor
-        {
-            get { return _statusColor; }
-            set
-            {
-                _statusColor = value;
-                this.RaisePropertyChanged("StatusColor");
-            }
-        }
-
         public DelegateCommand RefreshReplyCommand { get; set; }
 
         public ThreadItemForMyPostsModel ThreadItem { get; set; }
@@ -88,7 +76,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public void SelectThreadItem(ListView replyListView, Action beforeLoad, Action afterLoad)
+        public async void SelectThreadItem(ListView replyListView, Action beforeLoad, Action afterLoad, Action<int> listViewScroll)
         {
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
@@ -102,7 +90,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 LoadData(1);
             };
 
-            LoadData(1);
+            // 先载入第一个转跳到的页面的数据，并得到页码之后即可进入正常流程
+            var cts = new CancellationTokenSource();
+            int[] data = await _ds.LoadReplyDataForRedirectPageAsync(ThreadItem.ThreadId, ThreadItem.PostId, cts);
+            int pageNo = data[0];
+            int index = data[1];
+
+            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, index, _beforeLoad, _afterLoad, listViewScroll);
+            if (cv != null)
+            {
+                ReplyItemCollection = cv;
+            }
         }
 
         public void RefreshReplyDataFromPrevPage()

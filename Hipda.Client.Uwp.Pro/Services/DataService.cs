@@ -307,7 +307,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
 
-                var threadItem = new ThreadItemForMyPostsModel(i, forumName, threadId, pageNo, threadName, lastPostContent, lastPostTime);
+                var threadItem = new ThreadItemForMyPostsModel(i, forumName, threadId, postId, pageNo, threadName, lastPostContent, lastPostTime);
                 _threadDataForMyPosts.Add(threadItem);
 
                 i++;
@@ -637,7 +637,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 var floorPostInfoNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
                 var floorLinkNode = floorPostInfoNode.ChildNodes[1].ChildNodes[0]; // a
-                string postId = floorLinkNode.Attributes["id"].Value.Replace("postnum", string.Empty);
+                int postId = Convert.ToInt32(floorLinkNode.Attributes["id"].Value.Replace("postnum", string.Empty));
                 var floorNumNode = floorLinkNode.ChildNodes[0]; // em
                 int floor = Convert.ToInt32(floorNumNode.InnerText);
                 string threadTitle = string.Empty;
@@ -733,7 +733,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad, Action listViewScroll)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action afterLoad, Action<int> listViewScroll)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
@@ -746,7 +746,11 @@ namespace Hipda.Client.Uwp.Pro.Services
                 },
                 (index) =>
                 {
-                    if (listViewScroll != null) listViewScroll();
+                    // 滚动到指定页
+                    if (listViewScroll != null)
+                    {
+                        listViewScroll(floorIndex);
+                    }
 
                     // 从静态类中返回需要显示出来的数据
                     return GetReplyItemByIndex(threadId, index);
@@ -757,6 +761,137 @@ namespace Hipda.Client.Uwp.Pro.Services
                 });
 
             return cvs.View;
+        }
+
+        public async Task<int[]> LoadReplyDataForRedirectPageAsync(int threadId, int targetPostId, CancellationTokenSource cts)
+        {
+            // 先清空本贴的回复数据，以便重新加载
+            _replyData.RemoveAll(r => r.ThreadId == threadId);
+            var threadReply = new ReplyPageModel { ThreadId = threadId, Replies = new List<ReplyItemModel>() };
+            _replyData.Add(threadReply);
+
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={0}&ptid={1}&_={2}", targetPostId, threadId, DateTime.Now.Ticks.ToString("x"));
+            string htmlStr = await _httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlStr);
+
+            var data = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
+
+            // 获取当前页码，及最大页码
+            int pageNo = 1;
+            var forumControlNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forumcontrol s_clear"));
+            var pagesNode = forumControlNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+            if (pagesNode != null)
+            {
+                var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
+                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
+                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
+                _replyMaxPageNo = Convert.ToInt32(lastPageNodeValue);
+
+                var currentPageNode = nodeList.SingleOrDefault(n => n.Name.Equals("strong"));
+                if (currentPageNode != null)
+                {
+                    pageNo = Convert.ToInt32(currentPageNode.InnerText);
+                }
+            }
+
+            int i = 0;
+            foreach (var item in data)
+            {
+                var tableRowNode = item.ChildNodes[0].ChildNodes[1]; // tr
+
+                var postAuthorNode = tableRowNode.ChildNodes[1]; // td.postauthor
+                if (string.IsNullOrEmpty(postAuthorNode.InnerText))
+                {
+                    tableRowNode = item.ChildNodes[0].ChildNodes[3]; // tr
+                    postAuthorNode = tableRowNode.ChildNodes[1]; // td.postauthor
+                }
+
+                var postContentNode = tableRowNode.ChildNodes[3]; // td.postcontent
+
+                int authorUserId = 0;
+                string authorUsername = string.Empty;
+                var authorNode = postAuthorNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
+                if (authorNode != null)
+                {
+                    authorNode = authorNode.ChildNodes[1]; // a
+                    string authorUserIdStr = authorNode.Attributes[1].Value.Substring("space.php?uid=".Length);
+                    if (authorUserIdStr.Contains("&"))
+                    {
+                        authorUserId = Convert.ToInt32(authorUserIdStr.Split('&')[0]);
+                    }
+                    else
+                    {
+                        authorUserId = Convert.ToInt32(authorUserIdStr);
+                    }
+                    authorUsername = authorNode.InnerText;
+                }
+
+                var floorPostInfoNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
+                var floorLinkNode = floorPostInfoNode.ChildNodes[1].ChildNodes[0]; // a
+                int postId = Convert.ToInt32(floorLinkNode.Attributes["id"].Value.Replace("postnum", string.Empty));
+                var floorNumNode = floorLinkNode.ChildNodes[0]; // em
+                int floor = Convert.ToInt32(floorNumNode.InnerText);
+                string threadTitle = string.Empty;
+                if (floor == 1)
+                {
+                    var threadTitleNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("threadtitle"));
+                    if (threadTitleNode != null)
+                    {
+                        threadTitle = threadTitleNode.InnerText.Trim();
+                    }
+                }
+
+                string postTime = string.Empty;
+                var postTimeNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
+                if (postTimeNode != null)
+                {
+                    postTime = postTimeNode.InnerText
+                        .Replace("发表于 ", string.Empty)
+                        .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
+                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
+                }
+
+                string textContent = string.Empty;
+                string htmlContent = string.Empty;
+                string xamlContent = string.Empty;
+                int imageCount = 0;
+                var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
+                if (contentNode != null)
+                {
+                    // 用于回复引用
+                    textContent = contentNode.InnerText.Trim();
+                    textContent = new Regex("\r\n").Replace(textContent, "↵");
+                    textContent = new Regex("\r").Replace(textContent, "↵");
+                    textContent = new Regex("\n").Replace(textContent, "↵");
+                    textContent = new Regex(@"↵{1,}").Replace(textContent, "\r\n");
+                    textContent = textContent.Replace("&nbsp;", "  ");
+
+                    // 用于显示原始内容
+                    htmlContent = contentNode.InnerHtml.Trim();
+
+                    // 转换HTML为XAML
+                    xamlContent = Html.HtmlToXaml.Convert(htmlContent, 20, ref imageCount);
+                }
+                else
+                {
+                    xamlContent = @"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>";
+                    xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
+                }
+
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, 0, authorUserId, authorUsername, textContent, htmlContent, xamlContent, imageCount, postTime);
+                threadReply.Replies.Add(reply);
+
+                i++;
+            }
+
+            int index = threadReply.Replies.Single(r => r.PostId == targetPostId).Index;
+            return new int[] { pageNo, index };
         }
 
         public int GetReplyMaxPageNo()

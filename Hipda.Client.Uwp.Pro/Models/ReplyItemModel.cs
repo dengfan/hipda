@@ -11,7 +11,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ReplyItemModel
     {
-        public ReplyItemModel(int index, int floorNo, string postId, int pageNo, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string htmlContent, string xamlConent, int imageCount, string authorCreateTime)
+        public ReplyItemModel(int index, int floorNo, int postId, int pageNo, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string htmlContent, string xamlConent, int imageCount, string authorCreateTime)
         {
             this.Index = index;
             this.FloorNo = floorNo;
@@ -31,7 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public int Index { get; private set; }
         public int FloorNo { get; private set; }
-        public string PostId { get; private set; }
+        public int PostId { get; private set; }
         public int PageNo { get; private set; }
         public int ThreadId { get; private set; }
         public string ThreadTitle { get; private set; }

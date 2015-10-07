@@ -64,17 +64,17 @@ namespace Hipda.Client.Uwp.Pro.Views
             ReplyRefreshButton.IsEnabled = true;
         }
 
-        private async void ListViewScroll()
+        private async void ReplyListViewScroll(int index)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                if (ThreadListView.Items.Count > 0 && ThreadListView.Items.Count < 74)
+                if (ReplyListView.Items.Count > 0 && ReplyListView.Items.Count < index)
                 {
-                    ThreadListView.ScrollIntoView(ThreadListView.Items[ThreadListView.Items.Count - 1], ScrollIntoViewAlignment.Leading);
+                    ReplyListView.ScrollIntoView(ReplyListView.Items[ReplyListView.Items.Count - 1], ScrollIntoViewAlignment.Leading);
                 }
 
-                if (ThreadListView.Items.Count > 74)
+                if (ReplyListView.Items.Count > index)
                 {
-                    ThreadListView.ScrollIntoView(ThreadListView.Items[74 - 1], ScrollIntoViewAlignment.Leading);
+                    ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
                 }
             });
         }
@@ -210,7 +210,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
+                        itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad, ReplyListViewScroll);
                         RightWrap.DataContext = itemForMyPosts;
                     }
                     break;
