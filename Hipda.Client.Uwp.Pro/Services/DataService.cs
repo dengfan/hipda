@@ -36,6 +36,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         private static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
         private static int _replyMaxPageNo = 1;
         private static List<int> _read = new List<int>();
+        private static bool _isScrollCompleted = false;
 
         #region thread
         private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
@@ -908,6 +909,16 @@ namespace Hipda.Client.Uwp.Pro.Services
         public void ClearReplyData(int threadId)
         {
             _replyData.RemoveAll(t => t.ThreadId == threadId);
+        }
+
+        public void SetScrollState(bool isCompleted)
+        {
+            _isScrollCompleted = isCompleted;
+        }
+
+        public bool GetScrollState()
+        {
+            return _isScrollCompleted;
         }
         #endregion
     }

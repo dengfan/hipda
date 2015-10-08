@@ -95,7 +95,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             int[] data = await _ds.LoadReplyDataForRedirectPageAsync(ThreadItem.ThreadId, ThreadItem.PostId, cts);
             int pageNo = data[0];
             int index = data[1];
-
+            _ds.SetScrollState(false);
             var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, index, _beforeLoad, _afterLoad, listViewScroll);
             if (cv != null)
             {
@@ -111,6 +111,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             _ds.ClearReplyData(ThreadItem.ThreadId);
             LoadData(startPageNo);
+        }
+
+        public bool GetScrollState()
+        {
+            return _ds.GetScrollState();
+        }
+
+        public void SetScrollState(bool isCompleted)
+        {
+            _ds.SetScrollState(isCompleted);
         }
     }
 }

@@ -67,6 +67,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         private async void ReplyListViewScroll(int index)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                var item = _lastSelectedItem as ThreadItemForMyPostsViewModel;
                 int count = ReplyListView.Items.Count;
 
                 if (count > 0 && count <= index + 1)
@@ -74,9 +75,10 @@ namespace Hipda.Client.Uwp.Pro.Views
                     ReplyListView.ScrollIntoView(ReplyListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
                 }
 
-                if (count > index + 1)
+                if (count > index + 1 && item.GetScrollState() == false)
                 {
                     ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
+                    item.SetScrollState(true);
                 }
             });
         }

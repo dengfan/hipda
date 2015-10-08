@@ -65,6 +65,10 @@ namespace Hipda.Client.Uwp.Pro.Services
         int GetReplyMinPageNoInLoadedData(int threadId);
 
         void ClearReplyData(int threadId);
+
+        void SetScrollState(bool isCompleted);
+
+        bool GetScrollState();
         #endregion
     }
 }
