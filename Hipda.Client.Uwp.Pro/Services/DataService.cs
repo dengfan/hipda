@@ -747,7 +747,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 },
                 (index) =>
                 {
-                    // 滚动到指定页
+                    // 滚动到指定的项
                     if (listViewScroll != null)
                     {
                         listViewScroll(floorIndex);
