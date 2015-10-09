@@ -77,11 +77,6 @@ namespace Hipda.Client.Uwp.Pro
             e.Handled = true;
         }
 
-        private void btnNotice_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-
-        }
-
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=2");
@@ -106,5 +101,21 @@ namespace Hipda.Client.Uwp.Pro
         {
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=posts");
         }
+
+        private async void Button6_Click(object sender, RoutedEventArgs e)
+        {
+            await SearchDialog.ShowAsync();
+        }
+
+        private void SearchDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=posts");
+        }
+
+        private void SearchDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+
+        }
+
     }
 }

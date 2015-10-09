@@ -109,6 +109,7 @@
     <Compile Include="Models\AccountItemModel.cs" />
     <Compile Include="Models\ReplyItemModel.cs" />
     <Compile Include="Models\ReplyPageModel.cs" />
+    <Compile Include="Models\ThreadItemForSearchModel.cs" />
     <Compile Include="Models\ThreadItemModel.cs" />
     <Compile Include="Models\ThreadItemForMyPostsModel.cs" />
     <Compile Include="Models\ThreadItemForMyThreadsModel.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\ReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyViewModel.cs" />
+    <Compile Include="ViewModels\ThreadItemForSearchViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyPostsViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyThreadsViewModel.cs" />
