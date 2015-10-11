@@ -64,7 +64,7 @@
         </Storyboard>
     </Page.Resources>
 
-    <Grid x:Name="pageGrid" Tapped="pageGrid_Tapped">
+    <Grid x:Name="pageGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Tapped="pageGrid_Tapped">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
