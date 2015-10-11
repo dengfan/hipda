@@ -296,7 +296,7 @@
 
         <Button x:Name="MainSplitViewToggle" Style="{StaticResource SplitViewPaneButtonStyle}" Width="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
             <Button.Content>
-                <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+                <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"/>
             </Button.Content>
         </Button>
 

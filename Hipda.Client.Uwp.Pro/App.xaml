@@ -2,7 +2,7 @@
     x:Class="Hipda.Client.Uwp.Pro.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Hipda.Client.Uwp.Pro" RequestedTheme="Light">
+    xmlns:local="using:Hipda.Client.Uwp.Pro" RequestedTheme="Dark">
 
     <Application.Resources>
         <local:ReplyListItemTemplateSelector x:Key="replyListItemTemplateSelector"

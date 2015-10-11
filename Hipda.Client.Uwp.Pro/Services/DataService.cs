@@ -338,7 +338,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             threadItemViewModel.StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlBackgroundAccentBrush"];
             if (_read.Contains(threadItem.ThreadId))
             {
-                threadItemViewModel.StatusColor = new SolidColorBrush(Colors.White);
+                threadItemViewModel.StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlBackgroundChromeMediumBrush"];
             }
 
             return threadItemViewModel;
