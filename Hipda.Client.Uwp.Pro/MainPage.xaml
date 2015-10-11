@@ -121,7 +121,7 @@
             <ImageBrush ImageSource="Assets/bg.jpg" />
         </Grid.Background>-->
 
-        <SplitView x:Name="MainSplitView" PaneBackground="{ThemeResource AppBarBorderThemeBrush}" OpenPaneLength="220">
+        <SplitView x:Name="MainSplitView" PaneBackground="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" OpenPaneLength="220">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
