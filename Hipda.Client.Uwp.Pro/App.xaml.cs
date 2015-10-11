@@ -99,8 +99,8 @@ namespace Hipda.Client.Uwp.Pro
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
                 var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-                statusBar.BackgroundOpacity = 1;
                 statusBar.BackgroundColor = ((SolidColorBrush)Resources["SystemControlBackgroundChromeMediumBrush"]).Color;
+                statusBar.BackgroundOpacity = 1;
             }
 
             //var c = ((SolidColorBrush)Resources["SystemControlBackgroundAccentBrush"]).Color;

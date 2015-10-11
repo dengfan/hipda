@@ -249,35 +249,41 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void leftPr_RefreshInvoked(DependencyObject sender, object args)
         {
-            ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
-            switch (itemBase.ThreadDataType)
+            if (_lastSelectedItem != null)
             {
-                case ThreadDataType.MyThreads:
-                    _threadAndReplyViewModel.RefreshThreadDataForMyThreadsFromPrevPage();
-                    break;
-                case ThreadDataType.MyPosts:
-                    _threadAndReplyViewModel.RefreshThreadDataForMyPostsFromPrevPage();
-                    break;
-                default:
-                    _threadAndReplyViewModel.RefreshThreadDataFromPrevPage();
-                    break;
+                ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
+                switch (itemBase.ThreadDataType)
+                {
+                    case ThreadDataType.MyThreads:
+                        _threadAndReplyViewModel.RefreshThreadDataForMyThreadsFromPrevPage();
+                        break;
+                    case ThreadDataType.MyPosts:
+                        _threadAndReplyViewModel.RefreshThreadDataForMyPostsFromPrevPage();
+                        break;
+                    default:
+                        _threadAndReplyViewModel.RefreshThreadDataFromPrevPage();
+                        break;
+                }
             }
         }
 
         private void rightPr_RefreshInvoked(DependencyObject sender, object args)
         {
-            ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
-            switch (itemBase.ThreadDataType)
+            if (_lastSelectedItem != null)
             {
-                case ThreadDataType.MyThreads:
-                    ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                    break;
-                case ThreadDataType.MyPosts:
-                    ((ThreadItemForMyPostsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                    break;
-                default:
-                    ((ThreadItemViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                    break;
+                ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
+                switch (itemBase.ThreadDataType)
+                {
+                    case ThreadDataType.MyThreads:
+                        ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+                        break;
+                    case ThreadDataType.MyPosts:
+                        ((ThreadItemForMyPostsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+                        break;
+                    default:
+                        ((ThreadItemViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+                        break;
+                }
             }
         }
 
