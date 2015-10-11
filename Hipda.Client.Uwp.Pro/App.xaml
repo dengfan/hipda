@@ -2,7 +2,7 @@
     x:Class="Hipda.Client.Uwp.Pro.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Hipda.Client.Uwp.Pro">
+    xmlns:local="using:Hipda.Client.Uwp.Pro" RequestedTheme="Dark">
 
     <Application.Resources>
         <local:ReplyListItemTemplateSelector x:Key="replyListItemTemplateSelector"
@@ -66,12 +66,12 @@
                 <StackPanel Grid.Row="1">
                     <Border>
                         <StackPanel>
-                            <TextBlock>
-                                <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                                <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                                 <Run Text="{Binding AuthorCreateTime}" />
                             </TextBlock>
 
-                            <ContentControl Content="{Binding XamlContent}" />
+                            <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
                             <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                     HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                     Visibility="Collapsed" />
@@ -131,12 +131,12 @@
 
                 <Border Grid.Row="0" Grid.Column="2" Margin="0 0 60 0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Left">
                     <StackPanel>
-                        <TextBlock>
-                            <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                            <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl Content="{Binding XamlContent}" />
+                        <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />
@@ -195,13 +195,13 @@
 
                 <Border Grid.Row="0" Grid.Column="2" Margin="0 0 60 0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Left" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}">
                     <StackPanel>
-                        <TextBlock>
+                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                             <Run Text="楼主 " Foreground="Green" FontSize="11" />
-                            <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl Content="{Binding XamlContent}" />
+                        <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" />
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />
@@ -260,12 +260,12 @@
 
                 <Border Grid.Row="0" Grid.Column="0" Margin="60 0 0 0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}" HorizontalAlignment="Right">
                     <StackPanel>
-                        <TextBlock>
-                            <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                            <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl Content="{Binding XamlContent}" />
+                        <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" />
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />
@@ -326,12 +326,12 @@
                 </Border>
 
                 <StackPanel Grid.Column="2" Margin="0,4">
-                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}">
                                         <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
                                         <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                     </TextBlock>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap">
+                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                                         <Run FontFamily="Segoe UI Symbol" Foreground="Gray" Text="{Binding ThreadItem.TopFontIcon}" />
                                         <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
                                         <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
@@ -339,7 +339,7 @@
                                         <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
                                         <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
                                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>

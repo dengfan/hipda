@@ -11,6 +11,7 @@
     <Page.Resources>
         <Style x:Key="SplitViewPaneButtonStyle" TargetType="Button">
             <Setter Property="Height" Value="48"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
@@ -70,6 +71,7 @@
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1366" />
@@ -119,7 +121,7 @@
             <ImageBrush ImageSource="Assets/bg.jpg" />
         </Grid.Background>-->
 
-        <SplitView x:Name="MainSplitView" PaneBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" OpenPaneLength="220">
+        <SplitView x:Name="MainSplitView" PaneBackground="{ThemeResource AppBarBorderThemeBrush}" OpenPaneLength="220">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
