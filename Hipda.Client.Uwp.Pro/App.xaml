@@ -23,7 +23,7 @@
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
             <Setter Property="TabNavigation" Value="Local"/>
             <Setter Property="IsHoldingEnabled" Value="False"/>
-            <Setter Property="Padding" Value="12,12,12,4"/>
+            <Setter Property="Padding" Value="8,8,8,4"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}"/>
@@ -45,7 +45,7 @@
         </Style>
 
         <DataTemplate x:Name="ReplyListTopItemTemplate">
-            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="-12,-12,-12,0" Padding="10">
+            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="-8,-8,-8,0" Padding="8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -129,7 +129,7 @@
 
                 <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}" VerticalAlignment="Top"/>
 
-                <Border Grid.Row="0" Grid.Column="2" Margin="0 0 60 0" Padding="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Left">
+                <Border Grid.Row="0" Grid.Column="2" Margin="0 0 60 0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Left">
                     <StackPanel>
                         <TextBlock>
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
@@ -193,7 +193,7 @@
 
                 <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlHighlightListAccentLowBrush}" VerticalAlignment="Top"/>
 
-                <Border Grid.Row="0" Grid.Column="2" Margin="0 0 60 0" Padding="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Left" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                <Border Grid.Row="0" Grid.Column="2" Margin="0 0 60 0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Left" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}">
                     <StackPanel>
                         <TextBlock>
                             <Run Text="楼主 " Foreground="Green" FontSize="11" />
@@ -258,7 +258,7 @@
 
                 <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlHighlightListAccentLowBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
 
-                <Border Grid.Row="0" Grid.Column="0" Margin="60 0 0 0" Padding="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}" HorizontalAlignment="Right">
+                <Border Grid.Row="0" Grid.Column="0" Margin="60 0 0 0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}" HorizontalAlignment="Right">
                     <StackPanel>
                         <TextBlock>
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
@@ -311,7 +311,7 @@
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
 
-                <Border Grid.Column="0" Margin="1,0,0,0" Width="3" Background="{Binding StatusColor}"/>
+                <Border Grid.Column="0" Margin="1,0,0,0" Width="2" Background="{Binding StatusColor}"/>
 
                 <Border Grid.Column="1" Margin="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid CornerRadius="20">
