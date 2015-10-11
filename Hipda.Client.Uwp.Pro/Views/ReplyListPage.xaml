@@ -11,7 +11,7 @@
     Loaded="PageRoot_Loaded"
     Unloaded="PageRoot_Unloaded">
 
-    <Grid x:Name="RightWrap" x:DeferLoadStrategy="Lazy" Background="#E9EEF4">
+    <Grid x:Name="RightWrap" x:DeferLoadStrategy="Lazy" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />

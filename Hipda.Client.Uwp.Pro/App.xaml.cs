@@ -96,6 +96,13 @@ namespace Hipda.Client.Uwp.Pro
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
 
+            //if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            //{
+            //    Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundOpacity = 1;
+            //    Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)Resources["SystemControlBackgroundAccentBrush"]).Color;
+            //    Windows.UI.ViewManagement.StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
+            //}
+
             //var c = ((SolidColorBrush)Resources["SystemControlBackgroundAccentBrush"]).Color;
             //var titleBar = ApplicationView.GetForCurrentView().TitleBar;
             //titleBar.BackgroundColor = c;

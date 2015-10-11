@@ -25,18 +25,13 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        
+
         public Frame AppFrame { get { return this.MainFrame; } }
 
         public MainPage()
         {
             this.InitializeComponent();
-
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundOpacity = 1;
-                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)Resources["SystemControlBackgroundAccentBrush"]).Color;
-                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
-            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
