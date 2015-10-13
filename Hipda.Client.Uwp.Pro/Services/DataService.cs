@@ -29,14 +29,14 @@ namespace Hipda.Client.Uwp.Pro.Services
         private static List<ThreadItemForMyThreadsModel> _threadDataForMyThreads = new List<ThreadItemForMyThreadsModel>();
         private static List<ThreadItemForMyPostsModel> _threadDataForMyPosts = new List<ThreadItemForMyPostsModel>();
 
-        private static int _threadMaxPageNo = 1;
-        private static int _threadMaxPageNoForMyThreads = 1;
-        private static int _threadMaxPageNoForMyPosts = 1;
-
         private static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
-        private static int _replyMaxPageNo = 1;
         private static List<int> _read = new List<int>();
-        private static bool _isScrollCompleted = false;
+
+        private int _threadMaxPageNo = 1;
+        private int _threadMaxPageNoForMyThreads = 1;
+        private int _threadMaxPageNoForMyPosts = 1;
+        private int _replyMaxPageNo = 1;
+        private bool _isScrollCompleted = false;
 
         #region thread
         private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
@@ -338,7 +338,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             threadItemViewModel.StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlBackgroundAccentBrush"];
             if (_read.Contains(threadItem.ThreadId))
             {
-                threadItemViewModel.StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlBackgroundChromeMediumBrush"];
+                threadItemViewModel.StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlPageBackgroundChromeLowBrush"];
             }
 
             return threadItemViewModel;

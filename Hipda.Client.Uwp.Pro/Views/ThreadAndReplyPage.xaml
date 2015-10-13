@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
 
-    <Grid x:Name="LayoutRoot" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}" Loaded="LayoutRoot_Loaded">
+    <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="LayoutRoot_Loaded">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">
                 <VisualState>
@@ -50,7 +50,7 @@
             <ColumnDefinition x:Name="RightColumn" Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="LeftWrap" Grid.Column="0">
+        <Grid x:Name="LeftWrap" Grid.Column="0" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
@@ -77,8 +77,8 @@
                                         <ColumnDefinition Width="60"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Row="0" Grid.Column="0" Text="1" HorizontalAlignment="Left"/>
-                                    <Slider x:Name="PageSlider" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" Minimum="1" Maximum="19999" Width="280" HorizontalAlignment="Center" />
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="19999" HorizontalAlignment="Right"/>
+                                    <Slider x:Name="PageSlider" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" Minimum="1" Maximum="{Binding ThreadMaxPageNo}" Width="280" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding ThreadMaxPageNo}" HorizontalAlignment="Right"/>
                                     <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Value,ElementName=PageSlider}" HorizontalAlignment="Center" Width="80" />
                                     <Button Grid.Row="2" Grid.Column="1" Content="确定" HorizontalAlignment="Center" Width="80" />
                                 </Grid>
@@ -96,7 +96,7 @@
                           ItemsSource="{Binding ThreadItemCollection}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                            <Setter Property="Padding" Value="0,0,16,0"/>
+                            <Setter Property="Padding" Value="0,0,22,0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         </Style>
                     </ListView.ItemContainerStyle>
@@ -106,7 +106,7 @@
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
 
-        <Grid x:Name="RightWrap" Grid.Column="1" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+        <Grid x:Name="RightWrap" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />

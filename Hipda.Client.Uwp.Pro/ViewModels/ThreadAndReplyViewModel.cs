@@ -26,6 +26,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand RefreshThreadCommand { get; set; }
 
+        public int ThreadMaxPageNo { get; private set; }
+
+
         private ICollectionView _threadItemCollection;
 
         public ICollectionView ThreadItemCollection
@@ -45,6 +48,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 ThreadItemCollection = cv;
             }
+
+            ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
         }
 
         private void LoadDataForMyThreads(int pageNo)
@@ -52,6 +57,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             var cv = _ds.GetViewForThreadPageForMyThreads(pageNo, _beforeLoad, _afterLoad);
             if (cv != null)
             {
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
                 ThreadItemCollection = cv;
             }
         }
@@ -61,6 +67,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             var cv = _ds.GetViewForThreadPageForMyPosts(pageNo, _beforeLoad, _afterLoad);
             if (cv != null)
             {
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
                 ThreadItemCollection = cv;
             }
         }

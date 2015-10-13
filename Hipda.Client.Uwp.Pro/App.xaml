@@ -2,7 +2,7 @@
     x:Class="Hipda.Client.Uwp.Pro.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Hipda.Client.Uwp.Pro">
+    xmlns:local="using:Hipda.Client.Uwp.Pro" RequestedTheme="Dark">
 
     <Application.Resources>
         <local:ReplyListItemTemplateSelector x:Key="replyListItemTemplateSelector"
@@ -127,9 +127,9 @@
                     </Grid>
                 </Border>
 
-                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource ApplicationPageBackgroundThemeBrush}" VerticalAlignment="Top"/>
+                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundListLowBrush}" VerticalAlignment="Top"/>
 
-                <Border Grid.Row="0" Grid.Column="2" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Left">
+                <Border Grid.Row="0" Grid.Column="2" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="11">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
@@ -191,12 +191,12 @@
                     </Grid>
                 </Border>
 
-                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlHighlightListAccentLowBrush}" VerticalAlignment="Top"/>
+                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top"/>
 
-                <Border Grid.Row="0" Grid.Column="2" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Left" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                <Border Grid.Row="0" Grid.Column="2" Padding="8" HorizontalAlignment="Left" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="11">
-                            <Run Text="楼主 " Foreground="Green" />
+                            <Run Text="楼主 " Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
@@ -256,9 +256,9 @@
                     </Grid>
                 </Border>
 
-                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlHighlightListAccentLowBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
+                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
 
-                <Border Grid.Row="0" Grid.Column="0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2" BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}" HorizontalAlignment="Right">
+                <Border Grid.Row="0" Grid.Column="0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="11">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />

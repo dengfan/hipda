@@ -108,7 +108,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             _ds = new DataService();
             _ds.SetRead(ThreadItem.ThreadId);
-            StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlBackgroundChromeMediumBrush"];
+            StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlPageBackgroundChromeLowBrush"];
         }
 
         public void RefreshReplyDataFromPrevPage()
