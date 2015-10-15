@@ -6,7 +6,9 @@
     xmlns:t="using:Hipda.Client.Uwp.Pro.Triggers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    x:Name="Page1"
+    RequestedTheme="Light">
 
     <Page.Resources>
         <Style x:Key="SplitViewPaneButtonStyle" TargetType="Button">
@@ -136,7 +138,6 @@
                                         <SymbolIcon Symbol="ContactInfo" />
                                         <TextBlock Text="我的贴子"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button.Content>
@@ -147,7 +148,6 @@
                                         <SymbolIcon Symbol="Tag" />
                                         <TextBlock Text="我的回复"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button.Content>
@@ -158,7 +158,6 @@
                                         <SymbolIcon Symbol="OutlineStar" />
                                         <TextBlock Text="我的收藏"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button.Content>
@@ -169,7 +168,6 @@
                                         <SymbolIcon Symbol="Zoom" />
                                         <TextBlock Text="搜索贴子"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button.Content>
@@ -180,7 +178,6 @@
                                         <FontIcon Glyph="Di" FontFamily="Consolas" />
                                         <TextBlock Text="Discovery 版"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button.Content>
@@ -191,7 +188,6 @@
                                         <FontIcon Glyph="BS" FontFamily="Consolas" />
                                         <TextBlock Text="Buy &amp; Sell 版"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button.Content>
@@ -202,7 +198,6 @@
                                         <FontIcon Glyph="EI" FontFamily="Consolas" />
                                         <TextBlock Text="E-Ink 版"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button.Content>
@@ -213,7 +208,6 @@
                                         <SymbolIcon Symbol="More" />
                                         <TextBlock Text="更多版块"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button.Content>
@@ -228,7 +222,6 @@
                                     <SymbolIcon Symbol="Mail" />
                                     <TextBlock Text="提醒"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                 </StackPanel>
                             </Button.Content>
@@ -239,18 +232,16 @@
                                     <SymbolIcon Symbol="Message" />
                                     <TextBlock Text="短消息"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <Button x:Name="btnSettings" Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="btnSettings_Click">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <SymbolIcon Symbol="Setting" />
                                     <TextBlock Text="设置"
                                            Margin="24,0,0,0"
-                                          
                                            VerticalAlignment="Center" />
                                 </StackPanel>
                             </Button.Content>

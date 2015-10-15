@@ -2,7 +2,7 @@
     x:Class="Hipda.Client.Uwp.Pro.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Hipda.Client.Uwp.Pro" RequestedTheme="Dark">
+    xmlns:local="using:Hipda.Client.Uwp.Pro">
 
     <Application.Resources>
         <local:ReplyListItemTemplateSelector x:Key="replyListItemTemplateSelector"
@@ -45,7 +45,7 @@
         </Style>
 
         <DataTemplate x:Name="ReplyListTopItemTemplate">
-            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="-8,-8,-8,0" Padding="8">
+            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -295,6 +295,14 @@
             </Grid>
         </DataTemplate>
 
+        <Style x:Name="StatusColorStyle1" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+        </Style>
+
+        <Style x:Name="StatusColorStyle2" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
+        </Style>
+
         <DataTemplate x:Name="ThreadListNormalItemTemplate">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -311,7 +319,7 @@
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
 
-                <Border Grid.Column="0" Margin="1,0,0,0" Width="2" Background="{Binding StatusColor}"/>
+                <Border Grid.Column="0" Margin="1,0,0,0" Width="2" Style="{Binding StatusColorStyle}"/>
 
                 <Border Grid.Column="1" Margin="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid CornerRadius="20">
@@ -327,21 +335,21 @@
 
                 <StackPanel Grid.Column="2" Margin="0,4">
                     <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
-                                        <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
-                                        <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
+                        <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
+                        <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                     </TextBlock>
 
                     <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
-                                        <Run FontFamily="Segoe UI Symbol" Foreground="Gray" Text="{Binding ThreadItem.TopFontIcon}" />
-                                        <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
-                                        <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
-                                        <Run Text="{Binding ThreadItem.Title}" FontWeight="{Binding ThreadItem.TitleFontWeight}" />
-                                        <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                        <Run FontFamily="Segoe UI Symbol" Foreground="Gray" Text="{Binding ThreadItem.TopFontIcon}" />
+                        <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
+                        <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
+                        <Run Text="{Binding ThreadItem.Title}" FontWeight="{Binding ThreadItem.TitleFontWeight}" />
+                        <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     </TextBlock>
 
                     <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
-                                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
-                                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
+                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
+                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
                 </StackPanel>
             </Grid>

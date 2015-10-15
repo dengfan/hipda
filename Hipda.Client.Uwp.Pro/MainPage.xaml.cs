@@ -112,5 +112,16 @@ namespace Hipda.Client.Uwp.Pro
 
         }
 
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            if (Page1.RequestedTheme == ElementTheme.Light)
+            {
+                Page1.RequestedTheme = ElementTheme.Dark;
+            }
+            else
+            {
+                Page1.RequestedTheme = ElementTheme.Light;
+            }
+        }
     }
 }

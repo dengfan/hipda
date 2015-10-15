@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 
@@ -335,10 +336,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             
             var threadItemViewModel = new ThreadItemViewModel(threadItem);
-            threadItemViewModel.StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlBackgroundAccentBrush"];
+            threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle1"];
             if (_read.Contains(threadItem.ThreadId))
             {
-                threadItemViewModel.StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlPageBackgroundChromeLowBrush"];
+                threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle2"];
             }
 
             return threadItemViewModel;

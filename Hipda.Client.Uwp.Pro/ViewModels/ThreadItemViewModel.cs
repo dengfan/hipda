@@ -9,8 +9,8 @@ using Hipda.Client.Uwp.Pro.Commands;
 using Hipda.Client.Uwp.Pro.Services;
 using Windows.UI.Xaml.Controls;
 using System.Threading;
-using Windows.UI.Xaml.Media;
 using Windows.UI;
+using Windows.UI.Xaml;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -21,15 +21,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private Action _afterLoad { get; set; }
         private DataService _ds { get; set; }
 
-        private Brush _statusColor;
+        private Style _statusColorStyle;
 
-        public Brush StatusColor
+        public Style StatusColorStyle
         {
-            get { return _statusColor; }
+            get { return _statusColorStyle; }
             set
             {
-                _statusColor = value;
-                this.RaisePropertyChanged("StatusColor");
+                _statusColorStyle = value;
+                this.RaisePropertyChanged("StatusColorStyle");
             }
         }
 
@@ -108,7 +108,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             _ds = new DataService();
             _ds.SetRead(ThreadItem.ThreadId);
-            StatusColor = (SolidColorBrush)App.Current.Resources["SystemControlPageBackgroundChromeLowBrush"];
+            StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle2"];
         }
 
         public void RefreshReplyDataFromPrevPage()

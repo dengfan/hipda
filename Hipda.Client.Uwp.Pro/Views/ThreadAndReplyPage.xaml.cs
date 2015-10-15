@@ -289,14 +289,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void SortingButton_Click(object sender, RoutedEventArgs e)
         {
-            if (App.Current.RequestedTheme == ApplicationTheme.Light)
-            {
-                App.Current.RequestedTheme = ApplicationTheme.Dark;
-            }
-            else
-            {
-                App.Current.RequestedTheme = ApplicationTheme.Light;
-            }
+            
         }
     }
 }
