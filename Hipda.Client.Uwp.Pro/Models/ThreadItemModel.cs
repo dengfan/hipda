@@ -7,7 +7,7 @@ using Windows.UI.Text;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
-    public class ThreadItemModel
+    public class ThreadItemModel : ThreadItemModelBase
     {
         public ThreadItemModel(int index, int forumId, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, bool isTop, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
         {
@@ -32,10 +32,6 @@ namespace Hipda.Client.Uwp.Pro.Models
         public int ForumId { get; private set; }
 
         public int PageNo { get; private set; }
-
-        public int ThreadId { get; private set; }
-
-        public string Title { get; private set; }
 
         public string ReplyCount { get; private set; }
 

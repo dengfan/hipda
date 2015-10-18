@@ -109,6 +109,7 @@
     <Compile Include="Models\AccountItemModel.cs" />
     <Compile Include="Models\ReplyItemModel.cs" />
     <Compile Include="Models\ReplyPageModel.cs" />
+    <Compile Include="Models\ThreadItemModelBase.cs" />
     <Compile Include="Models\ThreadItemForSearchModel.cs" />
     <Compile Include="Models\ThreadItemModel.cs" />
     <Compile Include="Models\ThreadItemForMyPostsModel.cs" />

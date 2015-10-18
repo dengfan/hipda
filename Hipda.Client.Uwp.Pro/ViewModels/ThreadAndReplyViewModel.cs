@@ -28,7 +28,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public int ThreadMaxPageNo { get; private set; }
 
-
+        #region 用于主题列表控件增量加载
         private ICollectionView _threadItemCollection;
 
         public ICollectionView ThreadItemCollection
@@ -40,6 +40,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 this.RaisePropertyChanged("ThreadItemCollection");
             }
         }
+        #endregion
+
+        #region 用于浏览记录列表
+        private ObservableCollection<ThreadItemModelBase> _readList;
+
+        public ObservableCollection<ThreadItemModelBase> ReadList
+        {
+            get { return _readList; }
+            set
+            {
+                _readList = value;
+                this.RaisePropertyChanged("ReadList");
+            }
+        }
+        #endregion
 
         private void LoadData(int pageNo)
         {
@@ -80,6 +95,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _afterLoad = afterLoad;
             _ds = new DataService();
 
+            _readList = new ObservableCollection<ThreadItemModelBase>();
+
             RefreshThreadCommand = new DelegateCommand();
             RefreshThreadCommand.ExecuteAction = (p) => {
                 _ds.ClearThreadData(_forumId);
@@ -95,6 +112,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _ds = new DataService();
+
+            _readList = new ObservableCollection<ThreadItemModelBase>();
 
             if (itemType.Equals("threads"))
             {

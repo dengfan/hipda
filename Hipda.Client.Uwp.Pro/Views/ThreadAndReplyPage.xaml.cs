@@ -32,6 +32,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             ThreadListView.SelectedItem = _lastSelectedItem;
         }
 
+        #region 委托事件
         private void LeftBeforeLoad()
         {
             leftProgress.IsActive = true;
@@ -82,6 +83,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
             });
         }
+        #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -183,7 +185,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             EntranceNavigationTransitionInfo.SetIsTargetElement(ThreadListView, isNarrow);
         }
 
-        private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var b = e.ClickedItem as ThreadItemViewModelBase;
             switch (b.ThreadDataType)
@@ -221,6 +223,16 @@ namespace Hipda.Client.Uwp.Pro.Views
                 default:
                     var item = (ThreadItemViewModel)e.ClickedItem;
                     _lastSelectedItem = item;
+
+                    _threadAndReplyViewModel.ReadList.Add(new Models.ThreadItemModelBase {
+                        Title = item.ThreadItem.Title,
+                        ThreadId = item.ThreadItem.ThreadId
+                    });
+
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                        int count = ReadListView.Items.Count;
+                        ReadListView.ScrollIntoView(ReadListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                    });
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {

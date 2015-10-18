@@ -105,7 +105,7 @@
             </CommandBar>
 
             <pr:PullToRefreshBox x:Name="leftPr" Grid.Row="1" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
-                <ListView x:Name="ThreadListView" IsItemClickEnabled="True"
+                <ListView x:Name="ThreadListView" IsItemClickEnabled="True" ShowsScrollingPlaceholders="False"
                           VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
                           ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
                           ItemsSource="{Binding ThreadItemCollection}">
@@ -113,36 +113,6 @@
                         <Style TargetType="ListViewItem">
                             <Setter Property="Padding" Value="0,0,22,0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <Setter Property="VerticalContentAlignment" Value="Top"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListViewItem">
-                                        <Grid x:Name="RootGrid">
-                                            <VisualStateManager.VisualStateGroups>
-                                                <VisualStateGroup x:Name="CommonStates">
-                                                    <VisualState x:Name="Normal" />
-                                                    <VisualState x:Name="PointerOver">
-                                                        <VisualState.Setters>
-                                                            <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlHighlightListLowBrush}" />
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                    <VisualState x:Name="Pressed">
-                                                        <VisualState.Setters>
-                                                            <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlHighlightListAccentLowBrush}" />
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                </VisualStateGroup>
-                                            </VisualStateManager.VisualStateGroups>
-                                            <ContentPresenter Margin="{TemplateBinding Padding}"
-                                                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                            ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                            Content="{TemplateBinding Content}"
-                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
@@ -179,11 +149,32 @@
         </Grid>
 
         <Grid x:Name="RightSideWrap" Grid.Column="2" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-            <StackPanel Orientation="Horizontal" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}" VerticalAlignment="Top" Height="48">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <CommandBar x:Name="RightSideCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                <AppBarButton Icon="Delete" Label="清空"/>
+            </CommandBar>
+            
+            <ListView x:Name="ReadListView" Grid.Row="1" ShowsScrollingPlaceholders="False" ItemsSource="{Binding ReadList}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Padding" Value="8,4,20,4"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Text="{Binding Title}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <StackPanel Orientation="Horizontal" Height="48">
                 <SymbolIcon Margin="8,0,0,0" Symbol="Clock" VerticalAlignment="Center" />
                 <TextBlock Margin="8,0,0,0" Text="浏览记录" VerticalAlignment="Center" />
             </StackPanel>
-            <ListView/>
         </Grid>
     </Grid>
 </Page>

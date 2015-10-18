@@ -346,10 +346,8 @@
                         <Run Text="{Binding ThreadItem.Title}" FontWeight="{Binding ThreadItem.TitleFontWeight}" />
                         <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     </TextBlock>
-
-                    <TextBlock Text=""/>
                     
-                    <TextBlock Margin="0,-20,0,0" FontSize="11" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
                         <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
