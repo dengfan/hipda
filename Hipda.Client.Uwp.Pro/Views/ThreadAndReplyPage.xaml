@@ -13,7 +13,7 @@
     <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="LayoutRoot_Loaded">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">
-                <VisualState>
+                <VisualState x:Name="Min1600">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1600" />
                     </VisualState.StateTriggers>
@@ -158,15 +158,18 @@
                 <AppBarButton Icon="Delete" Label="清空"/>
             </CommandBar>
             
-            <ListView x:Name="ReadListView" Grid.Row="1" ShowsScrollingPlaceholders="False" ItemsSource="{Binding ReadList}">
+            <ListView x:Name="ReadListView" Grid.Row="1" ShowsScrollingPlaceholders="False" ItemsSource="{Binding ReadList}" IsItemClickEnabled="True" ItemClick="ReadListView_ItemClick">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
-                        <Setter Property="Padding" Value="8,4,20,4"/>
+                        <Setter Property="Padding" Value="10,5,18,5"/>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock TextWrapping="Wrap" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
+                        <TextBlock TextWrapping="Wrap" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                            <Run Text="&#xE2A0; " FontFamily="Segoe UI Symbol" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                            <Run Text="{Binding Title}"/>
+                        </TextBlock>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

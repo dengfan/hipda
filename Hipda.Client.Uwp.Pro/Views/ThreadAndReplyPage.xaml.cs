@@ -224,15 +224,21 @@ namespace Hipda.Client.Uwp.Pro.Views
                     var item = (ThreadItemViewModel)e.ClickedItem;
                     _lastSelectedItem = item;
 
-                    _threadAndReplyViewModel.ReadList.Add(new Models.ThreadItemModelBase {
+                    _threadAndReplyViewModel.ReadList.Add(new Models.ThreadItemModelBase
+                    {
                         Title = item.ThreadItem.Title,
                         ThreadId = item.ThreadItem.ThreadId
                     });
 
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                        int count = ReadListView.Items.Count;
-                        ReadListView.ScrollIntoView(ReadListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
-                    });
+                    #region 最宽屏模式下，自动滚到最底部
+                    if (AdaptiveStates.CurrentState == Min1600)
+                    {
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                            int count = ReadListView.Items.Count;
+                            ReadListView.ScrollIntoView(ReadListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                        });
+                    }
+                    #endregion
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
@@ -302,6 +308,11 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void SortingButton_Click(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private void ReadListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
         }
     }
 }
