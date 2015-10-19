@@ -166,7 +166,7 @@
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Text="{Binding Title}"/>
+                        <TextBlock TextWrapping="Wrap" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

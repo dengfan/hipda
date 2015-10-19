@@ -82,7 +82,7 @@
                         <Button.Template>
                             <ControlTemplate>
                                 <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
-                                    <TextBlock HorizontalAlignment="Center" FontSize="11">
+                                    <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                                         <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
                                         <Run Text="{Binding FloorNoStr}" />
                                     </TextBlock>
@@ -131,7 +131,7 @@
 
                 <Border Grid.Row="0" Grid.Column="2" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left">
                     <StackPanel>
-                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="11">
+                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
@@ -147,7 +147,7 @@
                     <Button.Template>
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center" FontSize="11">
+                                <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                                     <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
                                     <Run Text="{Binding FloorNoStr}" />
                                 </TextBlock>
@@ -195,7 +195,7 @@
 
                 <Border Grid.Row="0" Grid.Column="2" Padding="8" HorizontalAlignment="Left" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}">
                     <StackPanel>
-                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="11">
+                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="楼主 " Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
@@ -212,7 +212,7 @@
                     <Button.Template>
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center" FontSize="11">
+                                <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                                     <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
                                     <Run Text="{Binding FloorNoStr}" />
                                 </TextBlock>
@@ -260,7 +260,7 @@
 
                 <Border Grid.Row="0" Grid.Column="0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right">
                     <StackPanel>
-                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="11">
+                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
@@ -276,7 +276,7 @@
                     <Button.Template>
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center" FontSize="11">
+                                <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                                     <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
                                     <Run Text="{Binding FloorNoStr}" />
                                 </TextBlock>
@@ -334,7 +334,7 @@
                 </Border>
 
                 <StackPanel Grid.Column="2" Margin="0,4">
-                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
                         <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                     </TextBlock>
@@ -347,7 +347,7 @@
                         <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     </TextBlock>
                     
-                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
                         <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
@@ -358,7 +358,7 @@
         <DataTemplate x:Name="ThreadListMyThreadsItemTemplate">
             <Grid>
                 <StackPanel Margin="8,4,0,4">
-                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                         <Run Text="{Binding ThreadItem.ForumName}" />
                     </TextBlock>
 
@@ -366,7 +366,7 @@
                         <Run Text="{Binding ThreadItem.Title}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
                         <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
@@ -377,18 +377,18 @@
         <DataTemplate x:Name="ThreadListMyPostsItemTemplate">
             <Grid>
                 <StackPanel Margin="8,4,0,4">
-                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                         <Run Text="{Binding ThreadItem.ForumName}" />
                     </TextBlock>
 
                     <TextBlock Margin="2" TextWrapping="Wrap">
                         <Run Text="{Binding ThreadItem.Title}" />
                         <LineBreak/>
-                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="12" />
-                        <Run Text="{Binding ThreadItem.LastReplyContent}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="12" />
+                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}" />
+                        <Run Text="{Binding ThreadItem.LastReplyContent}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="11" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
                 </StackPanel>
