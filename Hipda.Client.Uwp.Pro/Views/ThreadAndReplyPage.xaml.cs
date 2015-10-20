@@ -226,6 +226,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     _threadAndReplyViewModel.ReadList.Add(new Models.ThreadItemModelBase
                     {
+                        Index = _threadAndReplyViewModel.ReadList.Count + 1,
                         Title = item.ThreadItem.Title,
                         ThreadId = item.ThreadItem.ThreadId
                     });

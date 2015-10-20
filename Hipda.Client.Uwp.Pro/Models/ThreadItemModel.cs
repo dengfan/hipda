@@ -27,8 +27,6 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.LastReplyTime = lastReplyTime;
         }
 
-        public int Index { get; private set; }
-
         public int ForumId { get; private set; }
 
         public int PageNo { get; private set; }
