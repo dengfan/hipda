@@ -111,7 +111,7 @@
                           ItemsSource="{Binding ThreadItemCollection}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                            <Setter Property="Padding" Value="0,0,22,0"/>
+                            <Setter Property="Padding" Value="0,0,20,0"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         </Style>
                     </ListView.ItemContainerStyle>
@@ -161,7 +161,7 @@
             <ListView x:Name="ReadListView" Grid.Row="1" ShowsScrollingPlaceholders="False" ItemsSource="{Binding ReadList}" IsItemClickEnabled="True" ItemClick="ReadListView_ItemClick">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
-                        <Setter Property="Padding" Value="10,5,18,5"/>
+                        <Setter Property="Padding" Value="12,4,20,4"/>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
