@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
 
-    <Grid x:Name="LayoutRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="LayoutRoot_Loaded">
+    <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">
                 <VisualState x:Name="Min1600">
