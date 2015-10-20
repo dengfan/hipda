@@ -18,9 +18,9 @@
                         <AdaptiveTrigger MinWindowWidth="1600" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="LeftColumn.Width" Value="600" />
+                        <Setter Target="LeftColumn.Width" Value="520" />
                         <Setter Target="RightColumn.Width" Value="*" />
-                        <Setter Target="RightSideColumn.Width" Value="220" />
+                        <Setter Target="RightSideColumn.Width" Value="200" />
                     </VisualState.Setters>
                 </VisualState>
                 
@@ -29,9 +29,9 @@
                         <AdaptiveTrigger MinWindowWidth="1366" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="LeftColumn.Width" Value="600" />
+                        <Setter Target="LeftColumn.Width" Value="520" />
                         <Setter Target="RightColumn.Width" Value="*" />
-                        <Setter Target="RightSideColumn.Width" Value="0" />
+                        <Setter Target="RightSideColumn.Width" Value="200" />
                     </VisualState.Setters>
                 </VisualState>
                 
@@ -138,7 +138,7 @@
             </CommandBar>
 
             <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-                <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
+                <ListView x:Name="ReplyListView" IsItemClickEnabled="False" ShowsScrollingPlaceholders="False"
                       ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                       ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                       ItemsSource="{Binding ReplyItemCollection}">

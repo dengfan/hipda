@@ -73,7 +73,15 @@
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
-                        <!--<Setter Target="MainSplitView.IsPaneOpen" Value="True" />-->
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1600" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1366" />
@@ -123,7 +131,7 @@
             <ImageBrush ImageSource="Assets/bg.jpg" />
         </Grid.Background>-->
 
-        <SplitView x:Name="MainSplitView" PaneBackground="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" OpenPaneLength="220">
+        <SplitView x:Name="MainSplitView" PaneBackground="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" OpenPaneLength="200">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
