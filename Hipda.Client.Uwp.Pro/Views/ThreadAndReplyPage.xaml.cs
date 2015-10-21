@@ -232,7 +232,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     });
 
                     #region 最宽屏模式下，自动滚到最底部
-                    if (AdaptiveStates.CurrentState == Min1600)
+                    if (RightSideColumn.ActualWidth > 0)
                     {
                         await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
                             int count = ReadListView.Items.Count;
