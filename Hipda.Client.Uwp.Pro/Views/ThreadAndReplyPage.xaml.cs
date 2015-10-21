@@ -1,4 +1,5 @@
-﻿using Hipda.Client.Uwp.Pro.Services;
+﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using Windows.UI;
@@ -313,7 +314,10 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ReadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-
+            ThreadItemModelBase data = e.ClickedItem as ThreadItemModelBase;
+            var threadItem = _threadAndReplyViewModel.GetThreadItem(data.ThreadId);
+            var item = new ThreadItemViewModel(threadItem);
+            RightWrap.DataContext = item;
         }
     }
 }

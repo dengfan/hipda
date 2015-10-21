@@ -60,13 +60,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemForSearchViewModel(ThreadItemModel threadItem)
         {
-            ThreadDataType = ThreadDataType.Normal;
+            ThreadDataType = ThreadDataType.Default;
             ThreadItem = threadItem;
         }
 
         public ThreadItemForSearchViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
         {
-            ThreadDataType = ThreadDataType.Normal;
+            ThreadDataType = ThreadDataType.Default;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;

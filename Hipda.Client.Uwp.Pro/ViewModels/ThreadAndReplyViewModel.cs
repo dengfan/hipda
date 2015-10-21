@@ -168,5 +168,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             LoadDataForMyPosts(startPageNo);
         }
         #endregion
+
+        public ThreadItemModel GetThreadItem(int threadId)
+        {
+            return _ds.GetThreadItem(threadId);
+        }
     }
 }

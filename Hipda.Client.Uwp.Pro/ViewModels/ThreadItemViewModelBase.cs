@@ -8,7 +8,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public enum ThreadDataType
     {
-        Normal,
+        Default,
 
         MyThreads,
 
