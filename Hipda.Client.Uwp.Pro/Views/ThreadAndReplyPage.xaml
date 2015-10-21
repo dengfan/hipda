@@ -13,7 +13,7 @@
     <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">
-                <VisualState x:Name="Min1600">
+                <VisualState>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1600" />
                     </VisualState.StateTriggers>
