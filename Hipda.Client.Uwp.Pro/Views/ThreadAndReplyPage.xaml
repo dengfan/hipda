@@ -20,7 +20,7 @@
                     <VisualState.Setters>
                         <Setter Target="LeftColumn.Width" Value="520" />
                         <Setter Target="RightColumn.Width" Value="*" />
-                        <Setter Target="RightSideColumn.Width" Value="200" />
+                        <Setter Target="RightSideColumn.Width" Value="220" />
                     </VisualState.Setters>
                 </VisualState>
                 
@@ -31,7 +31,7 @@
                     <VisualState.Setters>
                         <Setter Target="LeftColumn.Width" Value="520" />
                         <Setter Target="RightColumn.Width" Value="*" />
-                        <Setter Target="RightSideColumn.Width" Value="200" />
+                        <Setter Target="RightSideColumn.Width" Value="220" />
                     </VisualState.Setters>
                 </VisualState>
                 
