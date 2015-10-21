@@ -26,6 +26,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand RefreshThreadCommand { get; set; }
 
+        public DelegateCommand ClearHistoryCommand { get; set; }
+
         public int ThreadMaxPageNo { get; private set; }
 
         #region 用于主题列表控件增量加载
@@ -101,6 +103,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshThreadCommand.ExecuteAction = (p) => {
                 _ds.ClearThreadData(_forumId);
                 LoadData(1);
+            };
+
+            ClearHistoryCommand = new DelegateCommand();
+            ClearHistoryCommand.ExecuteAction = (p) => {
+                _readList.Clear();
             };
 
             LoadData(pageNo);

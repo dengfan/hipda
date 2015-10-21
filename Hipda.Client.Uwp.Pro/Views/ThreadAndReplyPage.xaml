@@ -155,7 +155,7 @@
             </Grid.RowDefinitions>
 
             <CommandBar x:Name="RightSideCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
-                <AppBarButton Icon="Delete" Label="清空"/>
+                <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
             </CommandBar>
             
             <ListView x:Name="ReadListView" Grid.Row="1" ShowsScrollingPlaceholders="False" ItemsSource="{Binding ReadList}" IsItemClickEnabled="True" ItemClick="ReadListView_ItemClick">
@@ -177,7 +177,7 @@
 
             <StackPanel Orientation="Horizontal" Height="48">
                 <SymbolIcon Margin="8,0,0,0" Symbol="Clock" VerticalAlignment="Center" />
-                <TextBlock Margin="8,0,0,0" Text="浏览记录" VerticalAlignment="Center" />
+                <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center" />
             </StackPanel>
         </Grid>
     </Grid>

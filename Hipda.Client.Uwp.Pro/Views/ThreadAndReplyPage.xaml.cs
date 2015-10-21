@@ -316,7 +316,13 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             ThreadItemModelBase data = e.ClickedItem as ThreadItemModelBase;
             var threadItem = _threadAndReplyViewModel.GetThreadItem(data.ThreadId);
+            if (threadItem == null)
+            {
+                return;
+            }
+
             var item = new ThreadItemViewModel(threadItem);
+            item.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
             RightWrap.DataContext = item;
         }
     }
