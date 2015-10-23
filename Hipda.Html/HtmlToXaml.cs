@@ -293,13 +293,13 @@ namespace Hipda.Html
                         string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
                         int width = System.Convert.ToInt16(matchsForImage1[i].Groups[2].Value); // 图片宽度
 
-                        string imgXaml = @"[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" Width=""{0}""][Image.Source][BitmapImage UriSource=""{{0}}"" /][/Image.Source][/Image][/InlineUIContainer]";
-                        imgXaml = string.Format(imgXaml, width);
+                        string imgXaml = @"[InlineUIContainer][local:MyImage Url=""{0}""][/local:MyImage][/InlineUIContainer]";
+                        //imgXaml = string.Format(imgXaml, width);
 
-                        if (width >= 600)
-                        {
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" MaxWidth=""1000""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
-                        }
+                        //if (width >= 600)
+                        //{
+                        //    imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" MaxWidth=""1000""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
+                        //}
 
                         imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
                         imgXaml = string.Format(imgXaml, imgUrl);
@@ -363,7 +363,7 @@ namespace Hipda.Html
                 xamlContent = xamlContent.Replace("↵", "[LineBreak/]"); // 解析换行符
                 xamlContent = xamlContent.Replace("[", "<");
                 xamlContent = xamlContent.Replace("]", ">");
-                xamlContent = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>", xamlContent);
+                xamlContent = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", xamlContent);
 
                 return xamlContent;
                 #endregion
