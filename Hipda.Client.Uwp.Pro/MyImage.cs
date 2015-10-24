@@ -37,23 +37,54 @@ namespace Hipda.Client.Uwp.Pro
         public static readonly DependencyProperty UrlProperty =
             DependencyProperty.Register("Url", typeof(string), typeof(MyImage), new PropertyMetadata(0));
 
+
+
+        public int ThreadId
+        {
+            get { return (int)GetValue(ThreadIdProperty); }
+            set { SetValue(ThreadIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ThreadIdProperty =
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyImage), new PropertyMetadata(0));
+
+
+
         protected async override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
-            StorageFile file;
+            StorageFolder folder = null;
+            StorageFile file = null;
             using (var client = new HttpClient())
             {
-                string[] tary = Url.Split('.');
-                string fileExName = tary.Last();
-                string fileFullName = string.Format("{0}.{1}", Guid.NewGuid().ToString(), fileExName);
+                string[] urlAry = Url.Split('/');
+                string fileFullName = urlAry.Last();
+
+                //urlAry = fileFullName.Split('.');
+                //string fileExName = urlAry.Last();
+                //string fileFullName = string.Format("{0}.{1}", Guid.NewGuid().ToString(), fileExName);
 
                 var response = await client.GetAsync(new Uri(Url));
                 var buf = await response.Content.ReadAsBufferAsync();
                 byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
 
-                file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
-                await FileIO.WriteBytesAsync(file, bytes);
+                try
+                {
+                    folder = ApplicationData.Current.LocalFolder;
+                    folder = await folder.CreateFolderAsync(ThreadId.ToString(), CreationCollisionOption.OpenIfExists); // 为当前主题创建一个图片文件夹
+                    if (await folder.TryGetItemAsync(fileFullName) != null)
+                    {
+                        file = await folder.GetFileAsync(fileFullName);
+                    }
+                    else
+                    {
+                        file = await folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
+                        await FileIO.WriteBytesAsync(file, bytes);
+                    }
+                }
+                catch { }
             }
 
             Image img = GetTemplateChild("img1") as Image;
@@ -63,25 +94,31 @@ namespace Hipda.Client.Uwp.Pro
 
             try
             {
-                BitmapImage bitmapImg = new BitmapImage();
-                IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read);
-                await bitmapImg.SetSourceAsync(fileStream);
-                int imgWidth = bitmapImg.PixelWidth;
-                if (imgWidth > 900)
+                if (folder != null && file != null)
                 {
-                    img.Stretch = Stretch.Uniform;
-                    img.MaxWidth = 1000;
+                    BitmapImage bitmapImg = new BitmapImage();
+                    IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read);
+                    if (fileStream != null)
+                    {
+                        await bitmapImg.SetSourceAsync(fileStream);
+                        int imgWidth = bitmapImg.PixelWidth;
+                        if (imgWidth > 900)
+                        {
+                            img.Stretch = Stretch.Uniform;
+                            img.MaxWidth = 1000;
+                        }
+                        else if (imgWidth > 400)
+                        {
+                            img.Stretch = Stretch.Uniform;
+                            img.MaxWidth = 600;
+                        }
+                        else
+                        {
+                            img.Stretch = Stretch.None;
+                        }
+                        img.Source = bitmapImg;
+                    }
                 }
-                else if (imgWidth > 400)
-                {
-                    img.Stretch = Stretch.Uniform;
-                    img.MaxWidth = 600;
-                }
-                else
-                {
-                    img.Stretch = Stretch.None;
-                }
-                img.Source = bitmapImg;
             }
             catch { }
 
@@ -92,7 +129,7 @@ namespace Hipda.Client.Uwp.Pro
                 fileTypeFilter.Add(".bmp");
                 fileTypeFilter.Add(".gif");
                 var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, fileTypeFilter);
-                var query = ApplicationData.Current.LocalFolder.CreateFileQueryWithOptions(queryOptions);
+                var query = folder.CreateFileQueryWithOptions(queryOptions);
                 var options = new LauncherOptions();
                 options.NeighboringFilesQuery = query;
                 await Launcher.LaunchFileAsync(file, options);

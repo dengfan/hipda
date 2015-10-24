@@ -681,7 +681,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.Convert(htmlContent, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.Convert(threadId, htmlContent, 20, ref imageCount);
                 }
                 else
                 {
@@ -878,7 +878,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.Convert(htmlContent, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.Convert(threadId, htmlContent, 20, ref imageCount);
                 }
                 else
                 {
