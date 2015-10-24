@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MyImage">
-                    <Image x:Name="img1" Margin="0,5,5,0" />
+                    <Image x:Name="img1" Margin="5" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
