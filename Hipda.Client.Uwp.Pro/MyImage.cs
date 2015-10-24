@@ -55,23 +55,38 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnApplyTemplate();
 
-            Image img = GetTemplateChild("img1") as Image;
-
-            img.ImageFailed += (s, e) => {
-                return;
-            };
-
-            img.ImageOpened += (s, e) => {
-                return;
-            };
-
             string[] urlAry = Url.Split('/');
             string fileFullName = urlAry.Last();
 
+            StorageFile file = null;
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             folder = await folder.CreateFolderAsync(ThreadId.ToString(), CreationCollisionOption.OpenIfExists); // 为当前主题创建一个图片文件夹
 
-            StorageFile file = null;
+            ContentControl content1 = GetTemplateChild("content1") as ContentControl;
+
+            Image img = new Image();
+            img.Margin = new Thickness(5);
+            img.Stretch = Stretch.None;
+            img.ImageFailed += (s, e) => {
+                return;
+            };
+            img.ImageOpened += (s, e) => {
+                return;
+            };
+            img.Tapped += async (s, e) => {
+                var fileTypeFilter = new List<string>();
+                fileTypeFilter.Add(".jpg");
+                fileTypeFilter.Add(".jpeg");
+                fileTypeFilter.Add(".png");
+                fileTypeFilter.Add(".bmp");
+                fileTypeFilter.Add(".gif");
+                var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, fileTypeFilter);
+                var query = folder.CreateFileQueryWithOptions(queryOptions);
+                var options = new LauncherOptions();
+                options.NeighboringFilesQuery = query;
+                await Launcher.LaunchFileAsync(file, options);
+            };
+
             IStorageItem existsFile = await folder.TryGetItemAsync(fileFullName);
             if (existsFile != null)
             {
@@ -105,38 +120,60 @@ namespace Hipda.Client.Uwp.Pro
                     {
                         await bitmapImg.SetSourceAsync(fileStream);
                         int imgWidth = bitmapImg.PixelWidth;
-                        if (imgWidth > 900)
+
+                        if (fileFullName.EndsWith(".gif")) // GIF图片，使用WebView控件显示
                         {
-                            img.Stretch = Stretch.Uniform;
-                            img.MaxWidth = 1000;
+                            string imgHtml = @"<html><body style=""margin:0;padding:0;""><img src=""{0}"" /></body></html>";
+                            imgHtml = string.Format(imgHtml, Url);
+
+                            WebView webView = new WebView();
+                            webView.Margin = new Thickness(5);
+                            webView.Tapped += async (s, e) => {
+                                var fileTypeFilter = new List<string>();
+                                fileTypeFilter.Add(".jpg");
+                                fileTypeFilter.Add(".jpeg");
+                                fileTypeFilter.Add(".png");
+                                fileTypeFilter.Add(".bmp");
+                                fileTypeFilter.Add(".gif");
+                                var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, fileTypeFilter);
+                                var query = folder.CreateFileQueryWithOptions(queryOptions);
+                                var options = new LauncherOptions();
+                                options.NeighboringFilesQuery = query;
+                                await Launcher.LaunchFileAsync(file, options);
+                            };
+                            webView.Width = imgWidth;
+                            webView.Height = bitmapImg.PixelHeight;
+                            webView.NavigateToString(imgHtml);
+                            
+                            content1.Content = webView;
                         }
-                        else if (imgWidth > 400)
+                        else // 其它图片，使用Image控件显示
                         {
-                            img.Stretch = Stretch.Uniform;
-                            img.MaxWidth = 600;
+                            if (imgWidth > 900)
+                            {
+                                img.Stretch = Stretch.Uniform;
+                                img.MaxWidth = 1000;
+                            }
+                            else if (imgWidth > 400)
+                            {
+                                img.Stretch = Stretch.Uniform;
+                                img.MaxWidth = 600;
+                            }
+                            else
+                            {
+                                img.Stretch = Stretch.None;
+                            }
+                            img.Source = bitmapImg;
                         }
-                        else
-                        {
-                            img.Stretch = Stretch.None;
-                        }
-                        img.Source = bitmapImg;
                     }
+                }
+
+                if (!fileFullName.EndsWith(".gif")) // 非gif图片，使用Image控件显示
+                {
+                    content1.Content = img;
                 }
             }
             catch { }
-
-            img.Tapped += async (s, e) => {
-                List<string> fileTypeFilter = new List<string>();
-                fileTypeFilter.Add(".jpg");
-                fileTypeFilter.Add(".png");
-                fileTypeFilter.Add(".bmp");
-                fileTypeFilter.Add(".gif");
-                var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, fileTypeFilter);
-                var query = folder.CreateFileQueryWithOptions(queryOptions);
-                var options = new LauncherOptions();
-                options.NeighboringFilesQuery = query;
-                await Launcher.LaunchFileAsync(file, options);
-            };
         }
     }
 }
