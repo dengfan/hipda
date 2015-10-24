@@ -143,7 +143,10 @@
                       ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                       ItemsSource="{Binding ReplyItemCollection}">
                     <ListView.Footer>
-                        <TextBlock Margin="0,80" Text="------------ 完 ------------" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" HorizontalAlignment="Center" />
+                        <StackPanel x:Name="rightFooter" Margin="0,80" Visibility="Collapsed">
+                            <TextBlock Text="------------ 完 ------------" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" HorizontalAlignment="Center" />
+                            <Button x:Name="ReplyRefreshButton2" Margin="0,8,0,0" Content="刷新试试？" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center" />
+                        </StackPanel>
                     </ListView.Footer>
                 </ListView>
             </pr:PullToRefreshBox>

@@ -34,36 +34,42 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
 
         #region 委托事件
-        private void LeftBeforeLoad()
+        private void LeftBeforeLoaded()
         {
             leftProgress.IsActive = true;
             leftProgress.Visibility = Visibility.Visible;
             ThreadRefreshButton.IsEnabled = false;
             ReplyRefreshButton.IsEnabled = false;
+            ReplyRefreshButton2.IsEnabled = false;
         }
 
-        private void LeftAfterLoad()
+        private void LeftAfterLoaded()
         {
             leftProgress.IsActive = false;
             leftProgress.Visibility = Visibility.Collapsed;
             ThreadRefreshButton.IsEnabled = true;
             ReplyRefreshButton.IsEnabled = true;
+            ReplyRefreshButton2.IsEnabled = true;
         }
 
-        private void RightBeforeLoad()
+        private void RightBeforeLoaded()
         {
             rightProgress.IsActive = true;
             rightProgress.Visibility = Visibility.Visible;
             ThreadRefreshButton.IsEnabled = false;
             ReplyRefreshButton.IsEnabled = false;
+            ReplyRefreshButton2.IsEnabled = false;
+            rightFooter.Visibility = Visibility.Collapsed;
         }
 
-        private void RightAfterLoad()
+        private void RightAfterLoaded()
         {
             rightProgress.IsActive = false;
             rightProgress.Visibility = Visibility.Collapsed;
             ThreadRefreshButton.IsEnabled = true;
             ReplyRefreshButton.IsEnabled = true;
+            ReplyRefreshButton2.IsEnabled = true;
+            rightFooter.Visibility = Visibility.Visible;
         }
 
         private async void ReplyListViewScroll(int index)
@@ -97,7 +103,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
                     int fid = Convert.ToInt32(param.Substring(4));
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, LeftBeforeLoad, LeftAfterLoad);
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("item="))
@@ -105,12 +111,12 @@ namespace Hipda.Client.Uwp.Pro.Views
                     string itemType = param.Substring(5);
                     if (itemType.Equals("threads"))
                     {
-                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoad, LeftAfterLoad);
+                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
                         DataContext = _threadAndReplyViewModel;
                     }
                     else if (itemType.Equals("posts"))
                     {
-                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoad, LeftAfterLoad);
+                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
                         DataContext = _threadAndReplyViewModel;
                     }
                 }
@@ -124,17 +130,17 @@ namespace Hipda.Client.Uwp.Pro.Views
                     switch (itemBase.ThreadDataType)
                     {
                         case ThreadDataType.MyThreads:
-                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoad, RightAfterLoad);
+                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
                             _lastSelectedItem = itemForMyThreads;
                             RightWrap.DataContext = itemForMyThreads;
                             break;
                         case ThreadDataType.MyPosts:
-                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoad, RightAfterLoad);
+                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
                             _lastSelectedItem = itemForMyPosts;
                             RightWrap.DataContext = itemForMyPosts;
                             break;
                         default:
-                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoad, RightAfterLoad);
+                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
                             _lastSelectedItem = item;
                             RightWrap.DataContext = item;
                             break;
@@ -202,7 +208,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        itemForMyThreads.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
+                        itemForMyThreads.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
                         RightWrap.DataContext = itemForMyThreads;
                     }
                     break;
@@ -217,7 +223,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad, ReplyListViewScroll);
+                        itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
                         RightWrap.DataContext = itemForMyPosts;
                     }
                     break;
@@ -251,7 +257,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     else
                     {
                         item.SetRead();
-                        item.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
+                        item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
                         RightWrap.DataContext = item;
                     }
                     break;
@@ -322,7 +328,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             var item = new ThreadItemViewModel(threadItem);
-            item.SelectThreadItem(ReplyListView, RightBeforeLoad, RightAfterLoad);
+            item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
             RightWrap.DataContext = item;
         }
     }
