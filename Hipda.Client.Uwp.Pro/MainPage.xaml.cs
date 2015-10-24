@@ -8,6 +8,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -114,13 +115,33 @@ namespace Hipda.Client.Uwp.Pro
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+
             if (Page1.RequestedTheme == ElementTheme.Light)
             {
                 Page1.RequestedTheme = ElementTheme.Dark;
+
+                var c = Colors.Black;
+                titleBar.BackgroundColor = c;
+                titleBar.InactiveBackgroundColor = c;
+                titleBar.ForegroundColor = Colors.White;
+                titleBar.ButtonBackgroundColor = c;
+                titleBar.ButtonInactiveBackgroundColor = c;
+                titleBar.ButtonForegroundColor = Colors.White;
+                titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
             }
             else
             {
                 Page1.RequestedTheme = ElementTheme.Light;
+
+                var c = Colors.White;
+                titleBar.BackgroundColor = c;
+                titleBar.InactiveBackgroundColor = c;
+                titleBar.ForegroundColor = Colors.Black;
+                titleBar.ButtonBackgroundColor = c;
+                titleBar.ButtonInactiveBackgroundColor = c;
+                titleBar.ButtonForegroundColor = Colors.Black;
+                titleBar.ButtonHoverBackgroundColor = Colors.LightGray;
             }
         }
     }
