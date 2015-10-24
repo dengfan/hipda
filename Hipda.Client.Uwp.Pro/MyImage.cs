@@ -60,7 +60,25 @@ namespace Hipda.Client.Uwp.Pro
             BitmapImage bitmapImg = new BitmapImage();
             IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read);
             await bitmapImg.SetSourceAsync(fileStream);
+            int imgWidth = bitmapImg.PixelWidth;
+            if (imgWidth > 1000)
+            {
+                img.Stretch = Stretch.Uniform;
+                img.MaxWidth = 1000;
+            }
+            else if (imgWidth > 400)
+            {
+                img.Stretch = Stretch.Uniform;
+                img.MaxWidth = 500;
+            }
+            else
+            {
+                img.Stretch = Stretch.None;
+            }
             img.Source = bitmapImg;
+            img.ImageFailed += (s, e) => {
+                return;
+            };
 
             img.Tapped += async (s, e) => {
                 List<string> fileTypeFilter = new List<string>();

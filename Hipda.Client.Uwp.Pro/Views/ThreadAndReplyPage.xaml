@@ -142,6 +142,9 @@
                       ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                       ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                       ItemsSource="{Binding ReplyItemCollection}">
+                    <ListView.Footer>
+                        <TextBlock Margin="0,80" Text="------------ 完 ------------" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" HorizontalAlignment="Center" />
+                    </ListView.Footer>
                 </ListView>
             </pr:PullToRefreshBox>
 

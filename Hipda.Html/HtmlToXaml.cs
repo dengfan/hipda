@@ -291,17 +291,9 @@ namespace Hipda.Html
                     {
                         string placeHolderLabel = matchsForImage1[i].Groups[0].Value; // 要被替换的元素
                         string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
-                        int width = System.Convert.ToInt16(matchsForImage1[i].Groups[2].Value); // 图片宽度
+                        if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
                         string imgXaml = @"[InlineUIContainer][local:MyImage Url=""{0}""][/local:MyImage][/InlineUIContainer]";
-                        //imgXaml = string.Format(imgXaml, width);
-
-                        //if (width >= 600)
-                        //{
-                        //    imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" MaxWidth=""1000""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
-                        //}
-
-                        imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
                         imgXaml = string.Format(imgXaml, imgUrl);
 
                         content = content.Replace(placeHolderLabel, imgXaml);
@@ -316,18 +308,10 @@ namespace Hipda.Html
                     {
                         var m = matchsForImage2[i];
                         string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
-                        int width = System.Convert.ToInt16(matchsForImage2[i].Groups[1].Value); // 图片宽度
                         string imgUrl = m.Groups[2].Value; // 图片URL
-
-                        string imgXaml = @"[InlineUIContainer][Image Stretch=""None"" Margin=""0,10,0,5""][Image.Source][BitmapImage UriSource=""{{0}}"" /][/Image.Source][/Image][/InlineUIContainer]";
-                        imgXaml = string.Format(imgXaml, width);
-
-                        if (width >= 500)
-                        {
-                            imgXaml = @"↵[InlineUIContainer][Image Stretch=""Uniform"" Margin=""0,10,0,5"" MaxWidth=""1000""][Image.Source][BitmapImage UriSource=""{0}"" /][/Image.Source][/Image][/InlineUIContainer]";
-                        }
-
                         if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
+
+                        string imgXaml = @"[InlineUIContainer][local:MyImage Url=""{0}""][/local:MyImage][/InlineUIContainer]";
                         imgXaml = string.Format(imgXaml, imgUrl);
 
                         content = content.Replace(placeHolderLabel, imgXaml);

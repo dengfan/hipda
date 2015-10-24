@@ -7,11 +7,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MyImage">
-                    <Border
-                        BorderBrush="Red"
-                        BorderThickness="1,1,1,1">
-                        <Image x:Name="img1" />
-                    </Border>
+                    <Image x:Name="img1" Margin="5" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
