@@ -55,42 +55,45 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnApplyTemplate();
 
-            StorageFolder folder = null;
+            Image img = GetTemplateChild("img1") as Image;
+
+            img.ImageFailed += (s, e) => {
+                return;
+            };
+
+            img.ImageOpened += (s, e) => {
+                return;
+            };
+
+            string[] urlAry = Url.Split('/');
+            string fileFullName = urlAry.Last();
+
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            folder = await folder.CreateFolderAsync(ThreadId.ToString(), CreationCollisionOption.OpenIfExists); // 为当前主题创建一个图片文件夹
+
             StorageFile file = null;
-            using (var client = new HttpClient())
+            IStorageItem existsFile = await folder.TryGetItemAsync(fileFullName);
+            if (existsFile != null)
             {
-                string[] urlAry = Url.Split('/');
-                string fileFullName = urlAry.Last();
-
-                //urlAry = fileFullName.Split('.');
-                //string fileExName = urlAry.Last();
-                //string fileFullName = string.Format("{0}.{1}", Guid.NewGuid().ToString(), fileExName);
-
-                var response = await client.GetAsync(new Uri(Url));
-                var buf = await response.Content.ReadAsBufferAsync();
-                byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
-
+                file = existsFile as StorageFile;
+            }
+            else
+            {
+                // 不存在则请求
                 try
                 {
-                    folder = ApplicationData.Current.LocalFolder;
-                    folder = await folder.CreateFolderAsync(ThreadId.ToString(), CreationCollisionOption.OpenIfExists); // 为当前主题创建一个图片文件夹
-                    if (await folder.TryGetItemAsync(fileFullName) != null)
+                    using (var client = new HttpClient())
                     {
-                        file = await folder.GetFileAsync(fileFullName);
-                    }
-                    else
-                    {
+                        var response = await client.GetAsync(new Uri(Url));
+                        string statusCode = response.ReasonPhrase;
+                        var buf = await response.Content.ReadAsBufferAsync();
+                        byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
                         file = await folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
                         await FileIO.WriteBytesAsync(file, bytes);
                     }
                 }
                 catch { }
             }
-
-            Image img = GetTemplateChild("img1") as Image;
-            img.ImageFailed += (s, e) => {
-                return;
-            };
 
             try
             {
