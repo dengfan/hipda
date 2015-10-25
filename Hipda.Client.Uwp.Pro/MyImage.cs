@@ -6,6 +6,7 @@ using Windows.Storage;
 using Windows.Storage.Search;
 using Windows.Storage.Streams;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -120,14 +121,15 @@ namespace Hipda.Client.Uwp.Pro
                     {
                         await bitmapImg.SetSourceAsync(fileStream);
                         int imgWidth = bitmapImg.PixelWidth;
+                        int imgHeight = bitmapImg.PixelHeight;
 
                         if (fileFullName.EndsWith(".gif")) // GIF图片，使用WebView控件显示
                         {
-                            string imgHtml = @"<html><body style=""margin:0;padding:0;""><img src=""{0}"" /></body></html>";
-                            imgHtml = string.Format(imgHtml, Url);
-
                             WebView webView = new WebView();
+                            webView.DefaultBackgroundColor = Colors.Transparent;
                             webView.Margin = new Thickness(5);
+                            webView.Width = imgWidth;
+                            webView.Height = imgHeight;
                             webView.Tapped += async (s, e) => {
                                 var fileTypeFilter = new List<string>();
                                 fileTypeFilter.Add(".jpg");
@@ -135,14 +137,15 @@ namespace Hipda.Client.Uwp.Pro
                                 fileTypeFilter.Add(".png");
                                 fileTypeFilter.Add(".bmp");
                                 fileTypeFilter.Add(".gif");
-                                var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, fileTypeFilter);
+                                var queryOptions = new QueryOptions(CommonFileQuery.OrderByDate, fileTypeFilter);
                                 var query = folder.CreateFileQueryWithOptions(queryOptions);
                                 var options = new LauncherOptions();
                                 options.NeighboringFilesQuery = query;
                                 await Launcher.LaunchFileAsync(file, options);
                             };
-                            webView.Width = imgWidth;
-                            webView.Height = bitmapImg.PixelHeight;
+
+                            string imgHtml = @"<html><body style=""margin:0;padding:0;""><img src=""{0}"" /></body></html>";
+                            imgHtml = string.Format(imgHtml, Url);
                             webView.NavigateToString(imgHtml);
                             
                             content1.Content = webView;
