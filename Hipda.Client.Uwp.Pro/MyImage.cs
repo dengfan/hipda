@@ -56,12 +56,21 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnApplyTemplate();
 
+            bool isCommonImage = Url.StartsWith("http://www.hi-pda.com/forum/images/") || Url.Equals("http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png");
+
             string[] urlAry = Url.Split('/');
             string fileFullName = urlAry.Last();
 
             StorageFile file = null;
             StorageFolder folder = ApplicationData.Current.LocalFolder;
-            folder = await folder.CreateFolderAsync(ThreadId.ToString(), CreationCollisionOption.OpenIfExists); // 为当前主题创建一个图片文件夹
+            if (isCommonImage)
+            {
+                folder = await folder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
+            }
+            else
+            {
+                folder = await folder.CreateFolderAsync(ThreadId.ToString(), CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
+            }
 
             ContentControl content1 = GetTemplateChild("content1") as ContentControl;
 
