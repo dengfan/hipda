@@ -86,7 +86,7 @@ namespace Hipda.Client.Uwp.Pro
                     fileTypeFilter.Add(".png");
                     fileTypeFilter.Add(".bmp");
                     fileTypeFilter.Add(".gif");
-                    var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, fileTypeFilter);
+                    var queryOptions = new QueryOptions(CommonFileQuery.OrderByDate, fileTypeFilter);
                     var query = folder.CreateFileQueryWithOptions(queryOptions);
                     var options = new LauncherOptions();
                     options.NeighboringFilesQuery = query;
