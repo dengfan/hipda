@@ -50,60 +50,63 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnApplyTemplate();
 
-            bool isCommonImage = Url.Contains("hi-pda.com/forum/images/") || Url.Equals("http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png");
-
-            string[] urlAry = Url.Split('/');
-            string fileFullName = urlAry.Last();
-
-            StorageFile file = null;
-            StorageFolder folder = ApplicationData.Current.LocalFolder;
-            if (isCommonImage)
+            try
             {
-                folder = await folder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
-            }
-            else
-            {
-                folder = await folder.CreateFolderAsync(ThreadId.ToString(), CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
-            }
+                bool isCommonImage = Url.Contains("hi-pda.com/forum/images/") || Url.Equals("http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png");
 
-            ContentControl content1 = GetTemplateChild("content1") as ContentControl;
+                string[] urlAry = Url.Split('/');
+                string fileFullName = urlAry.Last();
 
-            Image img = new Image();
-            img.Margin = new Thickness(5);
-            img.Stretch = Stretch.None;
-            img.ImageFailed += (s, e) => {
-                return;
-            };
-            img.ImageOpened += (s, e) => {
-                return;
-            };
-            if (!isCommonImage)
-            {
-                img.Tapped += async (s, e) => {
-                    var fileTypeFilter = new List<string>();
-                    fileTypeFilter.Add(".jpg");
-                    fileTypeFilter.Add(".jpeg");
-                    fileTypeFilter.Add(".png");
-                    fileTypeFilter.Add(".bmp");
-                    fileTypeFilter.Add(".gif");
-                    var queryOptions = new QueryOptions(CommonFileQuery.OrderByDate, fileTypeFilter);
-                    var query = folder.CreateFileQueryWithOptions(queryOptions);
-                    var options = new LauncherOptions();
-                    options.NeighboringFilesQuery = query;
-                    await Launcher.LaunchFileAsync(file, options);
-                };
-            }
-
-            IStorageItem existsFile = await folder.TryGetItemAsync(fileFullName);
-            if (existsFile != null)
-            {
-                file = existsFile as StorageFile;
-            }
-            else
-            {
-                // 不存在则请求
-                try
+                StorageFile file = null;
+                StorageFolder folder = ApplicationData.Current.LocalFolder;
+                if (isCommonImage)
                 {
+                    folder = await folder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
+                }
+                else
+                {
+                    folder = await folder.CreateFolderAsync(ThreadId.ToString(), CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
+                }
+
+                ContentControl content1 = GetTemplateChild("content1") as ContentControl;
+
+                Image img = new Image();
+                img.Margin = new Thickness(5);
+                img.Stretch = Stretch.None;
+                img.ImageFailed += (s, e) =>
+                {
+                    return;
+                };
+                img.ImageOpened += (s, e) =>
+                {
+                    return;
+                };
+                if (!isCommonImage)
+                {
+                    img.Tapped += async (s, e) =>
+                    {
+                        var fileTypeFilter = new List<string>();
+                        fileTypeFilter.Add(".jpg");
+                        fileTypeFilter.Add(".jpeg");
+                        fileTypeFilter.Add(".png");
+                        fileTypeFilter.Add(".bmp");
+                        fileTypeFilter.Add(".gif");
+                        var queryOptions = new QueryOptions(CommonFileQuery.OrderByDate, fileTypeFilter);
+                        var query = folder.CreateFileQueryWithOptions(queryOptions);
+                        var options = new LauncherOptions();
+                        options.NeighboringFilesQuery = query;
+                        await Launcher.LaunchFileAsync(file, options);
+                    };
+                }
+
+                IStorageItem existsFile = await folder.TryGetItemAsync(fileFullName);
+                if (existsFile != null)
+                {
+                    file = existsFile as StorageFile;
+                }
+                else
+                {
+                    // 不存在则请求
                     using (var client = new HttpClient())
                     {
                         var response = await client.GetAsync(new Uri(Url));
@@ -114,11 +117,7 @@ namespace Hipda.Client.Uwp.Pro
                         await FileIO.WriteBytesAsync(file, bytes);
                     }
                 }
-                catch { }
-            }
 
-            try
-            {
                 if (folder != null && file != null)
                 {
                     BitmapImage bitmapImg = new BitmapImage();
