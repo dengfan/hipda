@@ -50,7 +50,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnApplyTemplate();
 
-            bool isCommonImage = Url.StartsWith("http://www.hi-pda.com/forum/images/") || Url.Equals("http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png");
+            bool isCommonImage = Url.Contains("hi-pda.com/forum/images/") || Url.Equals("http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png");
 
             string[] urlAry = Url.Split('/');
             string fileFullName = urlAry.Last();
