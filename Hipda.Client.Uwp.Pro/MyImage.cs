@@ -53,6 +53,7 @@ namespace Hipda.Client.Uwp.Pro
             try
             {
                 bool isCommonImage = Url.Contains("hi-pda.com/forum/images/") || Url.Equals("http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png");
+                bool isGif = Url.ToLower().EndsWith(".gif");
 
                 string[] urlAry = Url.Split('/');
                 string fileFullName = urlAry.Last();
@@ -128,7 +129,7 @@ namespace Hipda.Client.Uwp.Pro
                         int imgWidth = bitmapImg.PixelWidth;
                         int imgHeight = bitmapImg.PixelHeight;
 
-                        if (fileFullName.EndsWith(".gif")) // GIF图片，使用WebView控件显示
+                        if (isGif) // GIF图片，使用WebView控件显示
                         {
                             WebView webView = new WebView();
                             webView.DefaultBackgroundColor = Colors.Transparent;
@@ -180,7 +181,7 @@ namespace Hipda.Client.Uwp.Pro
                     }
                 }
 
-                if (!fileFullName.EndsWith(".gif")) // 非gif图片，使用Image控件显示
+                if (!isGif) // 非gif图片，使用Image控件显示
                 {
                     content1.Content = img;
                 }
