@@ -3,16 +3,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Hipda.Client.Uwp.Pro">
 
-    <Style TargetType="local:MyImage" >
+    <Style TargetType="local:MyImage">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MyImage">
                     <StackPanel>
-                        <ContentControl x:Name="content1"/>
+                        <ContentControl x:Name="content1">
+                            <TextBlock Margin="5" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
+                                <Run Text="&#xE156; " FontFamily="Segoe UI Symbol"/>
+                                <Run Text="loading..."/>
+                            </TextBlock>
+                        </ContentControl>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    <!--<Image x:Name="img1" Margin="5" Source="/Assets/Images/loading.jpg" Stretch="None" />-->
 </ResourceDictionary>
