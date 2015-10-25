@@ -77,19 +77,22 @@ namespace Hipda.Client.Uwp.Pro
             img.ImageOpened += (s, e) => {
                 return;
             };
-            img.Tapped += async (s, e) => {
-                var fileTypeFilter = new List<string>();
-                fileTypeFilter.Add(".jpg");
-                fileTypeFilter.Add(".jpeg");
-                fileTypeFilter.Add(".png");
-                fileTypeFilter.Add(".bmp");
-                fileTypeFilter.Add(".gif");
-                var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, fileTypeFilter);
-                var query = folder.CreateFileQueryWithOptions(queryOptions);
-                var options = new LauncherOptions();
-                options.NeighboringFilesQuery = query;
-                await Launcher.LaunchFileAsync(file, options);
-            };
+            if (!isCommonImage)
+            {
+                img.Tapped += async (s, e) => {
+                    var fileTypeFilter = new List<string>();
+                    fileTypeFilter.Add(".jpg");
+                    fileTypeFilter.Add(".jpeg");
+                    fileTypeFilter.Add(".png");
+                    fileTypeFilter.Add(".bmp");
+                    fileTypeFilter.Add(".gif");
+                    var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, fileTypeFilter);
+                    var query = folder.CreateFileQueryWithOptions(queryOptions);
+                    var options = new LauncherOptions();
+                    options.NeighboringFilesQuery = query;
+                    await Launcher.LaunchFileAsync(file, options);
+                };
+            }
 
             IStorageItem existsFile = await folder.TryGetItemAsync(fileFullName);
             if (existsFile != null)
@@ -133,19 +136,23 @@ namespace Hipda.Client.Uwp.Pro
                             webView.Margin = new Thickness(5);
                             webView.Width = imgWidth;
                             webView.Height = imgHeight;
-                            webView.ScriptNotify += async (s, e) => {
-                                var fileTypeFilter = new List<string>();
-                                fileTypeFilter.Add(".jpg");
-                                fileTypeFilter.Add(".jpeg");
-                                fileTypeFilter.Add(".png");
-                                fileTypeFilter.Add(".bmp");
-                                fileTypeFilter.Add(".gif");
-                                var queryOptions = new QueryOptions(CommonFileQuery.OrderByDate, fileTypeFilter);
-                                var query = folder.CreateFileQueryWithOptions(queryOptions);
-                                var options = new LauncherOptions();
-                                options.NeighboringFilesQuery = query;
-                                await Launcher.LaunchFileAsync(file, options);
-                            };
+                            if (!isCommonImage)
+                            {
+                                webView.ScriptNotify += async (s, e) =>
+                                {
+                                    var fileTypeFilter = new List<string>();
+                                    fileTypeFilter.Add(".jpg");
+                                    fileTypeFilter.Add(".jpeg");
+                                    fileTypeFilter.Add(".png");
+                                    fileTypeFilter.Add(".bmp");
+                                    fileTypeFilter.Add(".gif");
+                                    var queryOptions = new QueryOptions(CommonFileQuery.OrderByDate, fileTypeFilter);
+                                    var query = folder.CreateFileQueryWithOptions(queryOptions);
+                                    var options = new LauncherOptions();
+                                    options.NeighboringFilesQuery = query;
+                                    await Launcher.LaunchFileAsync(file, options);
+                                };
+                            }
 
                             string imgHtml = @"<html><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""GIF Image"" /></body></html>";
                             imgHtml = string.Format(imgHtml, Url);
