@@ -130,7 +130,7 @@ namespace Hipda.Client.Uwp.Pro
                             webView.Margin = new Thickness(5);
                             webView.Width = imgWidth;
                             webView.Height = imgHeight;
-                            webView.Tapped += async (s, e) => {
+                            webView.ScriptNotify += async (s, e) => {
                                 var fileTypeFilter = new List<string>();
                                 fileTypeFilter.Add(".jpg");
                                 fileTypeFilter.Add(".jpeg");
@@ -144,10 +144,10 @@ namespace Hipda.Client.Uwp.Pro
                                 await Launcher.LaunchFileAsync(file, options);
                             };
 
-                            string imgHtml = @"<html><body style=""margin:0;padding:0;""><img src=""{0}"" /></body></html>";
+                            string imgHtml = @"<html><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""GIF Image"" /></body></html>";
                             imgHtml = string.Format(imgHtml, Url);
                             webView.NavigateToString(imgHtml);
-                            
+
                             content1.Content = webView;
                         }
                         else // 其它图片，使用Image控件显示

@@ -7,7 +7,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MyImage">
-                    <ContentControl x:Name="content1"/>
+                    <StackPanel>
+                        <ContentControl x:Name="content1"/>
+                    </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
