@@ -138,7 +138,7 @@
             <ImageBrush ImageSource="Assets/bg.jpg" />
         </Grid.Background>-->
 
-        <SplitView x:Name="MainSplitView" OpenPaneLength="200">
+        <SplitView x:Name="MainSplitView" OpenPaneLength="200" PaneBackground="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -230,7 +230,7 @@
                         </StackPanel>
                     </ScrollViewer>
 
-                    <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
+                    <StackPanel Grid.Row="1" VerticalAlignment="Bottom" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
                         <Button x:Name="btnNotice" Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
