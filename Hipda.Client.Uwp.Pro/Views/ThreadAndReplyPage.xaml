@@ -107,14 +107,14 @@
             <ColumnDefinition x:Name="RightSideColumn" Width="0" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="LeftWrap" Grid.Column="0" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+        <Grid x:Name="LeftWrap" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+            <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{Binding Background,ElementName=LayoutRoot}">
                 <AppBarButton Icon="Add" Label="发表新贴"/>
                 <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
                 <AppBarButton x:Name="SortingButton" Icon="Sort" Label="按发布时间倒序排列" Click="SortingButton_Click"/>
@@ -163,14 +163,14 @@
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
 
-        <Grid x:Name="RightWrap" Grid.Column="1">
+        <Grid x:Name="RightWrap" Grid.Column="1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+            <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{Binding Background,ElementName=LayoutRoot}">
                 <AppBarButton Icon="Edit" Label="评论"/>
                 <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
                 <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
@@ -228,13 +228,13 @@
             </StackPanel>
         </Grid>
 
-        <Grid x:Name="RightSideWrap" Grid.Column="2" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+        <Grid x:Name="RightSideWrap" Grid.Column="2" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <CommandBar x:Name="RightSideCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+            <CommandBar x:Name="RightSideCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{Binding Background,ElementName=LayoutRoot}">
                 <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
             </CommandBar>
             

@@ -37,7 +37,7 @@
         </Style>
 
         <DataTemplate x:Name="ReplyListTopItemTemplate">
-            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
