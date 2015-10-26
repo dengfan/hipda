@@ -10,6 +10,48 @@
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
 
+    <Page.Resources>
+        <Style x:Key="FaceButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="PointerOver">
+                                        <VisualState.Setters>
+                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlHighlightListAccentLowBrush}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlHighlightListAccentLowBrush}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <ContentPresenter x:Name="ContentPresenter"
+                                  Padding="{TemplateBinding Padding}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  AutomationProperties.AccessibilityView="Raw"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  ContentTransitions="{TemplateBinding ContentTransitions}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+
     <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">
@@ -124,11 +166,11 @@
         <Grid x:Name="RightWrap" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+            <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
                 <AppBarButton Icon="Edit" Label="评论"/>
                 <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
                 <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
@@ -160,6 +202,30 @@
             </pr:PullToRefreshBox>
 
             <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
+
+            <StackPanel Grid.Row="2" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
+                        <Button.Content>
+                            <SymbolIcon Symbol="Emoji2" />
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}">
+                        <Button.Content>
+                            <SymbolIcon Symbol="WebCam" />
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="SendPostButton" HorizontalAlignment="Right" Background="{ThemeResource SystemControlBackgroundAccentBrush}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Send" />
+                                <TextBlock Text="发送" Margin="4,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+                <TextBox x:Name="PostContentTextBox" Height="64" BorderThickness="0"/>
+            </StackPanel>
         </Grid>
 
         <Grid x:Name="RightSideWrap" Grid.Column="2" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
