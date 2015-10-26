@@ -203,7 +203,7 @@
 
             <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
-            <StackPanel Grid.Row="2" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
+            <StackPanel Grid.Row="2" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
                         <Button.Content>
