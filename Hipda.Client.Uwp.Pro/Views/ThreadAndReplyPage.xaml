@@ -15,6 +15,8 @@
             <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="30"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -147,7 +149,7 @@
             </CommandBar>
 
             <pr:PullToRefreshBox x:Name="leftPr" Grid.Row="1" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
-                <ListView x:Name="ThreadListView" IsItemClickEnabled="True" ShowsScrollingPlaceholders="False"
+                <ListView x:Name="ThreadListView" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False"
                           VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
                           ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
                           ItemsSource="{Binding ThreadItemCollection}">
@@ -180,7 +182,7 @@
             </CommandBar>
 
             <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-                <ListView x:Name="ReplyListView" IsItemClickEnabled="False" ShowsScrollingPlaceholders="False"
+                <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False"
                       ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                       ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                       ItemsSource="{Binding ReplyItemCollection}">
@@ -204,27 +206,43 @@
             <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
             <StackPanel Grid.Row="2" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
                         <Button.Content>
                             <SymbolIcon Symbol="Emoji2" />
                         </Button.Content>
                     </Button>
-                    <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}">
+                    <Button Grid.Column="1" x:Name="FileButton" Style="{StaticResource FaceButtonStyle}">
                         <Button.Content>
-                            <SymbolIcon Symbol="WebCam" />
+                            <SymbolIcon Symbol="Add" />
                         </Button.Content>
                     </Button>
-                    <Button x:Name="SendPostButton" HorizontalAlignment="Right" Background="{ThemeResource SystemControlBackgroundAccentBrush}">
+                    <Button Grid.Column="2" x:Name="SendPostButton" Style="{StaticResource FaceButtonStyle}" HorizontalAlignment="Right">
                         <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <SymbolIcon Symbol="Send" />
-                                <TextBlock Text="发送" Margin="4,0,0,0" VerticalAlignment="Center" />
-                            </StackPanel>
+                            <SymbolIcon Symbol="Send" />
                         </Button.Content>
                     </Button>
-                </StackPanel>
-                <TextBox x:Name="PostContentTextBox" Height="64" BorderThickness="0"/>
+                </Grid>
+                <TextBox x:Name="PostContentTextBox" Padding="8,4" BorderThickness="0" TextWrapping="Wrap"/>
+                <GridView ItemsSource="{Binding FaceData}" Height="64">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Button Width="48" Height="48">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Source="{Binding FaceFile}" Stretch="None"/>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+                <TextBlock Text="---------"/>
             </StackPanel>
         </Grid>
 
@@ -237,8 +255,8 @@
             <CommandBar x:Name="RightSideCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{Binding Background,ElementName=LayoutRoot}">
                 <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
             </CommandBar>
-            
-            <ListView x:Name="ReadListView" Grid.Row="1" ShowsScrollingPlaceholders="False" ItemsSource="{Binding ReadList}" IsItemClickEnabled="True" ItemClick="ReadListView_ItemClick">
+
+            <ListView x:Name="ReadListView" Grid.Row="1" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False" ItemsSource="{Binding ReadList}" ItemClick="ReadListView_ItemClick">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Padding" Value="12,4,20,4"/>
