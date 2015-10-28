@@ -212,6 +212,7 @@
     <Content Include="Assets\Faces\default\titter.gif" />
     <Content Include="Assets\Faces\default\tongue.gif" />
     <Content Include="Assets\Faces\default\victory.gif" />
+    <Content Include="Assets\Faces\Faces.html" />
     <Content Include="Assets\Faces\grapeman\01.gif" />
     <Content Include="Assets\Faces\grapeman\02.gif" />
     <Content Include="Assets\Faces\grapeman\03.gif" />

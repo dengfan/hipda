@@ -16,7 +16,6 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="30"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -165,54 +164,56 @@
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
 
-        <Grid x:Name="RightWrap" Grid.Column="1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Grid x:Name="RightWrap" Grid.Column="1" 
+              BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
+            <Grid Margin="0,0,0,80">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{Binding Background,ElementName=LayoutRoot}">
-                <AppBarButton Icon="Edit" Label="评论"/>
-                <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
-                <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
-                <CommandBar.SecondaryCommands>
-                    <AppBarButton Label="在浏览器中打开"/>
-                </CommandBar.SecondaryCommands>
-            </CommandBar>
+                <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{Binding Background,ElementName=LayoutRoot}">
+                    <AppBarButton Icon="Edit" Label="评论"/>
+                    <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
+                    <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
+                    <CommandBar.SecondaryCommands>
+                        <AppBarButton Label="在浏览器中打开"/>
+                    </CommandBar.SecondaryCommands>
+                </CommandBar>
 
-            <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-                <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False"
+                <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
+                    <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False"
                       ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                       ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                       ItemsSource="{Binding ReplyItemCollection}">
-                    <ListView.Footer>
-                        <StackPanel x:Name="rightFooter" Margin="0,80" Visibility="Collapsed">
-                            <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
-                            <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
-                                            <TextBlock Text="&#xE14A;" FontFamily="Segoe UI Symbol" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-                    </ListView.Footer>
-                </ListView>
-            </pr:PullToRefreshBox>
+                        <ListView.Footer>
+                            <StackPanel x:Name="rightFooter" Margin="0,80" Visibility="Collapsed">
+                                <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
+                                <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
+                                                <TextBlock Text="&#xE14A;" FontFamily="Segoe UI Symbol" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
+                        </ListView.Footer>
+                    </ListView>
+                </pr:PullToRefreshBox>
 
-            <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
-
-            <StackPanel Grid.Row="2" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
+                <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
+            </Grid>
+            <StackPanel x:Name="ReplyPanel" VerticalAlignment="Bottom" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="180"
+                  BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
+                    <Button Grid.Column="0" x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}" Click="FaceButton_Click">
                         <Button.Content>
                             <SymbolIcon Symbol="Emoji2" />
                         </Button.Content>
@@ -228,21 +229,22 @@
                         </Button.Content>
                     </Button>
                 </Grid>
-                <TextBox x:Name="PostContentTextBox" Padding="8,4" BorderThickness="0" TextWrapping="Wrap"/>
-                <GridView ItemsSource="{Binding FaceData}" Height="64">
+                <TextBox x:Name="PostContentTextBox" Padding="8,4" BorderThickness="0" TextWrapping="Wrap" Height="60"/>
+
+                <GridView ItemsSource="{Binding FaceData}" Height="100" Background="LightGray"
+                          ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Enabled"
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
                     <GridView.ItemTemplate>
                         <DataTemplate>
-                            <Button Width="48" Height="48">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Image Source="{Binding FaceFile}" Stretch="None"/>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                            <Image Source="{Binding FaceFile}" Stretch="None"/>
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>
-                <TextBlock Text="---------"/>
             </StackPanel>
         </Grid>
 

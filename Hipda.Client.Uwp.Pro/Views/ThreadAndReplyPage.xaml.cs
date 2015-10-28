@@ -331,5 +331,11 @@ namespace Hipda.Client.Uwp.Pro.Views
             item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
             RightWrap.DataContext = item;
         }
+
+        private void FaceButton_Click(object sender, RoutedEventArgs e)
+        {
+            ReplyPanel.VerticalAlignment = VerticalAlignment.Top;
+            ReplyPanel.Height = RightWrap.ActualHeight;
+        }
     }
 }
