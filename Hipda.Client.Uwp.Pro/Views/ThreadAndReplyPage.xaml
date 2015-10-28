@@ -205,8 +205,9 @@
 
                 <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
             </Grid>
-            <StackPanel x:Name="ReplyPanel" VerticalAlignment="Bottom" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="180"
+            <StackPanel x:Name="ReplyPanel" VerticalAlignment="Bottom" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                   BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
+                <TextBox x:Name="PostContentTextBox" Padding="8,4" BorderThickness="0" TextWrapping="Wrap" Height="60" PlaceholderText="说点啥呢。。。。"/>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -229,9 +230,8 @@
                         </Button.Content>
                     </Button>
                 </Grid>
-                <TextBox x:Name="PostContentTextBox" Padding="8,4" BorderThickness="0" TextWrapping="Wrap" Height="60"/>
-
-                <GridView ItemsSource="{Binding FaceData}" Height="100" Background="LightGray"
+                <GridView x:Name="FaceGridView" x:DeferLoadStrategy="Lazy" ItemsSource="{Binding FaceData}"
+                          BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0"
                           ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Enabled"
                           ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollMode="Disabled">
                     <GridView.ItemsPanel>
@@ -239,6 +239,14 @@
                             <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </GridView.ItemsPanel>
+                    <GridView.ItemContainerStyle>
+                        <Style TargetType="GridViewItem">
+                            <Setter Property="Margin" Value="4"/>
+                            <Setter Property="Padding" Value="4"/>
+                            <Setter Property="Width" Value="56"/>
+                            <Setter Property="Height" Value="56"/>
+                        </Style>
+                    </GridView.ItemContainerStyle>
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <Image Source="{Binding FaceFile}" Stretch="None"/>

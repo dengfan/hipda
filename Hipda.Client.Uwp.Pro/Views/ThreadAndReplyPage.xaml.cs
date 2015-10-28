@@ -334,8 +334,9 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void FaceButton_Click(object sender, RoutedEventArgs e)
         {
-            ReplyPanel.VerticalAlignment = VerticalAlignment.Top;
-            ReplyPanel.Height = RightWrap.ActualHeight;
+            this.FindName("FaceGridView");
+            //ReplyPanel.VerticalAlignment = VerticalAlignment.Top;
+            //ReplyPanel.Height = RightWrap.ActualHeight;
         }
     }
 }
