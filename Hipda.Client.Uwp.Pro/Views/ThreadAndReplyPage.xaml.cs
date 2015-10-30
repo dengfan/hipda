@@ -31,11 +31,21 @@ namespace Hipda.Client.Uwp.Pro.Views
                 string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
                 if (userInteractionType.Equals("Touch"))
                 {
-                    ReplyPanel.Visibility = Visibility.Collapsed;
+                    FaceButton.Width = 64;
+                    FaceButton.Height = 44;
+                    FileButton.Width = 64;
+                    FileButton.Height = 44;
+                    SendButton.Width = 80;
+                    SendButton.Height = 44;
                 }
                 else if (userInteractionType.Equals("Mouse"))
                 {
-                    ReplyPanel.Visibility = Visibility.Visible;
+                    FaceButton.Width = 36;
+                    FaceButton.Height = 36;
+                    FileButton.Width = 36;
+                    FileButton.Height = 36;
+                    SendButton.Width = 80;
+                    SendButton.Height = 36;
                 }
             };
         }
@@ -346,9 +356,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void FaceButton_Click(object sender, RoutedEventArgs e)
         {
-            this.FindName("FaceGridView");
-            //ReplyPanel.VerticalAlignment = VerticalAlignment.Top;
-            //ReplyPanel.Height = RightWrap.ActualHeight;
+            this.FindName("FaceGridViewForTouch");
         }
     }
 }
