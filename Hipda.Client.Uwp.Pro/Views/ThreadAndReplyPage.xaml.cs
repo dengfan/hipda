@@ -47,6 +47,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                     SendButton.Width = 80;
                     SendButton.Height = 32;
                 }
+
+                PostContentTextBoxForMouse.MaxHeight = this.ActualHeight / 2;
             };
         }
 
