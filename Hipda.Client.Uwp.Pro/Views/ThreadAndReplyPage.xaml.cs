@@ -31,21 +31,21 @@ namespace Hipda.Client.Uwp.Pro.Views
                 string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
                 if (userInteractionType.Equals("Touch"))
                 {
-                    FaceButton.Width = 64;
-                    FaceButton.Height = 44;
-                    FileButton.Width = 64;
-                    FileButton.Height = 44;
+                    FaceButton.Width = 80;
+                    FaceButton.Height = 40;
+                    FileButton.Width = 80;
+                    FileButton.Height = 40;
                     SendButton.Width = 80;
-                    SendButton.Height = 44;
+                    SendButton.Height = 40;
                 }
                 else if (userInteractionType.Equals("Mouse"))
                 {
                     FaceButton.Width = 36;
-                    FaceButton.Height = 36;
+                    FaceButton.Height = 32;
                     FileButton.Width = 36;
-                    FileButton.Height = 36;
+                    FileButton.Height = 32;
                     SendButton.Width = 80;
-                    SendButton.Height = 36;
+                    SendButton.Height = 32;
                 }
             };
         }
