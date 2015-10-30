@@ -30,6 +30,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public int ThreadMaxPageNo { get; private set; }
 
+        public List<FaceItem> FaceData
+        {
+            get
+            {
+                return FaceService.FaceData;
+            }
+        }
+
         #region 用于主题列表控件增量加载
         private ICollectionView _threadItemCollection;
 

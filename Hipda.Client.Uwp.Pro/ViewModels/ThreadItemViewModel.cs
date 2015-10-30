@@ -37,7 +37,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemModel ThreadItem { get; set; }
 
-        public List<FaceItem> FaceData { get; set; }
+        
 
         private ICollectionView _replyItemCollection;
 
@@ -64,7 +64,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             ThreadDataType = ThreadDataType.Default;
             ThreadItem = threadItem;
-            FaceData = FaceService.FaceData;
         }
 
         public ThreadItemViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
@@ -76,7 +75,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds = new DataService();
 
             ThreadItem = _ds.GetThreadItem(threadId);
-            FaceData = FaceService.FaceData;
 
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) =>
