@@ -259,7 +259,7 @@
             <ColumnDefinition x:Name="RightSideColumn" Width="0" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="LeftWrap" Grid.Column="0">
+        <Grid x:Name="LeftWrap" Grid.Column="0" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
@@ -394,7 +394,7 @@
                         </Button.Content>
                     </Button>
                 </Grid>
-                <TextBox x:Name="PostContentTextBoxForMouse" Style="{StaticResource TextBoxStyle1}" MaxHeight="280" Padding="8,4" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容"/>
+                <TextBox x:Name="PostContentTextBoxForMouse" Style="{StaticResource TextBoxStyle1}" MaxHeight="280" Padding="8,4" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容，回车可换行。"/>
             </StackPanel>
         </Grid>
 

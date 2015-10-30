@@ -105,7 +105,7 @@ namespace Hipda.Html
                     string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = @"[InlineUIContainer][local:MyImage ThreadId=""{0}"" Url=""{1}""][/local:MyImage][/InlineUIContainer]";
+                    string imgXaml = @"[InlineUIContainer][local:MyImage FolderName=""{0}"" Url=""{1}""][/local:MyImage][/InlineUIContainer]";
                     imgXaml = string.Format(imgXaml, threadId, imgUrl);
 
                     content = content.Replace(placeHolderLabel, imgXaml);
@@ -123,7 +123,7 @@ namespace Hipda.Html
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = @"[InlineUIContainer][local:MyImage ThreadId=""{0}"" Url=""{1}""][/local:MyImage][/InlineUIContainer]";
+                    string imgXaml = @"[InlineUIContainer][local:MyImage FolderName=""{0}"" Url=""{1}""][/local:MyImage][/InlineUIContainer]";
                     imgXaml = string.Format(imgXaml, threadId, imgUrl);
 
                     content = content.Replace(placeHolderLabel, imgXaml);

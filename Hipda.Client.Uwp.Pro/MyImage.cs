@@ -33,16 +33,15 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("Url", typeof(string), typeof(MyImage), new PropertyMetadata(0));
 
 
-
-        public int ThreadId
+        public string FolderName
         {
-            get { return (int)GetValue(ThreadIdProperty); }
-            set { SetValue(ThreadIdProperty, value); }
+            get { return (string)GetValue(FolderNameProperty); }
+            set { SetValue(FolderNameProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ThreadIdProperty =
-            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyImage), new PropertyMetadata(0));
+        // Using a DependencyProperty as the backing store for FolderName.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FolderNameProperty =
+            DependencyProperty.Register("FolderName", typeof(string), typeof(MyImage), new PropertyMetadata(0));
 
 
 
@@ -66,7 +65,7 @@ namespace Hipda.Client.Uwp.Pro
                 }
                 else
                 {
-                    folder = await folder.CreateFolderAsync(ThreadId.ToString(), CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
+                    folder = await folder.CreateFolderAsync(FolderName, CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
                 }
 
                 ContentControl content1 = GetTemplateChild("content1") as ContentControl;
