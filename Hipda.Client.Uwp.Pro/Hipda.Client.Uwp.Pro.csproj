@@ -125,6 +125,7 @@
     <Compile Include="Services\IncrementalLoadingBase.cs" />
     <Compile Include="ThreadListItemTemplateSelector.cs" />
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
+    <Compile Include="Triggers\InputTypeTrigger.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\ReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyViewModel.cs" />

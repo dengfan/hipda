@@ -26,6 +26,18 @@ namespace Hipda.Client.Uwp.Pro.Views
         public ThreadAndReplyPage()
         {
             this.InitializeComponent();
+
+            this.SizeChanged += (s, e) => {
+                string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
+                if (userInteractionType.Equals("Touch"))
+                {
+                    ReplyPanel.Visibility = Visibility.Collapsed;
+                }
+                else if (userInteractionType.Equals("Mouse"))
+                {
+                    ReplyPanel.Visibility = Visibility.Visible;
+                }
+            };
         }
 
         private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
