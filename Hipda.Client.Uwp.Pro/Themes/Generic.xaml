@@ -19,4 +19,14 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="local:MyLink" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:MyLink">
+                    <Button x:Name="button1" Content="{TemplateBinding LinkContent}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

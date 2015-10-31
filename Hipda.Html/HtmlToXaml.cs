@@ -58,8 +58,25 @@ namespace Hipda.Html
                 }
             }
 
+            // 替换站内链接为按钮
+            MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>([^<]*)</a>").Matches(content.ToString());
+            if (matchsForMyLink != null && matchsForMyLink.Count > 0)
+            {
+                for (int i = 0; i < matchsForMyLink.Count; i++)
+                {
+                    var m = matchsForMyLink[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string threadIdStr = m.Groups[1].Value;
+                    string linkContent = m.Groups[2].Value;
+
+                    string linkXaml = string.Format(@"[InlineUIContainer][local:MyLink ThreadIdStr=""{0}"" LinkContent=""{1}""][/local:MyLink][/InlineUIContainer]", threadIdStr, linkContent);
+                    content = content.Replace(placeHolder, linkXaml);
+                }
+            }
+
             // 替换链接
-            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^>#]*)</a>").Matches(content.ToString());
+            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<]*)</a>").Matches(content.ToString());
             if (matchsForLink != null && matchsForLink.Count > 0)
             {
                 for (int i = 0; i < matchsForLink.Count; i++)
