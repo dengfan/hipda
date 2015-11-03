@@ -64,7 +64,7 @@
              </Storyboard>-->
     </Page.Resources>
 
-    <Grid>
+    <Grid Background="WhiteSmoke">
         <Pivot x:Name="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
             <PivotItem Header="版区" CommonNavigationTransitionInfo.IsStaggerElement="True" Margin="0">
                 <ListView
