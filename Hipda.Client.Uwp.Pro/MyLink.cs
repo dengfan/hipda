@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hipda.Client.Uwp.Pro.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -46,7 +47,7 @@ namespace Hipda.Client.Uwp.Pro
 
 
 
-
+        public Action<string> MyLinkGo { get; set; }
 
         protected override void OnApplyTemplate()
         {
@@ -54,8 +55,8 @@ namespace Hipda.Client.Uwp.Pro
 
             var button1 = GetTemplateChild("button1") as Button;
 
-            button1.Click += async (s, e) => {
-                await new MessageDialog(LinkContent).ShowAsync();
+            button1.Click += (s, e) => {
+                MyLinkGo(ThreadIdStr);
             };
         }
     }
