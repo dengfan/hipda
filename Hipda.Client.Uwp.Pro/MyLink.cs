@@ -52,7 +52,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnApplyTemplate();
 
-            Button button1 = GetTemplateChild("button1") as Button;
+            var button1 = GetTemplateChild("button1") as Button;
 
             button1.Click += async (s, e) => {
                 await new MessageDialog(LinkContent).ShowAsync();
