@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="63653AppxKing.HiPDAUWPlite" Publisher="CN=5C7BFBCC-D6D6-4906-A546-DE530049BD46" Version="1.1.5.0" />
+  <Identity Name="63653AppxKing.HiPDAUWPlite" Publisher="CN=5C7BFBCC-D6D6-4906-A546-DE530049BD46" Version="1.1.6.0" />
   <mp:PhoneIdentity PhoneProductId="4979a543-4809-4b9a-b2e7-19a19dea9e53" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Hi!PDA UWP lite</DisplayName>
@@ -28,6 +28,5 @@
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
-    <uap:Capability Name="removableStorage" />
   </Capabilities>
 </Package>
