@@ -19,6 +19,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private ListView _replyListView { get; set; }
         private Action _beforeLoad { get; set; }
         private Action _afterLoad { get; set; }
+        private Action<int> _linkClickEvent { get; set; }
         private DataService _ds { get; set; }
 
         private Brush _statusColor;
@@ -51,7 +52,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad, _linkClickEvent);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -64,12 +65,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = threadItem;
         }
 
-        public ThreadItemForSearchViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
+        public ThreadItemForSearchViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad, Action<int> linkClickEvent)
         {
             ThreadDataType = ThreadDataType.Default;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
+            _linkClickEvent = linkClickEvent;
             _ds = new DataService();
 
             ThreadItem = _ds.GetThreadItem(threadId);
@@ -81,7 +83,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 LoadData(1);
             };
 
-            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad, _linkClickEvent);
             if (cv != null)
             {
                 ReplyItemCollection = cv;

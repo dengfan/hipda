@@ -116,6 +116,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                         rightProgress.IsActive = false;
                         rightProgress.Visibility = Visibility.Collapsed;
                         btnRefresh.IsEnabled = true;
+                    },
+                    (tid) => {
+
                     });
 
                 DataContext = _replyViewModel;

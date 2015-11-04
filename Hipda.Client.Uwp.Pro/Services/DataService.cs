@@ -511,7 +511,12 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public ThreadItemModel GetThreadItem(int threadId)
         {
-            return _threadData.FirstOrDefault(t => t.ThreadId == threadId);
+            var data = _threadData.FirstOrDefault(t => t.ThreadId == threadId);
+            if (data == null)
+            {
+                // 从这里开始
+            }
+            return data;
         }
 
         public ThreadItemForMyThreadsModel GetThreadItemForMyThreads(int threadId)
@@ -540,7 +545,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region reply
-        private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, CancellationTokenSource cts)
+        private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, Action<int> linkClickEvent, CancellationTokenSource cts)
         {
             // 如果页面已存在，则不重新从网站拉取数据，以便节省流量， 
             var threadReply = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
@@ -666,6 +671,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
+                int linkCount = 0;
                 var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
@@ -681,7 +687,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.Convert(threadId, htmlContent, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.Convert(threadId, htmlContent, 20, ref imageCount, ref linkCount);
                 }
                 else
                 {
@@ -689,18 +695,18 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, imageCount, postTime);
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, linkCount, linkClickEvent);
                 threadReply.Replies.Add(reply);
 
                 i++;
             }
         }
 
-        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int threadAuthorUserId, int pageNo, Action beforeLoad, Action afterLoad)
+        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int threadAuthorUserId, int pageNo, Action beforeLoad, Action afterLoad, Action<int> linkClickEvent)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
-            await LoadReplyDataAsync(threadId, threadAuthorUserId, pageNo, cts);
+            await LoadReplyDataAsync(threadId, threadAuthorUserId, pageNo, linkClickEvent, cts);
             if (afterLoad != null) afterLoad();
 
             return _replyData.Single(t => t.ThreadId == threadId).Replies.Count;
@@ -711,7 +717,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _replyData.Single(t => t.ThreadId == threadId).Replies[index];
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad, Action<int> linkClickEvent)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
@@ -720,7 +726,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad);
+                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad, linkClickEvent);
                 },
                 (index) =>
                 {
@@ -735,7 +741,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action afterLoad, Action<int> listViewScroll)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action afterLoad, Action<int> listViewScroll, Action<int> linkClickEvent)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
@@ -744,7 +750,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad);
+                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad, linkClickEvent);
                 },
                 (index) =>
                 {
@@ -765,7 +771,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public async Task<int[]> LoadReplyDataForRedirectPageAsync(int threadId, int targetPostId, CancellationTokenSource cts)
+        public async Task<int[]> LoadReplyDataForRedirectPageAsync(int threadId, int targetPostId, Action<int> linkClickEvent, CancellationTokenSource cts)
         {
             // 先清空本贴的回复数据，以便重新加载
             _replyData.RemoveAll(r => r.ThreadId == threadId);
@@ -863,6 +869,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
+                int linkCount = 0;
                 var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
@@ -878,7 +885,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.Convert(threadId, htmlContent, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.Convert(threadId, htmlContent, 20, ref imageCount, ref linkCount);
                 }
                 else
                 {
@@ -886,7 +893,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, 0, authorUserId, authorUsername, textContent, htmlContent, xamlContent, imageCount, postTime);
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, 0, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, linkCount, linkClickEvent);
                 threadReply.Replies.Add(reply);
 
                 i++;

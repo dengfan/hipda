@@ -19,6 +19,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private ListView _replyListView { get; set; }
         private Action _beforeLoad { get; set; }
         private Action _afterLoad { get; set; }
+        private Action<int> _linkClickEvent { get; set; }
         private DataService _ds { get; set; }
 
         public DelegateCommand RefreshReplyCommand { get; set; }
@@ -39,7 +40,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, _beforeLoad, _afterLoad, _linkClickEvent);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -52,12 +53,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = threadItem;
         }
 
-        public ThreadItemForMyThreadsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
+        public ThreadItemForMyThreadsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad, Action<int> linkClickEvent)
         {
             ThreadDataType = ThreadDataType.MyThreads;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
+            _linkClickEvent = linkClickEvent;
             _ds = new DataService();
 
             ThreadItem = _ds.GetThreadItemForMyThreads(threadId);
@@ -69,7 +71,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 LoadData(1);
             };
 
-            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad, _linkClickEvent);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -81,6 +83,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
+
             _ds = new DataService();
 
             RefreshReplyCommand = new DelegateCommand();

@@ -9,7 +9,7 @@ namespace Hipda.Html
 {
     public static class HtmlToXaml
     {
-        public static string Convert(int threadId, string htmlContent, int maxImageCount, ref int imageCount)
+        public static string Convert(int threadId, string htmlContent, int maxImageCount, ref int imageCount, ref int linkCount)
         {
             //string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
 
@@ -59,18 +59,21 @@ namespace Hipda.Html
             }
 
             // 替换站内链接为按钮
-            MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>([^<]*)</a>").Matches(content.ToString());
+            linkCount = 0;
+            MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(content.ToString());
             if (matchsForMyLink != null && matchsForMyLink.Count > 0)
             {
-                for (int i = 0; i < matchsForMyLink.Count; i++)
+                linkCount = matchsForMyLink.Count;
+                for (int i = 0; i < linkCount; i++)
                 {
                     var m = matchsForMyLink[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string threadIdStr = m.Groups[1].Value;
                     string linkContent = m.Groups[2].Value;
+                    linkContent = Regex.Replace(linkContent, @"<[^>]*>", string.Empty);
 
-                    string linkXaml = string.Format(@"[InlineUIContainer][local:MyLink ThreadIdStr=""{0}"" LinkContent=""{1}""][/local:MyLink][/InlineUIContainer]", threadIdStr, linkContent);
+                    string linkXaml = string.Format(@"[InlineUIContainer][local:MyLink Name=""MyLink_{2}"" ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent, i + 1);
                     content = content.Replace(placeHolder, linkXaml);
                 }
             }
@@ -149,7 +152,7 @@ namespace Hipda.Html
             #endregion
 
             string xamlContent = content.ToString();
-            xamlContent = new Regex("<[^<]*>").Replace(xamlContent, string.Empty); // 移除所有HTML标签
+            xamlContent = new Regex("<[^>]*>").Replace(xamlContent, string.Empty); // 移除所有HTML标签
             xamlContent = new Regex("\r\n").Replace(xamlContent, string.Empty); // 忽略源换行
             xamlContent = new Regex("\r").Replace(xamlContent, string.Empty); // 忽略源换行
             xamlContent = new Regex("\n").Replace(xamlContent, string.Empty); // 忽略源换行

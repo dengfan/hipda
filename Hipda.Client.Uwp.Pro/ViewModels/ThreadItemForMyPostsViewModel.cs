@@ -19,6 +19,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private ListView _replyListView { get; set; }
         private Action _beforeLoad { get; set; }
         private Action _afterLoad { get; set; }
+        private Action<int> _linkClickEvent { get; set; }
         private DataService _ds { get; set; }
 
         public DelegateCommand RefreshReplyCommand { get; set; }
@@ -39,7 +40,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, _beforeLoad, _afterLoad, _linkClickEvent);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -52,12 +53,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = threadItem;
         }
 
-        public ThreadItemForMyPostsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad)
+        public ThreadItemForMyPostsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action afterLoad, Action<int> linkClickEvent)
         {
             ThreadDataType = ThreadDataType.MyPosts;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
+            _linkClickEvent = linkClickEvent;
             _ds = new DataService();
 
             ThreadItem = _ds.GetThreadItemForMyPosts(threadId);
@@ -69,18 +71,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 LoadData(1);
             };
 
-            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad, _linkClickEvent);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
             }
         }
 
-        public async void SelectThreadItem(ListView replyListView, Action beforeLoad, Action afterLoad, Action<int> listViewScroll)
+        public async void SelectThreadItem(ListView replyListView, Action beforeLoad, Action afterLoad, Action<int> listViewScroll, Action<int> linkClickEvent)
         {
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
+            _linkClickEvent = linkClickEvent;
             _ds = new DataService();
 
             RefreshReplyCommand = new DelegateCommand();
@@ -92,11 +95,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             // 先载入第一个转跳到的页面的数据，并得到页码之后即可进入正常流程
             var cts = new CancellationTokenSource();
-            int[] data = await _ds.LoadReplyDataForRedirectPageAsync(ThreadItem.ThreadId, ThreadItem.PostId, cts);
+            int[] data = await _ds.LoadReplyDataForRedirectPageAsync(ThreadItem.ThreadId, ThreadItem.PostId, _linkClickEvent, cts);
             int pageNo = data[0];
             int index = data[1];
             _ds.SetScrollState(false);
-            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, index, _beforeLoad, _afterLoad, listViewScroll);
+            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, index, _beforeLoad, _afterLoad, listViewScroll, _linkClickEvent);
             if (cv != null)
             {
                 ReplyItemCollection = cv;

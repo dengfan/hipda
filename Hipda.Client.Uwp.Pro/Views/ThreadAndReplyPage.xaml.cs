@@ -114,6 +114,19 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
             });
         }
+
+        public void OpenReplyPageByThreadId(int threadId)
+        {
+            var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
+            if (threadItem == null)
+            {
+                return;
+            }
+
+            var item = new ThreadItemViewModel(threadItem);
+            //item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+            //RightWrap.DataContext = item;
+        }
         #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -154,17 +167,17 @@ namespace Hipda.Client.Uwp.Pro.Views
                     switch (itemBase.ThreadDataType)
                     {
                         case ThreadDataType.MyThreads:
-                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
                             _lastSelectedItem = itemForMyThreads;
                             RightWrap.DataContext = itemForMyThreads;
                             break;
                         case ThreadDataType.MyPosts:
-                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
                             _lastSelectedItem = itemForMyPosts;
                             RightWrap.DataContext = itemForMyPosts;
                             break;
                         default:
-                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
                             _lastSelectedItem = item;
                             RightWrap.DataContext = item;
                             break;
@@ -247,7 +260,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
+                        itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll, OpenReplyPageByThreadId);
                         RightWrap.DataContext = itemForMyPosts;
                     }
                     break;
@@ -281,7 +294,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     else
                     {
                         item.SetRead();
-                        item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+                        item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
                         RightWrap.DataContext = item;
                     }
                     break;
@@ -345,15 +358,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void ReadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             ThreadItemModelBase data = e.ClickedItem as ThreadItemModelBase;
-            var threadItem = _threadAndReplyViewModel.GetThreadItem(data.ThreadId);
-            if (threadItem == null)
-            {
-                return;
-            }
-
-            var item = new ThreadItemViewModel(threadItem);
-            item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-            RightWrap.DataContext = item;
+            OpenReplyPageByThreadId(data.ThreadId);
         }
 
         private void FaceButton_Click(object sender, RoutedEventArgs e)

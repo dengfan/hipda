@@ -5,13 +5,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Markup;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ReplyItemModel
     {
-        public ReplyItemModel(int index, int floorNo, int postId, int pageNo, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string htmlContent, string xamlConent, int imageCount, string authorCreateTime)
+        public ReplyItemModel(int index, int floorNo, int postId, int pageNo, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string htmlContent, string xamlConent, string authorCreateTime, int imageCount, int linkCount, Action<int> linkClickEvent)
         {
             this.Index = index;
             this.FloorNo = floorNo;
@@ -25,8 +26,10 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.TextStr = textContent;
             this.HtmlStr = htmlContent;
             this.XamlStr = xamlConent;
-            this.ImageCount = imageCount;
             this.AuthorCreateTime = authorCreateTime;
+            this.ImageCount = imageCount;
+            this.LinkCount = linkCount;
+            this.LinkClickEvent = linkClickEvent;
         }
 
         public int Index { get; private set; }
@@ -46,9 +49,13 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public string XamlStr { get; set; }
 
+        public string AuthorCreateTime { get; private set; }
+
         public int ImageCount { get; set; }
 
-        public string AuthorCreateTime { get; private set; }
+        public int LinkCount { get; set; }
+
+        public Action<int> LinkClickEvent { get; set; }
 
         public bool HasThreadTitle
         {
@@ -99,7 +106,26 @@ namespace Hipda.Client.Uwp.Pro.Models
             {
                 try
                 {
-                    return XamlReader.Load(XamlStr);
+                    var element = XamlReader.Load(XamlStr) as FrameworkElement;
+                    if (LinkCount > 0)
+                    {
+                        //MyLink myLink = element.FindName("MyLink_0") as MyLink;
+                        //if (myLink != null && LinkClickEvent != null)
+                        //{
+                        //    myLink.MyLinkClick = LinkClickEvent;
+                        //}
+
+                        for (int i = LinkCount; i >= 0; i--)
+                        {
+                            var myLink = element.FindName(string.Format("MyLink_{0}", i)) as MyLink;
+                            if (myLink != null && LinkClickEvent != null)
+                            {
+                                myLink.MyLinkClick = LinkClickEvent;
+                            }
+                        }
+                    }
+
+                    return element;
                 }
                 catch
                 {

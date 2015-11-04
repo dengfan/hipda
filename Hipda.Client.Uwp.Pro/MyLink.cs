@@ -23,16 +23,15 @@ namespace Hipda.Client.Uwp.Pro
         }
 
 
-
-        public string ThreadIdStr
+        public int ThreadId
         {
-            get { return (string)GetValue(ThreadIdStrProperty); }
-            set { SetValue(ThreadIdStrProperty, value); }
+            get { return (int)GetValue(ThreadIdProperty); }
+            set { SetValue(ThreadIdProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ThreadIdStr.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ThreadIdStrProperty =
-            DependencyProperty.Register("ThreadIdStr", typeof(string), typeof(MyLink), new PropertyMetadata(0));
+        // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ThreadIdProperty =
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyLink), new PropertyMetadata(0));
 
 
         public string LinkContent
@@ -47,7 +46,7 @@ namespace Hipda.Client.Uwp.Pro
 
 
 
-        public Action<string> MyLinkGo { get; set; }
+        public Action<int> MyLinkClick { get; set; }
 
         protected override void OnApplyTemplate()
         {
@@ -56,7 +55,10 @@ namespace Hipda.Client.Uwp.Pro
             var button1 = GetTemplateChild("button1") as Button;
 
             button1.Click += (s, e) => {
-                MyLinkGo(ThreadIdStr);
+                if (MyLinkClick != null)
+                {
+                    MyLinkClick(ThreadId);
+                }
             };
         }
     }
