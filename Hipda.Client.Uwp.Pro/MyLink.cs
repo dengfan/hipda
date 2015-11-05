@@ -52,9 +52,9 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnApplyTemplate();
 
-            var button1 = GetTemplateChild("button1") as Button;
+            var button1 = GetTemplateChild("button1") as Border;
 
-            button1.Click += (s, e) => {
+            button1.Tapped += (s, e) => {
                 if (MyLinkClick != null)
                 {
                     MyLinkClick(ThreadId);
