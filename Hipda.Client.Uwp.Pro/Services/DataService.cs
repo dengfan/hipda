@@ -511,12 +511,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public ThreadItemModel GetThreadItem(int threadId)
         {
-            var data = _threadData.FirstOrDefault(t => t.ThreadId == threadId);
-            if (data == null)
-            {
-                // 从这里开始
-            }
-            return data;
+            return _threadData.FirstOrDefault(t => t.ThreadId == threadId);
         }
 
         public ThreadItemForMyThreadsModel GetThreadItemForMyThreads(int threadId)
