@@ -30,7 +30,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace((string)"↵", (string)"&#8629;");
 
             // 移除无用的图片附加信息
-            MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n*.*").Matches(htmlContent.ToString());
+            MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n*.*").Matches(htmlContent);
             if (matchsForInvalidHtml1 != null && matchsForInvalidHtml1.Count > 0)
             {
                 for (int i = 0; i < matchsForInvalidHtml1.Count; i++)
@@ -43,7 +43,7 @@ namespace Hipda.Html
             }
 
             // 移除无用的图片附加信息2
-            MatchCollection matchsForInvalidHtml2 = new Regex(@"<p class=""imgtitle"">\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*").Matches(htmlContent.ToString());
+            MatchCollection matchsForInvalidHtml2 = new Regex(@"<p class=""imgtitle"">\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*").Matches(htmlContent);
             if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
             {
                 for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
@@ -57,7 +57,7 @@ namespace Hipda.Html
 
             // 替换站内链接为按钮
             linkCount = 0;
-            MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent.ToString());
+            MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
             if (matchsForMyLink != null && matchsForMyLink.Count > 0)
             {
                 linkCount = matchsForMyLink.Count;
@@ -77,7 +77,7 @@ namespace Hipda.Html
             }
 
             // 替换链接
-            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<]*)</a>").Matches(htmlContent.ToString());
+            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<]*)</a>").Matches(htmlContent);
             if (matchsForLink != null && matchsForLink.Count > 0)
             {
                 for (int i = 0; i < matchsForLink.Count; i++)
@@ -114,7 +114,7 @@ namespace Hipda.Html
 
             #region 解析图片
             // 站内上载的图片，通过file属性解析
-            MatchCollection matchsForImage1 = new Regex(@"<img[^>]*file=""([^""]*)""[^>]*>").Matches(htmlContent.ToString());
+            MatchCollection matchsForImage1 = new Regex(@"<img[^>]*file=""([^""]*)""[^>]*>").Matches(htmlContent);
             if (matchsForImage1 != null && matchsForImage1.Count > 0)
             {
                 for (int i = 0; i < matchsForImage1.Count; i++)
@@ -131,7 +131,7 @@ namespace Hipda.Html
             }
 
             // 其他图片，通过src属性解析
-            MatchCollection matchsForImage2 = new Regex(@"<img[^>]*src=""([^""]*)""[^>]*>").Matches(htmlContent.ToString());
+            MatchCollection matchsForImage2 = new Regex(@"<img[^>]*src=""([^""]*)""[^>]*>").Matches(htmlContent);
             if (matchsForImage2 != null && matchsForImage2.Count > 0)
             {
                 for (int i = 0; i < matchsForImage2.Count; i++)
