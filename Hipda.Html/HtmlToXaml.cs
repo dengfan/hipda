@@ -173,13 +173,10 @@ namespace Hipda.Html
         {
             return str
                 .Replace("^", @"\^")
-                .Replace("!", @"\!")
-                .Replace("|", @"\|")
                 .Replace("$", @"\$")
                 .Replace("*", @"\*")
                 .Replace("+", @"\+")
                 .Replace("?", @"\?")
-                .Replace(".", @"\.")
                 .Replace("[", @"\[")
                 .Replace("]", @"\]")
                 .Replace("(", @"\(")
