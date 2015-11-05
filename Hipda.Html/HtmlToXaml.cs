@@ -72,7 +72,7 @@ namespace Hipda.Html
 
                     string linkXaml = string.Format(@"[InlineUIContainer][local:MyLink Name=""MyLink_{2}"" ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent, i);
                     string regexPattern = StringToRegexPattern(placeHolder);
-                    htmlContent = new Regex(regexPattern).Replace(htmlContent, linkXaml, 1);
+                    htmlContent = new Regex(regexPattern).Replace(htmlContent, linkXaml, 1); // 由于站内链接有可能重复，所以这里每次只允许替换一个
                 }
             }
 
