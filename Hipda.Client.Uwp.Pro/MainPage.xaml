@@ -315,7 +315,7 @@
 
             <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <TextBox Name="userNameTextBox" Header="User name"/>
-                <PasswordBox Name="passwordTextBox" Header="Password" IsPasswordRevealButtonEnabled="True"/>
+                <PasswordBox Name="passwordTextBox" Header="Password" PasswordRevealMode="Peek"/>
                 <CheckBox Name="saveUserNameCheckBox" Content="Save user name"/>
                 <TextBlock x:Name="errorTextBlock" />
                 <TextBlock Text="Lorem ipsum dolor sit amet, consectetur adipisicing elit." TextWrapping="Wrap" />
