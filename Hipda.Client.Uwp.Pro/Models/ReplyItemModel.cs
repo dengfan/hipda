@@ -107,21 +107,12 @@ namespace Hipda.Client.Uwp.Pro.Models
                 try
                 {
                     var element = XamlReader.Load(XamlStr) as FrameworkElement;
-                    if (LinkCount > 0)
+                    for (int i = 0; i < LinkCount; i++)
                     {
-                        //MyLink myLink = element.FindName("MyLink_0") as MyLink;
-                        //if (myLink != null && LinkClickEvent != null)
-                        //{
-                        //    myLink.MyLinkClick = LinkClickEvent;
-                        //}
-
-                        for (int i = LinkCount; i >= 0; i--)
+                        var myLink = element.FindName(string.Format("MyLink_{0}", i)) as MyLink;
+                        if (myLink != null && LinkClickEvent != null)
                         {
-                            var myLink = element.FindName(string.Format("MyLink_{0}", i)) as MyLink;
-                            if (myLink != null && LinkClickEvent != null)
-                            {
-                                myLink.MyLinkClick = LinkClickEvent;
-                            }
+                            myLink.MyLinkClick = LinkClickEvent;
                         }
                     }
 
