@@ -538,12 +538,43 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _read.Contains(threadId);
         }
 
-        public string GetThreadTitle(int threadId)
+        public string GetThreadTitleFromReplyData(int threadId)
         {
-            var thread = _threadData.FirstOrDefault(t => t.ThreadId == threadId);
-            if (thread != null)
+            var replyData = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
+            if (replyData != null)
             {
-                return thread.Title;
+                var replyItem = replyData.Replies.FirstOrDefault(i => i.PageNo == 1 && i.Index == 0);
+                if (replyItem != null)
+                {
+                    return replyItem.ThreadTitle;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        public string GetThreadTitleFromThreadData(int threadId)
+        {
+            var threadData = _threadData.FirstOrDefault(t => t.ThreadId == threadId);
+            if (threadData != null)
+            {
+                return threadData.Title;
+            }
+            else
+            {
+                var threadDataForMyPosts = _threadDataForMyPosts.FirstOrDefault(t => t.ThreadId == threadId);
+                if (threadDataForMyPosts != null)
+                {
+                    return threadDataForMyPosts.Title;
+                }
+                else
+                {
+                    var threadDataForMyThreads = _threadDataForMyThreads.FirstOrDefault(t => t.ThreadId == threadId);
+                    if (threadDataForMyThreads != null)
+                    {
+                        return threadDataForMyThreads.Title;
+                    }
+                }
             }
 
             return string.Empty;
@@ -708,12 +739,13 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int threadAuthorUserId, int pageNo, Action beforeLoad, Action<int> afterLoad, Action<int> linkClickEvent)
+        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int threadAuthorUserId, int pageNo, Action beforeLoad, Action<int, string> afterLoad, Action<int> linkClickEvent)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
             await LoadReplyDataAsync(threadId, threadAuthorUserId, pageNo, linkClickEvent, cts);
-            if (afterLoad != null) afterLoad(threadId);
+            string threadTitle = GetThreadTitleFromThreadData(threadId);
+            if (afterLoad != null) afterLoad(threadId, threadTitle);
 
             return _replyData.Single(t => t.ThreadId == threadId).Replies.Count;
         }
@@ -723,7 +755,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _replyData.Single(t => t.ThreadId == threadId).Replies[index];
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int> afterLoad, Action<int> linkClickEvent)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int, string> afterLoad, Action<int> linkClickEvent)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
@@ -747,7 +779,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll, Action<int> linkClickEvent)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action<int, string> afterLoad, Action<int> listViewScroll, Action<int> linkClickEvent)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(

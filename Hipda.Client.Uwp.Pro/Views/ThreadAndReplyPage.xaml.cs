@@ -88,7 +88,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             rightFooter.Visibility = Visibility.Collapsed;
         }
 
-        private async void RightAfterLoaded(int threadId)
+        private async void RightAfterLoaded(int threadId, string threadTitle)
         {
             rightProgress.IsActive = false;
             rightProgress.Visibility = Visibility.Collapsed;
@@ -97,7 +97,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             ReplyRefreshButton2.IsEnabled = true;
             rightFooter.Visibility = Visibility.Visible;
 
-            await AddToReadHistory(threadId);
+            await AddToReadHistory(threadId, threadTitle);
         }
 
         private async void ReplyListViewScroll(int index)
@@ -135,18 +135,21 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        private async Task AddToReadHistory(int threadId)
+        private async Task AddToReadHistory(int threadId, string threadTitle)
         {
-            string threadTitle = _threadAndReplyViewModel.GetThreadTitle(threadId);
-            if (string.IsNullOrEmpty(threadTitle))
-            {
-                return;
-            }
-
             var ti = _threadAndReplyViewModel.ReadList.FirstOrDefault(t => t.ThreadId == threadId);
             if (ti != null)
             {
                 _threadAndReplyViewModel.ReadList.Remove(ti);
+            }
+
+            if (string.IsNullOrEmpty(threadTitle))
+            {
+                threadTitle = _threadAndReplyViewModel.GetThreadTitle(threadId);
+                if (string.IsNullOrEmpty(threadTitle))
+                {
+                    return;
+                }
             }
 
             _threadAndReplyViewModel.ReadList.Add(new ThreadItemModelBase
