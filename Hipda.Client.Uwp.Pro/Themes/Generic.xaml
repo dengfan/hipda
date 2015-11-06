@@ -24,7 +24,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MyLink">
-                    <Border x:Name="button1" Margin="0,12,0,0" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" BorderThickness="0,0,0,1">
+                    <Border x:Name="button1" Margin="0,8,0,0" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" BorderThickness="0,0,0,1">
                         <TextBlock Text="{TemplateBinding LinkContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" />
                     </Border>
                 </ControlTemplate>
