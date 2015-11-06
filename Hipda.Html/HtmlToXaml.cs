@@ -22,12 +22,12 @@ namespace Hipda.Html
 
             //}
 
-            htmlContent = htmlContent.Replace((string)"[", (string)"&#8968;");
-            htmlContent = htmlContent.Replace((string)"]", (string)"&#8971;");
-            htmlContent = htmlContent.Replace((string)"&nbsp;", (string)" ");
-            htmlContent = htmlContent.Replace((string)"<strong>", (string)string.Empty);
-            htmlContent = htmlContent.Replace((string)"</strong>", (string)string.Empty);
-            htmlContent = htmlContent.Replace((string)"↵", (string)"&#8629;");
+            htmlContent = htmlContent.Replace("[", "&#8968;");
+            htmlContent = htmlContent.Replace("]", "&#8971;");
+            htmlContent = htmlContent.Replace("&nbsp;", " ");
+            htmlContent = htmlContent.Replace("<strong>", string.Empty);
+            htmlContent = htmlContent.Replace("</strong>", string.Empty);
+            htmlContent = htmlContent.Replace("↵", "&#8629;");
 
             // 移除无用的图片附加信息
             MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n*.*").Matches(htmlContent);
@@ -38,7 +38,7 @@ namespace Hipda.Html
                     var m = matchsForInvalidHtml1[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    htmlContent = htmlContent.Replace((string)placeHolder, (string)string.Empty);
+                    htmlContent = htmlContent.Replace(placeHolder, string.Empty);
                 }
             }
 
@@ -51,7 +51,7 @@ namespace Hipda.Html
                     var m = matchsForInvalidHtml2[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    htmlContent = htmlContent.Replace((string)placeHolder, (string)string.Empty);
+                    htmlContent = htmlContent.Replace(placeHolder, string.Empty);
                 }
             }
 
@@ -93,24 +93,40 @@ namespace Hipda.Html
                         linkUrl = string.Format("http://www.hi-pda.com/forum/{0}", linkUrl);
                     }
                     string linkXaml = string.Format(@"[Hyperlink NavigateUri=""{0}"" Foreground=""DodgerBlue""]{1}[/Hyperlink]", linkUrl, linkContent);
-                    htmlContent = htmlContent.Replace((string)placeHolder, (string)linkXaml);
+                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                 }
             }
 
-            htmlContent = htmlContent.Replace((string)@"<div class=""postattachlist"">", (string)"↵");
-            htmlContent = htmlContent.Replace((string)"<br/>", (string)"↵"); // ↵符号表示换行符
-            htmlContent = htmlContent.Replace((string)"<br />", (string)"↵");
-            htmlContent = htmlContent.Replace((string)"<br>", (string)"↵");
-            htmlContent = htmlContent.Replace((string)"</div>", (string)"↵");
-            htmlContent = htmlContent.Replace((string)"</p>", (string)"↵");
+            // 替换"最后编辑时间"
+            MatchCollection matchsForLastEditInfo = new Regex(@"<i class=""pstatus"">(.*)</i>").Matches(htmlContent);
+            if (matchsForLastEditInfo != null && matchsForLastEditInfo.Count > 0)
+            {
+                for (int i = 0; i < matchsForLastEditInfo.Count; i++)
+                {
+                    var m = matchsForLastEditInfo[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string infoContent = m.Groups[1].Value.Trim();
+                    
+                    string infoXaml = string.Format(@"[InlineUIContainer][TextBlock Text=""{0}"" Foreground=""Gray""/][/InlineUIContainer]", infoContent);
+                    htmlContent = htmlContent.Replace(placeHolder, infoXaml);
+                }
+            }
+
+            htmlContent = htmlContent.Replace(@"<div class=""postattachlist"">", "↵");
+            htmlContent = htmlContent.Replace("<br/>", "↵"); // ↵符号表示换行符
+            htmlContent = htmlContent.Replace("<br />", "↵");
+            htmlContent = htmlContent.Replace("<br>", "↵");
+            htmlContent = htmlContent.Replace("</div>", "↵");
+            htmlContent = htmlContent.Replace("</p>", "↵");
 
             // 替换引用文字标签
-            htmlContent = htmlContent.Replace((string)"<blockquote>", (string)@"[/Paragraph][Paragraph Margin=""18,0,0,0"" Foreground=""Gray""][Span]");
-            htmlContent = htmlContent.Replace((string)"</blockquote>", (string)"[/Span][/Paragraph][Paragraph]");
+            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""16,0,0,0"" Foreground=""Gray""][Span]");
+            htmlContent = htmlContent.Replace("</blockquote>", "[/Span][/Paragraph][Paragraph]");
 
             // 移除无意义图片HTML
-            htmlContent = htmlContent.Replace((string)@"src=""images/default/attachimg.gif""", (string)string.Empty);
-            htmlContent = htmlContent.Replace((string)@"src=""http://www.hi-pda.com/forum/images/default/attachimg.gif""", (string)string.Empty);
+            htmlContent = htmlContent.Replace(@"src=""images/default/attachimg.gif""", string.Empty);
+            htmlContent = htmlContent.Replace(@"src=""http://www.hi-pda.com/forum/images/default/attachimg.gif""", string.Empty);
 
             #region 解析图片
             // 站内上载的图片，通过file属性解析
@@ -126,7 +142,7 @@ namespace Hipda.Html
                     string imgXaml = @"[InlineUIContainer][local:MyImage FolderName=""{0}"" Url=""{1}""/][/InlineUIContainer]";
                     imgXaml = string.Format(imgXaml, threadId, imgUrl);
 
-                    htmlContent = htmlContent.Replace((string)placeHolderLabel, (string)imgXaml);
+                    htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
                 }
             }
 
@@ -144,7 +160,7 @@ namespace Hipda.Html
                     string imgXaml = @"[InlineUIContainer][local:MyImage FolderName=""{0}"" Url=""{1}""/][/InlineUIContainer]";
                     imgXaml = string.Format(imgXaml, threadId, imgUrl);
 
-                    htmlContent = htmlContent.Replace((string)placeHolderLabel, (string)imgXaml);
+                    htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
                 }
             }
             #endregion

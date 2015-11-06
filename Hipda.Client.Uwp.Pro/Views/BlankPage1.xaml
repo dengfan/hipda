@@ -183,6 +183,14 @@
         <ListView x:Name="list1" ItemContainerStyle="{StaticResource ListViewItemStyle1}"/>
 
         <TextBox x:Name="tb1" Style="{StaticResource TextBoxStyle1}" />
+
+        <RichTextBlock>
+            <Paragraph>
+                <InlineUIContainer>
+                    <TextBlock/>
+                </InlineUIContainer>
+            </Paragraph>
+        </RichTextBlock>
     </Grid>
 
 
