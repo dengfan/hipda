@@ -337,7 +337,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             
             var threadItemViewModel = new ThreadItemViewModel(threadItem);
             threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle1"];
-            if (ReadHistoryData.Count(h => h.ThreadId == threadItem.ThreadId) > 0)
+            if (IsRead(threadItem.ThreadId))
             {
                 threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle2"];
             }
