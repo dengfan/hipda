@@ -191,7 +191,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public string GetThreadTitle(int threadId)
         {
-            return _ds.GetThreadTitleFromReplyData(threadId);
+            string title = _ds.GetThreadTitleFromReplyData(threadId);
+            if (string.IsNullOrEmpty(title))
+            {
+                title = _ds.GetThreadTitleFromThreadData(threadId);
+            }
+
+            return title;
         }
     }
 }
