@@ -31,7 +31,6 @@ namespace Hipda.Client.Uwp.Pro.Services
         private static List<ThreadItemForMyPostsModel> _threadDataForMyPosts = new List<ThreadItemForMyPostsModel>();
 
         private static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
-        private static List<int> _read = new List<int>();
         public static ObservableCollection<ThreadItemModelBase> ReadHistoryData = new ObservableCollection<ThreadItemModelBase>();
 
         private int _threadMaxPageNo = 1;
@@ -338,7 +337,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             
             var threadItemViewModel = new ThreadItemViewModel(threadItem);
             threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle1"];
-            if (_read.Contains(threadItem.ThreadId))
+            if (ReadHistoryData.Count(h => h.ThreadId == threadItem.ThreadId) > 0)
             {
                 threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle2"];
             }
@@ -525,18 +524,9 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadDataForMyPosts.FirstOrDefault(t => t.ThreadId == threadId);
         }
 
-
-        public void SetRead(int threadId)
-        {
-            if (!_read.Contains(threadId))
-            {
-                _read.Add(threadId);
-            }
-        }
-
         public bool IsRead(int threadId)
         {
-            return _read.Contains(threadId);
+            return ReadHistoryData.Count(h => h.ThreadId == threadId) > 0;
         }
 
         public string GetThreadTitleFromReplyData(int threadId)

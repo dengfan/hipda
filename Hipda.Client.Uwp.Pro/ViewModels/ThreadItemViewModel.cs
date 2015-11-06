@@ -117,8 +117,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public void SetRead()
         {
-            _ds = new DataService();
-            _ds.SetRead(_threadId);
             StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle2"];
         }
 

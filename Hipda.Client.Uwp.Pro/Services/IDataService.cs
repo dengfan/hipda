@@ -48,8 +48,6 @@ namespace Hipda.Client.Uwp.Pro.Services
         ThreadItemForMyPostsModel GetThreadItemForMyPosts(int threadId);
 
 
-        void SetRead(int threadId);
-
         bool IsRead(int threadId);
 
         string GetThreadTitleFromReplyData(int threadId);
