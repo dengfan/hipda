@@ -32,6 +32,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         private static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
         private static List<int> _read = new List<int>();
+        public static ObservableCollection<ThreadItemModelBase> ReadHistoryData = new ObservableCollection<ThreadItemModelBase>();
 
         private int _threadMaxPageNo = 1;
         private int _threadMaxPageNoForMyThreads = 1;

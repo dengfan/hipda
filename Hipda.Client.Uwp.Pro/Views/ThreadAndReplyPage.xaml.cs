@@ -97,7 +97,16 @@ namespace Hipda.Client.Uwp.Pro.Views
             ReplyRefreshButton2.IsEnabled = true;
             rightFooter.Visibility = Visibility.Visible;
 
-            await AddToReadHistory(threadId);
+            _threadAndReplyViewModel.AddToReadHistory(threadId);
+
+            // 最宽屏模式下，自动滚到最底部
+            if (RightSideColumn.ActualWidth > 0)
+            {
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                    int count = ReadListView.Items.Count;
+                    ReadListView.ScrollIntoView(ReadListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                });
+            }
         }
 
         private async void ReplyListViewScroll(int index)
@@ -132,36 +141,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                 var item = new ThreadItemViewModel(threadItem);
                 item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
                 RightWrap.DataContext = item;
-            }
-        }
-
-        private async Task AddToReadHistory(int threadId)
-        {
-            var ti = _threadAndReplyViewModel.ReadList.FirstOrDefault(t => t.ThreadId == threadId);
-            if (ti != null)
-            {
-                _threadAndReplyViewModel.ReadList.Remove(ti);
-            }
-
-            string threadTitle = _threadAndReplyViewModel.GetThreadTitle(threadId);
-            if (string.IsNullOrEmpty(threadTitle))
-            {
-                return;
-            }
-
-            _threadAndReplyViewModel.ReadList.Add(new ThreadItemModelBase
-            {
-                Title = threadTitle,
-                ThreadId = threadId
-            });
-
-            // 最宽屏模式下，自动滚到最底部
-            if (RightSideColumn.ActualWidth > 0)
-            {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                    int count = ReadListView.Items.Count;
-                    ReadListView.ScrollIntoView(ReadListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
-                });
             }
         }
         #endregion

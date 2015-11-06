@@ -38,6 +38,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        public ObservableCollection<ThreadItemModelBase> ReadData
+        {
+            get
+            {
+                return DataService.ReadHistoryData;
+            }
+        }
+
         #region 用于主题列表控件增量加载
         private ICollectionView _threadItemCollection;
 
@@ -48,20 +56,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 _threadItemCollection = value;
                 this.RaisePropertyChanged("ThreadItemCollection");
-            }
-        }
-        #endregion
-
-        #region 用于浏览记录列表
-        private ObservableCollection<ThreadItemModelBase> _readList;
-
-        public ObservableCollection<ThreadItemModelBase> ReadList
-        {
-            get { return _readList; }
-            set
-            {
-                _readList = value;
-                this.RaisePropertyChanged("ReadList");
             }
         }
         #endregion
@@ -105,8 +99,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _afterLoad = afterLoad;
             _ds = new DataService();
 
-            _readList = new ObservableCollection<ThreadItemModelBase>();
-
             RefreshThreadCommand = new DelegateCommand();
             RefreshThreadCommand.ExecuteAction = (p) => {
                 _ds.ClearThreadData(_forumId);
@@ -115,7 +107,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             ClearHistoryCommand = new DelegateCommand();
             ClearHistoryCommand.ExecuteAction = (p) => {
-                _readList.Clear();
+                DataService.ReadHistoryData.Clear();
             };
 
             LoadData(pageNo);
@@ -127,8 +119,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _ds = new DataService();
-
-            _readList = new ObservableCollection<ThreadItemModelBase>();
 
             if (itemType.Equals("threads"))
             {
@@ -189,7 +179,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             return _ds.GetThreadItem(threadId);
         }
 
-        public string GetThreadTitle(int threadId)
+        private string GetThreadTitle(int threadId)
         {
             string title = _ds.GetThreadTitleFromReplyData(threadId);
             if (string.IsNullOrEmpty(title))
@@ -198,6 +188,27 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
 
             return title;
+        }
+
+        public void AddToReadHistory(int threadId)
+        {
+            var ti = DataService.ReadHistoryData.FirstOrDefault(t => t.ThreadId == threadId);
+            if (ti != null)
+            {
+                DataService.ReadHistoryData.Remove(ti);
+            }
+
+            string threadTitle = GetThreadTitle(threadId);
+            if (string.IsNullOrEmpty(threadTitle))
+            {
+                return;
+            }
+
+            DataService.ReadHistoryData.Add(new ThreadItemModelBase
+            {
+                Title = threadTitle,
+                ThreadId = threadId
+            });
         }
     }
 }
