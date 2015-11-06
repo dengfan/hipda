@@ -537,6 +537,17 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             return _read.Contains(threadId);
         }
+
+        public string GetThreadTitle(int threadId)
+        {
+            var thread = _threadData.FirstOrDefault(t => t.ThreadId == threadId);
+            if (thread != null)
+            {
+                return thread.Title;
+            }
+
+            return string.Empty;
+        }
         #endregion
 
         #region reply
@@ -697,12 +708,12 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int threadAuthorUserId, int pageNo, Action beforeLoad, Action afterLoad, Action<int> linkClickEvent)
+        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int threadAuthorUserId, int pageNo, Action beforeLoad, Action<int> afterLoad, Action<int> linkClickEvent)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
             await LoadReplyDataAsync(threadId, threadAuthorUserId, pageNo, linkClickEvent, cts);
-            if (afterLoad != null) afterLoad();
+            if (afterLoad != null) afterLoad(threadId);
 
             return _replyData.Single(t => t.ThreadId == threadId).Replies.Count;
         }
@@ -712,7 +723,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _replyData.Single(t => t.ThreadId == threadId).Replies[index];
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad, Action<int> linkClickEvent)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int> afterLoad, Action<int> linkClickEvent)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
@@ -736,7 +747,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action afterLoad, Action<int> listViewScroll, Action<int> linkClickEvent)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll, Action<int> linkClickEvent)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(

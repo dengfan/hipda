@@ -2,6 +2,8 @@
 using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -86,7 +88,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             rightFooter.Visibility = Visibility.Collapsed;
         }
 
-        private void RightAfterLoaded()
+        private async void RightAfterLoaded(int threadId)
         {
             rightProgress.IsActive = false;
             rightProgress.Visibility = Visibility.Collapsed;
@@ -94,6 +96,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             ReplyRefreshButton.IsEnabled = true;
             ReplyRefreshButton2.IsEnabled = true;
             rightFooter.Visibility = Visibility.Visible;
+
+            await AddToReadHistory(threadId);
         }
 
         private async void ReplyListViewScroll(int index)
@@ -115,17 +119,50 @@ namespace Hipda.Client.Uwp.Pro.Views
             });
         }
 
-        public void OpenReplyPageByThreadId(int threadId)
+        private void OpenReplyPageByThreadId(int threadId)
         {
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
             if (threadItem == null)
             {
+                var item = new ThreadItemViewModel(1, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                RightWrap.DataContext = item;
+            }
+            else
+            {
+                var item = new ThreadItemViewModel(threadItem);
+                item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                RightWrap.DataContext = item;
+            }
+        }
+
+        private async Task AddToReadHistory(int threadId)
+        {
+            string threadTitle = _threadAndReplyViewModel.GetThreadTitle(threadId);
+            if (string.IsNullOrEmpty(threadTitle))
+            {
                 return;
             }
 
-            var item = new ThreadItemViewModel(threadItem);
-            //item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-            //RightWrap.DataContext = item;
+            var ti = _threadAndReplyViewModel.ReadList.FirstOrDefault(t => t.ThreadId == threadId);
+            if (ti != null)
+            {
+                _threadAndReplyViewModel.ReadList.Remove(ti);
+            }
+
+            _threadAndReplyViewModel.ReadList.Add(new ThreadItemModelBase
+            {
+                Title = threadTitle,
+                ThreadId = threadId
+            });
+
+            // 最宽屏模式下，自动滚到最底部
+            if (RightSideColumn.ActualWidth > 0)
+            {
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                    int count = ReadListView.Items.Count;
+                    ReadListView.ScrollIntoView(ReadListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                });
+            }
         }
         #endregion
 
@@ -229,7 +266,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             EntranceNavigationTransitionInfo.SetIsTargetElement(ThreadListView, isNarrow);
         }
 
-        private async void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
+        private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var b = e.ClickedItem as ThreadItemViewModelBase;
             switch (b.ThreadDataType)
@@ -267,23 +304,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                 default:
                     var item = (ThreadItemViewModel)e.ClickedItem;
                     _lastSelectedItem = item;
-
-                    _threadAndReplyViewModel.ReadList.Add(new Models.ThreadItemModelBase
-                    {
-                        Index = _threadAndReplyViewModel.ReadList.Count + 1,
-                        Title = item.ThreadItem.Title,
-                        ThreadId = item.ThreadItem.ThreadId
-                    });
-
-                    #region 最宽屏模式下，自动滚到最底部
-                    if (RightSideColumn.ActualWidth > 0)
-                    {
-                        await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                            int count = ReadListView.Items.Count;
-                            ReadListView.ScrollIntoView(ReadListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
-                        });
-                    }
-                    #endregion
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {

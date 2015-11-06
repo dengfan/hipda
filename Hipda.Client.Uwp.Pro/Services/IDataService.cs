@@ -51,12 +51,14 @@ namespace Hipda.Client.Uwp.Pro.Services
         void SetRead(int threadId);
 
         bool IsRead(int threadId);
+
+        string GetThreadTitle(int threadId);
         #endregion
 
         #region reply
-        ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action afterLoad, Action<int> linkClickEvent);
+        ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int> afterLoad, Action<int> linkClickEvent);
 
-        ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int postId, Action beforeLoad, Action afterLoad, Action<int> listViewScroll, Action<int> linkClickEvent);
+        ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int postId, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll, Action<int> linkClickEvent);
 
         Task<int[]> LoadReplyDataForRedirectPageAsync(int threadId, int targetPostId, Action<int> linkClickEvent, CancellationTokenSource cts);
 

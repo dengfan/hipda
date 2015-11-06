@@ -112,12 +112,12 @@ namespace Hipda.Client.Uwp.Pro.Views
                         rightProgress.Visibility = Visibility.Visible;
                         btnRefresh.IsEnabled = false;
                     },
-                    () => {
+                    (_threadId) => {
                         rightProgress.IsActive = false;
                         rightProgress.Visibility = Visibility.Collapsed;
                         btnRefresh.IsEnabled = true;
                     },
-                    (tid) => {
+                    (_threadId) => {
 
                     });
 

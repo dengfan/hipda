@@ -8,8 +8,6 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ThreadItemModelBase
     {
-        public int Index { get; set; }
-
         public int ThreadId { get; set; }
 
         public string Title { get; set; }

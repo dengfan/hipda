@@ -418,8 +418,6 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextBlock TextWrapping="Wrap" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
-                            <Run Text="{Binding Index}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-                            <Run Text=" "/>
                             <Run Text="{Binding Title}"/>
                         </TextBlock>
                     </DataTemplate>
