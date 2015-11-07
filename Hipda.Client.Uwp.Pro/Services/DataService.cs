@@ -681,7 +681,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     var threadTitleNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("threadtitle"));
                     if (threadTitleNode != null)
                     {
-                        threadTitle = threadTitleNode.InnerText.Trim();
+                        threadTitle = threadTitleNode.ChildNodes[1].InnerText.Trim();
                     }
                 }
 

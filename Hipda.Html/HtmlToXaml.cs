@@ -121,8 +121,8 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("</p>", "↵");
 
             // 替换引用文字标签
-            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""16,0,0,0"" Foreground=""Gray""][Span]");
-            htmlContent = htmlContent.Replace("</blockquote>", "[/Span][/Paragraph][Paragraph]");
+            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,0,0"" Foreground=""Gray""][Italic]");
+            htmlContent = htmlContent.Replace("</blockquote>", "[/Italic][/Paragraph][Paragraph]");
 
             // 移除无意义图片HTML
             htmlContent = htmlContent.Replace(@"src=""images/default/attachimg.gif""", string.Empty);

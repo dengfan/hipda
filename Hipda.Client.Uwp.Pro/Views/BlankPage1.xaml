@@ -186,9 +186,9 @@
 
         <RichTextBlock>
             <Paragraph>
-                <InlineUIContainer>
-                    <TextBlock/>
-                </InlineUIContainer>
+                <Italic FontSize=".7"></Italic>
+                <Run></Run>
+                <Span></Span>
             </Paragraph>
         </RichTextBlock>
     </Grid>
