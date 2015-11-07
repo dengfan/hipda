@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
@@ -209,6 +210,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 Title = threadTitle,
                 ThreadId = threadId
             });
+
+            ApplicationView.GetForCurrentView().Title = threadTitle;
         }
     }
 }
