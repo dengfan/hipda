@@ -336,10 +336,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             
             var threadItemViewModel = new ThreadItemViewModel(threadItem);
-            threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle1"];
+            threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["UnReadColorStyle"];
             if (IsRead(threadItem.ThreadId))
             {
-                threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle2"];
+                threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["ReadColorStyle"];
             }
 
             return threadItemViewModel;

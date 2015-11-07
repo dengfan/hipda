@@ -287,16 +287,16 @@
             </Grid>
         </DataTemplate>
 
-        <Style x:Name="StatusColorStyle1" TargetType="Border">
+        <Style x:Name="UnReadColorStyle" TargetType="Border">
             <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
         </Style>
 
-        <Style x:Name="StatusColorStyle2" TargetType="Border">
+        <Style x:Name="ReadColorStyle" TargetType="Border">
             <Setter Property="Background" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
         </Style>
 
         <Style x:Key="TopThreadItemStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseLowBrush}"/>
         </Style>
 
         <Style x:Key="NormalThreadItemStyle" TargetType="TextBlock">

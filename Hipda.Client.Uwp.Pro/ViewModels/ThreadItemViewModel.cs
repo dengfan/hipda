@@ -117,7 +117,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public void SetRead()
         {
-            StatusColorStyle = (Style)App.Current.Resources["StatusColorStyle2"];
+            StatusColorStyle = (Style)App.Current.Resources["ReadColorStyle"];
         }
 
         public void RefreshReplyDataFromPrevPage()
