@@ -28,6 +28,14 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("↵", "&#8629;");
             htmlContent = htmlContent.Replace("<strong>", string.Empty);
             htmlContent = htmlContent.Replace("</strong>", string.Empty);
+            htmlContent = Regex.Replace(htmlContent, @"<span[^>]*>", string.Empty);
+            htmlContent = Regex.Replace(htmlContent, @"</span>", string.Empty);
+            htmlContent = htmlContent.Replace(@"<div class=""postattachlist"">", "↵");
+            htmlContent = htmlContent.Replace("<br/>", "↵"); // ↵符号表示换行符
+            htmlContent = htmlContent.Replace("<br />", "↵");
+            htmlContent = htmlContent.Replace("<br>", "↵");
+            htmlContent = htmlContent.Replace("</div>", "↵");
+            htmlContent = htmlContent.Replace("</p>", "↵");
 
             // 移除无用的图片附加信息
             MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n*.*").Matches(htmlContent);
@@ -55,23 +63,6 @@ namespace Hipda.Html
                 }
             }
 
-            // 替换带颜色的font标签
-            MatchCollection matchsForColorText = new Regex(@"<font color=""([#0-9a-zA-Z]*)"">([^<]*)</font>").Matches(htmlContent);
-            if (matchsForColorText != null && matchsForColorText.Count > 0)
-            {
-                for (int i = 0; i < matchsForColorText.Count; i++)
-                {
-                    var m = matchsForColorText[i];
-
-                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string colorName = m.Groups[1].Value;
-                    string textContent = m.Groups[2].Value;
-
-                    string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""{1}""/]", textContent, colorName);
-                    htmlContent = htmlContent.Replace(placeHolder, infoXaml);
-                }
-            }
-
             // 替换站内链接为按钮
             linkCount = 0;
             MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
@@ -90,6 +81,27 @@ namespace Hipda.Html
                     string linkXaml = string.Format(@"[InlineUIContainer][local:MyLink Name=""MyLink_{2}"" ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent, i);
                     string regexPattern = StringToRegexPattern(placeHolder);
                     htmlContent = new Regex(regexPattern).Replace(htmlContent, linkXaml, 1); // 由于站内链接有可能重复，所以这里每次只允许替换一个
+                }
+            }
+
+            // 替换带颜色的font标签
+            MatchCollection matchsForColorText = new Regex(@"<font color=""([#0-9a-zA-Z]*)"">([^<]*)</font>").Matches(htmlContent);
+            if (matchsForColorText != null && matchsForColorText.Count > 0)
+            {
+                for (int i = 0; i < matchsForColorText.Count; i++)
+                {
+                    var m = matchsForColorText[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string colorName = m.Groups[1].Value.ToLower().Trim();
+                    string textContent = m.Groups[2].Value;
+
+                    string infoXaml = string.Format(@"[Span Foreground=""{1}""]{0}[/Span]", textContent, colorName);
+                    if (colorName.Equals("#000") || colorName.Equals("#000000") || colorName.Equals("black"))
+                    {
+                        infoXaml = string.Format(@"[Span]{0}[/Span]", textContent);
+                    }
+                    htmlContent = htmlContent.Replace(placeHolder, infoXaml);
                 }
             }
 
@@ -129,13 +141,6 @@ namespace Hipda.Html
                     htmlContent = htmlContent.Replace(placeHolder, infoXaml);
                 }
             }
-
-            htmlContent = htmlContent.Replace(@"<div class=""postattachlist"">", "↵");
-            htmlContent = htmlContent.Replace("<br/>", "↵"); // ↵符号表示换行符
-            htmlContent = htmlContent.Replace("<br />", "↵");
-            htmlContent = htmlContent.Replace("<br>", "↵");
-            htmlContent = htmlContent.Replace("</div>", "↵");
-            htmlContent = htmlContent.Replace("</p>", "↵");
 
             // 替换引用文字标签
             htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,0,0"" Foreground=""DimGray""][Span]");
