@@ -106,7 +106,7 @@ namespace Hipda.Html
             }
 
             // 替换链接
-            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<]*)</a>").Matches(htmlContent);
+            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<#]*)</a>").Matches(htmlContent);
             if (matchsForLink != null && matchsForLink.Count > 0)
             {
                 for (int i = 0; i < matchsForLink.Count; i++)
