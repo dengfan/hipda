@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Text;
+using Windows.UI.Xaml;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
@@ -116,11 +112,11 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
-        public FontWeight TitleFontWeight
+        public Style ThreadItemStyle
         {
             get
             {
-                return IsTop ? FontWeights.Bold : FontWeights.Normal;
+                return IsTop ? (Style)Application.Current.Resources["TopThreadItemStyle"] : (Style)Application.Current.Resources["NormalThreadItemStyle"];
             }
         }
     }

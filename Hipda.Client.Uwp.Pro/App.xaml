@@ -295,6 +295,14 @@
             <Setter Property="Background" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
         </Style>
 
+        <Style x:Key="TopThreadItemStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
+        </Style>
+
+        <Style x:Key="NormalThreadItemStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
+
         <DataTemplate x:Name="ThreadListNormalItemTemplate">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -331,11 +339,11 @@
                         <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                     </TextBlock>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                    <TextBlock Margin="2" TextWrapping="Wrap" Style="{Binding ThreadItem.ThreadItemStyle}">
                         <Run FontFamily="Segoe UI Symbol" Foreground="Gray" Text="{Binding ThreadItem.TopFontIcon}" />
                         <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
                         <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
-                        <Run Text="{Binding ThreadItem.Title}" FontWeight="{Binding ThreadItem.TitleFontWeight}" />
+                        <Run Text="{Binding ThreadItem.Title}" />
                         <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     </TextBlock>
                     
