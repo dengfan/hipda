@@ -58,10 +58,10 @@ namespace Hipda.Client.Uwp.Pro
                 string fileFullName = urlAry.Last();
 
                 StorageFile file = null;
-                StorageFolder folder = ApplicationData.Current.LocalFolder;
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
                 if (isCommonImage)
                 {
-                    folder = await folder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
+                    folder = await folder.CreateFolderAsync("common", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
                 }
                 else
                 {
@@ -120,23 +120,30 @@ namespace Hipda.Client.Uwp.Pro
 
                 if (folder != null && file != null)
                 {
-                    BitmapImage bitmapImg = new BitmapImage();
-                    IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read);
-                    if (fileStream != null)
+                    if (isCommonImage)
                     {
-                        await bitmapImg.SetSourceAsync(fileStream);
-                        int imgWidth = bitmapImg.PixelWidth;
-                        int imgHeight = bitmapImg.PixelHeight;
-
-                        if (isGif) // GIF图片，使用WebView控件显示
+                        img.Stretch = Stretch.None;
+                        var bm = new BitmapImage();
+                        bm.UriSource = new Uri(Url, UriKind.Absolute);
+                        img.Source = bm;
+                    }
+                    else
+                    {
+                        BitmapImage bitmapImg = new BitmapImage();
+                        IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read);
+                        if (fileStream != null)
                         {
-                            WebView webView = new WebView();
-                            webView.DefaultBackgroundColor = Colors.Transparent;
-                            webView.Margin = new Thickness(5);
-                            webView.Width = imgWidth;
-                            webView.Height = imgHeight;
-                            if (!isCommonImage)
+                            await bitmapImg.SetSourceAsync(fileStream);
+                            int imgWidth = bitmapImg.PixelWidth;
+                            int imgHeight = bitmapImg.PixelHeight;
+
+                            if (isGif) // GIF图片且不是论坛表情图标，则使用WebView控件显示
                             {
+                                WebView webView = new WebView();
+                                webView.DefaultBackgroundColor = Colors.Transparent;
+                                webView.Margin = new Thickness(5);
+                                webView.Width = imgWidth;
+                                webView.Height = imgHeight;
                                 webView.ScriptNotify += async (s, e) =>
                                 {
                                     var fileTypeFilter = new List<string>();
@@ -151,36 +158,36 @@ namespace Hipda.Client.Uwp.Pro
                                     options.NeighboringFilesQuery = query;
                                     await Launcher.LaunchFileAsync(file, options);
                                 };
-                            }
 
-                            string imgHtml = @"<html><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""GIF Image"" /></body></html>";
-                            imgHtml = string.Format(imgHtml, Url);
-                            webView.NavigateToString(imgHtml);
+                                string imgHtml = @"<html><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""GIF Image"" /></body></html>";
+                                imgHtml = string.Format(imgHtml, Url);
+                                webView.NavigateToString(imgHtml);
 
-                            content1.Content = webView;
-                        }
-                        else // 其它图片，使用Image控件显示
-                        {
-                            if (imgWidth > 900)
-                            {
-                                img.Stretch = Stretch.Uniform;
-                                img.MaxWidth = 1000;
+                                content1.Content = webView;
                             }
-                            else if (imgWidth > 400)
+                            else // 其它图片，使用Image控件显示
                             {
-                                img.Stretch = Stretch.Uniform;
-                                img.MaxWidth = 600;
+                                if (imgWidth > 900)
+                                {
+                                    img.Stretch = Stretch.Uniform;
+                                    img.MaxWidth = 1000;
+                                }
+                                else if (imgWidth > 400)
+                                {
+                                    img.Stretch = Stretch.Uniform;
+                                    img.MaxWidth = 600;
+                                }
+                                else
+                                {
+                                    img.Stretch = Stretch.None;
+                                }
+                                img.Source = bitmapImg;
                             }
-                            else
-                            {
-                                img.Stretch = Stretch.None;
-                            }
-                            img.Source = bitmapImg;
                         }
                     }
                 }
 
-                if (!isGif) // 非gif图片，使用Image控件显示
+                if (isCommonImage || !isGif) // 公共或非gif图片，使用Image控件显示
                 {
                     content1.Content = img;
                 }
