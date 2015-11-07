@@ -187,8 +187,16 @@
         <RichTextBlock>
             <Paragraph>
                 <Italic FontSize=".7"></Italic>
-                <Run></Run>
-                <Span></Span>
+                <Run Foreground="#00ff00" >AAAAA</Run>
+                <Bold>
+                    <Run/>
+                </Bold>
+                <Hyperlink>
+                    <Bold></Bold>
+                </Hyperlink>
+                <InlineUIContainer>
+                    <TextBlock HorizontalAlignment="Right"/>
+                </InlineUIContainer>
             </Paragraph>
         </RichTextBlock>
     </Grid>

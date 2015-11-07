@@ -25,8 +25,6 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("[", "&#8968;");
             htmlContent = htmlContent.Replace("]", "&#8971;");
             htmlContent = htmlContent.Replace("&nbsp;", " ");
-            htmlContent = htmlContent.Replace("<strong>", string.Empty);
-            htmlContent = htmlContent.Replace("</strong>", string.Empty);
             htmlContent = htmlContent.Replace("↵", "&#8629;");
 
             // 移除无用的图片附加信息
@@ -52,6 +50,27 @@ namespace Hipda.Html
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     htmlContent = htmlContent.Replace(placeHolder, string.Empty);
+                }
+            }
+
+            // 替换加粗标签
+            htmlContent = htmlContent.Replace("<strong>", @"[Bold]");
+            htmlContent = htmlContent.Replace("</strong>", "[/Bold]");
+
+            // 替换带颜色的font标签
+            MatchCollection matchsForColorText = new Regex(@"<font color=""([a-zA-Z]*)"">([^<]*)</font>").Matches(htmlContent);
+            if (matchsForColorText != null && matchsForColorText.Count > 0)
+            {
+                for (int i = 0; i < matchsForColorText.Count; i++)
+                {
+                    var m = matchsForColorText[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string colorName = m.Groups[1].Value;
+                    string textContent = m.Groups[2].Value;
+
+                    string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""{1}""/]", textContent, colorName);
+                    htmlContent = htmlContent.Replace(placeHolder, infoXaml);
                 }
             }
 
@@ -107,8 +126,8 @@ namespace Hipda.Html
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string infoContent = m.Groups[1].Value.Trim();
-                    
-                    string infoXaml = string.Format(@"[InlineUIContainer][TextBlock Text=""{0}"" Foreground=""Gray""/][/InlineUIContainer]", infoContent);
+
+                    string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""DimGray"" FontSize=""12""/][LineBreak/]", infoContent);
                     htmlContent = htmlContent.Replace(placeHolder, infoXaml);
                 }
             }
@@ -121,8 +140,8 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("</p>", "↵");
 
             // 替换引用文字标签
-            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,0,0"" Foreground=""Gray""][Italic]");
-            htmlContent = htmlContent.Replace("</blockquote>", "[/Italic][/Paragraph][Paragraph]");
+            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,0,0"" Foreground=""DimGray""][Span]");
+            htmlContent = htmlContent.Replace("</blockquote>", "[/Span][/Paragraph][Paragraph]");
 
             // 移除无意义图片HTML
             htmlContent = htmlContent.Replace(@"src=""images/default/attachimg.gif""", string.Empty);
