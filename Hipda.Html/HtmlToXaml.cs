@@ -28,14 +28,14 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("↵", "&#8629;");
             htmlContent = htmlContent.Replace("<strong>", string.Empty);
             htmlContent = htmlContent.Replace("</strong>", string.Empty);
-            htmlContent = Regex.Replace(htmlContent, @"<span[^>]*>", string.Empty);
-            htmlContent = Regex.Replace(htmlContent, @"</span>", string.Empty);
             htmlContent = htmlContent.Replace(@"<div class=""postattachlist"">", "↵");
             htmlContent = htmlContent.Replace("<br/>", "↵"); // ↵符号表示换行符
             htmlContent = htmlContent.Replace("<br />", "↵");
             htmlContent = htmlContent.Replace("<br>", "↵");
             htmlContent = htmlContent.Replace("</div>", "↵");
             htmlContent = htmlContent.Replace("</p>", "↵");
+            htmlContent = Regex.Replace(htmlContent, @"<span[^>]*>", string.Empty);
+            htmlContent = Regex.Replace(htmlContent, @"</span>", string.Empty);
 
             // 移除无用的图片附加信息
             MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n*.*").Matches(htmlContent);
