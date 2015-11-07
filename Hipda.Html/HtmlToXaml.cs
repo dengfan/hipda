@@ -26,6 +26,8 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("]", "&#8971;");
             htmlContent = htmlContent.Replace("&nbsp;", " ");
             htmlContent = htmlContent.Replace("↵", "&#8629;");
+            htmlContent = htmlContent.Replace("<strong>", string.Empty);
+            htmlContent = htmlContent.Replace("</strong>", string.Empty);
 
             // 移除无用的图片附加信息
             MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n*.*").Matches(htmlContent);
@@ -53,12 +55,8 @@ namespace Hipda.Html
                 }
             }
 
-            // 替换加粗标签
-            htmlContent = htmlContent.Replace("<strong>", @"[Bold]");
-            htmlContent = htmlContent.Replace("</strong>", "[/Bold]");
-
             // 替换带颜色的font标签
-            MatchCollection matchsForColorText = new Regex(@"<font color=""([a-zA-Z]*)"">([^<]*)</font>").Matches(htmlContent);
+            MatchCollection matchsForColorText = new Regex(@"<font color=""([#0-9a-zA-Z]*)"">([^<]*)</font>").Matches(htmlContent);
             if (matchsForColorText != null && matchsForColorText.Count > 0)
             {
                 for (int i = 0; i < matchsForColorText.Count; i++)
