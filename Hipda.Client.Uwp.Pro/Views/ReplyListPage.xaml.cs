@@ -110,12 +110,12 @@ namespace Hipda.Client.Uwp.Pro.Views
                     () => {
                         rightProgress.IsActive = true;
                         rightProgress.Visibility = Visibility.Visible;
-                        btnRefresh.IsEnabled = false;
+                        ReplyRefreshButton.IsEnabled = false;
                     },
                     (tid) => {
                         rightProgress.IsActive = false;
                         rightProgress.Visibility = Visibility.Collapsed;
-                        btnRefresh.IsEnabled = true;
+                        ReplyRefreshButton.IsEnabled = true;
                     },
                     (tid) => {
 
@@ -123,7 +123,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                 DataContext = _replyViewModel;
                 ReplyListView.ItemsSource = _replyViewModel.ReplyItemCollection;
-                btnRefresh.Command = _replyViewModel.RefreshReplyCommand;
+                ReplyRefreshButton.Command = _replyViewModel.RefreshReplyCommand;
             }
 
             Window.Current.SizeChanged += Window_SizeChanged;

@@ -359,10 +359,5 @@ namespace Hipda.Client.Uwp.Pro.Views
             ThreadItemModelBase data = e.ClickedItem as ThreadItemModelBase;
             OpenReplyPageByThreadId(data.ThreadId);
         }
-
-        private void FaceButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.FindName("FaceGridViewForTouch");
-        }
     }
 }

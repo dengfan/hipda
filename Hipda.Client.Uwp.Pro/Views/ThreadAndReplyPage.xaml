@@ -259,14 +259,18 @@
             <ColumnDefinition x:Name="RightSideColumn" Width="0" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="LeftWrap" Grid.Column="0" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
+        <Grid x:Name="LeftWrap" Grid.Column="0" 
+              BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
+              BorderThickness="1,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{Binding Background,ElementName=LayoutRoot}">
+            <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" 
+                        HorizontalContentAlignment="Stretch" 
+                        Background="{Binding Background,ElementName=LayoutRoot}">
                 <AppBarButton Icon="Add" Label="发表新贴"/>
                 <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
                 <AppBarButton x:Name="SortingButton" Icon="Sort" Label="按发布时间倒序排列" Click="SortingButton_Click"/>
@@ -315,7 +319,9 @@
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
 
-        <Grid Grid.Column="1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
+        <Grid Grid.Column="1" 
+              BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
+              BorderThickness="1,0,0,0">
             <Grid x:Name="RightWrap">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -332,10 +338,11 @@
                 </CommandBar>
 
                 <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-                    <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False"
-                      ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-                      ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
-                      ItemsSource="{Binding ReplyItemCollection}">
+                    <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
+                              SelectionMode="Single" ShowsScrollingPlaceholders="False"
+                              ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
+                              ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
+                              ItemsSource="{Binding ReplyItemCollection}">
                         <ListView.Footer>
                             <StackPanel x:Name="rightFooter" Margin="0,80,0,160" Visibility="Collapsed">
                                 <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
@@ -356,15 +363,17 @@
                 <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
             </Grid>
 
-            <StackPanel x:Name="ReplyPanel" VerticalAlignment="Bottom" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                  BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0" Opacity="0.8">
+            <StackPanel x:Name="ReplyPanel" VerticalAlignment="Bottom" 
+                        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
+                        BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderThickness="0,1,0,0" Opacity="0.8">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="FaceButton" Grid.Column="0" Style="{StaticResource FaceButtonStyle}" Click="FaceButton_Click">
+                    <Button x:Name="FaceButton" Grid.Column="0" Style="{StaticResource FaceButtonStyle}">
                         <Button.Content>
                             <SymbolIcon Symbol="Emoji2" />
                         </Button.Content>
@@ -399,13 +408,17 @@
             </StackPanel>
         </Grid>
 
-        <Grid x:Name="RightSideWrap" Grid.Column="2" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
+        <Grid x:Name="RightSideWrap" Grid.Column="2" 
+              BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
+              BorderThickness="1,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <CommandBar x:Name="RightSideCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{Binding Background,ElementName=LayoutRoot}">
+            <CommandBar x:Name="RightSideCommandBar" VerticalAlignment="Top" 
+                        HorizontalContentAlignment="Stretch" 
+                        Background="{Binding Background,ElementName=LayoutRoot}">
                 <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
             </CommandBar>
 
