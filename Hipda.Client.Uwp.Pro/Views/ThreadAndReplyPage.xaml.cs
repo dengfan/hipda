@@ -50,7 +50,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     SendButton.Height = 32;
                 }
 
-                PostContentTextBox.MaxHeight = this.ActualHeight / 2;
+                PostReplyTextBox.MaxHeight = this.ActualHeight / 2;
             };
         }
 
@@ -133,13 +133,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
             if (threadItem == null)
             {
-                var item = new ThreadItemViewModel(1, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                var item = new ThreadItemViewModel(1, threadId, 0, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
                 RightWrap.DataContext = item;
             }
             else
             {
                 var item = new ThreadItemViewModel(threadItem);
-                item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                item.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
                 RightWrap.DataContext = item;
             }
         }
@@ -193,7 +193,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                             RightWrap.DataContext = itemForMyPosts;
                             break;
                         default:
-                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
                             _lastSelectedItem = item;
                             RightWrap.DataContext = item;
                             break;
@@ -293,7 +293,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     else
                     {
                         item.SetRead();
-                        item.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                        item.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
                         RightWrap.DataContext = item;
                     }
                     break;

@@ -84,6 +84,27 @@ namespace Hipda.Html
                 }
             }
 
+            // 替换链接
+            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<#]*)</a>").Matches(htmlContent);
+            if (matchsForLink != null && matchsForLink.Count > 0)
+            {
+                for (int i = 0; i < matchsForLink.Count; i++)
+                {
+                    var m = matchsForLink[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string linkUrl = m.Groups[1].Value;
+                    string linkContent = m.Groups[2].Value;
+
+                    if (!linkUrl.Contains(":"))
+                    {
+                        linkUrl = string.Format("http://www.hi-pda.com/forum/{0}", linkUrl);
+                    }
+                    string linkXaml = string.Format(@"[Hyperlink NavigateUri=""{0}"" Foreground=""DodgerBlue""]{1}[/Hyperlink]", linkUrl, linkContent);
+                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                }
+            }
+
             // 替换带颜色的font标签
             MatchCollection matchsForColorText = new Regex(@"<font color=""([#0-9a-zA-Z]*)"">([^<]*)</font>").Matches(htmlContent);
             if (matchsForColorText != null && matchsForColorText.Count > 0)
@@ -97,32 +118,11 @@ namespace Hipda.Html
                     string textContent = m.Groups[2].Value;
 
                     string infoXaml = string.Format(@"[Span Foreground=""{1}""]{0}[/Span]", textContent, colorName);
-                    if (colorName.Equals("#000") || colorName.Equals("#000000") || colorName.Equals("black"))
+                    if (colorName.Equals("#000") || colorName.Equals("#000000") || colorName.Equals("black") || (colorName.StartsWith("#") && colorName.Length != 4 && colorName.Length != 7))
                     {
                         infoXaml = string.Format(@"[Span]{0}[/Span]", textContent);
                     }
                     htmlContent = htmlContent.Replace(placeHolder, infoXaml);
-                }
-            }
-
-            // 替换链接
-            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<#]*)</a>").Matches(htmlContent);
-            if (matchsForLink != null && matchsForLink.Count > 0)
-            {
-                for (int i = 0; i < matchsForLink.Count; i++)
-                {
-                    var m = matchsForLink[i];
-
-                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string linkUrl = m.Groups[1].Value;
-                    string linkContent = m.Groups[2].Value;
-
-                    if (!linkUrl.StartsWith("http"))
-                    {
-                        linkUrl = string.Format("http://www.hi-pda.com/forum/{0}", linkUrl);
-                    }
-                    string linkXaml = string.Format(@"[Hyperlink NavigateUri=""{0}"" Foreground=""DodgerBlue""]{1}[/Hyperlink]", linkUrl, linkContent);
-                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                 }
             }
 
