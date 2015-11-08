@@ -122,8 +122,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                     });
 
                 DataContext = _replyViewModel;
-                ReplyListView.ItemsSource = _replyViewModel.ReplyItemCollection;
-                ReplyRefreshButton.Command = _replyViewModel.RefreshReplyCommand;
             }
 
             Window.Current.SizeChanged += Window_SizeChanged;

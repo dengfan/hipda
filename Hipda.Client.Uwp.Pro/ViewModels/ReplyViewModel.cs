@@ -26,6 +26,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ICollectionView ReplyItemCollection { get; set; }
 
+        public List<FaceItem> FaceData
+        {
+            get
+            {
+                return FaceService.FaceData;
+            }
+        }
+
         private void LoadData(int pageNo)
         {
             var cv = _ds.GetViewForReplyPage(pageNo, _threadId, _threadAuthorUserId, _beforeLoad, _afterLoad, _linkClickEvent);
