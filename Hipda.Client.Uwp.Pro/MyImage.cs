@@ -32,7 +32,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for Url.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty UrlProperty =
-            DependencyProperty.Register("Url", typeof(string), typeof(MyImage), new PropertyMetadata(0));
+            DependencyProperty.Register("Url", typeof(string), typeof(MyImage), new PropertyMetadata(string.Empty));
 
 
         public string FolderName

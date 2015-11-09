@@ -24,8 +24,22 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MyLink">
-                    <Border x:Name="button1" Margin="0,8,0,0" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" BorderThickness="0,0,0,1">
+                    <Border Margin="0,8,0,0" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" BorderThickness="0,0,0,1">
                         <TextBlock Text="{TemplateBinding LinkContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:MyFace" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:MyFace">
+                    <Border Margin="8" Style="{StaticResource FaceIconStyle}"
+                        Background="{ThemeResource SystemControlBackgroundListLowBrush}"
+                        HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Grid x:Name="grid1" CornerRadius="20" Width="40" Height="40"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

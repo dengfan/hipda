@@ -52,15 +52,10 @@ namespace Hipda.Client.Uwp.Pro.Models
             return this.Title;
         }
 
-        public string AvatarUrl
+        public Uri AvatarUrl
         {
             get
             {
-                if (AuthorUserId == 0)
-                {
-                    return string.Empty;
-                }
-
                 int uid = Convert.ToInt32(AuthorUserId);
                 var s = new int[10];
                 for (int i = 0; i < s.Length - 1; ++i)
@@ -68,7 +63,7 @@ namespace Hipda.Client.Uwp.Pro.Models
                     s[i] = uid % 10;
                     uid = (uid - s[i]) / 10;
                 }
-                return "http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg";
+                return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg");
             }
         }
 

@@ -512,17 +512,7 @@
 
                 <Border Grid.Column="0" Margin="1,0,0,0" Width="2" Style="{Binding StatusColorStyle}"/>
 
-                <Border Grid.Column="1" Margin="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" Style="{StaticResource FaceIconStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Grid CornerRadius="20">
-                        <Grid.Background>
-                            <ImageBrush Stretch="UniformToFill">
-                                <ImageBrush.ImageSource>
-                                    <BitmapImage DecodePixelWidth="40" UriSource="{Binding ThreadItem.AvatarUrl}"/>
-                                </ImageBrush.ImageSource>
-                            </ImageBrush>
-                        </Grid.Background>
-                    </Grid>
-                </Border>
+                <local:MyFace Grid.Column="1" FaceUri="{Binding ThreadItem.AvatarUrl}" />
 
                 <StackPanel Grid.Column="2" Margin="0,4">
                     <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
