@@ -36,9 +36,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MyFace">
-                    <Border Margin="8" Style="{StaticResource FaceIconStyle}"
-                        Background="{ThemeResource SystemControlBackgroundListLowBrush}"
-                        HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Border Style="{StaticResource FaceIconStyle}"
+                            Background="{ThemeResource SystemControlBackgroundListLowBrush}">
                         <Grid x:Name="grid1" CornerRadius="20" Width="40" Height="40"/>
                     </Border>
                 </ControlTemplate>

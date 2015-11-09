@@ -298,17 +298,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
-                    <Grid CornerRadius="20">
-                        <Grid.Background>
-                            <ImageBrush Stretch="UniformToFill">
-                                <ImageBrush.ImageSource>
-                                    <BitmapImage DecodePixelWidth="40" UriSource="{Binding AvatarUrl}"/>
-                                </ImageBrush.ImageSource>
-                            </ImageBrush>
-                        </Grid.Background>
-                    </Grid>
-                </Border>
+                <local:MyFace Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" VerticalAlignment="Top"/>
 
                 <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundListLowBrush}" VerticalAlignment="Top"/>
 
@@ -362,17 +352,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
-                    <Grid CornerRadius="20">
-                        <Grid.Background>
-                            <ImageBrush Stretch="UniformToFill">
-                                <ImageBrush.ImageSource>
-                                    <BitmapImage DecodePixelWidth="40" UriSource="{Binding AvatarUrl}"/>
-                                </ImageBrush.ImageSource>
-                            </ImageBrush>
-                        </Grid.Background>
-                    </Grid>
-                </Border>
+                <local:MyFace Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" VerticalAlignment="Top"/>
 
                 <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top"/>
 
@@ -427,17 +407,7 @@
                     <ColumnDefinition Width="44"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
-                    <Grid CornerRadius="20">
-                        <Grid.Background>
-                            <ImageBrush Stretch="UniformToFill">
-                                <ImageBrush.ImageSource>
-                                    <BitmapImage DecodePixelWidth="40" UriSource="{Binding AvatarUrl}"/>
-                                </ImageBrush.ImageSource>
-                            </ImageBrush>
-                        </Grid.Background>
-                    </Grid>
-                </Border>
+                <local:MyFace Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" VerticalAlignment="Top" HorizontalAlignment="Right"/>
 
                 <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
 
@@ -512,7 +482,7 @@
 
                 <Border Grid.Column="0" Margin="1,0,0,0" Width="2" Style="{Binding StatusColorStyle}"/>
 
-                <local:MyFace Grid.Column="1" FaceUri="{Binding ThreadItem.AvatarUrl}" />
+                <local:MyFace Grid.Column="1" Margin="8" UserId="{Binding ThreadItem.AuthorUserId}" VerticalAlignment="Top"/>
 
                 <StackPanel Grid.Column="2" Margin="0,4">
                     <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">

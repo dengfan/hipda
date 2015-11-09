@@ -76,20 +76,6 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             return this.HtmlStr;
         }
-        public Uri AvatarUrl
-        {
-            get
-            {
-                int uid = Convert.ToInt32(AuthorUserId);
-                var s = new int[10];
-                for (int i = 0; i < s.Length - 1; ++i)
-                {
-                    s[i] = uid % 10;
-                    uid = (uid - s[i]) / 10;
-                }
-                return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg");
-            }
-        }
 
         public string FloorNoStr
         {
