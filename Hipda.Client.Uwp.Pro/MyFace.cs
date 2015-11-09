@@ -37,6 +37,17 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("UserId", typeof(int), typeof(MyFace), new PropertyMetadata(0, new PropertyChangedCallback(OnUserIdChanged)));
 
 
+        public int ThreadId
+        {
+            get { return (int)GetValue(ThreadIdProperty); }
+            set { SetValue(ThreadIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ThreadIdProperty =
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyFace), new PropertyMetadata(0));
+
+
 
 
         public static Uri GetAvatarUrl(int userId)
@@ -78,13 +89,13 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnHolding(e);
 
-            await new MessageDialog(UserId.ToString()).ShowAsync();
+            await new MessageDialog(ThreadId.ToString()).ShowAsync();
         }
 
         protected async override void OnRightTapped(RightTappedRoutedEventArgs e)
         {
             base.OnRightTapped(e);
-            await new MessageDialog(UserId.ToString()).ShowAsync();
+            await new MessageDialog(ThreadId.ToString()).ShowAsync();
         }
     }
 }
