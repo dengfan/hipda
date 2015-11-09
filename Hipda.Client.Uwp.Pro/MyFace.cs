@@ -51,6 +51,7 @@ namespace Hipda.Client.Uwp.Pro
             {
                 BitmapImage bi = new BitmapImage();
                 bi.UriSource = (Uri)e.NewValue;
+                bi.DecodePixelWidth = 40;
                 ImageBrush ib = new ImageBrush();
                 ib.ImageSource = bi;
                 instance._grid1.Background = ib;
