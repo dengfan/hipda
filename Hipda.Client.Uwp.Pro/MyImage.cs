@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Search;
 using Windows.Storage.Streams;
@@ -9,6 +10,7 @@ using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Web.Http;
@@ -44,6 +46,49 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("FolderName", typeof(string), typeof(MyImage), new PropertyMetadata(0));
 
 
+        public bool isCommonImage
+        {
+            get
+            {
+                return Url.Contains("hi-pda.com/forum/images/") || Url.Equals("http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png");
+            }
+        }
+
+        public bool isGif
+        {
+            get
+            {
+                return Url.ToLower().EndsWith(".gif");
+            }
+        }
+
+        private StorageFile file;
+        private StorageFolder folder;
+
+        protected async override void OnTapped(TappedRoutedEventArgs e)
+        {
+            base.OnTapped(e);
+
+            if (!isCommonImage)
+            {
+                await OpenPhoto();
+            }
+        }
+
+        private async Task OpenPhoto()
+        {
+            var fileTypeFilter = new List<string>();
+            fileTypeFilter.Add(".jpg");
+            fileTypeFilter.Add(".jpeg");
+            fileTypeFilter.Add(".png");
+            fileTypeFilter.Add(".bmp");
+            fileTypeFilter.Add(".gif");
+            var queryOptions = new QueryOptions(CommonFileQuery.DefaultQuery, fileTypeFilter);
+            var query = folder.CreateFileQueryWithOptions(queryOptions);
+            var options = new LauncherOptions();
+            options.NeighboringFilesQuery = query;
+            await Launcher.LaunchFileAsync(file, options);
+        }
 
         protected async override void OnApplyTemplate()
         {
@@ -51,14 +96,7 @@ namespace Hipda.Client.Uwp.Pro
 
             try
             {
-                bool isCommonImage = Url.Contains("hi-pda.com/forum/images/") || Url.Equals("http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png");
-                bool isGif = Url.ToLower().EndsWith(".gif");
-
-                string[] urlAry = Url.Split('/');
-                string fileFullName = urlAry.Last();
-
-                StorageFile file = null;
-                StorageFolder folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
+                folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
                 if (isCommonImage)
                 {
                     folder = await folder.CreateFolderAsync("common", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
@@ -77,28 +115,9 @@ namespace Hipda.Client.Uwp.Pro
                 {
                     return;
                 };
-                img.ImageOpened += (s, e) =>
-                {
-                    return;
-                };
-                if (!isCommonImage)
-                {
-                    img.Tapped += async (s, e) =>
-                    {
-                        var fileTypeFilter = new List<string>();
-                        fileTypeFilter.Add(".jpg");
-                        fileTypeFilter.Add(".jpeg");
-                        fileTypeFilter.Add(".png");
-                        fileTypeFilter.Add(".bmp");
-                        fileTypeFilter.Add(".gif");
-                        var queryOptions = new QueryOptions(CommonFileQuery.DefaultQuery, fileTypeFilter);
-                        var query = folder.CreateFileQueryWithOptions(queryOptions);
-                        var options = new LauncherOptions();
-                        options.NeighboringFilesQuery = query;
-                        await Launcher.LaunchFileAsync(file, options);
-                    };
-                }
 
+                string[] urlAry = Url.Split('/');
+                string fileFullName = urlAry.Last();
                 IStorageItem existsFile = await folder.TryGetItemAsync(fileFullName);
                 if (existsFile != null)
                 {
@@ -146,17 +165,7 @@ namespace Hipda.Client.Uwp.Pro
                                 webView.Height = imgHeight;
                                 webView.ScriptNotify += async (s, e) =>
                                 {
-                                    var fileTypeFilter = new List<string>();
-                                    fileTypeFilter.Add(".jpg");
-                                    fileTypeFilter.Add(".jpeg");
-                                    fileTypeFilter.Add(".png");
-                                    fileTypeFilter.Add(".bmp");
-                                    fileTypeFilter.Add(".gif");
-                                    var queryOptions = new QueryOptions(CommonFileQuery.DefaultQuery, fileTypeFilter);
-                                    var query = folder.CreateFileQueryWithOptions(queryOptions);
-                                    var options = new LauncherOptions();
-                                    options.NeighboringFilesQuery = query;
-                                    await Launcher.LaunchFileAsync(file, options);
+                                    await OpenPhoto();
                                 };
 
                                 string imgHtml = @"<html><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""GIF Image"" /></body></html>";
