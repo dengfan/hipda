@@ -48,18 +48,14 @@ namespace Hipda.Client.Uwp.Pro
 
         public Action<int> MyLinkClick { get; set; }
 
-        protected override void OnApplyTemplate()
+        protected override void OnTapped(TappedRoutedEventArgs e)
         {
-            base.OnApplyTemplate();
+            base.OnTapped(e);
 
-            var button1 = GetTemplateChild("button1") as Border;
-
-            button1.Tapped += (s, e) => {
-                if (MyLinkClick != null)
-                {
-                    MyLinkClick(ThreadId);
-                }
-            };
+            if (MyLinkClick != null)
+            {
+                MyLinkClick(ThreadId);
+            }
         }
     }
 }
