@@ -114,7 +114,7 @@
     <Compile Include="Models\ThreadItemModel.cs" />
     <Compile Include="Models\ThreadItemForMyPostsModel.cs" />
     <Compile Include="Models\ThreadItemForMyThreadsModel.cs" />
-    <Compile Include="MyFace.cs" />
+    <Compile Include="MyAvatar.cs" />
     <Compile Include="MyImage.cs" />
     <Compile Include="MyLink.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

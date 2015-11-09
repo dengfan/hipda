@@ -15,13 +15,13 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace Hipda.Client.Uwp.Pro
 {
-    public sealed class MyFace : Control
+    public sealed class MyAvatar : Control
     {
         private Grid _grid1;
 
-        public MyFace()
+        public MyAvatar()
         {
-            this.DefaultStyleKey = typeof(MyFace);
+            this.DefaultStyleKey = typeof(MyAvatar);
         }
 
 
@@ -34,7 +34,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for UserId.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty UserIdProperty =
-            DependencyProperty.Register("UserId", typeof(int), typeof(MyFace), new PropertyMetadata(0, new PropertyChangedCallback(OnUserIdChanged)));
+            DependencyProperty.Register("UserId", typeof(int), typeof(MyAvatar), new PropertyMetadata(0, new PropertyChangedCallback(OnUserIdChanged)));
 
 
         public int ThreadId
@@ -45,7 +45,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ThreadIdProperty =
-            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyFace), new PropertyMetadata(0));
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyAvatar), new PropertyMetadata(0));
 
 
 
@@ -71,7 +71,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private static void OnUserIdChanged(DependencyObject d,DependencyPropertyChangedEventArgs e)
         {
-            var instance = d as MyFace;
+            var instance = d as MyAvatar;
 
             if (instance._grid1 != null)
             {

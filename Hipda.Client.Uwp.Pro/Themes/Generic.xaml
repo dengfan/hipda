@@ -32,11 +32,11 @@
         </Setter>
     </Style>
 
-    <Style TargetType="local:MyFace" >
+    <Style TargetType="local:MyAvatar" >
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:MyFace">
-                    <Border Style="{StaticResource FaceIconStyle}"
+                <ControlTemplate TargetType="local:MyAvatar">
+                    <Border Style="{StaticResource AvatarStyle}"
                             Background="{ThemeResource SystemControlBackgroundListLowBrush}">
                         <Grid x:Name="grid1" CornerRadius="20" Width="40" Height="40"/>
                     </Border>

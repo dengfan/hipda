@@ -34,7 +34,7 @@
             <Setter Property="TextWrapping" Value="WrapWholeWords"/>
         </Style>
 
-        <Style x:Key="FaceIconStyle" TargetType="Border">
+        <Style x:Key="AvatarStyle" TargetType="Border">
             <Setter Property="CornerRadius" Value="25"/>
             <Setter Property="Width" Value="50"/>
             <Setter Property="Height" Value="50"/>
@@ -107,7 +107,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder"
-                        Style="{StaticResource FaceIconStyle}"
+                        Style="{StaticResource AvatarStyle}"
                         VerticalAlignment="Top"
                         Holding="avatarImageBorder_Holding" RightTapped="avatarImageBorder_RightTapped">
                     <FlyoutBase.AttachedFlyout>
@@ -160,7 +160,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource FaceIconStyle}" VerticalAlignment="Top" />
+                <Border Grid.Row="0" Grid.Column="0" x:Name="avatarImageBorder" Style="{StaticResource AvatarStyle}" VerticalAlignment="Top" />
 
                 <Polygon  Grid.Row="0" Grid.Column="1" Points="0,0 10,0 10,8" Fill="{StaticResource ItemBgColor}"/>
 
