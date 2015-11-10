@@ -5,6 +5,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
@@ -18,6 +19,9 @@ namespace Hipda.Client.Uwp.Pro
     public sealed class MyAvatar : Control
     {
         private Grid _grid1;
+        private MenuFlyoutItem _btn1;
+        private MenuFlyoutItem _btn2;
+        private MenuFlyoutItem _btn3;
 
         public MyAvatar()
         {
@@ -45,7 +49,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ThreadIdProperty =
-            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyAvatar), new PropertyMetadata(0));
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyAvatar), new PropertyMetadata(0, new PropertyChangedCallback(OnThreadIdChanged)));
 
 
 
@@ -67,35 +71,62 @@ namespace Hipda.Client.Uwp.Pro
             base.OnApplyTemplate();
 
             _grid1 = GetTemplateChild("grid1") as Grid;
+            _btn1 = GetTemplateChild("btn1") as MenuFlyoutItem;
+            _btn1.Text = "查看作者发贴记录";
+            _btn2 = GetTemplateChild("btn2") as MenuFlyoutItem;
+            _btn2.Text = "屏蔽作者";
+            _btn3 = GetTemplateChild("btn3") as MenuFlyoutItem;
+            _btn3.Text = "屏蔽此主题";
         }
 
         private static void OnUserIdChanged(DependencyObject d,DependencyPropertyChangedEventArgs e)
         {
             var instance = d as MyAvatar;
+            int userId = (int)e.NewValue;
 
             if (instance._grid1 != null)
             {
                 BitmapImage bi = new BitmapImage();
-                bi.UriSource = GetAvatarUrl((int)e.NewValue);
+                bi.UriSource = GetAvatarUrl(userId);
                 bi.DecodePixelWidth = 40;
                 ImageBrush ib = new ImageBrush();
                 ib.ImageSource = bi;
+                ib.ImageFailed += (s, e2) => { return; };
                 instance._grid1.Background = ib;
             }
         }
 
-
-        protected async override void OnHolding(HoldingRoutedEventArgs e)
+        private static void OnThreadIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            base.OnHolding(e);
+            var instance = d as MyAvatar;
+            int threadId = (int)e.NewValue;
 
-            await new MessageDialog(ThreadId.ToString()).ShowAsync();
+            if (instance._btn3 != null && threadId > 0)
+            {
+                instance._btn3.Visibility = Visibility.Visible;
+            }
         }
 
-        protected async override void OnRightTapped(RightTappedRoutedEventArgs e)
+        protected override void OnHolding(HoldingRoutedEventArgs e)
+        {
+            base.OnHolding(e);
+            var border1 = GetTemplateChild("border1") as Border;
+
+            // If you need the clicked element:
+            // Item whichOne = senderElement.DataContext as Item;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(border1);
+            flyoutBase.ShowAt(border1);
+        }
+
+        protected override void OnRightTapped(RightTappedRoutedEventArgs e)
         {
             base.OnRightTapped(e);
-            await new MessageDialog(ThreadId.ToString()).ShowAsync();
+            var border1 = GetTemplateChild("border1") as Border;
+
+            // If you need the clicked element:
+            // Item whichOne = senderElement.DataContext as Item;
+            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(border1);
+            flyoutBase.ShowAt(border1);
         }
     }
 }
