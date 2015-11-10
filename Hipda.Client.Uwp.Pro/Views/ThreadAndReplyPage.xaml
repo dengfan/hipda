@@ -11,6 +11,17 @@
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
 
+    <Page.Resources>
+        <MenuFlyout x:Key="avatarContextMenu">
+            <MenuFlyoutItem Text="查看个人详细资料"/>
+            <MenuFlyoutItem Text="查看发贴记录"/>
+            <MenuFlyoutSubItem Text="屏蔽">
+                <MenuFlyoutItem Text="屏蔽此人所有主题及回复" />
+                <MenuFlyoutItem Text="仅屏蔽此主题" />
+            </MenuFlyoutSubItem>
+        </MenuFlyout>
+    </Page.Resources>
+
     <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">

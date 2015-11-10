@@ -20,11 +20,8 @@ namespace Hipda.Client.Uwp.Pro
 {
     public sealed class MyAvatar : Control
     {
+        private Border _border1;
         private Grid _grid1;
-        private MenuFlyoutItem _btn1;
-        private MenuFlyoutItem _btn2;
-        private MenuFlyoutItem _btn3;
-        private MenuFlyoutItem _btn4;
 
         public MyAvatar()
         {
@@ -59,16 +56,8 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnApplyTemplate();
 
+            _border1 = GetTemplateChild("border1") as Border;
             _grid1 = GetTemplateChild("grid1") as Grid;
-            _btn1 = GetTemplateChild("btn1") as MenuFlyoutItem;
-            _btn1.Text = "查看详细资料";
-            _btn1.Tapped += async (s, e) => { await new UserInfoDialog().ShowAsync(); };
-            _btn2 = GetTemplateChild("btn2") as MenuFlyoutItem;
-            _btn2.Text = "查看发贴记录";
-            _btn3 = GetTemplateChild("btn3") as MenuFlyoutItem;
-            _btn3.Text = "屏蔽此人所有主题及回复";
-            _btn4 = GetTemplateChild("btn4") as MenuFlyoutItem;
-            _btn4.Text = "屏蔽此主题";
         }
 
         private static void OnUserIdChanged(DependencyObject d,DependencyPropertyChangedEventArgs e)
@@ -92,30 +81,17 @@ namespace Hipda.Client.Uwp.Pro
         {
             var instance = d as MyAvatar;
             int threadId = (int)e.NewValue;
-
-            if (instance._btn4 != null && threadId > 0)
-            {
-                instance._btn4.Visibility = Visibility.Visible;
-            }
-        }
-
-        protected override void OnHolding(HoldingRoutedEventArgs e)
-        {
-            base.OnHolding(e);
-            var border1 = GetTemplateChild("border1") as Border;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(border1);
-            flyoutBase.ShowAt(border1);
         }
 
         protected override void OnRightTapped(RightTappedRoutedEventArgs e)
         {
             base.OnRightTapped(e);
-            var border1 = GetTemplateChild("border1") as Border;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(border1);
-            flyoutBase.ShowAt(border1);
+            ThreadAndReplyPage parentPage = FindParent<ThreadAndReplyPage>(this);
+            var menu = parentPage.Resources["avatarContextMenu"] as MenuFlyout;
+            menu.ShowAt(this);
         }
 
-        public static Uri GetAvatarUrl(int userId)
+        private static Uri GetAvatarUrl(int userId)
         {
             int uid = userId;
             var s = new int[10];
@@ -125,6 +101,14 @@ namespace Hipda.Client.Uwp.Pro
                 uid = (uid - s[i]) / 10;
             }
             return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg");
+        }
+
+        private static T FindParent<T>(DependencyObject dependencyObject) where T : DependencyObject
+        {
+            var parent = VisualTreeHelper.GetParent(dependencyObject);
+            if (parent == null) return null;
+            var parentT = parent as T;
+            return parentT ?? FindParent<T>(parent);
         }
     }
 }
