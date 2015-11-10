@@ -41,9 +41,10 @@
                         <Grid x:Name="grid1" CornerRadius="20" Width="40" Height="40"/>
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout>
-                                <MenuFlyoutItem x:Name="btn1" />
-                                <MenuFlyoutItem x:Name="btn2" />
-                                <MenuFlyoutItem x:Name="btn3" Visibility="Collapsed" />
+                                <MenuFlyoutItem x:Name="btn1"/>
+                                <MenuFlyoutItem x:Name="btn2"/>
+                                <MenuFlyoutItem x:Name="btn3" Visibility="Collapsed"/>
+                                <MenuFlyoutItem x:Name="btn4"/>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
                     </Border>
