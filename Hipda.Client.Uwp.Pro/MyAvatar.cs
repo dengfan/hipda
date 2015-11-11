@@ -49,7 +49,18 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ThreadIdProperty =
-            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyAvatar), new PropertyMetadata(0, new PropertyChangedCallback(OnThreadIdChanged)));
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyAvatar), new PropertyMetadata(0));
+
+
+        public int Type
+        {
+            get { return (int)GetValue(TypeProperty); }
+            set { SetValue(TypeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Type.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TypeProperty =
+            DependencyProperty.Register("Type", typeof(int), typeof(MyAvatar), new PropertyMetadata(0));
 
 
         protected override void OnApplyTemplate()
@@ -77,17 +88,13 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        private static void OnThreadIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var instance = d as MyAvatar;
-            int threadId = (int)e.NewValue;
-        }
-
         protected override void OnRightTapped(RightTappedRoutedEventArgs e)
         {
             base.OnRightTapped(e);
-            ThreadAndReplyPage parentPage = FindParent<ThreadAndReplyPage>(this);
+
+            var parentPage = FindParent<ThreadAndReplyPage>(this);
             var menu = parentPage.Resources["avatarContextMenu"] as MenuFlyout;
+            menu.Items[4].Visibility = Type == 1 ? Visibility.Collapsed : Visibility.Visible;
             menu.ShowAt(this);
         }
 
