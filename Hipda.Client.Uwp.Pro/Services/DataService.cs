@@ -25,9 +25,9 @@ namespace Hipda.Client.Uwp.Pro.Services
         private static int _searchPageSize = 50;
 
         private static HttpHandle _httpClient = HttpHandle.getInstance();
-        public static ObservableCollection<ThreadItemModelBase> ReadHistoryData = new ObservableCollection<ThreadItemModelBase>();
 
         #region thread
+        public static ObservableCollection<ThreadItemModelBase> ReadHistoryData = new ObservableCollection<ThreadItemModelBase>();
         private static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
         private static List<ThreadItemForMyThreadsModel> _threadDataForMyThreads = new List<ThreadItemForMyThreadsModel>();
         private static List<ThreadItemForMyPostsModel> _threadDataForMyPosts = new List<ThreadItemForMyPostsModel>();
