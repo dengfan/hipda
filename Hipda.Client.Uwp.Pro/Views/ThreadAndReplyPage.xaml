@@ -13,7 +13,7 @@
 
     <Page.Resources>
         <MenuFlyout x:Key="avatarContextMenu">
-            <MenuFlyoutItem Text="查看详细资料"/>
+            <MenuFlyoutItem Text="查看详细资料" Tapped="openUserInfoDialog_Tapped"/>
             <MenuFlyoutItem Text="查看发贴记录"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="屏蔽此人" />
@@ -262,5 +262,10 @@
                 <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center" />
             </StackPanel>
         </Grid>
+
+        <ContentDialog x:Name="UserInfoDialog" Title="个人详细资料"
+                       PrimaryButtonText="关闭" PrimaryButtonClick="UserInfoDialog_PrimaryButtonClick">
+            
+        </ContentDialog>
     </Grid>
 </Page>

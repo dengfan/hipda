@@ -25,21 +25,16 @@ namespace Hipda.Client.Uwp.Pro.Services
         private static int _searchPageSize = 50;
 
         private static HttpHandle _httpClient = HttpHandle.getInstance();
+        public static ObservableCollection<ThreadItemModelBase> ReadHistoryData = new ObservableCollection<ThreadItemModelBase>();
 
+        #region thread
         private static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
         private static List<ThreadItemForMyThreadsModel> _threadDataForMyThreads = new List<ThreadItemForMyThreadsModel>();
         private static List<ThreadItemForMyPostsModel> _threadDataForMyPosts = new List<ThreadItemForMyPostsModel>();
-
-        private static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
-        public static ObservableCollection<ThreadItemModelBase> ReadHistoryData = new ObservableCollection<ThreadItemModelBase>();
-
         private int _threadMaxPageNo = 1;
         private int _threadMaxPageNoForMyThreads = 1;
         private int _threadMaxPageNoForMyPosts = 1;
-        private int _replyMaxPageNo = 1;
-        private bool _isScrollCompleted = false;
 
-        #region thread
         private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadData.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
@@ -573,6 +568,10 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region reply
+        private static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
+        private int _replyMaxPageNo = 1;
+        private bool _isScrollCompleted = false;
+
         private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, Action<int> linkClickEvent, CancellationTokenSource cts)
         {
             // 如果页面已存在，则不重新从网站拉取数据，以便节省流量， 
@@ -957,5 +956,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _isScrollCompleted;
         }
         #endregion
+
+        #region user
+        
+        #endregion
+
     }
 }

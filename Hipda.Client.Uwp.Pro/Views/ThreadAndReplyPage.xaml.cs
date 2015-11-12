@@ -359,5 +359,15 @@ namespace Hipda.Client.Uwp.Pro.Views
             ThreadItemModelBase data = e.ClickedItem as ThreadItemModelBase;
             OpenReplyPageByThreadId(data.ThreadId);
         }
+
+        private async void openUserInfoDialog_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            await UserInfoDialog.ShowAsync();
+        }
+
+        private void UserInfoDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+
+        }
     }
 }
