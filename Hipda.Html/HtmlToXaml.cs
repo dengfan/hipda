@@ -224,8 +224,7 @@ namespace Hipda.Html
 
         public static string ConvertUserInfo(string htmlContent)
         {
-            //htmlContent = htmlContent.Replace(":", "：");
-            //htmlContent = htmlContent.Replace("(", " (");
+            htmlContent = htmlContent.Replace(":", "：");
             htmlContent = htmlContent.Replace("[", "&#8968;");
             htmlContent = htmlContent.Replace("]", "&#8971;");
             htmlContent = htmlContent.Replace("&nbsp;", " ");

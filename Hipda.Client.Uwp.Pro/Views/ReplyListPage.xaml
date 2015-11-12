@@ -94,7 +94,7 @@
                     </Button.Content>
                 </Button>
             </Grid>
-            <TextBox x:Name="PostContentTextBox" Style="{StaticResource TextBoxStyle1}" 
+            <TextBox x:Name="PostContentTextBox" Template="{StaticResource TextBoxTemplate1}" 
                      MaxHeight="280" Padding="8,4" Background="Transparent" BorderThickness="0"
                      TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容，回车可换行。"/>
         </StackPanel>
