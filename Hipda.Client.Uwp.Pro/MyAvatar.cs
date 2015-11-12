@@ -93,6 +93,8 @@ namespace Hipda.Client.Uwp.Pro
             base.OnRightTapped(e);
 
             var parentPage = FindParent<ThreadAndReplyPage>(this);
+            parentPage.PopupUserId = UserId;
+            parentPage.PopupThreadId = ThreadId;
             var menu = parentPage.Resources["avatarContextMenu"] as MenuFlyout;
             menu.Items[4].Visibility = Type == 1 ? Visibility.Collapsed : Visibility.Visible;
             menu.ShowAt(this);

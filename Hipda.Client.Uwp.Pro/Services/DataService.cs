@@ -714,7 +714,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.Convert(threadId, htmlContent, 20, ref imageCount, ref linkCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, 20, ref imageCount, ref linkCount);
                 }
                 else
                 {
@@ -912,7 +912,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.Convert(threadId, htmlContent, 20, ref imageCount, ref linkCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, 20, ref imageCount, ref linkCount);
                 }
                 else
                 {
@@ -958,7 +958,43 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region user
-        
+        private static Dictionary<int, string> _userData = new Dictionary<int, string>();
+
+        private async Task LoadUserDataAsync(int userId, CancellationTokenSource cts)
+        {
+            if (_userData.ContainsKey(userId))
+            {
+                return;
+            }
+
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/space.php?uid={0}&_={1}", userId, DateTime.Now.Ticks.ToString("x"));
+            string htmlContent = await _httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlContent);
+
+            var node = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("profilecontent"));
+            if (node != null)
+            {
+                string xaml = Html.HtmlToXaml.ConvertUserInfo(node.InnerHtml);
+                _userData.Add(userId, xaml);
+            }
+        }
+
+        public async Task<string> GetXamlForUserInfo(int userId)
+        {
+            if (!_userData.ContainsKey(userId))
+            {
+                var cts = new CancellationTokenSource();
+                await LoadUserDataAsync(userId, cts);
+            }
+
+            return _userData[userId];
+        }
         #endregion
 
     }

@@ -9,7 +9,7 @@ namespace Hipda.Html
 {
     public static class HtmlToXaml
     {
-        public static string Convert(int threadId, string htmlContent, int maxImageCount, ref int imageCount, ref int linkCount)
+        public static string ConvertPost(int threadId, string htmlContent, int maxImageCount, ref int imageCount, ref int linkCount)
         {
             //string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
 
@@ -220,6 +220,89 @@ namespace Hipda.Html
                 .Replace("]", @"\]")
                 .Replace("(", @"\(")
                 .Replace(")", @"\)");
+        }
+
+        public static string ConvertUserInfo(string htmlContent)
+        {
+            //htmlContent = htmlContent.Replace(":", "：");
+            //htmlContent = htmlContent.Replace("(", " (");
+            htmlContent = htmlContent.Replace("[", "&#8968;");
+            htmlContent = htmlContent.Replace("]", "&#8971;");
+            htmlContent = htmlContent.Replace("&nbsp;", " ");
+            htmlContent = htmlContent.Replace("↵", "&#8629;");
+            htmlContent = htmlContent.Replace("<strong>", string.Empty);
+            htmlContent = htmlContent.Replace("</strong>", string.Empty);
+            htmlContent = htmlContent.Replace("<br/>", "↵"); // ↵符号表示换行符
+            htmlContent = htmlContent.Replace("<br />", "↵");
+            htmlContent = htmlContent.Replace("<br>", "↵");
+            htmlContent = htmlContent.Replace("</div>", "↵");
+            htmlContent = htmlContent.Replace("</p>", "↵");
+            htmlContent = htmlContent.Replace("</ul>", "↵");
+            htmlContent = htmlContent.Replace("</li>", "↵");
+            htmlContent = htmlContent.Replace("</td>", "↵");
+            htmlContent = Regex.Replace(htmlContent, @"<span[^>]*>", string.Empty);
+            htmlContent = Regex.Replace(htmlContent, @"</span>", string.Empty);
+            htmlContent = htmlContent.Replace(@"<h3 class=""blocktitle lightlink"">", @"[LineBreak/][Bold Foreground=""DimGray""]");
+            htmlContent = htmlContent.Replace("</h3>", "[/Bold][LineBreak/]");
+
+            // 替换链接
+            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<#]*)</a>").Matches(htmlContent);
+            if (matchsForLink != null && matchsForLink.Count > 0)
+            {
+                for (int i = 0; i < matchsForLink.Count; i++)
+                {
+                    var m = matchsForLink[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string linkUrl = m.Groups[1].Value;
+                    string linkContent = m.Groups[2].Value;
+
+                    if (!linkUrl.Contains(":"))
+                    {
+                        linkUrl = string.Format("http://www.hi-pda.com/forum/{0}", linkUrl);
+                    }
+                    string linkXaml = string.Format(@"[Hyperlink NavigateUri=""{0}"" Foreground=""DodgerBlue""]{1}[/Hyperlink]", linkUrl, linkContent);
+                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                }
+            }
+
+            // 移除无意义图片HTML
+            htmlContent = htmlContent.Replace(@"src=""images/default/attachimg.gif""", string.Empty);
+            htmlContent = htmlContent.Replace(@"src=""http://www.hi-pda.com/forum/images/default/attachimg.gif""", string.Empty);
+
+            #region 解析图片
+            // 图片，通过src属性解析
+            MatchCollection matchsForImage2 = new Regex(@"<img[^>]*src=""([^""]*)""[^>]*>").Matches(htmlContent);
+            if (matchsForImage2 != null && matchsForImage2.Count > 0)
+            {
+                for (int i = 0; i < matchsForImage2.Count; i++)
+                {
+                    var m = matchsForImage2[i];
+                    string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
+                    string imgUrl = m.Groups[1].Value; // 图片URL
+                    if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
+
+                    string imgXaml = @"[InlineUIContainer][local:MyImage FolderName=""0"" Url=""{0}""/][/InlineUIContainer]";
+                    imgXaml = string.Format(imgXaml, imgUrl);
+
+                    htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
+                }
+            }
+            #endregion
+
+            htmlContent = new Regex("<[^>]*>").Replace(htmlContent, string.Empty); // 移除所有HTML标签
+            htmlContent = new Regex("\r\n").Replace(htmlContent, string.Empty); // 忽略源换行
+            htmlContent = new Regex("\r").Replace(htmlContent, string.Empty); // 忽略源换行
+            htmlContent = new Regex("\n").Replace(htmlContent, string.Empty); // 忽略源换行
+            htmlContent = new Regex(@"↵{1,}").Replace(htmlContent, "↵"); // 将多个换行符合并成一个
+            htmlContent = new Regex(@"^↵").Replace(htmlContent, string.Empty); // 移除行首的换行符
+            htmlContent = new Regex(@"↵$").Replace(htmlContent, string.Empty); // 移除行末的换行符
+            htmlContent = htmlContent.Replace("↵", "[LineBreak/]"); // 解析换行符
+            htmlContent = htmlContent.Replace("[", "<");
+            htmlContent = htmlContent.Replace("]", ">");
+            htmlContent = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+
+            return htmlContent;
         }
     }
 }

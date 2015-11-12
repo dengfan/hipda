@@ -9,6 +9,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
@@ -22,6 +23,29 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ThreadAndReplyPage : Page
     {
+        #region 两个依赖属性，用于接收点击头像的参数
+        public int PopupUserId
+        {
+            get { return (int)GetValue(PopupUserIdProperty); }
+            set { SetValue(PopupUserIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PopupUserId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PopupUserIdProperty =
+            DependencyProperty.Register("PopupUserId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0));
+
+
+        public int PopupThreadId
+        {
+            get { return (int)GetValue(PopupThreadIdProperty); }
+            set { SetValue(PopupThreadIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PopupThreadId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PopupThreadIdProperty =
+            DependencyProperty.Register("PopupThreadId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0));
+        #endregion
+
         private object _lastSelectedItem;
         private ThreadAndReplyViewModel _threadAndReplyViewModel;
 
@@ -362,6 +386,13 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private async void openUserInfoDialog_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
+            if (PopupUserId == 0)
+            {
+                return;
+            }
+
+            string xaml = await _threadAndReplyViewModel.GetXamlForUserInfo(PopupUserId);
+            UserInfoDialogContentControl.Content = XamlReader.Load(xaml);
             await UserInfoDialog.ShowAsync();
         }
 

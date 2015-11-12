@@ -199,6 +199,8 @@
                 </InlineUIContainer>
             </Paragraph>
         </RichTextBlock>
+
+        <ContentDialog x:Name="aaae"></ContentDialog>
     </Grid>
 
 

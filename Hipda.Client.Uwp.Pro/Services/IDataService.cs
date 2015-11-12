@@ -70,5 +70,9 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         bool GetScrollState();
         #endregion
+
+        #region user
+        Task<string> GetXamlForUserInfo(int userId);
+        #endregion
     }
 }
