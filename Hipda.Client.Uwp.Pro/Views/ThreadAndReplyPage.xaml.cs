@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
@@ -390,6 +391,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 return;
             }
+
+            var bi = new BitmapImage();
+            bi.UriSource = MyAvatar.GetAvatarUrl(PopupUserId);
+            var img = new Image();
+            img.Stretch = Stretch.None;
+            img.Source = bi;
+            UserAvatarImageContentControl.Content = img;
 
             string xaml = await _threadAndReplyViewModel.GetXamlForUserInfo(PopupUserId);
             UserInfoDialogContentControl.Content = XamlReader.Load(xaml);

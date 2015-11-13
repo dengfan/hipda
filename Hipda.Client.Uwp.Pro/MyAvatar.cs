@@ -100,7 +100,7 @@ namespace Hipda.Client.Uwp.Pro
             menu.ShowAt(this);
         }
 
-        private static Uri GetAvatarUrl(int userId)
+        public static Uri GetAvatarUrl(int userId)
         {
             int uid = userId;
             var s = new int[10];

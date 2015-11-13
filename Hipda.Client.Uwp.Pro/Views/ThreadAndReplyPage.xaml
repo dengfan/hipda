@@ -265,7 +265,10 @@
 
         <ContentDialog x:Name="UserInfoDialog" Title="个人详细资料" Template="{StaticResource ContentDialogTemplate1}"
                        PrimaryButtonText="关闭" PrimaryButtonClick="UserInfoDialog_PrimaryButtonClick">
-            <ContentControl x:Name="UserInfoDialogContentControl" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+            <StackPanel>
+                <ContentControl x:Name="UserAvatarImageContentControl" HorizontalAlignment="Center"/>
+                <ContentControl x:Name="UserInfoDialogContentControl" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+            </StackPanel>
         </ContentDialog>
     </Grid>
 </Page>
