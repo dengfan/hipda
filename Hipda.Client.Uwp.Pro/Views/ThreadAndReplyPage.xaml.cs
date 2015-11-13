@@ -2,6 +2,7 @@
 using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI;
@@ -385,28 +386,80 @@ namespace Hipda.Client.Uwp.Pro.Views
             OpenReplyPageByThreadId(data.ThreadId);
         }
 
-        private async void openUserInfoDialog_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private async void openUserDialog_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             if (PopupUserId == 0)
             {
                 return;
             }
 
+            UserDialog.Title = "查看个人详细资料";
+            UserDialog.PrimaryButtonText = "发短消息";
+            UserDialog.PrimaryButtonClick += PostUserMessage;
+            UserDialog.SecondaryButtonText = "关闭";
+            
             var bi = new BitmapImage();
             bi.UriSource = MyAvatar.GetAvatarUrl(PopupUserId);
             var img = new Image();
             img.Stretch = Stretch.None;
             img.Source = bi;
-            UserAvatarImageContentControl.Content = img;
+            img.VerticalAlignment = VerticalAlignment.Top;
+            img.HorizontalAlignment = HorizontalAlignment.Right;
 
             string xaml = await _threadAndReplyViewModel.GetXamlForUserInfo(PopupUserId);
-            UserInfoDialogContentControl.Content = XamlReader.Load(xaml);
-            await UserInfoDialog.ShowAsync();
+            var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
+
+            var grid = new Grid();
+            grid.Children.Add(img);
+            grid.Children.Add(richTextBlock);
+            UserDialogContentControl.Content = grid;
+
+            await UserDialog.ShowAsync();
         }
 
-        private void UserInfoDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private async void PostUserMessage(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            args.Cancel = true;
 
+            if (PopupUserId == 0)
+            {
+                var textBlock = new TextBlock { Text = "对不起，参数错误！" };
+                UserDialogContentControl.Content = textBlock;
+                return;
+            }
+            else
+            {
+                var textBlock = new TextBlock { Text = "请稍候，载入中。。。" };
+                UserDialogContentControl.Content = textBlock;
+            }
+
+            sender.Title = "短消息";
+            sender.PrimaryButtonText = "发送";
+            sender.SecondaryButtonText = "关闭";
+
+            var grid = new Grid();
+            grid.RowDefinitions.Insert(0, new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            grid.RowDefinitions.Insert(1, new RowDefinition { Height = GridLength.Auto });
+
+            var lv = new ListView();
+            lv.SetValue(Grid.RowProperty, 0);
+            lv.IsItemClickEnabled = false;
+            lv.IsSwipeEnabled = false;
+            lv.CanDrag = false;
+            lv.SelectionMode = ListViewSelectionMode.None;
+            lv.ShowsScrollingPlaceholders = false;
+            lv.ItemTemplate = Resources["userMessageItemTemplate"] as DataTemplate;
+
+            var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId);
+            lv.ItemsSource = data;
+
+            var tb = new TextBox();
+            tb.SetValue(Grid.RowProperty, 1);
+            tb.PlaceholderText = "编辑短消息";
+
+            grid.Children.Add(lv);
+            grid.Children.Add(tb);
+            UserDialogContentControl.Content = grid;
         }
     }
 }

@@ -958,11 +958,11 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region user
-        private static Dictionary<int, string> _userData = new Dictionary<int, string>();
+        private static Dictionary<int, string> _userInfoData = new Dictionary<int, string>();
 
         private async Task LoadUserDataAsync(int userId, CancellationTokenSource cts)
         {
-            if (_userData.ContainsKey(userId))
+            if (_userInfoData.ContainsKey(userId))
             {
                 return;
             }
@@ -981,19 +981,94 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (node != null)
             {
                 string xaml = Html.HtmlToXaml.ConvertUserInfo(node.InnerHtml);
-                _userData.Add(userId, xaml);
+                _userInfoData.Add(userId, xaml);
             }
         }
 
         public async Task<string> GetXamlForUserInfo(int userId)
         {
-            if (!_userData.ContainsKey(userId))
+            if (!_userInfoData.ContainsKey(userId))
             {
                 var cts = new CancellationTokenSource();
                 await LoadUserDataAsync(userId, cts);
             }
 
-            return _userData[userId];
+            return _userInfoData[userId];
+        }
+
+        private async Task<List<UserMessageItemModel>> LoadUserMessageDataAsync(int userId, CancellationTokenSource cts)
+        {
+            var data = new List<UserMessageItemModel>();
+
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/pm.php?uid={0}&filter=privatepm&daterange=5&_={1}", userId, DateTime.Now.Ticks.ToString("x"));
+            string htmlContent = await _httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlContent);
+
+            var messageListNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pm_list"));
+            if (messageListNode != null)
+            {
+                var nodeList = messageListNode.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("pm_"));
+                if (nodeList != null)
+                {
+                    foreach (var item in nodeList)
+                    {
+                        int uid = 0;
+                        string userIdStr = item.ChildNodes[3].Attributes[0].Value;
+                        if (!userIdStr.Equals("avatar"))
+                        {
+                            userIdStr = userIdStr.Substring("space.php?uid=".Length);
+                            if (userIdStr.Contains("&"))
+                            {
+                                uid = Convert.ToInt32(userIdStr.Split('&')[0]);
+                            }
+                            else
+                            {
+                                uid = Convert.ToInt32(userIdStr);
+                            }
+                        }
+
+                        bool isRead = !item.ChildNodes[5].InnerHtml.Contains("notice_newpm.gif");
+                        string str = item.ChildNodes[5].InnerText.Trim().Replace(Environment.NewLine, "$");
+                        string[] strAry = str.Split('$');
+                        string username = strAry[0];
+                        string time = strAry[1];
+                        string date = time.Split(' ')[0];
+
+                        var messageNode = item.ChildNodes[7];
+                        string textStr = messageNode.InnerText;
+                        string htmlStr = messageNode.InnerHtml;
+                        int linkCount = 0;
+                        string xamlStr = Html.HtmlToXaml.ConvertUserMessage(htmlStr, ref linkCount);
+
+                        var messageItem = new UserMessageItemModel
+                        {
+                            Date = date,
+                            Time = time,
+                            UserId = uid,
+                            Username = username,
+                            TextStr = textStr,
+                            HtmlStr = htmlStr,
+                            XamlStr = xamlStr,
+                            IsRead = isRead
+                        };
+                        data.Add(messageItem);
+                    }
+                }
+            }
+
+            return data;
+        }
+
+        public async Task<List<UserMessageItemModel>> GetUserMessageData(int userId)
+        {
+            var cts = new CancellationTokenSource();
+            return await LoadUserMessageDataAsync(userId, cts);
         }
         #endregion
 

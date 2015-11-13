@@ -73,6 +73,8 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         #region user
         Task<string> GetXamlForUserInfo(int userId);
+
+        Task<List<UserMessageItemModel>> GetUserMessageData(int userId);
         #endregion
     }
 }

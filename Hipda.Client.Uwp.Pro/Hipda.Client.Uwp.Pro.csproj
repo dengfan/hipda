@@ -107,6 +107,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountItemModel.cs" />
+    <Compile Include="Models\UserMessageItemModel.cs" />
     <Compile Include="Models\ReplyItemModel.cs" />
     <Compile Include="Models\ReplyPageModel.cs" />
     <Compile Include="Models\ThreadItemModelBase.cs" />

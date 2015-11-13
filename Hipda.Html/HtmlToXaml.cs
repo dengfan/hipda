@@ -34,6 +34,9 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("<br>", "↵");
             htmlContent = htmlContent.Replace("</div>", "↵");
             htmlContent = htmlContent.Replace("</p>", "↵");
+            htmlContent = htmlContent.Replace("</ul>", "↵");
+            htmlContent = htmlContent.Replace("</li>", "↵");
+            htmlContent = htmlContent.Replace("</td>", "↵");
             htmlContent = Regex.Replace(htmlContent, @"<span[^>]*>", string.Empty);
             htmlContent = Regex.Replace(htmlContent, @"</span>", string.Empty);
 
@@ -268,6 +271,102 @@ namespace Hipda.Html
             // 移除无意义图片HTML
             htmlContent = htmlContent.Replace(@"src=""images/default/attachimg.gif""", string.Empty);
             htmlContent = htmlContent.Replace(@"src=""http://www.hi-pda.com/forum/images/default/attachimg.gif""", string.Empty);
+
+            #region 解析图片
+            // 图片，通过src属性解析
+            MatchCollection matchsForImage2 = new Regex(@"<img[^>]*src=""([^""]*)""[^>]*>").Matches(htmlContent);
+            if (matchsForImage2 != null && matchsForImage2.Count > 0)
+            {
+                for (int i = 0; i < matchsForImage2.Count; i++)
+                {
+                    var m = matchsForImage2[i];
+                    string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
+                    string imgUrl = m.Groups[1].Value; // 图片URL
+                    if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
+
+                    string imgXaml = @"[InlineUIContainer][local:MyImage FolderName=""0"" Url=""{0}""/][/InlineUIContainer]";
+                    imgXaml = string.Format(imgXaml, imgUrl);
+
+                    htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
+                }
+            }
+            #endregion
+
+            htmlContent = new Regex("<[^>]*>").Replace(htmlContent, string.Empty); // 移除所有HTML标签
+            htmlContent = new Regex("\r\n").Replace(htmlContent, string.Empty); // 忽略源换行
+            htmlContent = new Regex("\r").Replace(htmlContent, string.Empty); // 忽略源换行
+            htmlContent = new Regex("\n").Replace(htmlContent, string.Empty); // 忽略源换行
+            htmlContent = new Regex(@"↵{1,}").Replace(htmlContent, "↵"); // 将多个换行符合并成一个
+            htmlContent = new Regex(@"^↵").Replace(htmlContent, string.Empty); // 移除行首的换行符
+            htmlContent = new Regex(@"↵$").Replace(htmlContent, string.Empty); // 移除行末的换行符
+            htmlContent = htmlContent.Replace("↵", "[LineBreak/]"); // 解析换行符
+            htmlContent = htmlContent.Replace("[", "<");
+            htmlContent = htmlContent.Replace("]", ">");
+            htmlContent = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+
+            return htmlContent;
+        }
+
+        public static string ConvertUserMessage(string htmlContent, ref int linkCount)
+        {
+            htmlContent = htmlContent.Replace("[", "&#8968;");
+            htmlContent = htmlContent.Replace("]", "&#8971;");
+            htmlContent = htmlContent.Replace("&nbsp;", " ");
+            htmlContent = htmlContent.Replace("↵", "&#8629;");
+            htmlContent = htmlContent.Replace("<strong>", string.Empty);
+            htmlContent = htmlContent.Replace("</strong>", string.Empty);
+            htmlContent = htmlContent.Replace("<br/>", "↵"); // ↵符号表示换行符
+            htmlContent = htmlContent.Replace("<br />", "↵");
+            htmlContent = htmlContent.Replace("<br>", "↵");
+            htmlContent = htmlContent.Replace("</div>", "↵");
+            htmlContent = htmlContent.Replace("</p>", "↵");
+            htmlContent = htmlContent.Replace("</ul>", "↵");
+            htmlContent = htmlContent.Replace("</li>", "↵");
+            htmlContent = htmlContent.Replace("</td>", "↵");
+            htmlContent = Regex.Replace(htmlContent, @"<span[^>]*>", string.Empty);
+            htmlContent = Regex.Replace(htmlContent, @"</span>", string.Empty);
+
+            // 替换站内链接为按钮
+            linkCount = 0;
+            MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
+            if (matchsForMyLink != null && matchsForMyLink.Count > 0)
+            {
+                linkCount = matchsForMyLink.Count;
+                for (int i = 0; i < linkCount; i++)
+                {
+                    var m = matchsForMyLink[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string threadIdStr = m.Groups[1].Value;
+                    string linkContent = m.Groups[2].Value;
+                    linkContent = Regex.Replace(linkContent, @"<[^>]*>", string.Empty);
+
+                    string linkXaml = string.Format(@"[InlineUIContainer][local:MyLink Name=""MyLink_{2}"" ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent, i);
+                    string regexPattern = StringToRegexPattern(placeHolder);
+                    htmlContent = new Regex(regexPattern).Replace(htmlContent, linkXaml, 1); // 由于站内链接有可能重复，所以这里每次只允许替换一个
+                }
+            }
+
+            // 替换链接
+            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<#]*)</a>").Matches(htmlContent);
+            if (matchsForLink != null && matchsForLink.Count > 0)
+            {
+                for (int i = 0; i < matchsForLink.Count; i++)
+                {
+                    var m = matchsForLink[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string linkUrl = m.Groups[1].Value;
+                    string linkContent = m.Groups[2].Value;
+
+                    if (!linkUrl.Contains(":"))
+                    {
+                        linkUrl = string.Format("http://www.hi-pda.com/forum/{0}", linkUrl);
+                    }
+                    string linkXaml = string.Format(@"[Hyperlink NavigateUri=""{0}"" Foreground=""DodgerBlue""]{1}[/Hyperlink]", linkUrl, linkContent);
+                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                }
+            }
 
             #region 解析图片
             // 图片，通过src属性解析

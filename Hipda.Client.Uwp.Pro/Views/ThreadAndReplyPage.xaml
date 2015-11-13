@@ -13,12 +13,23 @@
 
     <Page.Resources>
         <MenuFlyout x:Key="avatarContextMenu">
-            <MenuFlyoutItem Text="查看详细资料" Tapped="openUserInfoDialog_Tapped"/>
+            <MenuFlyoutItem Text="查看详细资料" Tapped="openUserDialog_Tapped"/>
             <MenuFlyoutItem Text="查看发贴记录"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="屏蔽此人" />
             <MenuFlyoutItem Text="屏蔽此主题" />
         </MenuFlyout>
+
+        <DataTemplate x:Key="userMessageItemTemplate">
+            <StackPanel>
+                <TextBlock>
+                    <Run Text="{Binding Username}"/>
+                    <Run Text=" "/>
+                    <Run Text="{Binding Time}"/>
+                </TextBlock>
+                <ContentControl Content="{Binding XamlContent}"/>
+            </StackPanel>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">
@@ -263,12 +274,12 @@
             </StackPanel>
         </Grid>
 
-        <ContentDialog x:Name="UserInfoDialog" Title="个人详细资料" Template="{StaticResource ContentDialogTemplate1}"
-                       PrimaryButtonText="关闭" PrimaryButtonClick="UserInfoDialog_PrimaryButtonClick">
-            <StackPanel>
-                <ContentControl x:Name="UserAvatarImageContentControl" HorizontalAlignment="Center"/>
-                <ContentControl x:Name="UserInfoDialogContentControl" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-            </StackPanel>
+        <ContentDialog x:Name="UserDialog" Template="{StaticResource ContentDialogTemplate1}">
+            <ContentControl x:Name="UserDialogContentControl" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </ContentDialog>
+
+        <ContentDialog x:Name="UserMessageDialog" Title="短消息" Template="{StaticResource ContentDialogTemplate1}"
+                       PrimaryButtonText="关闭">
         </ContentDialog>
     </Grid>
 </Page>
