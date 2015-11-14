@@ -41,6 +41,17 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("UserId", typeof(int), typeof(MyAvatar), new PropertyMetadata(0, new PropertyChangedCallback(OnUserIdChanged)));
 
 
+        public string Username
+        {
+            get { return (string)GetValue(UsernameProperty); }
+            set { SetValue(UsernameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Username.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UsernameProperty =
+            DependencyProperty.Register("Username", typeof(string), typeof(MyAvatar), new PropertyMetadata(string.Empty));
+
+
         public int ThreadId
         {
             get { return (int)GetValue(ThreadIdProperty); }
@@ -94,6 +105,7 @@ namespace Hipda.Client.Uwp.Pro
 
             var parentPage = FindParent<ThreadAndReplyPage>(this);
             parentPage.PopupUserId = UserId;
+            parentPage.PopupUsername = Username;
             parentPage.PopupThreadId = ThreadId;
             var menu = parentPage.Resources["avatarContextMenu"] as MenuFlyout;
             menu.Items[4].Visibility = Type == 1 ? Visibility.Collapsed : Visibility.Visible;

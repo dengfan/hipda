@@ -37,6 +37,17 @@ namespace Hipda.Client.Uwp.Pro.Views
             DependencyProperty.Register("PopupUserId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0));
 
 
+        public string PopupUsername
+        {
+            get { return (string)GetValue(PopupUsernameProperty); }
+            set { SetValue(PopupUsernameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PopupUsername.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PopupUsernameProperty =
+            DependencyProperty.Register("PopupUsername", typeof(string), typeof(ThreadAndReplyPage), new PropertyMetadata(string.Empty));
+
+
         public int PopupThreadId
         {
             get { return (int)GetValue(PopupThreadIdProperty); }
@@ -393,7 +404,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
-            UserDialog.Title = "查看个人详细资料";
+            UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
             UserDialog.PrimaryButtonText = "发短消息";
             UserDialog.PrimaryButtonClick += PostUserMessage;
             UserDialog.SecondaryButtonText = "关闭";
@@ -433,7 +444,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 UserDialogContentControl.Content = textBlock;
             }
 
-            sender.Title = "短消息";
+            sender.Title = string.Format("短消息（与 {0}）", PopupUsername);
             sender.PrimaryButtonText = "发送";
             sender.SecondaryButtonText = "关闭";
 
@@ -448,6 +459,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             lv.CanDrag = false;
             lv.SelectionMode = ListViewSelectionMode.None;
             lv.ShowsScrollingPlaceholders = false;
+            lv.ItemContainerStyle = Application.Current.Resources["ReplyItemContainerStyle"] as Style;
             lv.ItemTemplate = Resources["userMessageItemTemplate"] as DataTemplate;
 
             var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId);

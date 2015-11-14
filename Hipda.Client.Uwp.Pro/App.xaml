@@ -316,7 +316,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" ThreadId="{Binding ThreadId}" VerticalAlignment="Top"/>
+                <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" VerticalAlignment="Top"/>
 
                 <StackPanel Grid.Row="0" Grid.Column="1" Margin="8,0,0,0">
                     <TextBlock Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontWeight="Bold"/>
@@ -369,7 +369,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" ThreadId="0" Type="1" VerticalAlignment="Top"/>
+                <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" Type="1" VerticalAlignment="Top"/>
 
                 <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundListLowBrush}" VerticalAlignment="Top"/>
 
@@ -423,7 +423,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" ThreadId="{Binding ThreadId}" VerticalAlignment="Top"/>
+                <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" VerticalAlignment="Top"/>
 
                 <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top"/>
 
@@ -478,7 +478,7 @@
                     <ColumnDefinition Width="44"/>
                 </Grid.ColumnDefinitions>
 
-                <local:MyAvatar Grid.Row="0" Grid.Column="2" UserId="{Binding AuthorUserId}" ThreadId="0" Type="1" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                <local:MyAvatar Grid.Row="0" Grid.Column="2" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" Type="1" VerticalAlignment="Top" HorizontalAlignment="Right"/>
 
                 <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
 
@@ -545,7 +545,7 @@
 
                 <Border Grid.Column="0" Margin="1,0,0,0" Width="2" Style="{Binding StatusColorStyle}"/>
 
-                <local:MyAvatar Grid.Column="1" Margin="8" UserId="{Binding ThreadItem.AuthorUserId}" ThreadId="{Binding ThreadItem.ThreadId}" VerticalAlignment="Top"/>
+                <local:MyAvatar Grid.Column="1" Margin="8" UserId="{Binding ThreadItem.AuthorUserId}" Username="{Binding ThreadItem.AuthorUsername}" ThreadId="{Binding ThreadItem.ThreadId}" VerticalAlignment="Top"/>
 
                 <StackPanel Grid.Column="2" Margin="0,4">
                     <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
