@@ -51,5 +51,13 @@ namespace Hipda.Client.Uwp.Pro.Models
                 }
             }
         }
+
+        public string IsReadInfo
+        {
+            get
+            {
+                return IsRead ? string.Empty : ", 未读";
+            }
+        }
     }
 }

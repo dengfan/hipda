@@ -1019,7 +1019,18 @@ namespace Hipda.Client.Uwp.Pro.Services
                     foreach (var item in nodeList)
                     {
                         int uid = 0;
-                        string userIdStr = item.ChildNodes[3].Attributes[0].Value;
+                        var userIdNode = item.ChildNodes[3];
+                        var userInfoNode = item.ChildNodes[5];
+                        var messageNode = item.ChildNodes[7];
+                        string userIdStr = userIdNode.Attributes[0].Value;
+                        if (userIdStr.Equals("new"))
+                        {
+                            userIdNode = item.ChildNodes[4];
+                            userInfoNode = item.ChildNodes[6];
+                            messageNode = item.ChildNodes[8];
+                            userIdStr = userIdNode.Attributes[0].Value;
+                        }
+
                         if (!userIdStr.Equals("avatar"))
                         {
                             userIdStr = userIdStr.Substring("space.php?uid=".Length);
@@ -1032,15 +1043,14 @@ namespace Hipda.Client.Uwp.Pro.Services
                                 uid = Convert.ToInt32(userIdStr);
                             }
                         }
-
-                        bool isRead = !item.ChildNodes[5].InnerHtml.Contains("notice_newpm.gif");
-                        string str = item.ChildNodes[5].InnerText.Trim().Replace(Environment.NewLine, "$");
+                        
+                        bool isRead = !userInfoNode.InnerHtml.Contains("notice_newpm.gif");
+                        string str = userInfoNode.InnerText.Trim().Replace("&nbsp;", string.Empty).Replace(Environment.NewLine, "$");
                         string[] strAry = str.Split('$');
                         string username = strAry[0];
                         string time = strAry[1];
                         string date = time.Split(' ')[0];
-
-                        var messageNode = item.ChildNodes[7];
+                        
                         string textStr = messageNode.InnerText;
                         string htmlStr = messageNode.InnerHtml;
                         int linkCount = 0;

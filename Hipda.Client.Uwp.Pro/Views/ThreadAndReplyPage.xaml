@@ -20,31 +20,6 @@
             <MenuFlyoutItem Text="屏蔽此人" />
             <MenuFlyoutItem Text="屏蔽此主题" />
         </MenuFlyout>
-
-        <DataTemplate x:Key="userMessageItemTemplate">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="44"/>
-                    <ColumnDefinition Width="8"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <root:MyAvatar Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" VerticalAlignment="Top"/>
-
-                <FontIcon Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundListLowBrush}" VerticalAlignment="Top"/>
-
-                <Border Grid.Column="2" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left">
-                    <StackPanel>
-                        <TextBlock>
-                            <Run Text="{Binding Username}"/>
-                            <Run Text=" "/>
-                            <Run Text="{Binding Time}"/>
-                        </TextBlock>
-                        <ContentControl Content="{Binding XamlContent}"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
-        </DataTemplate>
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">

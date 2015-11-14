@@ -444,11 +444,12 @@ namespace Hipda.Client.Uwp.Pro.Views
                 UserDialogContentControl.Content = textBlock;
             }
 
-            sender.Title = string.Format("短消息（与 {0}）", PopupUsername);
+            sender.Title = string.Format("与 {0} 聊天", PopupUsername);
             sender.PrimaryButtonText = "发送";
             sender.SecondaryButtonText = "关闭";
 
             var grid = new Grid();
+            grid.HorizontalAlignment = HorizontalAlignment.Stretch;
             grid.RowDefinitions.Insert(0, new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             grid.RowDefinitions.Insert(1, new RowDefinition { Height = GridLength.Auto });
 
@@ -460,7 +461,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             lv.SelectionMode = ListViewSelectionMode.None;
             lv.ShowsScrollingPlaceholders = false;
             lv.ItemContainerStyle = Application.Current.Resources["ReplyItemContainerStyle"] as Style;
-            lv.ItemTemplate = Resources["userMessageItemTemplate"] as DataTemplate;
+            lv.ItemTemplateSelector = Application.Current.Resources["userMessageListItemTemplateSelector"] as DataTemplateSelector;
 
             var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId);
             lv.ItemsSource = data;

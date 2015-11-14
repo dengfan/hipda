@@ -278,7 +278,7 @@
                                              TopTemplate="{StaticResource ReplyListTopItemTemplate}"
                                              LeftTemplate="{StaticResource ReplyListLeftItemTemplate}"
                                              Left2Template="{StaticResource ReplyListLeft2ItemTemplate}"
-                                             RightTemplate="{StaticResource ReplyListRightItemTemplate}" />
+                                             RightTemplate="{StaticResource ReplyListRightItemTemplate}"/>
 
         <local:ThreadListItemTemplateSelector x:Key="threadListItemTemplateSelector"
                                               NormalTemplate="{StaticResource ThreadListNormalItemTemplate}" 
@@ -606,6 +606,58 @@
                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
                 </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <local:UserMessageListItemTemplateSelector x:Key="userMessageListItemTemplateSelector"
+                                                   LeftTemplate="{StaticResource UserMessageLeftItemTemplate}"
+                                                   RightTemplate="{StaticResource UserMessageRightItemTemplate}"/>
+
+        <DataTemplate x:Name="UserMessageLeftItemTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <FontIcon Grid.Row="0" Margin="8,0,0,0" Glyph="&#x25E3;" FontFamily="Segoe UI Symbol"
+                          FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                          HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Border Grid.Row="1" Margin="0,0,60,0" Padding="8"
+                        Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                        HorizontalAlignment="Left">
+                    <StackPanel>
+                        <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                            <Run Text="{Binding Username}"/>
+                            <Run Text=", "/>
+                            <Run Text="{Binding Time}"/>
+                            <Run Text="{Binding IsReadInfo}" Foreground="Red" FontWeight="Bold"/>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="UserMessageRightItemTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <FontIcon Grid.Row="0" Margin="0,0,8,0" Glyph="&#x25E2;" FontFamily="Segoe UI Symbol"
+                          FontSize="16" Foreground="{ThemeResource SystemControlHighlightListAccentLowBrush}"
+                          HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                <Border Grid.Row="1" Margin="60,0,0,0" Padding="8"
+                        Background="{ThemeResource SystemControlHighlightListAccentLowBrush}"
+                        HorizontalAlignment="Right">
+                    <StackPanel>
+                        <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                            <Run Text="我, "/>
+                            <Run Text="{Binding Time}"/>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
             </Grid>
         </DataTemplate>
     </Application.Resources>
