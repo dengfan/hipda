@@ -277,9 +277,5 @@
         <ContentDialog x:Name="UserDialog" Template="{StaticResource ContentDialogTemplate1}">
             <ContentControl x:Name="UserDialogContentControl" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
         </ContentDialog>
-
-        <ContentDialog x:Name="UserMessageDialog" Title="短消息" Template="{StaticResource ContentDialogTemplate1}"
-                       PrimaryButtonText="关闭">
-        </ContentDialog>
     </Grid>
 </Page>

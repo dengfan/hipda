@@ -274,12 +274,12 @@ namespace Hipda.Html
 
             #region 解析图片
             // 图片，通过src属性解析
-            MatchCollection matchsForImage2 = new Regex(@"<img[^>]*src=""([^""]*)""[^>]*>").Matches(htmlContent);
-            if (matchsForImage2 != null && matchsForImage2.Count > 0)
+            MatchCollection matchsForImage = new Regex(@"<img[^>]*src=""([^""]*)""[^>]*>").Matches(htmlContent);
+            if (matchsForImage != null && matchsForImage.Count > 0)
             {
-                for (int i = 0; i < matchsForImage2.Count; i++)
+                for (int i = 0; i < matchsForImage.Count; i++)
                 {
-                    var m = matchsForImage2[i];
+                    var m = matchsForImage[i];
                     string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
