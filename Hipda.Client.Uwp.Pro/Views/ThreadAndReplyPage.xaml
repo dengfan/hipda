@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Hipda.Client.Uwp.Pro.Views"
+    xmlns:root="using:Hipda.Client.Uwp.Pro"
     xmlns:vm="using:Hipda.Client.Uwp.Pro.ViewModels"
     xmlns:t="using:Hipda.Client.Uwp.Pro.Triggers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -21,14 +22,28 @@
         </MenuFlyout>
 
         <DataTemplate x:Key="userMessageItemTemplate">
-            <StackPanel>
-                <TextBlock>
-                    <Run Text="{Binding Username}"/>
-                    <Run Text=" "/>
-                    <Run Text="{Binding Time}"/>
-                </TextBlock>
-                <ContentControl Content="{Binding XamlContent}"/>
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="44"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <root:MyAvatar Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" VerticalAlignment="Top"/>
+
+                <FontIcon Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundListLowBrush}" VerticalAlignment="Top"/>
+
+                <Border Grid.Column="2" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left">
+                    <StackPanel>
+                        <TextBlock>
+                            <Run Text="{Binding Username}"/>
+                            <Run Text=" "/>
+                            <Run Text="{Binding Time}"/>
+                        </TextBlock>
+                        <ContentControl Content="{Binding XamlContent}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </DataTemplate>
     </Page.Resources>
 

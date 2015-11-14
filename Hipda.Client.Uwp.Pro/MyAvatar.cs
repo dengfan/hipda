@@ -63,15 +63,26 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("ThreadId", typeof(int), typeof(MyAvatar), new PropertyMetadata(0));
 
 
-        public int Type
+        public bool IsRightTappedEnable
         {
-            get { return (int)GetValue(TypeProperty); }
-            set { SetValue(TypeProperty, value); }
+            get { return (bool)GetValue(IsRightTappedEnableProperty); }
+            set { SetValue(IsRightTappedEnableProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Type.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TypeProperty =
-            DependencyProperty.Register("Type", typeof(int), typeof(MyAvatar), new PropertyMetadata(0));
+        // Using a DependencyProperty as the backing store for IsRightTappedEnable.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsRightTappedEnableProperty =
+            DependencyProperty.Register("IsRightTappedEnable", typeof(bool), typeof(MyAvatar), new PropertyMetadata(true));
+
+
+        public bool IsNotAssociateThreadId
+        {
+            get { return (bool)GetValue(IsNotAssociateThreadIdProperty); }
+            set { SetValue(IsNotAssociateThreadIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsNotAssociateThreadId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsNotAssociateThreadIdProperty =
+            DependencyProperty.Register("IsNotAssociateThreadId", typeof(bool), typeof(MyAvatar), new PropertyMetadata(false));
 
 
         protected override void OnApplyTemplate()
@@ -103,13 +114,16 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnRightTapped(e);
 
-            var parentPage = FindParent<ThreadAndReplyPage>(this);
-            parentPage.PopupUserId = UserId;
-            parentPage.PopupUsername = Username;
-            parentPage.PopupThreadId = ThreadId;
-            var menu = parentPage.Resources["avatarContextMenu"] as MenuFlyout;
-            menu.Items[4].Visibility = Type == 1 ? Visibility.Collapsed : Visibility.Visible;
-            menu.ShowAt(this);
+            if (IsRightTappedEnable)
+            {
+                var parentPage = FindParent<ThreadAndReplyPage>(this);
+                parentPage.PopupUserId = UserId;
+                parentPage.PopupUsername = Username;
+                parentPage.PopupThreadId = ThreadId;
+                var menu = parentPage.Resources["avatarContextMenu"] as MenuFlyout;
+                menu.Items[4].Visibility = IsNotAssociateThreadId ? Visibility.Collapsed : Visibility.Visible;
+                menu.ShowAt(this);
+            }
         }
 
         public static Uri GetAvatarUrl(int userId)
