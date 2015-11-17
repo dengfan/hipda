@@ -265,7 +265,7 @@
         </Grid>
 
         <ContentDialog x:Name="UserDialog" Template="{StaticResource ContentDialogTemplate1}">
-            <ContentControl x:Name="UserDialogContentControl" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+            <ContentControl x:Name="UserDialogContentControl" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" HorizontalContentAlignment="Stretch"/>
         </ContentDialog>
     </Grid>
 </Page>
