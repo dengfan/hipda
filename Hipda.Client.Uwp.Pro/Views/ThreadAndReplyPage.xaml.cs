@@ -472,8 +472,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             tb.SetValue(Grid.RowProperty, 1);
             tb.PlaceholderText = "编辑短消息";
 
-            grid.Children.Add(lv);
             grid.Children.Add(tb);
+            grid.Children.Add(lv);
             UserDialogContentControl.Content = grid;
         }
 
