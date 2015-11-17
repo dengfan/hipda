@@ -404,26 +404,16 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
+            var loading = new TextBlock
+            {
+                Text = "请稍候，载入中。。。"
+            };
+
+            UserDialogContentControl.Content = loading;
             UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
             UserDialog.PrimaryButtonText = "发短消息";
             UserDialog.PrimaryButtonClick += PostUserMessage;
             UserDialog.SecondaryButtonText = "关闭";
-            
-            var bi = new BitmapImage();
-            bi.UriSource = MyAvatar.GetAvatarUrl(PopupUserId);
-            var img = new Image();
-            img.Stretch = Stretch.None;
-            img.Source = bi;
-            img.VerticalAlignment = VerticalAlignment.Top;
-            img.HorizontalAlignment = HorizontalAlignment.Right;
-
-            string xaml = await _threadAndReplyViewModel.GetXamlForUserInfo(PopupUserId);
-            var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
-
-            var grid = new Grid();
-            grid.Children.Add(img);
-            grid.Children.Add(richTextBlock);
-            UserDialogContentControl.Content = grid;
 
             await UserDialog.ShowAsync();
         }
@@ -484,6 +474,25 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             grid.Children.Add(lv);
             grid.Children.Add(tb);
+            UserDialogContentControl.Content = grid;
+        }
+
+        private async void UserDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
+        {
+            var bi = new BitmapImage();
+            bi.UriSource = MyAvatar.GetAvatarUrl(PopupUserId);
+            var img = new Image();
+            img.Stretch = Stretch.None;
+            img.Source = bi;
+            img.VerticalAlignment = VerticalAlignment.Top;
+            img.HorizontalAlignment = HorizontalAlignment.Right;
+
+            string xaml = await _threadAndReplyViewModel.GetXamlForUserInfo(PopupUserId);
+            var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
+
+            var grid = new Grid();
+            grid.Children.Add(img);
+            grid.Children.Add(richTextBlock);
             UserDialogContentControl.Content = grid;
         }
     }

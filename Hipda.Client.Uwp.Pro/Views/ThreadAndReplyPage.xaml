@@ -264,7 +264,7 @@
             </StackPanel>
         </Grid>
 
-        <ContentDialog x:Name="UserDialog" Template="{StaticResource ContentDialogTemplate1}">
+        <ContentDialog x:Name="UserDialog" Template="{StaticResource ContentDialogTemplate1}" Opened="UserDialog_Opened">
             <ContentControl x:Name="UserDialogContentControl" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" HorizontalContentAlignment="Stretch"/>
         </ContentDialog>
     </Grid>
