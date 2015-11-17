@@ -93,7 +93,7 @@ namespace Hipda.Client.Uwp.Pro
             _grid1 = GetTemplateChild("grid1") as Grid;
         }
 
-        private static void OnUserIdChanged(DependencyObject d,DependencyPropertyChangedEventArgs e)
+        private static void OnUserIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var instance = d as MyAvatar;
             int userId = (int)e.NewValue;
