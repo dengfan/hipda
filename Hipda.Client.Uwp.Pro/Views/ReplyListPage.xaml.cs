@@ -15,6 +15,40 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ReplyListPage : Page
     {
+        #region 两个依赖属性，用于接收点击头像的参数
+        public int PopupUserId
+        {
+            get { return (int)GetValue(PopupUserIdProperty); }
+            set { SetValue(PopupUserIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PopupUserId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PopupUserIdProperty =
+            DependencyProperty.Register("PopupUserId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0));
+
+
+        public string PopupUsername
+        {
+            get { return (string)GetValue(PopupUsernameProperty); }
+            set { SetValue(PopupUsernameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PopupUsername.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PopupUsernameProperty =
+            DependencyProperty.Register("PopupUsername", typeof(string), typeof(ThreadAndReplyPage), new PropertyMetadata(string.Empty));
+
+
+        public int PopupThreadId
+        {
+            get { return (int)GetValue(PopupThreadIdProperty); }
+            set { SetValue(PopupThreadIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PopupThreadId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PopupThreadIdProperty =
+            DependencyProperty.Register("PopupThreadId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0));
+        #endregion
+
         private ReplyViewModel _replyViewModel;
         private int _threadId;
         private int _threadAuthorUserId;
