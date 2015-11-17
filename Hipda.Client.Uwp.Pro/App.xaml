@@ -629,9 +629,8 @@
                         <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                             <Run Text="{Binding Username}"/>
-                            <Run Text=", "/>
+                            <Run Text=" "/>
                             <Run Text="{Binding Time}"/>
-                            <Run Text="{Binding IsReadInfo}" Foreground="Red" FontWeight="Bold"/>
                         </TextBlock>
                     </StackPanel>
                 </Border>
@@ -653,8 +652,10 @@
                     <StackPanel>
                         <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
-                            <Run Text="我, "/>
+                            <Run Text="我 "/>
                             <Run Text="{Binding Time}"/>
+                            <Run Text=" "/>
+                            <Run Text="{Binding IsReadInfo}" FontWeight="Bold"/>
                         </TextBlock>
                     </StackPanel>
                 </Border>

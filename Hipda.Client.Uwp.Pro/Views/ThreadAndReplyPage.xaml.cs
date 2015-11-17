@@ -453,6 +453,11 @@ namespace Hipda.Client.Uwp.Pro.Views
             grid.RowDefinitions.Insert(0, new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             grid.RowDefinitions.Insert(1, new RowDefinition { Height = GridLength.Auto });
 
+            var btnGetAll = new HyperlinkButton();
+            btnGetAll.Content = "点击查看所有消息";
+            btnGetAll.Visibility = Visibility.Collapsed;
+            btnGetAll.HorizontalAlignment = HorizontalAlignment.Center;
+
             var lv = new ListView();
             lv.SetValue(Grid.RowProperty, 0);
             lv.IsItemClickEnabled = false;
@@ -462,8 +467,15 @@ namespace Hipda.Client.Uwp.Pro.Views
             lv.ShowsScrollingPlaceholders = false;
             lv.ItemContainerStyle = Application.Current.Resources["ReplyItemContainerStyle"] as Style;
             lv.ItemTemplateSelector = Application.Current.Resources["userMessageListItemTemplateSelector"] as DataTemplateSelector;
+            lv.Header = btnGetAll;
 
             var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId);
+            data.Reverse();
+            if (data.Count > 5)
+            {
+                btnGetAll.Visibility = Visibility.Visible;
+                data = data.Take(5).ToList();
+            }
             lv.ItemsSource = data;
 
             var tb = new TextBox();

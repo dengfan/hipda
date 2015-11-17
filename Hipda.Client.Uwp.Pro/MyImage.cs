@@ -109,7 +109,6 @@ namespace Hipda.Client.Uwp.Pro
                 ContentControl content1 = GetTemplateChild("content1") as ContentControl;
 
                 Image img = new Image();
-                img.Margin = new Thickness(5);
                 img.Stretch = Stretch.None;
                 img.ImageFailed += (s, e) =>
                 {
@@ -160,7 +159,6 @@ namespace Hipda.Client.Uwp.Pro
                             {
                                 WebView webView = new WebView();
                                 webView.DefaultBackgroundColor = Colors.Transparent;
-                                webView.Margin = new Thickness(5);
                                 webView.Width = imgWidth;
                                 webView.Height = imgHeight;
                                 webView.ScriptNotify += async (s, e) =>

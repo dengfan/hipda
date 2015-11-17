@@ -56,7 +56,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return IsRead ? string.Empty : ", 未读";
+                return IsRead ? string.Empty : " 对方未读";
             }
         }
     }
