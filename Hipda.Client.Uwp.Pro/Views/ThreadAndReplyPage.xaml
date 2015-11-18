@@ -88,7 +88,7 @@
 
             <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" 
                         HorizontalContentAlignment="Stretch" 
-                        Background="{Binding Background,ElementName=LayoutRoot}">
+                        Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
                 <AppBarButton Icon="Add" Label="发表新贴"/>
                 <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
                 <AppBarButton x:Name="SortingButton" Icon="Sort" Label="按发布时间倒序排列" Click="SortingButton_Click"/>
@@ -146,7 +146,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{Binding Background,ElementName=LayoutRoot}">
+                <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
                     <AppBarButton Icon="Edit" Label="评论"/>
                     <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
                     <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
@@ -239,7 +239,7 @@
 
             <CommandBar x:Name="RightSideCommandBar" VerticalAlignment="Top" 
                         HorizontalContentAlignment="Stretch" 
-                        Background="{Binding Background,ElementName=LayoutRoot}">
+                        Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
                 <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
             </CommandBar>
 
