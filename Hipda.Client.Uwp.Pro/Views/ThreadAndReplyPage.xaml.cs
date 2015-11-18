@@ -442,18 +442,25 @@ namespace Hipda.Client.Uwp.Pro.Views
             sender.PrimaryButtonText = "发送";
             sender.SecondaryButtonText = "关闭";
 
-            var grid = new Grid();
-            grid.HorizontalAlignment = HorizontalAlignment.Stretch;
-            grid.RowDefinitions.Insert(0, new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            grid.RowDefinitions.Insert(1, new RowDefinition { Height = GridLength.Auto });
+            var btnGetAll = new HyperlinkButton
+            {
+                Content = "点击查看所有消息",
+                Visibility = Visibility.Collapsed,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
 
-            var btnGetAll = new HyperlinkButton();
-            btnGetAll.Content = "点击查看所有消息";
-            btnGetAll.Visibility = Visibility.Collapsed;
-            btnGetAll.HorizontalAlignment = HorizontalAlignment.Center;
+            // 读取数据
+            var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId);
+            int count = data.Count;
+            if (count > 5)
+            {
+                btnGetAll.Visibility = Visibility.Visible;
+                data = data.Skip(count - 5).ToList();
+            }
 
             var lv = new ListView();
             lv.SetValue(Grid.RowProperty, 0);
+            lv.SetValue(Grid.ColumnSpanProperty, 2);
             lv.IsItemClickEnabled = false;
             lv.IsSwipeEnabled = false;
             lv.CanDrag = false;
@@ -462,22 +469,28 @@ namespace Hipda.Client.Uwp.Pro.Views
             lv.ItemContainerStyle = Application.Current.Resources["ReplyItemContainerStyle"] as Style;
             lv.ItemTemplateSelector = Application.Current.Resources["userMessageListItemTemplateSelector"] as DataTemplateSelector;
             lv.Header = btnGetAll;
-
-            var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId);
-            data.Reverse();
-            if (data.Count > 5)
-            {
-                btnGetAll.Visibility = Visibility.Visible;
-                data = data.Take(5).ToList();
-            }
             lv.ItemsSource = data;
 
             var tb = new TextBox();
-            tb.SetValue(Grid.RowProperty, 1);
+            tb.SetValue(Grid.RowProperty, 2);
+            tb.SetValue(Grid.ColumnProperty, 0);
             tb.PlaceholderText = "编辑短消息";
 
-            grid.Children.Add(tb);
+            var btn = new Button();
+            btn.Width = 48;
+            btn.SetValue(Grid.RowProperty, 2);
+            btn.SetValue(Grid.ColumnProperty, 1);
+            btn.Content = new SymbolIcon { Symbol = Symbol.Send };
+
+            var grid = new Grid();
+            grid.RowDefinitions.Insert(0, new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            grid.RowDefinitions.Insert(1, new RowDefinition { Height = new GridLength(16) });
+            grid.RowDefinitions.Insert(2, new RowDefinition { Height = GridLength.Auto });
+            grid.ColumnDefinitions.Insert(0, new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Insert(1, new ColumnDefinition { Width = GridLength.Auto });
             grid.Children.Add(lv);
+            grid.Children.Add(tb);
+            grid.Children.Add(btn);
             UserDialogContentControl.Content = grid;
 
             UserDialog.PrimaryButtonText = "刷新";
