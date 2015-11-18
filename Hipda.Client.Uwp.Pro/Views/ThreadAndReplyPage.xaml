@@ -87,7 +87,6 @@
             </Grid.RowDefinitions>
 
             <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" 
-                        HorizontalContentAlignment="Stretch" 
                         Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
                 <AppBarButton Icon="Add" Label="发表新贴"/>
                 <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
@@ -146,7 +145,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+                <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
                     <AppBarButton Icon="Edit" Label="评论"/>
                     <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
                     <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
@@ -156,7 +155,7 @@
                 </CommandBar>
 
                 <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-                    <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
+                    <ListView x:Name="ReplyListView" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False"
                               SelectionMode="Single" ShowsScrollingPlaceholders="False"
                               ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                               ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
