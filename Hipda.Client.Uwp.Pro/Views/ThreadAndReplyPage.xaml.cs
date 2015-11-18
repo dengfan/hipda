@@ -429,7 +429,12 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
             else
             {
-                var textBlock = new TextBlock { Text = "请稍候，载入中。。。" };
+                var textBlock = new TextBlock
+                {
+                    Text = "请稍候，载入中。。。",
+                    Margin = new Thickness(0, 8, 0, 0),
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
                 UserDialogContentControl.Content = textBlock;
             }
 
@@ -474,6 +479,14 @@ namespace Hipda.Client.Uwp.Pro.Views
             grid.Children.Add(tb);
             grid.Children.Add(lv);
             UserDialogContentControl.Content = grid;
+
+            UserDialog.PrimaryButtonText = "刷新";
+            UserDialog.PrimaryButtonClick += RefreshUserMessage;
+        }
+
+        private void RefreshUserMessage(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            args.Cancel = true;
         }
 
         private async void UserDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
