@@ -412,8 +412,6 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             UserDialogContentControl.Content = loading;
             UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
-            UserDialog.PrimaryButtonText = "发短消息";
-            UserDialog.PrimaryButtonClick += PostUserMessage;
             UserDialog.SecondaryButtonText = "关闭";
 
             await UserDialog.ShowAsync();
@@ -492,9 +490,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
 
             var grid = new Grid();
+            grid.Margin = new Thickness(0,8,0,0);
             grid.Children.Add(img);
             grid.Children.Add(richTextBlock);
             UserDialogContentControl.Content = grid;
+
+            UserDialog.PrimaryButtonText = "发短消息";
+            UserDialog.PrimaryButtonClick += PostUserMessage;
         }
     }
 }
