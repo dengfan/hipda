@@ -142,7 +142,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+            <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
                 <AppBarButton Icon="Edit" Label="评论"/>
                 <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
                 <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
