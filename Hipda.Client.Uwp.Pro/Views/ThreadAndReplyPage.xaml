@@ -119,19 +119,17 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <pr:PullToRefreshBox x:Name="leftPr" Grid.Row="1" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
-                <ListView x:Name="ThreadListView" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False"
+            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False"
                           VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
                           ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
                           ItemsSource="{Binding ThreadItemCollection}">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Padding" Value="0,0,20,0"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                </ListView>
-            </pr:PullToRefreshBox>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Padding" Value="0,0,20,0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
 
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
@@ -139,48 +137,44 @@
         <Grid x:Name="RightWrap" Grid.Column="1" 
               BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
               BorderThickness="1,0,0,0">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-                <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-                    <AppBarButton Icon="Edit" Label="评论"/>
-                    <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
-                    <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
-                    <CommandBar.SecondaryCommands>
-                        <AppBarButton Label="在浏览器中打开"/>
-                    </CommandBar.SecondaryCommands>
-                </CommandBar>
+            <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+                <AppBarButton Icon="Edit" Label="评论"/>
+                <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
+                <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
+                <CommandBar.SecondaryCommands>
+                    <AppBarButton Label="在浏览器中打开"/>
+                </CommandBar.SecondaryCommands>
+            </CommandBar>
 
-                <pr:PullToRefreshBox x:Name="rightPr" Grid.Row="1" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-                    <ListView x:Name="ReplyListView" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False"
+            <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False"
                               SelectionMode="Single" ShowsScrollingPlaceholders="False"
                               ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                               ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                               ItemsSource="{Binding ReplyItemCollection}">
-                        <ListView.Footer>
-                            <StackPanel x:Name="rightFooter" Margin="0,80,0,160" Visibility="Collapsed">
-                                <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
-                                <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
-                                                <TextBlock Text="&#xE14A;" FontFamily="Segoe UI Symbol" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                            </StackPanel>
-                        </ListView.Footer>
-                    </ListView>
-                </pr:PullToRefreshBox>
+                <ListView.Footer>
+                    <StackPanel x:Name="rightFooter" Margin="0,80,0,160" Visibility="Collapsed">
+                        <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
+                        <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
+                                        <TextBlock Text="&#xE14A;" FontFamily="Segoe UI Symbol" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+                </ListView.Footer>
+            </ListView>
 
-                <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
-            </Grid>
+            <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
-            <StackPanel x:Name="ReplyPanel" VerticalAlignment="Bottom" 
+            <StackPanel Grid.Row="1" x:Name="ReplyPanel" VerticalAlignment="Bottom" 
                         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
                         BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderThickness="0,1,0,0" Opacity="0.8">

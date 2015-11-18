@@ -66,7 +66,8 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             this.InitializeComponent();
 
-            this.SizeChanged += (s, e) => {
+            this.SizeChanged += (s, e) =>
+            {
                 string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
                 if (userInteractionType.Equals("Touch"))
                 {
