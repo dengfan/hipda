@@ -402,6 +402,10 @@ namespace Hipda.Client.Uwp.Pro.Views
             OpenReplyPageByThreadId(data.ThreadId);
         }
 
+        #region 坛友资料及短消息之弹窗
+        private TextBox _userMessageTextBox; // 发短消息之文本框
+        private Button _userMessagePostButton; // 发短消息之按钮
+
         private async void openUserDialog_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             if (PopupUserId == 0)
@@ -526,17 +530,19 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
             containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
-            var userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
-            userMessagePostButton.Click += UserMessagePostButton_Click;
+            _userMessageTextBox = containerBorder.FindName("UserMessageTextBox") as TextBox;
+            _userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
+            _userMessagePostButton.Click += UserMessagePostButton_Click;
         }
 
         private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
         {
-            var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
-            containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
-            var userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
-            userMessagePostButton.Click -= UserMessagePostButton_Click;
+            if (_userMessagePostButton != null)
+            {
+                _userMessagePostButton.Click -= UserMessagePostButton_Click;
+            }
         }
+        #endregion
 
         private static T FindParent<T>(DependencyObject dependencyObject) where T : DependencyObject
         {
