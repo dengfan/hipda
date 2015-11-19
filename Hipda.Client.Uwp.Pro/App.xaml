@@ -162,12 +162,11 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <ScrollViewer x:Name="ContentScrollViewer"
-                                            HorizontalScrollBarVisibility="Disabled"
-                                            VerticalScrollBarVisibility="Auto"
-                                            ZoomMode="Disabled"
-                                            Margin="{ThemeResource ContentDialogContentScrollViewerMargin}"
-                                            IsTabStop="False">
-                                <Grid>
+                                          HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Auto"
+                                          ZoomMode="Disabled"
+                                          IsTabStop="False">
+                                <Grid Margin="0,0,0,16">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
@@ -209,23 +208,37 @@
                                                 TextWrapping="Wrap" />
                                 </Grid>
                             </ScrollViewer>
-                            <Grid x:Name="CommandSpace" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+                            <Grid x:Name="CommandSpace" Grid.Row="1"
+                                  HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                                  BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}"
+                                  BorderThickness="0,1,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border x:Name="Button1Host"
-                                            Margin="{ThemeResource ContentDialogButton1HostMargin}"
-                                            MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
-                                            MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
-                                            Height="{ThemeResource ContentDialogButtonHeight}"
+                                <Border Grid.ColumnSpan="2" Margin="16,8,16,8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox PlaceholderText="编辑短消息" Padding="0,4" BorderThickness="0" Background="Transparent" Template="{StaticResource TextBoxTemplate1}" />
+                                        <Button Grid.Column="1">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <SymbolIcon Symbol="Send"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="0" x:Name="Button1Host" Margin="16,8,8,16"
                                             HorizontalAlignment="Stretch" />
-                                <Border x:Name="Button2Host"
-                                            Margin="{ThemeResource ContentDialogButton2HostMargin}"
-                                            MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
-                                            MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
-                                            Height="{ThemeResource ContentDialogButtonHeight}"
-                                            Grid.Column="1"
+                                <Border Grid.Row="1" Grid.Column="1" x:Name="Button2Host" Margin="8,8,16,16"
                                             HorizontalAlignment="Stretch" />
                             </Grid>
                         </Grid>
