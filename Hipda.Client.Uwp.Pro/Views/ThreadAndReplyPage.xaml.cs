@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -420,6 +421,12 @@ namespace Hipda.Client.Uwp.Pro.Views
             await UserDialog.ShowAsync();
         }
 
+        private async void UserMessagePostButton_Click(object sender, RoutedEventArgs e)
+        {
+            var userMessageTextBox = UserDialog.FindName("UserMessageTextBox") as TextBox;
+            await new MessageDialog("aaabbbccc").ShowAsync();
+        }
+
         private async void PostUserMessage(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             args.Cancel = true;
@@ -516,6 +523,27 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             sender.PrimaryButtonText = "聊天记录";
             sender.PrimaryButtonClick += PostUserMessage;
+
+            var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
+            containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
+            var userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
+            userMessagePostButton.Click += UserMessagePostButton_Click;
+        }
+
+        private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
+        {
+            var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
+            containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
+            var userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
+            userMessagePostButton.Click -= UserMessagePostButton_Click;
+        }
+
+        private static T FindParent<T>(DependencyObject dependencyObject) where T : DependencyObject
+        {
+            var parent = VisualTreeHelper.GetParent(dependencyObject);
+            if (parent == null) return null;
+            var parentT = parent as T;
+            return parentT ?? FindParent<T>(parent);
         }
     }
 }
