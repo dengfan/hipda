@@ -635,7 +635,7 @@
                 <FontIcon Grid.Row="0" Margin="8,0,0,0" Glyph="&#x25E3;" FontFamily="Segoe UI Symbol"
                           FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                           HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <Border Grid.Row="1" Margin="0,0,60,0" Padding="8"
+                <Border Grid.Row="1" Margin="0,0,40,0" Padding="8"
                         Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                         HorizontalAlignment="Left">
                     <StackPanel>
@@ -659,7 +659,7 @@
                 <FontIcon Grid.Row="0" Margin="0,0,8,0" Glyph="&#x25E2;" FontFamily="Segoe UI Symbol"
                           FontSize="16" Foreground="{ThemeResource SystemControlHighlightListAccentLowBrush}"
                           HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                <Border Grid.Row="1" Margin="60,0,0,0" Padding="8"
+                <Border Grid.Row="1" Margin="40,0,0,0" Padding="8"
                         Background="{ThemeResource SystemControlHighlightListAccentLowBrush}"
                         HorizontalAlignment="Right">
                     <StackPanel>
