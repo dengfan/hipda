@@ -496,7 +496,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 _userMessageTextBox.Text = string.Empty;
 
-                ShowTipsForUserMessage("发送成功，刷新中。。。");
+                ShowTipsForUserMessage("已发送成功，载入中。。。");
 
                 // 这里延迟1秒再请求短消息列表，以免取到的还是旧数据
                 _dispatcherTimer = new DispatcherTimer();
