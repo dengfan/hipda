@@ -428,6 +428,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             sender.PrimaryButtonText = "短消息";
             sender.PrimaryButtonClick += OpenUserMessageDialog;
 
+            // “消息文本框”及“发送按钮”确保只查找一次
             if (_userMessageTextBox == null || _userMessagePostButton == null)
             {
                 var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
@@ -436,19 +437,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                 _userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
                 _userMessagePostButton.Click += UserMessagePostButton_Click;
             }
-        }
-
-        private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
-        {
-            //if (_userMessageTextBox != null)
-            //{
-            //    _userMessageTextBox.Text = string.Empty;
-            //}
-
-            //if (_userMessagePostButton != null)
-            //{
-            //    _userMessagePostButton.Click -= UserMessagePostButton_Click;
-            //}
         }
 
         private async void openUserDialog_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
