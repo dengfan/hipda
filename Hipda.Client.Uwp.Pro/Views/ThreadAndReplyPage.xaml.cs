@@ -441,20 +441,11 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             if (PopupUserId == 0)
             {
-                var textBlock = new TextBlock { Text = "对不起，参数错误！" };
-                UserDialogContentControl.Content = textBlock;
+                OpenButErrorForUserMessage();
                 return;
             }
-            else
-            {
-                var textBlock = new TextBlock
-                {
-                    Text = "请稍候，载入中。。。",
-                    Margin = new Thickness(0, 8, 0, 0),
-                    HorizontalAlignment = HorizontalAlignment.Center
-                };
-                UserDialogContentControl.Content = textBlock;
-            }
+
+            LoadingAndPleaseWaitForUserMessage();
 
             sender.Title = string.Format("与 {0} 聊天", PopupUsername);
             sender.SecondaryButtonText = "关闭";
@@ -466,6 +457,41 @@ namespace Hipda.Client.Uwp.Pro.Views
                 HorizontalAlignment = HorizontalAlignment.Center
             };
 
+            btnGetAll.Tapped += async (s, e) =>
+            {
+                LoadingAndPleaseWaitForUserMessage();
+                await LoadAndShowUserMessage(null);
+            };
+
+            await LoadAndShowUserMessage(btnGetAll);
+
+            sender.IsPrimaryButtonEnabled = true;
+        }
+
+        private void OpenButErrorForUserMessage()
+        {
+            var textBlock = new TextBlock
+            {
+                Text = "对不起，参数错误！",
+                Margin = new Thickness(0, 8, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            UserDialogContentControl.Content = textBlock;
+        }
+
+        private void LoadingAndPleaseWaitForUserMessage()
+        {
+            var textBlock = new TextBlock
+            {
+                Text = "请稍候，载入中。。。",
+                Margin = new Thickness(0, 8, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            UserDialogContentControl.Content = textBlock;
+        }
+
+        private async Task LoadAndShowUserMessage(HyperlinkButton getAllButton)
+        {
             // 读取数据
             var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId);
             if (data == null || data.Count == 0)
@@ -480,11 +506,14 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
             else
             {
-                int count = data.Count;
-                if (count > 5)
+                if (getAllButton != null)
                 {
-                    btnGetAll.Visibility = Visibility.Visible;
-                    data = data.Skip(count - 5).ToList();
+                    int count = data.Count;
+                    if (count > 5)
+                    {
+                        getAllButton.Visibility = Visibility.Visible;
+                        data = data.Skip(count - 5).ToList();
+                    }
                 }
 
                 var lv = new ListView();
@@ -495,13 +524,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                 lv.ShowsScrollingPlaceholders = false;
                 lv.ItemContainerStyle = Application.Current.Resources["ReplyItemContainerStyle"] as Style;
                 lv.ItemTemplateSelector = Application.Current.Resources["userMessageListItemTemplateSelector"] as DataTemplateSelector;
-                lv.Header = btnGetAll;
+                if (getAllButton != null)
+                {
+                    lv.Header = getAllButton;
+                }
                 lv.ItemsSource = data;
 
                 UserDialogContentControl.Content = lv;
             }
-
-            sender.IsPrimaryButtonEnabled = true;
         }
 
         private void RefreshUserMessage(ContentDialog sender, ContentDialogButtonClickEventArgs args)
