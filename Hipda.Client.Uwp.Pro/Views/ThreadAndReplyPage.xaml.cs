@@ -428,24 +428,27 @@ namespace Hipda.Client.Uwp.Pro.Views
             sender.PrimaryButtonText = "聊天记录";
             sender.PrimaryButtonClick += OpenUserMessageDialog;
 
-            var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
-            containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
-            _userMessageTextBox = containerBorder.FindName("UserMessageTextBox") as TextBox;
-            _userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
-            _userMessagePostButton.Click += UserMessagePostButton_Click;
+            if (_userMessageTextBox == null || _userMessagePostButton == null)
+            {
+                var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
+                containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
+                _userMessageTextBox = containerBorder.FindName("UserMessageTextBox") as TextBox;
+                _userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
+                _userMessagePostButton.Click += UserMessagePostButton_Click;
+            }
         }
 
         private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
         {
-            if (_userMessageTextBox != null)
-            {
-                _userMessageTextBox.Text = string.Empty;
-            }
+            //if (_userMessageTextBox != null)
+            //{
+            //    _userMessageTextBox.Text = string.Empty;
+            //}
 
-            if (_userMessagePostButton != null)
-            {
-                _userMessagePostButton.Click -= UserMessagePostButton_Click;
-            }
+            //if (_userMessagePostButton != null)
+            //{
+            //    _userMessagePostButton.Click -= UserMessagePostButton_Click;
+            //}
         }
 
         private async void openUserDialog_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
@@ -469,16 +472,21 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private async void UserMessagePostButton_Click(object sender, RoutedEventArgs e)
         {
-            LoadingAndPleaseWaitForUserMessage();
+            _userMessagePostButton.IsEnabled = false;
 
             string msg = _userMessageTextBox.Text.Trim();
-            bool isOk = await _threadAndReplyViewModel.PostUserMessage(msg, PopupUserId);
-            if (isOk)
+            if (string.IsNullOrEmpty(msg))
             {
-                _userMessageTextBox.Text = string.Empty;
-                await PrepareUserMessage(UserDialog);
+                UserDialogContentControl.Content = new TextBlock
+                {
+                    Text = "请先填写消息内容。",
+                    Margin = new Thickness(0, 8, 0, 0),
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
             }
-            else
+
+            bool isOk = await _threadAndReplyViewModel.PostUserMessage(msg, PopupUserId);
+            if (!isOk)
             {
                 UserDialogContentControl.Content = new TextBlock
                 {
@@ -486,7 +494,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                     Margin = new Thickness(0, 8, 0, 0),
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
+                
             }
+
+            // 发送成功
+            _userMessageTextBox.Text = string.Empty;
+            await PrepareUserMessage(UserDialog);
+
+            _userMessagePostButton.IsEnabled = true;
         }
 
         private async void OpenUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -559,7 +574,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 var textBlock = new TextBlock
                 {
-                    Text = "你们之间还没有开始。。。",
+                    Text = "你们之间还未开始。。。",
                     Margin = new Thickness(0, 8, 0, 0),
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
