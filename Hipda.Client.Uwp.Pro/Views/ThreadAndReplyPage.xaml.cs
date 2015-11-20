@@ -462,7 +462,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             };
         }
 
-        private async void openUserDialog_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private async void openUserDialog_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if (PopupUserId == 0)
             {
@@ -484,6 +484,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (string.IsNullOrEmpty(msg))
             {
                 ShowTipsForUserMessage("请先填写消息内容。");
+                _userMessagePostButton.IsEnabled = true;
+                return;
             }
 
             bool isOk = await _threadAndReplyViewModel.PostUserMessage(msg, PopupUserId);
@@ -491,13 +493,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 _userMessageTextBox.Text = string.Empty;
                 await PrepareUserMessage(UserDialog);
-
-                _userMessagePostButton.IsEnabled = true;
             }
             else
             {
                 ShowTipsForUserMessage("对不起，提交失败，请稍后再试。");
             }
+
+            _userMessagePostButton.IsEnabled = true;
         }
 
         private async Task PrepareUserMessage(ContentDialog sender)
