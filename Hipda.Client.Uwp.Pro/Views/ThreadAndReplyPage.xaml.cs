@@ -431,9 +431,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             await new MessageDialog("aaabbbccc").ShowAsync();
         }
 
-        private async void PostUserMessage(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private async void OpenUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             args.Cancel = true;
+
+            sender.IsPrimaryButtonEnabled = false;
+            sender.PrimaryButtonText = "刷新";
+            sender.PrimaryButtonClick += RefreshUserMessage;
 
             if (PopupUserId == 0)
             {
@@ -495,10 +499,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                 lv.ItemsSource = data;
 
                 UserDialogContentControl.Content = lv;
-
-                sender.PrimaryButtonText = "刷新";
-                sender.PrimaryButtonClick += RefreshUserMessage;
             }
+
+            sender.IsPrimaryButtonEnabled = true;
         }
 
         private void RefreshUserMessage(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -526,7 +529,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             UserDialogContentControl.Content = grid;
 
             sender.PrimaryButtonText = "聊天记录";
-            sender.PrimaryButtonClick += PostUserMessage;
+            sender.PrimaryButtonClick += OpenUserMessageDialog;
 
             var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
             containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素

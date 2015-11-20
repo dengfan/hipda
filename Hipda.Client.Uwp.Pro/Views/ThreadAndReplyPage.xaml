@@ -115,7 +115,8 @@
                             </Flyout>
                         </AppBarButton.Flyout>
                     </AppBarButton>
-                    <AppBarButton Icon="Globe" Label="在浏览器中打开"/>
+                    <AppBarButton Label="复制链接"/>
+                    <AppBarButton Label="在浏览器中打开"/>
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
@@ -147,6 +148,7 @@
                 <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
                 <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
                 <CommandBar.SecondaryCommands>
+                    <AppBarButton Label="复制链接"/>
                     <AppBarButton Label="在浏览器中打开"/>
                 </CommandBar.SecondaryCommands>
             </CommandBar>
