@@ -429,20 +429,21 @@ namespace Hipda.Client.Uwp.Pro.Views
             sender.PrimaryButtonText = "短消息";
             sender.PrimaryButtonClick += OpenOrRefreshUserMessageDialog;
 
-            // “消息文本框”及“发送按钮”确保只查找一次
-            if (_userMessageTextBox == null || _userMessagePostButton == null)
-            {
-                var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
-                containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
-                _userMessageTextBox = containerBorder.FindName("UserMessageTextBox") as TextBox;
-                _userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
-                _userMessagePostButton.Tapped += UserMessagePostButton_Tapped;
-            }
+            var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
+            containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
+            _userMessageTextBox = containerBorder.FindName("UserMessageTextBox") as TextBox;
+            _userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
+            _userMessagePostButton.Tapped += UserMessagePostButton_Tapped;
         }
 
         private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
         {
             sender.PrimaryButtonClick -= OpenOrRefreshUserMessageDialog;
+
+            if (_userMessagePostButton != null)
+            {
+                _userMessagePostButton.Tapped -= UserMessagePostButton_Tapped;
+            }
         }
 
         private async void OpenOrRefreshUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -486,16 +487,17 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             bool isOk = await _threadAndReplyViewModel.PostUserMessage(msg, PopupUserId);
-            if (!isOk)
+            if (isOk) // 发送成功
+            {
+                _userMessageTextBox.Text = string.Empty;
+                await PrepareUserMessage(UserDialog);
+
+                _userMessagePostButton.IsEnabled = true;
+            }
+            else
             {
                 ShowTipsForUserMessage("对不起，提交失败，请稍后再试。");
             }
-
-            // 发送成功
-            _userMessageTextBox.Text = string.Empty;
-            await PrepareUserMessage(UserDialog);
-
-            _userMessagePostButton.IsEnabled = true;
         }
 
         private async Task PrepareUserMessage(ContentDialog sender)
