@@ -439,6 +439,17 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
+        private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
+        {
+            sender.PrimaryButtonClick -= OpenUserMessageDialog;
+        }
+
+        private async void OpenUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            args.Cancel = true;
+            await PrepareUserMessage(sender);
+        }
+
         private void ShowTipsForUserMessage(string tips)
         {
             UserDialogContentControl.Content = new TextBlock
@@ -486,18 +497,10 @@ namespace Hipda.Client.Uwp.Pro.Views
             _userMessagePostButton.IsEnabled = true;
         }
 
-        private async void OpenUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            args.Cancel = true;
-
-            await PrepareUserMessage(sender);
-        }
-
         private async Task PrepareUserMessage(ContentDialog sender)
         {
             sender.IsPrimaryButtonEnabled = false;
             sender.PrimaryButtonText = "刷新";
-            sender.PrimaryButtonClick += RefreshUserMessage;
 
             if (PopupUserId == 0)
             {
@@ -556,19 +559,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                 lv.ShowsScrollingPlaceholders = false;
                 lv.ItemContainerStyle = Application.Current.Resources["ReplyItemContainerStyle"] as Style;
                 lv.ItemTemplateSelector = Application.Current.Resources["userMessageListItemTemplateSelector"] as DataTemplateSelector;
+                lv.ItemsSource = data;
                 if (getAllButton != null)
                 {
                     lv.Header = getAllButton;
                 }
-                lv.ItemsSource = data;
 
                 UserDialogContentControl.Content = lv;
             }
-        }
-
-        private void RefreshUserMessage(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            args.Cancel = true;
         }
         #endregion
 
@@ -579,5 +577,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             var parentT = parent as T;
             return parentT ?? FindParent<T>(parent);
         }
+
+        
     }
 }
