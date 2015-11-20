@@ -570,6 +570,11 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
         {
+            if (_userMessageTextBox != null)
+            {
+                _userMessageTextBox.Text = string.Empty;
+            }
+
             if (_userMessagePostButton != null)
             {
                 _userMessagePostButton.Click -= UserMessagePostButton_Click;
