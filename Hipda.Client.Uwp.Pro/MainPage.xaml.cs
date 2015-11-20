@@ -80,7 +80,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=14");
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=6");
         }
 
         private void Button3_Click(object sender, RoutedEventArgs e)
