@@ -510,6 +510,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (PopupUserId == 0)
             {
                 ShowTipsForUserMessage("对不起，参数错误！");
+                sender.IsPrimaryButtonEnabled = true;
                 return;
             }
 
