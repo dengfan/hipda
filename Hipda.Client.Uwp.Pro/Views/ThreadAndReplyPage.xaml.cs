@@ -406,6 +406,48 @@ namespace Hipda.Client.Uwp.Pro.Views
         private TextBox _userMessageTextBox; // 发短消息之文本框
         private Button _userMessagePostButton; // 发短消息之按钮
 
+        private async void UserDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
+        {
+            var bi = new BitmapImage();
+            bi.UriSource = MyAvatar.GetAvatarUrl(PopupUserId);
+            var img = new Image();
+            img.Stretch = Stretch.None;
+            img.Source = bi;
+            img.VerticalAlignment = VerticalAlignment.Top;
+            img.HorizontalAlignment = HorizontalAlignment.Right;
+
+            string xaml = await _threadAndReplyViewModel.GetXamlForUserInfo(PopupUserId);
+            var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
+
+            var grid = new Grid();
+            grid.Margin = new Thickness(0, 8, 0, 0);
+            grid.Children.Add(img);
+            grid.Children.Add(richTextBlock);
+            UserDialogContentControl.Content = grid;
+
+            sender.PrimaryButtonText = "聊天记录";
+            sender.PrimaryButtonClick += OpenUserMessageDialog;
+
+            var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
+            containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
+            _userMessageTextBox = containerBorder.FindName("UserMessageTextBox") as TextBox;
+            _userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
+            _userMessagePostButton.Click += UserMessagePostButton_Click;
+        }
+
+        private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
+        {
+            if (_userMessageTextBox != null)
+            {
+                _userMessageTextBox.Text = string.Empty;
+            }
+
+            if (_userMessagePostButton != null)
+            {
+                _userMessagePostButton.Click -= UserMessagePostButton_Click;
+            }
+        }
+
         private async void openUserDialog_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             if (PopupUserId == 0)
@@ -427,21 +469,42 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private async void UserMessagePostButton_Click(object sender, RoutedEventArgs e)
         {
-            var userMessageTextBox = UserDialog.FindName("UserMessageTextBox") as TextBox;
-            await new MessageDialog("aaabbbccc").ShowAsync();
+            LoadingAndPleaseWaitForUserMessage();
+
+            string msg = _userMessageTextBox.Text.Trim();
+            bool isOk = await _threadAndReplyViewModel.PostUserMessage(msg, PopupUserId);
+            if (isOk)
+            {
+                _userMessageTextBox.Text = string.Empty;
+                await PrepareUserMessage(UserDialog);
+            }
+            else
+            {
+                UserDialogContentControl.Content = new TextBlock
+                {
+                    Text = "对不起，提交失败，请稍后再试。",
+                    Margin = new Thickness(0, 8, 0, 0),
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
+            }
         }
 
         private async void OpenUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             args.Cancel = true;
 
+            await PrepareUserMessage(sender);
+        }
+
+        private async Task PrepareUserMessage(ContentDialog sender)
+        {
             sender.IsPrimaryButtonEnabled = false;
             sender.PrimaryButtonText = "刷新";
             sender.PrimaryButtonClick += RefreshUserMessage;
 
             if (PopupUserId == 0)
             {
-                OpenButErrorForUserMessage();
+                LoadingButErrorForUserMessage();
                 return;
             }
 
@@ -468,26 +531,24 @@ namespace Hipda.Client.Uwp.Pro.Views
             sender.IsPrimaryButtonEnabled = true;
         }
 
-        private void OpenButErrorForUserMessage()
+        private void LoadingButErrorForUserMessage()
         {
-            var textBlock = new TextBlock
+            UserDialogContentControl.Content = new TextBlock
             {
                 Text = "对不起，参数错误！",
                 Margin = new Thickness(0, 8, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center
             };
-            UserDialogContentControl.Content = textBlock;
         }
 
         private void LoadingAndPleaseWaitForUserMessage()
         {
-            var textBlock = new TextBlock
+            UserDialogContentControl.Content = new TextBlock
             {
                 Text = "请稍候，载入中。。。",
                 Margin = new Thickness(0, 8, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center
             };
-            UserDialogContentControl.Content = textBlock;
         }
 
         private async Task LoadAndShowUserMessage(HyperlinkButton getAllButton)
@@ -537,48 +598,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void RefreshUserMessage(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             args.Cancel = true;
-        }
-
-        private async void UserDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
-        {
-            var bi = new BitmapImage();
-            bi.UriSource = MyAvatar.GetAvatarUrl(PopupUserId);
-            var img = new Image();
-            img.Stretch = Stretch.None;
-            img.Source = bi;
-            img.VerticalAlignment = VerticalAlignment.Top;
-            img.HorizontalAlignment = HorizontalAlignment.Right;
-
-            string xaml = await _threadAndReplyViewModel.GetXamlForUserInfo(PopupUserId);
-            var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
-
-            var grid = new Grid();
-            grid.Margin = new Thickness(0,8,0,0);
-            grid.Children.Add(img);
-            grid.Children.Add(richTextBlock);
-            UserDialogContentControl.Content = grid;
-
-            sender.PrimaryButtonText = "聊天记录";
-            sender.PrimaryButtonClick += OpenUserMessageDialog;
-
-            var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
-            containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
-            _userMessageTextBox = containerBorder.FindName("UserMessageTextBox") as TextBox;
-            _userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
-            _userMessagePostButton.Click += UserMessagePostButton_Click;
-        }
-
-        private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
-        {
-            if (_userMessageTextBox != null)
-            {
-                _userMessageTextBox.Text = string.Empty;
-            }
-
-            if (_userMessagePostButton != null)
-            {
-                _userMessagePostButton.Click -= UserMessagePostButton_Click;
-            }
         }
         #endregion
 

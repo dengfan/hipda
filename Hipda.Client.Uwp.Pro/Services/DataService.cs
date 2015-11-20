@@ -1080,6 +1080,25 @@ namespace Hipda.Client.Uwp.Pro.Services
             var cts = new CancellationTokenSource();
             return await LoadUserMessageDataAsync(userId, cts);
         }
+
+        public async Task<bool> PostUserMessage(string message, int userId)
+        {
+            var postData = new Dictionary<string, object>();
+            postData.Add("formhash", AccountService.FormHash);
+            postData.Add("handlekey", "pmreply");
+            postData.Add("lastdaterange", DateTime.Now.ToString("yyyy-MM-dd"));
+            postData.Add("message", message);
+
+            string url = string.Format("http://www.hi-pda.com/forum/pm.php?action=send&uid={0}&pmsubmit=yes&_={1}", userId, DateTime.Now.Ticks.ToString("x"));
+            var cts = new CancellationTokenSource();
+            string resultContent = await _httpClient.PostAsync(url, postData, cts);
+            if (resultContent.StartsWith(@"<?xml version=""1.0"" encoding=""gbk""?><root><![CDATA[<li id=""pm_") && resultContent.Contains(@"images/default/notice_newpm.gif"))
+            {
+                return true;
+            }
+
+            return false;
+        }
         #endregion
 
     }

@@ -215,5 +215,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             return await _ds.GetUserMessageData(userId);
         }
+
+        public async Task<bool> PostUserMessage(string message, int userId)
+        {
+            return await _ds.PostUserMessage(message, userId);
+        }
     }
 }
