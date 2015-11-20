@@ -425,7 +425,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             grid.Children.Add(richTextBlock);
             UserDialogContentControl.Content = grid;
 
-            sender.PrimaryButtonText = "聊天记录";
+            sender.PrimaryButtonText = "短消息";
             sender.PrimaryButtonClick += OpenUserMessageDialog;
 
             if (_userMessageTextBox == null || _userMessagePostButton == null)
@@ -458,15 +458,10 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
-            var loading = new TextBlock
-            {
-                Text = "请稍候，载入中。。。"
-            };
+            ShowTipsForUserMessage("请稍候，载入中。。。");
 
-            UserDialogContentControl.Content = loading;
             UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
             UserDialog.SecondaryButtonText = "关闭";
-
             await UserDialog.ShowAsync();
         }
 
@@ -477,24 +472,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             string msg = _userMessageTextBox.Text.Trim();
             if (string.IsNullOrEmpty(msg))
             {
-                UserDialogContentControl.Content = new TextBlock
-                {
-                    Text = "请先填写消息内容。",
-                    Margin = new Thickness(0, 8, 0, 0),
-                    HorizontalAlignment = HorizontalAlignment.Center
-                };
+                ShowTipsForUserMessage("请先填写消息内容。");
             }
 
             bool isOk = await _threadAndReplyViewModel.PostUserMessage(msg, PopupUserId);
             if (!isOk)
             {
-                UserDialogContentControl.Content = new TextBlock
-                {
-                    Text = "对不起，提交失败，请稍后再试。",
-                    Margin = new Thickness(0, 8, 0, 0),
-                    HorizontalAlignment = HorizontalAlignment.Center
-                };
-                
+                ShowTipsForUserMessage("对不起，提交失败，请稍后再试。");
             }
 
             // 发送成功
@@ -519,11 +503,11 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             if (PopupUserId == 0)
             {
-                LoadingButErrorForUserMessage();
+                ShowTipsForUserMessage("对不起，参数错误！");
                 return;
             }
 
-            LoadingAndPleaseWaitForUserMessage();
+            ShowTipsForUserMessage("请稍候，载入中。。。");
 
             sender.Title = string.Format("与 {0} 聊天", PopupUsername);
             sender.SecondaryButtonText = "关闭";
@@ -537,7 +521,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             btnGetAll.Tapped += async (s, e) =>
             {
-                LoadingAndPleaseWaitForUserMessage();
+                ShowTipsForUserMessage("请稍候，载入中。。。");
                 await LoadAndShowUserMessage(null);
             };
 
@@ -546,21 +530,11 @@ namespace Hipda.Client.Uwp.Pro.Views
             sender.IsPrimaryButtonEnabled = true;
         }
 
-        private void LoadingButErrorForUserMessage()
+        private void ShowTipsForUserMessage(string tips)
         {
             UserDialogContentControl.Content = new TextBlock
             {
-                Text = "对不起，参数错误！",
-                Margin = new Thickness(0, 8, 0, 0),
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-        }
-
-        private void LoadingAndPleaseWaitForUserMessage()
-        {
-            UserDialogContentControl.Content = new TextBlock
-            {
-                Text = "请稍候，载入中。。。",
+                Text = tips,
                 Margin = new Thickness(0, 8, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center
             };
@@ -572,13 +546,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId);
             if (data == null || data.Count == 0)
             {
-                var textBlock = new TextBlock
-                {
-                    Text = "你们之间还未开始。。。",
-                    Margin = new Thickness(0, 8, 0, 0),
-                    HorizontalAlignment = HorizontalAlignment.Center
-                };
-                UserDialogContentControl.Content = textBlock;
+                ShowTipsForUserMessage("你们之间还未开始。。。");
             }
             else
             {
