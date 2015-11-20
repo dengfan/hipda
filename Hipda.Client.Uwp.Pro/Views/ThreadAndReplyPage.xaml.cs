@@ -426,7 +426,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             UserDialogContentControl.Content = grid;
 
             sender.PrimaryButtonText = "短消息";
-            sender.PrimaryButtonClick += OpenUserMessageDialog;
+            sender.PrimaryButtonClick += OpenOrRefreshUserMessageDialog;
 
             // “消息文本框”及“发送按钮”确保只查找一次
             if (_userMessageTextBox == null || _userMessagePostButton == null)
@@ -441,10 +441,10 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
         {
-            sender.PrimaryButtonClick -= OpenUserMessageDialog;
+            sender.PrimaryButtonClick -= OpenOrRefreshUserMessageDialog;
         }
 
-        private async void OpenUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private async void OpenOrRefreshUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             args.Cancel = true;
             await PrepareUserMessage(sender);
