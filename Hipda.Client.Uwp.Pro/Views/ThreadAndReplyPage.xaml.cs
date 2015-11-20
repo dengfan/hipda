@@ -439,6 +439,16 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
+        private void ShowTipsForUserMessage(string tips)
+        {
+            UserDialogContentControl.Content = new TextBlock
+            {
+                Text = tips,
+                Margin = new Thickness(0, 8, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+        }
+
         private async void openUserDialog_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             if (PopupUserId == 0)
@@ -516,16 +526,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             await LoadAndShowUserMessage(btnGetAll);
 
             sender.IsPrimaryButtonEnabled = true;
-        }
-
-        private void ShowTipsForUserMessage(string tips)
-        {
-            UserDialogContentControl.Content = new TextBlock
-            {
-                Text = tips,
-                Margin = new Thickness(0, 8, 0, 0),
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
         }
 
         private async Task LoadAndShowUserMessage(HyperlinkButton getAllButton)
