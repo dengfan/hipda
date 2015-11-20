@@ -11,6 +11,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
@@ -435,7 +436,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
                 _userMessageTextBox = containerBorder.FindName("UserMessageTextBox") as TextBox;
                 _userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
-                _userMessagePostButton.Click += UserMessagePostButton_Click;
+                _userMessagePostButton.Tapped += UserMessagePostButton_Tapped;
             }
         }
 
@@ -474,7 +475,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             await UserDialog.ShowAsync();
         }
 
-        private async void UserMessagePostButton_Click(object sender, RoutedEventArgs e)
+        private async void UserMessagePostButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             _userMessagePostButton.IsEnabled = false;
 
