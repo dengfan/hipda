@@ -220,14 +220,24 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.ColumnSpan="2" Margin="16,8,16,8">
+                                <Border Grid.ColumnSpan="2" Padding="8">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="UserMessageTextBox" Margin="0,0,20,0" PlaceholderText="输入短消息" BorderThickness="0" Background="Transparent" Template="{StaticResource TextBoxTemplate1}" AcceptsReturn="True" MaxHeight="160" />
-                                        <Button x:Name="UserMessagePostButton" Grid.Column="1" Width="48" VerticalAlignment="Center">
+                                        <Button x:Name="UserMessageFaceButton" Grid.Column="0" Width="44" VerticalAlignment="Center">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <SymbolIcon Symbol="Emoji2"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                        <TextBox x:Name="UserMessageTextBox" Grid.Column="1" Margin="0,0,20,0" VerticalAlignment="Center"
+                                                 PlaceholderText="输入短消息" BorderThickness="0" Background="Transparent"
+                                                 Template="{StaticResource TextBoxTemplate1}" AcceptsReturn="True" MaxHeight="160" />
+                                        <Button x:Name="UserMessagePostButton" Grid.Column="2" Width="44" VerticalAlignment="Center">
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <SymbolIcon Symbol="Send"/>
