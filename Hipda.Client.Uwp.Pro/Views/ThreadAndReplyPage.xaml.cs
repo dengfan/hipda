@@ -406,9 +406,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         #region 坛友资料及短消息之弹窗
         TextBox _userMessageTextBox; // 发短消息之文本框
         Button _userMessagePostButton; // 发短消息之按钮
-        DispatcherTimer _dispatcherTimer;
-        int _timesTicked = 1;
-        int _timesToTick = 2;
 
         private async void UserDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
         {
@@ -498,11 +495,8 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                 ShowTipsForUserMessage("已发送成功，载入中。。。");
 
-                // 这里延迟1秒再请求短消息列表，以免取到的还是旧数据
-                _dispatcherTimer = new DispatcherTimer();
-                _dispatcherTimer.Tick += dispatcherTimerTickForPrepareUserMessage;
-                _dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
-                _dispatcherTimer.Start();
+                // 这里要延迟载入短消息数据，以免取到的还是旧数据
+                DelayPrepareUserMessage(700);
             }
             else
             {
@@ -512,16 +506,14 @@ namespace Hipda.Client.Uwp.Pro.Views
             _userMessagePostButton.IsEnabled = true;
         }
 
-        private async void dispatcherTimerTickForPrepareUserMessage(object sender, object e)
+        private async void DelayPrepareUserMessage(int interval)
         {
-            if (_timesTicked > _timesToTick)
+            DateTime now = DateTime.Now;
+            while (now.AddMilliseconds(interval) > DateTime.Now)
             {
-                _dispatcherTimer.Stop();
-                _dispatcherTimer.Tick -= dispatcherTimerTickForPrepareUserMessage;
                 await PrepareUserMessage(UserDialog);
-                return;
             }
-            _timesTicked++;
+            return;
         }
 
         private async Task PrepareUserMessage(ContentDialog sender)
