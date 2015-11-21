@@ -496,7 +496,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 ShowTipsForUserMessage("已发送成功，载入中。。。");
 
                 // 这里要延迟载入短消息数据，以免取到的还是旧数据
-                DelayPrepareUserMessage(700);
+                DelayPrepareUserMessage(800);
             }
             else
             {
