@@ -406,27 +406,36 @@ namespace Hipda.Client.Uwp.Pro.Views
         #region 坛友资料及短消息之弹窗
         TextBox _userMessageTextBox; // 发短消息之文本框
         Button _userMessagePostButton; // 发短消息之按钮
+        UserDialogType _userDialogType = 0;
 
         private async void UserDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
         {
-            var bi = new BitmapImage();
-            bi.UriSource = MyAvatar.GetAvatarUrl(PopupUserId);
-            var img = new Image();
-            img.Stretch = Stretch.None;
-            img.Source = bi;
-            img.VerticalAlignment = VerticalAlignment.Top;
-            img.HorizontalAlignment = HorizontalAlignment.Right;
+            if (_userDialogType == UserDialogType.Info)
+            {
+                var bi = new BitmapImage();
+                bi.UriSource = MyAvatar.GetAvatarUrl(PopupUserId);
+                var img = new Image();
+                img.Stretch = Stretch.None;
+                img.Source = bi;
+                img.VerticalAlignment = VerticalAlignment.Top;
+                img.HorizontalAlignment = HorizontalAlignment.Right;
 
-            string xaml = await _threadAndReplyViewModel.GetXamlForUserInfo(PopupUserId);
-            var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
+                string xaml = await _threadAndReplyViewModel.GetXamlForUserInfo(PopupUserId);
+                var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
 
-            var grid = new Grid();
-            grid.Margin = new Thickness(0, 8, 0, 0);
-            grid.Children.Add(img);
-            grid.Children.Add(richTextBlock);
-            UserDialogContentControl.Content = grid;
+                var grid = new Grid();
+                grid.Margin = new Thickness(0, 8, 0, 0);
+                grid.Children.Add(img);
+                grid.Children.Add(richTextBlock);
+                UserDialogContentControl.Content = grid;
 
-            sender.PrimaryButtonText = "短消息";
+                sender.PrimaryButtonText = "短消息";
+            }
+            else if(_userDialogType == UserDialogType.Message)
+            {
+                await PrepareUserMessage(sender);
+            }
+
             sender.PrimaryButtonClick += OpenOrRefreshUserMessageDialog;
 
             var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
@@ -462,7 +471,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             };
         }
 
-        private async void openUserDialog_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void openUserInfoDialog_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if (PopupUserId == 0)
             {
@@ -474,6 +483,20 @@ namespace Hipda.Client.Uwp.Pro.Views
             UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
             UserDialog.SecondaryButtonText = "关闭";
             await UserDialog.ShowAsync();
+
+            _userDialogType = UserDialogType.Info;
+        }
+
+        private async void openUserMessageDialog_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (PopupUserId == 0)
+            {
+                return;
+            }
+
+            await UserDialog.ShowAsync();
+
+            _userDialogType = UserDialogType.Message;
         }
 
         private async void UserMessagePostButton_Tapped(object sender, TappedRoutedEventArgs e)
@@ -598,7 +621,11 @@ namespace Hipda.Client.Uwp.Pro.Views
             var parentT = parent as T;
             return parentT ?? FindParent<T>(parent);
         }
+    }
 
-        
+    public enum UserDialogType
+    {
+        Info,
+        Message
     }
 }
