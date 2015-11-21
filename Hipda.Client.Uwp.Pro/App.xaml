@@ -226,8 +226,8 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="UserMessageTextBox" Margin="0,0,20,0" PlaceholderText="输入短消息" BorderThickness="0" Background="Transparent" Template="{StaticResource TextBoxTemplate1}" />
-                                        <Button x:Name="UserMessagePostButton" Grid.Column="1" Width="48">
+                                        <TextBox x:Name="UserMessageTextBox" Margin="0,0,20,0" PlaceholderText="输入短消息" BorderThickness="0" Background="Transparent" Template="{StaticResource TextBoxTemplate1}" AcceptsReturn="True" MaxHeight="200" />
+                                        <Button x:Name="UserMessagePostButton" Grid.Column="1" Width="48" VerticalAlignment="Center">
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <SymbolIcon Symbol="Send"/>
