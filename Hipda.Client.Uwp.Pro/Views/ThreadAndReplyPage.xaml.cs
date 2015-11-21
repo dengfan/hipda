@@ -424,10 +424,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                 var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
 
                 var grid = new Grid();
-                grid.Margin = new Thickness(0, 8, 0, 0);
+                grid.Margin = new Thickness(0, 8, 20, 0);
                 grid.Children.Add(img);
                 grid.Children.Add(richTextBlock);
-                UserDialogContentControl.Content = grid;
+
+                var sv = new ScrollViewer();
+                sv.Content = grid;
+                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                UserDialogContentControl.Content = sv;
 
                 sender.PrimaryButtonText = "短消息";
             }

@@ -162,50 +162,52 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <ScrollViewer x:Name="ContentScrollViewer"
-                                          HorizontalScrollBarVisibility="Disabled"
-                                          VerticalScrollBarVisibility="Auto"
-                                          ZoomMode="Disabled"
-                                          IsTabStop="False">
-                                <Grid Margin="0,0,0,16">
+                                        HorizontalScrollBarVisibility="Disabled"
+                                        VerticalScrollBarVisibility="Disabled"
+                                        ZoomMode="Disabled"
+                                        Margin="{ThemeResource ContentDialogContentScrollViewerMargin}"
+                                        IsTabStop="False">
+                                <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
+                                        <!--Here, I delete 'Height="Auto"' of RowDefinition.-->
+                                        <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <ContentControl x:Name="Title"
-                                                Margin="{ThemeResource ContentDialogTitleMargin}"
-                                                Content="{TemplateBinding Title}"
-                                                ContentTemplate="{TemplateBinding TitleTemplate}"
-                                                FontSize="20"
-                                                FontFamily="Segoe UI"
-                                                FontWeight="Normal"
-                                                Foreground="{TemplateBinding Foreground}"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                IsTabStop="False"
-                                                MaxHeight="{ThemeResource ContentDialogTitleMaxHeight}" >
+                                            Margin="{ThemeResource ContentDialogTitleMargin}"
+                                            Content="{TemplateBinding Title}"
+                                            ContentTemplate="{TemplateBinding TitleTemplate}"
+                                            FontSize="20"
+                                            FontFamily="Segoe UI"
+                                            FontWeight="Normal"
+                                            Foreground="{TemplateBinding Foreground}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            IsTabStop="False"
+                                            MaxHeight="{ThemeResource ContentDialogTitleMaxHeight}" >
                                         <ContentControl.Template>
                                             <ControlTemplate TargetType="ContentControl">
                                                 <ContentPresenter 
-                                                            Content="{TemplateBinding Content}"
-                                                            MaxLines="2"
-                                                            TextWrapping="Wrap"
-                                                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                            Margin="{TemplateBinding Padding}"
-                                                            ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                        Content="{TemplateBinding Content}"
+                                                        MaxLines="2"
+                                                        TextWrapping="Wrap"
+                                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                        Margin="{TemplateBinding Padding}"
+                                                        ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                                             </ControlTemplate>
                                         </ContentControl.Template>
                                     </ContentControl>
                                     <ContentPresenter x:Name="Content"
-                                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                Content="{TemplateBinding Content}"
-                                                FontSize="{ThemeResource ControlContentThemeFontSize}"
-                                                FontFamily="{ThemeResource ContentControlThemeFontFamily}"
-                                                Margin="{ThemeResource ContentDialogContentMargin}"
-                                                Foreground="{TemplateBinding Foreground}"
-                                                Grid.Row="1"
-                                                TextWrapping="Wrap" />
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            Content="{TemplateBinding Content}"
+                                            FontSize="{ThemeResource ControlContentThemeFontSize}"
+                                            FontFamily="{ThemeResource ContentControlThemeFontFamily}"
+                                            Margin="{ThemeResource ContentDialogContentMargin}"
+                                            Foreground="{TemplateBinding Foreground}"
+                                            Grid.Row="1"
+                                            TextWrapping="Wrap" />
                                 </Grid>
                             </ScrollViewer>
                             <Grid x:Name="CommandSpace" Grid.Row="1"
