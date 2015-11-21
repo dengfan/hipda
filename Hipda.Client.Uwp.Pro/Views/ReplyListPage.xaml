@@ -5,7 +5,6 @@
     xmlns:local="using:Hipda.Client.Uwp.Pro.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:pr="using:PullToRefresh.UWP"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled"
     Loaded="PageRoot_Loaded"
