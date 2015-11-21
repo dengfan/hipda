@@ -74,7 +74,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         #region user
         Task<string> GetXamlForUserInfo(int userId);
 
-        Task<List<UserMessageItemModel>> GetUserMessageData(int userId);
+        Task<List<UserMessageItemModel>> GetUserMessageData(int userId, int limitCount);
 
         Task<bool> PostUserMessage(string message, int userId);
         #endregion

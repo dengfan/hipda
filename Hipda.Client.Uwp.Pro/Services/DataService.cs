@@ -996,7 +996,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _userInfoData[userId];
         }
 
-        private async Task<List<UserMessageItemModel>> LoadUserMessageDataAsync(int userId, CancellationTokenSource cts)
+        private async Task<List<UserMessageItemModel>> LoadUserMessageDataAsync(int userId, int limitCount, CancellationTokenSource cts)
         {
             var data = new List<UserMessageItemModel>();
 
@@ -1016,6 +1016,12 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var nodeList = messageListNode.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("pm_"));
                 if (nodeList != null)
                 {
+                    int total = nodeList.Count();
+                    if (limitCount != -1 && total > limitCount)
+                    {
+                        nodeList = nodeList.Skip(total - limitCount);
+                    }
+
                     foreach (var item in nodeList)
                     {
                         int uid = 0;
@@ -1075,10 +1081,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             return data;
         }
 
-        public async Task<List<UserMessageItemModel>> GetUserMessageData(int userId)
+        public async Task<List<UserMessageItemModel>> GetUserMessageData(int userId, int limitCount)
         {
             var cts = new CancellationTokenSource();
-            return await LoadUserMessageDataAsync(userId, cts);
+            return await LoadUserMessageDataAsync(userId, limitCount, cts);
         }
 
         public async Task<bool> PostUserMessage(string message, int userId)

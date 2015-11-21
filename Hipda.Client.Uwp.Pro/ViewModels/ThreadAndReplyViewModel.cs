@@ -211,9 +211,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             return await _ds.GetXamlForUserInfo(userId);
         }
 
-        public async Task<List<UserMessageItemModel>> GetUserMessageData(int userId)
+        public async Task<List<UserMessageItemModel>> GetUserMessageData(int userId, int limitCount)
         {
-            return await _ds.GetUserMessageData(userId);
+            return await _ds.GetUserMessageData(userId, limitCount);
         }
 
         public async Task<bool> PostUserMessage(string message, int userId)

@@ -561,22 +561,23 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private async Task LoadAndShowUserMessage(HyperlinkButton getAllButton)
         {
+            int limitCount = 5; // 默认只载入最新5条短消息
+            if (getAllButton == null)
+            {
+                limitCount = -1;
+            }
+
             // 读取数据
-            var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId);
+            var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId, limitCount);
             if (data == null || data.Count == 0)
             {
                 ShowTipsForUserMessage("你们之间还未开始。。。");
             }
             else
             {
-                if (getAllButton != null)
+                if (getAllButton != null && data.Count == limitCount)
                 {
-                    int count = data.Count;
-                    if (count > 5)
-                    {
-                        getAllButton.Visibility = Visibility.Visible;
-                        data = data.Skip(count - 5).ToList();
-                    }
+                    getAllButton.Visibility = Visibility.Visible;
                 }
 
                 var lv = new ListView();
