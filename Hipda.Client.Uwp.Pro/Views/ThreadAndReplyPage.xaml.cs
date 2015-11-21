@@ -478,13 +478,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
+            _userDialogType = UserDialogType.Info;
             ShowTipsForUserMessage("请稍候，载入中。。。");
 
             UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
             UserDialog.SecondaryButtonText = "关闭";
             await UserDialog.ShowAsync();
 
-            _userDialogType = UserDialogType.Info;
+            
         }
 
         private async void openUserMessageDialog_Tapped(object sender, TappedRoutedEventArgs e)
@@ -494,9 +495,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
-            await UserDialog.ShowAsync();
-
             _userDialogType = UserDialogType.Message;
+            await UserDialog.ShowAsync();
         }
 
         private async void UserMessagePostButton_Tapped(object sender, TappedRoutedEventArgs e)
