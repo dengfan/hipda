@@ -463,6 +463,11 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             var data = e.ClickedItem as FaceItemModel;
+            if (data == null)
+            {
+                return;
+            }
+
             string faceText = data.Text;
 
             int occurences = 0;

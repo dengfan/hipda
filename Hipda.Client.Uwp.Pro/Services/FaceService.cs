@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.Services
@@ -103,6 +104,26 @@ namespace Hipda.Client.Uwp.Pro.Services
                     new FaceItemModel { Image = "/Assets/Faces/baoman_25.png", Value = "[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522172bd4de9ae043edab.png[/img]", Text = ":暴漫25:"}
                 };
             }
+        }
+
+        public static string FaceReplace(string postContent)
+        {
+            MatchCollection mc = new Regex(@":(酷猴|呆男|暴漫)[0-9]{1,2}:").Matches(postContent);
+            if (mc != null && mc.Count > 0)
+            {
+                for (int i = 0; i < mc.Count; i++)
+                {
+                    var m = mc[i];
+                    string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
+                    var face = FaceData.FirstOrDefault(f => f.Text == placeHolderLabel);
+                    if (face != null && face.Value != null)
+                    {
+                        postContent = postContent.Replace(placeHolderLabel, face.Value);
+                    }
+                }
+            }
+
+            return postContent;
         }
     }
 }

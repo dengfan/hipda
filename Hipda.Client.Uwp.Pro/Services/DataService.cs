@@ -1093,7 +1093,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             postData.Add("formhash", AccountService.FormHash);
             postData.Add("handlekey", "pmreply");
             postData.Add("lastdaterange", DateTime.Now.ToString("yyyy-MM-dd"));
-            postData.Add("message", message);
+            postData.Add("message", FaceService.FaceReplace(message));
 
             string url = string.Format("http://www.hi-pda.com/forum/pm.php?action=send&uid={0}&pmsubmit=yes&_={1}", userId, DateTime.Now.Ticks.ToString("x"));
             var cts = new CancellationTokenSource();
