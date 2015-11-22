@@ -197,7 +197,7 @@
                                 <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceData}" SelectionMode="None" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" Width="300" Height="290">
                                     <GridView.ItemTemplate>
                                         <DataTemplate>
-                                            <Image Source="{Binding FaceFile}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                         </DataTemplate>
                                     </GridView.ItemTemplate>
                                 </GridView>

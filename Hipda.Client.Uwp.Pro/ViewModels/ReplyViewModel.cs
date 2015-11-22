@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Pro.Commands;
+using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.Services;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ICollectionView ReplyItemCollection { get; set; }
 
-        public List<FaceItem> FaceData
+        public List<FaceItemModel> FaceData
         {
             get
             {

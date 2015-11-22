@@ -404,6 +404,8 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
 
         #region 坛友资料及短消息之弹窗
+        Grid _postUserMessageForm; // 发短消息之输入元素之容器
+        GridView _userMessageFaceGridView; // 发短消息之表情图标
         TextBox _userMessageTextBox; // 发短消息之文本框
         Button _userMessagePostButton; // 发短消息之按钮
         UserDialogType _userDialogType = 0;
@@ -444,14 +446,47 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
             containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
-            _userMessageTextBox = containerBorder.FindName("UserMessageTextBox") as TextBox;
-            _userMessagePostButton = containerBorder.FindName("UserMessagePostButton") as Button;
+            _postUserMessageForm = containerBorder.FindName("PostUserMessageForm") as Grid;
+            _postUserMessageForm.DataContext = new PostUserMessageFormViewModel();
+            _userMessageFaceGridView = _postUserMessageForm.FindName("UserMessageFaceGridView") as GridView;
+            _userMessageFaceGridView.ItemClick += UserMessageFaceGridView_ItemClick;
+            _userMessageTextBox = _postUserMessageForm.FindName("UserMessageTextBox") as TextBox;
+            _userMessagePostButton = _postUserMessageForm.FindName("UserMessagePostButton") as Button;
             _userMessagePostButton.Tapped += UserMessagePostButton_Tapped;
+        }
+
+        private void UserMessageFaceGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (_userMessageTextBox == null)
+            {
+                return;
+            }
+
+            var data = e.ClickedItem as FaceItemModel;
+            string faceText = data.Text;
+
+            int occurences = 0;
+            string originalContent = _userMessageTextBox.Text;
+
+            for (var i = 0; i < _userMessageTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = _userMessageTextBox.SelectionStart + occurences;
+            _userMessageTextBox.Text = _userMessageTextBox.Text.Insert(cursorPosition, faceText);
+            _userMessageTextBox.SelectionStart = cursorPosition + faceText.Length;
         }
 
         private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
         {
             sender.PrimaryButtonClick -= OpenOrRefreshUserMessageDialog;
+
+            if (_userMessageFaceGridView != null)
+            {
+                _userMessageFaceGridView.ItemClick -= UserMessageFaceGridView_ItemClick;
+            }
 
             if (_userMessagePostButton != null)
             {
@@ -523,7 +558,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 ShowTipsForUserMessage("已发送成功，载入中。。。");
 
                 // 这里要延迟载入短消息数据，以免取到的还是旧数据
-                DelayPrepareUserMessage(800);
+                DelayPrepareUserMessage(1000);
             }
             else
             {

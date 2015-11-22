@@ -56,7 +56,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public List<FaceItem> FaceData
+        public List<FaceItemModel> FaceData
         {
             get
             {

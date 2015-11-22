@@ -107,6 +107,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountItemModel.cs" />
+    <Compile Include="Models\FaceItemModel.cs" />
     <Compile Include="Models\UserMessageItemModel.cs" />
     <Compile Include="Models\ReplyItemModel.cs" />
     <Compile Include="Models\ReplyPageModel.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Triggers\InputTypeTrigger.cs" />
     <Compile Include="UserMessageListItemTemplateSelector.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
+    <Compile Include="ViewModels\PostUserMessageFormViewModel.cs" />
     <Compile Include="ViewModels\ReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForSearchViewModel.cs" />
