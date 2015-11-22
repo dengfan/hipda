@@ -424,7 +424,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
 
                 var grid = new Grid();
-                grid.Margin = new Thickness(0, 8, 20, 0);
+                grid.Padding = new Thickness(16, 0, 16, 16);
                 grid.Children.Add(img);
                 grid.Children.Add(richTextBlock);
 
@@ -600,6 +600,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
 
                 var lv = new ListView();
+                lv.Padding = new Thickness(16, 0, 16, 16);
                 lv.IsItemClickEnabled = false;
                 lv.IsSwipeEnabled = false;
                 lv.CanDrag = false;

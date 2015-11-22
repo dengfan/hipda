@@ -165,7 +165,6 @@
                                         HorizontalScrollBarVisibility="Disabled"
                                         VerticalScrollBarVisibility="Disabled"
                                         ZoomMode="Disabled"
-                                        Margin="{ThemeResource ContentDialogContentScrollViewerMargin}"
                                         IsTabStop="False">
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -174,7 +173,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <ContentControl x:Name="Title"
-                                            Margin="{ThemeResource ContentDialogTitleMargin}"
+                                            Margin="16"
                                             Content="{TemplateBinding Title}"
                                             ContentTemplate="{TemplateBinding TitleTemplate}"
                                             FontSize="20"
@@ -204,7 +203,6 @@
                                             Content="{TemplateBinding Content}"
                                             FontSize="{ThemeResource ControlContentThemeFontSize}"
                                             FontFamily="{ThemeResource ContentControlThemeFontFamily}"
-                                            Margin="{ThemeResource ContentDialogContentMargin}"
                                             Foreground="{TemplateBinding Foreground}"
                                             Grid.Row="1"
                                             TextWrapping="Wrap" />
