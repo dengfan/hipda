@@ -470,7 +470,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             UserDialogContentControl.Content = new TextBlock
             {
                 Text = tips,
-                Margin = new Thickness(0, 8, 0, 0),
+                Margin = new Thickness(16),
                 HorizontalAlignment = HorizontalAlignment.Center
             };
         }
