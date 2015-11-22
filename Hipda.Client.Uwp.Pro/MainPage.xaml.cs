@@ -39,7 +39,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnNavigatedTo(e);
 
-            string param = string.Format("fid={0}", e.Parameter);
+            string param = e.Parameter.ToString();
             AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
         }
 

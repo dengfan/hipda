@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Pro.Services;
+using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -86,7 +87,7 @@ namespace Hipda.Client.Uwp.Pro
                 if (isLogin)
                 {
                     int fid = 2;
-                    rootFrame.Navigate(typeof(MainPage), fid);
+                    rootFrame.Navigate(typeof(MainPage), string.Format("fid={0}", fid));
                 }
                 else
                 {
@@ -144,6 +145,52 @@ namespace Hipda.Client.Uwp.Pro
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
+        }
+
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            base.OnActivated(args);
+            
+            if (args.Kind == ActivationKind.Protocol)
+            {
+                Frame rootFrame = Window.Current.Content as Frame;
+
+                // 不要在窗口已包含内容时重复应用程序初始化，
+                // 只需确保窗口处于活动状态
+                if (rootFrame == null)
+                {
+                    // 创建要充当导航上下文的框架，并导航到第一页
+                    rootFrame = new Frame();
+
+                    rootFrame.NavigationFailed += OnNavigationFailed;
+
+                    // 将框架放在当前窗口中
+                    Window.Current.Content = rootFrame;
+                }
+
+                ProtocolActivatedEventArgs eventArgs = args as ProtocolActivatedEventArgs;
+                if (eventArgs.Uri.Scheme == "hipda")
+                {
+                    // TODO: Handle URI activation
+                    // The received URI is eventArgs.Uri.AbsoluteUri
+                    string uri = eventArgs.Uri.AbsoluteUri;
+
+                    // 从URI里面解析出 fid 和 tid
+                    int fid = 0;
+                    int tid = 1753541;
+
+                    if (fid > 0)
+                    {
+                        rootFrame.Navigate(typeof(MainPage), string.Format("fid={0}", fid));
+                    }
+                    else if (tid > 0)
+                    {
+                        rootFrame.Navigate(typeof(MainPage), string.Format("tid={0}", tid));
+                    }
+
+                    Window.Current.Activate();
+                }
+            }
         }
     }
 }

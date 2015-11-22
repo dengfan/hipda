@@ -239,6 +239,15 @@ namespace Hipda.Client.Uwp.Pro.Views
                             break;
                     }
                 }
+                else if (param.StartsWith("tid="))
+                {
+                    int fid = 2;
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
+                    DataContext = _threadAndReplyViewModel;
+
+                    int tid = Convert.ToInt32(param.Substring(4));
+                    OpenReplyPageByThreadId(tid);
+                }
             }
 
             UpdateForVisualState(AdaptiveStates.CurrentState);
