@@ -19,7 +19,7 @@
                     <ImageBrush ImageSource="/Assets/Images/hipdabg1.png" Stretch="UniformToFill"/>
                 </Grid.Background>
                 <StackPanel x:Name="infoPanel" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Center" MaxWidth="600">
-                    <TextBlock Text="首先您需要登录一个账号" FontSize="30" Foreground="White"/>
+                    <TextBlock Text="首先您需要登录一个账号" FontWeight="Bold" Foreground="White"/>
                 </StackPanel>
             </Grid>
         </Grid>
