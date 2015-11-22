@@ -237,7 +237,7 @@
                                                 <Flyout>
                                                     <GridView x:Name="UserMessageFaceGridView" ItemsSource="{Binding FaceData}"
                                                               SelectionMode="None" IsItemClickEnabled="True" IsSwipeEnabled="False"
-                                                              CanDragItems="False" Width="248" Height="180">
+                                                              CanDragItems="False" Width="248" Height="200">
                                                         <GridView.ItemTemplate>
                                                             <DataTemplate>
                                                                 <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>

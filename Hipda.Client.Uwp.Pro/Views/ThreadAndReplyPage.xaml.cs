@@ -497,6 +497,11 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 _userMessagePostButton.Tapped -= UserMessagePostButton_Tapped;
             }
+
+            _userMessageTextBox = null;
+            _userMessagePostButton = null;
+            _userMessageFaceGridView = null;
+            _postUserMessageForm = null;
         }
 
         private async void OpenOrRefreshUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
