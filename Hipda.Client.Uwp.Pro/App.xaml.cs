@@ -86,8 +86,7 @@ namespace Hipda.Client.Uwp.Pro
                 // 参数
                 if (isLogin)
                 {
-                    int fid = 2;
-                    rootFrame.Navigate(typeof(MainPage), string.Format("fid={0}", fid));
+                    rootFrame.Navigate(typeof(MainPage), "fid=2");
                 }
                 else
                 {
@@ -147,12 +146,16 @@ namespace Hipda.Client.Uwp.Pro
             deferral.Complete();
         }
 
-        protected override void OnActivated(IActivatedEventArgs args)
+        protected override async void OnActivated(IActivatedEventArgs args)
         {
             base.OnActivated(args);
             
             if (args.Kind == ActivationKind.Protocol)
             {
+                // 自动登录
+                var accountService = new AccountService();
+                bool isLogin = await accountService.AutoLogin();
+
                 Frame rootFrame = Window.Current.Content as Frame;
 
                 // 不要在窗口已包含内容时重复应用程序初始化，
@@ -186,6 +189,20 @@ namespace Hipda.Client.Uwp.Pro
                     else if (tid > 0)
                     {
                         rootFrame.Navigate(typeof(MainPage), string.Format("tid={0}", tid));
+                    }
+                    else
+                    {
+                        // 当导航堆栈尚未还原时，导航到第一页，
+                        // 并通过将所需信息作为导航参数传入来配置
+                        // 参数
+                        if (isLogin)
+                        {
+                            rootFrame.Navigate(typeof(MainPage), "fid=2");
+                        }
+                        else
+                        {
+                            rootFrame.Navigate(typeof(LoginPage));
+                        }
                     }
 
                     Window.Current.Activate();
