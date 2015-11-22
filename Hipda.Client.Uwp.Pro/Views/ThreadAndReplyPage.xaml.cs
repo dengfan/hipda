@@ -447,7 +447,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
             containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
             _postUserMessageForm = containerBorder.FindName("PostUserMessageForm") as Grid;
-            _postUserMessageForm.DataContext = new PostUserMessageFormViewModel();
+            _postUserMessageForm.DataContext = new FaceService();
             _userMessageFaceGridView = _postUserMessageForm.FindName("UserMessageFaceGridView") as GridView;
             _userMessageFaceGridView.ItemClick += UserMessageFaceGridView_ItemClick;
             _userMessageTextBox = _postUserMessageForm.FindName("UserMessageTextBox") as TextBox;

@@ -132,7 +132,6 @@
     <Compile Include="Triggers\InputTypeTrigger.cs" />
     <Compile Include="UserMessageListItemTemplateSelector.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
-    <Compile Include="ViewModels\PostUserMessageFormViewModel.cs" />
     <Compile Include="ViewModels\ReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForSearchViewModel.cs" />
