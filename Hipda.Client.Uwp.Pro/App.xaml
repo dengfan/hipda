@@ -389,7 +389,7 @@
                             <ControlTemplate>
                                 <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
                                     <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                                        <Run Text="&#xE0C2;" FontFamily="Segoe MDL2 Assets" />
+                                        <Run Text="&#xE10C;" FontFamily="Segoe MDL2 Assets" />
                                         <Run Text="{Binding FloorNoStr}" />
                                     </TextBlock>
                                 </Border>
@@ -444,7 +444,7 @@
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
                                 <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                                    <Run Text="&#xE0C2;" FontFamily="Segoe MDL2 Assets" />
+                                    <Run Text="&#xE10C;" FontFamily="Segoe MDL2 Assets" />
                                     <Run Text="{Binding FloorNoStr}" />
                                 </TextBlock>
                             </Border>
@@ -499,7 +499,7 @@
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
                                 <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                                    <Run Text="&#xE0C2;" FontFamily="Segoe MDL2 Assets" />
+                                    <Run Text="&#xE10C;" FontFamily="Segoe MDL2 Assets" />
                                     <Run Text="{Binding FloorNoStr}" />
                                 </TextBlock>
                             </Border>
@@ -553,7 +553,7 @@
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
                                 <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                                    <Run Text="&#xE0C2;" FontFamily="Segoe MDL2 Assets" />
+                                    <Run Text="&#xE10C;" FontFamily="Segoe MDL2 Assets" />
                                     <Run Text="{Binding FloorNoStr}" />
                                 </TextBlock>
                             </Border>
