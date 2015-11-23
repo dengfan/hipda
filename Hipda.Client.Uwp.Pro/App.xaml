@@ -270,6 +270,22 @@
             </Border>
         </ControlTemplate>
 
+        <ControlTemplate x:Key="MessageUpArrow" TargetType="ContentControl">
+            <Polygon Points="0,0 0,8 10,8" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+        </ControlTemplate>
+        <ControlTemplate x:Key="MessageDownArrow" TargetType="ContentControl">
+            <Polygon Points="0,0 10,0 10,8" Fill="{ThemeResource SystemControlHighlightListAccentLowBrush}"/>
+        </ControlTemplate>
+        <ControlTemplate x:Key="ReplyLeftArrow" TargetType="ContentControl">
+            <Polygon Points="0,0 6,6 6,-6" Fill="{ThemeResource SystemControlBackgroundListLowBrush}"/>
+        </ControlTemplate>
+        <ControlTemplate x:Key="ReplyLeftArrow2" TargetType="ContentControl">
+            <Polygon Points="0,0 6,6 6,-6" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+        </ControlTemplate>
+        <ControlTemplate x:Key="ReplyRightArrow" TargetType="ContentControl">
+            <Polygon Points="6,0 0,6 0,-6" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+        </ControlTemplate>
+
         <Style x:Key="FaceButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -407,7 +423,7 @@
 
                 <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" VerticalAlignment="Top"/>
 
-                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundListLowBrush}" VerticalAlignment="Top"/>
+                <ContentControl Grid.Row="0" Grid.Column="1" Margin="0 16 0 0" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow}"/>
 
                 <Border Grid.Row="0" Grid.Column="2" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left">
                     <StackPanel>
@@ -461,7 +477,7 @@
 
                 <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" VerticalAlignment="Top"/>
 
-                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top"/>
+                <ContentControl Grid.Row="0" Grid.Column="1" Margin="0 16 0 0" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow2}"/>
 
                 <Border Grid.Row="0" Grid.Column="2" Padding="8" HorizontalAlignment="Left" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}">
                     <StackPanel>
@@ -516,7 +532,7 @@
 
                 <local:MyAvatar Grid.Row="0" Grid.Column="2" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" VerticalAlignment="Top" HorizontalAlignment="Right"/>
 
-                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
+                <ContentControl Grid.Row="0" Grid.Column="1" Margin="0 16 0 0" VerticalAlignment="Top" Template="{StaticResource ReplyRightArrow}"/>
 
                 <Border Grid.Row="0" Grid.Column="0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right">
                     <StackPanel>
@@ -650,15 +666,9 @@
                                                    RightTemplate="{StaticResource UserMessageRightItemTemplate}"/>
 
         <DataTemplate x:Name="UserMessageLeftItemTemplate">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="8"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <FontIcon Grid.Row="0" Margin="8,0,0,0" Glyph="&#x25E3;" FontFamily="Segoe MDL2 Assets"
-                          FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
-                          HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <Border Grid.Row="1" Margin="0,0,40,0" Padding="8"
+            <StackPanel>
+                <ContentControl Margin="8 0 0 0" VerticalAlignment="Top" Template="{StaticResource MessageUpArrow}"/>
+                <Border Margin="0,0,40,0" Padding="8"
                         Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                         HorizontalAlignment="Left">
                     <StackPanel>
@@ -670,19 +680,12 @@
                         </TextBlock>
                     </StackPanel>
                 </Border>
-            </Grid>
+            </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Name="UserMessageRightItemTemplate">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="8"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <FontIcon Grid.Row="0" Margin="0,0,8,0" Glyph="&#x25E2;" FontFamily="Segoe MDL2 Assets"
-                          FontSize="16" Foreground="{ThemeResource SystemControlHighlightListAccentLowBrush}"
-                          HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                <Border Grid.Row="1" Margin="40,0,0,0" Padding="8"
+            <StackPanel>
+                <Border Margin="40,0,0,0" Padding="8"
                         Background="{ThemeResource SystemControlHighlightListAccentLowBrush}"
                         HorizontalAlignment="Right">
                     <StackPanel>
@@ -695,7 +698,8 @@
                         </TextBlock>
                     </StackPanel>
                 </Border>
-            </Grid>
+                <ContentControl Margin="0 0 8 0" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource MessageDownArrow}"/>
+            </StackPanel>
         </DataTemplate>
     </Application.Resources>
 </Application>

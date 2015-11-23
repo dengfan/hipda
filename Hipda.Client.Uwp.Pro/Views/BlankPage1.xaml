@@ -179,10 +179,11 @@
         </Style>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ListView x:Name="list1" ItemContainerStyle="{StaticResource ListViewItemStyle1}"/>
 
-        <TextBox x:Name="tb1" Style="{StaticResource TextBoxStyle1}" />
+        <TextBox x:Name="tb1" Style="{StaticResource TextBoxStyle1}" Text="ddddddddd"/>
+        <TextBox x:Name="tb2" Style="{StaticResource TextBoxStyle1}" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Text="ddddddddd"/>
 
         <RichTextBlock>
             <Paragraph>
@@ -201,7 +202,7 @@
         </RichTextBlock>
 
         <ContentDialog x:Name="aaae"></ContentDialog>
-    </Grid>
+    </StackPanel>
 
 
 </Page>

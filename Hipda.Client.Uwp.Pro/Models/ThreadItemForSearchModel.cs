@@ -103,7 +103,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return AttachFileType == 1 ? "\uE187" : string.Empty;
+                return AttachFileType == 1 ? "\uEB9F" : string.Empty;
             }
         }
 

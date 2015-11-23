@@ -9,7 +9,7 @@
                 <ControlTemplate TargetType="local:MyImage">
                     <ContentControl x:Name="content1" Margin="4">
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                                <Run Text="&#xE156; " FontFamily="Segoe MDL2 Assets"/>
+                                <Run Text="&#xEB9F; " FontFamily="Segoe MDL2 Assets"/>
                         </TextBlock>
                     </ContentControl>
                 </ControlTemplate>
