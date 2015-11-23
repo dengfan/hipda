@@ -3,7 +3,7 @@
   <Identity Name="8f81b564-a34d-48fd-88c7-58be6695ddf3" Publisher="CN=appxking" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="8f81b564-a34d-48fd-88c7-58be6695ddf3" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>HipdaUwpPro.Client</DisplayName>
+    <DisplayName>Hipda.Client.Uwp.Pro</DisplayName>
     <PublisherDisplayName>appxking</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
