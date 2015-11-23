@@ -81,7 +81,7 @@ namespace Hipda.Html
                     string linkContent = m.Groups[2].Value;
                     linkContent = Regex.Replace(linkContent, @"<[^>]*>", string.Empty);
 
-                    string linkXaml = string.Format(@"[InlineUIContainer][local:MyLink Name=""MyLink_{2}"" ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent, i);
+                    string linkXaml = string.Format(@"[Hyperlink NavigateUri=""{0}"" Foreground=""DodgerBlue""]{1}[/Hyperlink]", string.Format("hipda:tid={0}", threadIdStr), linkContent, i);
                     string regexPattern = StringToRegexPattern(placeHolder);
                     htmlContent = new Regex(regexPattern).Replace(htmlContent, linkXaml, 1); // 由于站内链接有可能重复，所以这里每次只允许替换一个
                 }

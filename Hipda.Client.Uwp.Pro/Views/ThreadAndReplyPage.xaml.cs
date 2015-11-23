@@ -239,7 +239,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                             break;
                     }
                 }
-                else if (param.StartsWith("tid="))
+                else if (param.StartsWith("tid=")) // 来自 hipda 协议启动
                 {
                     int fid = 2;
                     _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
@@ -408,7 +408,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ReadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ThreadItemModelBase data = e.ClickedItem as ThreadItemModelBase;
+            var data = e.ClickedItem as ThreadItemModelBase;
             OpenReplyPageByThreadId(data.ThreadId);
         }
 

@@ -373,7 +373,7 @@
                             <ControlTemplate>
                                 <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
                                     <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                                        <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
+                                        <Run Text="&#xE0C2;" FontFamily="Segoe MDL2 Assets" />
                                         <Run Text="{Binding FloorNoStr}" />
                                     </TextBlock>
                                 </Border>
@@ -407,7 +407,7 @@
 
                 <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" VerticalAlignment="Top"/>
 
-                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundListLowBrush}" VerticalAlignment="Top"/>
+                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundListLowBrush}" VerticalAlignment="Top"/>
 
                 <Border Grid.Row="0" Grid.Column="2" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left">
                     <StackPanel>
@@ -428,7 +428,7 @@
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
                                 <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                                    <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
+                                    <Run Text="&#xE0C2;" FontFamily="Segoe MDL2 Assets" />
                                     <Run Text="{Binding FloorNoStr}" />
                                 </TextBlock>
                             </Border>
@@ -461,7 +461,7 @@
 
                 <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" VerticalAlignment="Top"/>
 
-                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top"/>
+                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top"/>
 
                 <Border Grid.Row="0" Grid.Column="2" Padding="8" HorizontalAlignment="Left" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}">
                     <StackPanel>
@@ -483,7 +483,7 @@
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
                                 <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                                    <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
+                                    <Run Text="&#xE0C2;" FontFamily="Segoe MDL2 Assets" />
                                     <Run Text="{Binding FloorNoStr}" />
                                 </TextBlock>
                             </Border>
@@ -516,7 +516,7 @@
 
                 <local:MyAvatar Grid.Row="0" Grid.Column="2" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" VerticalAlignment="Top" HorizontalAlignment="Right"/>
 
-                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe UI Symbol" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
+                <FontIcon Grid.Row="0" Grid.Column="1" Margin="0 8 0 0" Glyph="&#xE18A;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Top" HorizontalAlignment="Right" FlowDirection="RightToLeft"/>
 
                 <Border Grid.Row="0" Grid.Column="0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right">
                     <StackPanel>
@@ -537,7 +537,7 @@
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
                                 <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                                    <Run Text="&#xE0C2;" FontFamily="Segoe UI Symbol" />
+                                    <Run Text="&#xE0C2;" FontFamily="Segoe MDL2 Assets" />
                                     <Run Text="{Binding FloorNoStr}" />
                                 </TextBlock>
                             </Border>
@@ -590,15 +590,15 @@
                     </TextBlock>
 
                     <TextBlock Margin="2" TextWrapping="Wrap" Style="{Binding ThreadItem.ThreadItemStyle}">
-                        <Run FontFamily="Segoe UI Symbol" Foreground="Gray" Text="{Binding ThreadItem.TopFontIcon}" />
-                        <Run FontFamily="Segoe UI Symbol" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
-                        <Run FontFamily="Segoe UI Symbol" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
+                        <Run FontFamily="Segoe MDL2 Assets" Foreground="Gray" Text="{Binding ThreadItem.TopFontIcon}" />
+                        <Run FontFamily="Segoe MDL2 Assets" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
+                        <Run FontFamily="Segoe MDL2 Assets" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
                         <Run Text="{Binding ThreadItem.Title}" />
                         <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     </TextBlock>
                     
                     <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
-                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
+                        <Run Text=" &#xE25C;" FontFamily="Segoe MDL2 Assets" />
                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
                 </StackPanel>
@@ -617,7 +617,7 @@
                     </TextBlock>
 
                     <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
-                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" />
+                        <Run Text=" &#xE25C;" FontFamily="Segoe MDL2 Assets" />
                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
                 </StackPanel>
@@ -634,7 +634,7 @@
                     <TextBlock Margin="2" TextWrapping="Wrap">
                         <Run Text="{Binding ThreadItem.Title}" />
                         <LineBreak/>
-                        <Run Text=" &#xE25C;" FontFamily="Segoe UI Symbol" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}" />
+                        <Run Text=" &#xE25C;" FontFamily="Segoe MDL2 Assets" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}" />
                         <Run Text="{Binding ThreadItem.LastReplyContent}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}" />
                     </TextBlock>
 
@@ -655,7 +655,7 @@
                     <RowDefinition Height="8"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <FontIcon Grid.Row="0" Margin="8,0,0,0" Glyph="&#x25E3;" FontFamily="Segoe UI Symbol"
+                <FontIcon Grid.Row="0" Margin="8,0,0,0" Glyph="&#x25E3;" FontFamily="Segoe MDL2 Assets"
                           FontSize="16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                           HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <Border Grid.Row="1" Margin="0,0,40,0" Padding="8"
@@ -679,7 +679,7 @@
                     <RowDefinition Height="8"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <FontIcon Grid.Row="0" Margin="0,0,8,0" Glyph="&#x25E2;" FontFamily="Segoe UI Symbol"
+                <FontIcon Grid.Row="0" Margin="0,0,8,0" Glyph="&#x25E2;" FontFamily="Segoe MDL2 Assets"
                           FontSize="16" Foreground="{ThemeResource SystemControlHighlightListAccentLowBrush}"
                           HorizontalAlignment="Right" VerticalAlignment="Top"/>
                 <Border Grid.Row="1" Margin="40,0,0,0" Padding="8"

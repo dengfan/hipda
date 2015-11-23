@@ -180,8 +180,7 @@ namespace Hipda.Client.Uwp.Pro
 
                     // 从URI里面解析出 fid 和 tid
                     int fid = 0;
-                    int tid = 1753541;
-
+                    int tid = Convert.ToInt32(uri.Split('=')[1]);
                     if (fid > 0)
                     {
                         rootFrame.Navigate(typeof(MainPage), string.Format("fid={0}", fid));
