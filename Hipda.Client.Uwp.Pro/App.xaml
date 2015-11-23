@@ -237,7 +237,7 @@
                                                 <Flyout>
                                                     <GridView x:Name="UserMessageFaceGridView" ItemsSource="{Binding FaceData}"
                                                               SelectionMode="None" IsItemClickEnabled="True" IsSwipeEnabled="False"
-                                                              CanDragItems="False" Width="248" Height="200">
+                                                              CanDragItems="False" Width="248" Height="192">
                                                         <GridView.ItemTemplate>
                                                             <DataTemplate>
                                                                 <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -247,7 +247,7 @@
                                                 </Flyout>
                                             </Button.Flyout>
                                         </Button>
-                                        <TextBox x:Name="UserMessageTextBox" Grid.Column="1" Margin="0,0,20,0" VerticalAlignment="Center"
+                                        <TextBox x:Name="UserMessageTextBox" Grid.Column="1" Margin="0,4,20,0" VerticalAlignment="Center"
                                                  PlaceholderText="输入短消息" BorderThickness="0" Background="Transparent"
                                                  Template="{StaticResource TextBoxTemplate1}" AcceptsReturn="True" MaxHeight="160" />
                                         <Button x:Name="UserMessagePostButton" Grid.Column="2" Width="44" VerticalAlignment="Center">
