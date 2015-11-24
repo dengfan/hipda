@@ -357,75 +357,51 @@
         </Style>
 
         <DataTemplate x:Name="ReplyListTopItemTemplate">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <StackPanel>
+                <Grid>
+                    <local:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" VerticalAlignment="Top"/>
-
-                <StackPanel Grid.Row="0" Grid.Column="1" Margin="8,0,0,0">
-                    <TextBlock Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontWeight="Bold"/>
-                    <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                    <StackPanel Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <TextBlock Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontWeight="Bold" TextWrapping="Wrap" MaxLines="2"/>
+                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                         <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                         <Run Text="{Binding AuthorCreateTime}" />
-                    </TextBlock>
-                </StackPanel>
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
 
-                <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,8,0,0">
-                    <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
-                    <Button x:Name="showMoreButton" Margin="0,10,0,0"
-                            HorizontalAlignment="Stretch" Background="DeepSkyBlue"
-                            Foreground="White" BorderThickness="0" Visibility="Collapsed" />
+                <ContentControl Margin="0,4,0,0" Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
 
-                    <Button x:Name="menuButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Pivot.SlideInAnimationGroup="GroupOne">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
-                                    <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
+                <Button x:Name="menuButton" HorizontalAlignment="Center">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
+                                <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                                         <Run Text="&#xE10C;" FontFamily="Segoe MDL2 Assets" />
                                         <Run Text="{Binding FloorNoStr}" />
-                                    </TextBlock>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Button.Flyout>
-                            <MenuFlyout x:Name="replyMenu">
-                                <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" />
-                                <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" />
-                                <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" IsEnabled="False" />
-                                <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" />
-                            </MenuFlyout>
-                        </Button.Flyout>
-                    </Button>
-                </StackPanel>
-            </Grid>
+                                </TextBlock>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Flyout>
+                        <MenuFlyout x:Name="replyMenu">
+                            <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" />
+                            <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" />
+                            <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" IsEnabled="False" />
+                            <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Name="ReplyListLeftItemTemplate">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <local:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="44"/>
-                    <ColumnDefinition Width="8"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+                <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow}"/>
 
-                <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" VerticalAlignment="Top"/>
-
-                <ContentControl Grid.Row="0" Grid.Column="1" Margin="0 16 0 0" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow}"/>
-
-                <Border Grid.Row="0" Grid.Column="2" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left">
+                <Border Margin="54,0,0,32" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
@@ -439,7 +415,7 @@
                     </StackPanel>
                 </Border>
 
-                <Button x:Name="menuButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Pivot.SlideInAnimationGroup="GroupOne">
+                <Button x:Name="menuButton" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                     <Button.Template>
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
@@ -464,22 +440,11 @@
 
         <DataTemplate x:Name="ReplyListLeft2ItemTemplate">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <local:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="44"/>
-                    <ColumnDefinition Width="8"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+                <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow2}"/>
 
-                <local:MyAvatar Grid.Row="0" Grid.Column="0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" VerticalAlignment="Top"/>
-
-                <ContentControl Grid.Row="0" Grid.Column="1" Margin="0 16 0 0" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow2}"/>
-
-                <Border Grid.Row="0" Grid.Column="2" Padding="8" HorizontalAlignment="Left" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}">
+                <Border Margin="54,0,0,32" Padding="8" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="楼主 " Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
@@ -494,7 +459,7 @@
                     </StackPanel>
                 </Border>
 
-                <Button x:Name="menuButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Pivot.SlideInAnimationGroup="GroupOne">
+                <Button x:Name="menuButton" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                     <Button.Template>
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
@@ -519,22 +484,11 @@
 
         <DataTemplate x:Name="ReplyListRightItemTemplate">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <local:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" HorizontalAlignment="Right" VerticalAlignment="Top"/>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="8"/>
-                    <ColumnDefinition Width="44"/>
-                </Grid.ColumnDefinitions>
+                <ContentControl Margin="0 16 48 0" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource ReplyRightArrow}"/>
 
-                <local:MyAvatar Grid.Row="0" Grid.Column="2" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-
-                <ContentControl Grid.Row="0" Grid.Column="1" Margin="0 16 0 0" VerticalAlignment="Top" Template="{StaticResource ReplyRightArrow}"/>
-
-                <Border Grid.Row="0" Grid.Column="0" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="2" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right">
+                <Border Margin="0,0,54,32" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
@@ -548,7 +502,7 @@
                     </StackPanel>
                 </Border>
 
-                <Button x:Name="menuButton" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Pivot.SlideInAnimationGroup="GroupOne">
+                <Button x:Name="menuButton" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                     <Button.Template>
                         <ControlTemplate>
                             <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
