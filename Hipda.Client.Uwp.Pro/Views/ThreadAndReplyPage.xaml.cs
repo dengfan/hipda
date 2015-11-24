@@ -275,7 +275,12 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ThreadListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedItem = e.AddedItems.First();
+            if (e.AddedItems.Count == 0)
+            {
+                return;
+            }
+
+            var selectedItem = e.AddedItems[0];
             var b = e.AddedItems.First() as ThreadItemViewModelBase;
             switch (b.ThreadDataType)
             {
