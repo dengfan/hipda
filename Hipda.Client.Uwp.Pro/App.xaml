@@ -610,32 +610,32 @@
                                                    RightTemplate="{StaticResource UserMessageRightItemTemplate}"/>
 
         <DataTemplate x:Name="UserMessageLeftItemTemplate">
-            <StackPanel>
-                <ContentControl Margin="8 0 0 0" VerticalAlignment="Top" Template="{StaticResource MessageUpArrow}"/>
-                <StackPanel Margin="0,0,40,0" Padding="8" Background="{ThemeResource SystemControlBackgroundAccentBrush}">
+            <Grid>
+                <ContentControl Margin="8 0 0 0" Template="{StaticResource MessageUpArrow}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <StackPanel Margin="0,8,40,0" Padding="8" Background="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                     <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
-                            <Run Text="{Binding Username}"/>
-                            <Run Text=" "/>
-                            <Run Text="{Binding Time}"/>
+                        <Run Text="{Binding Username}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding Time}"/>
                     </TextBlock>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
         </DataTemplate>
 
         <DataTemplate x:Name="UserMessageRightItemTemplate">
-            <StackPanel>
-                <StackPanel Margin="40,0,0,0" Padding="8" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+            <Grid>
+                <StackPanel Margin="40,0,0,8" Padding="8" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                     <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
-                            <Run Text="我 "/>
-                            <Run Text="{Binding Time}"/>
-                            <Run Text=" "/>
-                            <Run Text="{Binding IsReadInfo}" FontWeight="Bold"/>
+                        <Run Text="我 "/>
+                        <Run Text="{Binding Time}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding IsReadInfo}" FontWeight="Bold"/>
                     </TextBlock>
                 </StackPanel>
-                <ContentControl Margin="0 0 8 0" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource MessageDownArrow}"/>
-            </StackPanel>
+                <ContentControl Margin="0 0 8 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Template="{StaticResource MessageDownArrow}"/>
+            </Grid>
         </DataTemplate>
     </Application.Resources>
 </Application>
