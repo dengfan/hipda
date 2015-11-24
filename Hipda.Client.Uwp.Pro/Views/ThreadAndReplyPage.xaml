@@ -122,10 +122,11 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False"
-                          VerticalAlignment="Top" IncrementalLoadingTrigger="Edge" ItemClick="ThreadListView_ItemClick"
-                          ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
-                          ItemsSource="{Binding ThreadItemCollection}">
+            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
+                      ShowsScrollingPlaceholders="False" VerticalAlignment="Top" IncrementalLoadingTrigger="Edge"
+                      SelectionMode="Single" SelectionChanged="ThreadListView_SelectionChanged"
+                      ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
+                      ItemsSource="{Binding ThreadItemCollection}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Padding" Value="0,0,20,0"/>
@@ -155,8 +156,8 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False"
-                              SelectionMode="Single" ShowsScrollingPlaceholders="False"
+            <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
+                              SelectionMode="None" ShowsScrollingPlaceholders="False"
                               ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                               ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                               ItemsSource="{Binding ReplyItemCollection}">

@@ -273,13 +273,14 @@ namespace Hipda.Client.Uwp.Pro.Views
             EntranceNavigationTransitionInfo.SetIsTargetElement(ThreadListView, isNarrow);
         }
 
-        private void ThreadListView_ItemClick(object sender, ItemClickEventArgs e)
+        private void ThreadListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var b = e.ClickedItem as ThreadItemViewModelBase;
+            var selectedItem = e.AddedItems.First();
+            var b = e.AddedItems.First() as ThreadItemViewModelBase;
             switch (b.ThreadDataType)
             {
                 case ThreadDataType.MyThreads:
-                    var itemForMyThreads = (ThreadItemForMyThreadsViewModel)e.ClickedItem;
+                    var itemForMyThreads = (ThreadItemForMyThreadsViewModel)selectedItem;
                     _lastSelectedItem = itemForMyThreads;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
@@ -294,7 +295,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     break;
                 case ThreadDataType.MyPosts:
-                    var itemForMyPosts = (ThreadItemForMyPostsViewModel)e.ClickedItem;
+                    var itemForMyPosts = (ThreadItemForMyPostsViewModel)selectedItem;
                     _lastSelectedItem = itemForMyPosts;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
@@ -309,7 +310,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     break;
                 default:
-                    var item = (ThreadItemViewModel)e.ClickedItem;
+                    var item = (ThreadItemViewModel)selectedItem;
                     _lastSelectedItem = item;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
