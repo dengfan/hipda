@@ -662,6 +662,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             var parentT = parent as T;
             return parentT ?? FindParent<T>(parent);
         }
+
+        
     }
 
     public enum UserDialogType
