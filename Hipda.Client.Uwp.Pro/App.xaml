@@ -571,12 +571,12 @@
             </Grid>
         </DataTemplate>
 
-        <Style x:Name="UnReadColorStyle" TargetType="Border">
-            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+        <Style x:Name="UnReadColorStyle" TargetType="Grid">
+            <Setter Property="BorderBrush" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
         </Style>
 
-        <Style x:Name="ReadColorStyle" TargetType="Border">
-            <Setter Property="Background" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
+        <Style x:Name="ReadColorStyle" TargetType="Grid">
+            <Setter Property="BorderBrush" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
         </Style>
 
         <Style x:Key="TopThreadItemStyle" TargetType="TextBlock">
@@ -588,36 +588,26 @@
         </Style>
 
         <DataTemplate x:Name="ThreadListNormalItemTemplate">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4"/>
-                    <ColumnDefinition Width="56"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Grid Margin="1,0,0,0" BorderThickness="2,0,0,0" Style="{Binding StatusColorStyle}">
+                <local:MyAvatar Margin="8,8,0,0" UserId="{Binding ThreadItem.AuthorUserId}" Username="{Binding ThreadItem.AuthorUsername}" ThreadId="{Binding ThreadItem.ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <Border Grid.Column="0" Margin="1,0,0,0" Width="2" Style="{Binding StatusColorStyle}"/>
+                <TextBlock Margin="56,4,0,0" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
+                    <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
+                </TextBlock>
 
-                <local:MyAvatar Grid.Column="1" Margin="8" UserId="{Binding ThreadItem.AuthorUserId}" Username="{Binding ThreadItem.AuthorUsername}" ThreadId="{Binding ThreadItem.ThreadId}" VerticalAlignment="Top"/>
+                <TextBlock Margin="56,22,0,20" TextWrapping="Wrap" Style="{Binding ThreadItem.ThreadItemStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Run FontFamily="Segoe MDL2 Assets" Foreground="Gray" Text="{Binding ThreadItem.TopFontIcon}" />
+                    <Run FontFamily="Segoe MDL2 Assets" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
+                    <Run FontFamily="Segoe MDL2 Assets" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
+                    <Run Text="{Binding ThreadItem.Title}" />
+                    <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                </TextBlock>
 
-                <StackPanel Grid.Column="2" Margin="0,4">
-                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
-                        <Run Text="{Binding ThreadItem.AuthorUsername}" FontWeight="Bold" />
-                        <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
-                    </TextBlock>
-
-                    <TextBlock Margin="2" TextWrapping="Wrap" Style="{Binding ThreadItem.ThreadItemStyle}">
-                        <Run FontFamily="Segoe MDL2 Assets" Foreground="Gray" Text="{Binding ThreadItem.TopFontIcon}" />
-                        <Run FontFamily="Segoe MDL2 Assets" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
-                        <Run FontFamily="Segoe MDL2 Assets" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
-                        <Run Text="{Binding ThreadItem.Title}" />
-                        <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                    </TextBlock>
-                    
-                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
-                        <Run Text=" &#xE25C;" FontFamily="Segoe MDL2 Assets" />
-                        <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
-                    </TextBlock>
-                </StackPanel>
+                <TextBlock Margin="0,0,0,4" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                    <Run Text=" &#xE25C;" FontFamily="Segoe MDL2 Assets" />
+                    <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
+                </TextBlock>
             </Grid>
         </DataTemplate>
 
