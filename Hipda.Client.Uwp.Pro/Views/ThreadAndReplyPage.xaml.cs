@@ -392,6 +392,8 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             var data = e.ClickedItem as ThreadItemModelBase;
             OpenReplyPageByThreadId(data.ThreadId);
+
+            ThreadListView.SelectedItem = null;
         }
 
         #region 坛友资料及短消息之弹窗
