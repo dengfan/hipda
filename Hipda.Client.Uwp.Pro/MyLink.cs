@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.System;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -46,16 +47,29 @@ namespace Hipda.Client.Uwp.Pro
 
 
 
-        public Action<int> MyLinkClick { get; set; }
-
-        protected override void OnTapped(TappedRoutedEventArgs e)
+        protected override async void OnTapped(TappedRoutedEventArgs e)
         {
             base.OnTapped(e);
 
-            if (MyLinkClick != null)
+            var parentPage = FindParent<ThreadAndReplyPage>(this);
+            if (parentPage != null)
             {
-                MyLinkClick(ThreadId);
+                parentPage.OpenReplyPageByThreadId(ThreadId);
             }
+            else
+            {
+                var options = new LauncherOptions();
+                options.TreatAsUntrusted = false;
+                await Launcher.LaunchUriAsync(new Uri("hipda:tid=" + ThreadId), options);
+            }
+        }
+
+        private static T FindParent<T>(DependencyObject dependencyObject) where T : DependencyObject
+        {
+            var parent = VisualTreeHelper.GetParent(dependencyObject);
+            if (parent == null) return null;
+            var parentT = parent as T;
+            return parentT ?? FindParent<T>(parent);
         }
     }
 }

@@ -572,7 +572,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         private int _replyMaxPageNo = 1;
         private bool _isScrollCompleted = false;
 
-        private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, Action<int> linkClickEvent, CancellationTokenSource cts)
+        private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, CancellationTokenSource cts)
         {
             // 如果页面已存在，则不重新从网站拉取数据，以便节省流量， 
             var threadReply = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
@@ -722,18 +722,18 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, linkCount, linkClickEvent);
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, linkCount);
                 threadReply.Replies.Add(reply);
 
                 i++;
             }
         }
 
-        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int threadAuthorUserId, int pageNo, Action beforeLoad, Action<int> afterLoad, Action<int> linkClickEvent)
+        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int threadAuthorUserId, int pageNo, Action beforeLoad, Action<int> afterLoad)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
-            await LoadReplyDataAsync(threadId, threadAuthorUserId, pageNo, linkClickEvent, cts);
+            await LoadReplyDataAsync(threadId, threadAuthorUserId, pageNo, cts);
             if (afterLoad != null) afterLoad(threadId);
 
             return _replyData.Single(t => t.ThreadId == threadId).Replies.Count;
@@ -744,7 +744,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _replyData.Single(t => t.ThreadId == threadId).Replies[index];
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int> afterLoad, Action<int> linkClickEvent)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int> afterLoad)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
@@ -753,7 +753,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad, linkClickEvent);
+                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad);
                 },
                 (index) =>
                 {
@@ -768,7 +768,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll, Action<int> linkClickEvent)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
@@ -777,7 +777,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad, linkClickEvent);
+                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad);
                 },
                 (index) =>
                 {
@@ -798,7 +798,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public async Task<int[]> LoadReplyDataForRedirectPageAsync(int threadId, int targetPostId, Action<int> linkClickEvent, CancellationTokenSource cts)
+        public async Task<int[]> LoadReplyDataForRedirectPageAsync(int threadId, int targetPostId, CancellationTokenSource cts)
         {
             // 先清空本贴的回复数据，以便重新加载
             _replyData.RemoveAll(r => r.ThreadId == threadId);
@@ -920,7 +920,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, 0, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, linkCount, linkClickEvent);
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, 0, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, linkCount);
                 threadReply.Replies.Add(reply);
 
                 i++;

@@ -5,12 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
@@ -27,38 +29,12 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ThreadAndReplyPage : Page
     {
-        #region 两个依赖属性，用于接收点击头像的参数
-        public int PopupUserId
-        {
-            get { return (int)GetValue(PopupUserIdProperty); }
-            set { SetValue(PopupUserIdProperty, value); }
-        }
+        #region 三个属性，用于接收点击头像的参数
+        public int PopupUserId { get; set; }
 
-        // Using a DependencyProperty as the backing store for PopupUserId.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PopupUserIdProperty =
-            DependencyProperty.Register("PopupUserId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0));
+        public string PopupUsername { get; set; }
 
-
-        public string PopupUsername
-        {
-            get { return (string)GetValue(PopupUsernameProperty); }
-            set { SetValue(PopupUsernameProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for PopupUsername.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PopupUsernameProperty =
-            DependencyProperty.Register("PopupUsername", typeof(string), typeof(ThreadAndReplyPage), new PropertyMetadata(string.Empty));
-
-
-        public int PopupThreadId
-        {
-            get { return (int)GetValue(PopupThreadIdProperty); }
-            set { SetValue(PopupThreadIdProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for PopupThreadId.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PopupThreadIdProperty =
-            DependencyProperty.Register("PopupThreadId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0));
+        public int PopupThreadId { get; set; }
         #endregion
 
         private object _lastSelectedItem;
@@ -168,18 +144,18 @@ namespace Hipda.Client.Uwp.Pro.Views
             });
         }
 
-        private void OpenReplyPageByThreadId(int threadId)
+        public void OpenReplyPageByThreadId(int threadId)
         {
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
             if (threadItem == null)
             {
-                var item = new ThreadItemViewModel(1, threadId, 0, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                var item = new ThreadItemViewModel(1, threadId, 0, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
                 RightWrap.DataContext = item;
             }
             else
             {
                 var item = new ThreadItemViewModel(threadItem);
-                item.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                item.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
                 RightWrap.DataContext = item;
             }
         }
@@ -223,17 +199,17 @@ namespace Hipda.Client.Uwp.Pro.Views
                     switch (itemBase.ThreadDataType)
                     {
                         case ThreadDataType.MyThreads:
-                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
                             _lastSelectedItem = itemForMyThreads;
                             RightWrap.DataContext = itemForMyThreads;
                             break;
                         case ThreadDataType.MyPosts:
-                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
                             _lastSelectedItem = itemForMyPosts;
                             RightWrap.DataContext = itemForMyPosts;
                             break;
                         default:
-                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
                             _lastSelectedItem = item;
                             RightWrap.DataContext = item;
                             break;
@@ -328,7 +304,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll, OpenReplyPageByThreadId);
+                        itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
                         RightWrap.DataContext = itemForMyPosts;
                     }
                     break;
@@ -345,7 +321,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     else
                     {
                         item.SetRead();
-                        item.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, OpenReplyPageByThreadId);
+                        item.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
                         RightWrap.DataContext = item;
                     }
                     break;

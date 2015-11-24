@@ -22,7 +22,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private TextBox _postReplyTextBox { get; set; }
         private Action _beforeLoad { get; set; }
         private Action<int> _afterLoad { get; set; }
-        private Action<int> _linkClickEvent { get; set; }
         private DataService _ds { get; set; }
 
         private Style _statusColorStyle;
@@ -66,7 +65,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, _threadId, _threadAuthorUserId, _beforeLoad, _afterLoad, _linkClickEvent);
+            var cv = _ds.GetViewForReplyPage(pageNo, _threadId, _threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -86,7 +85,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = threadItem;
         }
 
-        public ThreadItemViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int> afterLoad, Action<int> linkClickEvent)
+        public ThreadItemViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int> afterLoad)
         {
             ThreadDataType = ThreadDataType.Default;
             _threadId = threadId;
@@ -94,7 +93,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
-            _linkClickEvent = linkClickEvent;
             _ds = new DataService();
 
             ThreadItem = _ds.GetThreadItem(threadId);
@@ -112,19 +110,18 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 PostData(postContent, threadId);
             };
 
-            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad, _linkClickEvent);
+            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
             }
         }
 
-        public void SelectThreadItem(ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int> afterLoad, Action<int> linkClickEvent)
+        public void SelectThreadItem(ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int> afterLoad)
         {
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
-            _linkClickEvent = linkClickEvent;
             _ds = new DataService();
 
             RefreshReplyCommand = new DelegateCommand();

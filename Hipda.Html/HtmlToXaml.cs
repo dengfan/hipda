@@ -67,12 +67,10 @@ namespace Hipda.Html
             }
 
             // 替换站内链接为按钮
-            linkCount = 0;
             MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
             if (matchsForMyLink != null && matchsForMyLink.Count > 0)
             {
-                linkCount = matchsForMyLink.Count;
-                for (int i = 0; i < linkCount; i++)
+                for (int i = 0; i < matchsForMyLink.Count; i++)
                 {
                     var m = matchsForMyLink[i];
 
@@ -81,9 +79,8 @@ namespace Hipda.Html
                     string linkContent = m.Groups[2].Value;
                     linkContent = Regex.Replace(linkContent, @"<[^>]*>", string.Empty);
 
-                    string linkXaml = string.Format(@"[Hyperlink NavigateUri=""{0}"" Foreground=""DodgerBlue""]{1}[/Hyperlink]", string.Format("hipda:tid={0}", threadIdStr), linkContent, i);
-                    string regexPattern = StringToRegexPattern(placeHolder);
-                    htmlContent = new Regex(regexPattern).Replace(htmlContent, linkXaml, 1); // 由于站内链接有可能重复，所以这里每次只允许替换一个
+                    string linkXaml = string.Format(@"[InlineUIContainer][local:MyLink ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent);
+                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                 }
             }
 

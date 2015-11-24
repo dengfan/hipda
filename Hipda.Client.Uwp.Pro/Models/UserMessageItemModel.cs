@@ -17,7 +17,6 @@ namespace Hipda.Client.Uwp.Pro.Models
         public string Date { get; set; }
         public string Time { get; set; }
         public int LinkCount { get; set; }
-        public Action<int> LinkClickEvent { get; set; }
         public string TextStr { get; set; }
         public string HtmlStr { get; set; }
         public string XamlStr { get; set; }
@@ -27,17 +26,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             {
                 try
                 {
-                    var element = XamlReader.Load(XamlStr) as FrameworkElement;
-                    for (int i = 0; i < LinkCount; i++)
-                    {
-                        var myLink = element.FindName(string.Format("MyLink_{0}", i)) as MyLink;
-                        if (myLink != null && LinkClickEvent != null)
-                        {
-                            myLink.MyLinkClick = LinkClickEvent;
-                        }
-                    }
-
-                    return element;
+                    return XamlReader.Load(XamlStr) as FrameworkElement;
                 }
                 catch
                 {
