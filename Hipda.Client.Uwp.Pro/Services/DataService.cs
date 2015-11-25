@@ -386,7 +386,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         public ICollectionView GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass2<ThreadItemViewModel>(
+            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemViewModel>(
                 startPageNo,
                 async pageNo =>
                 {
@@ -410,7 +410,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         public ICollectionView GetViewForThreadPageForMyThreads(int startPageNo, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass2<ThreadItemForMyThreadsViewModel>(
+            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyThreadsViewModel>(
                 startPageNo,
                 async pageNo =>
                 {
@@ -434,7 +434,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         public ICollectionView GetViewForThreadPageForMyPosts(int startPageNo, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass2<ThreadItemForMyPostsViewModel>(
+            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyPostsViewModel>(
                 startPageNo,
                 async pageNo =>
                 {
@@ -747,7 +747,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int> afterLoad)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
+            cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
                 startPageNo,
                 async pageNo =>
                 {
@@ -771,7 +771,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass2<ReplyItemModel>(
+            cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
                 startPageNo,
                 async pageNo =>
                 {

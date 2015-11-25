@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public class GeneratorIncrementalLoadingClass2<T> : IncrementalLoadingBase
+    public class GeneratorIncrementalLoadingClass<T> : IncrementalLoadingBase
     {
         Func<int, Task<int>> _getMore;
         Func<int, T> _getOne;
@@ -16,7 +16,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         int _loadedCount = 0; // 已载入的项的数量
         uint _showedCount = 0; // 已显示的项的数量
 
-        public GeneratorIncrementalLoadingClass2(int pageNo, Func<int, Task<int>> getMore, Func<int, T> getOne, Func<int> getMaxPageNo)
+        public GeneratorIncrementalLoadingClass(int pageNo, Func<int, Task<int>> getMore, Func<int, T> getOne, Func<int> getMaxPageNo)
         {
             _pageNo = pageNo;
             _getMore = getMore;
