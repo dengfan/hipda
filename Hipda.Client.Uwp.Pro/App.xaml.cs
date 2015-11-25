@@ -2,15 +2,18 @@
 using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -27,6 +30,26 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     sealed partial class App : Application
     {
+        public ObservableCollection<ViewLifetimeControl> SecondaryViews = new ObservableCollection<ViewLifetimeControl>();
+
+        private CoreDispatcher mainDispatcher;
+        public CoreDispatcher MainDispatcher
+        {
+            get
+            {
+                return mainDispatcher;
+            }
+        }
+
+        private int mainViewId;
+        public int MainViewId
+        {
+            get
+            {
+                return mainViewId;
+            }
+        }
+
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
         /// 已执行，逻辑上等同于 main() 或 WinMain()。
@@ -69,6 +92,9 @@ namespace Hipda.Client.Uwp.Pro
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
+
+                mainDispatcher = Window.Current.Dispatcher;
+                mainViewId = ApplicationView.GetForCurrentView().Id;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -167,6 +193,9 @@ namespace Hipda.Client.Uwp.Pro
 
                     rootFrame.NavigationFailed += OnNavigationFailed;
 
+                    mainDispatcher = Window.Current.Dispatcher;
+                    mainViewId = ApplicationView.GetForCurrentView().Id;
+
                     // 将框架放在当前窗口中
                     Window.Current.Content = rootFrame;
                 }
@@ -178,33 +207,95 @@ namespace Hipda.Client.Uwp.Pro
                     // The received URI is eventArgs.Uri.AbsoluteUri
                     string uri = eventArgs.Uri.AbsoluteUri;
 
-                    // 从URI里面解析出 fid 和 tid
-                    int fid = 0;
+                    // 从URI里面解析出 tid
                     int tid = Convert.ToInt32(uri.Split('=')[1]);
-                    if (fid > 0)
-                    {
-                        rootFrame.Navigate(typeof(MainPage), string.Format("fid={0}", fid));
-                    }
-                    else if (tid > 0)
-                    {
-                        rootFrame.Navigate(typeof(MainPage), string.Format("tid={0}", tid));
-                    }
-                    else
-                    {
-                        // 当导航堆栈尚未还原时，导航到第一页，
-                        // 并通过将所需信息作为导航参数传入来配置
-                        // 参数
-                        if (isLogin)
-                        {
-                            rootFrame.Navigate(typeof(MainPage), "fid=2");
-                        }
-                        else
-                        {
-                            rootFrame.Navigate(typeof(LoginPage));
-                        }
-                    }
+                    await OpenThreadInNewView(tid);
+                    //if (fid > 0)
+                    //{
+                    //    rootFrame.Navigate(typeof(MainPage), string.Format("fid={0}", fid));
+                    //}
+                    //else if (tid > 0)
+                    //{
+                    //    rootFrame.Navigate(typeof(MainPage), string.Format("tid={0}", tid));
+                    //}
+                    //else
+                    //{
+                    //    // 当导航堆栈尚未还原时，导航到第一页，
+                    //    // 并通过将所需信息作为导航参数传入来配置
+                    //    // 参数
+                    //    if (isLogin)
+                    //    {
+                    //        rootFrame.Navigate(typeof(MainPage), "fid=2");
+                    //    }
+                    //    else
+                    //    {
+                    //        rootFrame.Navigate(typeof(LoginPage));
+                    //    }
+                    //}
 
-                    Window.Current.Activate();
+                    //Window.Current.Activate();
+                }
+            }
+        }
+
+        private async Task OpenThreadInNewView(int threadId)
+        {
+            // Set up the secondary view, but don't show it yet
+            ViewLifetimeControl viewControl = null;
+            await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                // This object is used to keep track of the views and important
+                // details about the contents of those views across threads
+                // In your app, you would probably want to track information
+                // like the open document or page inside that window
+                viewControl = ViewLifetimeControl.CreateForCurrentView();
+                viewControl.Title = "坐和放宽";
+                // Increment the ref count because we just created the view and we have a reference to it                
+                viewControl.StartViewInUse();
+
+                var frame = new Frame();
+                frame.Navigate(typeof(ReplyPage), viewControl);
+                Window.Current.Content = frame;
+                // This is a change from 8.1: In order for the view to be displayed later it needs to be activated.
+                Window.Current.Activate();
+                ApplicationView.GetForCurrentView().Title = viewControl.Title;
+            });
+
+            // Be careful! This collection is bound to the current thread,
+            // so make sure to update it only from this thread
+            ((App)App.Current).SecondaryViews.Add(viewControl);
+
+            var selectedView = viewControl;
+            var sizePreference = ViewSizePreference.UseHalf;
+            var anchorSizePreference = ViewSizePreference.UseHalf;
+
+            if (viewControl != null)
+            {
+                try
+                {
+                    // Prevent the view from closing while
+                    // switching to it
+                    selectedView.StartViewInUse();
+
+                    // Show the previously created secondary view, using the size
+                    // preferences the user specified. In your app, you should
+                    // choose a size that's best for your scenario and code it,
+                    // instead of requiring the user to decide.
+                    var viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(
+                        selectedView.Id,
+                        sizePreference,
+                        ApplicationView.GetForCurrentView().Id,
+                        anchorSizePreference);
+
+                    // Signal that switching has completed and let the view close
+                    selectedView.StopViewInUse();
+                }
+                catch (InvalidOperationException)
+                {
+                    // The view could be in the process of closing, and
+                    // this thread just hasn't updated. As part of being closed,
+                    // this thread will be informed to clean up its list of
+                    // views (see SecondaryViewPage.xaml.cs)
                 }
             }
         }
