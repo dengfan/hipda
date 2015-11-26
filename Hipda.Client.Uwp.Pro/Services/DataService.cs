@@ -643,11 +643,12 @@ namespace Hipda.Client.Uwp.Pro.Services
             int i = threadReply.Replies.Count();
             foreach (var item in data)
             {
-                var postAuthorNode = item.ChildNodes[0] // table
+                var mainTable = item.Descendants().SingleOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", "").StartsWith("pid"));
+                var postAuthorNode = mainTable // table
                         .ChildNodes[1] // tr
                         .ChildNodes[1]; // td.postauthor
 
-                var postContentNode = item.ChildNodes[0] // table
+                var postContentNode = mainTable // table
                         .ChildNodes[1] // tr
                         .ChildNodes[3]; // td.postcontent
 
@@ -838,12 +839,13 @@ namespace Hipda.Client.Uwp.Pro.Services
             int i = 0;
             foreach (var item in data)
             {
-                var tableRowNode = item.ChildNodes[0].ChildNodes[1]; // tr
+                var mainTable = item.Descendants().SingleOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", "").StartsWith("pid"));
+                var tableRowNode = mainTable.ChildNodes[1]; // tr
 
                 var postAuthorNode = tableRowNode.ChildNodes[1]; // td.postauthor
                 if (string.IsNullOrEmpty(postAuthorNode.InnerText))
                 {
-                    tableRowNode = item.ChildNodes[0].ChildNodes[3]; // tr
+                    tableRowNode = mainTable.ChildNodes[3]; // tr
                     postAuthorNode = tableRowNode.ChildNodes[1]; // td.postauthor
                 }
 
