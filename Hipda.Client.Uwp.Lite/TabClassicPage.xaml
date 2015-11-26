@@ -163,7 +163,7 @@
                         <Button.Template>
                             <ControlTemplate>
                                 <TextBlock >
-                                    <Run Text="&#xE0C2;" FontFamily="Segoe MDL2 Assets" />
+                                    <Run Text="&#xE10C;" FontFamily="Segoe MDL2 Assets" />
                                 </TextBlock>
                             </ControlTemplate>
                         </Button.Template>

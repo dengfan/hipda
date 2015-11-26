@@ -1017,11 +1017,12 @@ namespace HipdaUwpLite.Data
             int i = thread.Replies.Count;
             foreach (var item in data)
             {
-                var postAuthorNode = item.ChildNodes[0] // table
+                var mainTable = item.Descendants().SingleOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", "").StartsWith("pid"));
+                var postAuthorNode = mainTable // table
                         .ChildNodes[1] // tr
                         .ChildNodes[1]; // td.postauthor
 
-                var postContentNode = item.ChildNodes[0] // table
+                var postContentNode = mainTable // table
                         .ChildNodes[1] // tr
                         .ChildNodes[3]; // td.postcontent
 

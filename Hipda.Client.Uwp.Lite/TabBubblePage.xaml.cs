@@ -633,7 +633,7 @@ namespace Hipda.Client.Uwp.Lite
             Run numbersTextBlockRun = (Run)layoutGrid.FindName("numbersTextBlockRun");
 
             ownerInfoTextBlock.Opacity = 0;
-            pictureIconTextBlockRun.Text = thread.AttachType == 1 ? "\uE187" : string.Empty;
+            pictureIconTextBlockRun.Text = thread.AttachType == 1 ? "\uEB9F" : string.Empty;
             pagerclipTextBlockRun.Text = thread.AttachType == 2 ? "\uE16C" : string.Empty;
 
             titleTextBlockRun.Text = thread.Title;
