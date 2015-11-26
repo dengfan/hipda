@@ -1529,7 +1529,7 @@ namespace hipda
                     data.Add("uid", DataSource.UserId);
                     data.Add("hash", DataSource.Hash);
 
-                    string result = await httpClient.PostFileAsync("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1&type=image", data, file.Name, "image/jpg", "Filedata", image);
+                    string result = await httpClient.HttpPostFile("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1&type=image", data, file.Name, "image/jpg", "Filedata", image);
                     if (result.Contains("DISCUZUPLOAD|"))
                     {
                         string value = result.Split('|')[2];
