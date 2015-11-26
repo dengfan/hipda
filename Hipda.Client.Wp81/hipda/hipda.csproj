@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D385E860-3223-4452-8EAA-AEFCC0313400}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>hipda</RootNamespace>
+    <AssemblyName>hipda</AssemblyName>
+    <DefaultLanguage>zh-CN</DefaultLanguage>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Page Include="FaceIconGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TabBubblePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TabClassicPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TabPlainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BackgroundStyleSelecterForForumItem.cs" />
+    <Compile Include="Common\HtmlHelper.cs" />
+    <Compile Include="DataModel\Enum.cs" />
+    <Compile Include="Common\ImageHelper.cs" />
+    <Compile Include="Common\NavigationHelper.cs" />
+    <Compile Include="Common\ObservableDictionary.cs" />
+    <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="ContinuationManager.cs" />
+    <Compile Include="Settings\AccountSettings.cs" />
+    <Compile Include="DataModel\DataSource.cs" />
+    <Compile Include="DataModel\GeneratorIncrementalLoadingClass.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataModel\IncrementalLoadingBase.cs" />
+    <Compile Include="DBCSEncoding.cs" />
+    <Compile Include="FaceIconGrid.xaml.cs">
+      <DependentUpon>FaceIconGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HttpHandle.cs" />
+    <Compile Include="ListGroupStyleSelector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Settings\ImageCountSettings.cs" />
+    <Compile Include="Settings\LayoutModeSettings.cs" />
+    <Compile Include="Settings\SortForReplySettings.cs" />
+    <Compile Include="Settings\SortForThreadSettings.cs" />
+    <Compile Include="Settings\ThemeSettings.cs" />
+    <Compile Include="TabBubblePage.xaml.cs">
+      <DependentUpon>TabBubblePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TabClassicPage.xaml.cs">
+      <DependentUpon>TabClassicPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TabPlainPage.xaml.cs">
+      <DependentUpon>TabPlainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ThemeHelper.cs" />
+    <Compile Include="BooleanToVisibilityConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\BackgroundImages\BlueSky.jpg" />
+    <Content Include="Assets\BackgroundImages\StarSky.jpg" />
+    <Content Include="Assets\Faces\baoman\1.png" />
+    <Content Include="Assets\Faces\baoman\10.png" />
+    <Content Include="Assets\Faces\baoman\11.png" />
+    <Content Include="Assets\Faces\baoman\12.png" />
+    <Content Include="Assets\Faces\baoman\13.png" />
+    <Content Include="Assets\Faces\baoman\14.png" />
+    <Content Include="Assets\Faces\baoman\15.png" />
+    <Content Include="Assets\Faces\baoman\16.png" />
+    <Content Include="Assets\Faces\baoman\17.png" />
+    <Content Include="Assets\Faces\baoman\18.png" />
+    <Content Include="Assets\Faces\baoman\19.png" />
+    <Content Include="Assets\Faces\baoman\2.png" />
+    <Content Include="Assets\Faces\baoman\20.png" />
+    <Content Include="Assets\Faces\baoman\21.png" />
+    <Content Include="Assets\Faces\baoman\22.png" />
+    <Content Include="Assets\Faces\baoman\23.png" />
+    <Content Include="Assets\Faces\baoman\24.png" />
+    <Content Include="Assets\Faces\baoman\25.png" />
+    <Content Include="Assets\Faces\baoman\3.png" />
+    <Content Include="Assets\Faces\baoman\4.png" />
+    <Content Include="Assets\Faces\baoman\5.png" />
+    <Content Include="Assets\Faces\baoman\6.png" />
+    <Content Include="Assets\Faces\baoman\7.png" />
+    <Content Include="Assets\Faces\baoman\8.png" />
+    <Content Include="Assets\Faces\baoman\9.png" />
+    <Content Include="Assets\Faces\coolmonkey\01.gif" />
+    <Content Include="Assets\Faces\coolmonkey\02.gif" />
+    <Content Include="Assets\Faces\coolmonkey\03.gif" />
+    <Content Include="Assets\Faces\coolmonkey\04.gif" />
+    <Content Include="Assets\Faces\coolmonkey\05.gif" />
+    <Content Include="Assets\Faces\coolmonkey\06.gif" />
+    <Content Include="Assets\Faces\coolmonkey\07.gif" />
+    <Content Include="Assets\Faces\coolmonkey\08.gif" />
+    <Content Include="Assets\Faces\coolmonkey\09.gif" />
+    <Content Include="Assets\Faces\coolmonkey\10.gif" />
+    <Content Include="Assets\Faces\coolmonkey\11.gif" />
+    <Content Include="Assets\Faces\coolmonkey\12.gif" />
+    <Content Include="Assets\Faces\coolmonkey\13.gif" />
+    <Content Include="Assets\Faces\coolmonkey\14.gif" />
+    <Content Include="Assets\Faces\coolmonkey\15.gif" />
+    <Content Include="Assets\Faces\coolmonkey\16.gif" />
+    <Content Include="Assets\Faces\grapeman\01.gif" />
+    <Content Include="Assets\Faces\grapeman\02.gif" />
+    <Content Include="Assets\Faces\grapeman\03.gif" />
+    <Content Include="Assets\Faces\grapeman\04.gif" />
+    <Content Include="Assets\Faces\grapeman\05.gif" />
+    <Content Include="Assets\Faces\grapeman\06.gif" />
+    <Content Include="Assets\Faces\grapeman\07.gif" />
+    <Content Include="Assets\Faces\grapeman\08.gif" />
+    <Content Include="Assets\Faces\grapeman\09.gif" />
+    <Content Include="Assets\Faces\grapeman\10.gif" />
+    <Content Include="Assets\Faces\grapeman\11.gif" />
+    <Content Include="Assets\Faces\grapeman\12.gif" />
+    <Content Include="Assets\Faces\grapeman\13.gif" />
+    <Content Include="Assets\Faces\grapeman\14.gif" />
+    <Content Include="Assets\Faces\grapeman\15.gif" />
+    <Content Include="Assets\Faces\grapeman\16.gif" />
+    <Content Include="Assets\Faces\grapeman\17.gif" />
+    <Content Include="Assets\Faces\grapeman\18.gif" />
+    <Content Include="Assets\Faces\grapeman\19.gif" />
+    <Content Include="Assets\Faces\grapeman\20.gif" />
+    <Content Include="Assets\Faces\grapeman\21.gif" />
+    <Content Include="Assets\Faces\grapeman\22.gif" />
+    <Content Include="Assets\Faces\grapeman\23.gif" />
+    <Content Include="Assets\Faces\grapeman\24.gif" />
+    <Content Include="Assets\Faces\no_face.png" />
+    <Content Include="Assets\Faces\plus_48x48.png" />
+    <Content Include="Assets\Icons\appbar.moon.first.quarter.png" />
+    <Content Include="Assets\Icons\appbar.refresh.png" />
+    <Content Include="Assets\Icons\appbar.sort.numeric.descending.png" />
+    <Content Include="Assets\Logo.scale-240.png" />
+    <Content Include="Assets\SmallLogo.scale-240.png" />
+    <Content Include="Assets\SplashScreen.scale-240.png" />
+    <Content Include="Assets\Square71x71Logo.scale-240.png" />
+    <Content Include="Assets\StoreLogo.scale-240.png" />
+    <Content Include="Assets\WideLogo.scale-240.png" />
+    <Content Include="Common\ReadMe.txt" />
+    <None Include="Package.StoreAssociation.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Strings\zh-CN\Resources.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="HtmlAgilityPack-PCL">
+      <HintPath>..\packages\HtmlAgilityPack-PCL.1.4.6\lib\HtmlAgilityPack-PCL.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="gb2312.bin" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
+    <VisualStudioVersion>12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetPlatformIdentifier)' == '' ">
+    <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
