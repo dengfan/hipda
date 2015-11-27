@@ -25,9 +25,12 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ReplyNewViewPage : Page
     {
-        ViewLifetimeControl thisViewControl;
-        int mainViewId;
-        CoreDispatcher mainDispatcher;
+        ViewLifetimeControl _thisViewControl;
+        int _mainViewId;
+        CoreDispatcher _mainDispatcher;
+
+        int threadId;
+        ThemeMode themeMode;
 
         public ReplyNewViewPage()
         {
@@ -37,12 +40,15 @@ namespace Hipda.Client.Uwp.Pro.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             var param = e.Parameter as OpenNewViewParameterModel;
-            thisViewControl = param.NewView;
-            mainViewId = ((App)App.Current).MainViewId;
-            mainDispatcher = ((App)App.Current).MainDispatcher;
+            _thisViewControl = param.NewView;
+            _mainViewId = ((App)App.Current).MainViewId;
+            _mainDispatcher = ((App)App.Current).MainDispatcher;
+
+            threadId = param.ThreadId;
+            themeMode = param.ThemeMode;
 
             // When this view is finally release, clean up state
-            thisViewControl.Released += ViewLifetimeControl_Released;
+            _thisViewControl.Released += ViewLifetimeControl_Released;
         }
 
         private async void ViewLifetimeControl_Released(Object sender, EventArgs e)
@@ -50,9 +56,9 @@ namespace Hipda.Client.Uwp.Pro.Views
             ((ViewLifetimeControl)sender).Released -= ViewLifetimeControl_Released;
             // The ViewLifetimeControl object is bound to UI elements on the main thread
             // So, the object must be removed from that thread
-            await mainDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            await _mainDispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                ((App)App.Current).SecondaryViews.Remove(thisViewControl);
+                ((App)App.Current).SecondaryViews.Remove(_thisViewControl);
             });
 
             // The released event is fired on the thread of the window
