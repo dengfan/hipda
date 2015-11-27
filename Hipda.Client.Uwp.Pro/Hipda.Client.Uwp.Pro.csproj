@@ -109,7 +109,6 @@
     <Compile Include="Models\AccountItemModel.cs" />
     <Compile Include="Models\FaceItemModel.cs" />
     <Compile Include="Models\OpenNewViewParameterModel.cs" />
-    <Compile Include="Models\ThemeMode.cs" />
     <Compile Include="Models\UserMessageItemModel.cs" />
     <Compile Include="Models\ReplyItemModel.cs" />
     <Compile Include="Models\ReplyPageModel.cs" />

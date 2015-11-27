@@ -1,5 +1,6 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.Services;
+using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,8 +30,8 @@ namespace Hipda.Client.Uwp.Pro.Views
         int _mainViewId;
         CoreDispatcher _mainDispatcher;
 
-        int threadId;
-        ThemeMode themeMode;
+        int _threadId;
+        ReplyViewModel _replyViewModel;
 
         public ReplyNewViewPage()
         {
@@ -44,8 +45,26 @@ namespace Hipda.Client.Uwp.Pro.Views
             _mainViewId = ((App)App.Current).MainViewId;
             _mainDispatcher = ((App)App.Current).MainDispatcher;
 
-            threadId = param.ThreadId;
-            themeMode = param.ThemeMode;
+            _threadId = param.ThreadId;
+            RequestedTheme = param.ElementTheme;
+
+            _replyViewModel = new ReplyViewModel(
+                    1,
+                    _threadId,
+                    0,
+                    ReplyListView,
+                    () => {
+                        rightProgress.IsActive = true;
+                        rightProgress.Visibility = Visibility.Visible;
+                        ReplyRefreshButton.IsEnabled = false;
+                    },
+                    (tid) => {
+                        rightProgress.IsActive = false;
+                        rightProgress.Visibility = Visibility.Collapsed;
+                        ReplyRefreshButton.IsEnabled = true;
+                    });
+
+            DataContext = _replyViewModel;
 
             // When this view is finally release, clean up state
             _thisViewControl.Released += ViewLifetimeControl_Released;

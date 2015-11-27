@@ -255,7 +255,7 @@ namespace Hipda.Client.Uwp.Pro
 
                 var param = new OpenNewViewParameterModel
                 {
-                    ThemeMode = ThemeMode.Dark,
+                    ElementTheme = ElementTheme.Dark,
                     ThreadId = threadId,
                     NewView = viewControl
                 };
