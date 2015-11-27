@@ -25,7 +25,7 @@ using System.ComponentModel;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 
-namespace Hipda.Client.Uwp.Pro.Services
+namespace Hipda.Client.Uwp.Pro
 {
     // A custom event that fires whenever the secondary view is ready to be closed. You should
     // clean up any state (including deregistering for events) then close the window in this handler

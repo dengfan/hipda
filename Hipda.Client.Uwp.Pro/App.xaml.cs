@@ -263,8 +263,8 @@ namespace Hipda.Client.Uwp.Pro
             ((App)App.Current).SecondaryViews.Add(viewControl);
 
             var selectedView = viewControl;
-            var sizePreference = ViewSizePreference.UseHalf;
-            var anchorSizePreference = ViewSizePreference.UseHalf;
+            var sizePreference = ViewSizePreference.Default;
+            var anchorSizePreference = ViewSizePreference.Default;
 
             if (viewControl != null)
             {

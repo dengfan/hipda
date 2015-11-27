@@ -108,6 +108,8 @@
     </Compile>
     <Compile Include="Models\AccountItemModel.cs" />
     <Compile Include="Models\FaceItemModel.cs" />
+    <Compile Include="Models\OpenNewViewParameterModel.cs" />
+    <Compile Include="Models\ThemeMode.cs" />
     <Compile Include="Models\UserMessageItemModel.cs" />
     <Compile Include="Models\ReplyItemModel.cs" />
     <Compile Include="Models\ReplyPageModel.cs" />
@@ -127,7 +129,7 @@
     <Compile Include="Services\GeneratorIncrementalLoadingClass.cs" />
     <Compile Include="Services\IDataService.cs" />
     <Compile Include="Services\IncrementalLoadingBase.cs" />
-    <Compile Include="Services\ViewLifetimeControl.cs" />
+    <Compile Include="ViewLifetimeControl.cs" />
     <Compile Include="ThreadListItemTemplateSelector.cs" />
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
     <Compile Include="Triggers\InputTypeTrigger.cs" />
