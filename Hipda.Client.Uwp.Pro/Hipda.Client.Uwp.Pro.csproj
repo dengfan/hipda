@@ -148,8 +148,8 @@
     <Compile Include="Views\ReplyListPage.xaml.cs">
       <DependentUpon>ReplyListPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ReplyPage.xaml.cs">
-      <DependentUpon>ReplyPage.xaml</DependentUpon>
+    <Compile Include="Views\ReplyNewViewPage.xaml.cs">
+      <DependentUpon>ReplyNewViewPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ThreadAndReplyPage.xaml.cs">
       <DependentUpon>ThreadAndReplyPage.xaml</DependentUpon>
@@ -285,7 +285,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ReplyPage.xaml">
+    <Page Include="Views\ReplyNewViewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

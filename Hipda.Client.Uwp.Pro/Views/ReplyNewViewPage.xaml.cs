@@ -1,4 +1,5 @@
-﻿using Hipda.Client.Uwp.Pro.Services;
+﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,20 +23,21 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class ReplyPage : Page
+    public sealed partial class ReplyNewViewPage : Page
     {
         ViewLifetimeControl thisViewControl;
         int mainViewId;
         CoreDispatcher mainDispatcher;
 
-        public ReplyPage()
+        public ReplyNewViewPage()
         {
             this.InitializeComponent();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            thisViewControl = (ViewLifetimeControl)e.Parameter;
+            var param = e.Parameter as OpenNewViewParameterModel;
+            thisViewControl = param.NewView;
             mainViewId = ((App)App.Current).MainViewId;
             mainDispatcher = ((App)App.Current).MainDispatcher;
 

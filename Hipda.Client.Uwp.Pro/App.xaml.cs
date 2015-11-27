@@ -1,4 +1,5 @@
-﻿using Hipda.Client.Uwp.Pro.Services;
+﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
@@ -252,8 +253,14 @@ namespace Hipda.Client.Uwp.Pro
                 // Increment the ref count because we just created the view and we have a reference to it                
                 viewControl.StartViewInUse();
 
+                var param = new OpenNewViewParameterModel
+                {
+                    ThemeMode = ThemeMode.Dark,
+                    ThreadId = threadId,
+                    NewView = viewControl
+                };
                 var frame = new Frame();
-                frame.Navigate(typeof(ReplyPage), viewControl);
+                frame.Navigate(typeof(ReplyNewViewPage), param);
                 Window.Current.Content = frame;
                 Window.Current.Activate();
             });
