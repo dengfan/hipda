@@ -175,7 +175,7 @@ namespace Hipda.Client.Uwp.Pro
         protected override async void OnActivated(IActivatedEventArgs args)
         {
             base.OnActivated(args);
-            
+
             if (args.Kind == ActivationKind.Protocol)
             {
                 // 自动登录
@@ -240,7 +240,6 @@ namespace Hipda.Client.Uwp.Pro
 
         private async Task OpenThreadInNewView(int threadId)
         {
-            // Set up the secondary view, but don't show it yet
             ViewLifetimeControl viewControl = null;
             await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -256,9 +255,7 @@ namespace Hipda.Client.Uwp.Pro
                 var frame = new Frame();
                 frame.Navigate(typeof(ReplyPage), viewControl);
                 Window.Current.Content = frame;
-                // This is a change from 8.1: In order for the view to be displayed later it needs to be activated.
                 Window.Current.Activate();
-                ApplicationView.GetForCurrentView().Title = viewControl.Title;
             });
 
             // Be careful! This collection is bound to the current thread,

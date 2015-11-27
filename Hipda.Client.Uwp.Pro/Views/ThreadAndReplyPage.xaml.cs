@@ -396,6 +396,18 @@ namespace Hipda.Client.Uwp.Pro.Views
             ThreadListView.SelectedItem = null;
         }
 
+        /// <summary>
+        /// 头像之上下文菜单项之事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void openThreadInNewView_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var options = new LauncherOptions();
+            options.TreatAsUntrusted = false;
+            await Launcher.LaunchUriAsync(new Uri("hipda:tid=" + PopupThreadId), options);
+        }
+
         #region 坛友资料及短消息之弹窗
         Grid _postUserMessageForm; // 发短消息之输入元素之容器
         GridView _userMessageFaceGridView; // 发短消息之表情图标

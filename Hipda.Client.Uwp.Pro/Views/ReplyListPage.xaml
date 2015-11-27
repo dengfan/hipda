@@ -56,33 +56,31 @@
                     BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
                     BorderThickness="0,1,0,0" Opacity="0.8">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Button x:Name="FaceButton" Grid.Column="0" Style="{StaticResource FaceButtonStyle}">
-                    <Button.Content>
-                        <SymbolIcon Symbol="Emoji2" />
-                    </Button.Content>
-                    <Button.Flyout>
-                        <Flyout>
-                            <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceData}" SelectionMode="None" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" Width="248" Height="220">
-                                <GridView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </DataTemplate>
-                                </GridView.ItemTemplate>
-                            </GridView>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
-                <Button x:Name="FileButton" Grid.Column="1" Style="{StaticResource FaceButtonStyle}">
-                    <Button.Content>
-                        <SymbolIcon Symbol="Attach" />
-                    </Button.Content>
-                </Button>
-                <Button x:Name="SendButton" Grid.Column="2" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
+                        <Button.Content>
+                            <SymbolIcon Symbol="Emoji2" />
+                        </Button.Content>
+                        <Button.Flyout>
+                            <Flyout>
+                                <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceData}" SelectionMode="None" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" Width="248" Height="220">
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+                                </GridView>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                    <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}">
+                        <Button.Content>
+                            <SymbolIcon Symbol="Attach" />
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+                
+                <Button x:Name="SendButton" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <SymbolIcon Symbol="Send" />
