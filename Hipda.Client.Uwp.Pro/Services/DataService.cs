@@ -817,9 +817,21 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public async Task<int[]> LoadReplyDataForRedirectPageAsync(int threadId, int targetPostId, CancellationTokenSource cts)
         {
-            // 先清空本贴的回复数据，以便重新加载
-            _replyData.RemoveAll(r => r.ThreadId == threadId);
-            var threadReply = new ReplyPageModel { ThreadId = threadId, Replies = new List<ReplyItemModel>() };
+            int threadAuthorUserId = 0;
+
+            var threadReply = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
+            if (threadReply != null)
+            {
+                if (threadReply.Replies != null && threadReply.Replies.Count > 0)
+                {
+                    threadAuthorUserId = threadReply.Replies[0].AuthorUserId;
+                }
+
+                // 先清空本贴的回复数据，以便重新加载
+                _replyData.RemoveAll(r => r.ThreadId == threadId);
+            }
+                
+            threadReply = new ReplyPageModel { ThreadId = threadId, Replies = new List<ReplyItemModel>() };
             _replyData.Add(threadReply);
 
             // 读取数据
@@ -883,6 +895,11 @@ namespace Hipda.Client.Uwp.Pro.Services
                         authorUserId = Convert.ToInt32(authorUserIdStr);
                     }
                     authorUsername = authorNode.InnerText;
+
+                    if (threadAuthorUserId == 0)
+                    {
+                        threadAuthorUserId = authorUserId;
+                    }
                 }
 
                 var floorPostInfoNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
