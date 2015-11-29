@@ -401,7 +401,7 @@
 
                 <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow}"/>
 
-                <Border Margin="54,0,0,32" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Border Margin="54,0,64,32" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
@@ -444,7 +444,7 @@
 
                 <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow2}"/>
 
-                <Border Margin="54,0,0,32" Padding="8" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Border Margin="54,0,64,32" Padding="8" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="楼主 " Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
@@ -488,7 +488,7 @@
 
                 <ContentControl Margin="0 16 48 0" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource ReplyRightArrow}"/>
 
-                <Border Margin="0,0,54,32" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Border Margin="64,0,54,32" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
@@ -568,15 +568,15 @@
         <DataTemplate x:Name="ThreadListMyThreadsItemTemplate">
             <Grid Margin="1,0,0,0" BorderThickness="2,0,0,0" Style="{Binding StatusColorStyle}">
                 <StackPanel Margin="8,4,0,4">
-                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
                         <Run Text="{Binding ThreadItem.ForumName}" />
                     </TextBlock>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap">
+                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                         <Run Text="{Binding ThreadItem.Title}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" HorizontalAlignment="Right">
                         <Run Text=" &#xE25C;" FontFamily="Segoe MDL2 Assets" />
                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
@@ -587,18 +587,18 @@
         <DataTemplate x:Name="ThreadListMyPostsItemTemplate">
             <Grid Margin="1,0,0,0" BorderThickness="2,0,0,0" Style="{Binding StatusColorStyle}">
                 <StackPanel Margin="8,4,0,4">
-                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
                         <Run Text="{Binding ThreadItem.ForumName}" />
                     </TextBlock>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap">
+                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                         <Run Text="{Binding ThreadItem.Title}" />
                         <LineBreak/>
                         <Run Text=" &#xE25C;" FontFamily="Segoe MDL2 Assets" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}" />
                         <Run Text="{Binding ThreadItem.LastReplyContent}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" HorizontalAlignment="Right">
                         <Run Text="{Binding ThreadItem.LastReplyInfo}"/>
                     </TextBlock>
                 </StackPanel>

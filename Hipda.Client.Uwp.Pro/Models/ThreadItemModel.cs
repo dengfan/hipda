@@ -96,7 +96,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return IsTop ? (Style)Application.Current.Resources["TopThreadItemStyle"] : (Style)Application.Current.Resources["NormalThreadItemStyle"];
+                return IsTop ? (Style)App.Current.Resources["TopThreadItemStyle"] : (Style)App.Current.Resources["NormalThreadItemStyle"];
             }
         }
     }
