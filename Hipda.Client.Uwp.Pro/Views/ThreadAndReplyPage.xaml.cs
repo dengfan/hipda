@@ -244,28 +244,28 @@ namespace Hipda.Client.Uwp.Pro.Views
             var isNarrow = newState == NarrowState;
             if (isNarrow && oldState == DefaultState && _lastSelectedItem != null) // 如果是窄视图，则跳转到 reply list page 页面
             {
-                string p = string.Empty;
+                int tid = 0;
 
                 switch (itemBase.ThreadDataType)
                 {
                     case ThreadDataType.MyThreads:
                         var itemForMyThreads = _lastSelectedItem as ThreadItemForMyThreadsViewModel;
-                        p = string.Format("{0},{1}", itemForMyThreads.ThreadItem.ThreadId, AccountService.UserId);
+                        tid = itemForMyThreads.ThreadItem.ThreadId;
                         break;
                     case ThreadDataType.MyPosts:
                         var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsViewModel;
-                        p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, AccountService.UserId);
+                        tid = itemForMyPosts.ThreadItem.ThreadId;
                         break;
                     default:
                         var item = _lastSelectedItem as ThreadItemViewModel;
-                        p = string.Format("{0},{1}", item.ThreadItem.ThreadId, item.ThreadItem.AuthorUserId);
+                        tid = item.ThreadItem.ThreadId;
                         break;
                 }
 
                 UserDialogContentControl.Content = null;
                 UserDialog.Hide();
 
-                Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
+                Frame.Navigate(typeof(ReplyListPage), tid, new SuppressNavigationTransitionInfo());
             }
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(ThreadListView, isNarrow);
@@ -289,8 +289,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = string.Format("{0},{1}", itemForMyThreads.ThreadItem.ThreadId, AccountService.UserId);
-                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                        Frame.Navigate(typeof(ReplyListPage), itemForMyThreads.ThreadItem.ThreadId, new DrillInNavigationTransitionInfo());
                     }
                     else
                     {
@@ -305,8 +304,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, AccountService.UserId);
-                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                        Frame.Navigate(typeof(ReplyListPage), itemForMyPosts.ThreadItem.ThreadId, new DrillInNavigationTransitionInfo());
                     }
                     else
                     {
@@ -322,8 +320,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
                         
-                        string p = string.Format("{0},{1}", item.ThreadItem.ThreadId, item.ThreadItem.AuthorUserId);
-                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                        Frame.Navigate(typeof(ReplyListPage), item.ThreadItem.ThreadId, new DrillInNavigationTransitionInfo());
                     }
                     else
                     {
