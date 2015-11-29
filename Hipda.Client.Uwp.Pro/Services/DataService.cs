@@ -704,7 +704,6 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
-                int linkCount = 0;
                 var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
@@ -720,7 +719,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, 20, ref imageCount, ref linkCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, 20, ref imageCount);
                 }
                 else
                 {
@@ -728,7 +727,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, linkCount);
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount);
                 threadReply.Replies.Add(reply);
 
                 i++;
@@ -903,7 +902,6 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
-                int linkCount = 0;
                 var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
@@ -919,7 +917,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, 20, ref imageCount, ref linkCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, 20, ref imageCount);
                 }
                 else
                 {
@@ -927,7 +925,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, 0, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, linkCount);
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, 0, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount);
                 threadReply.Replies.Add(reply);
 
                 i++;
@@ -1066,8 +1064,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         
                         string textStr = messageNode.InnerText;
                         string htmlStr = messageNode.InnerHtml;
-                        int linkCount = 0;
-                        string xamlStr = Html.HtmlToXaml.ConvertUserMessage(htmlStr, ref linkCount);
+                        string xamlStr = Html.HtmlToXaml.ConvertUserMessage(htmlStr);
 
                         var messageItem = new UserMessageItemModel
                         {

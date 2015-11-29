@@ -9,7 +9,7 @@ namespace Hipda.Html
 {
     public static class HtmlToXaml
     {
-        public static string ConvertPost(int threadId, string htmlContent, int maxImageCount, ref int imageCount, ref int linkCount)
+        public static string ConvertPost(int threadId, string htmlContent, int maxImageCount, ref int imageCount)
         {
             //string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
 
@@ -303,7 +303,7 @@ namespace Hipda.Html
             return htmlContent;
         }
 
-        public static string ConvertUserMessage(string htmlContent, ref int linkCount)
+        public static string ConvertUserMessage(string htmlContent)
         {
             htmlContent = htmlContent.Replace("[", "&#8968;");
             htmlContent = htmlContent.Replace("]", "&#8971;");
