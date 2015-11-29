@@ -17,7 +17,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     public class ThreadItemViewModel : ThreadItemViewModelBase
     {
         private int _threadId { get; set; }
-        private int _threadAuthorUserId { get; set; }
         private ListView _replyListView { get; set; }
         private TextBox _postReplyTextBox { get; set; }
         private Action _beforeLoad { get; set; }
@@ -65,7 +64,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, _threadId, _threadAuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, _threadId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -81,15 +80,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             ThreadDataType = ThreadDataType.Default;
             _threadId = threadItem.ThreadId;
-            _threadAuthorUserId = threadItem.AuthorUserId;
             ThreadItem = threadItem;
         }
 
-        public ThreadItemViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int> afterLoad)
+        public ThreadItemViewModel(int pageNo, int threadId, ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int> afterLoad)
         {
             ThreadDataType = ThreadDataType.Default;
             _threadId = threadId;
-            _threadAuthorUserId = threadAuthorUserId;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
@@ -110,7 +107,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 PostData(postContent, threadId);
             };
 
-            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, threadId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;

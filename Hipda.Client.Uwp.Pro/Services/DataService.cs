@@ -577,12 +577,19 @@ namespace Hipda.Client.Uwp.Pro.Services
         private int _replyMaxPageNo = 1;
         private bool _isScrollCompleted = false;
 
-        private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, CancellationTokenSource cts)
+        private async Task LoadReplyDataAsync(int threadId, int pageNo, CancellationTokenSource cts)
         {
+            int threadAuthorUserId = 0; // 贴子之作者，用于判断当前回复是否是楼主回复
+
             // 如果页面已存在，则不重新从网站拉取数据，以便节省流量， 
             var threadReply = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
             if (threadReply != null)
             {
+                if (threadReply.Replies != null && threadReply.Replies.Count > 0)
+                {
+                    threadAuthorUserId = threadReply.Replies[0].AuthorUserId;
+                }
+
                 int count = threadReply.Replies.Count(r => r.PageNo == pageNo);
                 if (count > 0)
                 {
@@ -673,6 +680,11 @@ namespace Hipda.Client.Uwp.Pro.Services
                         authorUserId = Convert.ToInt32(authorUserIdStr);
                     }
                     authorUsername = authorNode.InnerText;
+
+                    if (threadAuthorUserId == 0)
+                    {
+                        threadAuthorUserId = authorUserId;
+                    }
                 }
 
                 var floorPostInfoNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
@@ -734,11 +746,11 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int threadAuthorUserId, int pageNo, Action beforeLoad, Action<int> afterLoad)
+        public async Task<int> LoadMoreReplyItemsAsync(int threadId, int pageNo, Action beforeLoad, Action<int> afterLoad)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
-            await LoadReplyDataAsync(threadId, threadAuthorUserId, pageNo, cts);
+            await LoadReplyDataAsync(threadId, pageNo, cts);
             if (afterLoad != null) afterLoad(threadId);
 
             return _replyData.Single(t => t.ThreadId == threadId).Replies.Count;
@@ -749,7 +761,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _replyData.Single(t => t.ThreadId == threadId).Replies[index];
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int> afterLoad)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, Action beforeLoad, Action<int> afterLoad)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
@@ -758,7 +770,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad);
+                    return await LoadMoreReplyItemsAsync(threadId, pageNo, beforeLoad, afterLoad);
                 },
                 (index) =>
                 {
@@ -773,7 +785,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll)
+        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int floorIndex, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
@@ -782,7 +794,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await LoadMoreReplyItemsAsync(threadId, threadAuthorUserId, pageNo, beforeLoad, afterLoad);
+                    return await LoadMoreReplyItemsAsync(threadId, pageNo, beforeLoad, afterLoad);
                 },
                 (index) =>
                 {

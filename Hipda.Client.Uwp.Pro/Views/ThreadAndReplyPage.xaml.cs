@@ -149,7 +149,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
             if (threadItem == null)
             {
-                var item = new ThreadItemViewModel(1, threadId, 0, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
+                var item = new ThreadItemViewModel(1, threadId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
                 RightWrap.DataContext = item;
             }
             else
@@ -189,32 +189,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                         DataContext = _threadAndReplyViewModel;
                     }
                 }
-                else if (param.Contains(",")) // 表示要加载指定的回复列表页
-                {
-                    string[] p = param.Split(',');
-                    int threadId = Convert.ToInt32(p[0]);
-                    int threadAuthorUserId = Convert.ToInt32(p[1]);
-
-                    ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
-                    switch (itemBase.ThreadDataType)
-                    {
-                        case ThreadDataType.MyThreads:
-                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-                            _lastSelectedItem = itemForMyThreads;
-                            RightWrap.DataContext = itemForMyThreads;
-                            break;
-                        case ThreadDataType.MyPosts:
-                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-                            _lastSelectedItem = itemForMyPosts;
-                            RightWrap.DataContext = itemForMyPosts;
-                            break;
-                        default:
-                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
-                            _lastSelectedItem = item;
-                            RightWrap.DataContext = item;
-                            break;
-                    }
-                }
                 else if (param.StartsWith("tid=")) // 来自 hipda 协议启动
                 {
                     int fid = 2;
@@ -223,6 +197,30 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     int tid = Convert.ToInt32(param.Substring(4));
                     OpenReplyPageByThreadId(tid);
+                }
+                else // 缺省值为 tid
+                {
+                    int threadId = Convert.ToInt32(param);
+
+                    ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
+                    switch (itemBase.ThreadDataType)
+                    {
+                        case ThreadDataType.MyThreads:
+                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+                            _lastSelectedItem = itemForMyThreads;
+                            RightWrap.DataContext = itemForMyThreads;
+                            break;
+                        case ThreadDataType.MyPosts:
+                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+                            _lastSelectedItem = itemForMyPosts;
+                            RightWrap.DataContext = itemForMyPosts;
+                            break;
+                        default:
+                            var item = new ThreadItemViewModel(1, threadId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
+                            _lastSelectedItem = item;
+                            RightWrap.DataContext = item;
+                            break;
+                    }
                 }
             }
 

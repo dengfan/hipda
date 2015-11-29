@@ -16,7 +16,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     public class ReplyViewModel : NotificationObject
     {
         private int _threadId;
-        private int _threadAuthorUserId;
         private ListView _replyListView { get; set; }
         private Action _beforeLoad { get; set; }
         private Action<int> _afterLoad { get; set; }
@@ -36,17 +35,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, _threadId, _threadAuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, _threadId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
             }
         }
 
-        public ReplyViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int> afterLoad)
+        public ReplyViewModel(int pageNo, int threadId, ListView replyListView, Action beforeLoad, Action<int> afterLoad)
         {
             _threadId = threadId;
-            _threadAuthorUserId = threadAuthorUserId;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
