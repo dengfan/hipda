@@ -330,14 +330,10 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return null;
             }
             
-            var threadItemViewModel = new ThreadItemViewModel(threadItem);
-            threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["UnReadColorStyle"];
-            if (IsRead(threadItem.ThreadId))
-            {
-                threadItemViewModel.StatusColorStyle = (Style)App.Current.Resources["ReadColorStyle"];
-            }
+            var vm = new ThreadItemViewModel(threadItem);
+            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
 
-            return threadItemViewModel;
+            return vm;
         }
 
         private async Task<int> GetMoreThreadItemsForMyThreadsAsync(int pageNo, Action beforeLoad, Action afterLoad)
@@ -358,7 +354,9 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return null;
             }
 
-            return new ThreadItemForMyThreadsViewModel(threadItem);
+            var vm = new ThreadItemForMyThreadsViewModel(threadItem);
+            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
+            return vm;
         }
 
         private async Task<int> GetMoreThreadItemsForMyPostsAsync(int pageNo, Action beforeLoad, Action afterLoad)
@@ -379,9 +377,16 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return null;
             }
 
-            return new ThreadItemForMyPostsViewModel(threadItem);
+            var vm = new ThreadItemForMyPostsViewModel(threadItem);
+            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
+            return vm;
         }
 
+        private Style GetReadStatusStyle(int threadId)
+        {
+            string styleName = IsRead(threadId) ? "ReadColorStyle" : "UnReadColorStyle";
+            return (Style)App.Current.Resources[styleName];
+        }
 
         public ICollectionView GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad)
         {

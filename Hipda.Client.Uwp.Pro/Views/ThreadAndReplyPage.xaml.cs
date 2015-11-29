@@ -286,6 +286,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 case ThreadDataType.MyThreads:
                     var itemForMyThreads = (ThreadItemForMyThreadsViewModel)selectedItem;
+                    itemForMyThreads.SetRead();
                     _lastSelectedItem = itemForMyThreads;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
@@ -301,6 +302,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     break;
                 case ThreadDataType.MyPosts:
                     var itemForMyPosts = (ThreadItemForMyPostsViewModel)selectedItem;
+                    itemForMyPosts.SetRead();
                     _lastSelectedItem = itemForMyPosts;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
@@ -316,17 +318,17 @@ namespace Hipda.Client.Uwp.Pro.Views
                     break;
                 default:
                     var item = (ThreadItemViewModel)selectedItem;
+                    item.SetRead();
                     _lastSelectedItem = item;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        item.SetRead();
+                        
                         string p = string.Format("{0},{1}", item.ThreadItem.ThreadId, item.ThreadItem.AuthorUserId);
                         Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
                     }
                     else
                     {
-                        item.SetRead();
                         item.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
                         RightWrap.DataContext = item;
                     }

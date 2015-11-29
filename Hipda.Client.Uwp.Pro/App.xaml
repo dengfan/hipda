@@ -566,7 +566,7 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ThreadListMyThreadsItemTemplate">
-            <Grid>
+            <Grid Margin="1,0,0,0" BorderThickness="2,0,0,0" Style="{Binding StatusColorStyle}">
                 <StackPanel Margin="8,4,0,4">
                     <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                         <Run Text="{Binding ThreadItem.ForumName}" />
@@ -585,7 +585,7 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ThreadListMyPostsItemTemplate">
-            <Grid>
+            <Grid Margin="1,0,0,0" BorderThickness="2,0,0,0" Style="{Binding StatusColorStyle}">
                 <StackPanel Margin="8,4,0,4">
                     <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                         <Run Text="{Binding ThreadItem.ForumName}" />
