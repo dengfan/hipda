@@ -51,6 +51,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private ReplyViewModel _replyViewModel;
         private int _threadId;
+        private int _threadAuthorUserId;
 
         public ReplyListPage()
         {
@@ -64,7 +65,9 @@ namespace Hipda.Client.Uwp.Pro.Views
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;
 
-            _threadId = Convert.ToInt32(e.Parameter);
+            string[] p = e.Parameter.ToString().Split(',');
+            _threadId = Convert.ToInt32(p[0]);
+            _threadAuthorUserId = Convert.ToInt32(p[1]);
 
             #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
             var backStack = Frame.BackStack;
@@ -79,7 +82,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 // will show the correct item in the side-by-side view.
                 var modifiedEntry = new PageStackEntry(
                     masterPageEntry.SourcePageType,
-                    string.Format("{0}", _threadId),
+                    string.Format("{0},{1}", _threadId, _threadAuthorUserId),
                     masterPageEntry.NavigationTransitionInfo
                     );
                 backStack.Add(modifiedEntry);
@@ -136,6 +139,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 _replyViewModel = new ReplyViewModel(
                     1,
                     _threadId,
+                    _threadAuthorUserId,
                     ReplyListView,
                     () => {
                         rightProgress.IsActive = true;

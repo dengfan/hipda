@@ -52,7 +52,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -65,7 +65,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = threadItem;
         }
 
-        public ThreadItemForMyPostsViewModel(int pageNo, int threadId, ListView replyListView, Action beforeLoad, Action<int> afterLoad)
+        public ThreadItemForMyPostsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int> afterLoad)
         {
             ThreadDataType = ThreadDataType.MyPosts;
             _replyListView = replyListView;
@@ -82,7 +82,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 LoadData(1);
             };
 
-            var cv = _ds.GetViewForReplyPage(pageNo, threadId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -109,7 +109,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             int pageNo = data[0];
             int index = data[1];
             _ds.SetScrollState(false);
-            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, index, _beforeLoad, _afterLoad, listViewScroll);
+            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, index, _beforeLoad, _afterLoad, listViewScroll);
             if (cv != null)
             {
                 ReplyItemCollection = cv;

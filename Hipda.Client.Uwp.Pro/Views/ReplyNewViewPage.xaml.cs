@@ -51,6 +51,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             _replyViewModel = new ReplyViewModel(
                     1,
                     _threadId,
+                    0,
                     ReplyListView,
                     () => {
                         rightProgress.IsActive = true;

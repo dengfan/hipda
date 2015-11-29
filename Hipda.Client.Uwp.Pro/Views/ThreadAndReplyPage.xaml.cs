@@ -149,7 +149,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
             if (threadItem == null)
             {
-                var item = new ThreadItemViewModel(1, threadId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
+                var item = new ThreadItemViewModel(1, threadId, 0, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
                 RightWrap.DataContext = item;
             }
             else
@@ -189,6 +189,32 @@ namespace Hipda.Client.Uwp.Pro.Views
                         DataContext = _threadAndReplyViewModel;
                     }
                 }
+                else if (param.Contains(",")) // 表示要加载指定的回复列表页
+                {
+                    string[] p = param.Split(',');
+                    int threadId = Convert.ToInt32(p[0]);
+                    int threadAuthorUserId = Convert.ToInt32(p[1]);
+
+                    ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
+                    switch (itemBase.ThreadDataType)
+                    {
+                        case ThreadDataType.MyThreads:
+                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+                            _lastSelectedItem = itemForMyThreads;
+                            RightWrap.DataContext = itemForMyThreads;
+                            break;
+                        case ThreadDataType.MyPosts:
+                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+                            _lastSelectedItem = itemForMyPosts;
+                            RightWrap.DataContext = itemForMyPosts;
+                            break;
+                        default:
+                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
+                            _lastSelectedItem = item;
+                            RightWrap.DataContext = item;
+                            break;
+                    }
+                }
                 else if (param.StartsWith("tid=")) // 来自 hipda 协议启动
                 {
                     int fid = 2;
@@ -197,30 +223,6 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     int tid = Convert.ToInt32(param.Substring(4));
                     OpenReplyPageByThreadId(tid);
-                }
-                else // 缺省值为 tid
-                {
-                    int threadId = Convert.ToInt32(param);
-
-                    ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
-                    switch (itemBase.ThreadDataType)
-                    {
-                        case ThreadDataType.MyThreads:
-                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-                            _lastSelectedItem = itemForMyThreads;
-                            RightWrap.DataContext = itemForMyThreads;
-                            break;
-                        case ThreadDataType.MyPosts:
-                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-                            _lastSelectedItem = itemForMyPosts;
-                            RightWrap.DataContext = itemForMyPosts;
-                            break;
-                        default:
-                            var item = new ThreadItemViewModel(1, threadId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
-                            _lastSelectedItem = item;
-                            RightWrap.DataContext = item;
-                            break;
-                    }
                 }
             }
 
@@ -244,28 +246,28 @@ namespace Hipda.Client.Uwp.Pro.Views
             var isNarrow = newState == NarrowState;
             if (isNarrow && oldState == DefaultState && _lastSelectedItem != null) // 如果是窄视图，则跳转到 reply list page 页面
             {
-                int tid = 0;
+                string p = string.Empty;
 
                 switch (itemBase.ThreadDataType)
                 {
                     case ThreadDataType.MyThreads:
                         var itemForMyThreads = _lastSelectedItem as ThreadItemForMyThreadsViewModel;
-                        tid = itemForMyThreads.ThreadItem.ThreadId;
+                        p = string.Format("{0},{1}", itemForMyThreads.ThreadItem.ThreadId, AccountService.UserId);
                         break;
                     case ThreadDataType.MyPosts:
                         var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsViewModel;
-                        tid = itemForMyPosts.ThreadItem.ThreadId;
+                        p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, AccountService.UserId);
                         break;
                     default:
                         var item = _lastSelectedItem as ThreadItemViewModel;
-                        tid = item.ThreadItem.ThreadId;
+                        p = string.Format("{0},{1}", item.ThreadItem.ThreadId, item.ThreadItem.AuthorUserId);
                         break;
                 }
 
                 UserDialogContentControl.Content = null;
                 UserDialog.Hide();
 
-                Frame.Navigate(typeof(ReplyListPage), tid, new SuppressNavigationTransitionInfo());
+                Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
             }
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(ThreadListView, isNarrow);
@@ -289,7 +291,8 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        Frame.Navigate(typeof(ReplyListPage), itemForMyThreads.ThreadItem.ThreadId, new DrillInNavigationTransitionInfo());
+                        string p = string.Format("{0},{1}", itemForMyThreads.ThreadItem.ThreadId, AccountService.UserId);
+                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
                     }
                     else
                     {
@@ -304,7 +307,8 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        Frame.Navigate(typeof(ReplyListPage), itemForMyPosts.ThreadItem.ThreadId, new DrillInNavigationTransitionInfo());
+                        string p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, AccountService.UserId);
+                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
                     }
                     else
                     {
@@ -320,7 +324,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
                         
-                        Frame.Navigate(typeof(ReplyListPage), item.ThreadItem.ThreadId, new DrillInNavigationTransitionInfo());
+                        string p = string.Format("{0},{1}", item.ThreadItem.ThreadId, item.ThreadItem.AuthorUserId);
+                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
                     }
                     else
                     {
