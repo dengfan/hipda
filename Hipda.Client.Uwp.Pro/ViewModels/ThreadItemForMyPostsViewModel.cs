@@ -46,7 +46,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             set
             {
                 _replyItemCollection = value;
-                //this.RaisePropertyChanged("ReplyItemCollection");
+                this.RaisePropertyChanged("ReplyItemCollection");
             }
         }
 
