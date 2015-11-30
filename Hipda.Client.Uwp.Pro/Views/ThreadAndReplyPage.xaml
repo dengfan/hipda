@@ -6,6 +6,7 @@
     xmlns:root="using:Hipda.Client.Uwp.Pro"
     xmlns:vm="using:Hipda.Client.Uwp.Pro.ViewModels"
     xmlns:t="using:Hipda.Client.Uwp.Pro.Triggers"
+    xmlns:pr="using:PullToRefresh.UWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -123,19 +124,20 @@
                     <AppBarButton Label="在浏览器中打开"/>
                 </CommandBar.SecondaryCommands>
             </CommandBar>
-
-            <ListView Grid.Row="1" x:Name="ThreadListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
+            <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked">
+                <ListView x:Name="ThreadListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
                       ShowsScrollingPlaceholders="False" VerticalAlignment="Top" IncrementalLoadingTrigger="Edge"
                       SelectionMode="Single" SelectionChanged="ThreadListView_SelectionChanged"
                       ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
                       ItemsSource="{Binding ThreadItemCollection}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Padding" Value="0,0,20,0"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="0,0,20,0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </pr:PullToRefreshBox>
 
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
         </Grid>
@@ -158,26 +160,28 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>
 
-            <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
+            <pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked">
+                <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
                               SelectionMode="None" ShowsScrollingPlaceholders="False"
                               ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                               ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                               ItemsSource="{Binding ReplyItemCollection}">
-                <ListView.Footer>
-                    <StackPanel x:Name="rightFooter" Margin="0,80,0,160" Visibility="Collapsed">
-                        <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
-                        <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
-                            <Button.Template>
-                                <ControlTemplate>
-                                    <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
-                                        <TextBlock Text="&#xE14A;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                    </StackPanel>
-                </ListView.Footer>
-            </ListView>
+                    <ListView.Footer>
+                        <StackPanel x:Name="rightFooter" Margin="0,80,0,160" Visibility="Collapsed">
+                            <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
+                            <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
+                                            <TextBlock Text="&#xE14A;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </StackPanel>
+                    </ListView.Footer>
+                </ListView>
+            </pr:PullToRefreshBox>
 
             <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 

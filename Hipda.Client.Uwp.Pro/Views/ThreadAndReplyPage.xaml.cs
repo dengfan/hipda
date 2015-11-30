@@ -3,6 +3,7 @@ using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.System;
@@ -37,8 +38,14 @@ namespace Hipda.Client.Uwp.Pro.Views
         public int PopupThreadId { get; set; }
         #endregion
 
-        private object _lastSelectedItem;
-        private ThreadAndReplyViewModel _threadAndReplyViewModel;
+        /// <summary>
+        /// 用于记录当前页的类型，如常规、我的贴子、我的回复等等类型
+        /// 在打开相应版块时赋值
+        /// </summary>
+        ThreadDataType _threadDataType;
+
+        object _lastSelectedItem;
+        ThreadAndReplyViewModel _threadAndReplyViewModel;
 
         public ThreadAndReplyPage()
         {
@@ -168,9 +175,9 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (e.Parameter != null)
             {
                 string param = e.Parameter.ToString();
-
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
+                    _threadDataType = ThreadDataType.Default;
                     int fid = Convert.ToInt32(param.Substring(4));
                     _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
                     DataContext = _threadAndReplyViewModel;
@@ -180,23 +187,24 @@ namespace Hipda.Client.Uwp.Pro.Views
                     string itemType = param.Substring(5);
                     if (itemType.Equals("threads"))
                     {
+                        _threadDataType = ThreadDataType.MyThreads;
                         _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
                         DataContext = _threadAndReplyViewModel;
                     }
                     else if (itemType.Equals("posts"))
                     {
+                        _threadDataType = ThreadDataType.MyPosts;
                         _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
                         DataContext = _threadAndReplyViewModel;
                     }
                 }
-                else if (param.Contains(",")) // 表示要加载指定的回复列表页
+                else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
                 {
                     string[] p = param.Split(',');
                     int threadId = Convert.ToInt32(p[0]);
                     int threadAuthorUserId = Convert.ToInt32(p[1]);
 
-                    ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
-                    switch (itemBase.ThreadDataType)
+                    switch (_threadDataType)
                     {
                         case ThreadDataType.MyThreads:
                             var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
@@ -215,15 +223,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                             break;
                     }
                 }
-                else if (param.StartsWith("tid=")) // 来自 hipda 协议启动
-                {
-                    int fid = 2;
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
-                    DataContext = _threadAndReplyViewModel;
-
-                    int tid = Convert.ToInt32(param.Substring(4));
-                    OpenReplyPageByThreadId(tid);
-                }
             }
 
             UpdateForVisualState(AdaptiveStates.CurrentState);
@@ -241,14 +240,12 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
         {
-            ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
-
             var isNarrow = newState == NarrowState;
             if (isNarrow && oldState == DefaultState && _lastSelectedItem != null) // 如果是窄视图，则跳转到 reply list page 页面
             {
                 string p = string.Empty;
 
-                switch (itemBase.ThreadDataType)
+                switch (_threadDataType)
                 {
                     case ThreadDataType.MyThreads:
                         var itemForMyThreads = _lastSelectedItem as ThreadItemForMyThreadsViewModel;
@@ -281,8 +278,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             var selectedItem = e.AddedItems[0];
-            var b = e.AddedItems.First() as ThreadItemViewModelBase;
-            switch (b.ThreadDataType)
+            switch (_threadDataType)
             {
                 case ThreadDataType.MyThreads:
                     var itemForMyThreads = (ThreadItemForMyThreadsViewModel)selectedItem;
@@ -349,8 +345,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             if (_lastSelectedItem != null)
             {
-                ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
-                switch (itemBase.ThreadDataType)
+                switch (_threadDataType)
                 {
                     case ThreadDataType.MyThreads:
                         _threadAndReplyViewModel.RefreshThreadDataForMyThreadsFromPrevPage();
@@ -369,8 +364,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             if (_lastSelectedItem != null)
             {
-                ThreadItemViewModelBase itemBase = _lastSelectedItem as ThreadItemViewModelBase;
-                switch (itemBase.ThreadDataType)
+                switch (_threadDataType)
                 {
                     case ThreadDataType.MyThreads:
                         ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
@@ -679,7 +673,11 @@ namespace Hipda.Client.Uwp.Pro.Views
             return parentT ?? FindParent<T>(parent);
         }
 
-        
+        //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        //{
+        //    ReplyItemModel item = args.Item as ReplyItemModel;
+        //    Debug.WriteLine(item.FloorNo);
+        //}
     }
 
     public enum UserDialogType

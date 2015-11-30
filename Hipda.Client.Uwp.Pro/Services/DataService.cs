@@ -803,6 +803,13 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
+        /// <summary>
+        /// 用于载入我的回复，并返回回复所在楼层及所在页码
+        /// </summary>
+        /// <param name="threadId"></param>
+        /// <param name="targetPostId"></param>
+        /// <param name="cts"></param>
+        /// <returns></returns>
         public async Task<int[]> LoadReplyDataForRedirectPageAsync(int threadId, int targetPostId, CancellationTokenSource cts)
         {
             // 先清空本贴的回复数据，以便重新加载

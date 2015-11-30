@@ -41,7 +41,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemModel ThreadItem { get; set; }
 
-        
 
         private ICollectionView _replyItemCollection;
 

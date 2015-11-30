@@ -46,7 +46,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             set
             {
                 _replyItemCollection = value;
-                this.RaisePropertyChanged("ReplyItemCollection");
+                //this.RaisePropertyChanged("ReplyItemCollection");
             }
         }
 
@@ -109,7 +109,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             int pageNo = data[0];
             int index = data[1];
             _ds.SetScrollState(false);
-            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, index, _beforeLoad, _afterLoad, listViewScroll);
+            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, 0, index, _beforeLoad, _afterLoad, listViewScroll);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
