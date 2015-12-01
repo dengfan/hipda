@@ -111,7 +111,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             rightFooter.Visibility = Visibility.Collapsed;
         }
 
-        private async void RightAfterLoaded(int threadId)
+        private async void RightAfterLoaded(int threadId, int pageNo)
         {
             rightProgress.IsActive = false;
             rightProgress.Visibility = Visibility.Collapsed;
@@ -121,6 +121,12 @@ namespace Hipda.Client.Uwp.Pro.Views
             rightFooter.Visibility = Visibility.Visible;
 
             _threadAndReplyViewModel.AddToReadHistory(threadId);
+
+            // 如果是“我的回复”之回复列表页且已加载（比下往上加载）到了第一页，则移除“加载上一页”的按钮
+            if (pageNo == 1)
+            {
+                ReplyListView.HeaderTemplate = null;
+            }
 
             // 最宽屏模式下，自动滚到最底部
             if (RightSideColumn.ActualWidth > 0)
@@ -168,13 +174,36 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
+        /// <summary>
+        /// 检查是否要保留回复列表页的“加载上一页”的按钮
+        /// </summary>
+        /// <returns>是否要保留回复列表页的“加载上一页”的按钮</returns>
+        private bool IsKeepButtonForLoadPrevReplyPage()
+        {
+            if (_lastSelectedItem != null && ReplyListView.Items.Count > 0)
+            {
+                var replyItem = ReplyListView.Items[0] as ReplyItemModel;
+                if (replyItem.FloorNo != 1)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
             if (e.Parameter != null)
             {
-                ReplyListView.HeaderTemplate = null;
+                // 每次进入时，先检查是否要保留回复列表页的“加载上一页”的按钮
+                bool isKeep = IsKeepButtonForLoadPrevReplyPage();
+                if (isKeep == false)
+                {
+                    ReplyListView.HeaderTemplate = null;
+                }
 
                 string param = e.Parameter.ToString();
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
@@ -375,7 +404,9 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             if (_lastSelectedItem != null)
             {
-                switch (_threadDataType)
+                // 根据回复列表页所属的主题类别来加载其下的回复列表的上一页
+                var threadItemViewModelBase = _lastSelectedItem as ThreadItemViewModelBase;
+                switch (threadItemViewModelBase.ThreadDataType)
                 {
                     case ThreadDataType.MyThreads:
                         ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
@@ -394,7 +425,9 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             if (_lastSelectedItem != null)
             {
-                switch (_threadDataType)
+                // 根据回复列表页所属的主题类别来加载其下的回复列表的上一页
+                var threadItemViewModelBase = _lastSelectedItem as ThreadItemViewModelBase;
+                switch (threadItemViewModelBase.ThreadDataType)
                 {
                     case ThreadDataType.MyThreads:
                         ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();

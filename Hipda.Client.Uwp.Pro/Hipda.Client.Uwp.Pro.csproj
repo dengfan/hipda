@@ -123,6 +123,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReplyListItemTemplateSelector.cs" />
     <Compile Include="Services\AccountService.cs" />
+    <Compile Include="Services\Common.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\FaceService.cs" />
     <Compile Include="Services\GeneratorIncrementalLoadingClass.cs" />

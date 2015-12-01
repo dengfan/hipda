@@ -146,7 +146,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                         rightProgress.Visibility = Visibility.Visible;
                         ReplyRefreshButton.IsEnabled = false;
                     },
-                    (tid) => {
+                    (tid, pageNo) => {
                         rightProgress.IsActive = false;
                         rightProgress.Visibility = Visibility.Collapsed;
                         ReplyRefreshButton.IsEnabled = true;

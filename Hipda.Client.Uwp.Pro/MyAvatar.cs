@@ -1,4 +1,5 @@
-﻿using Hipda.Client.Uwp.Pro.Views;
+﻿using Hipda.Client.Uwp.Pro.Services;
+using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,7 +118,7 @@ namespace Hipda.Client.Uwp.Pro
 
             if (IsRightTappedEnable)
             {
-                var parentPage = FindParent<ThreadAndReplyPage>(this);
+                var parentPage = Common.FindParent<ThreadAndReplyPage>(this);
                 parentPage.PopupUserId = UserId;
                 parentPage.PopupUsername = Username;
                 parentPage.PopupThreadId = ThreadId;
@@ -137,14 +138,6 @@ namespace Hipda.Client.Uwp.Pro
                 uid = (uid - s[i]) / 10;
             }
             return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg");
-        }
-
-        private static T FindParent<T>(DependencyObject dependencyObject) where T : DependencyObject
-        {
-            var parent = VisualTreeHelper.GetParent(dependencyObject);
-            if (parent == null) return null;
-            var parentT = parent as T;
-            return parentT ?? FindParent<T>(parent);
         }
     }
 }

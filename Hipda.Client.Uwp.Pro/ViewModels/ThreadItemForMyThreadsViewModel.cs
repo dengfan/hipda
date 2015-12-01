@@ -19,7 +19,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     {
         private ListView _replyListView { get; set; }
         private Action _beforeLoad { get; set; }
-        private Action<int> _afterLoad { get; set; }
+        private Action<int, int> _afterLoad { get; set; }
         private DataService _ds { get; set; }
 
         public DelegateCommand RefreshReplyCommand { get; set; }
@@ -53,7 +53,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = threadItem;
         }
 
-        public ThreadItemForMyThreadsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int> afterLoad)
+        public ThreadItemForMyThreadsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyThreads;
@@ -78,7 +78,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public void SelectThreadItem(ListView replyListView, Action beforeLoad, Action<int> afterLoad)
+        public void SelectThreadItem(ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
         {
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;

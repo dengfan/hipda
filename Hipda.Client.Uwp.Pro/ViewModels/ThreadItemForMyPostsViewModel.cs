@@ -19,7 +19,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     {
         private ListView _replyListView { get; set; }
         private Action _beforeLoad { get; set; }
-        private Action<int> _afterLoad { get; set; }
+        private Action<int, int> _afterLoad { get; set; }
         private DataService _ds { get; set; }
 
         public DelegateCommand RefreshReplyCommand { get; set; }
@@ -53,7 +53,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = threadItem;
         }
 
-        public ThreadItemForMyPostsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int> afterLoad)
+        public ThreadItemForMyPostsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyPosts;
@@ -78,7 +78,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public async Task SelectThreadItem(ListView replyListView, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll)
+        public async Task SelectThreadItem(ListView replyListView, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
         {
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
@@ -98,11 +98,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             int pageNo = data[0];
             int index = data[1];
             _ds.SetScrollState(false);
-            StartPageNo = pageNo;
             var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, 0, index, _beforeLoad, _afterLoad, listViewScroll);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
+                StartPageNo = pageNo;
             }
         }
 

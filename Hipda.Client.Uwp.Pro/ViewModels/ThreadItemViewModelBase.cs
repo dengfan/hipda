@@ -7,10 +7,24 @@ using Windows.UI.Xaml;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
+    /// <summary>
+    /// 主题类别之枚举
+    /// </summary>
     public enum ThreadDataType
     {
+        /// <summary>
+        /// 默认类别
+        /// </summary>
         Default,
+
+        /// <summary>
+        /// 我的贴子类别
+        /// </summary>
         MyThreads,
+
+        /// <summary>
+        /// 我的回复类别
+        /// </summary>
         MyPosts
     }
 
