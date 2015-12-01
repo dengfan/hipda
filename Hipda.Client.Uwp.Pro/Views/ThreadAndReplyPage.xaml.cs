@@ -174,37 +174,12 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
-        /// <summary>
-        /// 检查是否要保留回复列表页的“加载上一页”的按钮
-        /// </summary>
-        /// <returns>是否要保留回复列表页的“加载上一页”的按钮</returns>
-        private bool IsKeepButtonForLoadPrevReplyPage()
-        {
-            if (_lastSelectedItem != null && ReplyListView.Items.Count > 0)
-            {
-                var replyItem = ReplyListView.Items[0] as ReplyItemModel;
-                if (replyItem.FloorNo != 1)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
             if (e.Parameter != null)
             {
-                // 每次进入时，先检查是否要保留回复列表页的“加载上一页”的按钮
-                bool isKeep = IsKeepButtonForLoadPrevReplyPage();
-                if (isKeep == false)
-                {
-                    ReplyListView.HeaderTemplate = null;
-                }
-
                 string param = e.Parameter.ToString();
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
@@ -307,6 +282,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 return;
             }
+
+            ReplyListView.HeaderTemplate = null;
 
             var selectedItem = e.AddedItems[0];
             switch (_threadDataType)
@@ -510,8 +487,8 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             sender.PrimaryButtonClick += OpenOrRefreshUserMessageDialog;
 
-            var containerBorder = FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
-            containerBorder = FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
+            var containerBorder = Common.FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
+            containerBorder = Common.FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
             _postUserMessageForm = containerBorder.FindName("PostUserMessageForm") as Grid;
             _postUserMessageForm.DataContext = new FaceService();
             _userMessageFaceGridView = _postUserMessageForm.FindName("UserMessageFaceGridView") as GridView;
@@ -729,14 +706,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
         #endregion
-
-        private static T FindParent<T>(DependencyObject dependencyObject) where T : DependencyObject
-        {
-            var parent = VisualTreeHelper.GetParent(dependencyObject);
-            if (parent == null) return null;
-            var parentT = parent as T;
-            return parentT ?? FindParent<T>(parent);
-        }
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         //{
