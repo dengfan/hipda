@@ -55,6 +55,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemForMyThreadsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int> afterLoad)
         {
+            StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyThreads;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
@@ -67,7 +68,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand.ExecuteAction = (p) => 
             {
                 _ds.ClearReplyData(threadId);
-                LoadData(1);
+                LoadData(StartPageNo);
             };
 
             var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
@@ -89,10 +90,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand.ExecuteAction = (p) => 
             {
                 _ds.ClearReplyData(ThreadItem.ThreadId);
-                LoadData(1);
+                LoadData(StartPageNo);
             };
 
-            LoadData(1);
+            LoadData(StartPageNo);
         }
 
         public void SetRead()

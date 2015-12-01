@@ -55,6 +55,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemForMyPostsViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int> afterLoad)
         {
+            StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyPosts;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
@@ -67,7 +68,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand.ExecuteAction = (p) =>
             {
                 _ds.ClearReplyData(threadId);
-                LoadData(1);
+                LoadData(StartPageNo);
             };
 
             var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
@@ -77,7 +78,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public async void SelectThreadItem(ListView replyListView, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll)
+        public async Task SelectThreadItem(ListView replyListView, Action beforeLoad, Action<int> afterLoad, Action<int> listViewScroll)
         {
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
@@ -88,7 +89,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand.ExecuteAction = (p) =>
             {
                 _ds.ClearReplyData(ThreadItem.ThreadId);
-                LoadData(1);
+                LoadData(StartPageNo);
             };
 
             // 先载入第一个转跳到的页面的数据，并得到页码之后即可进入正常流程

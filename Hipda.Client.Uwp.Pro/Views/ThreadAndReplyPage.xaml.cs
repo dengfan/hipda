@@ -272,7 +272,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             EntranceNavigationTransitionInfo.SetIsTargetElement(ThreadListView, isNarrow);
         }
 
-        private void ThreadListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ThreadListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0)
             {
@@ -302,12 +302,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                     var itemForMyPosts = (ThreadItemForMyPostsViewModel)selectedItem;
                     itemForMyPosts.SetRead();
 
-                    if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop") && itemForMyPosts.StartPageNo > 1)
-                    {
-                        // 只在桌面环境及起始页不是第一页才显示此按钮
-                        ReplyListView.HeaderTemplate = Resources["ReplyListViewHeaderTemplate"] as DataTemplate;
-                    }
-
                     _lastSelectedItem = itemForMyPosts;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
@@ -317,9 +311,16 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
+                        await itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
                         RightWrap.DataContext = itemForMyPosts;
                     }
+
+                    if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop") && itemForMyPosts.StartPageNo != 1)
+                    {
+                        // 只在桌面环境及起始页不是第一页才显示此按钮
+                        ReplyListView.HeaderTemplate = Resources["ReplyListViewHeaderTemplate"] as DataTemplate;
+                    }
+
                     break;
                 default:
                     var item = (ThreadItemViewModel)selectedItem;

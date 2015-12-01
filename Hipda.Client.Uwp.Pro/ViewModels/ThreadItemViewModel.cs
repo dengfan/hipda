@@ -73,6 +73,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int> afterLoad)
         {
+            StartPageNo = 1;
             ThreadDataType = ThreadDataType.Default;
             _threadId = threadId;
             _threadAuthorUserId = threadAuthorUserId;
@@ -113,7 +114,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) => {
                 _ds.ClearReplyData(_threadId);
-                LoadData(1);
+                LoadData(StartPageNo);
             };
 
             PostReplyCommand = new DelegateCommand();
@@ -122,7 +123,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 PostData(postContent, _threadId);
             };
 
-            LoadData(1);
+            LoadData(StartPageNo);
         }
 
         public void SetRead()
