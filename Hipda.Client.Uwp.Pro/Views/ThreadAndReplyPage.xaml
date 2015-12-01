@@ -25,6 +25,13 @@
             <MenuFlyoutItem Text="屏蔽此人" />
             <MenuFlyoutItem Text="屏蔽此主题" />
         </MenuFlyout>
+
+        <DataTemplate x:Key="ReplyListViewHeaderTemplate">
+            <Button x:Name="LoadPrevReplyPageButton" Content="点击这里加载上一页"
+                    FontSize="{ThemeResource ToolTipContentThemeFontSize}"
+                    Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                    HorizontalAlignment="Center" Tapped="LoadPrevReplyPageButton_Tapped"/>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">

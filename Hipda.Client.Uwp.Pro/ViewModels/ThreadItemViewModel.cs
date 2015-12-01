@@ -24,23 +24,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private Action<int> _afterLoad { get; set; }
         private DataService _ds { get; set; }
 
-        private Style _statusColorStyle;
-
-        public Style StatusColorStyle
-        {
-            get { return _statusColorStyle; }
-            set
-            {
-                _statusColorStyle = value;
-                this.RaisePropertyChanged("StatusColorStyle");
-            }
-        }
-
         public DelegateCommand RefreshReplyCommand { get; set; }
         public DelegateCommand PostReplyCommand { get; set; }
 
         public ThreadItemModel ThreadItem { get; set; }
-
 
         private ICollectionView _replyItemCollection;
 

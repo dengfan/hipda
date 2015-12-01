@@ -174,6 +174,8 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             if (e.Parameter != null)
             {
+                ReplyListView.HeaderTemplate = null;
+
                 string param = e.Parameter.ToString();
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
@@ -299,6 +301,13 @@ namespace Hipda.Client.Uwp.Pro.Views
                 case ThreadDataType.MyPosts:
                     var itemForMyPosts = (ThreadItemForMyPostsViewModel)selectedItem;
                     itemForMyPosts.SetRead();
+
+                    if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop") && itemForMyPosts.StartPageNo > 1)
+                    {
+                        // 只在桌面环境及起始页不是第一页才显示此按钮
+                        ReplyListView.HeaderTemplate = Resources["ReplyListViewHeaderTemplate"] as DataTemplate;
+                    }
+
                     _lastSelectedItem = itemForMyPosts;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
@@ -341,6 +350,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             flyoutBase.ShowAt(senderElement);
         }
 
+        #region 加载上一页
         private void leftPr_RefreshInvoked(DependencyObject sender, object args)
         {
             if (_lastSelectedItem != null)
@@ -378,6 +388,27 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
             }
         }
+
+        private void LoadPrevReplyPageButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (_lastSelectedItem != null)
+            {
+                switch (_threadDataType)
+                {
+                    case ThreadDataType.MyThreads:
+                        ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+                        break;
+                    case ThreadDataType.MyPosts:
+                        ((ThreadItemForMyPostsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+                        break;
+                    default:
+                        ((ThreadItemViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+                        break;
+                }
+            }
+        }
+        #endregion
+
 
         private void SortingButton_Click(object sender, RoutedEventArgs e)
         {

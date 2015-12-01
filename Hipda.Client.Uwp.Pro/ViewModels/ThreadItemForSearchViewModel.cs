@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls;
 using System.Threading;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
+using Windows.UI.Xaml;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -20,18 +21,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private Action _beforeLoad { get; set; }
         private Action<int> _afterLoad { get; set; }
         private DataService _ds { get; set; }
-
-        private Brush _statusColor;
-
-        public Brush StatusColor
-        {
-            get { return _statusColor; }
-            set
-            {
-                _statusColor = value;
-                this.RaisePropertyChanged("StatusColor");
-            }
-        }
 
         public DelegateCommand RefreshReplyCommand { get; set; }
 
@@ -106,7 +95,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public void SetRead()
         {
-            StatusColor = (SolidColorBrush)App.Current.Resources["StatusColor2"];
+            StatusColorStyle = (Style)App.Current.Resources["ReadColorStyle"];
         }
 
         public void RefreshReplyDataFromPrevPage()

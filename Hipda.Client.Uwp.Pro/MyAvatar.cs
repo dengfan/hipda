@@ -104,6 +104,7 @@ namespace Hipda.Client.Uwp.Pro
                 bi.UriSource = GetAvatarUrl(userId);
                 bi.DecodePixelWidth = 40;
                 ImageBrush ib = new ImageBrush();
+                ib.Stretch = Stretch.UniformToFill;
                 ib.ImageSource = bi;
                 ib.ImageFailed += (s, e2) => { return; };
                 instance._grid1.Background = ib;
