@@ -122,7 +122,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             _threadAndReplyViewModel.AddToReadHistory(threadId);
 
-            // 如果是“我的回复”之回复列表页且已加载（比下往上加载）到了第一页，则移除“加载上一页”的按钮
+            // 如果加载到了第一页，则移除回复列表页的“加载上一页”的按钮，无论其有没有显示
             if (pageNo == 1)
             {
                 ReplyListView.HeaderTemplate = null;
