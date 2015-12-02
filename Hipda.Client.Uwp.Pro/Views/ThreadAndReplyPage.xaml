@@ -267,7 +267,7 @@
             </ListView>
 
             <StackPanel Orientation="Horizontal" Height="48">
-                <FontIcon Margin="8,0,0,0" Glyph="&#xECC5;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" />
+                <FontIcon Margin="8,0,0,0" Glyph="&#xE81C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" />
                 <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center" />
             </StackPanel>
         </Grid>
