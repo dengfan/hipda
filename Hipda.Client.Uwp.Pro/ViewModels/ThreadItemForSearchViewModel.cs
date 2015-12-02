@@ -49,6 +49,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemForSearchViewModel(ThreadItemModel threadItem)
         {
+            StartPageNo = 1;
             ThreadDataType = ThreadDataType.Default;
             ThreadItem = threadItem;
         }

@@ -49,6 +49,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemForMyThreadsViewModel(ThreadItemForMyThreadsModel threadItem)
         {
+            StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyThreads;
             ThreadItem = threadItem;
         }
