@@ -169,6 +169,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
             if (threadItem == null)
             {
+                _threadAndReplyViewModel.ClearReplyData(threadId);
                 var item = new ThreadItemViewModel(1, threadId, 0, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
                 RightWrap.DataContext = item;
             }

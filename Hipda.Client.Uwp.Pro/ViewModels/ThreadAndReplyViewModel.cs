@@ -211,6 +211,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ApplicationView.GetForCurrentView().Title = threadTitle;
         }
 
+        public void ClearReplyData(int threadId)
+        {
+            _ds.ClearReplyData(threadId);
+        }
+
         public async Task<string> GetXamlForUserInfo(int userId)
         {
             return await _ds.GetXamlForUserInfo(userId);
