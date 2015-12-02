@@ -14,6 +14,7 @@ namespace Hipda.Client.Uwp.Pro
         public DataTemplate NormalTemplate { get; set; }
         public DataTemplate MyThreadsTemplate { get; set; }
         public DataTemplate MyPostsTemplate { get; set; }
+        public DataTemplate MyFavoritesTemplate { get; set; }
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
@@ -24,6 +25,8 @@ namespace Hipda.Client.Uwp.Pro
                     return MyThreadsTemplate;
                 case ThreadDataType.MyPosts:
                     return MyPostsTemplate;
+                case ThreadDataType.MyFavorites:
+                    return MyFavoritesTemplate;
                 default:
                     return NormalTemplate;
             }

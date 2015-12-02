@@ -84,6 +84,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        private void LoadDataForMyFavorites(int pageNo)
+        {
+            var cv = _ds.GetViewForThreadPageForMyFavorites(pageNo, _beforeLoad, _afterLoad);
+            if (cv != null)
+            {
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
+                ThreadItemCollection = cv;
+            }
+        }
+
         public ThreadAndReplyViewModel(int pageNo, int forumId, ListView threadListView, Action beforeLoad, Action afterLoad)
         {
             _forumId = forumId;
@@ -132,6 +142,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 };
 
                 LoadDataForMyPosts(pageNo);
+            }
+            else if (itemType.Equals("favorites"))
+            {
+                RefreshThreadCommand = new DelegateCommand();
+                RefreshThreadCommand.ExecuteAction = (p) => {
+                    _ds.ClearThreadDataForMyFavorites();
+                    LoadDataForMyFavorites(1);
+                };
+
+                LoadDataForMyFavorites(pageNo);
             }
         }
 

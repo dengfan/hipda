@@ -98,7 +98,12 @@ namespace Hipda.Client.Uwp.Pro
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=posts");
         }
 
-        private async void Button6_Click(object sender, RoutedEventArgs e)
+        private void Button6_Click(object sender, RoutedEventArgs e)
+        {
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=favorites");
+        }
+
+        private async void Button7_Click(object sender, RoutedEventArgs e)
         {
             await SearchDialog.ShowAsync();
         }

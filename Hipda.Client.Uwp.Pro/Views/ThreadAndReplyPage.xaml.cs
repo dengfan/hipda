@@ -202,15 +202,18 @@ namespace Hipda.Client.Uwp.Pro.Views
                     if (itemType.Equals("threads"))
                     {
                         _threadDataType = ThreadDataType.MyThreads;
-                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
-                        DataContext = _threadAndReplyViewModel;
                     }
                     else if (itemType.Equals("posts"))
                     {
                         _threadDataType = ThreadDataType.MyPosts;
-                        _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
-                        DataContext = _threadAndReplyViewModel;
                     }
+                    else if (itemType.Equals("favorites"))
+                    {
+                        _threadDataType = ThreadDataType.MyFavorites;
+                    }
+
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
+                    DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
                 {
@@ -267,7 +270,11 @@ namespace Hipda.Client.Uwp.Pro.Views
                         break;
                     case ThreadDataType.MyPosts:
                         var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsViewModel;
-                        p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, AccountService.UserId);
+                        p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, 0);
+                        break;
+                    case ThreadDataType.MyFavorites:
+                        var itemForMyFavorites = _lastSelectedItem as ThreadItemForMyFavoritesViewModel;
+                        p = string.Format("{0},{1}", itemForMyFavorites.ThreadItem.ThreadId, 0);
                         break;
                     default:
                         var item = _lastSelectedItem as ThreadItemViewModel;
@@ -318,13 +325,30 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, AccountService.UserId);
+                        string p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, 0);
                         Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
                     }
                     else
                     {
                         await itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
                         RightWrap.DataContext = itemForMyPosts;
+                    }
+                    break;
+                case ThreadDataType.MyFavorites:
+                    var itemForMyFavorites = (ThreadItemForMyFavoritesViewModel)selectedItem;
+                    itemForMyFavorites.SetRead();
+
+                    _lastSelectedItem = itemForMyFavorites;
+
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        string p = string.Format("{0},{1}", itemForMyFavorites.ThreadItem.ThreadId, 0);
+                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        itemForMyFavorites.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
+                        RightWrap.DataContext = itemForMyFavorites;
                     }
                     break;
                 default:

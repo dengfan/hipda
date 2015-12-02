@@ -25,7 +25,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// <summary>
         /// 我的回复类别
         /// </summary>
-        MyPosts
+        MyPosts,
+
+        /// <summary>
+        /// 我的收藏
+        /// </summary>
+        MyFavorites
     }
 
     public class ThreadItemViewModelBase : NotificationObject
