@@ -857,7 +857,12 @@ namespace Hipda.Client.Uwp.Pro.Services
                     if (threadTitleNode != null)
                     {
                         var h1 = threadTitleNode.ChildNodes[1];
-                        h1.RemoveChild(threadTitleNode.ChildNodes[1].ChildNodes[0]); // 移除版块名称
+                        var a = h1.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
+                        if (a != null)
+                        {
+                            h1.RemoveChild(a); // 移除版块名称
+                        }
+                        
                         threadTitle = h1.InnerText.Trim();
                     }
                 }

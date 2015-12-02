@@ -123,6 +123,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _afterLoad = afterLoad;
             _ds = new DataService();
 
+            ClearHistoryCommand = new DelegateCommand();
+            ClearHistoryCommand.ExecuteAction = (p) => {
+                DataService.ReadHistoryData.Clear();
+            };
+
             if (itemType.Equals("threads"))
             {
                 RefreshThreadCommand = new DelegateCommand();
