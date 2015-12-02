@@ -967,6 +967,20 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             return _isScrollCompleted;
         }
+
+        public bool CheckIsShowButtonForLoadPrevReplyPage(int threadId)
+        {
+            var data = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
+            if (data != null)
+            {
+                if (data.Replies.Min(r => r.PageNo) != 1)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         #endregion
 
         #region user

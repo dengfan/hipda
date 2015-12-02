@@ -128,6 +128,13 @@ namespace Hipda.Client.Uwp.Pro.Views
                 ReplyListView.HeaderTemplate = null;
             }
 
+            bool isShown = _threadAndReplyViewModel.CheckIsShowButtonForLoadPrevReplyPage(threadId);
+            if (isShown && Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop"))
+            {
+                // 只在桌面环境及最小页码不是1才显示此按钮
+                ReplyListView.HeaderTemplate = Resources["ReplyListViewHeaderTemplate"] as DataTemplate;
+            }
+
             // 最宽屏模式下，自动滚到最底部
             if (RightSideColumn.ActualWidth > 0)
             {
@@ -283,8 +290,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
-            ReplyListView.HeaderTemplate = null;
-
             var selectedItem = e.AddedItems[0];
             switch (_threadDataType)
             {
@@ -320,13 +325,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                         await itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
                         RightWrap.DataContext = itemForMyPosts;
                     }
-
-                    if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop") && itemForMyPosts.StartPageNo != 1)
-                    {
-                        // 只在桌面环境及起始页不是第一页才显示此按钮
-                        ReplyListView.HeaderTemplate = Resources["ReplyListViewHeaderTemplate"] as DataTemplate;
-                    }
-
                     break;
                 default:
                     var item = (ThreadItemViewModel)selectedItem;

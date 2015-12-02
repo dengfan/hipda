@@ -183,6 +183,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             return title;
         }
 
+        public bool CheckIsShowButtonForLoadPrevReplyPage(int threadId)
+        {
+            return _ds.CheckIsShowButtonForLoadPrevReplyPage(threadId);
+        }
+
         public void AddToReadHistory(int threadId)
         {
             var ti = DataService.ReadHistoryData.FirstOrDefault(t => t.ThreadId == threadId);
