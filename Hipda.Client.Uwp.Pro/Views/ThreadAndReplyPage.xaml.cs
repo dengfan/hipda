@@ -393,6 +393,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                     case ThreadDataType.MyPosts:
                         _threadAndReplyViewModel.RefreshThreadDataForMyPostsFromPrevPage();
                         break;
+                    case ThreadDataType.MyFavorites:
+                        _threadAndReplyViewModel.RefreshThreadDataForMyFavoritesFromPrevPage();
+                        break;
                     default:
                         _threadAndReplyViewModel.RefreshThreadDataFromPrevPage();
                         break;
@@ -414,6 +417,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                     case ThreadDataType.MyPosts:
                         ((ThreadItemForMyPostsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
                         break;
+                    case ThreadDataType.MyFavorites:
+                        ((ThreadItemForMyFavoritesViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+                        break;
                     default:
                         ((ThreadItemViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
                         break;
@@ -434,6 +440,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                         break;
                     case ThreadDataType.MyPosts:
                         ((ThreadItemForMyPostsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+                        break;
+                    case ThreadDataType.MyFavorites:
+                        ((ThreadItemForMyFavoritesViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
                         break;
                     default:
                         ((ThreadItemViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();

@@ -647,6 +647,11 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadDataForMyPosts.Min(t => t.PageNo);
         }
 
+        public int GetThreadMinPageNoForMyFavoritesInLoadedData()
+        {
+            return _threadDataForMyFavorites.Min(t => t.PageNo);
+        }
+
 
         public void ClearThreadData(int forumId)
         {

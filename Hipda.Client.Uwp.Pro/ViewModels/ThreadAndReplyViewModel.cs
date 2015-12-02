@@ -185,6 +185,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds.ClearThreadDataForMyPosts();
             LoadDataForMyPosts(startPageNo);
         }
+
+        public void RefreshThreadDataForMyFavoritesFromPrevPage()
+        {
+            // 先获取当前数据中已存在的最小页码
+            int minPageNo = _ds.GetThreadMinPageNoForMyFavoritesInLoadedData();
+            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
+
+            _ds.ClearThreadDataForMyFavorites();
+            LoadDataForMyFavorites(startPageNo);
+        }
         #endregion
 
         public ThreadItemModel GetThreadItem(int threadId)
