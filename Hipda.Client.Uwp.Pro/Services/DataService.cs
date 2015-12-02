@@ -686,7 +686,9 @@ namespace Hipda.Client.Uwp.Pro.Services
                     var threadTitleNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("threadtitle"));
                     if (threadTitleNode != null)
                     {
-                        threadTitle = threadTitleNode.ChildNodes[1].InnerText.Trim();
+                        var h1 = threadTitleNode.ChildNodes[1];
+                        h1.RemoveChild(threadTitleNode.ChildNodes[1].ChildNodes[0]); // 移除版块名称
+                        threadTitle = h1.InnerText.Trim();
                     }
                 }
 
