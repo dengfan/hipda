@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
@@ -40,16 +41,33 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         }
 
         #region 用于主题列表控件增量加载
-        private ICollectionView _threadItemCollection;
+        //private ICollectionView _threadItemCollection;
 
-        public ICollectionView ThreadItemCollection
+        //public ICollectionView ThreadItemCollection
+        //{
+        //    get { return _threadItemCollection; }
+        //    set
+        //    {
+        //        _threadItemCollection = value;
+        //        this.RaisePropertyChanged("ThreadItemCollection");
+        //    }
+        //}
+
+        //private ListView _threadListView;
+
+        //public ListView ThreadListView
+        //{
+        //    get { return _threadListView; }
+        //    set { _threadListView = value; }
+        //}
+
+
+        private CommandBar _threadCmdBar;
+
+        public CommandBar ThreadCmdBar
         {
-            get { return _threadItemCollection; }
-            set
-            {
-                _threadItemCollection = value;
-                this.RaisePropertyChanged("ThreadItemCollection");
-            }
+            get { return _threadCmdBar; }
+            set { _threadCmdBar = value; }
         }
         #endregion
 
@@ -58,10 +76,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             var cv = _ds.GetViewForThreadPage(pageNo, _forumId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
-                ThreadItemCollection = cv;
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
+                _threadListView.ItemsSource = cv;
             }
-
-            ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
         }
 
         private void LoadDataForMyThreads(int pageNo)
@@ -70,7 +87,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
-                ThreadItemCollection = cv;
+                _threadListView.ItemsSource = cv;
             }
         }
 
@@ -80,7 +97,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
-                ThreadItemCollection = cv;
+                _threadListView.ItemsSource = cv;
             }
         }
 
@@ -90,7 +107,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
-                ThreadItemCollection = cv;
+                _threadListView.ItemsSource = cv;
             }
         }
 
@@ -109,42 +126,67 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             switch (threadTypeOrForumId)
             {
                 case "threads":
+                    _threadListView.SelectionMode = ListViewSelectionMode.Single;
+
+                    LoadDataForMyThreads(pageNo);
+
                     RefreshThreadCommand = new DelegateCommand();
                     RefreshThreadCommand.ExecuteAction = (p) => {
                         _ds.ClearThreadDataForMyThreads();
                         LoadDataForMyThreads(1);
                     };
-
-                    LoadDataForMyThreads(pageNo);
                     break;
                 case "posts":
+                    _threadListView.SelectionMode = ListViewSelectionMode.Single;
+
+                    LoadDataForMyPosts(pageNo);
+
                     RefreshThreadCommand = new DelegateCommand();
                     RefreshThreadCommand.ExecuteAction = (p) => {
                         _ds.ClearThreadDataForMyPosts();
                         LoadDataForMyPosts(1);
                     };
-
-                    LoadDataForMyPosts(pageNo);
                     break;
                 case "favorites":
+                    _threadListView.SelectionMode = ListViewSelectionMode.Multiple;
+
+                    var btnRefreshForFavorites = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
+                    btnRefreshForFavorites.Command = RefreshThreadCommand;
+                    var btnMultipleCheck = new AppBarButton { Icon = new FontIcon { Glyph = "\uE179", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label="进入选择模式" };
+                    _threadCmdBar = new CommandBar();
+                    _threadCmdBar.Style = App.Current.Resources["CmdBarStyle"] as Style;
+                    _threadCmdBar.PrimaryCommands.Add(btnRefreshForFavorites);
+                    _threadCmdBar.PrimaryCommands.Add(btnMultipleCheck);
+
+                    LoadDataForMyFavorites(pageNo);
+
                     RefreshThreadCommand = new DelegateCommand();
                     RefreshThreadCommand.ExecuteAction = (p) => {
                         _ds.ClearThreadDataForMyFavorites();
                         LoadDataForMyFavorites(1);
                     };
-
-                    LoadDataForMyFavorites(pageNo);
                     break;
                 default:
                     _forumId = Convert.ToInt32(threadTypeOrForumId);
+                    _threadListView.SelectionMode = ListViewSelectionMode.Single;
+
+                    var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
+                    var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
+                    btnRefresh.Command = RefreshThreadCommand;
+                    var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
+                    _threadCmdBar = new CommandBar();
+                    _threadCmdBar.Style = App.Current.Resources["CmdBarStyle"] as Style;
+                    _threadCmdBar.PrimaryCommands.Add(btnAdd);
+                    _threadCmdBar.PrimaryCommands.Add(btnRefresh);
+                    _threadCmdBar.PrimaryCommands.Add(btnSort);
+
+                    LoadData(pageNo);
 
                     RefreshThreadCommand = new DelegateCommand();
                     RefreshThreadCommand.ExecuteAction = (p) => {
                         _ds.ClearThreadData(_forumId);
                         LoadData(1);
                     };
-
-                    LoadData(pageNo);
                     break;
             }
         }

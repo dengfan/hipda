@@ -87,7 +87,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             leftProgress.IsActive = true;
             leftProgress.Visibility = Visibility.Visible;
-            ThreadRefreshButton.IsEnabled = false;
+            //ThreadRefreshButton.IsEnabled = false;
             ReplyRefreshButton.IsEnabled = false;
             ReplyRefreshButton2.IsEnabled = false;
         }
@@ -96,7 +96,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             leftProgress.IsActive = false;
             leftProgress.Visibility = Visibility.Collapsed;
-            ThreadRefreshButton.IsEnabled = true;
+            //ThreadRefreshButton.IsEnabled = true;
             ReplyRefreshButton.IsEnabled = true;
             ReplyRefreshButton2.IsEnabled = true;
         }
@@ -105,7 +105,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             rightProgress.IsActive = true;
             rightProgress.Visibility = Visibility.Visible;
-            ThreadRefreshButton.IsEnabled = false;
+            //ThreadRefreshButton.IsEnabled = false;
             ReplyRefreshButton.IsEnabled = false;
             ReplyRefreshButton2.IsEnabled = false;
             rightFooter.Visibility = Visibility.Collapsed;
@@ -115,7 +115,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             rightProgress.IsActive = false;
             rightProgress.Visibility = Visibility.Collapsed;
-            ThreadRefreshButton.IsEnabled = true;
+            //ThreadRefreshButton.IsEnabled = true;
             ReplyRefreshButton.IsEnabled = true;
             ReplyRefreshButton2.IsEnabled = true;
             rightFooter.Visibility = Visibility.Visible;
@@ -726,8 +726,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                 lv.CanDrag = false;
                 lv.SelectionMode = ListViewSelectionMode.None;
                 lv.ShowsScrollingPlaceholders = false;
-                lv.ItemContainerStyle = Application.Current.Resources["ReplyItemContainerStyle"] as Style;
-                lv.ItemTemplateSelector = Application.Current.Resources["userMessageListItemTemplateSelector"] as DataTemplateSelector;
+                lv.ItemContainerStyle = App.Current.Resources["ReplyItemContainerStyle"] as Style;
+                lv.ItemTemplateSelector = App.Current.Resources["userMessageListItemTemplateSelector"] as DataTemplateSelector;
                 lv.ItemsSource = data;
                 if (getAllButton != null)
                 {

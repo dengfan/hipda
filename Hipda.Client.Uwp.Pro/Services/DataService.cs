@@ -1147,7 +1147,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public bool CheckIsShowButtonForLoadPrevReplyPage(int threadId)
         {
-            var data = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
+            var data = _replyData.FirstOrDefault(d => d.ThreadId == threadId);
             if (data != null)
             {
                 if (data.Replies.Min(r => r.PageNo) != 1)

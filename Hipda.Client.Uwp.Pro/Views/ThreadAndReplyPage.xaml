@@ -94,11 +94,10 @@
               BorderThickness="1,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition />
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" 
+            <!--<CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" 
                         Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
                 <AppBarButton Icon="Add" Label="发表新贴"/>
                 <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
@@ -130,20 +129,16 @@
                     <AppBarButton Label="复制链接"/>
                     <AppBarButton Label="在浏览器中打开"/>
                 </CommandBar.SecondaryCommands>
-            </CommandBar>
-            <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked">
-                <ListView x:Name="ThreadListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
-                      ShowsScrollingPlaceholders="False" VerticalAlignment="Top" IncrementalLoadingTrigger="Edge"
-                      SelectionMode="Single" SelectionChanged="ThreadListView_SelectionChanged"
-                      ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
-                      ItemsSource="{Binding ThreadItemCollection}">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Padding" Value="0,0,20,0"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                </ListView>
+            </CommandBar>-->
+
+            <ContentControl Grid.Row="0" Content="{Binding ThreadCmdBar}" HorizontalContentAlignment="Stretch" Background="Transparent"/>
+
+            <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
+                <ListView x:Name="ThreadListView" SelectionChanged="ThreadListView_SelectionChanged" IncrementalLoadingTrigger="Edge"
+                          VerticalAlignment="Top" IsItemClickEnabled="False" IsSwipeEnabled="False"
+                          CanDrag="False" CanDragItems="False" CanReorderItems="False" ShowsScrollingPlaceholders="False"
+                          ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
+                          ItemContainerStyle="{StaticResource ThreadItemContainerStyle}"/>
             </pr:PullToRefreshBox>
 
             <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
