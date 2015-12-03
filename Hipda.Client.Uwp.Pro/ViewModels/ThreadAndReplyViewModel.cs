@@ -94,29 +94,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ThreadAndReplyViewModel(int pageNo, int forumId, ListView threadListView, Action beforeLoad, Action afterLoad)
-        {
-            _forumId = forumId;
-            _threadListView = threadListView;
-            _beforeLoad = beforeLoad;
-            _afterLoad = afterLoad;
-            _ds = new DataService();
-
-            RefreshThreadCommand = new DelegateCommand();
-            RefreshThreadCommand.ExecuteAction = (p) => {
-                _ds.ClearThreadData(_forumId);
-                LoadData(1);
-            };
-
-            ClearHistoryCommand = new DelegateCommand();
-            ClearHistoryCommand.ExecuteAction = (p) => {
-                DataService.ReadHistoryData.Clear();
-            };
-
-            LoadData(pageNo);
-        }
-
-        public ThreadAndReplyViewModel(int pageNo, string itemType, ListView threadListView, Action beforeLoad, Action afterLoad)
+        public ThreadAndReplyViewModel(int pageNo, string threadTypeOrForumId, ListView threadListView, Action beforeLoad, Action afterLoad)
         {
             _threadListView = threadListView;
             _beforeLoad = beforeLoad;
@@ -128,35 +106,46 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 DataService.ReadHistoryData.Clear();
             };
 
-            if (itemType.Equals("threads"))
+            switch (threadTypeOrForumId)
             {
-                RefreshThreadCommand = new DelegateCommand();
-                RefreshThreadCommand.ExecuteAction = (p) => {
-                    _ds.ClearThreadDataForMyThreads();
-                    LoadDataForMyThreads(1);
-                };
+                case "threads":
+                    RefreshThreadCommand = new DelegateCommand();
+                    RefreshThreadCommand.ExecuteAction = (p) => {
+                        _ds.ClearThreadDataForMyThreads();
+                        LoadDataForMyThreads(1);
+                    };
 
-                LoadDataForMyThreads(pageNo);
-            }
-            else if (itemType.Equals("posts"))
-            {
-                RefreshThreadCommand = new DelegateCommand();
-                RefreshThreadCommand.ExecuteAction = (p) => {
-                    _ds.ClearThreadDataForMyPosts();
-                    LoadDataForMyPosts(1);
-                };
+                    LoadDataForMyThreads(pageNo);
+                    break;
+                case "posts":
+                    RefreshThreadCommand = new DelegateCommand();
+                    RefreshThreadCommand.ExecuteAction = (p) => {
+                        _ds.ClearThreadDataForMyPosts();
+                        LoadDataForMyPosts(1);
+                    };
 
-                LoadDataForMyPosts(pageNo);
-            }
-            else if (itemType.Equals("favorites"))
-            {
-                RefreshThreadCommand = new DelegateCommand();
-                RefreshThreadCommand.ExecuteAction = (p) => {
-                    _ds.ClearThreadDataForMyFavorites();
-                    LoadDataForMyFavorites(1);
-                };
+                    LoadDataForMyPosts(pageNo);
+                    break;
+                case "favorites":
+                    RefreshThreadCommand = new DelegateCommand();
+                    RefreshThreadCommand.ExecuteAction = (p) => {
+                        _ds.ClearThreadDataForMyFavorites();
+                        LoadDataForMyFavorites(1);
+                    };
 
-                LoadDataForMyFavorites(pageNo);
+                    LoadDataForMyFavorites(pageNo);
+                    break;
+                default:
+                    _forumId = Convert.ToInt32(threadTypeOrForumId);
+
+                    RefreshThreadCommand = new DelegateCommand();
+                    RefreshThreadCommand.ExecuteAction = (p) => {
+                        _ds.ClearThreadData(_forumId);
+                        LoadData(1);
+                    };
+
+                    LoadData(pageNo);
+                    break;
             }
         }
 

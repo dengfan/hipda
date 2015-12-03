@@ -192,27 +192,27 @@ namespace Hipda.Client.Uwp.Pro.Views
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
                     _threadDataType = ThreadDataType.Default;
-                    int fid = Convert.ToInt32(param.Substring(4));
+                    string fid = param.Substring(4);
                     _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("item="))
                 {
-                    string itemType = param.Substring(5);
-                    if (itemType.Equals("threads"))
+                    string threadType = param.Substring(5);
+                    if (threadType.Equals("threads"))
                     {
                         _threadDataType = ThreadDataType.MyThreads;
                     }
-                    else if (itemType.Equals("posts"))
+                    else if (threadType.Equals("posts"))
                     {
                         _threadDataType = ThreadDataType.MyPosts;
                     }
-                    else if (itemType.Equals("favorites"))
+                    else if (threadType.Equals("favorites"))
                     {
                         _threadDataType = ThreadDataType.MyFavorites;
                     }
 
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, itemType, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, threadType, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
