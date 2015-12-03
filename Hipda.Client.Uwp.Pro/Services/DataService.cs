@@ -151,11 +151,11 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 string lastPostAuthorName = "匿名";
                 string lastPostTime = string.Empty;
-                string[] lastPostInfo = tdLastPost.InnerText.Trim().Replace(Environment.NewLine, "@").Split('@');
+                string[] lastPostInfo = tdLastPost.InnerText.Trim().Replace("\n", "@").Split('@');
                 if (lastPostInfo.Length == 2)
                 {
-                    lastPostAuthorName = lastPostInfo[0];
-                    lastPostTime = lastPostInfo[1]
+                    lastPostAuthorName = lastPostInfo[0].Trim();
+                    lastPostTime = lastPostInfo[1].Trim()
                         .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
@@ -230,11 +230,11 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var lastPostNode = item.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("lastpost"));
                 string lastPostAuthorName = "匿名";
                 string lastPostTime = string.Empty;
-                string[] lastPostInfo = lastPostNode.InnerText.Trim().Replace(Environment.NewLine, "@").Split('@');
+                string[] lastPostInfo = lastPostNode.InnerText.Trim().Replace("\n", "@").Split('@');
                 if (lastPostInfo.Length == 2)
                 {
-                    lastPostAuthorName = lastPostInfo[0];
-                    lastPostTime = lastPostInfo[1]
+                    lastPostAuthorName = lastPostInfo[0].Trim();
+                    lastPostTime = lastPostInfo[1].Trim()
                         .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
@@ -398,11 +398,11 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var lastPostNode = item.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("lastpost"));
                 string lastPostAuthorName = "匿名";
                 string lastPostTime = string.Empty;
-                string[] lastPostInfo = lastPostNode.InnerText.Trim().Replace(Environment.NewLine, "@").Split('@');
+                string[] lastPostInfo = lastPostNode.InnerText.Trim().Replace("\n", "@").Split('@');
                 if (lastPostInfo.Length == 2)
                 {
-                    lastPostAuthorName = lastPostInfo[0];
-                    lastPostTime = lastPostInfo[1]
+                    lastPostAuthorName = lastPostInfo[0].Trim();
+                    lastPostTime = lastPostInfo[1].Trim()
                         .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
@@ -1254,10 +1254,10 @@ namespace Hipda.Client.Uwp.Pro.Services
                         }
                         
                         bool isRead = !userInfoNode.InnerHtml.Contains("notice_newpm.gif");
-                        string str = userInfoNode.InnerText.Trim().Replace("&nbsp;", string.Empty).Replace(Environment.NewLine, "$");
+                        string str = userInfoNode.InnerText.Trim().Replace("&nbsp;", string.Empty).Replace("\n", "$");
                         string[] strAry = str.Split('$');
-                        string username = strAry[0];
-                        string time = strAry[1];
+                        string username = strAry[0].Trim();
+                        string time = strAry[1].Trim();
                         string date = time.Split(' ')[0];
                         
                         string textStr = messageNode.InnerText;

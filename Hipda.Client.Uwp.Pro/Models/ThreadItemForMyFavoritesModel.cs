@@ -45,7 +45,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return LastReplyTime;
+                return string.Format("{0} {1}", LastReplyUsername, LastReplyTime);
             }
         }
     }
