@@ -148,6 +148,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     var btnRefreshForFavorites = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
                     btnRefreshForFavorites.Tapped += (s, e) => {
                         _threadListView.SelectionMode = ListViewSelectionMode.Single;
+                        btnMultipleSelect.Label = "进入选择模式";
                         btnMultipleSelect.IsChecked = false;
                         btnDeleteSelected.IsEnabled = false;
 
