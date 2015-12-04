@@ -612,7 +612,7 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ThreadListMyFavoritesItemTemplate">
-            <Grid Margin="1,0,0,0" BorderThickness="2,0,0,0" Style="{Binding StatusColorStyle}">
+            <Grid>
                 <StackPanel Margin="8,4,0,4">
                     <TextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
                         <Run Text="{Binding ThreadItem.ForumName}" />

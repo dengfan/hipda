@@ -27,8 +27,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private Action _afterLoad { get; set; }
         private DataService _ds { get; set; }
 
-        public DelegateCommand RefreshThreadCommand { get; set; }
-
         public DelegateCommand ClearHistoryCommand { get; set; }
 
         public int ThreadMaxPageNo { get; private set; }
@@ -105,8 +103,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 case "threads":
                     LoadDataForMyThreads(pageNo);
 
-                    RefreshThreadCommand = new DelegateCommand();
-                    RefreshThreadCommand.ExecuteAction = (p) => {
+                    var refreshThreadForThreadsCommand = new DelegateCommand();
+                    refreshThreadForThreadsCommand.ExecuteAction = (p) => {
                         _ds.ClearThreadDataForMyThreads();
                         LoadDataForMyThreads(1);
                     };
@@ -114,43 +112,67 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 case "posts":
                     LoadDataForMyPosts(pageNo);
 
-                    RefreshThreadCommand = new DelegateCommand();
-                    RefreshThreadCommand.ExecuteAction = (p) => {
+                    var refreshThreadForPostsCommand = new DelegateCommand();
+                    refreshThreadForPostsCommand.ExecuteAction = (p) => {
                         _ds.ClearThreadDataForMyPosts();
                         LoadDataForMyPosts(1);
                     };
                     break;
                 case "favorites":
-                    _threadListView.SelectionMode = ListViewSelectionMode.Multiple;
-
                     LoadDataForMyFavorites(pageNo);
 
-                    RefreshThreadCommand = new DelegateCommand();
-                    RefreshThreadCommand.ExecuteAction = (p) => {
+                    var btnDeleteSelected = new AppBarButton { Icon = new SymbolIcon(Symbol.Delete), Label = "删除", IsEnabled = false };
+                    btnDeleteSelected.Tapped += (s, e) =>
+                    {
+
+                    };
+
+                    var btnMultipleSelect = new AppBarToggleButton { Icon = new FontIcon { Glyph = "\uE179", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label = "进入选择模式", IsThreeState = false };
+                    btnMultipleSelect.Tapped += (s, e) =>
+                    {
+                        var btn = s as AppBarToggleButton;
+                        if (btn.IsChecked == true)
+                        {
+                            _threadListView.SelectionMode = ListViewSelectionMode.Multiple;
+                            btnMultipleSelect.Label = "退出选择模式";
+                            btnDeleteSelected.IsEnabled = true;
+                        }
+                        else
+                        {
+                            _threadListView.SelectionMode = ListViewSelectionMode.Single;
+                            btnMultipleSelect.Label = "进入选择模式";
+                            btnDeleteSelected.IsEnabled = false;
+                        }
+                    };
+
+                    var btnRefreshForFavorites = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
+                    btnRefreshForFavorites.Tapped += (s, e) => {
+                        _threadListView.SelectionMode = ListViewSelectionMode.Single;
+                        btnMultipleSelect.IsChecked = false;
+                        btnDeleteSelected.IsEnabled = false;
+
                         _ds.ClearThreadDataForMyFavorites();
                         LoadDataForMyFavorites(1);
                     };
 
-                    var btnRefreshForFavorites = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
-                    btnRefreshForFavorites.Command = RefreshThreadCommand;
-                    var btnMultipleCheck = new AppBarButton { Icon = new FontIcon { Glyph = "\uE179", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label="进入选择模式" };
                     _threadCommandBar.PrimaryCommands.Add(btnRefreshForFavorites);
-                    _threadCommandBar.PrimaryCommands.Add(btnMultipleCheck);
+                    _threadCommandBar.PrimaryCommands.Add(btnMultipleSelect);
+                    _threadCommandBar.PrimaryCommands.Add(btnDeleteSelected);
                     break;
                 default:
                     _forumId = Convert.ToInt32(threadTypeOrForumId);
 
                     LoadData(pageNo);
 
-                    RefreshThreadCommand = new DelegateCommand();
-                    RefreshThreadCommand.ExecuteAction = (p) => {
+                    var refreshThreadCommand = new DelegateCommand();
+                    refreshThreadCommand.ExecuteAction = (p) => {
                         _ds.ClearThreadData(_forumId);
                         LoadData(1);
                     };
 
                     var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
                     var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
-                    btnRefresh.Command = RefreshThreadCommand;
+                    btnRefresh.Command = refreshThreadCommand;
                     var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
                     _threadCommandBar.PrimaryCommands.Add(btnAdd);
                     _threadCommandBar.PrimaryCommands.Add(btnRefresh);
