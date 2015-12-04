@@ -534,10 +534,6 @@
             <Setter Property="BorderBrush" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
         </Style>
 
-        <Style x:Key="CmdBarStyle" TargetType="CommandBar">
-            <Setter Property="Background" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
-        </Style>
-        
         <Style x:Key="TopThreadItemStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseLowBrush}"/>
         </Style>
