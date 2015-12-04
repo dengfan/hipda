@@ -69,7 +69,7 @@ namespace Hipda.Http
             return result;
         }
 
-        public async Task<string> PostAsync(string url, IDictionary<string, object> toPost, CancellationTokenSource cts)
+        public async Task<string> PostAsync(string url, List<KeyValuePair<string, object>> toPost, CancellationTokenSource cts)
         {
             var result = string.Empty;
             string postData = GetQueryString(toPost);
@@ -138,7 +138,7 @@ namespace Hipda.Http
         /// </summary>
         /// <param name="toPost">字典数据</param>
         /// <returns>QueryString</returns>
-        public string GetQueryString(IDictionary<string, object> toPost)
+        public string GetQueryString(List<KeyValuePair<string, object>> toPost)
         {
             string queryStr = string.Empty;
 

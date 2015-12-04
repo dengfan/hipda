@@ -122,9 +122,18 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     LoadDataForMyFavorites(pageNo);
 
                     var btnDeleteSelected = new AppBarButton { Icon = new SymbolIcon(Symbol.Delete), Label = "删除", IsEnabled = false };
-                    btnDeleteSelected.Tapped += (s, e) =>
+                    btnDeleteSelected.Tapped += async (s, e) =>
                     {
-
+                        var deleteThreads = _threadListView.SelectedItems;
+                        if (deleteThreads != null)
+                        {
+                            var ids = new List<int>();
+                            foreach (ThreadItemForMyFavoritesViewModel thread in deleteThreads)
+                            {
+                                ids.Add(thread.ThreadItem.ThreadId);
+                            }
+                            await _ds.DeleteThreadForMyFavoritesAsync(ids);
+                        }
                     };
 
                     var btnMultipleSelect = new AppBarToggleButton { Icon = new FontIcon { Glyph = "\uE179", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label = "进入选择模式", IsThreeState = false };

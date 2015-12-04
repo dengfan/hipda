@@ -740,6 +740,27 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             return string.Empty;
         }
+
+        public async Task<bool> DeleteThreadForMyFavoritesAsync(List<int> deleteThreadIds)
+        {
+            if (deleteThreadIds.Count == 0)
+            {
+                return false;
+            }
+
+            var postData = new List<KeyValuePair<string, object>>();
+            postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
+            postData.Add(new KeyValuePair<string, object>("favsubmit", "true"));
+            foreach (var tid in deleteThreadIds)
+            {
+                postData.Add(new KeyValuePair<string, object>("delete[]", tid));
+            }
+
+            string url = string.Format("http://www.hi-pda.com/forum/my.php?item=favorites&type=thread&_={0}", DateTime.Now.Ticks.ToString("x"));
+            var cts = new CancellationTokenSource();
+            string resultContent = await _httpClient.PostAsync(url, postData, cts);
+            return resultContent.Contains("收藏夹已成功更新，现在将转入更新后的收藏夹。");
+        }
         #endregion
 
         #region reply
@@ -1291,21 +1312,16 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public async Task<bool> PostUserMessage(string message, int userId)
         {
-            var postData = new Dictionary<string, object>();
-            postData.Add("formhash", AccountService.FormHash);
-            postData.Add("handlekey", "pmreply");
-            postData.Add("lastdaterange", DateTime.Now.ToString("yyyy-MM-dd"));
-            postData.Add("message", FaceService.FaceReplace(message));
+            var postData = new List<KeyValuePair<string, object>>();
+            postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
+            postData.Add(new KeyValuePair<string, object>("handlekey", "pmreply"));
+            postData.Add(new KeyValuePair<string, object>("lastdaterange", DateTime.Now.ToString("yyyy-MM-dd")));
+            postData.Add(new KeyValuePair<string, object>("message", FaceService.FaceReplace(message)));
 
             string url = string.Format("http://www.hi-pda.com/forum/pm.php?action=send&uid={0}&pmsubmit=yes&_={1}", userId, DateTime.Now.Ticks.ToString("x"));
             var cts = new CancellationTokenSource();
             string resultContent = await _httpClient.PostAsync(url, postData, cts);
-            if (resultContent.StartsWith(@"<?xml version=""1.0"" encoding=""gbk""?><root><![CDATA[<li id=""pm_") && resultContent.Contains(@"images/default/notice_newpm.gif"))
-            {
-                return true;
-            }
-
-            return false;
+            return resultContent.StartsWith(@"<?xml version=""1.0"" encoding=""gbk""?><root><![CDATA[<li id=""pm_") && resultContent.Contains(@"images/default/notice_newpm.gif");
         }
         #endregion
 

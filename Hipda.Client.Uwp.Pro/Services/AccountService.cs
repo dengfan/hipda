@@ -99,11 +99,11 @@ namespace Hipda.Client.Uwp.Pro.Services
             // 先清除 cookie
             _httpClient.ClearCookies();
 
-            var postData = new Dictionary<string, object>();
-            postData.Add("username", username);
-            postData.Add("password", password);
-            postData.Add("questionid", questionId);
-            postData.Add("answer", answer);
+            var postData = new List<KeyValuePair<string, object>>();
+            postData.Add(new KeyValuePair<string, object>("username", username));
+            postData.Add(new KeyValuePair<string, object>("password", password));
+            postData.Add(new KeyValuePair<string, object>("questionid", questionId));
+            postData.Add(new KeyValuePair<string, object>("answer", answer));
 
             var cts = new CancellationTokenSource();
             string resultContent = await _httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData, cts);
