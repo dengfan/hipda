@@ -131,7 +131,7 @@
                 </CommandBar.SecondaryCommands>
             </CommandBar>-->
 
-            <ContentControl Grid.Row="0" Content="{Binding ThreadCmdBar}" HorizontalContentAlignment="Stretch" Background="Transparent"/>
+            <CommandBar x:Name="ThreadCommandBar" Grid.Row="0" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
 
             <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
                 <ListView x:Name="ThreadListView" SelectionChanged="ThreadListView_SelectionChanged" IncrementalLoadingTrigger="Edge"

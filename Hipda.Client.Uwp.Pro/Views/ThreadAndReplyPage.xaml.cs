@@ -193,7 +193,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 {
                     _threadDataType = ThreadDataType.Default;
                     string fid = param.Substring(4);
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("item="))
@@ -212,7 +212,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                         _threadDataType = ThreadDataType.MyFavorites;
                     }
 
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, threadType, ThreadListView, LeftBeforeLoaded, LeftAfterLoaded);
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, threadType, ThreadListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来

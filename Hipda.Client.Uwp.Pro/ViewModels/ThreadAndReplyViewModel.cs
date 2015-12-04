@@ -22,6 +22,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     {
         private int _forumId { get; set; }
         private ListView _threadListView { get; set; }
+        private CommandBar _threadCommandBar { get; set; }
         private Action _beforeLoad { get; set; }
         private Action _afterLoad { get; set; }
         private DataService _ds { get; set; }
@@ -39,37 +40,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 return DataService.ReadHistoryData;
             }
         }
-
-        #region 用于主题列表控件增量加载
-        //private ICollectionView _threadItemCollection;
-
-        //public ICollectionView ThreadItemCollection
-        //{
-        //    get { return _threadItemCollection; }
-        //    set
-        //    {
-        //        _threadItemCollection = value;
-        //        this.RaisePropertyChanged("ThreadItemCollection");
-        //    }
-        //}
-
-        //private ListView _threadListView;
-
-        //public ListView ThreadListView
-        //{
-        //    get { return _threadListView; }
-        //    set { _threadListView = value; }
-        //}
-
-
-        private CommandBar _threadCmdBar;
-
-        public CommandBar ThreadCmdBar
-        {
-            get { return _threadCmdBar; }
-            set { _threadCmdBar = value; }
-        }
-        #endregion
 
         private void LoadData(int pageNo)
         {
@@ -111,9 +81,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ThreadAndReplyViewModel(int pageNo, string threadTypeOrForumId, ListView threadListView, Action beforeLoad, Action afterLoad)
+        public ThreadAndReplyViewModel(int pageNo, string threadTypeOrForumId, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad)
         {
             _threadListView = threadListView;
+            _threadListView.ItemsSource = null;
+
+            _threadCommandBar = threadCommandBar;
+            _threadCommandBar.PrimaryCommands.Clear();
+            _threadCommandBar.SecondaryCommands.Clear();
+
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _ds = new DataService();
@@ -153,10 +129,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     var btnRefreshForFavorites = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
                     btnRefreshForFavorites.Command = RefreshThreadCommand;
                     var btnMultipleCheck = new AppBarButton { Icon = new FontIcon { Glyph = "\uE179", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label="进入选择模式" };
-                    _threadCmdBar = new CommandBar();
-                    _threadCmdBar.Style = App.Current.Resources["CmdBarStyle"] as Style;
-                    _threadCmdBar.PrimaryCommands.Add(btnRefreshForFavorites);
-                    _threadCmdBar.PrimaryCommands.Add(btnMultipleCheck);
+                    _threadCommandBar.PrimaryCommands.Add(btnRefreshForFavorites);
+                    _threadCommandBar.PrimaryCommands.Add(btnMultipleCheck);
 
                     LoadDataForMyFavorites(pageNo);
 
@@ -168,17 +142,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     break;
                 default:
                     _forumId = Convert.ToInt32(threadTypeOrForumId);
+
                     _threadListView.SelectionMode = ListViewSelectionMode.Single;
 
                     var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
                     var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
                     btnRefresh.Command = RefreshThreadCommand;
                     var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
-                    _threadCmdBar = new CommandBar();
-                    _threadCmdBar.Style = App.Current.Resources["CmdBarStyle"] as Style;
-                    _threadCmdBar.PrimaryCommands.Add(btnAdd);
-                    _threadCmdBar.PrimaryCommands.Add(btnRefresh);
-                    _threadCmdBar.PrimaryCommands.Add(btnSort);
+                    _threadCommandBar.PrimaryCommands.Add(btnAdd);
+                    _threadCommandBar.PrimaryCommands.Add(btnRefresh);
+                    _threadCommandBar.PrimaryCommands.Add(btnSort);
 
                     LoadData(pageNo);
 
