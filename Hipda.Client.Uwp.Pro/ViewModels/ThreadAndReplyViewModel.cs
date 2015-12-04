@@ -123,12 +123,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 case "favorites":
                     _threadListView.SelectionMode = ListViewSelectionMode.Multiple;
 
-                    var btnRefreshForFavorites = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
-                    btnRefreshForFavorites.Command = RefreshThreadCommand;
-                    var btnMultipleCheck = new AppBarButton { Icon = new FontIcon { Glyph = "\uE179", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label="进入选择模式" };
-                    _threadCommandBar.PrimaryCommands.Add(btnRefreshForFavorites);
-                    _threadCommandBar.PrimaryCommands.Add(btnMultipleCheck);
-
                     LoadDataForMyFavorites(pageNo);
 
                     RefreshThreadCommand = new DelegateCommand();
@@ -136,17 +130,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                         _ds.ClearThreadDataForMyFavorites();
                         LoadDataForMyFavorites(1);
                     };
+
+                    var btnRefreshForFavorites = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
+                    btnRefreshForFavorites.Command = RefreshThreadCommand;
+                    var btnMultipleCheck = new AppBarButton { Icon = new FontIcon { Glyph = "\uE179", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label="进入选择模式" };
+                    _threadCommandBar.PrimaryCommands.Add(btnRefreshForFavorites);
+                    _threadCommandBar.PrimaryCommands.Add(btnMultipleCheck);
                     break;
                 default:
                     _forumId = Convert.ToInt32(threadTypeOrForumId);
-
-                    var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
-                    var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
-                    btnRefresh.Command = RefreshThreadCommand;
-                    var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
-                    _threadCommandBar.PrimaryCommands.Add(btnAdd);
-                    _threadCommandBar.PrimaryCommands.Add(btnRefresh);
-                    _threadCommandBar.PrimaryCommands.Add(btnSort);
 
                     LoadData(pageNo);
 
@@ -155,6 +147,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                         _ds.ClearThreadData(_forumId);
                         LoadData(1);
                     };
+
+                    var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
+                    var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
+                    btnRefresh.Command = RefreshThreadCommand;
+                    var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
+                    _threadCommandBar.PrimaryCommands.Add(btnAdd);
+                    _threadCommandBar.PrimaryCommands.Add(btnRefresh);
+                    _threadCommandBar.PrimaryCommands.Add(btnSort);
                     break;
             }
         }
