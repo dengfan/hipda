@@ -84,6 +84,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public ThreadAndReplyViewModel(int pageNo, string threadTypeOrForumId, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad)
         {
             _threadListView = threadListView;
+            _threadListView.SelectionMode = ListViewSelectionMode.Single;
             _threadListView.ItemsSource = null;
 
             _threadCommandBar = threadCommandBar;
@@ -102,8 +103,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             switch (threadTypeOrForumId)
             {
                 case "threads":
-                    _threadListView.SelectionMode = ListViewSelectionMode.Single;
-
                     LoadDataForMyThreads(pageNo);
 
                     RefreshThreadCommand = new DelegateCommand();
@@ -113,8 +112,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     };
                     break;
                 case "posts":
-                    _threadListView.SelectionMode = ListViewSelectionMode.Single;
-
                     LoadDataForMyPosts(pageNo);
 
                     RefreshThreadCommand = new DelegateCommand();
@@ -142,8 +139,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     break;
                 default:
                     _forumId = Convert.ToInt32(threadTypeOrForumId);
-
-                    _threadListView.SelectionMode = ListViewSelectionMode.Single;
 
                     var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
                     var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
