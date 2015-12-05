@@ -295,6 +295,12 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private async void ThreadListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // 如果进入了选择模式，则不打开主题
+            if (ThreadListView.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                return;
+            }
+
             if (e.AddedItems.Count == 0)
             {
                 return;
