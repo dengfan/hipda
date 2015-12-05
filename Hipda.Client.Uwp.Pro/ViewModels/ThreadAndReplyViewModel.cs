@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -135,7 +136,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                             bool isOk = await _ds.DeleteThreadForMyFavoritesAsync(ids);
                             if (isOk)
                             {
-                                
+                                _ds.ClearThreadDataForMyFavorites();
+                                LoadDataForMyFavorites(1);
+
+                                var options = new LauncherOptions();
+                                options.TreatAsUntrusted = false;
+                                await Launcher.LaunchUriAsync(new Uri(string.Format("hipda:tip={0}", "操作成功！")), options);
                             }
                         }
                     };

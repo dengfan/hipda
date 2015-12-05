@@ -350,7 +350,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             doc.LoadHtml(htmlContent);
 
             var dataTable = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
-            if (dataTable == null)
+            if (dataTable == null || dataTable.InnerText.Trim().Equals("暂无数据"))
             {
                 return;
             }

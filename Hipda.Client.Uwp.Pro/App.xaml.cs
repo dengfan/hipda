@@ -205,8 +205,6 @@ namespace Hipda.Client.Uwp.Pro
                 ProtocolActivatedEventArgs eventArgs = args as ProtocolActivatedEventArgs;
                 if (eventArgs.Uri.Scheme == "hipda")
                 {
-                    // TODO: Handle URI activation
-                    // The received URI is eventArgs.Uri.AbsoluteUri
                     string uri = eventArgs.Uri.AbsoluteUri;
                     if (uri.StartsWith("hipda:tid=")) // 在新窗口中打开指定的回复列表
                     {
