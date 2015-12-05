@@ -15,6 +15,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -207,34 +208,16 @@ namespace Hipda.Client.Uwp.Pro
                     // TODO: Handle URI activation
                     // The received URI is eventArgs.Uri.AbsoluteUri
                     string uri = eventArgs.Uri.AbsoluteUri;
-
-                    // 从URI里面解析出 tid
-                    int tid = Convert.ToInt32(uri.Split('=')[1]);
-                    await OpenThreadInNewView(tid);
-                    //if (fid > 0)
-                    //{
-                    //    rootFrame.Navigate(typeof(MainPage), string.Format("fid={0}", fid));
-                    //}
-                    //else if (tid > 0)
-                    //{
-                    //    rootFrame.Navigate(typeof(MainPage), string.Format("tid={0}", tid));
-                    //}
-                    //else
-                    //{
-                    //    // 当导航堆栈尚未还原时，导航到第一页，
-                    //    // 并通过将所需信息作为导航参数传入来配置
-                    //    // 参数
-                    //    if (isLogin)
-                    //    {
-                    //        rootFrame.Navigate(typeof(MainPage), "fid=2");
-                    //    }
-                    //    else
-                    //    {
-                    //        rootFrame.Navigate(typeof(LoginPage));
-                    //    }
-                    //}
-
-                    //Window.Current.Activate();
+                    if (uri.StartsWith("hipda:tid=")) // 在新窗口中打开指定的回复列表
+                    {
+                        int tid = Convert.ToInt32(uri.Split('=')[1]);
+                        await OpenThreadInNewView(tid);
+                    }
+                    else if (uri.StartsWith("hipda:tip=")) // 弹出提示标签
+                    {
+                        MainPage mp = rootFrame.Content as MainPage;
+                        mp.ShowTipBar(uri.Substring(6));
+                    }
                 }
             }
         }

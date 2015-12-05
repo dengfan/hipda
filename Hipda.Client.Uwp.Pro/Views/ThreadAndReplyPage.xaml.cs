@@ -181,13 +181,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        public async void ShowTipBar(string tipContent)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                TipTextBlock.Text = tipContent;
-                ShowTipBarAnimation.Begin();
-            });
-        }
+        
         #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

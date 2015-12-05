@@ -32,14 +32,6 @@
                     Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                     HorizontalAlignment="Center" Tapped="LoadPrevReplyPageButton_Tapped"/>
         </DataTemplate>
-
-        <Storyboard x:Name="ShowTipBarAnimation">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="TipBar">
-                <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="-240"/>
-                <LinearDoubleKeyFrame KeyTime="0:0:2" Value="-240"/>
-                <LinearDoubleKeyFrame KeyTime="0:0:2.2" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">
@@ -285,11 +277,6 @@
                             HorizontalContentAlignment="Stretch"/>
         </ContentDialog>
 
-        <Border x:Name="TipBar" Margin="0,48,-240,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Red" Width="240">
-            <Border.RenderTransform>
-                <CompositeTransform />
-            </Border.RenderTransform>
-            <TextBlock x:Name="TipTextBlock" Padding="8" Text="中华人民共和国，中华人民共和国，中华人民共和国，中华人民共和国" TextWrapping="Wrap"/>
-        </Border>
+        
     </Grid>
 </Page>
