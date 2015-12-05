@@ -89,5 +89,10 @@ namespace Hipda.Client.Uwp.Pro.Views
             // that will throw exceptions
             Window.Current.Close();
         }
+
+        private void rightPr_RefreshInvoked(DependencyObject sender, object args)
+        {
+            _replyViewModel.RefreshReplyDataFromPrevPage();
+        }
     }
 }

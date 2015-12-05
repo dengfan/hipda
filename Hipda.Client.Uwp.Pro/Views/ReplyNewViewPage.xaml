@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Hipda.Client.Uwp.Pro.Views"
+    xmlns:pr="using:PullToRefresh.UWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -23,26 +24,28 @@
             </CommandBar.SecondaryCommands>
         </CommandBar>
 
-        <ListView Grid.Row="1" x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
-                              SelectionMode="Single" ShowsScrollingPlaceholders="False"
+        <pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
+            <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
+                              VerticalAlignment="Top" SelectionMode="Single" ShowsScrollingPlaceholders="False"
                               ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                               ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                               ItemsSource="{Binding ReplyItemCollection}">
-            <ListView.Footer>
-                <StackPanel x:Name="rightFooter" Margin="0,80,0,160">
-                    <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
-                    <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
-                                    <TextBlock Text="&#xE14A;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-                </StackPanel>
-            </ListView.Footer>
-        </ListView>
+                <ListView.Footer>
+                    <StackPanel x:Name="rightFooter" Margin="0,80,0,160">
+                        <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
+                        <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
+                                        <TextBlock Text="&#xE14A;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+                </ListView.Footer>
+            </ListView>
+        </pr:PullToRefreshBox>
 
         <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 

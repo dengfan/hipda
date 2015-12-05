@@ -99,6 +99,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             //ThreadRefreshButton.IsEnabled = true;
             ReplyRefreshButton.IsEnabled = true;
             ReplyRefreshButton2.IsEnabled = true;
+
+            ShowTipBar("加载完成！");
         }
 
         private void RightBeforeLoaded()
@@ -179,6 +181,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                 item.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
                 RightWrap.DataContext = item;
             }
+        }
+
+        public async void ShowTipBar(string tipContent)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                TipTextBlock.Text = tipContent;
+                ShowTipBarAnimation.Begin();
+            });
         }
         #endregion
 

@@ -132,7 +132,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                             {
                                 ids.Add(thread.ThreadItem.ThreadId);
                             }
-                            await _ds.DeleteThreadForMyFavoritesAsync(ids);
+                            bool isOk = await _ds.DeleteThreadForMyFavoritesAsync(ids);
+
                         }
                     };
 

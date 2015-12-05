@@ -27,9 +27,9 @@
             </CommandBar.SecondaryCommands>
         </CommandBar>
 
-        <pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked">
+        <pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
             <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
-                              SelectionMode="Single" ShowsScrollingPlaceholders="False"
+                              VerticalAlignment="Top" SelectionMode="Single" ShowsScrollingPlaceholders="False"
                               ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                               ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                               ItemsSource="{Binding ReplyItemCollection}">

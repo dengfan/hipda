@@ -32,6 +32,14 @@
                     Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                     HorizontalAlignment="Center" Tapped="LoadPrevReplyPageButton_Tapped"/>
         </DataTemplate>
+
+        <Storyboard x:Name="ShowTipBarAnimation">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="TipBar">
+                <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="-240"/>
+                <LinearDoubleKeyFrame KeyTime="0:0:2" Value="-240"/>
+                <LinearDoubleKeyFrame KeyTime="0:0:2.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">
@@ -83,190 +91,192 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="LeftColumn" Width="320" />
-            <ColumnDefinition x:Name="RightColumn" Width="*" />
-            <ColumnDefinition x:Name="RightSideColumn" Width="0" />
-        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftColumn" Width="320" />
+                <ColumnDefinition x:Name="RightColumn" Width="*" />
+                <ColumnDefinition x:Name="RightSideColumn" Width="0" />
+            </Grid.ColumnDefinitions>
 
-        <Grid x:Name="LeftWrap" Grid.Column="0" 
+            <Grid x:Name="LeftWrap" Grid.Column="0" 
               BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
               BorderThickness="1,0,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <!--<CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" 
+                <!--<CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" 
                         Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-                <AppBarButton Icon="Add" Label="发表新贴"/>
-                <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
-                <AppBarButton x:Name="SortingButton" Icon="Sort" Label="按发布时间倒序排列" Click="SortingButton_Click"/>
-                <CommandBar.SecondaryCommands>
-                    <AppBarButton Label="跳转到指定页">
-                        <AppBarButton.Flyout>
-                            <Flyout>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="60"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="60"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="1" HorizontalAlignment="Left"/>
-                                    <Slider x:Name="PageSlider" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" Minimum="1" Maximum="{Binding ThreadMaxPageNo}" Width="280" HorizontalAlignment="Center" />
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding ThreadMaxPageNo}" HorizontalAlignment="Right"/>
-                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Value,ElementName=PageSlider}" HorizontalAlignment="Center" Width="80" />
-                                    <Button Grid.Row="2" Grid.Column="1" Content="确定" HorizontalAlignment="Center" Width="80" />
-                                </Grid>
-                            </Flyout>
-                        </AppBarButton.Flyout>
-                    </AppBarButton>
-                    <AppBarButton Label="复制链接"/>
-                    <AppBarButton Label="在浏览器中打开"/>
-                </CommandBar.SecondaryCommands>
-            </CommandBar>-->
+                    <AppBarButton Icon="Add" Label="发表新贴"/>
+                    <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
+                    <AppBarButton x:Name="SortingButton" Icon="Sort" Label="按发布时间倒序排列" Click="SortingButton_Click"/>
+                    <CommandBar.SecondaryCommands>
+                        <AppBarButton Label="跳转到指定页">
+                            <AppBarButton.Flyout>
+                                <Flyout>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="1" HorizontalAlignment="Left"/>
+                                        <Slider x:Name="PageSlider" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" Minimum="1" Maximum="{Binding ThreadMaxPageNo}" Width="280" HorizontalAlignment="Center" />
+                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding ThreadMaxPageNo}" HorizontalAlignment="Right"/>
+                                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Value,ElementName=PageSlider}" HorizontalAlignment="Center" Width="80" />
+                                        <Button Grid.Row="2" Grid.Column="1" Content="确定" HorizontalAlignment="Center" Width="80" />
+                                    </Grid>
+                                </Flyout>
+                            </AppBarButton.Flyout>
+                        </AppBarButton>
+                        <AppBarButton Label="复制链接"/>
+                        <AppBarButton Label="在浏览器中打开"/>
+                    </CommandBar.SecondaryCommands>
+                </CommandBar>-->
 
-            <CommandBar x:Name="ThreadCommandBar" Grid.Row="0" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
+                <CommandBar x:Name="ThreadCommandBar" Grid.Row="0" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
 
-            <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
-                <ListView x:Name="ThreadListView" SelectionChanged="ThreadListView_SelectionChanged" IncrementalLoadingTrigger="Edge"
+                <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
+                    <ListView x:Name="ThreadListView" SelectionChanged="ThreadListView_SelectionChanged" IncrementalLoadingTrigger="Edge"
                           VerticalAlignment="Top" IsItemClickEnabled="False" IsSwipeEnabled="False"
                           CanDrag="False" CanDragItems="False" CanReorderItems="False" ShowsScrollingPlaceholders="False"
                           ItemTemplateSelector="{StaticResource threadListItemTemplateSelector}"
                           ItemContainerStyle="{StaticResource ThreadItemContainerStyle}"/>
-            </pr:PullToRefreshBox>
+                </pr:PullToRefreshBox>
 
-            <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
-        </Grid>
+                <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
+            </Grid>
 
-        <Grid x:Name="RightWrap" Grid.Column="1" 
+            <Grid x:Name="RightWrap" Grid.Column="1" 
               BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
               BorderThickness="1,0,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-                <AppBarButton Icon="Edit" Label="评论"/>
-                <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
-                <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
-                <CommandBar.SecondaryCommands>
-                    <AppBarButton Label="复制链接"/>
-                    <AppBarButton Label="在浏览器中打开"/>
-                </CommandBar.SecondaryCommands>
-            </CommandBar>
+                <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+                    <AppBarButton Icon="Edit" Label="评论"/>
+                    <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
+                    <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
+                    <CommandBar.SecondaryCommands>
+                        <AppBarButton Label="复制链接"/>
+                        <AppBarButton Label="在浏览器中打开"/>
+                    </CommandBar.SecondaryCommands>
+                </CommandBar>
 
-            <pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked">
-                <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
-                              SelectionMode="None" ShowsScrollingPlaceholders="False"
+                <pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
+                    <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
+                              VerticalAlignment="Top" SelectionMode="None" ShowsScrollingPlaceholders="False"
                               ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                               ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                               ItemsSource="{Binding ReplyItemCollection}">
-                    <ListView.Footer>
-                        <StackPanel x:Name="rightFooter" Margin="0,80,0,160" Visibility="Collapsed">
-                            <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
-                            <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
-                                            <TextBlock Text="&#xE14A;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-                    </ListView.Footer>
-                </ListView>
-            </pr:PullToRefreshBox>
+                        <ListView.Footer>
+                            <StackPanel x:Name="rightFooter" Margin="0,80,0,160" Visibility="Collapsed">
+                                <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
+                                <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
+                                                <TextBlock Text="&#xE14A;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
+                        </ListView.Footer>
+                    </ListView>
+                </pr:PullToRefreshBox>
 
-            <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
+                <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
-            <StackPanel Grid.Row="1" x:Name="ReplyPanel" VerticalAlignment="Bottom" 
+                <StackPanel Grid.Row="1" x:Name="ReplyPanel" VerticalAlignment="Bottom" 
                         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
                         BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderThickness="0,1,0,0" Opacity="0.8">
-                <Grid>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
-                            <Button.Content>
-                                <SymbolIcon Symbol="Emoji2" />
-                            </Button.Content>
-                            <Button.Flyout>
-                                <Flyout>
-                                    <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceData}" SelectionMode="None" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" Width="300" Height="290">
-                                        <GridView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            </DataTemplate>
-                                        </GridView.ItemTemplate>
-                                    </GridView>
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                        <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}">
-                            <Button.Content>
-                                <SymbolIcon Symbol="Attach" />
-                            </Button.Content>
-                        </Button>
-                    </StackPanel>
-                    <Button x:Name="SendButton" Command="{Binding PostReplyCommand}"
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="Emoji2" />
+                                </Button.Content>
+                                <Button.Flyout>
+                                    <Flyout>
+                                        <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceData}" SelectionMode="None" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" Width="300" Height="290">
+                                            <GridView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </DataTemplate>
+                                            </GridView.ItemTemplate>
+                                        </GridView>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                            <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="Attach" />
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        <Button x:Name="SendButton" Command="{Binding PostReplyCommand}"
                             Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
                             Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
                             HorizontalAlignment="Right" VerticalAlignment="Top">
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <SymbolIcon Symbol="Send" />
-                                <TextBlock Text=" 发送"/>
-                            </StackPanel>
-                        </Button.Content>
-                    </Button>
-                </Grid>
-                <TextBox x:Name="PostReplyTextBox" Template="{StaticResource TextBoxTemplate1}" MaxHeight="280" Padding="8,4" Background="Transparent" BorderThickness="0"
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <SymbolIcon Symbol="Send" />
+                                    <TextBlock Text=" 发送"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <TextBox x:Name="PostReplyTextBox" Template="{StaticResource TextBoxTemplate1}" MaxHeight="280" Padding="8,4" Background="Transparent" BorderThickness="0"
                          TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容，回车可换行。"/>
-            </StackPanel>
-        </Grid>
+                </StackPanel>
+            </Grid>
 
-        <Grid x:Name="RightSideWrap" Grid.Column="2" 
+            <Grid x:Name="RightSideWrap" Grid.Column="2" 
               BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
               BorderThickness="1,0,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <CommandBar x:Name="RightSideCommandBar" VerticalAlignment="Top" 
+                <CommandBar x:Name="RightSideCommandBar" VerticalAlignment="Top" 
                         HorizontalContentAlignment="Stretch" 
                         Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-                <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
-            </CommandBar>
+                    <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
+                </CommandBar>
 
-            <ListView x:Name="ReadListView" Grid.Row="1" IsItemClickEnabled="True" IsSwipeEnabled="False"
+                <ListView x:Name="ReadListView" Grid.Row="1" IsItemClickEnabled="True" IsSwipeEnabled="False"
                       CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False"
                       ItemsSource="{Binding ReadData}" ItemClick="ReadListView_ItemClick">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Padding" Value="2,4,20,4"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="2,0,0,0">
-                            <TextBlock TextWrapping="Wrap" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
-                        </Border>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="2,4,20,4"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="2,0,0,0">
+                                <TextBlock TextWrapping="Wrap" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
 
-            <StackPanel Orientation="Horizontal" Height="48">
-                <FontIcon Margin="8,0,0,0" Glyph="&#xE81C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" />
-                <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center" />
-            </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="48">
+                    <FontIcon Margin="8,0,0,0" Glyph="&#xE81C;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" />
+                    <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
         </Grid>
 
         <ContentDialog x:Name="UserDialog" Template="{StaticResource ContentDialogTemplate1}" Opened="UserDialog_Opened" Closed="UserDialog_Closed">
@@ -274,5 +284,12 @@
                             Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                             HorizontalContentAlignment="Stretch"/>
         </ContentDialog>
+
+        <Border x:Name="TipBar" Margin="0,48,-240,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Red" Width="240">
+            <Border.RenderTransform>
+                <CompositeTransform />
+            </Border.RenderTransform>
+            <TextBlock x:Name="TipTextBlock" Padding="8" Text="中华人民共和国，中华人民共和国，中华人民共和国，中华人民共和国" TextWrapping="Wrap"/>
+        </Border>
     </Grid>
 </Page>
