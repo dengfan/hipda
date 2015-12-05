@@ -99,8 +99,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             //ThreadRefreshButton.IsEnabled = true;
             ReplyRefreshButton.IsEnabled = true;
             ReplyRefreshButton2.IsEnabled = true;
-
-            ShowTipBar("加载完成！");
         }
 
         private void RightBeforeLoaded()
