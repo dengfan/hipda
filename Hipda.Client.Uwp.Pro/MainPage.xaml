@@ -66,9 +66,9 @@
         </Storyboard>
         <Storyboard x:Name="ShowTipBarAnimation">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="TipBar">
-                <LinearDoubleKeyFrame KeyTime="0:0:0.4" Value="-240"/>
+                <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="-240"/>
                 <LinearDoubleKeyFrame KeyTime="0:0:3" Value="-240"/>
-                <LinearDoubleKeyFrame KeyTime="0:0:3.4" Value="0"/>
+                <LinearDoubleKeyFrame KeyTime="0:0:3.2" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </Page.Resources>
