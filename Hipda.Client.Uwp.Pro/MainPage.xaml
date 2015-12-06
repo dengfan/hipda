@@ -331,7 +331,7 @@
             </StackPanel>
         </ContentDialog>
 
-        <Border x:Name="TipBar" Margin="0,48,-260,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Red" Width="260">
+        <Border x:Name="TipBar" Margin="0,48,-260,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Width="260">
             <Border.RenderTransform>
                 <CompositeTransform />
             </Border.RenderTransform>
