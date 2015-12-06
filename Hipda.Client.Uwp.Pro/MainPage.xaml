@@ -253,7 +253,7 @@
                         <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
-                                    <SymbolIcon Symbol="Message" />
+                                    <FontIcon Glyph="&#xE8F2;" FontFamily="Segoe MDL2 Assets" />
                                     <TextBlock Text="短消息"
                                            Margin="24,0,0,0"
                                            VerticalAlignment="Center" />

@@ -163,7 +163,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
             });
         }
+        #endregion
 
+        #region
         public void OpenReplyPageByThreadId(int threadId)
         {
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
@@ -181,7 +183,10 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        
+        public async void ShowPostDetailByPostId(int postId, int threadId)
+        {
+            await new MessageDialog("引用内容详情").ShowAsync();
+        }
         #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

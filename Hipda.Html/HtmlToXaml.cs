@@ -66,6 +66,23 @@ namespace Hipda.Html
                 }
             }
 
+            // 替换引用链接为按钮
+            MatchCollection matchsForRefLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/redirect\.php\?goto\=findpost&amp;pid\=(\d*)&amp;ptid\=(\d*)[^\""]*""[^>]*><img\s[^>]*></a>").Matches(htmlContent);
+            if (matchsForRefLink != null && matchsForRefLink.Count > 0)
+            {
+                for (int i = 0; i < matchsForRefLink.Count; i++)
+                {
+                    var m = matchsForRefLink[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string postIdStr = m.Groups[1].Value;
+                    string threadIdStr = m.Groups[2].Value;
+
+                    string linkXaml = string.Format(@"[InlineUIContainer][local:MyRefLink PostId=""{0}"" ThreadId=""{1}""/][/InlineUIContainer]", postIdStr, threadIdStr);
+                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                }
+            }
+
             // 替换站内链接为按钮
             MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
             if (matchsForMyLink != null && matchsForMyLink.Count > 0)
@@ -143,7 +160,7 @@ namespace Hipda.Html
             }
 
             // 替换引用文字标签
-            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,0,0"" Foreground=""DimGray""][Span]");
+            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,20,0"" Foreground=""DimGray""][Span]");
             htmlContent = htmlContent.Replace("</blockquote>", "[/Span][/Paragraph][Paragraph]");
 
             // 移除无意义图片HTML

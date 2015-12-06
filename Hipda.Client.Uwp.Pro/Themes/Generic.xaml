@@ -27,6 +27,20 @@
         </Setter>
     </Style>
 
+    <Style TargetType="local:MyRefLink" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:MyRefLink">
+                    <HyperlinkButton>
+                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundAccentBrush}">
+                            <Run Text="&#xE248;" FontFamily="Segoe MDL2 Assets"/>
+                        </TextBlock>
+                    </HyperlinkButton>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="local:MyAvatar" >
         <Setter Property="Template">
             <Setter.Value>
