@@ -148,7 +148,7 @@ namespace Hipda.Client.Uwp.Pro
         public async void ShowTipBar(string tipContent)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                TipTextBlock.Text = tipContent;
+                TipTextBlock.Text = Uri.UnescapeDataString(tipContent);
                 ShowTipBarAnimation.Begin();
             });
         }

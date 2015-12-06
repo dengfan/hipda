@@ -141,7 +141,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
                                 var options = new LauncherOptions();
                                 options.TreatAsUntrusted = false;
-                                await Launcher.LaunchUriAsync(new Uri(string.Format("hipda:tip={0}", "操作成功！")), options);
+
+                                string tipContent = Uri.EscapeUriString("操作成功！");
+                                await Launcher.LaunchUriAsync(new Uri(string.Format("hipda:tip={0}", tipContent)), options);
                             }
                         }
                     };

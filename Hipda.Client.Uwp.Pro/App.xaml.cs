@@ -216,7 +216,7 @@ namespace Hipda.Client.Uwp.Pro
                         MainPage mp = rootFrame.Content as MainPage;
                         if (mp != null)
                         {
-                            mp.ShowTipBar(uri.Substring(6));
+                            mp.ShowTipBar(uri.Substring(10));
                         }
                     }
                 }

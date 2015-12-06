@@ -335,7 +335,7 @@
             <Border.RenderTransform>
                 <CompositeTransform />
             </Border.RenderTransform>
-            <TextBlock x:Name="TipTextBlock" Padding="8,8,28,8" Text="中华人民共和国，中华人民共和国，中华人民共和国，中华人民共和国" TextWrapping="Wrap"/>
+            <TextBlock x:Name="TipTextBlock" Padding="8,8,28,8" TextWrapping="Wrap"/>
         </Border>
     </Grid>
 </Page>
