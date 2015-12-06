@@ -156,10 +156,20 @@
                     </Grid.RowDefinitions>
                     <ScrollViewer Grid.Row="0" Margin="0 48 0 0" VerticalScrollBarVisibility="Hidden">
                         <StackPanel>
+                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="SearchButton_Click">
+                                <Button.Content>
+                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                        <SymbolIcon Symbol="Zoom" />
+                                        <TextBlock Text="搜索贴子"
+                                           Margin="24,0,0,0"
+                                           VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
                             <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button4_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
-                                        <SymbolIcon Symbol="ContactInfo" />
+                                        <FontIcon Glyph="&#xE7BC;" FontFamily="Segoe MDL2 Assets" />
                                         <TextBlock Text="我的贴子"
                                            Margin="24,0,0,0"
                                            VerticalAlignment="Center" />
@@ -169,7 +179,7 @@
                             <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button5_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
-                                        <SymbolIcon Symbol="Tag" />
+                                        <FontIcon Glyph="&#xE89B;" FontFamily="Segoe MDL2 Assets" />
                                         <TextBlock Text="我的回复"
                                            Margin="24,0,0,0"
                                            VerticalAlignment="Center" />
@@ -179,18 +189,8 @@
                             <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button6_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
-                                        <SymbolIcon Symbol="OutlineStar" />
+                                        <FontIcon Glyph="&#xE728;" FontFamily="Segoe MDL2 Assets" />
                                         <TextBlock Text="我的收藏"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button7_Click">
-                                <Button.Content>
-                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
-                                        <SymbolIcon Symbol="Zoom" />
-                                        <TextBlock Text="搜索贴子"
                                            Margin="24,0,0,0"
                                            VerticalAlignment="Center" />
                                     </StackPanel>

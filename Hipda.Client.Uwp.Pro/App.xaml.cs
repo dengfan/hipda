@@ -208,7 +208,7 @@ namespace Hipda.Client.Uwp.Pro
                     string uri = eventArgs.Uri.AbsoluteUri;
                     if (uri.StartsWith("hipda:tid=")) // 在新窗口中打开指定的回复列表
                     {
-                        int tid = Convert.ToInt32(uri.Substring(6));
+                        int tid = Convert.ToInt32(uri.Substring(10));
                         await OpenThreadInNewView(tid);
                     }
                     else if (uri.StartsWith("hipda:tip=")) // 弹出提示标签

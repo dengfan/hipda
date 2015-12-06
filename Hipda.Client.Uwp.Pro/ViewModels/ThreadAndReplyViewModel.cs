@@ -148,7 +148,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                         }
                     };
 
-                    var btnMultipleSelect = new AppBarToggleButton { Icon = new FontIcon { Glyph = "\uE179", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label = "进入选择模式", IsThreeState = false };
+                    var btnMultipleSelect = new AppBarToggleButton { Icon = new FontIcon { Glyph = "\uE762", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label = "进入选择模式", IsThreeState = false };
                     btnMultipleSelect.Tapped += (s, e) =>
                     {
                         var btn = s as AppBarToggleButton;
