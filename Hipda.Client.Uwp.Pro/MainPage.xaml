@@ -66,9 +66,11 @@
         </Storyboard>
         <Storyboard x:Name="ShowTipBarAnimation">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="TipBar">
-                <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="-240"/>
-                <LinearDoubleKeyFrame KeyTime="0:0:3" Value="-240"/>
-                <LinearDoubleKeyFrame KeyTime="0:0:3.2" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-260"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-240"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2.6" Value="-240"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2.7" Value="-260"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </Page.Resources>
@@ -329,11 +331,11 @@
             </StackPanel>
         </ContentDialog>
 
-        <Border x:Name="TipBar" Margin="0,48,-240,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Red" Width="240">
+        <Border x:Name="TipBar" Margin="0,48,-260,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Red" Width="260">
             <Border.RenderTransform>
                 <CompositeTransform />
             </Border.RenderTransform>
-            <TextBlock x:Name="TipTextBlock" Padding="8" Text="中华人民共和国，中华人民共和国，中华人民共和国，中华人民共和国" TextWrapping="Wrap"/>
+            <TextBlock x:Name="TipTextBlock" Padding="8,8,28,8" Text="中华人民共和国，中华人民共和国，中华人民共和国，中华人民共和国" TextWrapping="Wrap"/>
         </Border>
     </Grid>
 </Page>
