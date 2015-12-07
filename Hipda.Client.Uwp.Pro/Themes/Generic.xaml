@@ -27,14 +27,24 @@
         </Setter>
     </Style>
 
-    <Style TargetType="local:MyRefLink" >
+    <Style TargetType="local:MyRefLink1" >
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:MyRefLink">
+                <ControlTemplate TargetType="local:MyRefLink1">
                     <HyperlinkButton>
-                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundAccentBrush}">
-                            <Run Text="&#xE248;" FontFamily="Segoe MDL2 Assets"/>
-                        </TextBlock>
+                        <TextBlock Text="{TemplateBinding LinkContent}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                    </HyperlinkButton>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:MyRefLink2" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:MyRefLink2">
+                    <HyperlinkButton>
+                        <TextBlock Text="&#xE248;" FontFamily="Segoe MDL2 Assets" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
                     </HyperlinkButton>
                 </ControlTemplate>
             </Setter.Value>

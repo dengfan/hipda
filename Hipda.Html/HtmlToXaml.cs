@@ -67,7 +67,7 @@ namespace Hipda.Html
             }
 
             // 替换引用链接为按钮
-            MatchCollection matchsForRefLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/redirect\.php\?goto\=findpost&amp;pid\=(\d*)&amp;ptid\=(\d*)[^\""]*""[^>]*><img\s[^>]*></a>").Matches(htmlContent);
+            MatchCollection matchsForRefLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/redirect\.php\?goto\=findpost&amp;pid\=(\d*)&amp;ptid\=(\d*)[^\""]*""[^>]*>(<img\s[^>]*>|\d+#)</a>").Matches(htmlContent);
             if (matchsForRefLink != null && matchsForRefLink.Count > 0)
             {
                 for (int i = 0; i < matchsForRefLink.Count; i++)
@@ -77,8 +77,18 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string postIdStr = m.Groups[1].Value;
                     string threadIdStr = m.Groups[2].Value;
+                    string linkContent = m.Groups[3].Value;
 
-                    string linkXaml = string.Format(@"[InlineUIContainer][local:MyRefLink PostId=""{0}"" ThreadId=""{1}""/][/InlineUIContainer]", postIdStr, threadIdStr);
+                    string linkXaml = string.Empty;
+                    if (linkContent.StartsWith("<img"))
+                    {
+                        linkXaml = string.Format(@"[InlineUIContainer][local:MyRefLink2 PostId=""{0}"" ThreadId=""{1}""/][/InlineUIContainer]", postIdStr, threadIdStr);
+                    }
+                    else
+                    {
+                        linkXaml = string.Format(@"[InlineUIContainer][local:MyRefLink1 PostId=""{0}"" ThreadId=""{1}"" LinkContent=""{2}""/][/InlineUIContainer]", postIdStr, threadIdStr, linkContent);
+                    }
+
                     htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                 }
             }
