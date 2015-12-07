@@ -8,6 +8,8 @@ using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Markup;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
@@ -97,6 +99,30 @@ namespace Hipda.Client.Uwp.Pro.Models
                     XamlStr = string.Format("<RichTextBlock xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"><Paragraph>{0}</Paragraph></RichTextBlock>", text);
                     return XamlReader.Load(XamlStr);
                 }
+            }
+        }
+
+        public ImageBrush AvatarImageBrush
+        {
+            get
+            {
+                int uid = AuthorUserId;
+                var s = new int[10];
+                for (int i = 0; i < s.Length - 1; ++i)
+                {
+                    s[i] = uid % 10;
+                    uid = (uid - s[i]) / 10;
+                }
+                var imgUri = new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg");
+
+                BitmapImage bi = new BitmapImage();
+                bi.UriSource = imgUri;
+                bi.DecodePixelWidth = 40;
+                ImageBrush ib = new ImageBrush();
+                ib.Stretch = Stretch.UniformToFill;
+                ib.ImageSource = bi;
+                ib.ImageFailed += (s2, e2) => { return; };
+                return ib;
             }
         }
     }

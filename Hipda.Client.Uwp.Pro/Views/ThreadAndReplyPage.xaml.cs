@@ -165,7 +165,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
-        #region
+        #region 公开的方法
         public void OpenReplyPageByThreadId(int threadId)
         {
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
@@ -185,7 +185,12 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         public async void ShowPostDetailByPostId(int postId, int threadId)
         {
-            await new MessageDialog("引用内容详情").ShowAsync();
+            var replyItem = _threadAndReplyViewModel.GetPostDetail(postId, threadId);
+            if (replyItem != null)
+            {
+                PostDialog.DataContext = replyItem;
+                await PostDialog.ShowAsync();
+            }
         }
         #endregion
 
@@ -751,6 +756,12 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
         #endregion
+
+        private void PostDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            var data = sender.DataContext as ReplyItemModel;
+            PostReplyTextBox.Text = data.TextStr;
+        }
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         //{

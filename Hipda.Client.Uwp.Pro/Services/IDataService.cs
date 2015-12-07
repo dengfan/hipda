@@ -69,6 +69,8 @@ namespace Hipda.Client.Uwp.Pro.Services
         void SetScrollState(bool isCompleted);
 
         bool GetScrollState();
+
+        ReplyItemModel GetPostDetail(int postId, int threadId);
         #endregion
 
         #region user

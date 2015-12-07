@@ -1179,6 +1179,17 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             return false;
         }
+
+        public ReplyItemModel GetPostDetail(int postId, int threadId)
+        {
+            var replyData = _replyData.FirstOrDefault(d => d.ThreadId == threadId);
+            if (replyData != null)
+            {
+                return replyData.Replies.FirstOrDefault(r => r.PostId == postId);
+            }
+
+            return null;
+        }
         #endregion
 
         #region user

@@ -308,5 +308,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             return await _ds.PostUserMessage(message, userId);
         }
+
+        public ReplyItemModel GetPostDetail(int postId, int threadId)
+        {
+            return _ds.GetPostDetail(postId, threadId);
+        }
     }
 }

@@ -277,6 +277,30 @@
                             HorizontalContentAlignment="Stretch"/>
         </ContentDialog>
 
-        
+        <ContentDialog x:Name="PostDialog" Template="{StaticResource ContentDialogTemplate2}"
+                       PrimaryButtonText="回复"
+                       PrimaryButtonClick="PostDialog_PrimaryButtonClick"
+                       SecondaryButtonText="关闭">
+            <ContentDialog.TitleTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="{ThemeResource SystemControlBackgroundListLowBrush}" Width="40" Height="40">
+                            <Border Background="{Binding AvatarImageBrush}"/>
+                        </Border>
+                        <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                            <Run Text="{Binding AuthorUsername}"/>
+                            <LineBreak/>
+                            <Run Text="{Binding AuthorCreateTime}"/>
+                            <Run Text=" "/>
+                            <Run Text="{Binding FloorNoStr}"/>
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ContentDialog.TitleTemplate>
+            <ScrollViewer Padding="16,16,20,16"
+                        Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                        HorizontalContentAlignment="Stretch"
+                        Content="{Binding XamlContent}"/>
+        </ContentDialog>
     </Grid>
 </Page>
