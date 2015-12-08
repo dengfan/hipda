@@ -98,9 +98,17 @@ namespace Hipda.Client.Uwp.Pro
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=favorites");
         }
 
-        private async void SearchButton_Click(object sender, RoutedEventArgs e)
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            await SearchDialog.ShowAsync();
+            if (SearchPanel.Visibility == Visibility.Collapsed)
+            {
+                MainSplitView.IsPaneOpen = true;
+                SearchPanel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SearchPanel.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void SearchDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -151,6 +159,11 @@ namespace Hipda.Client.Uwp.Pro
                 TipTextBlock.Text = Uri.UnescapeDataString(tipContent);
                 ShowTipBarAnimation.Begin();
             });
+        }
+
+        private void MainSplitView_PaneClosed(SplitView sender, object args)
+        {
+            SearchPanel.Visibility = Visibility.Collapsed;
         }
     }
 }

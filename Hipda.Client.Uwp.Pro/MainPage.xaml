@@ -147,7 +147,7 @@
             <ImageBrush ImageSource="Assets/bg.jpg" />
         </Grid.Background>-->
 
-        <SplitView x:Name="MainSplitView" OpenPaneLength="200" PaneBackground="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+        <SplitView x:Name="MainSplitView" OpenPaneLength="200" PaneBackground="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" PaneClosed="MainSplitView_PaneClosed">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -166,6 +166,22 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
+                            <StackPanel x:Name="SearchPanel" Margin="8" Visibility="Collapsed">
+                                <TextBox x:Name="KeywordTextBox" PlaceholderText="请输入关键字" />
+                                <ComboBox x:Name="SearchTypeComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0">
+                                    <x:String>按标题</x:String>
+                                    <x:String>按标题及内容</x:String>
+                                    <x:String>按作者ID</x:String>
+                                </ComboBox>
+                                <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0">
+                                    <x:String>全部时间</x:String>
+                                    <x:String>一个月以内</x:String>
+                                    <x:String>三个月以内</x:String>
+                                    <x:String>一年以内</x:String>
+                                </ComboBox>
+                                <Button Content="在所有版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch"/>
+                                <Button Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch"/>
+                            </StackPanel>
                             <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button4_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
@@ -314,22 +330,6 @@
                 <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"/>
             </Button.Content>
         </Button>
-
-        <ContentDialog x:Name="SearchDialog"
-            Title="搜索"
-            PrimaryButtonText="搜索"
-            SecondaryButtonText="取消"
-            PrimaryButtonClick="SearchDialog_PrimaryButtonClick"
-            SecondaryButtonClick="SearchDialog_SecondaryButtonClick">
-
-            <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <TextBox Name="userNameTextBox" Header="User name"/>
-                <PasswordBox Name="passwordTextBox" Header="Password" PasswordRevealMode="Peek"/>
-                <CheckBox Name="saveUserNameCheckBox" Content="Save user name"/>
-                <TextBlock x:Name="errorTextBlock" />
-                <TextBlock Text="Lorem ipsum dolor sit amet, consectetur adipisicing elit." TextWrapping="Wrap" />
-            </StackPanel>
-        </ContentDialog>
 
         <Border x:Name="TipBar" Margin="0,48,-260,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Width="260">
             <Border.RenderTransform>
