@@ -183,11 +183,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
+        private bool _isShownForPostDialog = false;
         public async void ShowPostDetailByPostId(int postId, int threadId)
         {
-            if (PostDialog.DataContext == null || !PostDialog.DataContext.GetType().Equals(typeof(ReplyItemModel)))
+            if (_isShownForPostDialog == false)
             {
                 PostDialog.DataContext = await _threadAndReplyViewModel.GetPostDetail(postId, threadId);
+                _isShownForPostDialog = true;
                 await PostDialog.ShowAsync();
             }
             else
@@ -764,12 +766,11 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             var data = sender.DataContext as ReplyItemModel;
             PostReplyTextBox.Text = data.TextStr;
-            sender.DataContext = null;
         }
 
-        private void PostDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void PostDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
         {
-            sender.DataContext = null;
+            _isShownForPostDialog = false;
         }
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)

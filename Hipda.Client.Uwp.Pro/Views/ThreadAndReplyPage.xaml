@@ -281,7 +281,7 @@
                        PrimaryButtonText="回复"
                        PrimaryButtonClick="PostDialog_PrimaryButtonClick"
                        SecondaryButtonText="关闭"
-                       SecondaryButtonClick="PostDialog_SecondaryButtonClick">
+                       Closed="PostDialog_Closed">
             <ContentDialog.TitleTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
