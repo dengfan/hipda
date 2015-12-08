@@ -70,7 +70,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         bool GetScrollState();
 
-        ReplyItemModel GetPostDetail(int postId, int threadId);
+        Task<ReplyItemModel> GetPostDetail(int postId, int threadId);
         #endregion
 
         #region user

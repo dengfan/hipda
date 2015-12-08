@@ -165,7 +165,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
-        #region 公开的方法
+        #region 公开的方法，可用URI SCHEME方法调用
         public void OpenReplyPageByThreadId(int threadId)
         {
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
@@ -187,12 +187,12 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             if (PostDialog.DataContext == null || !PostDialog.DataContext.GetType().Equals(typeof(ReplyItemModel)))
             {
-                PostDialog.DataContext = _threadAndReplyViewModel.GetPostDetail(postId, threadId);
+                PostDialog.DataContext = await _threadAndReplyViewModel.GetPostDetail(postId, threadId);
                 await PostDialog.ShowAsync();
             }
             else
             {
-                PostDialog.DataContext = _threadAndReplyViewModel.GetPostDetail(postId, threadId);
+                PostDialog.DataContext = await _threadAndReplyViewModel.GetPostDetail(postId, threadId);
             }
         }
         #endregion

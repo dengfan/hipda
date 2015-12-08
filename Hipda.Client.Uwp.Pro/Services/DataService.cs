@@ -1180,15 +1180,23 @@ namespace Hipda.Client.Uwp.Pro.Services
             return false;
         }
 
-        public ReplyItemModel GetPostDetail(int postId, int threadId)
+        public async Task<ReplyItemModel> GetPostDetail(int postId, int threadId)
         {
             var replyData = _replyData.FirstOrDefault(d => d.ThreadId == threadId);
             if (replyData != null)
             {
-                return replyData.Replies.FirstOrDefault(r => r.PostId == postId);
+                var replyItemData = replyData.Replies.FirstOrDefault(r => r.PostId == postId);
+                if (replyItemData != null)
+                {
+                    return replyItemData;
+                }
             }
 
-            return null;
+            // 由于回复列表页不一定是从第一页开始载入，所以会存在在缓存中找不到的情况
+            // 故需要在此处作处理
+            var cts = new CancellationTokenSource();
+            await LoadReplyDataForRedirectPageAsync(threadId, postId, cts);
+            return _replyData.FirstOrDefault(d => d.ThreadId == threadId).Replies.FirstOrDefault(r => r.PostId == postId);
         }
         #endregion
 
