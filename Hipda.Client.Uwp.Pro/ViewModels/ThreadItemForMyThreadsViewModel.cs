@@ -53,7 +53,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyThreads;
-            _threadId = ThreadItem.ThreadId;
+            _threadId = threadItem.ThreadId;
             ThreadItem = threadItem;
         }
 
