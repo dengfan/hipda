@@ -53,6 +53,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             var cv = _ds.GetViewForReplyPage(pageNo, _threadId, 0, _beforeLoad, _afterLoad);
             if (cv != null)
             {
+                StartPageNo = pageNo;
                 ReplyItemCollection = cv;
             }
         }
@@ -131,12 +132,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public void RefreshReplyDataFromPrevPage()
         {
-            // 先获取当前数据中已存在的最小页码
-            int minPageNo = _ds.GetReplyMinPageNoInLoadedData(_threadId);
-            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
-
-            _ds.ClearReplyData(_threadId);
-            LoadData(startPageNo);
+            if (StartPageNo > 1)
+            {
+                _ds.ClearReplyData(_threadId);
+                LoadData(StartPageNo - 1);
+            }
         }
     }
 }

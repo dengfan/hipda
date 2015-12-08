@@ -17,6 +17,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ThreadItemForMyThreadsViewModel : ThreadItemViewModelBase
     {
+        private int _threadId { get; set; }
         private ListView _replyListView { get; set; }
         private Action _beforeLoad { get; set; }
         private Action<int, int> _afterLoad { get; set; }
@@ -40,9 +41,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, ThreadItem.ThreadId, AccountService.UserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPage(pageNo, _threadId, AccountService.UserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
+                StartPageNo = pageNo;
                 ReplyItemCollection = cv;
             }
         }
@@ -51,6 +53,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyThreads;
+            _threadId = ThreadItem.ThreadId;
             ThreadItem = threadItem;
         }
 
@@ -58,6 +61,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyThreads;
+            _threadId = threadId;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
@@ -90,7 +94,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) => 
             {
-                _ds.ClearReplyData(ThreadItem.ThreadId);
+                _ds.ClearReplyData(_threadId);
                 LoadData(StartPageNo);
             };
 
@@ -104,12 +108,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public void RefreshReplyDataFromPrevPage()
         {
-            // 先获取当前数据中已存在的最小页码
-            int minPageNo = _ds.GetReplyMinPageNoInLoadedData(ThreadItem.ThreadId);
-            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
-
-            _ds.ClearReplyData(ThreadItem.ThreadId);
-            LoadData(startPageNo);
+            if (StartPageNo > 1)
+            {
+                _ds.ClearReplyData(_threadId);
+                LoadData(StartPageNo - 1);
+            }
         }
     }
 }
