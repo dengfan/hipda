@@ -185,11 +185,14 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         public async void ShowPostDetailByPostId(int postId, int threadId)
         {
-            var replyItem = _threadAndReplyViewModel.GetPostDetail(postId, threadId);
-            if (replyItem != null)
+            if (PostDialog.DataContext == null || !PostDialog.DataContext.GetType().Equals(typeof(ReplyItemModel)))
             {
-                PostDialog.DataContext = replyItem;
+                PostDialog.DataContext = _threadAndReplyViewModel.GetPostDetail(postId, threadId);
                 await PostDialog.ShowAsync();
+            }
+            else
+            {
+                PostDialog.DataContext = _threadAndReplyViewModel.GetPostDetail(postId, threadId);
             }
         }
         #endregion
@@ -761,6 +764,12 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             var data = sender.DataContext as ReplyItemModel;
             PostReplyTextBox.Text = data.TextStr;
+            sender.DataContext = null;
+        }
+
+        private void PostDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            sender.DataContext = null;
         }
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)

@@ -219,6 +219,25 @@ namespace Hipda.Client.Uwp.Pro
                             mp.ShowTipBar(uri.Substring(10));
                         }
                     }
+                    else if (uri.StartsWith("hipda:openref=")) // 打开回复页之引用楼层之详细之对话框
+                    {
+                        string[] param = uri.Substring(14).Split(',');
+                        int postId = Convert.ToInt32(param[0]);
+                        int threadId = Convert.ToInt32(param[1]);
+
+                        MainPage mp = rootFrame.Content as MainPage;
+                        if (mp != null)
+                        {
+                            if (mp.AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
+                            {
+                                ThreadAndReplyPage trp = mp.AppFrame.Content as ThreadAndReplyPage;
+                                if (trp != null)
+                                {
+                                    trp.ShowPostDetailByPostId(postId, threadId);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

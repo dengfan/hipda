@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -48,15 +49,13 @@ namespace Hipda.Client.Uwp.Pro
 
 
 
-        protected override void OnTapped(TappedRoutedEventArgs e)
+        protected override async void OnTapped(TappedRoutedEventArgs e)
         {
             base.OnTapped(e);
 
-            var parentPage = Common.FindParent<ThreadAndReplyPage>(this);
-            if (parentPage != null)
-            {
-                parentPage.ShowPostDetailByPostId(PostId, ThreadId);
-            }
+            var options = new LauncherOptions();
+            options.TreatAsUntrusted = false;
+            await Launcher.LaunchUriAsync(new Uri(string.Format("hipda:openref={0},{1}", PostId, ThreadId)), options);
         }
     }
 }

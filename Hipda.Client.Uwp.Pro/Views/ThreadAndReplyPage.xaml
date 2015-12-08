@@ -280,7 +280,8 @@
         <ContentDialog x:Name="PostDialog" Template="{StaticResource ContentDialogTemplate2}"
                        PrimaryButtonText="回复"
                        PrimaryButtonClick="PostDialog_PrimaryButtonClick"
-                       SecondaryButtonText="关闭">
+                       SecondaryButtonText="关闭"
+                       SecondaryButtonClick="PostDialog_SecondaryButtonClick">
             <ContentDialog.TitleTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
