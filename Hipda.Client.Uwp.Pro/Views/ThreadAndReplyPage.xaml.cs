@@ -87,7 +87,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             leftProgress.IsActive = true;
             leftProgress.Visibility = Visibility.Visible;
-            //ThreadRefreshButton.IsEnabled = false;
             ReplyRefreshButton.IsEnabled = false;
             ReplyRefreshButton2.IsEnabled = false;
         }
@@ -96,7 +95,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             leftProgress.IsActive = false;
             leftProgress.Visibility = Visibility.Collapsed;
-            //ThreadRefreshButton.IsEnabled = true;
             ReplyRefreshButton.IsEnabled = true;
             ReplyRefreshButton2.IsEnabled = true;
         }
@@ -105,7 +103,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             rightProgress.IsActive = true;
             rightProgress.Visibility = Visibility.Visible;
-            //ThreadRefreshButton.IsEnabled = false;
             ReplyRefreshButton.IsEnabled = false;
             ReplyRefreshButton2.IsEnabled = false;
             rightFooter.Visibility = Visibility.Collapsed;
@@ -115,7 +112,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             rightProgress.IsActive = false;
             rightProgress.Visibility = Visibility.Collapsed;
-            //ThreadRefreshButton.IsEnabled = true;
             ReplyRefreshButton.IsEnabled = true;
             ReplyRefreshButton2.IsEnabled = true;
             rightFooter.Visibility = Visibility.Visible;
