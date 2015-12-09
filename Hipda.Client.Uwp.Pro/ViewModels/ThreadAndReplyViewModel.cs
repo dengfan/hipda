@@ -21,7 +21,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ThreadAndReplyViewModel : NotificationObject
     {
+        /// <summary>
+        /// 版块ID，仅用于按版块ID来初始化的情况
+        /// </summary>
         private int _forumId { get; set; }
+
+        /// <summary>
+        /// 起始页，只在load 方法中赋值
+        /// </summary>
+        private int _startPageNo { get; set; }
         private ListView _threadListView { get; set; }
         private CommandBar _threadCommandBar { get; set; }
         private Action _beforeLoad { get; set; }
@@ -40,12 +48,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private void LoadData(int pageNo)
+        #region 从指定页开始加载数据
+        private void LoadData(int pageNo, int forumId)
         {
-            var cv = _ds.GetViewForThreadPage(pageNo, _forumId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForThreadPage(pageNo, forumId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
+                _startPageNo = pageNo;
                 _threadListView.ItemsSource = cv;
             }
         }
@@ -56,6 +66,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
+                _startPageNo = pageNo;
                 _threadListView.ItemsSource = cv;
             }
         }
@@ -66,6 +77,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
+                _startPageNo = pageNo;
                 _threadListView.ItemsSource = cv;
             }
         }
@@ -76,11 +88,106 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
+                _startPageNo = pageNo;
                 _threadListView.ItemsSource = cv;
             }
         }
+        #endregion
 
-        public ThreadAndReplyViewModel(int pageNo, string threadTypeOrForumId, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad)
+        #region 从开始页的上一页开始加载，用于下滑刷新
+        public void RefreshThreadDataFromPrevPage()
+        {
+            if (_startPageNo > 1)
+            {
+                _ds.ClearThreadData(_forumId);
+                LoadData(_startPageNo, _forumId);
+            }
+        }
+
+        public void RefreshThreadDataForMyThreadsFromPrevPage()
+        {
+            if (_startPageNo > 1)
+            {
+                _ds.ClearThreadDataForMyThreads();
+                LoadDataForMyThreads(_startPageNo);
+            }
+        }
+
+        public void RefreshThreadDataForMyPostsFromPrevPage()
+        {
+            if (_startPageNo > 1)
+            {
+                _ds.ClearThreadDataForMyPosts();
+                LoadDataForMyPosts(_startPageNo);
+            }
+        }
+
+        public void RefreshThreadDataForMyFavoritesFromPrevPage()
+        {
+            if (_startPageNo > 1)
+            {
+                _ds.ClearThreadDataForMyFavorites();
+                LoadDataForMyFavorites(_startPageNo);
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// 按版块ID来初始化视图模型
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <param name="forumId"></param>
+        /// <param name="threadListView"></param>
+        /// <param name="threadCommandBar"></param>
+        /// <param name="beforeLoad"></param>
+        /// <param name="afterLoad"></param>
+        public ThreadAndReplyViewModel(int pageNo, int forumId, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad)
+        {
+            _forumId = forumId;
+            _threadListView = threadListView;
+            _threadListView.SelectionMode = ListViewSelectionMode.Single;
+            _threadListView.ItemsSource = null;
+
+            _threadCommandBar = threadCommandBar;
+            _threadCommandBar.PrimaryCommands.Clear();
+            _threadCommandBar.SecondaryCommands.Clear();
+
+            _beforeLoad = beforeLoad;
+            _afterLoad = afterLoad;
+            _ds = new DataService();
+
+            ClearHistoryCommand = new DelegateCommand();
+            ClearHistoryCommand.ExecuteAction = (p) => {
+                DataService.ReadHistoryData.Clear();
+            };
+
+            LoadData(pageNo, _forumId);
+
+            var refreshThreadCommand = new DelegateCommand();
+            refreshThreadCommand.ExecuteAction = (p) => {
+                _ds.ClearThreadData(_forumId);
+                LoadData(1, _forumId);
+            };
+
+            var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
+            var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
+            btnRefresh.Command = refreshThreadCommand;
+            var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
+            _threadCommandBar.PrimaryCommands.Add(btnAdd);
+            _threadCommandBar.PrimaryCommands.Add(btnRefresh);
+            _threadCommandBar.PrimaryCommands.Add(btnSort);
+        }
+
+        /// <summary>
+        /// 按主题类型（如我的主题、我的回复等）来初始化视图模型
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <param name="threadType"></param>
+        /// <param name="threadListView"></param>
+        /// <param name="threadCommandBar"></param>
+        /// <param name="beforeLoad"></param>
+        /// <param name="afterLoad"></param>
+        public ThreadAndReplyViewModel(int pageNo, string threadType, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad)
         {
             _threadListView = threadListView;
             _threadListView.SelectionMode = ListViewSelectionMode.Single;
@@ -99,7 +206,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 DataService.ReadHistoryData.Clear();
             };
 
-            switch (threadTypeOrForumId)
+            switch (threadType)
             {
                 case "threads":
                     LoadDataForMyThreads(pageNo);
@@ -181,69 +288,48 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     _threadCommandBar.PrimaryCommands.Add(btnMultipleSelect);
                     _threadCommandBar.PrimaryCommands.Add(btnDeleteSelected);
                     break;
-                default:
-                    _forumId = Convert.ToInt32(threadTypeOrForumId);
-
-                    LoadData(pageNo);
-
-                    var refreshThreadCommand = new DelegateCommand();
-                    refreshThreadCommand.ExecuteAction = (p) => {
-                        _ds.ClearThreadData(_forumId);
-                        LoadData(1);
-                    };
-
-                    var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
-                    var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
-                    btnRefresh.Command = refreshThreadCommand;
-                    var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
-                    _threadCommandBar.PrimaryCommands.Add(btnAdd);
-                    _threadCommandBar.PrimaryCommands.Add(btnRefresh);
-                    _threadCommandBar.PrimaryCommands.Add(btnSort);
-                    break;
             }
         }
 
-        #region 从上一页开始加载
-        public void RefreshThreadDataFromPrevPage()
+        /// <summary>
+        /// 按关键字搜索来初始化视图模型
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <param name="searchKeyword"></param>
+        /// <param name="searchType"></param>
+        /// <param name="searchTimeSpan"></param>
+        /// <param name="searchForumSpan"></param>
+        /// <param name="threadListView"></param>
+        /// <param name="threadCommandBar"></param>
+        /// <param name="beforeLoad"></param>
+        /// <param name="afterLoad"></param>
+        public ThreadAndReplyViewModel(int pageNo, string searchKeyword, int searchType, int searchTimeSpan, int searchForumSpan, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad)
         {
-            // 先获取当前数据中已存在的最小页码
-            int minPageNo = _ds.GetThreadMinPageNoInLoadedData();
-            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
+            _threadListView = threadListView;
+            _threadListView.SelectionMode = ListViewSelectionMode.Single;
+            _threadListView.ItemsSource = null;
 
-            _ds.ClearThreadData(_forumId);
-            LoadData(startPageNo);
+            _threadCommandBar = threadCommandBar;
+            _threadCommandBar.PrimaryCommands.Clear();
+            _threadCommandBar.SecondaryCommands.Clear();
+
+            _beforeLoad = beforeLoad;
+            _afterLoad = afterLoad;
+            _ds = new DataService();
+
+            ClearHistoryCommand = new DelegateCommand();
+            ClearHistoryCommand.ExecuteAction = (p) => {
+                DataService.ReadHistoryData.Clear();
+            };
+
+            LoadDataForMyThreads(pageNo);
+
+            var refreshThreadForThreadsCommand = new DelegateCommand();
+            refreshThreadForThreadsCommand.ExecuteAction = (p) => {
+                _ds.ClearThreadDataForMyThreads();
+                LoadDataForMyThreads(1);
+            };
         }
-
-        public void RefreshThreadDataForMyThreadsFromPrevPage()
-        {
-            // 先获取当前数据中已存在的最小页码
-            int minPageNo = _ds.GetThreadMinPageNoForMyThreadsInLoadedData();
-            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
-
-            _ds.ClearThreadDataForMyThreads();
-            LoadDataForMyThreads(startPageNo);
-        }
-
-        public void RefreshThreadDataForMyPostsFromPrevPage()
-        {
-            // 先获取当前数据中已存在的最小页码
-            int minPageNo = _ds.GetThreadMinPageNoForMyPostsInLoadedData();
-            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
-
-            _ds.ClearThreadDataForMyPosts();
-            LoadDataForMyPosts(startPageNo);
-        }
-
-        public void RefreshThreadDataForMyFavoritesFromPrevPage()
-        {
-            // 先获取当前数据中已存在的最小页码
-            int minPageNo = _ds.GetThreadMinPageNoForMyFavoritesInLoadedData();
-            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
-
-            _ds.ClearThreadDataForMyFavorites();
-            LoadDataForMyFavorites(startPageNo);
-        }
-        #endregion
 
         public ThreadItemModel GetThreadItem(int threadId)
         {
