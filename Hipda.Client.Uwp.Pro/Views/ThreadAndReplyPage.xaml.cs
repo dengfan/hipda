@@ -211,7 +211,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
                 else if (param.StartsWith("item="))
                 {
-                    string threadType = param.Substring(5);
+                    string threadType = param.Substring("item=".Length);
                     if (threadType.Equals("threads"))
                     {
                         _threadDataType = ThreadDataType.MyThreads;
@@ -227,6 +227,19 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, threadType, ThreadListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded);
                     DataContext = _threadAndReplyViewModel;
+                }
+                else if (param.StartsWith("search="))
+                {
+                    string[] paramaters = param.Substring("search=".Length).Split(',');
+                    int searchForumSpan = Convert.ToInt32(paramaters[0]);
+                    string keywords = Uri.UnescapeDataString(paramaters[1]);
+                    int searchType = Convert.ToInt32(paramaters[2]);
+                    int searchTimeSpan = Convert.ToInt32(paramaters[3]);
+
+                    if (searchForumSpan == 1)
+                    {
+
+                    }
                 }
                 else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
                 {

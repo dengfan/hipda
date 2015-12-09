@@ -165,5 +165,29 @@ namespace Hipda.Client.Uwp.Pro
         {
             SearchPanel.Visibility = Visibility.Collapsed;
         }
+
+        private void SearchButton1_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            string paramFormat = "search=1,{0},{1},{2}";
+
+            string keywords = Uri.EscapeUriString(KeywordTextBox.Text.Trim().Replace(","," "));
+            int searchType = SearchTypeComboBox.SelectedIndex;
+            int searchTimeSpan = SearchTimeSpanComboBox.SelectedIndex;
+
+            string param = string.Format(paramFormat, keywords, searchType, searchTimeSpan);
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
+        }
+
+        private void SearchButton2_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            string paramFormat = "search=2,{0},{1},{2}";
+
+            string keywords = Uri.EscapeUriString(KeywordTextBox.Text.Trim().Replace(",", " "));
+            int searchType = SearchTypeComboBox.SelectedIndex;
+            int searchTimeSpan = SearchTimeSpanComboBox.SelectedIndex;
+
+            string param = string.Format(paramFormat, keywords, searchType, searchTimeSpan);
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
+        }
     }
 }
