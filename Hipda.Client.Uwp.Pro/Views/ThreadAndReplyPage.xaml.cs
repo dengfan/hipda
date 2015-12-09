@@ -205,7 +205,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
                     _threadDataType = ThreadDataType.Default;
-                    string fid = param.Substring(4);
+                    int fid = Convert.ToInt32(param.Substring("fid=".Length));
                     _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded);
                     DataContext = _threadAndReplyViewModel;
                 }

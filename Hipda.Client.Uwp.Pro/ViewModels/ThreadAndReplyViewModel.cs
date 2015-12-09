@@ -19,6 +19,13 @@ using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
+    /// <summary>
+    /// 主题及回复页之视图模型
+    /// 共有三种
+    /// 1. 按版块ID来初始化
+    /// 2. 按主题类别来初始化，如我的贴子、我的回复
+    /// 2. 按搜索条件来初始化
+    /// </summary>
     public class ThreadAndReplyViewModel : NotificationObject
     {
         /// <summary>
@@ -27,18 +34,20 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private int _forumId { get; set; }
 
         /// <summary>
-        /// 起始页，只在load 方法中赋值
+        /// 起始页，只在LoadData方法中赋值
+        /// 因为只有LoadData方法中的页码参数才算作起始页
         /// </summary>
         private int _startPageNo { get; set; }
+
         private ListView _threadListView { get; set; }
         private CommandBar _threadCommandBar { get; set; }
         private Action _beforeLoad { get; set; }
         private Action _afterLoad { get; set; }
         private DataService _ds { get; set; }
 
-        public DelegateCommand ClearHistoryCommand { get; set; }
-
         public int ThreadMaxPageNo { get; private set; }
+
+        public DelegateCommand ClearHistoryCommand { get; set; }
 
         public ObservableCollection<ThreadItemModelBase> ReadData
         {
@@ -292,7 +301,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         }
 
         /// <summary>
-        /// 按关键字搜索来初始化视图模型
+        /// 按搜索条件来初始化视图模型
         /// </summary>
         /// <param name="pageNo"></param>
         /// <param name="searchKeyword"></param>
