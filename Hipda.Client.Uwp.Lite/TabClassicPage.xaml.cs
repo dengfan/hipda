@@ -375,19 +375,19 @@ namespace Hipda.Client.Uwp.Lite
 
                     string messageTail = message.Trim() + "\n \n" + DataSource.MessageTail; // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
 
-                    var postData = new Dictionary<string, object>();
-                    postData.Add("formhash", DataSource.FormHash);
-                    postData.Add("subject", string.Empty);
-                    postData.Add("message", messageTail);
-                    postData.Add("usesig", "1");
-                    postData.Add("noticeauthor", noticeauthor);
-                    postData.Add("noticetrimstr", noticetrimstr);
-                    postData.Add("noticeauthormsg", noticeauthormsg);
+                    var postData = new List<KeyValuePair<string, object>>();
+                    postData.Add(new KeyValuePair<string, object>("formhash", DataSource.FormHash));
+                    postData.Add(new KeyValuePair<string, object>("subject", string.Empty));
+                    postData.Add(new KeyValuePair<string, object>("message", messageTail));
+                    postData.Add(new KeyValuePair<string, object>("usesig", "1"));
+                    postData.Add(new KeyValuePair<string, object>("noticeauthor", noticeauthor));
+                    postData.Add(new KeyValuePair<string, object>("noticetrimstr", noticetrimstr));
+                    postData.Add(new KeyValuePair<string, object>("noticeauthormsg", noticeauthormsg));
 
                     // 图片信息
                     foreach (var imageName in imageNameList)
                     {
-                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+                        postData.Add(new KeyValuePair<string, object>(string.Format("attachnew[{0}][description]", imageName), string.Empty));
                     }
 
                     // 发布请求
@@ -433,19 +433,19 @@ namespace Hipda.Client.Uwp.Lite
                         return;
                     }
 
-                    var postData = new Dictionary<string, object>();
-                    postData.Add("formhash", DataSource.FormHash);
-                    postData.Add("wysiwyg", "1");
-                    postData.Add("iconid", "0");
-                    postData.Add("subject", subject);
-                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
-                    postData.Add("attention_add", "1");
-                    postData.Add("usesig", "1");
+                    var postData = new List<KeyValuePair<string, object>>();
+                    postData.Add(new KeyValuePair<string, object>("formhash", DataSource.FormHash));
+                    postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
+                    postData.Add(new KeyValuePair<string, object>("iconid", "0"));
+                    postData.Add(new KeyValuePair<string, object>("subject", subject));
+                    postData.Add(new KeyValuePair<string, object>("message", message.Trim() + "\n \n" + DataSource.MessageTail)); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
+                    postData.Add(new KeyValuePair<string, object>("attention_add", "1"));
+                    postData.Add(new KeyValuePair<string, object>("usesig", "1"));
 
                     // 图片信息
                     foreach (var imageName in imageNameList)
                     {
-                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+                        postData.Add(new KeyValuePair<string, object>(string.Format("attachnew[{0}][description]", imageName), string.Empty));
                     }
 
                     // 发布请求
@@ -486,19 +486,19 @@ namespace Hipda.Client.Uwp.Lite
                         return;
                     }
 
-                    var postData = new Dictionary<string, object>();
-                    postData.Add("formhash", DataSource.FormHash);
-                    postData.Add("subject", string.Empty);
-                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
-                    postData.Add("wysiwyg", "1");
-                    postData.Add("tid", threadId);
-                    postData.Add("pid", DataSource.ContentForEdit.PostId);
-                    postData.Add("iconid", "0");
+                    var postData = new List<KeyValuePair<string, object>>();
+                    postData.Add(new KeyValuePair<string, object>("formhash", DataSource.FormHash));
+                    postData.Add(new KeyValuePair<string, object>("subject", string.Empty));
+                    postData.Add(new KeyValuePair<string, object>("message", message.Trim() + "\n \n" + DataSource.MessageTail)); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
+                    postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
+                    postData.Add(new KeyValuePair<string, object>("tid", threadId));
+                    postData.Add(new KeyValuePair<string, object>("pid", DataSource.ContentForEdit.PostId));
+                    postData.Add(new KeyValuePair<string, object>("iconid", "0"));
 
                     // 图片信息
                     foreach (var imageName in imageNameList)
                     {
-                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+                        postData.Add(new KeyValuePair<string, object>(string.Format("attachnew[{0}][description]", imageName), string.Empty));
                     }
 
                     // 发布请求
@@ -535,19 +535,19 @@ namespace Hipda.Client.Uwp.Lite
                         return;
                     }
 
-                    var postData = new Dictionary<string, object>();
-                    postData.Add("formhash", DataSource.FormHash);
-                    postData.Add("subject", subject);
-                    postData.Add("message", message.Trim() + "\n \n" + DataSource.MessageTail); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
-                    postData.Add("wysiwyg", "1");
-                    postData.Add("tid", threadId);
-                    postData.Add("pid", DataSource.ContentForEdit.PostId);
-                    postData.Add("iconid", "0");
+                    var postData = new List<KeyValuePair<string, object>>();
+                    postData.Add(new KeyValuePair<string, object>("formhash", DataSource.FormHash));
+                    postData.Add(new KeyValuePair<string, object>("subject", subject));
+                    postData.Add(new KeyValuePair<string, object>("message", message.Trim() + "\n \n" + DataSource.MessageTail)); // 客户端尾巴，两个换行符之间的空格用于避免换行符被合并为一个
+                    postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
+                    postData.Add(new KeyValuePair<string, object>("tid", threadId));
+                    postData.Add(new KeyValuePair<string, object>("pid", DataSource.ContentForEdit.PostId));
+                    postData.Add(new KeyValuePair<string, object>("iconid", "0"));
 
                     // 图片信息
                     foreach (var imageName in imageNameList)
                     {
-                        postData.Add(string.Format("attachnew[{0}][description]", imageName), string.Empty);
+                        postData.Add(new KeyValuePair<string, object>(string.Format("attachnew[{0}][description]", imageName), string.Empty));
                     }
 
                     // 发布请求

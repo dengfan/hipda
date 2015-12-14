@@ -358,7 +358,7 @@ namespace HipdaUwpLite.Data
             doc.LoadHtml(htmlContent);
             var data = doc.DocumentNode;
 
-            var content = data.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("content"));
+            var content = data.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("content"));
             if (content == null)
             {
                 return;
@@ -467,7 +467,7 @@ namespace HipdaUwpLite.Data
             doc.LoadHtml(htmlContent);
             var data = doc.DocumentNode;
 
-            var content = data.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("srchfid"));
+            var content = data.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("srchfid"));
             if (content == null)
             {
                 return;
@@ -625,7 +625,7 @@ namespace HipdaUwpLite.Data
             // 载入HTML
             doc.LoadHtml(htmlContent);
 
-            var dataTable = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
+            var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
                 return;
@@ -766,7 +766,7 @@ namespace HipdaUwpLite.Data
             }
             #endregion
 
-            var dataTable = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
+            var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
                 return;
@@ -986,14 +986,14 @@ namespace HipdaUwpLite.Data
                 var pagesNode = forumControlNode.ChildNodes[1] // table
                     .ChildNodes[1] // tr
                     .ChildNodes[3] // td
-                    .Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+                    .Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
                 if (pagesNode == null) // 没有超过两页
                 {
                     return;
                 }
                 else
                 {
-                    var actualCurrentPageNode = pagesNode.Descendants().SingleOrDefault(n => n.NodeType == HtmlNodeType.Element && n.Name == "strong");
+                    var actualCurrentPageNode = pagesNode.Descendants().FirstOrDefault(n => n.NodeType == HtmlNodeType.Element && n.Name == "strong");
                     if (actualCurrentPageNode != null)
                     {
                         int currentPage = Convert.ToInt32(actualCurrentPageNode.InnerText);
@@ -1006,7 +1006,7 @@ namespace HipdaUwpLite.Data
             }
             #endregion
 
-            var data = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
+            var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
             if (data == null)
             {
                 return;
@@ -1017,7 +1017,7 @@ namespace HipdaUwpLite.Data
             int i = thread.Replies.Count;
             foreach (var item in data)
             {
-                var mainTable = item.Descendants().SingleOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", "").StartsWith("pid"));
+                var mainTable = item.Descendants().FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", "").StartsWith("pid"));
                 var postAuthorNode = mainTable // table
                         .ChildNodes[1] // tr
                         .ChildNodes[1]; // td.postauthor
@@ -1028,7 +1028,7 @@ namespace HipdaUwpLite.Data
 
                 string authorId = string.Empty;
                 string ownerName = string.Empty;
-                var authorNode = postAuthorNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
+                var authorNode = postAuthorNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
                 if (authorNode != null)
                 {
                     authorNode = authorNode.ChildNodes[1]; // a
@@ -1040,7 +1040,7 @@ namespace HipdaUwpLite.Data
                     ownerName = authorNode.InnerText;
                 }
 
-                var floorPostInfoNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
+                var floorPostInfoNode = postContentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
                 var floorLinkNode = floorPostInfoNode.ChildNodes[1].ChildNodes[0]; // a
                 string postId = floorLinkNode.Attributes["id"].Value.Replace("postnum", string.Empty);
                 var floorNumNode = floorLinkNode.ChildNodes[0]; // em
@@ -1048,7 +1048,7 @@ namespace HipdaUwpLite.Data
                 string threadTitle = string.Empty;
                 if (floor == 1)
                 {
-                    var threadTitleNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("threadtitle"));
+                    var threadTitleNode = postContentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("threadtitle"));
                     if (threadTitleNode != null)
                     {
                         threadTitle = threadTitleNode.InnerText.Trim();
@@ -1056,7 +1056,7 @@ namespace HipdaUwpLite.Data
                 }
 
                 string postTime = string.Empty;
-                var postTimeNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
+                var postTimeNode = postContentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
                 if (postTimeNode != null)
                 {
                     postTime = postTimeNode.InnerText
@@ -1069,7 +1069,7 @@ namespace HipdaUwpLite.Data
                 string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
-                var contentNode = postContentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
+                var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
                     // 用于回复引用
@@ -1122,10 +1122,10 @@ namespace HipdaUwpLite.Data
             doc.LoadHtml(htmlContent);
 
             // 读取发布文字信息所需要的 hash 值
-            var postNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("content editorcontent"));
+            var postNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("content editorcontent"));
             if (postNode != null)
             {
-                var formHashInputNode = postNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
+                var formHashInputNode = postNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
                 if (formHashInputNode != null)
                 {
                     this._formHash = formHashInputNode.Attributes[3].Value.ToString();
@@ -1133,16 +1133,16 @@ namespace HipdaUwpLite.Data
             }
 
             // 读取 上载图片所需的 uid 和 hash 值
-            var imgAttachNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("imgattachbtnhidden"));
+            var imgAttachNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("imgattachbtnhidden"));
             if (imgAttachNode != null)
             {
-                var userIdNode = imgAttachNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("uid"));
+                var userIdNode = imgAttachNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("name", "").Equals("uid"));
                 if (userIdNode != null)
                 {
                     this._userId = userIdNode.Attributes[2].Value;
                 }
 
-                var hashNode = imgAttachNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("hash"));
+                var hashNode = imgAttachNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("name", "").Equals("hash"));
                 if (hashNode != null)
                 {
                     this._hash = hashNode.Attributes[2].Value;
@@ -1171,7 +1171,7 @@ namespace HipdaUwpLite.Data
 
             // 标题
             string subject = string.Empty;
-            var subjectInput = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("prompt", "").Equals("post_subject"));
+            var subjectInput = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("prompt", "").Equals("post_subject"));
             if (subjectInput != null)
             {
                 subject = subjectInput.Attributes["value"].Value;
@@ -1179,7 +1179,7 @@ namespace HipdaUwpLite.Data
 
             // 内容
             string content = string.Empty;
-            var contentTextArea = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("prompt", "").Equals("post_message"));
+            var contentTextArea = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("prompt", "").Equals("post_message"));
             if (contentTextArea != null)
             {
                 content = contentTextArea.InnerText.Replace(MessageTail, string.Empty).TrimEnd();
