@@ -231,15 +231,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                 else if (param.StartsWith("search="))
                 {
                     string[] paramaters = param.Substring("search=".Length).Split(',');
-                    int searchForumSpan = Convert.ToInt32(paramaters[0]);
-                    string keywords = Uri.UnescapeDataString(paramaters[1]);
+                    string searchKeyowrd = Uri.UnescapeDataString(paramaters[0]);
+                    string searchAuthor = Uri.UnescapeDataString(paramaters[1]);
                     int searchType = Convert.ToInt32(paramaters[2]);
                     int searchTimeSpan = Convert.ToInt32(paramaters[3]);
+                    int searchForumSpan = Convert.ToInt32(paramaters[4]);
 
-                    if (searchForumSpan == 1)
-                    {
-
-                    }
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, ThreadListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded);
+                    DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
                 {

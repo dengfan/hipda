@@ -15,7 +15,7 @@ using Windows.UI.Xaml;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadItemForSearchViewModel : ThreadItemViewModelBase
+    public class ThreadItemForSearchFullTextViewModel : ThreadItemViewModelBase
     {
         private int _threadId { get; set; }
         private ListView _replyListView { get; set; }
@@ -25,7 +25,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand RefreshReplyCommand { get; set; }
 
-        public ThreadItemModel ThreadItem { get; set; }
+        public ThreadItemForSearchFullTextModel ThreadItem { get; set; }
 
         private ICollectionView _replyItemCollection;
 
@@ -49,25 +49,25 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ThreadItemForSearchViewModel(ThreadItemModel threadItem)
+        public ThreadItemForSearchFullTextViewModel(ThreadItemForSearchFullTextModel threadItem)
         {
             StartPageNo = 1;
-            ThreadDataType = ThreadDataType.Default;
+            ThreadDataType = ThreadDataType.SearchFullText;
             _threadId = threadItem.ThreadId;
             ThreadItem = threadItem;
         }
 
-        public ThreadItemForSearchViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
+        public ThreadItemForSearchFullTextViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
         {
             StartPageNo = 1;
-            ThreadDataType = ThreadDataType.Default;
+            ThreadDataType = ThreadDataType.SearchFullText;
             _threadId = threadId;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _ds = new DataService();
 
-            ThreadItem = _ds.GetThreadItem(threadId);
+            ThreadItem = _ds.GetThreadItemForSearchFullText(threadId);
 
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) =>

@@ -27,13 +27,6 @@ namespace Hipda.Client.Uwp.Pro.Services
         int GetThreadMaxPageNoForMyPosts();
 
 
-        int GetThreadMinPageNoInLoadedData();
-
-        int GetThreadMinPageNoForMyThreadsInLoadedData();
-
-        int GetThreadMinPageNoForMyPostsInLoadedData();
-
-
         void ClearThreadData(int forumId);
 
         void ClearThreadDataForMyThreads();

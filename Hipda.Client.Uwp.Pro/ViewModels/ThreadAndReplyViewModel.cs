@@ -28,24 +28,34 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     /// </summary>
     public class ThreadAndReplyViewModel : NotificationObject
     {
+        #region 仅用于按版块ID来初始化的情况
         /// <summary>
-        /// 版块ID，仅用于按版块ID来初始化的情况
+        /// 版块ID
         /// </summary>
-        private int _forumId { get; set; }
+        int _forumId { get; set; }
+        #endregion
+
+        #region 仅用于按搜索条件来来初始化的情况
+        string _searchKeyword { get; set; }
+        string _searchAuthor { get; set; }
+        int _searchType { get; set; }
+        int _searchTimeSpan { get; set; }
+        int _searchForumSpan { get; set; }
+        #endregion
 
         /// <summary>
         /// 起始页，只在LoadData方法中赋值
         /// 因为只有LoadData方法中的页码参数才算作起始页
         /// </summary>
-        private int _startPageNo { get; set; }
+        int _startPageNo { get; set; }
 
-        private ListView _threadListView { get; set; }
-        private CommandBar _threadCommandBar { get; set; }
-        private Action _beforeLoad { get; set; }
-        private Action _afterLoad { get; set; }
-        private DataService _ds { get; set; }
+        ListView _threadListView { get; set; }
+        CommandBar _threadCommandBar { get; set; }
+        Action _beforeLoad { get; set; }
+        Action _afterLoad { get; set; }
+        DataService _ds { get; set; }
 
-        public int ThreadMaxPageNo { get; private set; }
+        public int ThreadMaxPageNo { get; set; }
 
         public DelegateCommand ClearHistoryCommand { get; set; }
 
@@ -58,7 +68,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         }
 
         #region 从指定页开始加载数据
-        private void LoadData(int pageNo, int forumId)
+        void LoadData(int pageNo, int forumId)
         {
             var cv = _ds.GetViewForThreadPage(pageNo, forumId, _beforeLoad, _afterLoad);
             if (cv != null)
@@ -69,34 +79,45 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private void LoadDataForMyThreads(int pageNo)
+        void LoadDataForMyThreads(int pageNo)
         {
             var cv = _ds.GetViewForThreadPageForMyThreads(pageNo, _beforeLoad, _afterLoad);
             if (cv != null)
             {
-                ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyThreads();
                 _startPageNo = pageNo;
                 _threadListView.ItemsSource = cv;
             }
         }
 
-        private void LoadDataForMyPosts(int pageNo)
+        void LoadDataForMyPosts(int pageNo)
         {
             var cv = _ds.GetViewForThreadPageForMyPosts(pageNo, _beforeLoad, _afterLoad);
             if (cv != null)
             {
-                ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyPosts();
                 _startPageNo = pageNo;
                 _threadListView.ItemsSource = cv;
             }
         }
 
-        private void LoadDataForMyFavorites(int pageNo)
+        void LoadDataForMyFavorites(int pageNo)
         {
             var cv = _ds.GetViewForThreadPageForMyFavorites(pageNo, _beforeLoad, _afterLoad);
             if (cv != null)
             {
-                ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyFavorites();
+                _startPageNo = pageNo;
+                _threadListView.ItemsSource = cv;
+            }
+        }
+
+        void LoadDataForSearch(int pageNo)
+        {
+            var cv = _ds.GetViewForThreadPageForSearchTitle(pageNo, _searchKeyword, _searchAuthor, _searchType, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad);
+            if (cv != null)
+            {
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchTitle();
                 _startPageNo = pageNo;
                 _threadListView.ItemsSource = cv;
             }
@@ -312,8 +333,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// <param name="threadCommandBar"></param>
         /// <param name="beforeLoad"></param>
         /// <param name="afterLoad"></param>
-        public ThreadAndReplyViewModel(int pageNo, string searchKeyword, int searchType, int searchTimeSpan, int searchForumSpan, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad)
+        public ThreadAndReplyViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad)
         {
+            _searchKeyword = searchKeyword;
+            _searchAuthor = searchAuthor;
+            _searchType = searchType;
+            _searchTimeSpan = searchTimeSpan;
+            _searchForumSpan = searchForumSpan;
+
             _threadListView = threadListView;
             _threadListView.SelectionMode = ListViewSelectionMode.Single;
             _threadListView.ItemsSource = null;
@@ -331,12 +358,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 DataService.ReadHistoryData.Clear();
             };
 
-            LoadDataForMyThreads(pageNo);
+            LoadDataForSearch(pageNo);
 
-            var refreshThreadForThreadsCommand = new DelegateCommand();
-            refreshThreadForThreadsCommand.ExecuteAction = (p) => {
-                _ds.ClearThreadDataForMyThreads();
-                LoadDataForMyThreads(1);
+            var refreshThreadForSearchCommand = new DelegateCommand();
+            refreshThreadForSearchCommand.ExecuteAction = (p) => {
+                _ds.ClearThreadDataForSearchTitle();
+                LoadDataForSearch(1);
             };
         }
 
@@ -345,7 +372,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             return _ds.GetThreadItem(threadId);
         }
 
-        private string GetThreadTitle(int threadId)
+        string GetThreadTitle(int threadId)
         {
             string title = _ds.GetThreadTitleFromReplyData(threadId);
             if (string.IsNullOrEmpty(title))

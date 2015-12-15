@@ -18,27 +18,19 @@ using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public class DataService : IDataService
+    public partial class DataService : IDataService
     {
-        private static int _threadPageSize = 75;
-        private static int _replyPageSize = 50;
-        private static int _searchPageSize = 50;
+        static int _threadPageSize = 75;
+        static int _replyPageSize = 50;
+        static int _searchPageSize = 50;
 
-        private static HttpHandle _httpClient = HttpHandle.getInstance();
+        static HttpHandle _httpClient = HttpHandle.getInstance();
 
         #region thread
-        public static ObservableCollection<ThreadItemModelBase> ReadHistoryData = new ObservableCollection<ThreadItemModelBase>();
-        private static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
-        private static List<ThreadItemForMyThreadsModel> _threadDataForMyThreads = new List<ThreadItemForMyThreadsModel>();
-        private static List<ThreadItemForMyPostsModel> _threadDataForMyPosts = new List<ThreadItemForMyPostsModel>();
-        private static List<ThreadItemForMyFavoritesModel> _threadDataForMyFavorites = new List<ThreadItemForMyFavoritesModel>();
-        
-        private int _threadMaxPageNo = 1;
-        private int _threadMaxPageNoForMyThreads = 1;
-        private int _threadMaxPageNoForMyPosts = 1;
-        private int _threadMaxPageNoForMyFavorites = 1;
+        static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
+        int _threadMaxPageNo = 1;
 
-        private async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
+        async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadData.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
             if (count == _threadPageSize)
@@ -167,255 +159,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        private async Task LoadThreadDataForMyThreadsAsync(int pageNo, CancellationTokenSource cts)
-        {
-            int count = _threadDataForMyThreads.Count(t => t.PageNo == pageNo);
-            if (count == _threadPageSize)
-            {
-                return;
-            }
-            else
-            {
-                _threadDataForMyThreads.RemoveAll(t => t.PageNo == pageNo);
-            }
-
-            // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/my.php?item=threads&page={0}&_={1}", pageNo, DateTime.Now.Ticks.ToString("x"));
-            string htmlContent = await _httpClient.GetAsync(url, cts);
-
-            // 实例化 HtmlAgilityPack.HtmlDocument 对象
-            HtmlDocument doc = new HtmlDocument();
-
-            // 载入HTML
-            doc.LoadHtml(htmlContent);
-
-            var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
-            if (dataTable == null)
-            {
-                return;
-            }
-
-            // 读取最大页码
-            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            if (pagesNode != null)
-            {
-                var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
-                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
-                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
-                _threadMaxPageNoForMyThreads = Convert.ToInt32(lastPageNodeValue);
-            }
-
-            if (pageNo > _threadMaxPageNoForMyThreads)
-            {
-                return;
-            }
-
-            var rows = dataTable.ChildNodes[3].Descendants().Where(n => n.Name.Equals("tr"));
-            if (rows == null)
-            {
-                return;
-            }
-
-            int i = _threadDataForMyThreads.Count;
-            foreach (var item in rows)
-            {
-                var th = item.Descendants().FirstOrDefault(n => n.Name.Equals("th"));
-                var a = th.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
-                string threadName = a.InnerText.Trim();
-                int threadId = Convert.ToInt32(a.GetAttributeValue("href", "").Substring("viewthread.php?tid=".Length));
-
-                var forumNameNode = item.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forum"));
-                string forumName = forumNameNode.InnerText.Trim();
-
-                var lastPostNode = item.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("lastpost"));
-                string lastPostAuthorName = "匿名";
-                string lastPostTime = string.Empty;
-                string[] lastPostInfo = lastPostNode.InnerText.Trim().Replace("\n", "@").Split('@');
-                if (lastPostInfo.Length == 2)
-                {
-                    lastPostAuthorName = lastPostInfo[0].Trim();
-                    lastPostTime = lastPostInfo[1].Trim()
-                        .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
-                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
-                }
-
-                var threadItem = new ThreadItemForMyThreadsModel(i, forumName, threadId, pageNo, threadName, lastPostAuthorName, lastPostTime);
-                _threadDataForMyThreads.Add(threadItem);
-
-                i++;
-            }
-        }
-
-        private async Task LoadThreadDataForMyPostsAsync(int pageNo, CancellationTokenSource cts)
-        {
-            int count = _threadDataForMyPosts.Count(t => t.PageNo == pageNo);
-            if (count == _threadPageSize)
-            {
-                return;
-            }
-            else
-            {
-                _threadDataForMyPosts.RemoveAll(t => t.PageNo == pageNo);
-            }
-
-            // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/my.php?item=posts&page={0}&_={1}", pageNo, DateTime.Now.Ticks.ToString("x"));
-            string htmlContent = await _httpClient.GetAsync(url, cts);
-
-            // 实例化 HtmlAgilityPack.HtmlDocument 对象
-            HtmlDocument doc = new HtmlDocument();
-
-            // 载入HTML
-            doc.LoadHtml(htmlContent);
-
-            var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
-            if (dataTable == null)
-            {
-                return;
-            }
-
-            // 读取最大页码
-            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            if (pagesNode != null)
-            {
-                var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
-                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
-                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
-                _threadMaxPageNoForMyPosts = Convert.ToInt32(lastPageNodeValue);
-            }
-
-            if (pageNo > _threadMaxPageNoForMyPosts)
-            {
-                return;
-            }
-
-            var rows = dataTable.ChildNodes[3].Descendants().Where(n => n.Name.Equals("tr")).ToList();
-            if (rows == null)
-            {
-                return;
-            }
-
-            int i = _threadDataForMyPosts.Count;
-            for (int j = 0; j < _threadPageSize * 2; j += 2)
-            {
-                var tr = rows[j];
-                var tr2 = rows[j + 1];
-
-                var th = tr.Descendants().FirstOrDefault(n => n.Name.Equals("th"));
-                var a = th.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
-                string threadName = a.InnerText.Trim();
-                string[] pramaStr = a.GetAttributeValue("href", "").Substring("redirect.php?goto=findpost&amp;pid=".Length).Replace("&amp;ptid=", ",").Split(',');
-                int threadId = Convert.ToInt32(pramaStr[1]);
-                int postId = Convert.ToInt32(pramaStr[0]);
-
-                var th2 = tr2.Descendants().FirstOrDefault(n => n.Name.Equals("th"));
-                string lastPostContent = th2.InnerText.Trim();
-
-                var forumNameNode = tr.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forum"));
-                string forumName = forumNameNode.InnerText.Trim();
-
-                var lastPostNode = tr.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("lastpost"));
-                string lastPostTime = lastPostNode.InnerText.Trim();
-                lastPostTime = lastPostTime
-                        .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
-                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
-
-                var threadItem = new ThreadItemForMyPostsModel(i, forumName, threadId, postId, pageNo, threadName, lastPostContent, lastPostTime);
-                _threadDataForMyPosts.Add(threadItem);
-
-                i++;
-            }
-        }
-
-        private async Task LoadThreadDataForMyFavoritesAsync(int pageNo, CancellationTokenSource cts)
-        {
-            int count = _threadDataForMyFavorites.Count(t => t.PageNo == pageNo);
-            if (count == _threadPageSize)
-            {
-                return;
-            }
-            else
-            {
-                _threadDataForMyFavorites.RemoveAll(t => t.PageNo == pageNo);
-            }
-
-            // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/my.php?item=favorites&type=thread&page={0}&_={1}", pageNo, DateTime.Now.Ticks.ToString("x"));
-            string htmlContent = await _httpClient.GetAsync(url, cts);
-
-            // 实例化 HtmlAgilityPack.HtmlDocument 对象
-            HtmlDocument doc = new HtmlDocument();
-
-            // 载入HTML
-            doc.LoadHtml(htmlContent);
-
-            var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
-            if (dataTable == null || dataTable.InnerText.Trim().Equals("暂无数据"))
-            {
-                return;
-            }
-
-            // 读取最大页码
-            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            if (pagesNode != null)
-            {
-                var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
-                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
-                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
-                _threadMaxPageNoForMyFavorites = Convert.ToInt32(lastPageNodeValue);
-            }
-
-            if (pageNo > _threadMaxPageNoForMyFavorites)
-            {
-                return;
-            }
-
-            var rows = dataTable.ChildNodes[3].Descendants().Where(n => n.Name.Equals("tr")).ToList();
-            if (rows == null)
-            {
-                return;
-            }
-
-            // 移除最后一行，注：最后一行是批量删除的按钮
-            rows.RemoveAt(rows.Count - 1);
-
-            int i = _threadDataForMyFavorites.Count;
-            foreach (var item in rows)
-            {
-                var th = item.Descendants().FirstOrDefault(n => n.Name.Equals("th"));
-                var a = th.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
-                string threadName = a.InnerText.Trim();
-                string hrefStr = a.GetAttributeValue("href", "").Substring("viewthread.php?tid=".Length);
-                hrefStr = hrefStr.Split('&')[0];
-                int threadId = Convert.ToInt32(hrefStr);
-
-                var forumNameNode = item.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forum"));
-                string forumName = forumNameNode.InnerText.Trim();
-
-                var replyCountNode = item.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("nums"));
-                int replyCount = Convert.ToInt32(replyCountNode.InnerText);
-
-                var lastPostNode = item.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("lastpost"));
-                string lastPostAuthorName = "匿名";
-                string lastPostTime = string.Empty;
-                string[] lastPostInfo = lastPostNode.InnerText.Trim().Replace("\n", "@").Split('@');
-                if (lastPostInfo.Length == 2)
-                {
-                    lastPostAuthorName = lastPostInfo[0].Trim();
-                    lastPostTime = lastPostInfo[1].Trim()
-                        .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
-                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
-                }
-
-                var threadItem = new ThreadItemForMyFavoritesModel(i, forumName, threadId, pageNo, threadName, replyCount, lastPostAuthorName, lastPostTime);
-                _threadDataForMyFavorites.Add(threadItem);
-
-                i++;
-            }
-        }
-
-
-        private async Task<int> GetMoreThreadItemsAsync(int forumId, int pageNo, Action beforeLoad, Action afterLoad)
+        async Task<int> GetMoreThreadItemsAsync(int forumId, int pageNo, Action beforeLoad, Action afterLoad)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
@@ -425,93 +169,18 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadData.Count(t => t.ForumId == forumId);
         }
 
-        private ThreadItemViewModel GetOneThreadItem(int forumId, int index)
+        ThreadItemViewModel GetOneThreadItem(int forumId, int index)
         {
             var threadItem = _threadData.FirstOrDefault(t => t.ForumId == forumId && t.Index == index);
             if (threadItem == null)
             {
                 return null;
             }
-            
+
             var vm = new ThreadItemViewModel(threadItem);
             vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
 
             return vm;
-        }
-
-        private async Task<int> GetMoreThreadItemsForMyThreadsAsync(int pageNo, Action beforeLoad, Action afterLoad)
-        {
-            if (beforeLoad != null) beforeLoad();
-            var cts = new CancellationTokenSource();
-            await LoadThreadDataForMyThreadsAsync(pageNo, cts);
-            if (afterLoad != null) afterLoad();
-
-            return _threadDataForMyThreads.Count;
-        }
-
-        private ThreadItemForMyThreadsViewModel GetOneThreadItemForMyThreads(int index)
-        {
-            var threadItem = _threadDataForMyThreads.FirstOrDefault(t => t.Index == index);
-            if (threadItem == null)
-            {
-                return null;
-            }
-
-            var vm = new ThreadItemForMyThreadsViewModel(threadItem);
-            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
-            return vm;
-        }
-
-        private async Task<int> GetMoreThreadItemsForMyPostsAsync(int pageNo, Action beforeLoad, Action afterLoad)
-        {
-            if (beforeLoad != null) beforeLoad();
-            var cts = new CancellationTokenSource();
-            await LoadThreadDataForMyPostsAsync(pageNo, cts);
-            if (afterLoad != null) afterLoad();
-
-            return _threadDataForMyPosts.Count;
-        }
-
-        private ThreadItemForMyPostsViewModel GetOneThreadItemForMyPosts(int index)
-        {
-            var threadItem = _threadDataForMyPosts.FirstOrDefault(t => t.Index == index);
-            if (threadItem == null)
-            {
-                return null;
-            }
-
-            var vm = new ThreadItemForMyPostsViewModel(threadItem);
-            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
-            return vm;
-        }
-
-        private async Task<int> GetMoreThreadItemsForMyFavoritesAsync(int pageNo, Action beforeLoad, Action afterLoad)
-        {
-            if (beforeLoad != null) beforeLoad();
-            var cts = new CancellationTokenSource();
-            await LoadThreadDataForMyFavoritesAsync(pageNo, cts);
-            if (afterLoad != null) afterLoad();
-
-            return _threadDataForMyFavorites.Count;
-        }
-
-        private ThreadItemForMyFavoritesViewModel GetOneThreadItemForMyFavorites(int index)
-        {
-            var threadItem = _threadDataForMyFavorites.FirstOrDefault(t => t.Index == index);
-            if (threadItem == null)
-            {
-                return null;
-            }
-
-            var vm = new ThreadItemForMyFavoritesViewModel(threadItem);
-            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
-            return vm;
-        }
-
-        private Style GetReadStatusStyle(int threadId)
-        {
-            string styleName = IsRead(threadId) ? "ReadColorStyle" : "UnReadColorStyle";
-            return (Style)App.Current.Resources[styleName];
         }
 
         public ICollectionView GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad)
@@ -538,160 +207,27 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public ICollectionView GetViewForThreadPageForMyThreads(int startPageNo, Action beforeLoad, Action afterLoad)
-        {
-            var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyThreadsViewModel>(
-                startPageNo,
-                async pageNo =>
-                {
-                    // 加载分页数据，并写入静态类中
-                    // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsForMyThreadsAsync(pageNo, beforeLoad, afterLoad);
-                },
-                (index) =>
-                {
-                    // 从静态类中返回需要显示出来的数据
-                    return GetOneThreadItemForMyThreads(index);
-                },
-                () =>
-                {
-                    return GetThreadMaxPageNoForMyThreads();
-                });
-
-            return cvs.View;
-        }
-
-        public ICollectionView GetViewForThreadPageForMyPosts(int startPageNo, Action beforeLoad, Action afterLoad)
-        {
-            var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyPostsViewModel>(
-                startPageNo,
-                async pageNo =>
-                {
-                    // 加载分页数据，并写入静态类中
-                    // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsForMyPostsAsync(pageNo, beforeLoad, afterLoad);
-                },
-                (index) =>
-                {
-                    // 从静态类中返回需要显示出来的数据
-                    return GetOneThreadItemForMyPosts(index);
-                },
-                () =>
-                {
-                    return GetThreadMaxPageNoForMyPosts();
-                });
-
-            return cvs.View;
-        }
-
-        public ICollectionView GetViewForThreadPageForMyFavorites(int startPageNo, Action beforeLoad, Action afterLoad)
-        {
-            var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyFavoritesViewModel>(
-                startPageNo,
-                async pageNo =>
-                {
-                    // 加载分页数据，并写入静态类中
-                    // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsForMyFavoritesAsync(pageNo, beforeLoad, afterLoad);
-                },
-                (index) =>
-                {
-                    // 从静态类中返回需要显示出来的数据
-                    return GetOneThreadItemForMyFavorites(index);
-                },
-                () =>
-                {
-                    return GetThreadMaxPageNoForMyFavorites();
-                });
-
-            return cvs.View;
-        }
-
-
         public int GetThreadMaxPageNo()
         {
             return _threadMaxPageNo;
         }
-
-        public int GetThreadMaxPageNoForMyThreads()
-        {
-            return _threadMaxPageNoForMyThreads;
-        }
-
-        public int GetThreadMaxPageNoForMyPosts()
-        {
-            return _threadMaxPageNoForMyPosts;
-        }
-
-        public int GetThreadMaxPageNoForMyFavorites()
-        {
-            return _threadMaxPageNoForMyFavorites;
-        }
-
-
-        public int GetThreadMinPageNoInLoadedData()
-        {
-            return _threadData.Min(t => t.PageNo);
-        }
-
-        public int GetThreadMinPageNoForMyThreadsInLoadedData()
-        {
-            return _threadDataForMyThreads.Min(t => t.PageNo);
-        }
-
-        public int GetThreadMinPageNoForMyPostsInLoadedData()
-        {
-            return _threadDataForMyPosts.Min(t => t.PageNo);
-        }
-
-        public int GetThreadMinPageNoForMyFavoritesInLoadedData()
-        {
-            return _threadDataForMyFavorites.Min(t => t.PageNo);
-        }
-
 
         public void ClearThreadData(int forumId)
         {
             _threadData.RemoveAll(t => t.ForumId == forumId);
         }
 
-        public void ClearThreadDataForMyThreads()
-        {
-            _threadDataForMyThreads.Clear();
-        }
-
-        public void ClearThreadDataForMyPosts()
-        {
-            _threadDataForMyPosts.Clear();
-        }
-
-        public void ClearThreadDataForMyFavorites()
-        {
-            _threadDataForMyFavorites.Clear();
-        }
-
-
         public ThreadItemModel GetThreadItem(int threadId)
         {
             return _threadData.FirstOrDefault(t => t.ThreadId == threadId);
         }
 
-        public ThreadItemForMyThreadsModel GetThreadItemForMyThreads(int threadId)
-        {
-            return _threadDataForMyThreads.FirstOrDefault(t => t.ThreadId == threadId);
-        }
+        public static ObservableCollection<ThreadItemModelBase> ReadHistoryData = new ObservableCollection<ThreadItemModelBase>();
 
-        public ThreadItemForMyPostsModel GetThreadItemForMyPosts(int threadId)
+        Style GetReadStatusStyle(int threadId)
         {
-            return _threadDataForMyPosts.FirstOrDefault(t => t.ThreadId == threadId);
-        }
-
-        public ThreadItemForMyFavoritesModel GetThreadItemForMyFavorites(int threadId)
-        {
-            return _threadDataForMyFavorites.FirstOrDefault(t => t.ThreadId == threadId);
+            string styleName = IsRead(threadId) ? "ReadColorStyle" : "UnReadColorStyle";
+            return (Style)App.Current.Resources[styleName];
         }
 
         public bool IsRead(int threadId)
@@ -764,11 +300,11 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region reply
-        private static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
-        private int _replyMaxPageNo = 1;
-        private bool _isScrollCompleted = false;
+        static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
+        int _replyMaxPageNo = 1;
+        bool _isScrollCompleted = false;
 
-        private async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, CancellationTokenSource cts)
+        async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, CancellationTokenSource cts)
         {
             // 如果页面已存在，则不重新从网站拉取数据，以便节省流量， 
             var threadReply = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
@@ -883,7 +419,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         {
                             h1.RemoveChild(a); // 移除版块名称
                         }
-                        
+
                         threadTitle = h1.InnerText.Trim();
                     }
                 }
@@ -1201,9 +737,9 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region user
-        private static Dictionary<int, string> _userInfoData = new Dictionary<int, string>();
+        static Dictionary<int, string> _userInfoData = new Dictionary<int, string>();
 
-        private async Task LoadUserDataAsync(int userId, CancellationTokenSource cts)
+        async Task LoadUserDataAsync(int userId, CancellationTokenSource cts)
         {
             if (_userInfoData.ContainsKey(userId))
             {
@@ -1239,7 +775,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _userInfoData[userId];
         }
 
-        private async Task<List<UserMessageItemModel>> LoadUserMessageDataAsync(int userId, int limitCount, CancellationTokenSource cts)
+        async Task<List<UserMessageItemModel>> LoadUserMessageDataAsync(int userId, int limitCount, CancellationTokenSource cts)
         {
             var data = new List<UserMessageItemModel>();
 
@@ -1292,14 +828,14 @@ namespace Hipda.Client.Uwp.Pro.Services
                                 uid = Convert.ToInt32(userIdStr);
                             }
                         }
-                        
+
                         bool isRead = !userInfoNode.InnerHtml.Contains("notice_newpm.gif");
                         string str = userInfoNode.InnerText.Trim().Replace("&nbsp;", string.Empty).Replace("\n", "$");
                         string[] strAry = str.Split('$');
                         string username = strAry[0].Trim();
                         string time = strAry[1].Trim();
                         string date = time.Split(' ')[0];
-                        
+
                         string textStr = messageNode.InnerText;
                         string htmlStr = messageNode.InnerHtml;
                         string xamlStr = Html.HtmlToXaml.ConvertUserMessage(htmlStr);

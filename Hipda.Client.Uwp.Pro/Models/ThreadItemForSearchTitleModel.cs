@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Text;
+using Windows.UI.Xaml;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
-    public class ThreadItemForSearchModel
+    public class ThreadItemForSearchTitleModel : ThreadItemModelBase
     {
-        public ThreadItemForSearchModel(int index, int readStatus, int forumId, string forumName, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
+        public ThreadItemForSearchTitleModel(int index, string forumName, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
         {
             this.Index = index;
-            this.ReadStatus = readStatus;
-            this.ForumId = forumId;
             this.ForumName = forumName;
             this.ThreadId = threadId;
             this.PageNo = pageNo;
@@ -30,17 +29,11 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public int Index { get; private set; }
 
-        public int ReadStatus { get; private set; }
-
         public int ForumId { get; private set; }
 
         public string ForumName { get; private set; }
 
         public int PageNo { get; private set; }
-
-        public int ThreadId { get; private set; }
-
-        public string Title { get; private set; }
 
         public string ReplyCount { get; private set; }
 
@@ -61,26 +54,6 @@ namespace Hipda.Client.Uwp.Pro.Models
         public override string ToString()
         {
             return this.Title;
-        }
-
-        public string AvatarUrl
-        {
-            get
-            {
-                if (AuthorUserId == 0)
-                {
-                    return string.Empty;
-                }
-
-                int uid = Convert.ToInt32(AuthorUserId);
-                var s = new int[10];
-                for (int i = 0; i < s.Length - 1; ++i)
-                {
-                    s[i] = uid % 10;
-                    uid = (uid - s[i]) / 10;
-                }
-                return "http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg";
-            }
         }
 
         public string ViewInfo
@@ -112,6 +85,14 @@ namespace Hipda.Client.Uwp.Pro.Models
             get
             {
                 return AttachFileType == 2 ? "\uE16C" : string.Empty;
+            }
+        }
+
+        public Style ThreadItemStyle
+        {
+            get
+            {
+                return (Style)App.Current.Resources["NormalThreadItemStyle"];
             }
         }
     }

@@ -110,11 +110,12 @@
     <Compile Include="Models\FaceItemModel.cs" />
     <Compile Include="Models\OpenNewViewParameterModel.cs" />
     <Compile Include="Models\ThreadItemForMyFavoritesModel.cs" />
+    <Compile Include="Models\ThreadItemForSearchFullTextModel.cs" />
     <Compile Include="Models\UserMessageItemModel.cs" />
     <Compile Include="Models\ReplyItemModel.cs" />
     <Compile Include="Models\ReplyPageModel.cs" />
     <Compile Include="Models\ThreadItemModelBase.cs" />
-    <Compile Include="Models\ThreadItemForSearchModel.cs" />
+    <Compile Include="Models\ThreadItemForSearchTitleModel.cs" />
     <Compile Include="Models\ThreadItemModel.cs" />
     <Compile Include="Models\ThreadItemForMyPostsModel.cs" />
     <Compile Include="Models\ThreadItemForMyThreadsModel.cs" />
@@ -128,6 +129,11 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\Common.cs" />
     <Compile Include="Services\DataService.cs" />
+    <Compile Include="Services\DataServiceForMyFavorites.cs" />
+    <Compile Include="Services\DataServiceForMyPosts.cs" />
+    <Compile Include="Services\DataServiceForMyThreads.cs" />
+    <Compile Include="Services\DataServiceForSearchFullText.cs" />
+    <Compile Include="Services\DataServiceForSearchTitle.cs" />
     <Compile Include="Services\FaceService.cs" />
     <Compile Include="Services\GeneratorIncrementalLoadingClass.cs" />
     <Compile Include="Services\IDataService.cs" />
@@ -141,7 +147,8 @@
     <Compile Include="ViewModels\ReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyFavoritesViewModel.cs" />
-    <Compile Include="ViewModels\ThreadItemForSearchViewModel.cs" />
+    <Compile Include="ViewModels\ThreadItemForSearchFullTextViewModel.cs" />
+    <Compile Include="ViewModels\ThreadItemForSearchTitleViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyPostsViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyThreadsViewModel.cs" />
