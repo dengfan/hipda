@@ -129,6 +129,7 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\Common.cs" />
     <Compile Include="Services\DataService.cs" />
+    <Compile Include="Services\DataServiceForDefault.cs" />
     <Compile Include="Services\DataServiceForMyFavorites.cs" />
     <Compile Include="Services\DataServiceForMyPosts.cs" />
     <Compile Include="Services\DataServiceForMyThreads.cs" />
