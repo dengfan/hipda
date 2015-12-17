@@ -98,25 +98,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                string title = Title;
-                string xaml = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumBrush}}"" TextWrapping=""Wrap""><Run FontFamily=""Segoe MDL2 Assets"" Foreground=""OrangeRed"" Text=""{1}"" /><Run FontFamily=""Segoe MDL2 Assets"" Foreground=""DeepSkyBlue"" Text=""{2}"" /> {0} <Run Text=""{3}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"" /></TextBlock>";
-
-                MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(title);
-                if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
-                {
-                    for (int j = 0; j < matchsForSearchKeywords.Count; j++)
-                    {
-                        var m = matchsForSearchKeywords[j];
-
-                        string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                        string k = m.Groups[1].Value;
-
-                        string linkXaml = string.Format(@"<Run Foreground=""Red"">{0}</Run>", k);
-                        title = title.Replace(placeHolder, linkXaml);
-                    }
-                }
-
-                xaml = string.Format(xaml, title, ImageFontIcon, FileFontIcon, ViewInfo);
+                string xaml = Html.HtmlToXaml.ConvertSearchThreadTitle(Title, ImageFontIcon, FileFontIcon, ViewInfo);
                 return XamlReader.Load(xaml) as TextBlock;
             }
         }

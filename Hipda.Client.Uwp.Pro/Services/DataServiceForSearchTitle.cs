@@ -105,22 +105,6 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 string title = a.InnerHtml;
 
-                // 替换搜索关键字，用于高亮关键字
-                //MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(title);
-                //if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
-                //{
-                //    for (int j = 0; j < matchsForSearchKeywords.Count; j++)
-                //    {
-                //        var m = matchsForSearchKeywords[j];
-
-                //        string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                //        string k = m.Groups[1].Value;
-
-                //        string linkXaml = string.Format(@"  “{0}”  ", k);
-                //        title = title.Replace(placeHolder, linkXaml);
-                //    }
-                //}
-
                 int attachType = -1;
                 var attachIconNode = th.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("attach"));
                 if (attachIconNode != null)
