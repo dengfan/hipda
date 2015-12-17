@@ -237,6 +237,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                     int searchTimeSpan = Convert.ToInt32(paramaters[3]);
                     int searchForumSpan = Convert.ToInt32(paramaters[4]);
 
+                    _threadDataType = (searchType == 0) ? ThreadDataType.SearchTitle : ThreadDataType.SearchFullText;
+
                     _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, ThreadListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded);
                     DataContext = _threadAndReplyViewModel;
                 }
@@ -257,6 +259,10 @@ namespace Hipda.Client.Uwp.Pro.Views
                             var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
                             _lastSelectedItem = itemForMyPosts;
                             RightWrap.DataContext = itemForMyPosts;
+                            break;
+                        case ThreadDataType.SearchTitle:
+                            break;
+                        case ThreadDataType.SearchFullText:
                             break;
                         default:
                             var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
@@ -301,6 +307,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                         var itemForMyFavorites = _lastSelectedItem as ThreadItemForMyFavoritesViewModel;
                         p = string.Format("{0},{1}", itemForMyFavorites.ThreadItem.ThreadId, 0);
                         break;
+                    case ThreadDataType.SearchTitle:
+                        var itemForSearchTitle = _lastSelectedItem as ThreadItemForSearchTitleViewModel;
+                        p = string.Format("{0},{1}", itemForSearchTitle.ThreadItem.ThreadId, 0);
+                        break;
+                    case ThreadDataType.SearchFullText:
+                        var itemForSearchFullText = _lastSelectedItem as ThreadItemForSearchFullTextViewModel;
+                        p = string.Format("{0},{1}", itemForSearchFullText.ThreadItem.ThreadId, 0);
+                        break;
                     default:
                         var item = _lastSelectedItem as ThreadItemViewModel;
                         p = string.Format("{0},{1}", item.ThreadItem.ThreadId, item.ThreadItem.AuthorUserId);
@@ -309,6 +323,9 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                 UserDialogContentControl.Content = null;
                 UserDialog.Hide();
+
+                PostDialog.DataContext = null;
+                PostDialog.Hide();
 
                 Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
             }
@@ -380,6 +397,40 @@ namespace Hipda.Client.Uwp.Pro.Views
                     {
                         itemForMyFavorites.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
                         RightWrap.DataContext = itemForMyFavorites;
+                    }
+                    break;
+                case ThreadDataType.SearchTitle:
+                    var itemForSearchTitle = (ThreadItemForSearchTitleViewModel)selectedItem;
+                    itemForSearchTitle.SetRead();
+
+                    _lastSelectedItem = itemForSearchTitle;
+
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        string p = string.Format("{0},{1}", itemForSearchTitle.ThreadItem.ThreadId, 0);
+                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        itemForSearchTitle.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
+                        RightWrap.DataContext = itemForSearchTitle;
+                    }
+                    break;
+                case ThreadDataType.SearchFullText:
+                    var itemForSearchFullText = (ThreadItemForSearchFullTextViewModel)selectedItem;
+                    itemForSearchFullText.SetRead();
+
+                    _lastSelectedItem = itemForSearchFullText;
+
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        string p = string.Format("{0},{1}", itemForSearchFullText.ThreadItem.ThreadId, 0);
+                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        itemForSearchFullText.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
+                        RightWrap.DataContext = itemForSearchFullText;
                     }
                     break;
                 default:

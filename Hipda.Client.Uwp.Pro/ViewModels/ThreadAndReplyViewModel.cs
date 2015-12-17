@@ -358,6 +358,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 DataService.ReadHistoryData.Clear();
             };
 
+            _ds.ClearThreadDataForSearchTitle(); // 清除已搜索的数据
             LoadDataForSearch(pageNo);
 
             var refreshThreadForSearchCommand = new DelegateCommand();

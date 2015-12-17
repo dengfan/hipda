@@ -52,6 +52,9 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             string searchForumSpanStr = "all";
 
+            searchKeyword = _httpClient.GetEncoding(searchKeyword);
+            searchAuthor = _httpClient.GetEncoding(searchAuthor);
+
             string url = string.Format("http://www.hi-pda.com/forum/search.php?srchtype={2}&srchtxt={0}&searchsubmit=%CB%D1%CB%F7&st=on&srchuname={1}&srchfilter=all&srchfrom={3}&before=&orderby={5}&ascdesc=desc&srchfid%5B0%5D={4}&page={6}&_={7}",
                 searchKeyword, searchAuthor, searchTypeStr, searchTimeSpanStr, searchForumSpanStr, "lastpost", pageNo, DateTime.Now.Ticks.ToString("x"));
             string htmlContent = await _httpClient.GetAsync(url, cts);

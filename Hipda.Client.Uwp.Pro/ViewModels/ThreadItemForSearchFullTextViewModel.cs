@@ -24,6 +24,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private DataService _ds { get; set; }
 
         public DelegateCommand RefreshReplyCommand { get; set; }
+        public DelegateCommand PostReplyCommand { get; set; }
 
         public ThreadItemForSearchFullTextModel ThreadItem { get; set; }
 
@@ -49,6 +50,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        private void PostData(string postContent, int threadId)
+        {
+
+        }
+
         public ThreadItemForSearchFullTextViewModel(ThreadItemForSearchFullTextModel threadItem)
         {
             StartPageNo = 1;
@@ -57,7 +63,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             ThreadItem = threadItem;
         }
 
-        public ThreadItemForSearchFullTextViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
+        public ThreadItemForSearchFullTextViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int, int> afterLoad)
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.SearchFullText;
@@ -76,6 +82,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 LoadData(1);
             };
 
+            PostReplyCommand = new DelegateCommand();
+            PostReplyCommand.ExecuteAction = (p) => {
+                string postContent = postReplyTextBox.Text.Trim();
+                PostData(postContent, threadId);
+            };
+
             var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
@@ -83,7 +95,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public void SelectThreadItem(ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
+        public void SelectThreadItem(ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int, int> afterLoad)
         {
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
@@ -94,6 +106,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand.ExecuteAction = (p) => {
                 _ds.ClearReplyData(_threadId);
                 LoadData(StartPageNo);
+            };
+
+            PostReplyCommand = new DelegateCommand();
+            PostReplyCommand.ExecuteAction = (p) => {
+                string postContent = postReplyTextBox.Text.Trim();
+                PostData(postContent, _threadId);
             };
 
             LoadData(StartPageNo);
