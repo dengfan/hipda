@@ -285,20 +285,18 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                         }
                     };
 
-                    var btnMultipleSelect = new AppBarToggleButton { Icon = new FontIcon { Glyph = "\uE762", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label = "进入选择模式", IsThreeState = false };
+                    var btnMultipleSelect = new AppBarToggleButton { Icon = new FontIcon { Glyph = "\uE762", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label = "选择", IsThreeState = false };
                     btnMultipleSelect.Tapped += (s, e) =>
                     {
                         var btn = s as AppBarToggleButton;
                         if (btn.IsChecked == true)
                         {
                             _threadListView.SelectionMode = ListViewSelectionMode.Multiple;
-                            btnMultipleSelect.Label = "退出选择模式";
                             btnDeleteSelected.IsEnabled = true;
                         }
                         else
                         {
                             _threadListView.SelectionMode = ListViewSelectionMode.Single;
-                            btnMultipleSelect.Label = "进入选择模式";
                             btnDeleteSelected.IsEnabled = false;
                         }
                     };
@@ -306,7 +304,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     var btnRefreshForFavorites = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
                     btnRefreshForFavorites.Tapped += (s, e) => {
                         _threadListView.SelectionMode = ListViewSelectionMode.Single;
-                        btnMultipleSelect.Label = "进入选择模式";
                         btnMultipleSelect.IsChecked = false;
                         btnDeleteSelected.IsEnabled = false;
 
