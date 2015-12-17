@@ -652,10 +652,7 @@
                     <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                 </TextBlock>
 
-                <TextBlock Margin="56,22,0,20" TextWrapping="Wrap" Style="{Binding ThreadItem.ThreadItemStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Run FontFamily="Segoe MDL2 Assets" Foreground="Gray" Text="{Binding ThreadItem.TopFontIcon}" />
-                    <Run FontFamily="Segoe MDL2 Assets" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
-                    <Run FontFamily="Segoe MDL2 Assets" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
+                <TextBlock Margin="56,22,0,20" TextWrapping="Wrap" Style="{Binding ThreadItem.ThreadItemStyle}" HorizontalAlignment="Left" VerticalAlignment="Top"><Run FontFamily="Segoe MDL2 Assets" Foreground="Gray" Text="{Binding ThreadItem.TopFontIcon}" /><Run FontFamily="Segoe MDL2 Assets" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" /><Run FontFamily="Segoe MDL2 Assets" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
                     <Run Text="{Binding ThreadItem.Title}" />
                     <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                 </TextBlock>
@@ -735,12 +732,7 @@
                     <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                 </TextBlock>
 
-                <TextBlock Margin="56,22,0,20" TextWrapping="Wrap" Style="{Binding ThreadItem.ThreadItemStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Run FontFamily="Segoe MDL2 Assets" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
-                    <Run FontFamily="Segoe MDL2 Assets" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
-                    <Run Text="{Binding ThreadItem.Title}" />
-                    <Run Text="{Binding ThreadItem.ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
-                </TextBlock>
+                <ContentControl Content="{Binding ThreadItem.TitleControl}" Margin="56,22,0,20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <TextBlock Margin="0,0,0,4" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <Run Text=" &#xE25C;" FontFamily="Segoe MDL2 Assets" />
@@ -758,7 +750,7 @@
                     <Run Text="{Binding ThreadItem.AuthorCreateTime}" />
                 </TextBlock>
 
-                <TextBlock Margin="56,22,0,20" TextWrapping="Wrap" Style="{Binding ThreadItem.ThreadItemStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Margin="56,22,0,20" TextWrapping="Wrap" Style="{StaticResource NormalThreadItemStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Run FontFamily="Segoe MDL2 Assets" Foreground="OrangeRed" Text="{Binding ThreadItem.ImageFontIcon}" />
                     <Run FontFamily="Segoe MDL2 Assets" Foreground="DeepSkyBlue" Text="{Binding ThreadItem.FileFontIcon}" />
                     <Run Text="{Binding ThreadItem.Title}" />

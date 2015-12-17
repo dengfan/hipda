@@ -52,11 +52,8 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             string searchForumSpanStr = "all";
 
-            searchKeyword = _httpClient.GetEncoding(searchKeyword);
-            searchAuthor = _httpClient.GetEncoding(searchAuthor);
-
             string url = string.Format("http://www.hi-pda.com/forum/search.php?srchtype={2}&srchtxt={0}&searchsubmit=%CB%D1%CB%F7&st=on&srchuname={1}&srchfilter=all&srchfrom={3}&before=&orderby={5}&ascdesc=desc&srchfid%5B0%5D={4}&page={6}&_={7}",
-                searchKeyword, searchAuthor, searchTypeStr, searchTimeSpanStr, searchForumSpanStr, "lastpost", pageNo, DateTime.Now.Ticks.ToString("x"));
+                _httpClient.GetEncoding(searchKeyword), _httpClient.GetEncoding(searchAuthor), searchTypeStr, searchTimeSpanStr, searchForumSpanStr, "lastpost", pageNo, DateTime.Now.Ticks.ToString("x"));
             string htmlContent = await _httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
@@ -109,20 +106,20 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string title = a.InnerHtml;
 
                 // 替换搜索关键字，用于高亮关键字
-                MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(title);
-                if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
-                {
-                    for (int j = 0; j < matchsForSearchKeywords.Count; j++)
-                    {
-                        var m = matchsForSearchKeywords[j];
+                //MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(title);
+                //if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
+                //{
+                //    for (int j = 0; j < matchsForSearchKeywords.Count; j++)
+                //    {
+                //        var m = matchsForSearchKeywords[j];
 
-                        string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                        string k = m.Groups[1].Value;
+                //        string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                //        string k = m.Groups[1].Value;
 
-                        string linkXaml = string.Format(@"  “{0}”  ", k);
-                        title = title.Replace(placeHolder, linkXaml);
-                    }
-                }
+                //        string linkXaml = string.Format(@"  “{0}”  ", k);
+                //        title = title.Replace(placeHolder, linkXaml);
+                //    }
+                //}
 
                 int attachType = -1;
                 var attachIconNode = th.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("attach"));
@@ -176,7 +173,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
-                var threadItem = new ThreadItemForSearchTitleModel(i, forumName, threadId, pageNo, title, attachType, replyCount, viewCount, authorUsername, authorUserId, authorCreateTime, lastReplyUsername, lastReplyTime);
+                var threadItem = new ThreadItemForSearchTitleModel(i, searchKeyword, forumName, threadId, pageNo, title, attachType, replyCount, viewCount, authorUsername, authorUserId, authorCreateTime, lastReplyUsername, lastReplyTime);
                 _threadDataForSearchTitle.Add(threadItem);
 
                 i++;

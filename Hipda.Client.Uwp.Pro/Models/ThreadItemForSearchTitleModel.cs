@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Markup;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ThreadItemForSearchTitleModel : ThreadItemModelBase
     {
-        public ThreadItemForSearchTitleModel(int index, string forumName, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
+        public ThreadItemForSearchTitleModel(int index, string searchKeyword, string forumName, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
         {
             this.Index = index;
+            this.SearchKeyword = searchKeyword;
             this.ForumName = forumName;
             this.ThreadId = threadId;
             this.PageNo = pageNo;
@@ -28,6 +32,8 @@ namespace Hipda.Client.Uwp.Pro.Models
         }
 
         public int Index { get; private set; }
+
+        public string SearchKeyword { get; private set; }
 
         public int ForumId { get; private set; }
 
@@ -88,11 +94,30 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
-        public Style ThreadItemStyle
+        public TextBlock TitleControl
         {
             get
             {
-                return (Style)App.Current.Resources["NormalThreadItemStyle"];
+                string title = Title;
+                string xaml = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumBrush}}"" TextWrapping=""Wrap""><Run FontFamily=""Segoe MDL2 Assets"" Foreground=""OrangeRed"" Text=""{1}"" /><Run FontFamily=""Segoe MDL2 Assets"" Foreground=""DeepSkyBlue"" Text=""{2}"" /> {0} <Run Text=""{3}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"" /></TextBlock>";
+
+                MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(title);
+                if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
+                {
+                    for (int j = 0; j < matchsForSearchKeywords.Count; j++)
+                    {
+                        var m = matchsForSearchKeywords[j];
+
+                        string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                        string k = m.Groups[1].Value;
+
+                        string linkXaml = string.Format(@"<Run Foreground=""Red"">{0}</Run>", k);
+                        title = title.Replace(placeHolder, linkXaml);
+                    }
+                }
+
+                xaml = string.Format(xaml, title, ImageFontIcon, FileFontIcon, ViewInfo);
+                return XamlReader.Load(xaml) as TextBlock;
             }
         }
     }
