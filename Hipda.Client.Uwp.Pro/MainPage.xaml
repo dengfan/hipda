@@ -167,7 +167,7 @@
                                 </Button.Content>
                             </Button>
                             <StackPanel x:Name="SearchPanel" Margin="8" Visibility="Collapsed">
-                                <TextBox x:Name="KeywordTextBox" PlaceholderText="关键字"/>
+                                <TextBox x:Name="KeywordTextBox" PlaceholderText="关键字" KeyUp="KeywordTextBox_KeyUp"/>
                                 <TextBox x:Name="AuthorTextBox" Margin="0,4,0,0" PlaceholderText="作者"/>
                                 <ComboBox x:Name="SearchTypeComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                                     <x:String>标题</x:String>

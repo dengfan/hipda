@@ -104,6 +104,7 @@ namespace Hipda.Client.Uwp.Pro
             {
                 MainSplitView.IsPaneOpen = true;
                 SearchPanel.Visibility = Visibility.Visible;
+                KeywordTextBox.Focus(FocusState.Programmatic);
             }
             else
             {
@@ -111,14 +112,12 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        private void SearchDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void KeywordTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
         {
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=posts");
-        }
-
-        private void SearchDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                SearchButton1Submit();
+            }
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
@@ -166,17 +165,22 @@ namespace Hipda.Client.Uwp.Pro
             SearchPanel.Visibility = Visibility.Collapsed;
         }
 
-        private void SearchButton1_Tapped(object sender, TappedRoutedEventArgs e)
+        private void SearchButton1Submit()
         {
             string paramFormat = "search={0},{1},{2},{3},1";
 
-            string searchKeyword = Uri.EscapeUriString(KeywordTextBox.Text.Trim().Replace(","," "));
+            string searchKeyword = Uri.EscapeUriString(KeywordTextBox.Text.Trim().Replace(",", " "));
             string searchAuthor = Uri.EscapeUriString(AuthorTextBox.Text.Trim().Replace(",", " "));
             int searchType = SearchTypeComboBox.SelectedIndex;
             int searchTimeSpan = SearchTimeSpanComboBox.SelectedIndex;
 
             string param = string.Format(paramFormat, searchKeyword, searchAuthor, searchType, searchTimeSpan);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
+        }
+
+        private void SearchButton1_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            SearchButton1Submit();
         }
 
         private void SearchButton2_Tapped(object sender, TappedRoutedEventArgs e)
