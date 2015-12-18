@@ -444,5 +444,43 @@ namespace Hipda.Html
 
             return string.Format(xaml, title, imageFontIcon, fileFontIcon, viewInfo);
         }
+
+        public static string ConvertSearchResultSummary(string titleHtml, string searchResultSummaryHtml)
+        {
+            string searchResultHtml = string.Format(@"<Run>{0}</Run><LineBreak/><Span Foreground=""{{ThemeResource SystemControlForegroundBaseMediumLowBrush}}"" FontSize=""{{ThemeResource ToolTipContentThemeFontSize}}""><Run>{1}</Run></Span>", titleHtml, searchResultSummaryHtml);
+            searchResultHtml = searchResultHtml.Replace("\n", string.Empty);
+            searchResultHtml = searchResultHtml.Replace("\r", string.Empty);
+
+            string xaml = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumBrush}}"" TextWrapping=""Wrap"">{0}</TextBlock>";
+
+            MatchCollection matchsForInvalidStr = new Regex(@"\[[^\]]*\]").Matches(searchResultHtml);
+            if (matchsForInvalidStr != null && matchsForInvalidStr.Count > 0)
+            {
+                for (int j = 0; j < matchsForInvalidStr.Count; j++)
+                {
+                    var m = matchsForInvalidStr[j];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    searchResultHtml = searchResultHtml.Replace(placeHolder, " ");
+                }
+            }
+
+            MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(searchResultHtml);
+            if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
+            {
+                for (int j = 0; j < matchsForSearchKeywords.Count; j++)
+                {
+                    var m = matchsForSearchKeywords[j];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string k = m.Groups[1].Value;
+
+                    string linkXaml = string.Format(@"</Run><Run Foreground=""Red"">{0}</Run><Run>", k);
+                    searchResultHtml = searchResultHtml.Replace(placeHolder, linkXaml);
+                }
+            }
+
+            return string.Format(xaml, searchResultHtml);
+        }
     }
 }

@@ -5,8 +5,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Text;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
 
 namespace Hipda.Client.Uwp.Pro.Models
@@ -34,8 +32,6 @@ namespace Hipda.Client.Uwp.Pro.Models
         public int Index { get; private set; }
 
         public string SearchKeyword { get; private set; }
-
-        public int ForumId { get; private set; }
 
         public string ForumName { get; private set; }
 
@@ -94,12 +90,12 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
-        public TextBlock TitleControl
+        public object TitleControl
         {
             get
             {
                 string xaml = Html.HtmlToXaml.ConvertSearchThreadTitle(Title, ImageFontIcon, FileFontIcon, ViewInfo);
-                return XamlReader.Load(xaml) as TextBlock;
+                return XamlReader.Load(xaml);
             }
         }
     }

@@ -112,12 +112,23 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        void LoadDataForSearch(int pageNo)
+        void LoadDataForSearchTitle(int pageNo)
         {
-            var cv = _ds.GetViewForThreadPageForSearchTitle(pageNo, _searchKeyword, _searchAuthor, _searchType, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForThreadPageForSearchTitle(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchTitle();
+                _startPageNo = pageNo;
+                _threadListView.ItemsSource = cv;
+            }
+        }
+
+        void LoadDataForSearchFullText(int pageNo)
+        {
+            var cv = _ds.GetViewForThreadPageForSearchFullText(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad);
+            if (cv != null)
+            {
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchFullText();
                 _startPageNo = pageNo;
                 _threadListView.ItemsSource = cv;
             }
@@ -355,14 +366,31 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 DataService.ReadHistoryData.Clear();
             };
 
-            _ds.ClearThreadDataForSearchTitle(); // 清除已搜索的数据
-            LoadDataForSearch(pageNo);
-
-            var refreshThreadForSearchCommand = new DelegateCommand();
-            refreshThreadForSearchCommand.ExecuteAction = (p) => {
+            if (_searchType == 0) // 按标题搜索
+            {
+                // 先清除已搜索的数据
                 _ds.ClearThreadDataForSearchTitle();
-                LoadDataForSearch(1);
-            };
+                LoadDataForSearchTitle(pageNo);
+
+                var refreshThreadForSearchCommand = new DelegateCommand();
+                refreshThreadForSearchCommand.ExecuteAction = (p) =>
+                {
+                    _ds.ClearThreadDataForSearchTitle();
+                    LoadDataForSearchTitle(1);
+                };
+            }
+            else // 全文搜索
+            {
+                // 先清除已搜索的数据
+                _ds.ClearThreadDataForSearchFullText();
+                LoadDataForSearchFullText(pageNo);
+
+                var refreshThreadForSearchCommand = new DelegateCommand();
+                refreshThreadForSearchCommand.ExecuteAction = (p) => {
+                    _ds.ClearThreadDataForSearchFullText();
+                    LoadDataForSearchFullText(1);
+                };
+            }
         }
 
         public ThreadItemModel GetThreadItem(int threadId)

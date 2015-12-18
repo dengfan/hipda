@@ -17,7 +17,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         static List<ThreadItemForSearchFullTextModel> _threadDataForSearchFullText = new List<ThreadItemForSearchFullTextModel>();
         int _threadMaxPageNoForSearchFullText = 1;
 
-        async Task LoadThreadDataForSearchFullTextAsync(string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
+        async Task LoadThreadDataForSearchFullTextAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForSearchFullText.Count(t => t.PageNo == pageNo);
             if (count == _threadPageSize)
@@ -30,7 +30,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 读取数据
-            string searchTypeStr = searchType == 0 ? "title" : "fulltext";
             string searchTimeSpanStr = string.Empty;
             switch (searchTimeSpan)
             {
@@ -50,10 +49,11 @@ namespace Hipda.Client.Uwp.Pro.Services
                     searchTimeSpanStr = "0"; // 全部时间
                     break;
             }
-            string searchForumSpanStr = "all";
+
+            string searchForumSpanStr = searchForumSpan == 1 ? "all" : searchForumSpan.ToString();
 
             string url = string.Format("http://www.hi-pda.com/forum/search.php?srchtype={2}&srchtxt={0}&searchsubmit=%CB%D1%CB%F7&st=on&srchuname={1}&srchfilter=all&srchfrom={3}&before=&orderby={5}&ascdesc=desc&srchfid%5B0%5D={4}&page={6}&_={7}",
-                searchKeyword, searchAuthor, searchTypeStr, searchTimeSpanStr, searchForumSpanStr, "lastpost", pageNo, DateTime.Now.Ticks.ToString("x"));
+                _httpClient.GetEncoding(searchKeyword), _httpClient.GetEncoding(searchAuthor), "fulltext", searchTimeSpanStr, searchForumSpanStr, "lastpost", pageNo, DateTime.Now.Ticks.ToString("x"));
             string htmlContent = await _httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
@@ -83,108 +83,44 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return;
             }
 
-            var tbodies = dataTable.Descendants().Where(n => n.Name.Equals("tbody"));
-            if (tbodies == null)
+            var rows = dataTable.Descendants().Where(n => n.Name.Equals("tr"));
+            if (rows == null)
             {
                 return;
             }
 
             int i = _threadDataForSearchFullText.Count;
-            foreach (var item in tbodies)
+            foreach (var r in rows)
             {
-                var tr = item.ChildNodes[1];
-                var th = tr.ChildNodes[5];
-                var a = th.ChildNodes[3];
-                var tdAuthor = tr.ChildNodes[9];
-                var tdNums = tr.ChildNodes[11];
-                var tdLastPost = tr.ChildNodes[13];
+                var div = r.ChildNodes[0].ChildNodes[0];
+                var div1 = div.ChildNodes[1];
+                var div2 = div.ChildNodes[3];
+                var div3 = div.ChildNodes[5];
 
-                string threadIdStr = a.Attributes[0].Value.Substring("viewthread.php?tid=".Length);
-                threadIdStr = threadIdStr.Split('&')[0];
-                int threadId = Convert.ToInt32(threadIdStr);
+                var titleNode = div1.ChildNodes[2];
+                int postId = Convert.ToInt32(titleNode.Attributes[0].Value.Substring("gotopost.php?pid=".Length).Split('&')[0]);
+                string titleHtml = titleNode.InnerHtml;
+                string summaryHtml = div2.InnerHtml;
+                string forumName = div3.ChildNodes[1].ChildNodes[1].InnerText.Trim();
+                var authorNode = div3.ChildNodes[3];
+                string authorUsername = authorNode.InnerText.Replace("作者: ", string.Empty).Trim();
+                int authorUserId = Convert.ToInt32(authorNode.ChildNodes[1].Attributes[0].Value.Substring("space.php?uid=".Length).Split('&')[0]);
+                string viewCount = div3.ChildNodes[5].InnerText.Trim().Replace("查看: ", string.Empty).Trim();
+                string replyCount = div3.ChildNodes[7].InnerText.Trim().Replace("回复: ", string.Empty).Trim();
+                string lastReplyTime = div3.ChildNodes[9].InnerText.Trim().Replace("最后发表: ", string.Empty).Trim();
 
-                string title = a.InnerHtml;
-
-                // 替换搜索关键字，用于高亮关键字
-                MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(title);
-                if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
-                {
-                    for (int j = 0; j < matchsForSearchKeywords.Count; j++)
-                    {
-                        var m = matchsForSearchKeywords[j];
-
-                        string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                        string k = m.Groups[1].Value;
-
-                        string linkXaml = string.Format(@"  “{0}”  ", k);
-                        title = title.Replace(placeHolder, linkXaml);
-                    }
-                }
-
-                int attachType = -1;
-                var attachIconNode = th.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("attach"));
-                if (attachIconNode != null)
-                {
-                    string attachString = attachIconNode.Attributes[1].Value;
-                    if (attachString.Equals("图片附件"))
-                    {
-                        attachType = 1;
-                    }
-
-                    if (attachString.Equals("附件"))
-                    {
-                        attachType = 2;
-                    }
-                }
-
-                var forumNameNode = item.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forum"));
-                string forumName = forumNameNode.InnerText.Trim();
-
-                var authorUsername = string.Empty;
-                int authorUserId = 0;
-                var authorNameNode = tdAuthor.ChildNodes[1]; // cite 此节点有出“匿名”的可能
-                var authorNameLink = authorNameNode.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
-                if (authorNameLink == null)
-                {
-                    authorUsername = authorNameNode.InnerText.Trim();
-                }
-                else
-                {
-                    authorUsername = authorNameLink.InnerText;
-                    string authorUserIdStr = authorNameLink.Attributes[0].Value.Substring("space.php?uid=".Length);
-                    authorUserIdStr = authorUserIdStr.Split('&')[0];
-                    authorUserId = Convert.ToInt32(authorUserIdStr);
-                }
-
-                var authorCreateTime = tdAuthor.ChildNodes[3].InnerText;
-
-                string[] nums = tdNums.InnerText.Split('/');
-                var replyCount = nums[0].Trim();
-                var viewCount = nums[1].Trim();
-
-                string lastReplyUsername = "匿名";
-                string lastReplyTime = string.Empty;
-                string[] lastPostInfo = tdLastPost.InnerText.Trim().Replace("\n", "@").Split('@');
-                if (lastPostInfo.Length == 2)
-                {
-                    lastReplyUsername = lastPostInfo[0];
-                    lastReplyTime = lastPostInfo[1]
-                        .Replace(string.Format("{0}-{1}-{2} ", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day), string.Empty)
-                        .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
-                }
-
-                var threadItem = new ThreadItemForSearchFullTextModel(i, forumName, threadId, pageNo, title, attachType, replyCount, viewCount, authorUsername, authorUserId, authorCreateTime, lastReplyUsername, lastReplyTime);
+                var threadItem = new ThreadItemForSearchFullTextModel(i, postId, summaryHtml, forumName, pageNo, titleHtml, replyCount, viewCount, authorUsername, authorUserId, lastReplyTime);
                 _threadDataForSearchFullText.Add(threadItem);
 
                 i++;
             }
         }
 
-        async Task<int> GetMoreThreadItemsForSearchFullTextAsync(string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, int pageNo, Action beforeLoad, Action afterLoad)
+        async Task<int> GetMoreThreadItemsForSearchFullTextAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, Action beforeLoad, Action afterLoad)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
-            await LoadThreadDataForSearchFullTextAsync(searchKeyword, searchAuthor, searchType, searchTimeSpan, searchForumSpan, pageNo, cts);
+            await LoadThreadDataForSearchFullTextAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, pageNo, cts);
             if (afterLoad != null) afterLoad();
 
             return _threadDataForSearchFullText.Count;
@@ -204,7 +140,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return vm;
         }
 
-        public ICollectionView GetViewForThreadPageForSearchFullText(int startPageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad)
+        public ICollectionView GetViewForThreadPageForSearchFullText(int startPageNo, string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForSearchFullTextViewModel>(
@@ -213,7 +149,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsForSearchFullTextAsync(searchKeyword, searchAuthor, searchType, searchTimeSpan, searchForumSpan, pageNo, beforeLoad, afterLoad);
+                    return await GetMoreThreadItemsForSearchFullTextAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, pageNo, beforeLoad, afterLoad);
                 },
                 (index) =>
                 {

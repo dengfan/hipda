@@ -17,7 +17,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         static List<ThreadItemForSearchTitleModel> _threadDataForSearchTitle = new List<ThreadItemForSearchTitleModel>();
         int _threadMaxPageNoForSearchTitle = 1;
 
-        async Task LoadThreadDataForSearchTitleAsync(string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
+        async Task LoadThreadDataForSearchTitleAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForSearchTitle.Count(t => t.PageNo == pageNo);
             if (count == _threadPageSize)
@@ -30,7 +30,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 读取数据
-            string searchTypeStr = searchType == 0 ? "title" : "fulltext";
             string searchTimeSpanStr = string.Empty;
             switch (searchTimeSpan)
             {
@@ -54,7 +53,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             string searchForumSpanStr = searchForumSpan == 1 ? "all" : searchForumSpan.ToString();
 
             string url = string.Format("http://www.hi-pda.com/forum/search.php?srchtype={2}&srchtxt={0}&searchsubmit=%CB%D1%CB%F7&st=on&srchuname={1}&srchfilter=all&srchfrom={3}&before=&orderby={5}&ascdesc=desc&srchfid%5B0%5D={4}&page={6}&_={7}",
-                _httpClient.GetEncoding(searchKeyword), _httpClient.GetEncoding(searchAuthor), searchTypeStr, searchTimeSpanStr, searchForumSpanStr, "lastpost", pageNo, DateTime.Now.Ticks.ToString("x"));
+                _httpClient.GetEncoding(searchKeyword), _httpClient.GetEncoding(searchAuthor), "title", searchTimeSpanStr, searchForumSpanStr, "lastpost", pageNo, DateTime.Now.Ticks.ToString("x"));
             string htmlContent = await _httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
@@ -165,11 +164,11 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        async Task<int> GetMoreThreadItemsForSearchTitleAsync(string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, int pageNo, Action beforeLoad, Action afterLoad)
+        async Task<int> GetMoreThreadItemsForSearchTitleAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, Action beforeLoad, Action afterLoad)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
-            await LoadThreadDataForSearchTitleAsync(searchKeyword, searchAuthor, searchType, searchTimeSpan, searchForumSpan, pageNo, cts);
+            await LoadThreadDataForSearchTitleAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, pageNo, cts);
             if (afterLoad != null) afterLoad();
 
             return _threadDataForSearchTitle.Count;
@@ -189,7 +188,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return vm;
         }
 
-        public ICollectionView GetViewForThreadPageForSearchTitle(int startPageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad)
+        public ICollectionView GetViewForThreadPageForSearchTitle(int startPageNo, string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForSearchTitleViewModel>(
@@ -198,7 +197,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsForSearchTitleAsync(searchKeyword, searchAuthor, searchType, searchTimeSpan, searchForumSpan, pageNo, beforeLoad, afterLoad);
+                    return await GetMoreThreadItemsForSearchTitleAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, pageNo, beforeLoad, afterLoad);
                 },
                 (index) =>
                 {

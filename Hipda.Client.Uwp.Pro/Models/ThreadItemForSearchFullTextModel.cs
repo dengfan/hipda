@@ -5,31 +5,33 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Markup;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ThreadItemForSearchFullTextModel : ThreadItemModelBase
     {
-        public ThreadItemForSearchFullTextModel(int index, string forumName, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
+        public ThreadItemForSearchFullTextModel(int index, int postId, string searchResultSummaryHtml, string forumName, int pageNo, string titleHtml, string replyCount, string viewCount, string authorUsername, int authorUserId, string lastReplyTime)
         {
             this.Index = index;
+            this.PostId = postId;
+            this.SearchResultSummaryHtml = searchResultSummaryHtml;
             this.ForumName = forumName;
-            this.ThreadId = threadId;
             this.PageNo = pageNo;
-            this.Title = title;
-            this.AttachFileType = attachFileType;
+            this.Title = titleHtml;
             this.ReplyCount = replyCount;
             this.ViewCount = viewCount;
             this.AuthorUsername = authorUsername;
             this.AuthorUserId = authorUserId;
-            this.AuthorCreateTime = authorCreateTime;
-            this.LastReplyUsername = lastReplyUsername;
             this.LastReplyTime = lastReplyTime;
         }
 
         public int Index { get; private set; }
 
-        public int ForumId { get; private set; }
+        public int PostId { get; private set; }
+
+        public string SearchResultSummaryHtml { get; private set; }
 
         public string ForumName { get; private set; }
 
@@ -39,15 +41,9 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public string ViewCount { get; private set; }
 
-        public int AttachFileType { get; private set; }
-
         public string AuthorUsername { get; private set; }
 
         public int AuthorUserId { get; private set; }
-
-        public string AuthorCreateTime { get; private set; }
-
-        public string LastReplyUsername { get; private set; }
 
         public string LastReplyTime { get; private set; }
 
@@ -68,31 +64,16 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return string.Format("{0} {1}", LastReplyUsername, LastReplyTime);
+                return LastReplyTime;
             }
         }
 
-        public string ImageFontIcon
+        public object TitleControl
         {
             get
             {
-                return AttachFileType == 1 ? "\uEB9F" : string.Empty;
-            }
-        }
-
-        public string FileFontIcon
-        {
-            get
-            {
-                return AttachFileType == 2 ? "\uE16C" : string.Empty;
-            }
-        }
-
-        public Style ThreadItemStyle
-        {
-            get
-            {
-                return (Style)App.Current.Resources["NormalThreadItemStyle"];
+                string xaml = Html.HtmlToXaml.ConvertSearchResultSummary(Title, SearchResultSummaryHtml);
+                return XamlReader.Load(xaml);
             }
         }
     }
