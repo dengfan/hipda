@@ -72,7 +72,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                string xaml = Html.HtmlToXaml.ConvertSearchResultSummary(Title, SearchResultSummaryHtml);
+                string xaml = Html.HtmlToXaml.ConvertSearchResultSummary(Title, SearchResultSummaryHtml, ViewInfo);
                 return XamlReader.Load(xaml);
             }
         }

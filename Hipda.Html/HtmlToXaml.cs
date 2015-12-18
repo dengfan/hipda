@@ -445,9 +445,9 @@ namespace Hipda.Html
             return string.Format(xaml, title, imageFontIcon, fileFontIcon, viewInfo);
         }
 
-        public static string ConvertSearchResultSummary(string titleHtml, string searchResultSummaryHtml)
+        public static string ConvertSearchResultSummary(string titleHtml, string searchResultSummaryHtml, string viewInfo)
         {
-            string searchResultHtml = string.Format(@"<Run>{0}</Run><LineBreak/><Span Foreground=""{{ThemeResource SystemControlForegroundBaseMediumLowBrush}}"" FontSize=""{{ThemeResource ToolTipContentThemeFontSize}}""><Run>{1}</Run></Span>", titleHtml, searchResultSummaryHtml);
+            string searchResultHtml = string.Format(@"<Run>{0}</Run> <Run Text=""{1}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"" /><LineBreak/><Span FontStyle=""Italic"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumLowBrush}}"" FontSize=""{{ThemeResource ToolTipContentThemeFontSize}}""><Run>{2}</Run></Span>", titleHtml, viewInfo, searchResultSummaryHtml);
             searchResultHtml = searchResultHtml.Replace("\n", string.Empty);
             searchResultHtml = searchResultHtml.Replace("\r", string.Empty);
 
