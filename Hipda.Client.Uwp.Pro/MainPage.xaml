@@ -180,8 +180,8 @@
                                     <x:String>3个月以内</x:String>
                                     <x:String>1年以内</x:String>
                                 </ComboBox>
-                                <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Tapped="SearchButton1_Tapped"/>
-                                <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Tapped="SearchButton2_Tapped"/>
+                                <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton1_Click"/>
+                                <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton2_Click"/>
                             </StackPanel>
                             <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button4_Click">
                                 <Button.Content>

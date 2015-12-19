@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.System;
 using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
@@ -92,27 +93,50 @@ namespace Hipda.Client.Uwp.Pro.Services
             int i = _threadDataForSearchFullText.Count;
             foreach (var r in rows)
             {
-                var div = r.ChildNodes[0].ChildNodes[0];
-                var div1 = div.ChildNodes[1];
-                var div2 = div.ChildNodes[3];
-                var div3 = div.ChildNodes[5];
+                string titleHtml = string.Empty;
+                int postId = 0;
+                string summaryHtml = string.Empty;
+                string forumName = string.Empty;
+                string replyCount = string.Empty;
+                string viewCount = string.Empty;
+                string authorUsername = string.Empty;
+                int authorUserId = 0;
+                string lastReplyTime = string.Empty;
 
-                var titleNode = div1.ChildNodes[2];
-                int postId = Convert.ToInt32(titleNode.Attributes[0].Value.Substring("gotopost.php?pid=".Length).Split('&')[0]);
-                string titleHtml = titleNode.InnerHtml;
-                string summaryHtml = div2.InnerHtml;
-                string forumName = div3.ChildNodes[1].ChildNodes[1].InnerText.Trim();
-                var authorNode = div3.ChildNodes[3];
-                string authorUsername = authorNode.InnerText.Replace("作者: ", string.Empty).Trim();
-                int authorUserId = Convert.ToInt32(authorNode.ChildNodes[1].Attributes[0].Value.Substring("space.php?uid=".Length).Split('&')[0]);
-                string viewCount = div3.ChildNodes[5].InnerText.Trim().Replace("查看: ", string.Empty).Trim();
-                string replyCount = div3.ChildNodes[7].InnerText.Trim().Replace("回复: ", string.Empty).Trim();
-                string lastReplyTime = div3.ChildNodes[9].InnerText.Trim().Replace("最后发表: ", string.Empty).Trim();
+                try
+                {
+                    var div = r.ChildNodes[0].ChildNodes[0];
+                    var div1 = div.ChildNodes[1];
+                    var div2 = div.ChildNodes[3];
+                    var div3 = div.ChildNodes[5];
 
-                var threadItem = new ThreadItemForSearchFullTextModel(i, postId, summaryHtml, forumName, pageNo, titleHtml, replyCount, viewCount, authorUsername, authorUserId, lastReplyTime);
-                _threadDataForSearchFullText.Add(threadItem);
+                    var titleNode = div1.ChildNodes[2];
+                    string postIdStr = titleNode.Attributes[0].Value.Substring("gotopost.php?pid=".Length).Split('&')[0];
+                    if (!string.IsNullOrEmpty(postIdStr))
+                    {
+                        postId = Convert.ToInt32(postIdStr);
+                        titleHtml = titleNode.InnerHtml;
+                        summaryHtml = div2.InnerHtml;
+                        forumName = div3.ChildNodes[1].ChildNodes[1].InnerText.Trim();
+                        var authorNode = div3.ChildNodes[3];
+                        authorUsername = authorNode.InnerText.Replace("作者: ", string.Empty).Trim();
+                        authorUserId = Convert.ToInt32(authorNode.ChildNodes[1].Attributes[0].Value.Substring("space.php?uid=".Length).Split('&')[0]);
+                        viewCount = div3.ChildNodes[5].InnerText.Trim().Replace("查看: ", string.Empty).Trim();
+                        replyCount = div3.ChildNodes[7].InnerText.Trim().Replace("回复: ", string.Empty).Trim();
+                        lastReplyTime = div3.ChildNodes[9].InnerText.Trim().Replace("最后发表: ", string.Empty).Trim();
+                    }
 
-                i++;
+                    var threadItem = new ThreadItemForSearchFullTextModel(i, postId, summaryHtml, forumName, pageNo, titleHtml, replyCount, viewCount, authorUsername, authorUserId, lastReplyTime);
+                    _threadDataForSearchFullText.Add(threadItem);
+
+                    i++;
+                }
+                catch (Exception ex)
+                {
+                    string errorDetails = "k: {0};p: {1};i: {2};t: {3};d: {4}";
+                    errorDetails = string.Format(errorDetails, searchKeyword, pageNo, i, titleHtml, ex.Message);
+                    Common.PostErrorEmailToDeveloper("全文搜索解析出现异常", errorDetails);
+                }
             }
         }
 

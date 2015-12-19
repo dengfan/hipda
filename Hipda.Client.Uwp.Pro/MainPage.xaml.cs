@@ -116,7 +116,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                SearchButton1Submit();
+                SearchDefaultSubmit();
             }
         }
 
@@ -165,7 +165,7 @@ namespace Hipda.Client.Uwp.Pro
             SearchPanel.Visibility = Visibility.Collapsed;
         }
 
-        private void SearchButton1Submit()
+        private void SearchDefaultSubmit()
         {
             string paramFormat = "search={0},{1},{2},{3},1";
 
@@ -178,12 +178,12 @@ namespace Hipda.Client.Uwp.Pro
             AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
         }
 
-        private void SearchButton1_Tapped(object sender, TappedRoutedEventArgs e)
+        private void SearchButton1_Click(object sender, RoutedEventArgs e)
         {
-            SearchButton1Submit();
+            SearchDefaultSubmit();
         }
 
-        private void SearchButton2_Tapped(object sender, TappedRoutedEventArgs e)
+        private void SearchButton2_Click(object sender, RoutedEventArgs e)
         {
             string paramFormat = "search={0},{1},{2},{3},2";
 
