@@ -47,11 +47,11 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region reply
-        ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int, int> afterLoad);
+        ICollectionView GetViewForReplyPageByThreadId(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int, int> afterLoad);
 
-        ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int postId, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll);
+        ICollectionView GetViewForRedirectReplyPageByThreadId(int startPageNo, int threadId, int threadAuthorUserId, int postId, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll);
 
-        Task<int[]> LoadReplyDataForRedirectPageAsync(int threadId, int targetPostId, CancellationTokenSource cts);
+        Task<int[]> LoadReplyDataForRedirectReplyPageAsync(int threadId, int targetPostId, CancellationTokenSource cts);
 
         int GetReplyMaxPageNo();
 

@@ -15,20 +15,24 @@ using Windows.UI.Xaml;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
+    /// <summary>
+    /// 全文搜索模块之视图模型
+    /// 本模块是先只是提供 post id，待加载了数据之后才会获取到 thread id
+    /// </summary>
     public class ThreadItemForSearchFullTextViewModel : ThreadItemViewModelBase
     {
-        private int _threadId { get; set; }
-        private ListView _replyListView { get; set; }
-        private Action _beforeLoad { get; set; }
-        private Action<int, int> _afterLoad { get; set; }
-        private DataService _ds { get; set; }
+        int _postId;
+        ListView _replyListView;
+        Action _beforeLoad;
+        Action<int, int> _afterLoad;
+        DataService _ds;
 
         public DelegateCommand RefreshReplyCommand { get; set; }
         public DelegateCommand PostReplyCommand { get; set; }
 
         public ThreadItemForSearchFullTextModel ThreadItem { get; set; }
 
-        private ICollectionView _replyItemCollection;
+        ICollectionView _replyItemCollection;
 
         public ICollectionView ReplyItemCollection
         {
@@ -40,9 +44,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private void LoadData(int pageNo)
+        void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, _threadId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _postId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 StartPageNo = pageNo;
@@ -50,7 +54,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private void PostData(string postContent, int threadId)
+        void PostData(string postContent, int threadId)
         {
 
         }
@@ -59,7 +63,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.SearchFullText;
-            _threadId = threadItem.ThreadId;
+            _postId = threadItem.ThreadId;
             ThreadItem = threadItem;
         }
 
@@ -67,7 +71,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.SearchFullText;
-            _threadId = threadId;
+            _postId = threadId;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
@@ -88,7 +92,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 PostData(postContent, threadId);
             };
 
-            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -104,14 +108,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) => {
-                _ds.ClearReplyData(_threadId);
+                _ds.ClearReplyData(_postId);
                 LoadData(StartPageNo);
             };
 
             PostReplyCommand = new DelegateCommand();
             PostReplyCommand.ExecuteAction = (p) => {
                 string postContent = postReplyTextBox.Text.Trim();
-                PostData(postContent, _threadId);
+                PostData(postContent, _postId);
             };
 
             LoadData(StartPageNo);
@@ -126,7 +130,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             if (StartPageNo > 1)
             {
-                _ds.ClearReplyData(_threadId);
+                _ds.ClearReplyData(_postId);
                 LoadData(StartPageNo - 1);
             }
         }

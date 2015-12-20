@@ -41,7 +41,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPage(pageNo, _threadId, AccountService.UserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, AccountService.UserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 StartPageNo = pageNo;
@@ -76,7 +76,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 LoadData(StartPageNo);
             };
 
-            var cv = _ds.GetViewForReplyPage(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, threadId, threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 ReplyItemCollection = cv;
@@ -99,11 +99,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             // 先载入第一个转跳到的页面的数据，并得到页码之后即可进入正常流程
             var cts = new CancellationTokenSource();
-            int[] data = await _ds.LoadReplyDataForRedirectPageAsync(_threadId, ThreadItem.PostId, cts);
+            int[] data = await _ds.LoadReplyDataForRedirectReplyPageAsync(_threadId, ThreadItem.PostId, cts);
             int pageNo = data[0];
             int index = data[1];
             _ds.SetScrollState(false);
-            var cv = _ds.GetViewForReplyPage(pageNo, _threadId, 0, index, _beforeLoad, _afterLoad, listViewScroll);
+            var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, 0, index, _beforeLoad, _afterLoad, listViewScroll);
             if (cv != null)
             {
                 ReplyItemCollection = cv;

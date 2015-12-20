@@ -288,7 +288,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _replyData.Single(t => t.ThreadId == threadId).Replies[index];
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int, int> afterLoad)
+        public ICollectionView GetViewForReplyPageByThreadId(int startPageNo, int threadId, int threadAuthorUserId, Action beforeLoad, Action<int, int> afterLoad)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
@@ -312,7 +312,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        public ICollectionView GetViewForReplyPage(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
+        public ICollectionView GetViewForRedirectReplyPageByThreadId(int startPageNo, int threadId, int threadAuthorUserId, int floorIndex, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
@@ -349,7 +349,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         /// <param name="targetPostId"></param>
         /// <param name="cts"></param>
         /// <returns></returns>
-        public async Task<int[]> LoadReplyDataForRedirectPageAsync(int threadId, int targetPostId, CancellationTokenSource cts)
+        public async Task<int[]> LoadReplyDataForRedirectReplyPageAsync(int threadId, int targetPostId, CancellationTokenSource cts)
         {
             // 先清空本贴的回复数据，以便重新加载
             _replyData.RemoveAll(r => r.ThreadId == threadId);
@@ -536,7 +536,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             // 由于回复列表页不一定是从第一页开始载入，所以会存在在缓存中找不到的情况
             // 故需要在此处作处理
             var cts = new CancellationTokenSource();
-            await LoadReplyDataForRedirectPageAsync(threadId, postId, cts);
+            await LoadReplyDataForRedirectReplyPageAsync(threadId, postId, cts);
             return _replyData.FirstOrDefault(d => d.ThreadId == threadId).Replies.FirstOrDefault(r => r.PostId == postId);
         }
         #endregion
