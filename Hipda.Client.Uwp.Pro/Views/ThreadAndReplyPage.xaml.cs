@@ -453,15 +453,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        private void ThreadItem_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
-        {
-            FrameworkElement senderElement = sender as FrameworkElement;
-            // If you need the clicked element:
-            // Item whichOne = senderElement.DataContext as Item;
-            FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(senderElement);
-            flyoutBase.ShowAt(senderElement);
-        }
-
         #region 加载上一页
         private void leftPr_RefreshInvoked(DependencyObject sender, object args)
         {
@@ -538,14 +529,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void SortingButton_Click(object sender, RoutedEventArgs e)
         {
             
-        }
-
-        private void ReadListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var data = e.ClickedItem as ThreadItemModelBase;
-            OpenReplyPageByThreadId(data.ThreadId);
-
-            ThreadListView.SelectedItem = null;
         }
 
         /// <summary>
@@ -830,6 +813,19 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void PostDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
         {
             _isShownForPostDialog = false;
+        }
+
+        private void ReadListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0)
+            {
+                return;
+            }
+
+            var data = e.AddedItems[0] as ThreadItemModelBase;
+            OpenReplyPageByThreadId(data.ThreadId);
+
+            ThreadListView.SelectedItem = null;
         }
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)

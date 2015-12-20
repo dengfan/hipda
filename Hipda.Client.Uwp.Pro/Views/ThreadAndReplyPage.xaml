@@ -247,9 +247,9 @@
                     <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
                 </CommandBar>
 
-                <ListView x:Name="ReadListView" Grid.Row="1" IsItemClickEnabled="True" IsSwipeEnabled="False"
+                <ListView x:Name="ReadListView" Grid.Row="1" IsItemClickEnabled="False" IsSwipeEnabled="False"
                       CanDragItems="False" SelectionMode="Single" ShowsScrollingPlaceholders="False"
-                      ItemsSource="{Binding ReadData}" ItemClick="ReadListView_ItemClick">
+                      ItemsSource="{Binding ReadData}" SelectionChanged="ReadListView_SelectionChanged">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="Padding" Value="2,4,20,4"/>
