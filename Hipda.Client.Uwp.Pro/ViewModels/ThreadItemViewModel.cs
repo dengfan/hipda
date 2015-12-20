@@ -16,20 +16,20 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ThreadItemViewModel : ThreadItemViewModelBase
     {
-        private int _threadId { get; set; }
-        private int _threadAuthorUserId { get; set; }
-        private ListView _replyListView { get; set; }
-        private TextBox _postReplyTextBox { get; set; }
-        private Action _beforeLoad { get; set; }
-        private Action<int, int> _afterLoad { get; set; }
-        private DataService _ds { get; set; }
+        int _threadId;
+        int _threadAuthorUserId;
+        ListView _replyListView;
+        TextBox _postReplyTextBox;
+        Action _beforeLoad;
+        Action<int, int> _afterLoad;
+        DataService _ds;
 
         public DelegateCommand RefreshReplyCommand { get; set; }
         public DelegateCommand PostReplyCommand { get; set; }
 
         public ThreadItemModel ThreadItem { get; set; }
 
-        private ICollectionView _replyItemCollection;
+        ICollectionView _replyItemCollection;
 
         public ICollectionView ReplyItemCollection
         {
@@ -49,7 +49,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private void LoadData(int pageNo)
+        void LoadData(int pageNo)
         {
             var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
@@ -59,7 +59,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private void PostData(string postContent, int threadId)
+        void PostData(string postContent, int threadId)
         {
 
         }
