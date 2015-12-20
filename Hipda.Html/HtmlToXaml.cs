@@ -170,7 +170,7 @@ namespace Hipda.Html
             }
 
             // 替换引用文字标签
-            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,20,0"" Foreground=""DimGray""][Span FontStyle=""Italic"" FontSize=""{{ThemeResource ToolTipContentThemeFontSize}}""]");
+            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,20,0"" Foreground=""DimGray""][Span FontStyle=""Italic""]");
             htmlContent = htmlContent.Replace("</blockquote>", "[/Span][/Paragraph][Paragraph]");
 
             // 移除无意义图片HTML
