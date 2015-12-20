@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
-    public class ThreadItemForMyPostsModel
+    public class ThreadItemForMyPostsModel : ThreadItemModelBase
     {
         public ThreadItemForMyPostsModel(int index, string forumName, int threadId, int postId, int pageNo, string title, string lastReplyContent, string lastReplyTime)
         {
@@ -24,12 +24,9 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public string ForumName { get; private set; }
 
-        public int ThreadId { get; private set; }
         public int PostId { get; private set; }
 
         public int PageNo { get; private set; }
-
-        public string Title { get; private set; }
 
         public string LastReplyContent { get; private set; }
 

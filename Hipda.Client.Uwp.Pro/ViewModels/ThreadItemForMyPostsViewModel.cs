@@ -17,17 +17,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ThreadItemForMyPostsViewModel : ThreadItemViewModelBase
     {
-        private int _threadId { get; set; }
-        private ListView _replyListView { get; set; }
-        private Action _beforeLoad { get; set; }
-        private Action<int, int> _afterLoad { get; set; }
-        private DataService _ds { get; set; }
+        int _threadId;
+        ListView _replyListView;
+        Action _beforeLoad;
+        Action<int, int> _afterLoad;
+        DataService _ds;
 
         public DelegateCommand RefreshReplyCommand { get; set; }
 
         public ThreadItemForMyPostsModel ThreadItem { get; set; }
 
-        private ICollectionView _replyItemCollection;
+        ICollectionView _replyItemCollection;
 
         public ICollectionView ReplyItemCollection
         {
@@ -39,7 +39,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private void LoadData(int pageNo)
+        void LoadData(int pageNo)
         {
             var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, AccountService.UserId, _beforeLoad, _afterLoad);
             if (cv != null)
@@ -53,7 +53,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyPosts;
-            _threadId = threadItem.ThreadId;
             ThreadItem = threadItem;
         }
 
@@ -99,15 +98,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             // 先载入第一个转跳到的页面的数据，并得到页码之后即可进入正常流程
             var cts = new CancellationTokenSource();
-            int[] data = await _ds.LoadReplyDataForRedirectReplyPageAsync(_threadId, ThreadItem.PostId, cts);
-            int pageNo = data[0];
-            int index = data[1];
-            _ds.SetScrollState(false);
-            var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, 0, index, _beforeLoad, _afterLoad, listViewScroll);
-            if (cv != null)
+            int[] data = await _ds.LoadReplyDataForRedirectReplyPageAsync(ThreadItem.PostId, cts);
+            if (data != null)
             {
-                ReplyItemCollection = cv;
-                StartPageNo = pageNo;
+                int pageNo = data[0];
+                int index = data[1];
+                _threadId = data[2];
+                _ds.SetScrollState(false);
+                var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, 0, index, _beforeLoad, _afterLoad, listViewScroll);
+                if (cv != null)
+                {
+                    ReplyItemCollection = cv;
+                    StartPageNo = pageNo;
+                }
             }
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
-    public class ThreadItemForMyFavoritesModel
+    public class ThreadItemForMyFavoritesModel : ThreadItemModelBase
     {
         public ThreadItemForMyFavoritesModel(int index, string forumName, int threadId, int pageNo, string title, int replyCount, string lastReplyUsername, string lastReplyTime)
         {
@@ -24,11 +24,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public string ForumName { get; private set; }
 
-        public int ThreadId { get; private set; }
-
         public int PageNo { get; private set; }
-
-        public string Title { get; private set; }
 
         public int ReplyCount { get; private set; }
 

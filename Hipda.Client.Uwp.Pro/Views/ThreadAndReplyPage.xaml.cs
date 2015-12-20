@@ -144,18 +144,38 @@ namespace Hipda.Client.Uwp.Pro.Views
         private async void ReplyListViewScroll(int index)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                var item = _lastSelectedItem as ThreadItemForMyPostsViewModel;
-                int count = ReplyListView.Items.Count;
-
-                if (count > 0 && count <= index + 1)
+                switch (_threadDataType)
                 {
-                    ReplyListView.ScrollIntoView(ReplyListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
-                }
+                    case ThreadDataType.SearchFullText:
+                        var itemForSearchFullText = _lastSelectedItem as ThreadItemForSearchFullTextViewModel;
+                        int countForSearchFullText = ReplyListView.Items.Count;
 
-                if (count > index + 1 && item.GetScrollState() == false)
-                {
-                    ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
-                    item.SetScrollState(true);
+                        if (countForSearchFullText > 0 && countForSearchFullText <= index + 1)
+                        {
+                            ReplyListView.ScrollIntoView(ReplyListView.Items[countForSearchFullText - 1], ScrollIntoViewAlignment.Leading);
+                        }
+
+                        if (countForSearchFullText > index + 1 && itemForSearchFullText.GetScrollState() == false)
+                        {
+                            ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
+                            itemForSearchFullText.SetScrollState(true);
+                        }
+                        break;
+                    default:
+                        var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsViewModel;
+                        int countForMyPosts = ReplyListView.Items.Count;
+
+                        if (countForMyPosts > 0 && countForMyPosts <= index + 1)
+                        {
+                            ReplyListView.ScrollIntoView(ReplyListView.Items[countForMyPosts - 1], ScrollIntoViewAlignment.Leading);
+                        }
+
+                        if (countForMyPosts > index + 1 && itemForMyPosts.GetScrollState() == false)
+                        {
+                            ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
+                            itemForMyPosts.SetScrollState(true);
+                        }
+                        break;
                 }
             });
         }
@@ -429,7 +449,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        itemForSearchFullText.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
+                        await itemForSearchFullText.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
                         RightWrap.DataContext = itemForSearchFullText;
                     }
                     break;

@@ -448,8 +448,9 @@ namespace Hipda.Html
         public static string ConvertSearchResultSummary(string titleHtml, string searchResultSummaryHtml, string viewInfo)
         {
             string searchResultHtml = string.Format(@"<Run>{0}</Run> <Run Text=""{1}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"" /><LineBreak/><Span FontStyle=""Italic"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumLowBrush}}"" FontSize=""{{ThemeResource ToolTipContentThemeFontSize}}""><Run>{2}</Run></Span>", titleHtml, viewInfo, searchResultSummaryHtml);
-            searchResultHtml = searchResultHtml.Replace("\n", string.Empty);
-            searchResultHtml = searchResultHtml.Replace("\r", string.Empty);
+            searchResultHtml = searchResultHtml.Replace("&", "&amp;")
+                .Replace("\n", string.Empty)
+                .Replace("\r", string.Empty);
 
             string xaml = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumBrush}}"" TextWrapping=""Wrap"">{0}</TextBlock>";
 

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
+    /// <summary>
+    /// 抽象出来的原因是方便记录浏览历史
+    /// </summary>
     public class ThreadItemModelBase
     {
         public int ThreadId { get; set; }

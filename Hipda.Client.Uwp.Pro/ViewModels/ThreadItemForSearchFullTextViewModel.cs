@@ -21,7 +21,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     /// </summary>
     public class ThreadItemForSearchFullTextViewModel : ThreadItemViewModelBase
     {
-        int _postId;
+        int _threadId;
         ListView _replyListView;
         Action _beforeLoad;
         Action<int, int> _afterLoad;
@@ -46,7 +46,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _postId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, ThreadItem.AuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 StartPageNo = pageNo;
@@ -63,7 +63,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.SearchFullText;
-            _postId = threadItem.ThreadId;
             ThreadItem = threadItem;
         }
 
@@ -71,7 +70,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             StartPageNo = 1;
             ThreadDataType = ThreadDataType.SearchFullText;
-            _postId = threadId;
+            _threadId = threadId;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
@@ -99,7 +98,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public void SelectThreadItem(ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int, int> afterLoad)
+        public async Task SelectThreadItem(ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
         {
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
@@ -108,17 +107,32 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) => {
-                _ds.ClearReplyData(_postId);
+                _ds.ClearReplyData(_threadId);
                 LoadData(StartPageNo);
             };
 
             PostReplyCommand = new DelegateCommand();
             PostReplyCommand.ExecuteAction = (p) => {
                 string postContent = postReplyTextBox.Text.Trim();
-                PostData(postContent, _postId);
+                PostData(postContent, _threadId);
             };
 
-            LoadData(StartPageNo);
+            // 先载入第一个转跳到的页面的数据，并得到页码之后即可进入正常流程
+            var cts = new CancellationTokenSource();
+            int[] data = await _ds.LoadReplyDataForRedirectReplyPageAsync(ThreadItem.PostId, cts);
+            if (data != null)
+            {
+                int pageNo = data[0];
+                int index = data[1];
+                _threadId = data[2];
+                _ds.SetScrollState(false);
+                var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, 0, index, _beforeLoad, _afterLoad, listViewScroll);
+                if (cv != null)
+                {
+                    ReplyItemCollection = cv;
+                    StartPageNo = pageNo;
+                }
+            }
         }
 
         public void SetRead()
@@ -130,9 +144,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             if (StartPageNo > 1)
             {
-                _ds.ClearReplyData(_postId);
+                _ds.ClearReplyData(_threadId);
                 LoadData(StartPageNo - 1);
             }
+        }
+
+        public bool GetScrollState()
+        {
+            return _ds.GetScrollState();
+        }
+
+        public void SetScrollState(bool isCompleted)
+        {
+            _ds.SetScrollState(isCompleted);
         }
     }
 }

@@ -343,21 +343,18 @@ namespace Hipda.Client.Uwp.Pro.Services
         }
 
         /// <summary>
-        /// 用于载入我的回复，并返回回复所在楼层及所在页码
+        /// 用于我的回复、全文搜索等列表页，
+        /// 他们共同的特点是只根据 post id 来定位到指定的回复项，
+        /// 事先并不知道 thread id 及 page no
+        /// 请求的地址格式如 .../redirect.php?goto=findpost&pid=12345...
         /// </summary>
-        /// <param name="threadId"></param>
-        /// <param name="targetPostId"></param>
+        /// <param name="postId"></param>
         /// <param name="cts"></param>
         /// <returns></returns>
-        public async Task<int[]> LoadReplyDataForRedirectReplyPageAsync(int threadId, int targetPostId, CancellationTokenSource cts)
+        public async Task<int[]> LoadReplyDataForRedirectReplyPageAsync(int targetPostId, CancellationTokenSource cts)
         {
-            // 先清空本贴的回复数据，以便重新加载
-            _replyData.RemoveAll(r => r.ThreadId == threadId);
-            var threadReply = new ReplyPageModel { ThreadId = threadId, Replies = new List<ReplyItemModel>() };
-            _replyData.Add(threadReply);
-
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={0}&ptid={1}&_={2}", targetPostId, threadId, DateTime.Now.Ticks.ToString("x"));
+            string url = string.Format("http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={0}&_={1}", targetPostId, DateTime.Now.Ticks.ToString("x"));
             string htmlStr = await _httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
@@ -366,7 +363,20 @@ namespace Hipda.Client.Uwp.Pro.Services
             // 载入HTML
             doc.LoadHtml(htmlStr);
 
-            var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
+            // 获取当前 thread id
+            var postReplyLink = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("post_reply")).ChildNodes[0];
+            string linkUrl = postReplyLink.Attributes[0].Value.Trim();
+            string threadIdStr = linkUrl.Substring("post.php?action=reply&amp;fid=14&amp;tid=".Length);
+            int threadId = 0;
+            if (!int.TryParse(threadIdStr, out threadId))
+            {
+                return null;
+            }
+
+            // 先清空本贴的回复数据，以便重新加载
+            _replyData.RemoveAll(r => r.ThreadId == threadId);
+            var threadReply = new ReplyPageModel { ThreadId = threadId, Replies = new List<ReplyItemModel>() };
+            _replyData.Add(threadReply);
 
             // 获取当前页码，及最大页码
             int pageNo = 1;
@@ -386,6 +396,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
             }
 
+            var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
             int i = 0;
             foreach (var item in data)
             {
@@ -478,7 +489,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             int index = threadReply.Replies.Single(r => r.PostId == targetPostId).Index;
-            return new int[] { pageNo, index };
+            return new int[] { pageNo, index, threadId };
         }
 
         public int GetReplyMaxPageNo()
@@ -536,7 +547,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             // 由于回复列表页不一定是从第一页开始载入，所以会存在在缓存中找不到的情况
             // 故需要在此处作处理
             var cts = new CancellationTokenSource();
-            await LoadReplyDataForRedirectReplyPageAsync(threadId, postId, cts);
+            await LoadReplyDataForRedirectReplyPageAsync(postId, cts);
             return _replyData.FirstOrDefault(d => d.ThreadId == threadId).Replies.FirstOrDefault(r => r.PostId == postId);
         }
         #endregion
