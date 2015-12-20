@@ -186,7 +186,7 @@
                             <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button4_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
-                                        <FontIcon Glyph="&#xE7BC;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                                        <FontIcon Glyph="&#xEA4A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                                         <TextBlock Text="我的贴子"
                                            Margin="24,0,0,0"
                                            VerticalAlignment="Center" />
