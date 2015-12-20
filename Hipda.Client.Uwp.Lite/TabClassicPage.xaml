@@ -118,14 +118,14 @@
                         </TextBlock>
 
                         <TextBlock x:Name="titleTextBlock" FontWeight="Bold" Style="{StaticResource Text1Style}">
-                            <Run x:Name="pictureIconTextBlockRun" FontFamily="Segoe MDL2 Assets" Foreground="OrangeRed" />
-                            <Run x:Name="pagerclipTextBlockRun" FontFamily="Segoe MDL2 Assets" Foreground="DeepSkyBlue" />
+                            <Run x:Name="pictureIconTextBlockRun" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="OrangeRed" />
+                            <Run x:Name="pagerclipTextBlockRun" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="DeepSkyBlue" />
                             <Run x:Name="titleTextBlockRun" Text="{Binding Title}" />
                             <Run x:Name="numbersTextBlockRun" Text="{Binding Numbers}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                         </TextBlock>
 
                         <TextBlock Pivot.SlideInAnimationGroup="GroupOne" HorizontalAlignment="Right" FontSize="11">
-                            <Run Text="&#xE25C;" FontFamily="Segoe MDL2 Assets" />
+                            <Run Text="&#xE25C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                             <Run x:Name="lastPostTextBlockRun" Text="{Binding LastPostInfo}"/>
                         </TextBlock>
                     </StackPanel>
@@ -163,7 +163,7 @@
                         <Button.Template>
                             <ControlTemplate>
                                 <TextBlock >
-                                    <Run Text="&#xE10C;" FontFamily="Segoe MDL2 Assets" />
+                                    <Run Text="&#xE10C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                                 </TextBlock>
                             </ControlTemplate>
                         </Button.Template>

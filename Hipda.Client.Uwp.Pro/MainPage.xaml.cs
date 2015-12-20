@@ -10,6 +10,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 //“空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 上有介绍
@@ -128,7 +129,7 @@ namespace Hipda.Client.Uwp.Pro
             {
                 Page1.RequestedTheme = ElementTheme.Dark;
 
-                var c = Colors.Black;
+                Color c = Colors.Black;
                 titleBar.BackgroundColor = c;
                 titleBar.InactiveBackgroundColor = c;
                 titleBar.ForegroundColor = Colors.White;
@@ -141,14 +142,13 @@ namespace Hipda.Client.Uwp.Pro
             {
                 Page1.RequestedTheme = ElementTheme.Light;
 
-                var c = Colors.White;
-                titleBar.BackgroundColor = c;
-                titleBar.InactiveBackgroundColor = c;
-                titleBar.ForegroundColor = Colors.Black;
-                titleBar.ButtonBackgroundColor = c;
-                titleBar.ButtonInactiveBackgroundColor = c;
-                titleBar.ButtonForegroundColor = Colors.Black;
-                titleBar.ButtonHoverBackgroundColor = Colors.LightGray;
+                titleBar.BackgroundColor = null;
+                titleBar.InactiveBackgroundColor = null;
+                titleBar.ForegroundColor = null;
+                titleBar.ButtonBackgroundColor = null;
+                titleBar.ButtonInactiveBackgroundColor = null;
+                titleBar.ButtonForegroundColor = null;
+                titleBar.ButtonHoverBackgroundColor = null;
             }
         }
 

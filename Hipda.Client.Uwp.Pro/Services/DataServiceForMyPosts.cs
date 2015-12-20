@@ -80,6 +80,8 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 var th2 = tr2.Descendants().FirstOrDefault(n => n.Name.Equals("th"));
                 string lastPostContent = th2.InnerText.Trim();
+                lastPostContent = lastPostContent.Replace("\n", string.Empty);
+                lastPostContent = lastPostContent.Replace("\r", string.Empty);
 
                 var forumNameNode = tr.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forum"));
                 string forumName = forumNameNode.InnerText.Trim();
