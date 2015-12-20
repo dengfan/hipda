@@ -167,7 +167,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private void SearchDefaultSubmit()
         {
-            string paramFormat = "search={0},{1},{2},{3},1";
+            string paramFormat = "search={0},{1},{2},{3},2";
 
             string searchKeyword = Uri.EscapeUriString(KeywordTextBox.Text.Trim().Replace(",", " "));
             string searchAuthor = Uri.EscapeUriString(AuthorTextBox.Text.Trim().Replace(",", " "));
@@ -180,12 +180,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private void SearchButton1_Click(object sender, RoutedEventArgs e)
         {
-            SearchDefaultSubmit();
-        }
-
-        private void SearchButton2_Click(object sender, RoutedEventArgs e)
-        {
-            string paramFormat = "search={0},{1},{2},{3},2";
+            string paramFormat = "search={0},{1},{2},{3},1";
 
             string searchKeyword = Uri.EscapeUriString(KeywordTextBox.Text.Trim().Replace(",", " "));
             string searchAuthor = Uri.EscapeUriString(AuthorTextBox.Text.Trim().Replace(",", " "));
@@ -194,6 +189,11 @@ namespace Hipda.Client.Uwp.Pro
 
             string param = string.Format(paramFormat, searchKeyword, searchAuthor, searchType, searchTimeSpan);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
+        }
+
+        private void SearchButton2_Click(object sender, RoutedEventArgs e)
+        {
+            SearchDefaultSubmit();
         }
     }
 }
