@@ -677,6 +677,11 @@
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
         </Style>
 
+        <Style x:Key="MineThreadItemStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
         <Style x:Key="ThreadItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="Padding" Value="0,0,20,0"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

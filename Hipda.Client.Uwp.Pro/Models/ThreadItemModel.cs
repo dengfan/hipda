@@ -5,7 +5,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ThreadItemModel : ThreadItemModelBase
     {
-        public ThreadItemModel(int index, int forumId, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, bool isTop, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime)
+        public ThreadItemModel(int index, int forumId, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, bool isTop, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime, bool isMine)
         {
             this.Index = index;
             this.ForumId = forumId;
@@ -21,6 +21,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.AuthorCreateTime = authorCreateTime;
             this.LastReplyUsername = lastReplyUsername;
             this.LastReplyTime = lastReplyTime;
+            this.IsMine = isMine;
         }
 
         public int Index { get; private set; }
@@ -46,6 +47,8 @@ namespace Hipda.Client.Uwp.Pro.Models
         public string LastReplyUsername { get; private set; }
 
         public string LastReplyTime { get; private set; }
+
+        public bool IsMine { get; private set; }
 
         public override string ToString()
         {
@@ -96,7 +99,18 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return IsTop ? (Style)App.Current.Resources["TopThreadItemStyle"] : (Style)App.Current.Resources["NormalThreadItemStyle"];
+                if (IsTop)
+                {
+                    return (Style)App.Current.Resources["TopThreadItemStyle"];
+                }
+                else if (IsMine)
+                {
+                    return (Style)App.Current.Resources["MineThreadItemStyle"];
+                }
+                else
+                {
+                    return (Style)App.Current.Resources["NormalThreadItemStyle"];
+                }
             }
         }
     }

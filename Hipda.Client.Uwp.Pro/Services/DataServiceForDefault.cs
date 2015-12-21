@@ -138,7 +138,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
-                var threadItem = new ThreadItemModel(i, forumId, threadId, pageNo, title, attachType, replyNum, viewNum, isTop, authorName, authorUserId, authorCreateTime, lastPostAuthorName, lastPostTime);
+                var threadItem = new ThreadItemModel(i, forumId, threadId, pageNo, title, attachType, replyNum, viewNum, isTop, authorName, authorUserId, authorCreateTime, lastPostAuthorName, lastPostTime, AccountService.UserId == authorUserId);
                 _threadData.Add(threadItem);
 
                 i++;
