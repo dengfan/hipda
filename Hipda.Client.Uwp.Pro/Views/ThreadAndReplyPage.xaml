@@ -150,9 +150,14 @@
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="RightWrap" Grid.Column="1" 
-              BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
-              BorderThickness="1,0,0,0">
+            <Grid x:Name="welcomePanel" Grid.Column="1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock FontSize="120" Text="🍐" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Text="来自D版带着爱"/>
+                </StackPanel>
+            </Grid>
+            
+            <Grid x:Name="RightWrap" Grid.Column="1" Visibility="Collapsed" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*" />
@@ -193,7 +198,7 @@
 
                 <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
-                <StackPanel Grid.Row="1" x:Name="ReplyPanel" VerticalAlignment="Bottom" 
+                <StackPanel Grid.Row="1" x:Name="ReplyPanel" VerticalAlignment="Bottom"
                         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
                         BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderThickness="0,1,0,0" Opacity="0.8">
@@ -235,11 +240,6 @@
                     </Grid>
                     <TextBox x:Name="PostReplyTextBox" Template="{StaticResource TextBoxTemplate1}" MaxHeight="280" Padding="8,4" Background="Transparent" BorderThickness="0"
                          TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容，回车可换行。"/>
-                </StackPanel>
-
-                <StackPanel x:Name="rightNoDataNoticePanel" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
-                    <TextBlock FontSize="120" Text="😦" HorizontalAlignment="Center"></TextBlock>
-                    <TextBlock HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Text="对不起，没有找到数据！"/>
                 </StackPanel>
             </Grid>
 

@@ -225,7 +225,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             base.OnNavigatedTo(e);
 
             leftNoDataNoticePanel.Visibility = Visibility.Collapsed;
-            rightNoDataNoticePanel.Visibility = Visibility.Collapsed;
 
             if (e.Parameter != null)
             {
@@ -372,6 +371,12 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (e.AddedItems.Count == 0)
             {
                 return;
+            }
+
+            if (RightWrap.Visibility == Visibility.Collapsed)
+            {
+                welcomePanel.Visibility = Visibility.Collapsed;
+                RightWrap.Visibility = Visibility.Visible;
             }
 
             var selectedItem = e.AddedItems[0];
