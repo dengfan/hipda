@@ -423,7 +423,9 @@
                                              TopTemplate="{StaticResource ReplyListTopItemTemplate}"
                                              LeftTemplate="{StaticResource ReplyListLeftItemTemplate}"
                                              Left2Template="{StaticResource ReplyListLeft2ItemTemplate}"
-                                             RightTemplate="{StaticResource ReplyListRightItemTemplate}"/>
+                                             RightTemplate="{StaticResource ReplyListRightItemTemplate}"
+                                             HighLightTemplate="{StaticResource ReplyListHighLightItemTemplate}"
+                                             />
 
         <local:ThreadListItemTemplateSelector x:Key="threadListItemTemplateSelector"
                                               NormalTemplate="{StaticResource ThreadListNormalItemTemplate}" 
@@ -620,6 +622,43 @@
                     </Button.Flyout>
                 </Button>
             </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="ReplyListHighLightItemTemplate">
+            <StackPanel Padding="16,0,16,8" BorderThickness="1" BorderBrush="#3285D6">
+                <Border Margin="0,0,0,8" Padding="8" Background="#3285D6" HorizontalAlignment="Center">
+                    <TextBlock Text="以下是你搜索的回复" Foreground="#3EE8FF" FontSize="{ThemeResource ToolTipContentThemeFontSize}" />
+                </Border>
+                <local:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" HorizontalAlignment="Center"/>
+
+                <TextBlock Margin="0,4" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}" HorizontalAlignment="Center">
+                    <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
+                    <Run Text="{Binding AuthorCreateTime}" />
+                </TextBlock>
+
+                <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" HorizontalAlignment="Center"/>
+
+                <Button x:Name="menuButton" HorizontalAlignment="Center">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
+                                <TextBlock HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
+                                    <Run Text="&#xE10C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                                    <Run Text="{Binding FloorNoStr}" />
+                                </TextBlock>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Flyout>
+                        <MenuFlyout x:Name="replyMenu">
+                            <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" />
+                            <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" />
+                            <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" IsEnabled="False" />
+                            <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
         </DataTemplate>
 
         <Style x:Name="UnReadColorStyle" TargetType="Ellipse">

@@ -15,7 +15,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ReplyItemModel
     {
-        public ReplyItemModel(int index, int floorNo, int postId, int pageNo, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string htmlContent, string xamlConent, string authorCreateTime, int imageCount)
+        public ReplyItemModel(int index, int floorNo, int postId, int pageNo, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string htmlContent, string xamlConent, string authorCreateTime, int imageCount, bool isHighLight)
         {
             this.Index = index;
             this.FloorNo = floorNo;
@@ -31,6 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.XamlStr = xamlConent;
             this.AuthorCreateTime = authorCreateTime;
             this.ImageCount = imageCount;
+            this.IsHighLight = isHighLight;
         }
 
         public int Index { get; private set; }
@@ -53,6 +54,8 @@ namespace Hipda.Client.Uwp.Pro.Models
         public string AuthorCreateTime { get; private set; }
 
         public int ImageCount { get; set; }
+
+        public bool IsHighLight { get; private set; }
 
         public bool HasThreadTitle
         {

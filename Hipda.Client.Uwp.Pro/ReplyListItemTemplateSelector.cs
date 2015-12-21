@@ -16,6 +16,7 @@ namespace Hipda.Client.Uwp.Pro
         public DataTemplate LeftTemplate { get; set; }
         public DataTemplate Left2Template { get; set; }
         public DataTemplate RightTemplate { get; set; }
+        public DataTemplate HighLightTemplate { get; set; }
 
         protected override DataTemplate SelectTemplateCore (object item, DependencyObject container)
         {
@@ -24,6 +25,10 @@ namespace Hipda.Client.Uwp.Pro
             if (data.FloorNo == 1)
             {
                 return TopTemplate;
+            }
+            else if (data.IsHighLight)
+            {
+                return HighLightTemplate;
             }
             else if (data.AuthorUserId == AccountService.UserId)
             {
