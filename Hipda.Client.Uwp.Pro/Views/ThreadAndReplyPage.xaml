@@ -143,6 +143,11 @@
                 </pr:PullToRefreshBox>
 
                 <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
+
+                <StackPanel x:Name="leftNoDataNoticePanel" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+                    <TextBlock FontSize="120" Text="😦" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Text="对不起，没有找到数据！"/>
+                </StackPanel>
             </Grid>
 
             <Grid x:Name="RightWrap" Grid.Column="1" 
@@ -230,6 +235,11 @@
                     </Grid>
                     <TextBox x:Name="PostReplyTextBox" Template="{StaticResource TextBoxTemplate1}" MaxHeight="280" Padding="8,4" Background="Transparent" BorderThickness="0"
                          TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容，回车可换行。"/>
+                </StackPanel>
+
+                <StackPanel x:Name="rightNoDataNoticePanel" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+                    <TextBlock FontSize="120" Text="😦" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Text="对不起，没有找到数据！"/>
                 </StackPanel>
             </Grid>
 

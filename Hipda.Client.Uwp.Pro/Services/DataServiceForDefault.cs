@@ -16,12 +16,12 @@ namespace Hipda.Client.Uwp.Pro.Services
         static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
         int _threadMaxPageNo = 1;
 
-        async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
+        async Task<bool> LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadData.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
             if (count == _threadPageSize)
             {
-                return;
+                return true;
             }
             else
             {
@@ -42,7 +42,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
-                return;
+                return false;
             }
 
             // 读取最大页码
@@ -57,14 +57,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             if (pageNo > _threadMaxPageNo)
             {
-                return;
+                return false;
             }
 
             // 如果置顶贴数过多，只取非置顶贴的话，第一页数据项过少，会导致不会自动触发加载下一页数据
             var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").Contains("stickthread_") || n.GetAttributeValue("id", "").Contains("normalthread_"));
             if (tbodies == null)
             {
-                return;
+                return false;
             }
 
             int i = _threadData.Count(t => t.ForumId == forumId);
@@ -143,6 +143,8 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 i++;
             }
+
+            return true;
         }
 
         async Task<int> GetMoreThreadItemsAsync(int forumId, int pageNo, Action beforeLoad, Action afterLoad)
@@ -169,8 +171,16 @@ namespace Hipda.Client.Uwp.Pro.Services
             return vm;
         }
 
-        public ICollectionView GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad)
+        public async Task<ICollectionView> GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
+            // 预先加载一次，以判断是否有数据，不会浪费性能，因为如果本次载入了数据，后面就不用再载入了
+            var hasData = await LoadThreadDataAsync(forumId, startPageNo, new CancellationTokenSource());
+            if (hasData == false)
+            {
+                noDataNotice();
+                return null;
+            }
+
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemViewModel>(
                 startPageNo,

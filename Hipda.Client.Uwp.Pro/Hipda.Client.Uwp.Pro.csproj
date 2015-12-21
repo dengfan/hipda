@@ -137,7 +137,6 @@
     <Compile Include="Services\DataServiceForSearchTitle.cs" />
     <Compile Include="Services\FaceService.cs" />
     <Compile Include="Services\GeneratorIncrementalLoadingClass.cs" />
-    <Compile Include="Services\IDataService.cs" />
     <Compile Include="Services\IncrementalLoadingBase.cs" />
     <Compile Include="ViewLifetimeControl.cs" />
     <Compile Include="ThreadListItemTemplateSelector.cs" />

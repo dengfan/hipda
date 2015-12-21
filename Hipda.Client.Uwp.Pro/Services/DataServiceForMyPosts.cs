@@ -16,12 +16,12 @@ namespace Hipda.Client.Uwp.Pro.Services
         static List<ThreadItemForMyPostsModel> _threadDataForMyPosts = new List<ThreadItemForMyPostsModel>();
         int _threadMaxPageNoForMyPosts = 1;
 
-        async Task LoadThreadDataForMyPostsAsync(int pageNo, CancellationTokenSource cts)
+        async Task<bool> LoadThreadDataForMyPostsAsync(int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForMyPosts.Count(t => t.PageNo == pageNo);
             if (count == _threadPageSize)
             {
-                return;
+                return true;
             }
             else
             {
@@ -41,7 +41,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
-                return;
+                return false;
             }
 
             // 读取最大页码
@@ -56,13 +56,13 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             if (pageNo > _threadMaxPageNoForMyPosts)
             {
-                return;
+                return false;
             }
 
             var rows = dataTable.ChildNodes[3].Descendants().Where(n => n.Name.Equals("tr")).ToList();
             if (rows == null)
             {
-                return;
+                return false;
             }
 
             int i = _threadDataForMyPosts.Count;
@@ -97,6 +97,8 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 i++;
             }
+
+            return true;
         }
 
         async Task<int> GetMoreThreadItemsForMyPostsAsync(int pageNo, Action beforeLoad, Action afterLoad)
@@ -122,8 +124,16 @@ namespace Hipda.Client.Uwp.Pro.Services
             return vm;
         }
 
-        public ICollectionView GetViewForThreadPageForMyPosts(int startPageNo, Action beforeLoad, Action afterLoad)
+        public async Task<ICollectionView> GetViewForThreadPageForMyPosts(int startPageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
+            // 预先加载一次，以判断是否有数据，不会浪费性能，因为如果本次载入了数据，后面就不用再载入了
+            var hasData = await LoadThreadDataForMyPostsAsync(startPageNo, new CancellationTokenSource());
+            if (hasData == false)
+            {
+                noDataNotice();
+                return null;
+            }
+
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyPostsViewModel>(
                 startPageNo,

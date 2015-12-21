@@ -22,7 +22,9 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        
+        public static string CurrentModuleName = "2"; // 默认为地板
+
+
 
         public Frame AppFrame { get { return this.MainFrame; } }
 

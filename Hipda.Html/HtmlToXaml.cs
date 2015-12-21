@@ -132,6 +132,22 @@ namespace Hipda.Html
                 }
             }
 
+            // 替换小字
+            MatchCollection matchsForSmallFont = new Regex(@"<font size=""1"">([^<]*)</font>").Matches(htmlContent);
+            if (matchsForSmallFont != null && matchsForSmallFont.Count > 0)
+            {
+                for (int i = 0; i < matchsForSmallFont.Count; i++)
+                {
+                    var m = matchsForSmallFont[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string fontText = m.Groups[1].Value;
+                    
+                    string fontXaml = string.Format(@"[Run FontSize=""{{ThemeResource ToolTipContentThemeFontSize}}""]{0}[/Run]", fontText);
+                    htmlContent = htmlContent.Replace(placeHolder, fontXaml);
+                }
+            }
+
             // 替换带颜色的font标签
             MatchCollection matchsForColorText = new Regex(@"<font color=""([#0-9a-zA-Z]*)"">([^<]*)</font>").Matches(htmlContent);
             if (matchsForColorText != null && matchsForColorText.Count > 0)

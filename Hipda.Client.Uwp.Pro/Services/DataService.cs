@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public partial class DataService : IDataService
+    public partial class DataService
     {
         static int _threadPageSize = 75;
         static int _replyPageSize = 50;
