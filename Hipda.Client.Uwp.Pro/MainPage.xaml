@@ -7,48 +7,40 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    x:Name="Page1" RequestedTheme="Dark">
+    x:Name="Page1" RequestedTheme="Light">
 
     <Page.Resources>
-        <Style x:Key="SplitViewPaneButtonStyle" TargetType="Button">
+        <Style x:Key="NavButtonNormalStyle" TargetType="Button">
+            <Setter Property="Padding" Value="6,0,0,0"/>
             <Setter Property="Height" Value="48"/>
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="PointerOver">
-                                        <VisualState.Setters>
-                                            <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <VisualState.Setters>
-                                            <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" />
-                                        </VisualState.Setters>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-
-                            <ContentPresenter x:Name="ContentPresenter"
-                                  Padding="{TemplateBinding Padding}"
-                                  BorderBrush="{TemplateBinding BorderBrush}"
-                                  BorderThickness="{TemplateBinding BorderThickness}"
-                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                  AutomationProperties.AccessibilityView="Raw"
-                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                  ContentTransitions="{TemplateBinding ContentTransitions}" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Template" Value="{StaticResource NavButtonTemplate}"/>
         </Style>
+
+        <Style x:Key="NavButtonSelectedStyle" TargetType="Button">
+            <Setter Property="Padding" Value="6,0,0,0"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
+            <Setter Property="Template" Value="{StaticResource NavButtonTemplate}"/>
+        </Style>
+
+        <ControlTemplate x:Key="NavButtonTemplate" TargetType="Button">
+            <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+                <ContentPresenter x:Name="ContentPresenter" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+            </Grid>
+        </ControlTemplate>
 
         <Storyboard x:Name="OpenView">
             <DoubleAnimation Duration="0:0:0.2" To="300" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="FullSebjectPanel">
@@ -156,7 +148,7 @@
                     </Grid.RowDefinitions>
                     <ScrollViewer Grid.Row="0" Margin="0 48 0 0" VerticalScrollBarVisibility="Hidden">
                         <StackPanel>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="SearchButton_Click">
+                            <Button Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="SearchButton_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <SymbolIcon Symbol="Zoom" />
@@ -183,7 +175,7 @@
                                 <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton2_Click"/>
                                 <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton1_Click"/>
                             </StackPanel>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button4_Click">
+                            <Button x:Name="MyThreadsButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="MyThreadsButton_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="&#xEA4A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
@@ -193,7 +185,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button5_Click">
+                            <Button x:Name="MyPostsButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="MyPostsButton_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="&#xE89B;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
@@ -203,7 +195,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button6_Click">
+                            <Button x:Name="MyFavoritesButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="MyFavoritesButton_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="&#xE1CE;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
@@ -213,7 +205,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button1_Click">
+                            <Button x:Name="DiButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="DiButton_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="Di" FontFamily="Consolas" />
@@ -223,7 +215,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button2_Click">
+                            <Button x:Name="BsButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="BsButton_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="BS" FontFamily="Consolas" />
@@ -233,7 +225,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="Button3_Click">
+                            <Button x:Name="EiButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="EiButton_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="EI" FontFamily="Consolas" />
@@ -243,7 +235,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button x:Name="btnMore" Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnMore_Tapped">
+                            <Button x:Name="btnMore" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnMore_Tapped">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <SymbolIcon Symbol="More" />
@@ -257,7 +249,7 @@
                     </ScrollViewer>
 
                     <StackPanel Grid.Row="1" VerticalAlignment="Bottom" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
-                        <Button x:Name="btnNotice" Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <Button x:Name="btnNotice" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <SymbolIcon Symbol="Mail" />
@@ -267,7 +259,7 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <Button Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <Button Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
@@ -277,7 +269,7 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <Button x:Name="btnSettings" Style="{StaticResource SplitViewPaneButtonStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="btnSettings_Click">
+                        <Button x:Name="btnSettings" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="btnSettings_Click">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <SymbolIcon Symbol="Setting" />
@@ -326,7 +318,7 @@
             
         </SplitView>
 
-        <Button x:Name="MainSplitViewToggle" Style="{StaticResource SplitViewPaneButtonStyle}" Width="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
+        <Button x:Name="MainSplitViewToggle" Style="{StaticResource NavButtonNormalStyle}" Width="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
             <Button.Content>
                 <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"/>
             </Button.Content>

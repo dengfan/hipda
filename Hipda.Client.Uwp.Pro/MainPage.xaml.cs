@@ -22,9 +22,7 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public static string CurrentModuleName = "2"; // 默认为地板
-
-
+        public static string CurrentNavButtonName = "DiButton"; // 默认为地板
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
@@ -71,33 +69,53 @@ namespace Hipda.Client.Uwp.Pro
             e.Handled = true;
         }
 
-        private void Button1_Click(object sender, RoutedEventArgs e)
+        private async void SetSelected(Button button)
         {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                var btn1 = this.FindName(CurrentNavButtonName) as Button;
+                if (btn1 != null)
+                {
+                    btn1.Style = this.Resources["NavButtonNormalStyle"] as Style;
+                }
+
+                button.Style = this.Resources["NavButtonSelectedStyle"] as Style;
+                CurrentNavButtonName = button.Name;
+            });
+        }
+
+        private void DiButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetSelected(sender as Button);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=2");
         }
 
-        private void Button2_Click(object sender, RoutedEventArgs e)
+        private void BsButton_Click(object sender, RoutedEventArgs e)
         {
+            SetSelected(sender as Button);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=14");
         }
 
-        private void Button3_Click(object sender, RoutedEventArgs e)
+        private void EiButton_Click(object sender, RoutedEventArgs e)
         {
+            SetSelected(sender as Button);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=57");
         }
 
-        private void Button4_Click(object sender, RoutedEventArgs e)
+        private void MyThreadsButton_Click(object sender, RoutedEventArgs e)
         {
+            SetSelected(sender as Button);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=threads");
         }
 
-        private void Button5_Click(object sender, RoutedEventArgs e)
+        private void MyPostsButton_Click(object sender, RoutedEventArgs e)
         {
+            SetSelected(sender as Button);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=posts");
         }
 
-        private void Button6_Click(object sender, RoutedEventArgs e)
+        private void MyFavoritesButton_Click(object sender, RoutedEventArgs e)
         {
+            SetSelected(sender as Button);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=favorites");
         }
 
