@@ -75,7 +75,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return AttachFileType == 1 ? "\uEB9F" : string.Empty;
+                return AttachFileType == 1 ? "\uD83C\uDF04" : string.Empty;
             }
         }
 
@@ -83,7 +83,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return AttachFileType == 2 ? "\uE16C" : string.Empty;
+                return AttachFileType == 2 ? "\uD83D\uDCCE" : string.Empty;
             }
         }
 
@@ -91,7 +91,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return IsTop ? "\uE11C" : string.Empty;
+                return IsTop ? "\uD83D\uDD1D" : string.Empty;
             }
         }
 
