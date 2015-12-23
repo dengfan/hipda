@@ -707,7 +707,7 @@
                 </TextBlock>
 
                 <TextBlock Margin="0,0,0,4" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Run Text=" &#xE25C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                    <Run Text="&#x1F5E9;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     <Run Text="{Binding ThreadItem.LastReplyInfo}" FontStyle="Italic"/>
                 </TextBlock>
             </Grid>
