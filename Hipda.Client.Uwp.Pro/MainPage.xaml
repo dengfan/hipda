@@ -146,7 +146,7 @@
                     </Grid.RowDefinitions>
                     <ScrollViewer Grid.Row="0" Margin="0 48 0 0" VerticalScrollBarVisibility="Hidden">
                         <StackPanel>
-                            <Button Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="SearchButton_Click">
+                            <Button x:Name="SearchButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="SearchButton_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <SymbolIcon Symbol="Zoom" />
@@ -170,8 +170,8 @@
                                     <x:String>3个月以内</x:String>
                                     <x:String>1年以内</x:String>
                                 </ComboBox>
-                                <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton2_Click"/>
                                 <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton1_Click"/>
+                                <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton2_Click"/>
                             </StackPanel>
                             <Button x:Name="MyThreadsButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="MyThreadsButton_Click">
                                 <Button.Content>
