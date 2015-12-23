@@ -21,7 +21,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         async Task<bool> LoadThreadDataForSearchFullTextAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForSearchFullText.Count(t => t.PageNo == pageNo);
-            if (count == _threadPageSize)
+            if (count == _searchPageSize)
             {
                 return true;
             }

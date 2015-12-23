@@ -20,7 +20,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         async Task<bool> LoadThreadDataForSearchTitleAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForSearchTitle.Count(t => t.PageNo == pageNo);
-            if (count == _threadPageSize)
+            if (count == _searchPageSize)
             {
                 return true;
             }
