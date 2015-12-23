@@ -203,7 +203,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button x:Name="DiButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="DiButton_Click">
+                            <Button x:Name="DiButton" Style="{StaticResource NavButtonSelectedStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="DiButton_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="Di" FontFamily="Consolas" />
@@ -247,7 +247,7 @@
                     </ScrollViewer>
 
                     <StackPanel Grid.Row="1" VerticalAlignment="Bottom" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
-                        <Button x:Name="btnNotice" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <Button x:Name="NoticeButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="NoticeButton_Click">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <SymbolIcon Symbol="Mail" />

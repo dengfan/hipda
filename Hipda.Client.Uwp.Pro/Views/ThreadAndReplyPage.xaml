@@ -281,13 +281,13 @@
             </Grid>
         </Grid>
 
-        <ContentDialog x:Name="UserDialog" Template="{StaticResource ContentDialogTemplate1}" Opened="UserDialog_Opened" Closed="UserDialog_Closed">
+        <ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate1}" Opened="UserDialog_Opened" Closed="UserDialog_Closed">
             <ContentControl x:Name="UserDialogContentControl"
                             Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                             HorizontalContentAlignment="Stretch"/>
         </ContentDialog>
 
-        <ContentDialog x:Name="PostDialog" Template="{StaticResource ContentDialogTemplate2}"
+        <ContentDialog x:Name="PostDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate2}"
                        PrimaryButtonText="回复"
                        PrimaryButtonClick="PostDialog_PrimaryButtonClick"
                        SecondaryButtonText="关闭"
@@ -306,6 +306,26 @@
                             <Run Text="{Binding FloorNoStr}"/>
                         </TextBlock>
                     </StackPanel>
+                </DataTemplate>
+            </ContentDialog.TitleTemplate>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="48"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer Padding="16,16,20,16"
+                        Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                        HorizontalContentAlignment="Stretch"
+                        Content="{Binding XamlContent}"/>
+                <TextBlock Grid.Row="1" Text="test"/>
+            </Grid>
+        </ContentDialog>
+
+        <ContentDialog x:Name="NoticeDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate2}"
+                       PrimaryButtonText="关闭">
+            <ContentDialog.TitleTemplate>
+                <DataTemplate>
+                    <TextBlock Text="&#x1F4A1; 提醒"/>
                 </DataTemplate>
             </ContentDialog.TitleTemplate>
             <ScrollViewer Padding="16,16,20,16"

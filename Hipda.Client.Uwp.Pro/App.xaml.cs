@@ -233,7 +233,7 @@ namespace Hipda.Client.Uwp.Pro
                                 ThreadAndReplyPage trp = mp.AppFrame.Content as ThreadAndReplyPage;
                                 if (trp != null)
                                 {
-                                    trp.ShowPostDetailByPostId(postId, threadId);
+                                    trp.ShowPostDialogByPostId(postId, threadId);
                                 }
                             }
                         }

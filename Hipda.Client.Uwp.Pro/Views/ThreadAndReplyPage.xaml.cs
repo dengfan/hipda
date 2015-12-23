@@ -205,8 +205,9 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
 
         private bool _isShownForPostDialog = false;
-        public async void ShowPostDetailByPostId(int postId, int threadId)
+        public async void ShowPostDialogByPostId(int postId, int threadId)
         {
+            FindName("PostDialog");
             if (_isShownForPostDialog == false)
             {
                 PostDialog.DataContext = await _threadAndReplyViewModel.GetPostDetail(postId, threadId);
@@ -217,6 +218,12 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 PostDialog.DataContext = await _threadAndReplyViewModel.GetPostDetail(postId, threadId);
             }
+        }
+
+        public async void ShowNoticeDialog()
+        {
+            FindName("NoticeDialog");
+            await NoticeDialog.ShowAsync();
         }
         #endregion
 
@@ -348,11 +355,24 @@ namespace Hipda.Client.Uwp.Pro.Views
                         break;
                 }
 
-                UserDialogContentControl.Content = null;
-                UserDialog.Hide();
+                if (UserDialog != null)
+                {
+                    UserDialogContentControl.Content = null;
+                    UserDialog.Hide();
+                }
 
-                PostDialog.DataContext = null;
-                PostDialog.Hide();
+                if (PostDialog != null)
+                {
+                    PostDialog.DataContext = null;
+                    PostDialog.Hide();
+                }
+
+                if (NoticeDialog != null)
+                {
+                    NoticeDialog.DataContext = null;
+                    NoticeDialog.Hide();
+                }
+
 
                 Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
             }
@@ -685,6 +705,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ShowTipsForUserMessage(string tips)
         {
+            FindName("UserDialog");
             UserDialogContentControl.Content = new TextBlock
             {
                 Text = tips,
@@ -706,8 +727,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
             UserDialog.SecondaryButtonText = "关闭";
             await UserDialog.ShowAsync();
-
-            
         }
 
         private async void openUserMessageDialog_Tapped(object sender, TappedRoutedEventArgs e)

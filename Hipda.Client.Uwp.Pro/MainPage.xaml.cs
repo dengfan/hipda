@@ -223,5 +223,11 @@ namespace Hipda.Client.Uwp.Pro
             string param = string.Format(paramFormat, searchKeyword, searchAuthor, searchType, searchTimeSpan);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
         }
+
+        private void NoticeButton_Click(object sender, RoutedEventArgs e)
+        {
+            var threadAndReplyPage = AppFrame.Content as ThreadAndReplyPage;
+            threadAndReplyPage.ShowNoticeDialog();
+        }
     }
 }
