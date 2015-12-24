@@ -1,0 +1,50 @@
+﻿<UserControl
+    x:Class="Hipda.Client.Uwp.Pro.Controls.UserMessageBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Hipda.Client.Uwp.Pro.Controls"
+    xmlns:m="using:Hipda.Client.Uwp.Pro.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid x:Name="PostUserMessageForm">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="UserMessageFaceButton" Grid.Column="0" Width="44" VerticalAlignment="Center">
+            <Button.Template>
+                <ControlTemplate>
+                    <SymbolIcon Symbol="Emoji2"/>
+                </ControlTemplate>
+            </Button.Template>
+            <Button.Flyout>
+                <Flyout>
+                    <GridView x:Name="UserMessageFaceGridView" ItemsSource="{x:Bind FaceData}"
+                            SelectionMode="None" IsItemClickEnabled="True" IsSwipeEnabled="False"
+                            CanDragItems="False" Width="248" Height="192" ItemClick="UserMessageFaceGridView_ItemClick">
+                        <GridView.ItemTemplate>
+                            <DataTemplate x:DataType="m:FaceItemModel">
+                                <Image Source="{x:Bind Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </Flyout>
+            </Button.Flyout>
+        </Button>
+        <TextBox x:Name="UserMessageTextBox" Grid.Column="1" Margin="0,4,20,0" VerticalAlignment="Center"
+                                                 PlaceholderText="输入短消息" BorderThickness="0" Background="Transparent"
+                                                 Template="{StaticResource TextBoxTemplate1}" AcceptsReturn="True" MaxHeight="160" />
+        <Button x:Name="UserMessagePostButton" Grid.Column="2" Width="44" VerticalAlignment="Center" Click="UserMessagePostButton_Click">
+            <Button.Template>
+                <ControlTemplate>
+                    <SymbolIcon Symbol="Send"/>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </Grid>
+</UserControl>

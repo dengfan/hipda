@@ -6,6 +6,7 @@
     xmlns:root="using:Hipda.Client.Uwp.Pro"
     xmlns:vm="using:Hipda.Client.Uwp.Pro.ViewModels"
     xmlns:t="using:Hipda.Client.Uwp.Pro.Triggers"
+    xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
     xmlns:pr="using:PullToRefresh.UWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,9 +18,9 @@
             <MenuFlyoutItem Text="在新窗口中打开此主题" Tapped="openThreadInNewView_Tapped"/>
             <MenuFlyoutItem Text="收藏此主题"/>
             <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="查看详细资料" Tapped="openUserInfoDialog_Tapped"/>
+            <MenuFlyoutItem Text="查看详细资料" Tapped="OpenUserInfoDialog"/>
             <MenuFlyoutItem Text="查看发贴记录"/>
-            <MenuFlyoutItem Text="发短消息" Tapped="openUserMessageDialog_Tapped"/>
+            <MenuFlyoutItem Text="发短消息" Tapped="OpenUserMessageDialog"/>
             <MenuFlyoutItem Text="加为好友"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="屏蔽此人" />
@@ -31,6 +32,67 @@
                     FontSize="{ThemeResource ToolTipContentThemeFontSize}"
                     Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                     HorizontalAlignment="Center" Tapped="LoadPrevReplyPageButton_Tapped"/>
+        </DataTemplate>
+
+        <DataTemplate x:Name="UserInfoDialogContentTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer Padding="16,0,20,0"
+                              Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                              HorizontalContentAlignment="Stretch"
+                              VerticalScrollMode="Auto">
+                    <Grid Padding="0,0,0,16">
+                        <Image Source="{Binding AvatarUri}" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <ContentControl Content="{Binding UserInfoRichTextBlock}"/>
+                    </Grid>
+                </ScrollViewer>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Click="OpenUserMessageDialog" />
+                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="UserMessageDialogContentTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ListView Padding="16,0,16,16" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{Binding ListData}"
+                          ShowsScrollingPlaceholders="False" ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
+                          ItemTemplateSelector="{StaticResource userMessageListItemTemplateSelector}">
+                    <ListView.Header>
+                        <HyperlinkButton Content="点击查看所有短消息" HorizontalAlignment="Center"
+                                         Visibility="{Binding IsShowLoadMoreButton}" Command="{Binding LoadMoreCommand}"/>
+                    </ListView.Header>
+                </ListView>
+                <Border Grid.Row="1" Padding="8" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
+                    <c:UserMessageBox UserId="{Binding UserId}"></c:UserMessageBox>
+                </Border>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="刷新" Command="{Binding RefreshCommand}" />
+                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
+                </Grid>
+            </Grid>
         </DataTemplate>
     </Page.Resources>
 
@@ -281,13 +343,10 @@
             </Grid>
         </Grid>
 
-        <ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate1}" Opened="UserDialog_Opened" Closed="UserDialog_Closed">
-            <ContentControl x:Name="UserDialogContentControl"
-                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                            HorizontalContentAlignment="Stretch"/>
-        </ContentDialog>
+        <!--Opened="UserDialog_Opened" Closed="UserDialog_Closed"-->
+        <ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
 
-        <ContentDialog x:Name="PostDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate2}"
+        <ContentDialog x:Name="PostDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate}"
                        PrimaryButtonText="回复"
                        PrimaryButtonClick="PostDialog_PrimaryButtonClick"
                        SecondaryButtonText="关闭"
@@ -321,7 +380,7 @@
             </Grid>
         </ContentDialog>
 
-        <ContentDialog x:Name="NoticeDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate2}"
+        <ContentDialog x:Name="NoticeDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate}"
                        PrimaryButtonText="关闭">
             <ContentDialog.TitleTemplate>
                 <DataTemplate>

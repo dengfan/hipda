@@ -100,6 +100,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Controls\UserMessageBox.xaml.cs">
+      <DependentUpon>UserMessageBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -111,7 +114,7 @@
     <Compile Include="Models\OpenNewViewParameterModel.cs" />
     <Compile Include="Models\ThreadItemForMyFavoritesModel.cs" />
     <Compile Include="Models\ThreadItemForSearchFullTextModel.cs" />
-    <Compile Include="Models\UserMessageItemModel.cs" />
+    <Compile Include="Models\UserMessageDataModel.cs" />
     <Compile Include="Models\ReplyItemModel.cs" />
     <Compile Include="Models\ReplyPageModel.cs" />
     <Compile Include="Models\ThreadItemModelBase.cs" />
@@ -153,6 +156,8 @@
     <Compile Include="ViewModels\ThreadItemForMyPostsViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyThreadsViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemViewModelBase.cs" />
+    <Compile Include="ViewModels\UserInfoDialogViewModel.cs" />
+    <Compile Include="ViewModels\UserMessageDialogViewModel.cs" />
     <Compile Include="Views\BlankPage1.xaml.cs">
       <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>
@@ -276,6 +281,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\UserMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

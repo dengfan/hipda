@@ -446,16 +446,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds.ClearReplyData(threadId);
         }
 
-        public async Task<string> GetXamlForUserInfo(int userId)
-        {
-            return await _ds.GetXamlForUserInfo(userId);
-        }
-
-        public async Task<List<UserMessageItemModel>> GetUserMessageData(int userId, int limitCount)
-        {
-            return await _ds.GetUserMessageData(userId, limitCount);
-        }
-
+        
         public async Task<bool> PostUserMessage(string message, int userId)
         {
             return await _ds.PostUserMessage(message, userId);

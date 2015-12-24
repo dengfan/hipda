@@ -357,7 +357,6 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                 if (UserDialog != null)
                 {
-                    UserDialogContentControl.Content = null;
                     UserDialog.Hide();
                 }
 
@@ -597,6 +596,56 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
 
         #region 坛友资料及短消息之弹窗
+        bool _isDialogShown = false;
+        private void CloseDialog(object sender, RoutedEventArgs e)
+        {
+            _isDialogShown = false;
+            UserDialog.DataContext = null;
+            UserDialog.Hide();
+        }
+
+        private async void OpenUserInfoDialog(object sender, TappedRoutedEventArgs e)
+        {
+            if (PopupUserId == 0)
+            {
+                return;
+            }
+
+            FindName("UserDialog");
+            var vm = new UserInfoDialogViewModel(PopupUserId);
+            UserDialog.DataContext = vm;
+            UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
+            UserDialog.ContentTemplate = this.Resources["UserInfoDialogContentTemplate"] as DataTemplate;
+
+            if (_isDialogShown == false)
+            {
+                _isDialogShown = true;
+                await UserDialog.ShowAsync();
+                
+            }
+        }
+
+        private async void OpenUserMessageDialog(object sender, RoutedEventArgs e)
+        {
+            if (PopupUserId == 0)
+            {
+                return;
+            }
+
+            FindName("UserDialog");
+            var vm = new UserMessageDialogViewModel(PopupUserId);
+            UserDialog.DataContext = vm;
+            UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
+            UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
+
+            if (_isDialogShown == false)
+            {
+                _isDialogShown = true;
+                await UserDialog.ShowAsync();
+                
+            }
+        }
+
         Grid _postUserMessageForm; // 发短消息之输入元素之容器
         GridView _userMessageFaceGridView; // 发短消息之表情图标
         TextBox _userMessageTextBox; // 发短消息之文本框
@@ -615,7 +664,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 img.VerticalAlignment = VerticalAlignment.Top;
                 img.HorizontalAlignment = HorizontalAlignment.Right;
 
-                string xaml = await _threadAndReplyViewModel.GetXamlForUserInfo(PopupUserId);
+                string xaml = "";
                 var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
 
                 var grid = new Grid();
@@ -626,7 +675,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 var sv = new ScrollViewer();
                 sv.Content = grid;
                 sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-                UserDialogContentControl.Content = sv;
+                //UserDialogContentControl.Content = sv;
 
                 sender.PrimaryButtonText = "短消息";
             }
@@ -637,15 +686,15 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             sender.PrimaryButtonClick += OpenOrRefreshUserMessageDialog;
 
-            var containerBorder = Common.FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
-            containerBorder = Common.FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
-            _postUserMessageForm = containerBorder.FindName("PostUserMessageForm") as Grid;
-            _postUserMessageForm.DataContext = new FaceService();
-            _userMessageFaceGridView = _postUserMessageForm.FindName("UserMessageFaceGridView") as GridView;
-            _userMessageFaceGridView.ItemClick += UserMessageFaceGridView_ItemClick;
-            _userMessageTextBox = _postUserMessageForm.FindName("UserMessageTextBox") as TextBox;
-            _userMessagePostButton = _postUserMessageForm.FindName("UserMessagePostButton") as Button;
-            _userMessagePostButton.Tapped += UserMessagePostButton_Tapped;
+            //var containerBorder = Common.FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
+            //containerBorder = Common.FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
+            //_postUserMessageForm = containerBorder.FindName("PostUserMessageForm") as Grid;
+            //_postUserMessageForm.DataContext = new FaceService();
+            //_userMessageFaceGridView = _postUserMessageForm.FindName("UserMessageFaceGridView") as GridView;
+            //_userMessageFaceGridView.ItemClick += UserMessageFaceGridView_ItemClick;
+            //_userMessageTextBox = _postUserMessageForm.FindName("UserMessageTextBox") as TextBox;
+            //_userMessagePostButton = _postUserMessageForm.FindName("UserMessagePostButton") as Button;
+            //_userMessagePostButton.Tapped += UserMessagePostButton_Tapped;
         }
 
         private void UserMessageFaceGridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -677,25 +726,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             _userMessageTextBox.SelectionStart = cursorPosition + faceText.Length;
         }
 
-        private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
-        {
-            sender.PrimaryButtonClick -= OpenOrRefreshUserMessageDialog;
-
-            if (_userMessageFaceGridView != null)
-            {
-                _userMessageFaceGridView.ItemClick -= UserMessageFaceGridView_ItemClick;
-            }
-
-            if (_userMessagePostButton != null)
-            {
-                _userMessagePostButton.Tapped -= UserMessagePostButton_Tapped;
-            }
-
-            _userMessageTextBox = null;
-            _userMessagePostButton = null;
-            _userMessageFaceGridView = null;
-            _postUserMessageForm = null;
-        }
+        
 
         private async void OpenOrRefreshUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
@@ -705,16 +736,15 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void ShowTipsForUserMessage(string tips)
         {
-            FindName("UserDialog");
-            UserDialogContentControl.Content = new TextBlock
-            {
-                Text = tips,
-                Margin = new Thickness(16),
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
+            //UserDialogContentControl.Content = new TextBlock
+            //{
+            //    Text = tips,
+            //    Margin = new Thickness(16),
+            //    HorizontalAlignment = HorizontalAlignment.Center
+            //};
         }
 
-        private async void openUserInfoDialog_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void openUserInfoDialog_Tapped2(object sender, TappedRoutedEventArgs e)
         {
             if (PopupUserId == 0)
             {
@@ -729,16 +759,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             await UserDialog.ShowAsync();
         }
 
-        private async void openUserMessageDialog_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            if (PopupUserId == 0)
-            {
-                return;
-            }
-
-            _userDialogType = UserDialogType.Message;
-            await UserDialog.ShowAsync();
-        }
+        
 
         private async void UserMessagePostButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -824,35 +845,35 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             // 读取数据
-            var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId, limitCount);
-            if (data == null || data.Count == 0)
-            {
-                ShowTipsForUserMessage("你们之间还未开始。。。");
-            }
-            else
-            {
-                if (getAllButton != null && data.Count == limitCount)
-                {
-                    getAllButton.Visibility = Visibility.Visible;
-                }
+            //var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId, limitCount);
+            //if (data == null || data.Count == 0)
+            //{
+            //    ShowTipsForUserMessage("你们之间还未开始。。。");
+            //}
+            //else
+            //{
+            //    if (getAllButton != null && data.Count == limitCount)
+            //    {
+            //        getAllButton.Visibility = Visibility.Visible;
+            //    }
 
-                var lv = new ListView();
-                lv.Padding = new Thickness(16, 0, 16, 16);
-                lv.IsItemClickEnabled = false;
-                lv.IsSwipeEnabled = false;
-                lv.CanDrag = false;
-                lv.SelectionMode = ListViewSelectionMode.None;
-                lv.ShowsScrollingPlaceholders = false;
-                lv.ItemContainerStyle = App.Current.Resources["ReplyItemContainerStyle"] as Style;
-                lv.ItemTemplateSelector = App.Current.Resources["userMessageListItemTemplateSelector"] as DataTemplateSelector;
-                lv.ItemsSource = data;
-                if (getAllButton != null)
-                {
-                    lv.Header = getAllButton;
-                }
+            //    var lv = new ListView();
+            //    lv.Padding = new Thickness(16, 0, 16, 16);
+            //    lv.IsItemClickEnabled = false;
+            //    lv.IsSwipeEnabled = false;
+            //    lv.CanDrag = false;
+            //    lv.SelectionMode = ListViewSelectionMode.None;
+            //    lv.ShowsScrollingPlaceholders = false;
+            //    lv.ItemContainerStyle = App.Current.Resources["ReplyItemContainerStyle"] as Style;
+            //    lv.ItemTemplateSelector = App.Current.Resources["userMessageListItemTemplateSelector"] as DataTemplateSelector;
+            //    lv.ItemsSource = data;
+            //    if (getAllButton != null)
+            //    {
+            //        lv.Header = getAllButton;
+            //    }
 
-                UserDialogContentControl.Content = lv;
-            }
+            //    //UserDialogContentControl.Content = lv;
+            //}
         }
         #endregion
 

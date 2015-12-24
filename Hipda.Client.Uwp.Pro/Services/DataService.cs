@@ -591,9 +591,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _userInfoData[userId];
         }
 
-        async Task<List<UserMessageItemModel>> LoadUserMessageDataAsync(int userId, int limitCount, CancellationTokenSource cts)
+        async Task<UserMessageDataModel> LoadUserMessageDataAsync(int userId, int limitCount, CancellationTokenSource cts)
         {
-            var data = new List<UserMessageItemModel>();
+            var listData = new List<UserMessageItemModel>();
+            int total = 0;
 
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/pm.php?uid={0}&filter=privatepm&daterange=5&_={1}", userId, DateTime.Now.Ticks.ToString("x"));
@@ -611,7 +612,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var nodeList = messageListNode.Descendants().Where(n => n.GetAttributeValue("id", "").StartsWith("pm_"));
                 if (nodeList != null)
                 {
-                    int total = nodeList.Count();
+                    total = nodeList.Count();
                     if (limitCount != -1 && total > limitCount)
                     {
                         nodeList = nodeList.Skip(total - limitCount);
@@ -667,15 +668,15 @@ namespace Hipda.Client.Uwp.Pro.Services
                             XamlStr = xamlStr,
                             IsRead = isRead
                         };
-                        data.Add(messageItem);
+                        listData.Add(messageItem);
                     }
                 }
             }
 
-            return data;
+            return new UserMessageDataModel { ListData = listData, Total = total };
         }
 
-        public async Task<List<UserMessageItemModel>> GetUserMessageData(int userId, int limitCount)
+        public async Task<UserMessageDataModel> GetUserMessageData(int userId, int limitCount)
         {
             var cts = new CancellationTokenSource();
             return await LoadUserMessageDataAsync(userId, limitCount, cts);

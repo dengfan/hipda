@@ -45,4 +45,10 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
     }
+
+    public class UserMessageDataModel
+    {
+        public List<UserMessageItemModel> ListData;
+        public int Total;
+    }
 }
