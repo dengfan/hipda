@@ -34,10 +34,6 @@
                     HorizontalAlignment="Center" Tapped="LoadPrevReplyPageButton_Tapped"/>
         </DataTemplate>
 
-        <DataTemplate x:Name="ContentDialogLoadingTemplate">
-            <TextBlock Margin="20" HorizontalAlignment="Center" Text="载入中，请稍候。。。" />
-        </DataTemplate>
-
         <DataTemplate x:Name="UserInfoDialogContentTemplate">
             <Grid>
                 <Grid.RowDefinitions>
