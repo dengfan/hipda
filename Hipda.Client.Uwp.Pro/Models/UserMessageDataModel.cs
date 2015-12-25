@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -48,7 +49,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 
     public class UserMessageDataModel
     {
-        public List<UserMessageItemModel> ListData;
+        public ObservableCollection<UserMessageItemModel> ListData;
         public int Total;
     }
 }

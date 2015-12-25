@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -593,7 +594,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         async Task<UserMessageDataModel> LoadUserMessageDataAsync(int userId, int limitCount, CancellationTokenSource cts)
         {
-            var listData = new List<UserMessageItemModel>();
+            var listData = new ObservableCollection<UserMessageItemModel>();
             int total = 0;
 
             // 读取数据
@@ -620,60 +621,64 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                     foreach (var item in nodeList)
                     {
-                        int uid = 0;
-                        var userIdNode = item.ChildNodes[3];
-                        var userInfoNode = item.ChildNodes[5];
-                        var messageNode = item.ChildNodes[7];
-                        string userIdStr = userIdNode.Attributes[0].Value;
-                        if (userIdStr.Equals("new"))
-                        {
-                            userIdNode = item.ChildNodes[4];
-                            userInfoNode = item.ChildNodes[6];
-                            messageNode = item.ChildNodes[8];
-                            userIdStr = userIdNode.Attributes[0].Value;
-                        }
-
-                        if (!userIdStr.Equals("avatar"))
-                        {
-                            userIdStr = userIdStr.Substring("space.php?uid=".Length);
-                            if (userIdStr.Contains("&"))
-                            {
-                                uid = Convert.ToInt32(userIdStr.Split('&')[0]);
-                            }
-                            else
-                            {
-                                uid = Convert.ToInt32(userIdStr);
-                            }
-                        }
-
-                        bool isRead = !userInfoNode.InnerHtml.Contains("notice_newpm.gif");
-                        string str = userInfoNode.InnerText.Trim().Replace("&nbsp;", string.Empty).Replace("\n", "$");
-                        string[] strAry = str.Split('$');
-                        string username = strAry[0].Trim();
-                        string time = strAry[1].Trim();
-                        string date = time.Split(' ')[0];
-
-                        string textStr = messageNode.InnerText;
-                        string htmlStr = messageNode.InnerHtml;
-                        string xamlStr = Html.HtmlToXaml.ConvertUserMessage(htmlStr);
-
-                        var messageItem = new UserMessageItemModel
-                        {
-                            Date = date,
-                            Time = time,
-                            UserId = uid,
-                            Username = username,
-                            TextStr = textStr,
-                            HtmlStr = htmlStr,
-                            XamlStr = xamlStr,
-                            IsRead = isRead
-                        };
-                        listData.Add(messageItem);
+                        listData.Add(GetUserMessageItem(item));
                     }
                 }
             }
 
             return new UserMessageDataModel { ListData = listData, Total = total };
+        }
+
+        private UserMessageItemModel GetUserMessageItem(HtmlNode htmlNode)
+        {
+            int uid = 0;
+            var userIdNode = htmlNode.ChildNodes[3];
+            var userInfoNode = htmlNode.ChildNodes[5];
+            var messageNode = htmlNode.ChildNodes[7];
+            string userIdStr = userIdNode.Attributes[0].Value;
+            if (userIdStr.Equals("new"))
+            {
+                userIdNode = htmlNode.ChildNodes[4];
+                userInfoNode = htmlNode.ChildNodes[6];
+                messageNode = htmlNode.ChildNodes[8];
+                userIdStr = userIdNode.Attributes[0].Value;
+            }
+
+            if (!userIdStr.Equals("avatar"))
+            {
+                userIdStr = userIdStr.Substring("space.php?uid=".Length);
+                if (userIdStr.Contains("&"))
+                {
+                    uid = Convert.ToInt32(userIdStr.Split('&')[0]);
+                }
+                else
+                {
+                    uid = Convert.ToInt32(userIdStr);
+                }
+            }
+
+            bool isRead = !userInfoNode.InnerHtml.Contains("notice_newpm.gif");
+            string str = userInfoNode.InnerText.Trim().Replace("&nbsp;", string.Empty).Replace("\n", "$");
+            string[] strAry = str.Split('$');
+            string username = strAry[0].Trim();
+            string time = strAry[1].Trim();
+            string date = time.Split(' ')[0];
+
+            string textStr = messageNode.InnerText;
+            string htmlStr = messageNode.InnerHtml;
+            string xamlStr = Html.HtmlToXaml.ConvertUserMessage(htmlStr);
+
+            return new UserMessageItemModel
+            {
+                Date = date,
+                Time = time,
+                UserId = uid,
+                Username = username,
+                TextStr = textStr,
+                HtmlStr = htmlStr,
+                XamlStr = xamlStr,
+                IsRead = isRead
+            };
         }
 
         public async Task<UserMessageDataModel> GetUserMessageData(int userId, int limitCount)
@@ -682,7 +687,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return await LoadUserMessageDataAsync(userId, limitCount, cts);
         }
 
-        public async Task<bool> PostUserMessage(string message, int userId)
+        public async Task<UserMessageItemModel> PostUserMessage(string message, int userId)
         {
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
@@ -693,7 +698,21 @@ namespace Hipda.Client.Uwp.Pro.Services
             string url = string.Format("http://www.hi-pda.com/forum/pm.php?action=send&uid={0}&pmsubmit=yes&_={1}", userId, DateTime.Now.Ticks.ToString("x"));
             var cts = new CancellationTokenSource();
             string resultContent = await _httpClient.PostAsync(url, postData, cts);
-            return resultContent.StartsWith(@"<?xml version=""1.0"" encoding=""gbk""?><root><![CDATA[<li id=""pm_") && resultContent.Contains(@"images/default/notice_newpm.gif");
+            if (resultContent.StartsWith(@"<?xml version=""1.0"" encoding=""gbk""?><root><![CDATA[<li id=""pm_") && resultContent.Contains(@"images/default/notice_newpm.gif"))
+            {
+                XmlDocument xdoc = new XmlDocument();
+                xdoc.LoadXml(resultContent);
+                string html = xdoc.ChildNodes[1].InnerText;
+
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml(html);
+
+                var htmlNode = doc.DocumentNode.ChildNodes[0];
+                var messageItem = GetUserMessageItem(htmlNode);
+                return messageItem;
+            }
+
+            return null;
         }
         #endregion
 

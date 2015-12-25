@@ -33,6 +33,11 @@ namespace Hipda.Client.Uwp.Pro.Controls
             DependencyProperty.Register("UserId", typeof(int), typeof(UserMessageBox), new PropertyMetadata(0));
 
 
+        public delegate void PostMessageEventHandler(object sender, EventArgs e);
+
+        public event PostMessageEventHandler PostMessage;
+
+
         public UserMessageBox()
         {
             this.InitializeComponent();
@@ -70,9 +75,12 @@ namespace Hipda.Client.Uwp.Pro.Controls
             UserMessageTextBox.SelectionStart = cursorPosition + faceText.Length;
         }
 
-        private async void UserMessagePostButton_Click(object sender, RoutedEventArgs e)
+        private void UserMessagePostButton_Click(object sender, RoutedEventArgs e)
         {
-            await new MessageDialog(UserId.ToString()).ShowAsync();
+            if (PostMessage != null)
+            {
+                PostMessage(this, EventArgs.Empty);
+            }
         }
     }
 }

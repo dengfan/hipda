@@ -3,6 +3,7 @@ using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,8 +24,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        List<UserMessageItemModel> _listData;
-        public List<UserMessageItemModel> ListData
+        ObservableCollection<UserMessageItemModel> _listData;
+        public ObservableCollection<UserMessageItemModel> ListData
         {
             get
             {
@@ -83,6 +84,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             var data = await _ds.GetUserMessageData(_userId, 5);
             ListData = data.ListData;
             IsShowLoadMoreButton = data.Total > 5 ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public async void PostUserMessage(string message, int userId)
+        {
+            var data = await _ds.PostUserMessage(message, userId);
+            if (data != null)
+            {
+                ListData.Add(data);
+            }
         }
     }
 }

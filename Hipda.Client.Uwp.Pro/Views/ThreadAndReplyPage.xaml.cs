@@ -1,4 +1,5 @@
-﻿using Hipda.Client.Uwp.Pro.Models;
+﻿using Hipda.Client.Uwp.Pro.Controls;
+using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
@@ -357,6 +358,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                 if (UserDialog != null)
                 {
+                    _isDialogShown = false;
                     UserDialog.Hide();
                 }
 
@@ -621,7 +623,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 _isDialogShown = true;
                 await UserDialog.ShowAsync();
-                
             }
         }
 
@@ -635,15 +636,23 @@ namespace Hipda.Client.Uwp.Pro.Views
             FindName("UserDialog");
             var vm = new UserMessageDialogViewModel(PopupUserId);
             UserDialog.DataContext = vm;
-            UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
+            UserDialog.Title = string.Format("与 {0} 聊天", PopupUsername);
             UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
 
             if (_isDialogShown == false)
             {
                 _isDialogShown = true;
                 await UserDialog.ShowAsync();
-                
             }
+        }
+
+        private void UserMessageBox_PostMessage(object sender, EventArgs e)
+        {
+            UserMessageBox umb = sender as UserMessageBox;
+            TextBox tb = umb.FindName("UserMessageTextBox") as TextBox;
+            var msg = tb.Text.Trim();
+            var vm = umb.DataContext as UserMessageDialogViewModel;
+            vm.PostUserMessage(msg, umb.UserId);
         }
 
         Grid _postUserMessageForm; // 发短消息之输入元素之容器
@@ -773,22 +782,22 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
-            bool isOk = await _threadAndReplyViewModel.PostUserMessage(msg, PopupUserId);
-            if (isOk) // 发送成功
-            {
-                _userMessageTextBox.Text = string.Empty;
+            //bool isOk = await _threadAndReplyViewModel.PostUserMessage(msg, PopupUserId);
+            //if (isOk) // 发送成功
+            //{
+            //    _userMessageTextBox.Text = string.Empty;
 
-                ShowTipsForUserMessage("已发送成功，载入中。。。");
+            //    ShowTipsForUserMessage("已发送成功，载入中。。。");
 
-                // 这里要延迟载入短消息数据，以免取到的还是旧数据
-                DelayPrepareUserMessage(1001);
-            }
-            else
-            {
-                ShowTipsForUserMessage("对不起，提交失败，请稍后再试。");
-            }
+            //    // 这里要延迟载入短消息数据，以免取到的还是旧数据
+            //    DelayPrepareUserMessage(1001);
+            //}
+            //else
+            //{
+            //    ShowTipsForUserMessage("对不起，提交失败，请稍后再试。");
+            //}
 
-            _userMessagePostButton.IsEnabled = true;
+            //_userMessagePostButton.IsEnabled = true;
         }
 
         private async void DelayPrepareUserMessage(int interval)
@@ -900,6 +909,8 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             ThreadListView.SelectedItem = null;
         }
+
+        
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         //{

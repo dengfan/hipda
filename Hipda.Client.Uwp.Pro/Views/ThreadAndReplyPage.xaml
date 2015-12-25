@@ -34,6 +34,10 @@
                     HorizontalAlignment="Center" Tapped="LoadPrevReplyPageButton_Tapped"/>
         </DataTemplate>
 
+        <DataTemplate x:Name="ContentDialogLoadingTemplate">
+            <TextBlock Margin="20" HorizontalAlignment="Center" Text="载入中，请稍候。。。" />
+        </DataTemplate>
+
         <DataTemplate x:Name="UserInfoDialogContentTemplate">
             <Grid>
                 <Grid.RowDefinitions>
@@ -79,7 +83,7 @@
                     </ListView.Header>
                 </ListView>
                 <Border Grid.Row="1" Padding="8" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
-                    <c:UserMessageBox UserId="{Binding UserId}"></c:UserMessageBox>
+                    <c:UserMessageBox UserId="{Binding UserId}" PostMessage="UserMessageBox_PostMessage"></c:UserMessageBox>
                 </Border>
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
