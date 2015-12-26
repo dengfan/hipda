@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -55,7 +56,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds = new DataService();
             _userId = userId;
 
-            GetData();
+            GetData(5);
 
             LoadMoreCommand = new DelegateCommand();
             LoadMoreCommand.ExecuteAction = new Action<object>(LoadMoreExecute);
@@ -67,21 +68,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public DelegateCommand LoadMoreCommand { get; set; }
         public DelegateCommand RefreshCommand { get; set; }
 
-        async void LoadMoreExecute(object parameter)
+        void LoadMoreExecute(object parameter)
         {
-            var data = await _ds.GetUserMessageData(_userId, -1);
-            ListData = data.ListData;
-            IsShowLoadMoreButton = data.Total > 5 ? Visibility.Collapsed : Visibility.Visible;
+            GetData(-1);
         }
 
         void RefreshExecute(object parameter)
         {
-            GetData();
+            GetData(5);
         }
 
-        async void GetData()
+        async void GetData(int dataCount)
         {
-            var data = await _ds.GetUserMessageData(_userId, 5);
+            var data = await _ds.GetUserMessageData(_userId, dataCount);
             ListData = data.ListData;
             IsShowLoadMoreButton = data.Total > 5 ? Visibility.Visible : Visibility.Collapsed;
         }
