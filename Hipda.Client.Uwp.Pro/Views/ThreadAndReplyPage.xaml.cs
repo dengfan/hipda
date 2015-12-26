@@ -646,7 +646,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        private async void UserMessageBox_PostMessage(object sender, EventArgs e)
+        private async void UserMessageBox_Submit(object sender, EventArgs e)
         {
             UserMessageBox umb = sender as UserMessageBox;
             TextBox tb = umb.FindName("UserMessageTextBox") as TextBox;

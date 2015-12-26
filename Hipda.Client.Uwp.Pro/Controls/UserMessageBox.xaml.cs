@@ -33,9 +33,9 @@ namespace Hipda.Client.Uwp.Pro.Controls
             DependencyProperty.Register("UserId", typeof(int), typeof(UserMessageBox), new PropertyMetadata(0));
 
 
-        public delegate void PostMessageEventHandler(object sender, EventArgs e);
+        public delegate void SubmitEventHandler(object sender, EventArgs e);
 
-        public event PostMessageEventHandler PostMessage;
+        public event SubmitEventHandler Submit;
 
 
         public UserMessageBox()
@@ -77,9 +77,9 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         private void UserMessagePostButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PostMessage != null)
+            if (Submit != null)
             {
-                PostMessage(this, EventArgs.Empty);
+                Submit(this, EventArgs.Empty);
             }
         }
     }

@@ -79,7 +79,7 @@
                     </ListView.Header>
                 </ListView>
                 <Border Grid.Row="1" Padding="8" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
-                    <c:UserMessageBox UserId="{Binding UserId}" PostMessage="UserMessageBox_PostMessage"></c:UserMessageBox>
+                    <c:UserMessageBox UserId="{Binding UserId}" Submit="UserMessageBox_Submit"></c:UserMessageBox>
                 </Border>
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
