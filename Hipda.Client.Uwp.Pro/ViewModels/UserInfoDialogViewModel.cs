@@ -24,25 +24,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        object _userInfoRichTextBlock = new TextBlock
-        {
-            Text = "请稍候，载入中。。。",
-            HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Center,
-            VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center
-        };
+        private string _tipText;
 
-        public UserInfoDialogViewModel(int userId)
+        public string TipText
         {
-            _ds = new DataService();
-            _userId = userId;
-
-            GetUserInfoRichTextBlock();
-        }
-
-        async void GetUserInfoRichTextBlock()
-        {
-            string xaml = await _ds.GetXamlForUserInfo(_userId);
-            UserInfoRichTextBlock = XamlReader.Load(xaml);
+            get { return _tipText; }
+            set
+            {
+                _tipText = value;
+                this.RaisePropertyChanged("TipText");
+            }
         }
 
         public Uri AvatarUri
@@ -53,6 +44,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        object _userInfoRichTextBlock;
         public object UserInfoRichTextBlock
         {
             get
@@ -64,6 +56,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 _userInfoRichTextBlock = value;
                 this.RaisePropertyChanged("UserInfoRichTextBlock");
             }
+        }
+
+        public UserInfoDialogViewModel(int userId)
+        {
+            _ds = new DataService();
+            _userId = userId;
+            TipText = "请稍候，载入中。。。";
+            GetUserInfoRichTextBlock();
+        }
+
+        async void GetUserInfoRichTextBlock()
+        {
+            string xaml = await _ds.GetXamlForUserInfo(_userId);
+            UserInfoRichTextBlock = XamlReader.Load(xaml);
+            TipText = string.Empty;
         }
     }
 }

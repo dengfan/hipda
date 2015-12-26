@@ -46,6 +46,7 @@
                               VerticalScrollMode="Auto">
                     <Grid Padding="0,0,0,16">
                         <Image Source="{Binding AvatarUri}" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <ContentControl Content="{Binding UserInfoRichTextBlock}"/>
                     </Grid>
                 </ScrollViewer>
@@ -70,6 +71,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <ListView Padding="16,0,16,16" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{Binding ListData}"
                           ShowsScrollingPlaceholders="False" ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                           ItemTemplateSelector="{StaticResource userMessageListItemTemplateSelector}">

@@ -27,6 +27,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        private string _tipText;
+
+        public string TipText
+        {
+            get { return _tipText; }
+            set
+            {
+                _tipText = value;
+                this.RaisePropertyChanged("TipText");
+            }
+        }
+
+
         ObservableCollection<UserMessageItemModel> _listData;
         public ObservableCollection<UserMessageItemModel> ListData
         {
@@ -57,6 +70,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             _ds = new DataService();
             _userId = userId;
+            TipText = "载入中，请稍候。。。";
 
             GetData(limitCount);
 
@@ -83,8 +97,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         async void GetData(int count)
         {
             var data = await _ds.GetUserMessageData(_userId, count);
-            ListData = data.ListData;
-            IsShowLoadMoreButton = data.Total > count ? Visibility.Visible : Visibility.Collapsed;
+            if (data.Total == 0)
+            {
+                TipText = "你们之间还没有开始。。。";
+            }
+            else
+            {
+                TipText = string.Empty;
+                ListData = data.ListData;
+                IsShowLoadMoreButton = data.Total > count ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
 
         public async Task<bool> PostUserMessage(string message, int userId)
