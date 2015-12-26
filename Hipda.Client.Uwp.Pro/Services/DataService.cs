@@ -708,8 +708,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 doc.LoadHtml(html);
 
                 var htmlNode = doc.DocumentNode.ChildNodes[0];
-                var messageItem = GetUserMessageItem(htmlNode);
-                return messageItem;
+                return GetUserMessageItem(htmlNode);
             }
 
             return null;

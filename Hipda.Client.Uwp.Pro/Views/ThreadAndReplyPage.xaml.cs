@@ -646,13 +646,22 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        private void UserMessageBox_PostMessage(object sender, EventArgs e)
+        private async void UserMessageBox_PostMessage(object sender, EventArgs e)
         {
             UserMessageBox umb = sender as UserMessageBox;
             TextBox tb = umb.FindName("UserMessageTextBox") as TextBox;
             var msg = tb.Text.Trim();
             var vm = umb.DataContext as UserMessageDialogViewModel;
             vm.PostUserMessage(msg, umb.UserId);
+            tb.Text = string.Empty;
+
+            var listView = Common.FindParent<Grid>(umb).Children[0] as ListView;
+            if (listView.Items.Count > 0)
+            {
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                    listView.ScrollIntoView(listView.Items.Last());
+                });
+            }
         }
 
         Grid _postUserMessageForm; // 发短消息之输入元素之容器

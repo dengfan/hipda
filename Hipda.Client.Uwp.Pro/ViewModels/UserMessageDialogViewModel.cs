@@ -14,6 +14,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class UserMessageDialogViewModel : NotificationObject
     {
+        int limitCount = 5;
+
         DataService _ds;
 
         int _userId;
@@ -56,7 +58,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds = new DataService();
             _userId = userId;
 
-            GetData(5);
+            GetData(limitCount);
 
             LoadMoreCommand = new DelegateCommand();
             LoadMoreCommand.ExecuteAction = new Action<object>(LoadMoreExecute);
@@ -75,14 +77,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void RefreshExecute(object parameter)
         {
-            GetData(5);
+            GetData(limitCount);
         }
 
-        async void GetData(int dataCount)
+        async void GetData(int count)
         {
-            var data = await _ds.GetUserMessageData(_userId, dataCount);
+            var data = await _ds.GetUserMessageData(_userId, count);
             ListData = data.ListData;
-            IsShowLoadMoreButton = data.Total > 5 ? Visibility.Visible : Visibility.Collapsed;
+            IsShowLoadMoreButton = data.Total > count ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public async void PostUserMessage(string message, int userId)
