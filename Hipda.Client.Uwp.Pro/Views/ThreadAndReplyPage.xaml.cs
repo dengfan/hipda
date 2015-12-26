@@ -655,6 +655,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             bool isOk = await vm.PostUserMessage(msg, umb.UserId);
             tb.Text = string.Empty;
 
+            // 发送完成后跳到列表底部
             var listView = Common.FindParent<Grid>(umb).Children[0] as ListView;
             if (listView.Items.Count > 0)
             {

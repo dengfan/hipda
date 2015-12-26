@@ -10,20 +10,6 @@
     x:Name="Page1" RequestedTheme="Light">
 
     <Page.Resources>
-        <Style x:Key="NavButtonNormalStyle" TargetType="Button">
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Template" Value="{StaticResource NavButtonTemplate}"/>
-        </Style>
-
-        <Style x:Key="NavButtonSelectedStyle" TargetType="Button">
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
-            <Setter Property="Template" Value="{StaticResource NavButtonTemplate}"/>
-        </Style>
-
         <ControlTemplate x:Key="NavButtonTemplate" TargetType="Button">
             <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
                 <VisualStateManager.VisualStateGroups>
@@ -39,6 +25,20 @@
                 <ContentPresenter x:Name="ContentPresenter" Padding="{TemplateBinding Padding}" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}"/>
             </Grid>
         </ControlTemplate>
+
+        <Style x:Key="NavButtonNormalStyle" TargetType="Button">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template" Value="{StaticResource NavButtonTemplate}"/>
+        </Style>
+
+        <Style x:Key="NavButtonSelectedStyle" TargetType="Button">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
+            <Setter Property="Template" Value="{StaticResource NavButtonTemplate}"/>
+        </Style>
 
         <Storyboard x:Name="OpenView">
             <DoubleAnimation Duration="0:0:0.2" To="300" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="FullSebjectPanel">
