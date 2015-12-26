@@ -87,13 +87,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             IsShowLoadMoreButton = data.Total > count ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public async void PostUserMessage(string message, int userId)
+        public async Task<bool> PostUserMessage(string message, int userId)
         {
             var data = await _ds.PostUserMessage(message, userId);
             if (data != null)
             {
                 ListData.Add(data);
+                return true;
             }
+
+            return false;
         }
     }
 }

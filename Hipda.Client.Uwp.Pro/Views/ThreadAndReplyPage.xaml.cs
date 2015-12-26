@@ -652,7 +652,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             TextBox tb = umb.FindName("UserMessageTextBox") as TextBox;
             var msg = tb.Text.Trim();
             var vm = umb.DataContext as UserMessageDialogViewModel;
-            vm.PostUserMessage(msg, umb.UserId);
+            bool isOk = await vm.PostUserMessage(msg, umb.UserId);
             tb.Text = string.Empty;
 
             var listView = Common.FindParent<Grid>(umb).Children[0] as ListView;
