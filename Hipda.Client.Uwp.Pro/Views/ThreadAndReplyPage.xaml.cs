@@ -582,8 +582,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             FindName("UserDialog");
-            var vm = new UserInfoDialogViewModel(PopupUserId);
-            UserDialog.DataContext = vm;
+            UserDialog.DataContext = new UserInfoDialogViewModel(PopupUserId);
             UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
             UserDialog.ContentTemplate = this.Resources["UserInfoDialogContentTemplate"] as DataTemplate;
 
@@ -602,8 +601,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             FindName("UserDialog");
-            var vm = new UserMessageDialogViewModel(PopupUserId);
-            UserDialog.DataContext = vm;
+            UserDialog.DataContext = new UserMessageDialogViewModel(PopupUserId);
             UserDialog.Title = string.Format("与 {0} 聊天", PopupUsername);
             UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
 
@@ -633,11 +631,10 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        public async void OpenPostDialog(int postId, int threadId)
+        public async void OpenPostDetailDialog(int postId, int threadId)
         {
             FindName("UserDialog");
-            var vm = new PostDetailDialogViewModel(postId, threadId);
-            UserDialog.DataContext = vm;
+            UserDialog.DataContext = new PostDetailDialogViewModel(postId, threadId);
             UserDialog.TitleTemplate = this.Resources["PostDetailDialogTitleTemplate"] as DataTemplate;
             UserDialog.ContentTemplate = this.Resources["PostDetailDialogContentTemplate"] as DataTemplate;
 
