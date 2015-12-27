@@ -32,11 +32,11 @@ namespace Hipda.Client.Uwp.Pro.Views
     public sealed partial class ThreadAndReplyPage : Page
     {
         #region 三个属性，用于接收点击头像的参数
-        public int PopupUserId { get; set; }
+        public static int PopupUserId { get; set; }
 
-        public string PopupUsername { get; set; }
+        public static string PopupUsername { get; set; }
 
-        public int PopupThreadId { get; set; }
+        public static int PopupThreadId { get; set; }
         #endregion
 
         /// <summary>
@@ -634,12 +634,9 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 return;
             }
-            PopupUserId = vm.ReplyItem.AuthorUserId;
-            PopupUsername = vm.ReplyItem.AuthorUsername;
-            PopupThreadId = vm.ReplyItem.ThreadId;
 
             UserDialog.DataContext = vm;
-            UserDialog.Title = string.Format("查看引用楼层 {0} 的详情", vm.ReplyItem.FloorNoStr);
+            UserDialog.Title = "查看引用楼之详情";
             UserDialog.ContentTemplate = this.Resources["PostDetailDialogContentTemplate"] as DataTemplate;
 
             if (_isDialogShown == false)

@@ -1,5 +1,6 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.Services;
+using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,21 +20,72 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public string TipText
         {
             get { return _tipText; }
-            set { _tipText = value; }
-        }
-
-        private ReplyItemModel _replyItem;
-
-        public ReplyItemModel ReplyItem
-        {
-            get { return _replyItem; }
             set
             {
-                _replyItem = value;
-                this.RaisePropertyChanged("ReplyItem");
+                _tipText = value;
+                this.RaisePropertyChanged("TipText");
             }
         }
 
+        private string _floorNoStr;
+
+        public string FloorNoStr
+        {
+            get { return _floorNoStr; }
+            set
+            {
+                _floorNoStr = value;
+                this.RaisePropertyChanged("FloorNoStr");
+            }
+        }
+
+        private Uri _avatarUri;
+
+        public Uri AvatarUri
+        {
+            get { return _avatarUri; }
+            set
+            {
+                _avatarUri = value;
+                this.RaisePropertyChanged("AvatarUri");
+            }
+        }
+
+        private string _authorUsername;
+
+        public string AuthorUsername
+        {
+            get { return _authorUsername; }
+            set
+            {
+                _authorUsername = value;
+                this.RaisePropertyChanged("AuthorUsername");
+            }
+        }
+
+        private string _authorCreateTime;
+
+        public string AuthorCreateTime
+        {
+            get { return _authorCreateTime; }
+            set
+            {
+                _authorCreateTime = value;
+                this.RaisePropertyChanged("AuthorCreateTime");
+            }
+        }
+
+        private object _xamlContent;
+
+        public object XamlContent
+        {
+            get { return _xamlContent; }
+            set
+            {
+                _xamlContent = value;
+                this.RaisePropertyChanged("XamlContent");
+            }
+        }
 
         public PostDetailDialogViewModel(int postId, int threadId)
         {
@@ -46,9 +98,22 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         async void GetData()
         {
-            TipText = string.Empty;
-            ReplyItem = await _ds.GetPostDetail(_postId, _threadId);
-        }
+            var replyItem = await _ds.GetPostDetail(_postId, _threadId);
+            if (replyItem == null)
+            {
+                return;
+            }
 
+            ThreadAndReplyPage.PopupUserId = replyItem.AuthorUserId;
+            ThreadAndReplyPage.PopupUsername = replyItem.AuthorUsername;
+            ThreadAndReplyPage.PopupThreadId = replyItem.ThreadId;
+
+            TipText = string.Empty;
+            FloorNoStr = replyItem.FloorNoStr;
+            AvatarUri = replyItem.AvatarUri;
+            AuthorUsername = replyItem.AuthorUsername;
+            AuthorCreateTime = replyItem.AuthorCreateTime;
+            XamlContent = replyItem.XamlContent;
+        }
     }
 }
