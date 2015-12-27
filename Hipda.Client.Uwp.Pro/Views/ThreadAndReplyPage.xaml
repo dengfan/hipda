@@ -109,12 +109,11 @@
                         <Border Background="{ThemeResource SystemControlBackgroundListLowBrush}" Width="40" Height="40">
                             <Image Source="{Binding ReplyItem.AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
                         </Border>
-                        <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
-                        <Run Text="{Binding ReplyItem.AuthorUsername}"/>
-                        <LineBreak/>
-                        <Run Text="{Binding ReplyItem.AuthorCreateTime}"/>
-                        <Run Text=" "/>
-                        <Run Text="{Binding ReplyItem.FloorNoStr}"/>
+                        <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                            <Run Text="{Binding ReplyItem.AuthorUsername}"/>
+                            <Run Text=" "/>
+                            <Run Text="{Binding ReplyItem.AuthorCreateTime}"/>
                         </TextBlock>
                     </StackPanel>
                     <ScrollViewer Padding="16,0,20,0"

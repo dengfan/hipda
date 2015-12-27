@@ -639,7 +639,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             PopupThreadId = vm.ReplyItem.ThreadId;
 
             UserDialog.DataContext = vm;
-            UserDialog.Title = string.Format("查看引用楼 {0} 详情", vm.ReplyItem.FloorNoStr);
+            UserDialog.Title = string.Format("查看引用楼层 {0} 的详情", vm.ReplyItem.FloorNoStr);
             UserDialog.ContentTemplate = this.Resources["PostDetailDialogContentTemplate"] as DataTemplate;
 
             if (_isDialogShown == false)
