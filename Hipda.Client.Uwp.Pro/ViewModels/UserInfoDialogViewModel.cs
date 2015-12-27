@@ -36,11 +36,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        Uri _avatarUri;
         public Uri AvatarUri
         {
             get
             {
-                return MyAvatar.GetAvatarUrl(_userId);
+                return _avatarUri;
+            }
+            set
+            {
+                _avatarUri = value;
+                this.RaisePropertyChanged("AvatarUri");
             }
         }
 
@@ -60,17 +66,20 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public UserInfoDialogViewModel(int userId)
         {
+            TipText = "请稍候，载入中。。。";
+
             _ds = new DataService();
             _userId = userId;
-            TipText = "请稍候，载入中。。。";
+            
             GetUserInfoRichTextBlock();
         }
 
         async void GetUserInfoRichTextBlock()
         {
             string xaml = await _ds.GetXamlForUserInfo(_userId);
-            UserInfoRichTextBlock = XamlReader.Load(xaml);
             TipText = string.Empty;
+            UserInfoRichTextBlock = XamlReader.Load(xaml);
+            AvatarUri = MyAvatar.GetAvatarUrl(_userId);
         }
     }
 }
