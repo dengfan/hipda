@@ -547,12 +547,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
-
-        private void SortingButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         /// <summary>
         /// 头像之上下文菜单项之事件
         /// </summary>
@@ -664,8 +658,6 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             ThreadListView.SelectedItem = null;
         }
-
-        
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         //{

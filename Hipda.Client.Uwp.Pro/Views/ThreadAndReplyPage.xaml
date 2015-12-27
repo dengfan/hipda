@@ -206,7 +206,7 @@
                         Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
                     <AppBarButton Icon="Add" Label="发表新贴"/>
                     <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
-                    <AppBarButton x:Name="SortingButton" Icon="Sort" Label="按发布时间倒序排列" Click="SortingButton_Click"/>
+                    <AppBarButton x:Name="SortingButton" Icon="Sort" Label="按发布时间倒序排列"/>
                     <CommandBar.SecondaryCommands>
                         <AppBarButton Label="跳转到指定页">
                             <AppBarButton.Flyout>
