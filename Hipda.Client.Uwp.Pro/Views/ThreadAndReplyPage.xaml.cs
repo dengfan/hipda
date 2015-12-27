@@ -628,8 +628,18 @@ namespace Hipda.Client.Uwp.Pro.Views
         public async void OpenPostDetailDialog(int postId, int threadId)
         {
             FindName("UserDialog");
-            UserDialog.DataContext = new PostDetailDialogViewModel(postId, threadId);
-            UserDialog.TitleTemplate = this.Resources["PostDetailDialogTitleTemplate"] as DataTemplate;
+
+            var vm = new PostDetailDialogViewModel(postId, threadId);
+            if (vm == null)
+            {
+                return;
+            }
+            PopupUserId = vm.ReplyItem.AuthorUserId;
+            PopupUsername = vm.ReplyItem.AuthorUsername;
+            PopupThreadId = vm.ReplyItem.ThreadId;
+
+            UserDialog.DataContext = vm;
+            UserDialog.Title = string.Format("查看引用楼 {0} 详情", vm.ReplyItem.FloorNoStr);
             UserDialog.ContentTemplate = this.Resources["PostDetailDialogContentTemplate"] as DataTemplate;
 
             if (_isDialogShown == false)
@@ -664,11 +674,5 @@ namespace Hipda.Client.Uwp.Pro.Views
         //    ReplyItemModel item = args.Item as ReplyItemModel;
         //    Debug.WriteLine(item.FloorNo);
         //}
-    }
-
-    public enum UserDialogType
-    {
-        Info,
-        Message
     }
 }
