@@ -24,7 +24,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private string _tipText;
+        private string _tipText = "请稍候，载入中。。。";
 
         public string TipText
         {
@@ -66,8 +66,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public UserInfoDialogViewModel(int userId)
         {
-            TipText = "请稍候，载入中。。。";
-
             _ds = new DataService();
             _userId = userId;
             

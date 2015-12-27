@@ -96,6 +96,46 @@
                 </Grid>
             </Grid>
         </DataTemplate>
+
+        <DataTemplate x:Name="PostDetailDialogTitleTemplate">
+            <StackPanel Orientation="Horizontal">
+                <Border Background="{ThemeResource SystemControlBackgroundListLowBrush}" Width="40" Height="40">
+                    <Image Source="{Binding ReplyItem.AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
+                </Border>
+                <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                    <Run Text="{Binding ReplyItem.AuthorUsername}"/>
+                    <LineBreak/>
+                    <Run Text="{Binding ReplyItem.AuthorCreateTime}"/>
+                    <Run Text=" "/>
+                    <Run Text="{Binding ReplyItem.FloorNoStr}"/>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Name="PostDetailDialogContentTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ScrollViewer Padding="16,0,20,0"
+                    Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                    HorizontalContentAlignment="Stretch"
+                    Content="{Binding ReplyItem.XamlContent}"/>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Click="OpenUserMessageDialog" />
+                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">
@@ -345,54 +385,6 @@
             </Grid>
         </Grid>
 
-        <!--Opened="UserDialog_Opened" Closed="UserDialog_Closed"-->
         <ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-
-        <ContentDialog x:Name="PostDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate}"
-                       PrimaryButtonText="回复"
-                       PrimaryButtonClick="PostDialog_PrimaryButtonClick"
-                       SecondaryButtonText="关闭"
-                       Closed="PostDialog_Closed">
-            <ContentDialog.TitleTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Border Background="{ThemeResource SystemControlBackgroundListLowBrush}" Width="40" Height="40">
-                            <Border Background="{Binding AvatarImageBrush}"/>
-                        </Border>
-                        <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
-                            <Run Text="{Binding AuthorUsername}"/>
-                            <LineBreak/>
-                            <Run Text="{Binding AuthorCreateTime}"/>
-                            <Run Text=" "/>
-                            <Run Text="{Binding FloorNoStr}"/>
-                        </TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </ContentDialog.TitleTemplate>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="48"/>
-                </Grid.RowDefinitions>
-                <ScrollViewer Padding="16,16,20,16"
-                        Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                        HorizontalContentAlignment="Stretch"
-                        Content="{Binding XamlContent}"/>
-                <TextBlock Grid.Row="1" Text="test"/>
-            </Grid>
-        </ContentDialog>
-
-        <ContentDialog x:Name="NoticeDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate}"
-                       PrimaryButtonText="关闭">
-            <ContentDialog.TitleTemplate>
-                <DataTemplate>
-                    <TextBlock Text="&#x1F4A1; 提醒"/>
-                </DataTemplate>
-            </ContentDialog.TitleTemplate>
-            <ScrollViewer Padding="16,16,20,16"
-                        Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                        HorizontalContentAlignment="Stretch"
-                        Content="{Binding XamlContent}"/>
-        </ContentDialog>
     </Grid>
 </Page>

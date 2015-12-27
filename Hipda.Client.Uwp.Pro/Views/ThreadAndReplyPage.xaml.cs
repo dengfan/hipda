@@ -205,27 +205,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        private bool _isShownForPostDialog = false;
-        public async void ShowPostDialogByPostId(int postId, int threadId)
-        {
-            FindName("PostDialog");
-            if (_isShownForPostDialog == false)
-            {
-                PostDialog.DataContext = await _threadAndReplyViewModel.GetPostDetail(postId, threadId);
-                _isShownForPostDialog = true;
-                await PostDialog.ShowAsync();
-            }
-            else
-            {
-                PostDialog.DataContext = await _threadAndReplyViewModel.GetPostDetail(postId, threadId);
-            }
-        }
-
-        public async void ShowNoticeDialog()
-        {
-            FindName("NoticeDialog");
-            await NoticeDialog.ShowAsync();
-        }
+        
         #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -359,21 +339,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                 if (UserDialog != null)
                 {
                     _isDialogShown = false;
+                    UserDialog.DataContext = null;
                     UserDialog.Hide();
                 }
-
-                if (PostDialog != null)
-                {
-                    PostDialog.DataContext = null;
-                    PostDialog.Hide();
-                }
-
-                if (NoticeDialog != null)
-                {
-                    NoticeDialog.DataContext = null;
-                    NoticeDialog.Hide();
-                }
-
 
                 Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
             }
@@ -665,234 +633,19 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        Grid _postUserMessageForm; // 发短消息之输入元素之容器
-        GridView _userMessageFaceGridView; // 发短消息之表情图标
-        TextBox _userMessageTextBox; // 发短消息之文本框
-        Button _userMessagePostButton; // 发短消息之按钮
-        UserDialogType _userDialogType = 0;
-
-        private async void UserDialog_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
+        public async void OpenPostDialog(int postId, int threadId)
         {
-            if (_userDialogType == UserDialogType.Info)
+            FindName("UserDialog");
+            var vm = new PostDetailDialogViewModel(postId, threadId);
+            UserDialog.DataContext = vm;
+            UserDialog.TitleTemplate = this.Resources["PostDetailDialogTitleTemplate"] as DataTemplate;
+            UserDialog.ContentTemplate = this.Resources["PostDetailDialogContentTemplate"] as DataTemplate;
+
+            if (_isDialogShown == false)
             {
-                var bi = new BitmapImage();
-                bi.UriSource = MyAvatar.GetAvatarUrl(PopupUserId);
-                var img = new Image();
-                img.Stretch = Stretch.None;
-                img.Source = bi;
-                img.VerticalAlignment = VerticalAlignment.Top;
-                img.HorizontalAlignment = HorizontalAlignment.Right;
-
-                string xaml = "";
-                var richTextBlock = XamlReader.Load(xaml) as RichTextBlock;
-
-                var grid = new Grid();
-                grid.Padding = new Thickness(16, 0, 16, 16);
-                grid.Children.Add(img);
-                grid.Children.Add(richTextBlock);
-
-                var sv = new ScrollViewer();
-                sv.Content = grid;
-                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-                //UserDialogContentControl.Content = sv;
-
-                sender.PrimaryButtonText = "短消息";
+                _isDialogShown = true;
+                await UserDialog.ShowAsync();
             }
-            else if(_userDialogType == UserDialogType.Message)
-            {
-                await PrepareUserMessage(sender);
-            }
-
-            sender.PrimaryButtonClick += OpenOrRefreshUserMessageDialog;
-
-            //var containerBorder = Common.FindParent<Border>(UserDialogContentControl) as Border; // 最先找到border容器不包含我要找的目标元素
-            //containerBorder = Common.FindParent<Border>(containerBorder) as Border; // 这次找到的border容器才包含我要找的目标元素
-            //_postUserMessageForm = containerBorder.FindName("PostUserMessageForm") as Grid;
-            //_postUserMessageForm.DataContext = new FaceService();
-            //_userMessageFaceGridView = _postUserMessageForm.FindName("UserMessageFaceGridView") as GridView;
-            //_userMessageFaceGridView.ItemClick += UserMessageFaceGridView_ItemClick;
-            //_userMessageTextBox = _postUserMessageForm.FindName("UserMessageTextBox") as TextBox;
-            //_userMessagePostButton = _postUserMessageForm.FindName("UserMessagePostButton") as Button;
-            //_userMessagePostButton.Tapped += UserMessagePostButton_Tapped;
-        }
-
-        private void UserMessageFaceGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            if (_userMessageTextBox == null)
-            {
-                return;
-            }
-
-            var data = e.ClickedItem as FaceItemModel;
-            if (data == null)
-            {
-                return;
-            }
-
-            string faceText = data.Text;
-
-            int occurences = 0;
-            string originalContent = _userMessageTextBox.Text;
-
-            for (var i = 0; i < _userMessageTextBox.SelectionStart + occurences; i++)
-            {
-                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
-                    occurences++;
-            }
-
-            int cursorPosition = _userMessageTextBox.SelectionStart + occurences;
-            _userMessageTextBox.Text = _userMessageTextBox.Text.Insert(cursorPosition, faceText);
-            _userMessageTextBox.SelectionStart = cursorPosition + faceText.Length;
-        }
-
-        
-
-        private async void OpenOrRefreshUserMessageDialog(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            args.Cancel = true;
-            await PrepareUserMessage(sender);
-        }
-
-        private void ShowTipsForUserMessage(string tips)
-        {
-            //UserDialogContentControl.Content = new TextBlock
-            //{
-            //    Text = tips,
-            //    Margin = new Thickness(16),
-            //    HorizontalAlignment = HorizontalAlignment.Center
-            //};
-        }
-
-        private async void openUserInfoDialog_Tapped2(object sender, TappedRoutedEventArgs e)
-        {
-            if (PopupUserId == 0)
-            {
-                return;
-            }
-
-            _userDialogType = UserDialogType.Info;
-            ShowTipsForUserMessage("请稍候，载入中。。。");
-
-            UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
-            UserDialog.SecondaryButtonText = "关闭";
-            await UserDialog.ShowAsync();
-        }
-
-        
-
-        private async void UserMessagePostButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            _userMessagePostButton.IsEnabled = false;
-
-            string msg = _userMessageTextBox.Text.Trim();
-            if (string.IsNullOrEmpty(msg))
-            {
-                ShowTipsForUserMessage("请先填写消息内容。");
-                _userMessagePostButton.IsEnabled = true;
-                return;
-            }
-
-            //bool isOk = await _threadAndReplyViewModel.PostUserMessage(msg, PopupUserId);
-            //if (isOk) // 发送成功
-            //{
-            //    _userMessageTextBox.Text = string.Empty;
-
-            //    ShowTipsForUserMessage("已发送成功，载入中。。。");
-
-            //    // 这里要延迟载入短消息数据，以免取到的还是旧数据
-            //    DelayPrepareUserMessage(1001);
-            //}
-            //else
-            //{
-            //    ShowTipsForUserMessage("对不起，提交失败，请稍后再试。");
-            //}
-
-            //_userMessagePostButton.IsEnabled = true;
-        }
-
-        private async void DelayPrepareUserMessage(int interval)
-        {
-            DateTime now = DateTime.Now;
-            while (now.AddMilliseconds(interval) > DateTime.Now)
-            {
-                await PrepareUserMessage(UserDialog);
-            }
-            return;
-        }
-
-        private async Task PrepareUserMessage(ContentDialog sender)
-        {
-            sender.IsPrimaryButtonEnabled = false;
-            sender.PrimaryButtonText = "刷新";
-
-            if (PopupUserId == 0)
-            {
-                ShowTipsForUserMessage("对不起，参数错误！");
-                sender.IsPrimaryButtonEnabled = true;
-                return;
-            }
-
-            ShowTipsForUserMessage("请稍候，载入中。。。");
-
-            sender.Title = string.Format("与 {0} 聊天", PopupUsername);
-            sender.SecondaryButtonText = "关闭";
-
-            var btnGetAll = new HyperlinkButton
-            {
-                Content = "点击查看所有消息",
-                Visibility = Visibility.Collapsed,
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-
-            btnGetAll.Tapped += async (s, e) =>
-            {
-                ShowTipsForUserMessage("请稍候，载入中。。。");
-                await LoadAndShowUserMessage(null);
-            };
-
-            await LoadAndShowUserMessage(btnGetAll);
-
-            sender.IsPrimaryButtonEnabled = true;
-        }
-
-        private async Task LoadAndShowUserMessage(HyperlinkButton getAllButton)
-        {
-            int limitCount = 5; // 默认只载入最新5条短消息
-            if (getAllButton == null)
-            {
-                limitCount = -1;
-            }
-
-            // 读取数据
-            //var data = await _threadAndReplyViewModel.GetUserMessageData(PopupUserId, limitCount);
-            //if (data == null || data.Count == 0)
-            //{
-            //    ShowTipsForUserMessage("你们之间还未开始。。。");
-            //}
-            //else
-            //{
-            //    if (getAllButton != null && data.Count == limitCount)
-            //    {
-            //        getAllButton.Visibility = Visibility.Visible;
-            //    }
-
-            //    var lv = new ListView();
-            //    lv.Padding = new Thickness(16, 0, 16, 16);
-            //    lv.IsItemClickEnabled = false;
-            //    lv.IsSwipeEnabled = false;
-            //    lv.CanDrag = false;
-            //    lv.SelectionMode = ListViewSelectionMode.None;
-            //    lv.ShowsScrollingPlaceholders = false;
-            //    lv.ItemContainerStyle = App.Current.Resources["ReplyItemContainerStyle"] as Style;
-            //    lv.ItemTemplateSelector = App.Current.Resources["userMessageListItemTemplateSelector"] as DataTemplateSelector;
-            //    lv.ItemsSource = data;
-            //    if (getAllButton != null)
-            //    {
-            //        lv.Header = getAllButton;
-            //    }
-
-            //    //UserDialogContentControl.Content = lv;
-            //}
         }
         #endregion
 
@@ -900,11 +653,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             var data = sender.DataContext as ReplyItemModel;
             PostReplyTextBox.Text = data.TextStr;
-        }
-
-        private void PostDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
-        {
-            _isShownForPostDialog = false;
         }
 
         private void ReadListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

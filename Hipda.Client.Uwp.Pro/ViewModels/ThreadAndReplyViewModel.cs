@@ -445,10 +445,5 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             _ds.ClearReplyData(threadId);
         }
-
-        public async Task<ReplyItemModel> GetPostDetail(int postId, int threadId)
-        {
-            return await _ds.GetPostDetail(postId, threadId);
-        }
     }
 }

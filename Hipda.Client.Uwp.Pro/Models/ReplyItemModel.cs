@@ -106,7 +106,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
-        public ImageBrush AvatarImageBrush
+        public Uri AvatarUri
         {
             get
             {
@@ -117,16 +117,7 @@ namespace Hipda.Client.Uwp.Pro.Models
                     s[i] = uid % 10;
                     uid = (uid - s[i]) / 10;
                 }
-                var imgUri = new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg");
-
-                BitmapImage bi = new BitmapImage();
-                bi.UriSource = imgUri;
-                bi.DecodePixelWidth = 40;
-                ImageBrush ib = new ImageBrush();
-                ib.Stretch = Stretch.UniformToFill;
-                ib.ImageSource = bi;
-                ib.ImageFailed += (s2, e2) => { return; };
-                return ib;
+                return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg");
             }
         }
     }

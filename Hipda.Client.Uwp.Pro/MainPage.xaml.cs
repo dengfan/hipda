@@ -227,7 +227,7 @@ namespace Hipda.Client.Uwp.Pro
         private void NoticeButton_Click(object sender, RoutedEventArgs e)
         {
             var threadAndReplyPage = AppFrame.Content as ThreadAndReplyPage;
-            threadAndReplyPage.ShowNoticeDialog();
+            
         }
     }
 }
