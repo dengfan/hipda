@@ -34,6 +34,46 @@
                     HorizontalAlignment="Center" Tapped="LoadPrevReplyPageButton_Tapped"/>
         </DataTemplate>
 
+        <DataTemplate x:Name="PostDetailDialogContentTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Margin="16,0,0,16" Orientation="Horizontal">
+                    <Border Background="{ThemeResource SystemControlBackgroundListLowBrush}" Width="40" Height="40">
+                        <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
+                    </Border>
+                    <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                   VerticalAlignment="Bottom">
+                        <Run Text="{Binding FloorNoStr}"/>
+                        <LineBreak/>
+                        <Run Text="{Binding AuthorUsername}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding AuthorCreateTime}"/>
+                    </TextBlock>
+                </StackPanel>
+                <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ScrollViewer Grid.Row="1" Padding="16,0,20,0"
+                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                            HorizontalContentAlignment="Stretch"
+                            Content="{Binding XamlContent}"/>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Click="OpenUserMessageDialog" />
+                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
+        
         <DataTemplate x:Name="UserInfoDialogContentTemplate">
             <Grid>
                 <Grid.RowDefinitions>
@@ -97,44 +137,8 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="PostDetailDialogContentTemplate">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <StackPanel Margin="16,0,0,16" Orientation="Horizontal">
-                    <Border Background="{ThemeResource SystemControlBackgroundListLowBrush}" Width="40" Height="40">
-                        <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
-                    </Border>
-                    <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}"
-                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                   VerticalAlignment="Bottom">
-                        <Run Text="{Binding FloorNoStr}"/>
-                        <LineBreak/>
-                        <Run Text="{Binding AuthorUsername}"/>
-                        <Run Text=" "/>
-                        <Run Text="{Binding AuthorCreateTime}"/>
-                    </TextBlock>
-                </StackPanel>
-                <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <ScrollViewer Grid.Row="1" Padding="16,0,20,0"
-                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                            HorizontalContentAlignment="Stretch"
-                            Content="{Binding XamlContent}"/>
-                <Grid Grid.Row="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Click="OpenUserMessageDialog" />
-                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
-                </Grid>
-            </Grid>
+        <DataTemplate x:Name="UserMessageListDialogContentTemplate">
+            <ListView/>
         </DataTemplate>
     </Page.Resources>
 
@@ -163,13 +167,35 @@
                     </VisualState.Setters>
                 </VisualState>
 
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1200" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="LeftColumn.Width" Value="400" />
+                        <Setter Target="RightColumn.Width" Value="*" />
+                        <Setter Target="RightSideColumn.Width" Value="220" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="900" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="LeftColumn.Width" Value="450" />
+                        <Setter Target="RightColumn.Width" Value="*" />
+                        <Setter Target="RightSideColumn.Width" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+
                 <VisualState x:Name="DefaultState">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="720" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="LeftColumn.Width" Value="*" />
-                        <Setter Target="RightColumn.Width" Value="1.3*" />
+                        <Setter Target="LeftColumn.Width" Value="320" />
+                        <Setter Target="RightColumn.Width" Value="*" />
                         <Setter Target="RightSideColumn.Width" Value="0" />
                     </VisualState.Setters>
                 </VisualState>
