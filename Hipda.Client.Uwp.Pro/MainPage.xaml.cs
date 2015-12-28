@@ -229,5 +229,11 @@ namespace Hipda.Client.Uwp.Pro
             var threadAndReplyPage = AppFrame.Content as ThreadAndReplyPage;
             
         }
+
+        private void UserMessageListButton_Click(object sender, RoutedEventArgs e)
+        {
+            var threadAndReplyPage = AppFrame.Content as ThreadAndReplyPage;
+            threadAndReplyPage.OpenUserMessageListDialog();
+        }
     }
 }

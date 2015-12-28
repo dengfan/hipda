@@ -138,7 +138,34 @@
         </DataTemplate>
 
         <DataTemplate x:Name="UserMessageListDialogContentTemplate">
-            <ListView/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <CommandBar>
+                    <AppBarButton Icon="SelectAll" Label="选择"/>
+                    <AppBarButton Icon="Delete" Label="删除"/>
+                </CommandBar>
+                <ListView Grid.Row="1" ItemsSource="{Binding DataView}" IncrementalLoadingTrigger="Edge"
+                      IsItemClickEnabled="False" IsSwipeEnabled="False"
+                      CanDrag="False" CanDragItems="False" CanReorderItems="False"
+                      ShowsScrollingPlaceholders="False"
+                      ItemTemplate="{StaticResource UserMessageListItemTemplate}">
+                </ListView>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="刷新" Command="{Binding RefreshCommand}" />
+                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
+                </Grid>
+            </Grid>
         </DataTemplate>
     </Page.Resources>
 

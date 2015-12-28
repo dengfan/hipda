@@ -715,5 +715,109 @@ namespace Hipda.Client.Uwp.Pro.Services
         }
         #endregion
 
+        #region notice
+        #endregion
+
+        #region pm
+        static List<UserMessageListItemModel> _userMessageListData = new List<UserMessageListItemModel>();
+        int _userMessageListMaxPageNo = 1;
+
+        async Task LoadUserMessageListDataAsync(int pageNo, CancellationTokenSource cts)
+        {
+            if (pageNo == 1)
+            {
+                // 如果是新打开，则清空所有短消息列表数据
+                _userMessageListData.Clear();
+            }
+
+            if (pageNo > _userMessageListMaxPageNo)
+            {
+                return;
+            }
+
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/pm.php?filter=privatepm&page={0}&_={1}", pageNo, DateTime.Now.Ticks.ToString("x"));
+            string htmlStr = await _httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlStr);
+
+            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pm_list")).ChildNodes;
+            if (items == null)
+            {
+                return;
+            }
+
+            // 读取最大页码
+            var pagesNode2 = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+            if (pagesNode2 != null)
+            {
+                var nodeList = pagesNode2.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
+                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
+                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
+                _userMessageListMaxPageNo = Convert.ToInt32(lastPageNodeValue);
+            }
+
+            int i = _userMessageListData.Count;
+            foreach (var item in items)
+            {
+                var linkNode = item.ChildNodes[3].ChildNodes[1].ChildNodes[0];
+                int userId = Convert.ToInt32(linkNode.Attributes[0].Value.Substring("space.php?uid=".Length).Split('&')[0]);
+                string username = linkNode.InnerText.Trim();
+                string lastMessageTime = item.ChildNodes[3].ChildNodes[2].InnerText.Trim();
+                string lastMessageText = item.ChildNodes[5].InnerText.Trim();
+
+                var userMessageListItem = new UserMessageListItemModel(i, pageNo, userId, username, lastMessageTime, lastMessageText);
+                _userMessageListData.Add(userMessageListItem);
+
+                i++;
+            }
+        }
+
+        public async Task<int> LoadMoreUserMessageListAsync(int pageNo)
+        {
+            var cts = new CancellationTokenSource();
+            await LoadUserMessageListDataAsync(pageNo, cts);
+
+            return _userMessageListData.Count;
+        }
+
+        public static UserMessageListItemModel GetUserMessageListItemByIndex(int index)
+        {
+            return _userMessageListData.FirstOrDefault(li => li.Index == index);
+        }
+
+        public int GetUserMessageListMaxPageNo()
+        {
+            return _userMessageListMaxPageNo;
+        }
+
+        public ICollectionView GetViewForUserMessageList(int startPageNo)
+        {
+            var cvs = new CollectionViewSource();
+            cvs.Source = new GeneratorIncrementalLoadingClass<UserMessageListItemModel>(
+                startPageNo,
+                async pageNo =>
+                {
+                    // 加载分页数据，并写入静态类中
+                    // 返回的是本次加载的数据量
+                    return await LoadMoreUserMessageListAsync(pageNo);
+                },
+                (index) =>
+                {
+                    // 从静态类中返回需要显示出来的数据
+                    return GetUserMessageListItemByIndex(index);
+                },
+                () =>
+                {
+                    return GetUserMessageListMaxPageNo();
+                });
+
+            return cvs.View;
+        }
+        #endregion
     }
 }

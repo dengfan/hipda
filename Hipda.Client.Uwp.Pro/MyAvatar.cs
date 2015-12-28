@@ -102,7 +102,7 @@ namespace Hipda.Client.Uwp.Pro
             if (instance._grid1 != null)
             {
                 BitmapImage bi = new BitmapImage();
-                bi.UriSource = GetAvatarUrl(userId);
+                bi.UriSource = Common.GetAvatarUriByUserId(userId);
                 bi.DecodePixelWidth = 40;
                 ImageBrush ib = new ImageBrush();
                 ib.Stretch = Stretch.UniformToFill;
@@ -126,18 +126,6 @@ namespace Hipda.Client.Uwp.Pro
                 menu.Items[4].Visibility = IsNotAssociateThreadId ? Visibility.Collapsed : Visibility.Visible;
                 menu.ShowAt(this);
             }
-        }
-
-        public static Uri GetAvatarUrl(int userId)
-        {
-            int uid = userId;
-            var s = new int[10];
-            for (int i = 0; i < s.Length - 1; ++i)
-            {
-                s[i] = uid % 10;
-                uid = (uid - s[i]) / 10;
-            }
-            return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg");
         }
     }
 }

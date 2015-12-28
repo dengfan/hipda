@@ -719,5 +719,19 @@
                 <ContentControl Margin="0 0 8 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Template="{StaticResource MessageDownArrow}"/>
             </Grid>
         </DataTemplate>
+
+        <DataTemplate x:Name="UserMessageListItemTemplate">
+            <Grid>
+                <Image Margin="8" Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                <StackPanel Margin="56,8,8,8" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <TextBlock>
+                        <Run Text="{Binding Username}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding LastMessageTime}"/>
+                    </TextBlock>
+                    <TextBlock Text="{Binding LastMessageText}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
     </Application.Resources>
 </Application>

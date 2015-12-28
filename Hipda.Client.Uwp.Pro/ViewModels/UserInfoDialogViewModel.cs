@@ -77,7 +77,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             string xaml = await _ds.GetXamlForUserInfo(_userId);
             TipText = string.Empty;
             UserInfoRichTextBlock = XamlReader.Load(xaml);
-            AvatarUri = MyAvatar.GetAvatarUrl(_userId);
+            AvatarUri = Common.GetAvatarUriByUserId(_userId);
         }
     }
 }

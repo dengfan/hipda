@@ -645,6 +645,27 @@ namespace Hipda.Client.Uwp.Pro.Views
                 await UserDialog.ShowAsync();
             }
         }
+
+        public async void OpenUserMessageListDialog()
+        {
+            FindName("UserDialog");
+
+            var vm = new UserMessageListDialogViewModel();
+            if (vm == null)
+            {
+                return;
+            }
+
+            UserDialog.DataContext = vm;
+            UserDialog.Title = "短消息";
+            UserDialog.ContentTemplate = this.Resources["UserMessageListDialogContentTemplate"] as DataTemplate;
+
+            if (_isDialogShown == false)
+            {
+                _isDialogShown = true;
+                await UserDialog.ShowAsync();
+            }
+        }
         #endregion
 
         private void PostDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
