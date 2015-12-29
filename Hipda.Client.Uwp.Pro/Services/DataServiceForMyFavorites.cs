@@ -174,5 +174,31 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             return _threadDataForMyFavorites.FirstOrDefault(t => t.ThreadId == threadId);
         }
+
+        public async Task<bool> DeleteThreadForMyFavoritesAsync(List<int> deleteThreadIds, CancellationTokenSource cts)
+        {
+            if (deleteThreadIds.Count == 0)
+            {
+                return false;
+            }
+
+            var postData = new List<KeyValuePair<string, object>>();
+            postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
+            postData.Add(new KeyValuePair<string, object>("favsubmit", "true"));
+            foreach (var tid in deleteThreadIds)
+            {
+                postData.Add(new KeyValuePair<string, object>("delete[]", tid));
+            }
+
+            string url = string.Format("http://www.hi-pda.com/forum/my.php?item=favorites&type=thread&_={0}", DateTime.Now.Ticks.ToString("x"));
+            string resultContent = await _httpClient.PostAsync(url, postData, cts);
+            return resultContent.Contains("收藏夹已成功更新，现在将转入更新后的收藏夹。");
+        }
+
+        public async Task<bool> DeleteThreadForMyFavorites(List<int> deleteThreadIds)
+        {
+            var cts = new CancellationTokenSource();
+            return await DeleteThreadForMyFavoritesAsync(deleteThreadIds, cts);
+        }
     }
 }

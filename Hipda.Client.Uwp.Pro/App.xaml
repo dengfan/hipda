@@ -722,14 +722,16 @@
 
         <DataTemplate x:Name="UserMessageListItemTemplate">
             <Grid>
-                <Image Margin="8" Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                <Image Margin="0,8" Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 <StackPanel Margin="56,8,8,8" HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <TextBlock>
+                    <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                         <Run Text="{Binding Username}"/>
                         <Run Text=" "/>
                         <Run Text="{Binding LastMessageTime}"/>
                     </TextBlock>
-                    <TextBlock Text="{Binding LastMessageText}"/>
+                    <TextBlock Text="{Binding LastMessageText}" MaxWidth="250"
+                               Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                               FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>

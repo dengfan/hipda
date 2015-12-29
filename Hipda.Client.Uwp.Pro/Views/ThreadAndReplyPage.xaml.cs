@@ -687,6 +687,12 @@ namespace Hipda.Client.Uwp.Pro.Views
             ThreadListView.SelectedItem = null;
         }
 
+        private void UserMessageListListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var listView = (MyListView)sender;
+            listView.SelectedUserMessageListItems = listView.SelectedItems;
+        }
+
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         //{
         //    ReplyItemModel item = args.Item as ReplyItemModel;

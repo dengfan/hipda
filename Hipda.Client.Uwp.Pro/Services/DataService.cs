@@ -82,27 +82,6 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             return string.Empty;
         }
-
-        public async Task<bool> DeleteThreadForMyFavoritesAsync(List<int> deleteThreadIds)
-        {
-            if (deleteThreadIds.Count == 0)
-            {
-                return false;
-            }
-
-            var postData = new List<KeyValuePair<string, object>>();
-            postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
-            postData.Add(new KeyValuePair<string, object>("favsubmit", "true"));
-            foreach (var tid in deleteThreadIds)
-            {
-                postData.Add(new KeyValuePair<string, object>("delete[]", tid));
-            }
-
-            string url = string.Format("http://www.hi-pda.com/forum/my.php?item=favorites&type=thread&_={0}", DateTime.Now.Ticks.ToString("x"));
-            var cts = new CancellationTokenSource();
-            string resultContent = await _httpClient.PostAsync(url, postData, cts);
-            return resultContent.Contains("收藏夹已成功更新，现在将转入更新后的收藏夹。");
-        }
         #endregion
 
         #region reply
@@ -817,6 +796,37 @@ namespace Hipda.Client.Uwp.Pro.Services
                 });
 
             return cvs.View;
+        }
+
+        public void ClearUserMessageListData()
+        {
+            _userMessageListData.Clear();
+        }
+
+        async Task<bool> DeleteUserMessageListItemAsync(List<int> delUserIdList, CancellationTokenSource cts)
+        {
+            var postData = new List<KeyValuePair<string, object>>();
+            postData.Add(new KeyValuePair<string, object>("readopt", "0"));
+            foreach (int userId in delUserIdList)
+            {
+                postData.Add(new KeyValuePair<string, object>("uid[]", userId.ToString()));
+            }
+
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/pm.php?action=del&filter=privatepm&page=1&_={0}", DateTime.Now.Ticks.ToString("x"));
+            string resultContent = await _httpClient.PostAsync(url, postData, cts);
+            if (resultContent.StartsWith("<!DOCTYPE html"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteUserMessageListItem(List<int> delUserIdList)
+        {
+            var cts = new CancellationTokenSource();
+            return await DeleteUserMessageListItemAsync(delUserIdList, cts);
         }
         #endregion
     }
