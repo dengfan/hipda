@@ -14,7 +14,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class UserMessageDialogViewModel : NotificationObject
     {
-        int limitCount = 5;
+        int limitCount = 3;
 
         DataService _ds;
 

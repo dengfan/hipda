@@ -691,6 +691,21 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             var listView = (MyListView)sender;
             listView.SelectedUserMessageListItems = listView.SelectedItems;
+
+            if (listView.SelectionMode == ListViewSelectionMode.Single && e.AddedItems.Count == 1)
+            {
+                var data = e.AddedItems[0] as UserMessageListItemModel;
+                if (data == null)
+                {
+                    return;
+                }
+                PopupUserId = data.UserId;
+                PopupUsername = data.Username;
+                FindName("UserDialog");
+                UserDialog.DataContext = new UserMessageDialogViewModel(PopupUserId);
+                UserDialog.Title = string.Format("与 {0} 聊天", PopupUsername);
+                UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
+            }
         }
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
