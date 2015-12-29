@@ -145,8 +145,8 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <CommandBar>
-                    <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshCommand}"/>
-                    <AppBarButton Label="选择" Command="{Binding IntoMultiSelectionModeCommand}">
+                    <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
+                    <AppBarButton Label="选择" IsEnabled="{Binding IsButtonEnable}" Command="{Binding IntoMultiSelectionModeCommand}">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE762;" FontFamily="Segoe MDL2 Assets" />
                         </AppBarButton.Icon>

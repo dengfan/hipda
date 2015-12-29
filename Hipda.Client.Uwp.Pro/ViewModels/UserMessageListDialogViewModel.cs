@@ -42,6 +42,18 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        private bool _isButtonEnable = false;
+
+        public bool IsButtonEnable
+        {
+            get { return _isButtonEnable; }
+            set
+            {
+                _isButtonEnable = value;
+                this.RaisePropertyChanged("IsButtonEnable");
+            }
+        }
+
         private bool _isDeleteButtonEnable = false;
 
         public bool IsDeleteButtonEnable
@@ -119,6 +131,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             DataView = _ds.GetViewForUserMessageList(1);
             TipText = string.Empty;
+            IsButtonEnable = true;
         }
     }
 }
