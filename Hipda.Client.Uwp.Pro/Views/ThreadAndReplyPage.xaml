@@ -153,6 +153,7 @@
                     </AppBarButton>
                     <AppBarButton Icon="Delete" Label="删除" IsEnabled="{Binding IsDeleteButtonEnable}" Command="{Binding DeleteCommand}"/>
                 </CommandBar>
+                <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <c:MyListView Grid.Row="1" ItemsSource="{Binding DataView}" IncrementalLoadingTrigger="Edge"
                           IsItemClickEnabled="False" IsSwipeEnabled="False" ShowsScrollingPlaceholders="False"
                           CanDrag="False" CanDragItems="False" CanReorderItems="False"

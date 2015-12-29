@@ -20,6 +20,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public DelegateCommand RefreshCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
 
+        private string _tipText = "请稍候，载入中。。。";
+
+        public string TipText
+        {
+            get { return _tipText; }
+            set { _tipText = value;
+                this.RaisePropertyChanged("TipText");
+            }
+        }
+
         ListViewSelectionMode _selectionMode = ListViewSelectionMode.Single;
 
         public ListViewSelectionMode SelectionMode
@@ -108,6 +118,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         void GetData()
         {
             DataView = _ds.GetViewForUserMessageList(1);
+            TipText = string.Empty;
         }
     }
 }
