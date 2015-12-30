@@ -138,12 +138,21 @@
         <DataTemplate x:Name="UserMessageDialogContentTemplate">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <ListView Padding="16,0,16,16" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{Binding ListData}"
+                <CommandBar>
+                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageListButton_Tapped">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
+                </CommandBar>
+                <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ListView Grid.Row="1" Padding="16,0,16,16" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{Binding ListData}"
                           ShowsScrollingPlaceholders="False" ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                           ItemTemplateSelector="{StaticResource userMessageListItemTemplateSelector}">
                     <ListView.Header>
@@ -151,10 +160,10 @@
                                          Visibility="{Binding IsShowLoadMoreButton}" Command="{Binding LoadMoreCommand}"/>
                     </ListView.Header>
                 </ListView>
-                <Border Grid.Row="1" Padding="8" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
+                <Border Grid.Row="2" Padding="8" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
                     <c:UserMessageBox UserId="{Binding UserId}" Submit="UserMessageBox_Submit"></c:UserMessageBox>
                 </Border>
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -189,7 +198,7 @@
                           IsItemClickEnabled="False" IsSwipeEnabled="False" ShowsScrollingPlaceholders="False"
                           CanDrag="False" CanDragItems="False" CanReorderItems="False"
                           SelectionMode="{Binding SelectionMode}" SelectedUserMessageListItems="{Binding SelectedUserMessageListItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          ItemTemplate="{StaticResource UserMessageListItemTemplate}" SelectionChanged="UserMessageListListView_SelectionChanged">
+                          ItemTemplate="{StaticResource UserMessageListItemTemplate}" SelectionChanged="userMessageListListView_SelectionChanged">
                 </c:MyListView>
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>

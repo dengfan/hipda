@@ -359,7 +359,7 @@ namespace Hipda.Client.Uwp.Pro
             OpenUserMessageDialog();
         }
 
-        private void UserMessageListListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void userMessageListListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var listView = (MyListView)sender;
             listView.SelectedUserMessageListItems = listView.SelectedItems;
