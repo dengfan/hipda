@@ -87,6 +87,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        private void AfterLoaded()
+        {
+            TipText = string.Empty;
+            IsButtonEnable = true;
+        }
+
         public UserMessageListDialogViewModel()
         {
             _ds = new DataService();
@@ -96,7 +102,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshCommand = new DelegateCommand();
             RefreshCommand.ExecuteAction = (p) => {
                 _ds.ClearUserMessageListData();
-                DataView = _ds.GetViewForUserMessageList(1);
+                DataView = _ds.GetViewForUserMessageList(1, AfterLoaded);
             };
 
             IntoMultiSelectionModeCommand = new DelegateCommand();
@@ -122,16 +128,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 if (isOk)
                 {
                     _ds.ClearUserMessageListData();
-                    DataView = _ds.GetViewForUserMessageList(1);
+                    DataView = _ds.GetViewForUserMessageList(1, AfterLoaded);
                 }
             };
         }
 
         void GetData()
         {
-            DataView = _ds.GetViewForUserMessageList(1);
-            TipText = string.Empty;
-            IsButtonEnable = true;
+            DataView = _ds.GetViewForUserMessageList(1, AfterLoaded);
         }
     }
 }

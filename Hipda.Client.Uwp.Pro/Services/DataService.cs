@@ -756,10 +756,15 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        public async Task<int> LoadMoreUserMessageListAsync(int pageNo)
+        public async Task<int> LoadMoreUserMessageListAsync(int pageNo, Action afterLoaded)
         {
             var cts = new CancellationTokenSource();
             await LoadUserMessageListDataAsync(pageNo, cts);
+
+            if (afterLoaded != null)
+            {
+                afterLoaded();
+            }
 
             return _userMessageListData.Count;
         }
@@ -774,7 +779,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _userMessageListMaxPageNo;
         }
 
-        public ICollectionView GetViewForUserMessageList(int startPageNo)
+        public ICollectionView GetViewForUserMessageList(int startPageNo, Action afterLoaded)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<UserMessageListItemModel>(
@@ -783,7 +788,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await LoadMoreUserMessageListAsync(pageNo);
+                    return await LoadMoreUserMessageListAsync(pageNo, afterLoaded);
                 },
                 (index) =>
                 {

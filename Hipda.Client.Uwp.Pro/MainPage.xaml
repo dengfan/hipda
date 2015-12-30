@@ -122,13 +122,13 @@
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <ScrollViewer Padding="16,0,20,0"
                               Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                               HorizontalContentAlignment="Stretch"
                               VerticalScrollMode="Auto">
                     <Grid Padding="0,0,0,16">
                         <Image Source="{Binding AvatarUri}" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <ContentControl Content="{Binding UserInfoRichTextBlock}"/>
                     </Grid>
                 </ScrollViewer>
