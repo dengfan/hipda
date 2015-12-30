@@ -189,12 +189,12 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <c:MyListView ItemsSource="{Binding DataView}" IncrementalLoadingTrigger="Edge"
+                <c:MyListViewForUserMessageList ItemsSource="{Binding DataView}" IncrementalLoadingTrigger="Edge"
                           IsItemClickEnabled="False" IsSwipeEnabled="False" ShowsScrollingPlaceholders="False"
                           CanDrag="False" CanDragItems="False" CanReorderItems="False"
                           SelectionMode="{Binding SelectionMode}" SelectedUserMessageListItems="{Binding SelectedUserMessageListItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           ItemTemplate="{StaticResource UserMessageListItemTemplate}" SelectionChanged="userMessageListListView_SelectionChanged">
-                </c:MyListView>
+                </c:MyListViewForUserMessageList>
                 <CommandBar Grid.Row="1">
                     <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
                     <AppBarButton Label="选择" IsEnabled="{Binding IsButtonEnable}" Command="{Binding IntoMultiSelectionModeCommand}">

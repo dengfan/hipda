@@ -100,7 +100,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Commands\DelegateCommand.cs" />
-    <Compile Include="Controls\MyListView.cs" />
+    <Compile Include="Controls\MyListViewForUserMessageList.cs" />
     <Compile Include="Controls\UserMessageBox.xaml.cs">
       <DependentUpon>UserMessageBox.xaml</DependentUpon>
     </Compile>
