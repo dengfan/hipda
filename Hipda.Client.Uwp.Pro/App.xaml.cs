@@ -228,14 +228,7 @@ namespace Hipda.Client.Uwp.Pro
                         MainPage mp = rootFrame.Content as MainPage;
                         if (mp != null)
                         {
-                            if (mp.AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
-                            {
-                                ThreadAndReplyPage trp = mp.AppFrame.Content as ThreadAndReplyPage;
-                                if (trp != null)
-                                {
-                                    trp.OpenPostDetailDialog(postId, threadId);
-                                }
-                            }
+                            mp.OpenPostDetailDialog(postId, threadId);
                         }
                     }
                 }

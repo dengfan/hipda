@@ -104,9 +104,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 return;
             }
 
-            ThreadAndReplyPage.PopupUserId = replyItem.AuthorUserId;
-            ThreadAndReplyPage.PopupUsername = replyItem.AuthorUsername;
-            ThreadAndReplyPage.PopupThreadId = replyItem.ThreadId;
+            MainPage.PopupUserId = replyItem.AuthorUserId;
+            MainPage.PopupUsername = replyItem.AuthorUsername;
+            MainPage.PopupThreadId = replyItem.ThreadId;
 
             TipText = string.Empty;
             FloorNoStr = replyItem.FloorNoStr;

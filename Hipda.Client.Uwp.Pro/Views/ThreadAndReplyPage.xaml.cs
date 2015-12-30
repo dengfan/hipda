@@ -31,13 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ThreadAndReplyPage : Page
     {
-        #region 三个属性，用于接收点击头像的参数
-        public static int PopupUserId { get; set; }
-
-        public static string PopupUsername { get; set; }
-
-        public static int PopupThreadId { get; set; }
-        #endregion
+        
 
         /// <summary>
         /// 用于记录当前页的类型，如常规、我的贴子、我的回复等等类型
@@ -336,13 +330,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                         break;
                 }
 
-                if (UserDialog != null)
-                {
-                    _isDialogShown = false;
-                    UserDialog.DataContext = null;
-                    UserDialog.Hide();
-                }
-
                 Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
             }
 
@@ -554,124 +541,19 @@ namespace Hipda.Client.Uwp.Pro.Views
         /// <param name="e"></param>
         private async void openThreadInNewView_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var options = new LauncherOptions();
-            options.TreatAsUntrusted = false;
-            await Launcher.LaunchUriAsync(new Uri("hipda:tid=" + PopupThreadId), options);
+            var uri = new Uri("hipda:tid=" + MainPage.PopupThreadId);
+            await Launcher.LaunchUriAsync(uri, new LauncherOptions { TreatAsUntrusted = false });
         }
 
-        #region 坛友资料及短消息之弹窗
-        bool _isDialogShown = false;
-        private void CloseDialog(object sender, RoutedEventArgs e)
+        private void openUserInfoDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            _isDialogShown = false;
-            UserDialog.DataContext = null;
-            UserDialog.Hide();
-        }
-
-        private async void OpenUserInfoDialog(object sender, TappedRoutedEventArgs e)
-        {
-            if (PopupUserId == 0)
-            {
-                return;
-            }
-
-            FindName("UserDialog");
-            UserDialog.DataContext = new UserInfoDialogViewModel(PopupUserId);
-            UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
-            UserDialog.ContentTemplate = this.Resources["UserInfoDialogContentTemplate"] as DataTemplate;
-
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
         }
 
         private void openUserMessageDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            OpenUserMessageDialog();
+            MainPage mp = Common.FindParent<Page>(this.Frame) as MainPage;
+            mp.OpenUserMessageDialog();
         }
-
-        private async void OpenUserMessageDialog()
-        {
-            if (PopupUserId == 0)
-            {
-                return;
-            }
-
-            FindName("UserDialog");
-            UserDialog.DataContext = new UserMessageDialogViewModel(PopupUserId);
-            UserDialog.Title = string.Format("与 {0} 聊天", PopupUsername);
-            UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
-
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
-        }
-
-        private async void UserMessageBox_Submit(object sender, EventArgs e)
-        {
-            UserMessageBox umb = sender as UserMessageBox;
-            TextBox tb = umb.FindName("UserMessageTextBox") as TextBox;
-            var msg = tb.Text.Trim();
-            var vm = umb.DataContext as UserMessageDialogViewModel;
-            bool isOk = await vm.PostUserMessage(msg, umb.UserId);
-            tb.Text = string.Empty;
-
-            // 发送完成后跳到列表底部
-            var listView = Common.FindParent<Grid>(umb).Children[0] as ListView;
-            if (listView.Items.Count > 0)
-            {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                    listView.ScrollIntoView(listView.Items.Last());
-                });
-            }
-        }
-
-        public async void OpenPostDetailDialog(int postId, int threadId)
-        {
-            FindName("UserDialog");
-
-            var vm = new PostDetailDialogViewModel(postId, threadId);
-            if (vm == null)
-            {
-                return;
-            }
-
-            UserDialog.DataContext = vm;
-            UserDialog.Title = "查看引用楼之详情";
-            UserDialog.ContentTemplate = this.Resources["PostDetailDialogContentTemplate"] as DataTemplate;
-
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
-        }
-
-        public async void OpenUserMessageListDialog()
-        {
-            FindName("UserDialog");
-
-            var vm = new UserMessageListDialogViewModel();
-            if (vm == null)
-            {
-                return;
-            }
-
-            UserDialog.DataContext = vm;
-            UserDialog.Title = "短消息";
-            UserDialog.ContentTemplate = this.Resources["UserMessageListDialogContentTemplate"] as DataTemplate;
-
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
-        }
-        #endregion
 
         private void PostDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
@@ -692,24 +574,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             ThreadListView.SelectedItem = null;
         }
 
-        private void UserMessageListListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var listView = (MyListView)sender;
-            listView.SelectedUserMessageListItems = listView.SelectedItems;
-
-            if (listView.SelectionMode == ListViewSelectionMode.Single && e.AddedItems.Count == 1)
-            {
-                var data = e.AddedItems[0] as UserMessageListItemModel;
-                if (data == null)
-                {
-                    return;
-                }
-
-                PopupUserId = data.UserId;
-                PopupUsername = data.Username;
-                OpenUserMessageDialog();
-            }
-        }
+        
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         //{

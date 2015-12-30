@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Hipda.Client.Uwp.Pro"
     xmlns:t="using:Hipda.Client.Uwp.Pro.Triggers"
+    xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -63,6 +64,146 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+
+        <DataTemplate x:Name="PostDetailDialogContentTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Margin="16,0,0,16" Orientation="Horizontal">
+                    <Border Background="{ThemeResource SystemControlBackgroundListLowBrush}" Width="40" Height="40">
+                        <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
+                    </Border>
+                    <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                   VerticalAlignment="Bottom">
+                        <Run Text="{Binding FloorNoStr}"/>
+                        <LineBreak/>
+                        <Run Text="{Binding AuthorUsername}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding AuthorCreateTime}"/>
+                    </TextBlock>
+                </StackPanel>
+                <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ScrollViewer Grid.Row="1" Padding="16,0,20,0"
+                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                            HorizontalContentAlignment="Stretch"
+                            Content="{Binding XamlContent}"/>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Tapped="openUserMessageDialogButton_Tapped" />
+                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="UserInfoDialogContentTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer Padding="16,0,20,0"
+                              Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                              HorizontalContentAlignment="Stretch"
+                              VerticalScrollMode="Auto">
+                    <Grid Padding="0,0,0,16">
+                        <Image Source="{Binding AvatarUri}" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ContentControl Content="{Binding UserInfoRichTextBlock}"/>
+                    </Grid>
+                </ScrollViewer>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Tapped="openUserMessageDialogButton_Tapped" />
+                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="UserMessageDialogContentTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ListView Padding="16,0,16,16" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{Binding ListData}"
+                          ShowsScrollingPlaceholders="False" ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
+                          ItemTemplateSelector="{StaticResource userMessageListItemTemplateSelector}">
+                    <ListView.Header>
+                        <HyperlinkButton Content="点击查看所有短消息" HorizontalAlignment="Center"
+                                         Visibility="{Binding IsShowLoadMoreButton}" Command="{Binding LoadMoreCommand}"/>
+                    </ListView.Header>
+                </ListView>
+                <Border Grid.Row="1" Padding="8" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
+                    <c:UserMessageBox UserId="{Binding UserId}" Submit="UserMessageBox_Submit"></c:UserMessageBox>
+                </Border>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="刷新" Command="{Binding RefreshCommand}" />
+                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="UserMessageListDialogContentTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <CommandBar>
+                    <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
+                    <AppBarButton Label="选择" IsEnabled="{Binding IsButtonEnable}" Command="{Binding IntoMultiSelectionModeCommand}">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE762;" FontFamily="Segoe MDL2 Assets" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Icon="Delete" Label="删除" IsEnabled="{Binding IsDeleteButtonEnable}" Command="{Binding DeleteCommand}"/>
+                </CommandBar>
+                <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <c:MyListView Grid.Row="1" ItemsSource="{Binding DataView}" IncrementalLoadingTrigger="Edge"
+                          IsItemClickEnabled="False" IsSwipeEnabled="False" ShowsScrollingPlaceholders="False"
+                          CanDrag="False" CanDragItems="False" CanReorderItems="False"
+                          SelectionMode="{Binding SelectionMode}" SelectedUserMessageListItems="{Binding SelectedUserMessageListItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          ItemTemplate="{StaticResource UserMessageListItemTemplate}" SelectionChanged="UserMessageListListView_SelectionChanged">
+                </c:MyListView>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="刷新" Command="{Binding RefreshCommand}" />
+                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid x:Name="pageGrid" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Tapped="pageGrid_Tapped">
@@ -257,7 +398,7 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <Button Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="UserMessageListButton_Click">
+                        <Button Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="openUserMessageListButton_Tapped">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
@@ -328,5 +469,7 @@
             </Border.RenderTransform>
             <TextBlock x:Name="TipTextBlock" Padding="8,8,28,8" TextWrapping="Wrap"/>
         </Border>
+
+        <ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
     </Grid>
 </Page>
