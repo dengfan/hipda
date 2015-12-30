@@ -91,17 +91,28 @@
                             Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                             HorizontalContentAlignment="Stretch"
                             Content="{Binding XamlContent}"/>
-                <Grid Grid.Row="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Tapped="openUserMessageDialogButton_Tapped" />
-                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
-                </Grid>
+                <CommandBar Grid.Row="2">
+                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageListButton_Tapped">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="发短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageDialogButton_Tapped">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE15F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="个人资料" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserInfoDialogButton_Tapped">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE2AF;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="回复此楼" IsEnabled="{Binding IsButtonEnable}">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE90A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                </CommandBar>
             </Grid>
         </DataTemplate>
 
@@ -121,38 +132,30 @@
                         <ContentControl Content="{Binding UserInfoRichTextBlock}"/>
                     </Grid>
                 </ScrollViewer>
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Tapped="openUserMessageDialogButton_Tapped" />
-                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
-                </Grid>
+                <CommandBar Grid.Row="1">
+                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageListButton_Tapped">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="发短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageDialogButton_Tapped">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE15F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                </CommandBar>
             </Grid>
         </DataTemplate>
 
         <DataTemplate x:Name="UserMessageDialogContentTemplate">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <CommandBar>
-                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageListButton_Tapped">
-                        <AppBarButton.Icon>
-                            <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-                    <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
-                </CommandBar>
-                <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <ListView Grid.Row="1" Padding="16,0,16,16" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{Binding ListData}"
+                <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <ListView Padding="16,0,16,16" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{Binding ListData}"
                           ShowsScrollingPlaceholders="False" ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                           ItemTemplateSelector="{StaticResource userMessageListItemTemplateSelector}">
                     <ListView.Header>
@@ -160,31 +163,39 @@
                                          Visibility="{Binding IsShowLoadMoreButton}" Command="{Binding LoadMoreCommand}"/>
                     </ListView.Header>
                 </ListView>
-                <Border Grid.Row="2" Padding="8" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
+                <Border Grid.Row="1" Padding="8" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
                     <c:UserMessageBox UserId="{Binding UserId}" Submit="UserMessageBox_Submit"></c:UserMessageBox>
                 </Border>
-                <Grid Grid.Row="3">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="刷新" Command="{Binding RefreshCommand}" />
-                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
-                </Grid>
+                <CommandBar Grid.Row="2">
+                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageListButton_Tapped">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="个人资料" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserInfoDialogButton_Tapped">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE2AF;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
+                </CommandBar>
             </Grid>
         </DataTemplate>
 
         <DataTemplate x:Name="UserMessageListDialogContentTemplate">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <CommandBar>
+                <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <c:MyListView ItemsSource="{Binding DataView}" IncrementalLoadingTrigger="Edge"
+                          IsItemClickEnabled="False" IsSwipeEnabled="False" ShowsScrollingPlaceholders="False"
+                          CanDrag="False" CanDragItems="False" CanReorderItems="False"
+                          SelectionMode="{Binding SelectionMode}" SelectedUserMessageListItems="{Binding SelectedUserMessageListItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          ItemTemplate="{StaticResource UserMessageListItemTemplate}" SelectionChanged="userMessageListListView_SelectionChanged">
+                </c:MyListView>
+                <CommandBar Grid.Row="1">
                     <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
                     <AppBarButton Label="选择" IsEnabled="{Binding IsButtonEnable}" Command="{Binding IntoMultiSelectionModeCommand}">
                         <AppBarButton.Icon>
@@ -193,24 +204,6 @@
                     </AppBarButton>
                     <AppBarButton Icon="Delete" Label="删除" IsEnabled="{Binding IsDeleteButtonEnable}" Command="{Binding DeleteCommand}"/>
                 </CommandBar>
-                <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <c:MyListView Grid.Row="1" ItemsSource="{Binding DataView}" IncrementalLoadingTrigger="Edge"
-                          IsItemClickEnabled="False" IsSwipeEnabled="False" ShowsScrollingPlaceholders="False"
-                          CanDrag="False" CanDragItems="False" CanReorderItems="False"
-                          SelectionMode="{Binding SelectionMode}" SelectedUserMessageListItems="{Binding SelectedUserMessageListItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          ItemTemplate="{StaticResource UserMessageListItemTemplate}" SelectionChanged="userMessageListListView_SelectionChanged">
-                </c:MyListView>
-                <Grid Grid.Row="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="刷新" Command="{Binding RefreshCommand}" />
-                    <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
-                </Grid>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -479,6 +472,10 @@
             <TextBlock x:Name="TipTextBlock" Padding="8,8,28,8" TextWrapping="Wrap"/>
         </Border>
 
-        <ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy" Template="{StaticResource ContentDialogTemplate}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        <ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy"
+                       Template="{StaticResource ContentDialogTemplate}"
+                       Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                       SecondaryButtonText="关闭"
+                       SecondaryButtonClick="userDialog_SecondaryButtonClick"/>
     </Grid>
 </Page>

@@ -243,13 +243,6 @@ namespace Hipda.Client.Uwp.Pro
 
         bool _isDialogShown = false;
 
-        private void CloseDialog(object sender, RoutedEventArgs e)
-        {
-            _isDialogShown = false;
-            UserDialog.DataContext = null;
-            UserDialog.Hide();
-        }
-
         public async void OpenUserInfoDialog()
         {
             if (PopupUserId == 0)
@@ -349,6 +342,11 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
+        private void openUserInfoDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            OpenUserInfoDialog();
+        }
+
         private void openUserMessageListButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             OpenUserMessageListDialog();
@@ -378,5 +376,11 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
         #endregion
+
+        private void userDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            _isDialogShown = false;
+            UserDialog.DataContext = null;
+        }
     }
 }
