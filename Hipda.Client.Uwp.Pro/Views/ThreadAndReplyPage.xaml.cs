@@ -587,7 +587,12 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        private async void OpenUserMessageDialog(object sender, RoutedEventArgs e)
+        private void openUserMessageDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            OpenUserMessageDialog();
+        }
+
+        private async void OpenUserMessageDialog()
         {
             if (PopupUserId == 0)
             {
@@ -699,12 +704,10 @@ namespace Hipda.Client.Uwp.Pro.Views
                 {
                     return;
                 }
+
                 PopupUserId = data.UserId;
                 PopupUsername = data.Username;
-                FindName("UserDialog");
-                UserDialog.DataContext = new UserMessageDialogViewModel(PopupUserId);
-                UserDialog.Title = string.Format("与 {0} 聊天", PopupUsername);
-                UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
+                OpenUserMessageDialog();
             }
         }
 

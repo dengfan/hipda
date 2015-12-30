@@ -20,7 +20,7 @@
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="查看详细资料" Tapped="OpenUserInfoDialog"/>
             <MenuFlyoutItem Text="查看发贴记录"/>
-            <MenuFlyoutItem Text="发短消息" Tapped="OpenUserMessageDialog"/>
+            <MenuFlyoutItem Text="发短消息" Tapped="openUserMessageDialogButton_Tapped"/>
             <MenuFlyoutItem Text="加为好友"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="屏蔽此人" />
@@ -68,7 +68,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Click="OpenUserMessageDialog" />
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Tapped="openUserMessageDialogButton_Tapped" />
                     <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
                 </Grid>
             </Grid>
@@ -98,7 +98,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Click="OpenUserMessageDialog" />
+                    <Button Grid.Column="0" Margin="16,16,8,16" HorizontalAlignment="Stretch" Content="查看短消息" Tapped="openUserMessageDialogButton_Tapped" />
                     <Button Grid.Column="1" Margin="8,16,16,16" HorizontalAlignment="Stretch" Content="关闭" Click="CloseDialog" />
                 </Grid>
             </Grid>
