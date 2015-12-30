@@ -87,7 +87,7 @@
                     </TextBlock>
                 </StackPanel>
                 <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <ScrollViewer Grid.Row="1" Padding="16,0,20,0"
+                <ScrollViewer Grid.Row="1" Padding="16,8,20,8"
                             Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                             HorizontalContentAlignment="Stretch"
                             Content="{Binding XamlContent}"/>
