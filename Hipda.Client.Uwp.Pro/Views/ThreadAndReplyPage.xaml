@@ -52,17 +52,6 @@
 
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1366" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="LeftColumn.Width" Value="520" />
-                        <Setter Target="RightColumn.Width" Value="*" />
-                        <Setter Target="RightSideColumn.Width" Value="220" />
-                    </VisualState.Setters>
-                </VisualState>
-
-                <VisualState>
-                    <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1200" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
