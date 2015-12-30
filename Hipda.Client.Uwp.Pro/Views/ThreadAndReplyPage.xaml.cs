@@ -31,7 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ThreadAndReplyPage : Page
     {
-        
+        MainPage mainPage;
 
         /// <summary>
         /// 用于记录当前页的类型，如常规、我的贴子、我的回复等等类型
@@ -45,6 +45,8 @@ namespace Hipda.Client.Uwp.Pro.Views
         public ThreadAndReplyPage()
         {
             this.InitializeComponent();
+
+            mainPage = Common.FindParent<Page>(Frame) as MainPage;
 
             this.SizeChanged += (s, e) =>
             {
@@ -547,12 +549,12 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void openUserInfoDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            mainPage.OpenUserInfoDialog();
         }
 
         private void openUserMessageDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            MainPage mp = Common.FindParent<Page>(this.Frame) as MainPage;
-            mp.OpenUserMessageDialog();
+            mainPage.OpenUserMessageDialog();
         }
 
         private void PostDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
