@@ -195,6 +195,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _leftListView = threadListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
             _leftListView.ItemsSource = null;
+            _leftListView.ItemTemplateSelector = App.Current.Resources["threadListItemTemplateSelector"] as DataTemplateSelector;
+            _leftListView.ItemContainerStyle = App.Current.Resources["ThreadItemContainerStyle"] as Style;
 
             _leftCommandBar = threadCommandBar;
             _leftCommandBar.PrimaryCommands.Clear();
@@ -241,6 +243,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _leftListView = threadListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
             _leftListView.ItemsSource = null;
+            _leftListView.ItemTemplateSelector = App.Current.Resources["threadListItemTemplateSelector"] as DataTemplateSelector;
+            _leftListView.ItemContainerStyle = App.Current.Resources["ThreadItemContainerStyle"] as Style;
 
             _leftCommandBar = threadCommandBar;
             _leftCommandBar.PrimaryCommands.Clear();

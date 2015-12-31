@@ -714,6 +714,7 @@
         
         <DataTemplate x:Name="NoticeQuoteOrReplyItemTemplate">
             <Grid>
+                <TextBlock Text="{Binding ActionInfo[0]}"/>
                 <TextBlock Text="{Binding Username}"/>
                 <TextBlock Text="{Binding ActionTime}"/>
             </Grid>
