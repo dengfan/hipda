@@ -735,14 +735,10 @@
                             <Run Text="{Binding ActionInfo[4]}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         </Paragraph>
                     </RichTextBlock>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Margin="0,4,4,0" Content="回复" HorizontalAlignment="Stretch"/>
-                        <Button Grid.Column="1" Margin="4,4,0,0" Content="查看" HorizontalAlignment="Stretch"/>
-                    </Grid>
+                    <StackPanel Margin="0,4,0,0" Orientation="Horizontal">
+                        <Button Margin="0,0,4,0" Content="回复"/>
+                        <Button Content="查看"/>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </DataTemplate>
