@@ -104,6 +104,8 @@
     <Compile Include="Controls\UserMessageBox.xaml.cs">
       <DependentUpon>UserMessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\UserIdStringToInt32Converter.cs" />
+    <Compile Include="Converters\UserIdToAvatarUriConverter.cs" />
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>

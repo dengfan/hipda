@@ -722,15 +722,12 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string threadId = string.Empty;
                 string threadTitle = string.Empty;
                 string originalText = string.Empty;
-                string actionHtml = string.Empty;
+                string actionText = string.Empty;
                 string repostStr = string.Empty;
                 string postId = string.Empty;
 
                 HtmlNode userLinkNode;
                 HtmlNode threadLinkNode;
-                HtmlNode buttonsNode;
-                HtmlNode replyLinkNode;
-                HtmlNode viewLinkNode;
 
                 var divNode = item.ChildNodes[0];
                 string nodeClass = divNode.Attributes[0].Value.Trim().ToLower();
@@ -749,21 +746,30 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                         actionTime = divNode.ChildNodes[4].InnerText.Trim();
 
-                        actionHtml = divNode.ChildNodes[6].InnerHtml;
+                        var actionContentNode = divNode.ChildNodes[6];
+                        originalText = actionContentNode.ChildNodes[0].ChildNodes[1].ChildNodes[0]
+                            .InnerText.Trim()
+                            .Replace("\r", " ")
+                            .Replace("\n", " ");
+                        actionText = actionContentNode.ChildNodes[0].ChildNodes[1].ChildNodes[2]
+                            .InnerText.Trim()
+                            .Replace("\r", " ")
+                            .Replace("\n", " ");
 
-                        buttonsNode = divNode.ChildNodes[8];
-                        replyLinkNode = buttonsNode.ChildNodes[0];
+                        var buttonsNode = divNode.ChildNodes[8];
+                        var replyLinkNode = buttonsNode.ChildNodes[0];
                         repostStr = replyLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/post.php?from=notice&action=reply&fid=2&tid=1778684&reppost=".Length).Split('&')[0];
-                        viewLinkNode = buttonsNode.ChildNodes[2];
+                        var viewLinkNode = buttonsNode.ChildNodes[2];
                         postId = viewLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/redirect.php?from=notice&goto=findpost&pid=".Length).Split('&')[0];
 
                         NoticeData.Add(new NoticeItemModel(noticeType, username, actionTime, new string[] {
-                            userId,
-                            threadId,
-                            threadTitle,
-                            actionHtml,
-                            repostStr,
-                            postId
+                            userId,         // 0
+                            threadId,       // 1
+                            threadTitle,    // 2
+                            originalText,   // 3
+                            actionText,     // 4
+                            repostStr,      // 5
+                            postId          // 6
                         }));
                         break;
                     case "f_thread":
