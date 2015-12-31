@@ -555,11 +555,26 @@
 
         <Style x:Key="ThreadItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="Padding" Value="0,0,20,0"/>
+            <Setter Property="MinHeight" Value="0"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
 
-        
-        
+        <Style x:Key="NoticeItemContainerStyle" TargetType="ListViewItem">
+            <Setter Property="Padding" Value="0,0,20,0"/>
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" MinHeight="{TemplateBinding MinHeight}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
         <DataTemplate x:Name="ThreadListNormalItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />

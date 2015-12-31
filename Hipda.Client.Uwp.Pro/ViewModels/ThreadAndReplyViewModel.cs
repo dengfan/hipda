@@ -337,6 +337,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     break;
                 case "notice":
                     _leftListView.ItemTemplateSelector = App.Current.Resources["noticeListItemTemplateSelector"] as DataTemplateSelector;
+                    _leftListView.ItemContainerStyle = App.Current.Resources["NoticeItemContainerStyle"] as Style;
+
                     LoadDataForNotice();
 
                     var btnRefreshForNotice = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
