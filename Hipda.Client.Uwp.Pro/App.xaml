@@ -722,7 +722,7 @@
                             <Run Text="{Binding Username}" FontWeight="Bold" />
                             <Run Text="{Binding ActionTime}" />
                             <LineBreak/>
-                            <Run Text="引用或答复了您此主题的贴子" />
+                            <Run Text="引用或答复了您在此主题的贴子" />
                             <LineBreak/>
                             <InlineUIContainer>
                                 <HyperlinkButton Content="{Binding ActionInfo[2]}"/>
@@ -732,7 +732,9 @@
                             <Run Text="{Binding ActionInfo[3]}"/>
                             <LineBreak/>
                             <Run Text="他说：" FontWeight="Bold"/>
-                            <Run Text="{Binding ActionInfo[4]}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                            <Underline>
+                                <Run Text="{Binding ActionInfo[4]}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                            </Underline>
                         </Paragraph>
                     </RichTextBlock>
                     <StackPanel Margin="0,4,0,0" Orientation="Horizontal">
