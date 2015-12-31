@@ -285,20 +285,26 @@
         </Style>
 
         <local:ReplyListItemTemplateSelector x:Key="replyListItemTemplateSelector"
-                                             TopTemplate="{StaticResource ReplyListTopItemTemplate}"
-                                             LeftTemplate="{StaticResource ReplyListLeftItemTemplate}"
-                                             Left2Template="{StaticResource ReplyListLeft2ItemTemplate}"
-                                             RightTemplate="{StaticResource ReplyListRightItemTemplate}"
-                                             HighLightTemplate="{StaticResource ReplyListHighLightItemTemplate}"
+                                             ReplyListTopItemTemplate="{StaticResource ReplyListTopItemTemplate}"
+                                             ReplyListLeftItemTemplate="{StaticResource ReplyListLeftItemTemplate}"
+                                             ReplyListLeft2ItemTemplate="{StaticResource ReplyListLeft2ItemTemplate}"
+                                             ReplyListRightItemTemplate="{StaticResource ReplyListRightItemTemplate}"
+                                             ReplyListHighLightItemTemplate="{StaticResource ReplyListHighLightItemTemplate}"
                                              />
 
         <local:ThreadListItemTemplateSelector x:Key="threadListItemTemplateSelector"
-                                              NormalTemplate="{StaticResource ThreadListNormalItemTemplate}" 
-                                              MyThreadsTemplate="{StaticResource ThreadListMyThreadsItemTemplate}"
-                                              MyPostsTemplate="{StaticResource ThreadListMyPostsItemTemplate}"
-                                              MyFavoritesTemplate="{StaticResource ThreadListMyFavoritesItemTemplate}"
-                                              SearchTitleTemplate="{StaticResource ThreadListSearchTitleItemTemplate}"
-                                              SearchFullTextTemplate="{StaticResource ThreadListSearchFullTextItemTemplate}"
+                                              ThreadListNormalItemTemplate="{StaticResource ThreadListNormalItemTemplate}" 
+                                              ThreadListMyThreadsItemTemplate="{StaticResource ThreadListMyThreadsItemTemplate}"
+                                              ThreadListMyPostsItemTemplate="{StaticResource ThreadListMyPostsItemTemplate}"
+                                              ThreadListMyFavoritesItemTemplate="{StaticResource ThreadListMyFavoritesItemTemplate}"
+                                              ThreadListSearchTitleItemTemplate="{StaticResource ThreadListSearchTitleItemTemplate}"
+                                              ThreadListSearchFullTextItemTemplate="{StaticResource ThreadListSearchFullTextItemTemplate}"
+                                              />
+
+        <local:NoticeListItemTemplateSelector x:Key="noticeListItemTemplateSelector"
+                                              NoticeQuoteOrReplyItemTemplate="{StaticResource NoticeQuoteOrReplyItemTemplate}"
+                                              NoticeThreadItemTemplate="{StaticResource NoticeThreadItemTemplate}"
+                                              NoticeBuddyItemTemplate="{StaticResource NoticeBuddyItemTemplate}"
                                               />
 
         <Style x:Key="ReplyItemContainerStyle" TargetType="ListViewItem">
@@ -552,6 +558,8 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
 
+        
+        
         <DataTemplate x:Name="ThreadListNormalItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
@@ -687,9 +695,32 @@
             </Grid>
         </DataTemplate>
 
+
+        
+        <DataTemplate x:Name="NoticeQuoteOrReplyItemTemplate">
+            <Grid>
+                <TextBlock Text="{Binding Username}"/>
+                <TextBlock Text="{Binding ActionTime}"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="NoticeThreadItemTemplate">
+            <Grid MinHeight="0">
+                
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="NoticeBuddyItemTemplate">
+            <Grid MinHeight="0">
+
+            </Grid>
+        </DataTemplate>
+
+
+
         <local:UserMessageListItemTemplateSelector x:Key="userMessageListItemTemplateSelector"
-                                                   LeftTemplate="{StaticResource UserMessageLeftItemTemplate}"
-                                                   RightTemplate="{StaticResource UserMessageRightItemTemplate}"/>
+                                                   UserMessageLeftItemTemplate="{StaticResource UserMessageLeftItemTemplate}"
+                                                   UserMessageRightItemTemplate="{StaticResource UserMessageRightItemTemplate}"/>
 
         <DataTemplate x:Name="UserMessageLeftItemTemplate">
             <Grid>

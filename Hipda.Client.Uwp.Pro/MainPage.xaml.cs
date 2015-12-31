@@ -230,11 +230,9 @@ namespace Hipda.Client.Uwp.Pro
 
         private void NoticeButton_Click(object sender, RoutedEventArgs e)
         {
-            var threadAndReplyPage = AppFrame.Content as ThreadAndReplyPage;
-            
+            SetSelected(sender as Button);
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=notice");
         }
-
-        
 
         #region 坛友资料及短消息之弹窗
         public static int PopupUserId { get; set; }

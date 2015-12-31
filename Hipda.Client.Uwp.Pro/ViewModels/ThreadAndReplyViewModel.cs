@@ -49,8 +49,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// </summary>
         int _startPageNo;
 
-        ListView _threadListView;
-        CommandBar _threadCommandBar;
+        ListView _leftListView;
+        CommandBar _leftCommandBar;
         Action _beforeLoad;
         Action _afterLoad;
         Action _noDataNotice;
@@ -76,7 +76,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
                 _startPageNo = pageNo;
-                _threadListView.ItemsSource = cv;
+                _leftListView.ItemsSource = cv;
             }
         }
 
@@ -87,7 +87,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyThreads();
                 _startPageNo = pageNo;
-                _threadListView.ItemsSource = cv;
+                _leftListView.ItemsSource = cv;
             }
         }
 
@@ -98,7 +98,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyPosts();
                 _startPageNo = pageNo;
-                _threadListView.ItemsSource = cv;
+                _leftListView.ItemsSource = cv;
             }
         }
 
@@ -109,7 +109,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyFavorites();
                 _startPageNo = pageNo;
-                _threadListView.ItemsSource = cv;
+                _leftListView.ItemsSource = cv;
             }
         }
 
@@ -120,7 +120,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchTitle();
                 _startPageNo = pageNo;
-                _threadListView.ItemsSource = cv;
+                _leftListView.ItemsSource = cv;
             }
         }
 
@@ -131,8 +131,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchFullText();
                 _startPageNo = pageNo;
-                _threadListView.ItemsSource = cv;
+                _leftListView.ItemsSource = cv;
             }
+        }
+
+        async void LoadDataForNotice()
+        {
+            await _ds.GetNoticeData();
+            _leftListView.ItemsSource = DataService.NoticeData;
         }
         #endregion
 
@@ -186,13 +192,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public ThreadAndReplyViewModel(int pageNo, int forumId, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _forumId = forumId;
-            _threadListView = threadListView;
-            _threadListView.SelectionMode = ListViewSelectionMode.Single;
-            _threadListView.ItemsSource = null;
+            _leftListView = threadListView;
+            _leftListView.SelectionMode = ListViewSelectionMode.Single;
+            _leftListView.ItemsSource = null;
 
-            _threadCommandBar = threadCommandBar;
-            _threadCommandBar.PrimaryCommands.Clear();
-            _threadCommandBar.SecondaryCommands.Clear();
+            _leftCommandBar = threadCommandBar;
+            _leftCommandBar.PrimaryCommands.Clear();
+            _leftCommandBar.SecondaryCommands.Clear();
 
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
@@ -216,9 +222,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
             btnRefresh.Command = refreshThreadCommand;
             var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
-            _threadCommandBar.PrimaryCommands.Add(btnAdd);
-            _threadCommandBar.PrimaryCommands.Add(btnRefresh);
-            _threadCommandBar.PrimaryCommands.Add(btnSort);
+            _leftCommandBar.PrimaryCommands.Add(btnAdd);
+            _leftCommandBar.PrimaryCommands.Add(btnRefresh);
+            _leftCommandBar.PrimaryCommands.Add(btnSort);
         }
 
         /// <summary>
@@ -232,13 +238,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// <param name="afterLoad"></param>
         public ThreadAndReplyViewModel(int pageNo, string threadType, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
-            _threadListView = threadListView;
-            _threadListView.SelectionMode = ListViewSelectionMode.Single;
-            _threadListView.ItemsSource = null;
+            _leftListView = threadListView;
+            _leftListView.SelectionMode = ListViewSelectionMode.Single;
+            _leftListView.ItemsSource = null;
 
-            _threadCommandBar = threadCommandBar;
-            _threadCommandBar.PrimaryCommands.Clear();
-            _threadCommandBar.SecondaryCommands.Clear();
+            _leftCommandBar = threadCommandBar;
+            _leftCommandBar.PrimaryCommands.Clear();
+            _leftCommandBar.SecondaryCommands.Clear();
 
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
@@ -276,7 +282,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     var btnDeleteSelected = new AppBarButton { Icon = new SymbolIcon(Symbol.Delete), Label = "删除", IsEnabled = false };
                     btnDeleteSelected.Tapped += async (s, e) =>
                     {
-                        var deleteThreads = _threadListView.SelectedItems;
+                        var deleteThreads = _leftListView.SelectedItems;
                         if (deleteThreads != null)
                         {
                             var ids = new List<int>();
@@ -305,19 +311,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                         var btn = s as AppBarToggleButton;
                         if (btn.IsChecked == true)
                         {
-                            _threadListView.SelectionMode = ListViewSelectionMode.Multiple;
+                            _leftListView.SelectionMode = ListViewSelectionMode.Multiple;
                             btnDeleteSelected.IsEnabled = true;
                         }
                         else
                         {
-                            _threadListView.SelectionMode = ListViewSelectionMode.Single;
+                            _leftListView.SelectionMode = ListViewSelectionMode.Single;
                             btnDeleteSelected.IsEnabled = false;
                         }
                     };
 
                     var btnRefreshForFavorites = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
                     btnRefreshForFavorites.Tapped += (s, e) => {
-                        _threadListView.SelectionMode = ListViewSelectionMode.Single;
+                        _leftListView.SelectionMode = ListViewSelectionMode.Single;
                         btnMultipleSelect.IsChecked = false;
                         btnDeleteSelected.IsEnabled = false;
 
@@ -325,9 +331,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                         LoadDataForMyFavorites(1);
                     };
 
-                    _threadCommandBar.PrimaryCommands.Add(btnRefreshForFavorites);
-                    _threadCommandBar.PrimaryCommands.Add(btnMultipleSelect);
-                    _threadCommandBar.PrimaryCommands.Add(btnDeleteSelected);
+                    _leftCommandBar.PrimaryCommands.Add(btnRefreshForFavorites);
+                    _leftCommandBar.PrimaryCommands.Add(btnMultipleSelect);
+                    _leftCommandBar.PrimaryCommands.Add(btnDeleteSelected);
+                    break;
+                case "notice":
+                    _leftListView.ItemTemplateSelector = App.Current.Resources["noticeListItemTemplateSelector"] as DataTemplateSelector;
+                    LoadDataForNotice();
+
+                    var btnRefreshForNotice = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
+                    btnRefreshForNotice.Tapped += (s, e) => {
+                        DataService.NoticeData.Clear();
+                        LoadDataForNotice();
+                    };
+
+                    _leftCommandBar.PrimaryCommands.Add(btnRefreshForNotice);
                     break;
             }
         }
@@ -352,13 +370,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _searchTimeSpan = searchTimeSpan;
             _searchForumSpan = searchForumSpan;
 
-            _threadListView = threadListView;
-            _threadListView.SelectionMode = ListViewSelectionMode.Single;
-            _threadListView.ItemsSource = null;
+            _leftListView = threadListView;
+            _leftListView.SelectionMode = ListViewSelectionMode.Single;
+            _leftListView.ItemsSource = null;
 
-            _threadCommandBar = threadCommandBar;
-            _threadCommandBar.PrimaryCommands.Clear();
-            _threadCommandBar.SecondaryCommands.Clear();
+            _leftCommandBar = threadCommandBar;
+            _leftCommandBar.PrimaryCommands.Clear();
+            _leftCommandBar.SecondaryCommands.Clear();
 
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;

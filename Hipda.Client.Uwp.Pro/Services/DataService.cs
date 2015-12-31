@@ -695,6 +695,113 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region notice
+        public static List<NoticeItemModel> NoticeData = new List<NoticeItemModel>();
+        async Task LoadNoticeDataAsync(CancellationTokenSource cts)
+        {
+            string url = string.Format("http://www.hi-pda.com/forum/notice.php?_={0}", DateTime.Now.Ticks.ToString("x"));
+            string htmlStr = await _httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlStr);
+
+            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("feed")).ChildNodes;
+            if (items == null)
+            {
+                return;
+            }
+
+            foreach (var item in items)
+            {
+                NoticeType noticeType;
+                string userId = string.Empty;
+                string username = string.Empty;
+                string actionTime = string.Empty;
+                string threadId = string.Empty;
+                string threadTitle = string.Empty;
+                string originalText = string.Empty;
+                string actionHtml = string.Empty;
+                string repostStr = string.Empty;
+                string postId = string.Empty;
+
+                HtmlNode userLinkNode;
+                HtmlNode threadLinkNode;
+                HtmlNode buttonsNode;
+                HtmlNode replyLinkNode;
+                HtmlNode viewLinkNode;
+
+                var divNode = item.ChildNodes[0];
+                string nodeClass = divNode.Attributes[0].Value.Trim().ToLower();
+                switch (nodeClass)
+                {
+                    case "f_quote":
+                    case "f_reply":
+                        noticeType = NoticeType.QuoteOrReply;
+                        userLinkNode = divNode.ChildNodes[0];
+                        userId = userLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/space.php?from=notice&uid=".Length).Split('&')[0];
+                        username = userLinkNode.InnerText.Trim();
+
+                        threadLinkNode = divNode.ChildNodes[2];
+                        threadId = threadLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/viewthread.php?from=notice&tid=".Length).Split('&')[0];
+                        threadTitle = threadLinkNode.InnerText.Trim();
+
+                        actionTime = divNode.ChildNodes[4].InnerText.Trim();
+
+                        actionHtml = divNode.ChildNodes[6].InnerHtml;
+
+                        buttonsNode = divNode.ChildNodes[8];
+                        replyLinkNode = buttonsNode.ChildNodes[0];
+                        repostStr = replyLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/post.php?from=notice&action=reply&fid=2&tid=1778684&reppost=".Length).Split('&')[0];
+                        viewLinkNode = buttonsNode.ChildNodes[2];
+                        postId = viewLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/redirect.php?from=notice&goto=findpost&pid=".Length).Split('&')[0];
+
+                        NoticeData.Add(new NoticeItemModel(noticeType, username, actionTime, new string[] {
+                            userId,
+                            threadId,
+                            threadTitle,
+                            actionHtml,
+                            repostStr,
+                            postId
+                        }));
+                        break;
+                    case "f_thread":
+                        noticeType = NoticeType.Thread;
+                        userLinkNode = divNode.ChildNodes[0];
+                        username = userLinkNode.Attributes[0].Value.Substring("space.php?username=".Length).Split('&')[0];
+                        threadLinkNode = divNode.ChildNodes[2];
+                        string linkUrlStr = threadLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/redirect.php?from=notice&goto=findpost&pid=".Length).Replace("ptid=", string.Empty);
+                        string[] idsAry = linkUrlStr.Split('&');
+                        postId = idsAry[0];
+                        threadId = idsAry[1];
+                        actionTime = divNode.ChildNodes[4].InnerText.Trim();
+
+                        NoticeData.Add(new NoticeItemModel(noticeType, username, actionTime, new string[] {
+                            threadId,
+                            postId
+                        }));
+                        break;
+                    case "f_buddy":
+                        noticeType = NoticeType.Buddy;
+                        userLinkNode = divNode.ChildNodes[0];
+                        userId = userLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/space.php?from=notice&uid=".Length);
+                        username = userLinkNode.InnerText.Trim();
+                        actionTime = divNode.ChildNodes[2].InnerText.Trim();
+
+                        NoticeData.Add(new NoticeItemModel(noticeType, username, actionTime, new string[] {
+                            userId
+                        }));
+                        break;
+                }
+            }
+        }
+
+        public async Task GetNoticeData()
+        {
+            var cts = new CancellationTokenSource();
+            await LoadNoticeDataAsync(cts);
+        }
         #endregion
 
         #region pm

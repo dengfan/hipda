@@ -11,12 +11,12 @@ namespace Hipda.Client.Uwp.Pro
 {
     public class ThreadListItemTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate NormalTemplate { get; set; }
-        public DataTemplate MyThreadsTemplate { get; set; }
-        public DataTemplate MyPostsTemplate { get; set; }
-        public DataTemplate MyFavoritesTemplate { get; set; }
-        public DataTemplate SearchTitleTemplate { get; set; }
-        public DataTemplate SearchFullTextTemplate { get; set; }
+        public DataTemplate ThreadListNormalItemTemplate { get; set; }
+        public DataTemplate ThreadListMyThreadsItemTemplate { get; set; }
+        public DataTemplate ThreadListMyPostsItemTemplate { get; set; }
+        public DataTemplate ThreadListMyFavoritesItemTemplate { get; set; }
+        public DataTemplate ThreadListSearchTitleItemTemplate { get; set; }
+        public DataTemplate ThreadListSearchFullTextItemTemplate { get; set; }
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
@@ -24,17 +24,17 @@ namespace Hipda.Client.Uwp.Pro
             switch (b.ThreadDataType)
             {
                 case ThreadDataType.MyThreads:
-                    return MyThreadsTemplate;
+                    return ThreadListMyThreadsItemTemplate;
                 case ThreadDataType.MyPosts:
-                    return MyPostsTemplate;
+                    return ThreadListMyPostsItemTemplate;
                 case ThreadDataType.MyFavorites:
-                    return MyFavoritesTemplate;
+                    return ThreadListMyFavoritesItemTemplate;
                 case ThreadDataType.SearchTitle:
-                    return SearchTitleTemplate;
+                    return ThreadListSearchTitleItemTemplate;
                 case ThreadDataType.SearchFullText:
-                    return SearchFullTextTemplate;
+                    return ThreadListSearchFullTextItemTemplate;
                 default:
-                    return NormalTemplate;
+                    return ThreadListNormalItemTemplate;
             }
         }
     }

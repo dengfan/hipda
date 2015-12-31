@@ -12,8 +12,8 @@ namespace Hipda.Client.Uwp.Pro
 {
     public class UserMessageListItemTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate LeftTemplate { get; set; }
-        public DataTemplate RightTemplate { get; set; }
+        public DataTemplate UserMessageLeftItemTemplate { get; set; }
+        public DataTemplate UserMessageRightItemTemplate { get; set; }
 
         protected override DataTemplate SelectTemplateCore (object item, DependencyObject container)
         {
@@ -21,10 +21,10 @@ namespace Hipda.Client.Uwp.Pro
 
             if (data.UserId == 0)
             {
-                return RightTemplate;
+                return UserMessageRightItemTemplate;
             }
 
-            return LeftTemplate;
+            return UserMessageLeftItemTemplate;
         }
 
     }

@@ -40,7 +40,24 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// <summary>
         /// 全文搜索
         /// </summary>
-        SearchFullText
+        SearchFullText,
+
+        /// <summary>
+        /// 被引用、回复提醒
+        /// </summary>
+        NoticeQuoteOrReply,
+
+        /// <summary>
+        /// 关注的主题被回复
+        /// </summary>
+        NoticeThread,
+
+        /// <summary>
+        /// 被加为好友之提醒
+        /// </summary>
+        NoticeBuddy,
+
+        Notice
     }
 
     public class ThreadItemViewModelBase : NotificationObject

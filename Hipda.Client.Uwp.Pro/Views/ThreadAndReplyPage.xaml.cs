@@ -231,6 +231,10 @@ namespace Hipda.Client.Uwp.Pro.Views
                     {
                         _threadDataType = ThreadDataType.MyFavorites;
                     }
+                    else if (threadType.Equals("notice"))
+                    {
+                        _threadDataType = ThreadDataType.Notice;
+                    }
 
                     _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, threadType, ThreadListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     DataContext = _threadAndReplyViewModel;

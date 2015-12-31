@@ -12,11 +12,11 @@ namespace Hipda.Client.Uwp.Pro
 {
     public class ReplyListItemTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate TopTemplate { get; set; }
-        public DataTemplate LeftTemplate { get; set; }
-        public DataTemplate Left2Template { get; set; }
-        public DataTemplate RightTemplate { get; set; }
-        public DataTemplate HighLightTemplate { get; set; }
+        public DataTemplate ReplyListTopItemTemplate { get; set; }
+        public DataTemplate ReplyListLeftItemTemplate { get; set; }
+        public DataTemplate ReplyListLeft2ItemTemplate { get; set; }
+        public DataTemplate ReplyListRightItemTemplate { get; set; }
+        public DataTemplate ReplyListHighLightItemTemplate { get; set; }
 
         protected override DataTemplate SelectTemplateCore (object item, DependencyObject container)
         {
@@ -24,23 +24,23 @@ namespace Hipda.Client.Uwp.Pro
 
             if (data.FloorNo == 1)
             {
-                return TopTemplate;
+                return ReplyListTopItemTemplate;
             }
             else if (data.IsHighLight)
             {
-                return HighLightTemplate;
+                return ReplyListHighLightItemTemplate;
             }
             else if (data.AuthorUserId == AccountService.UserId)
             {
-                return RightTemplate;
+                return ReplyListRightItemTemplate;
             }
             else if (data.IsTopicStarter)
             {
-                return Left2Template;
+                return ReplyListLeft2ItemTemplate;
             }
             else
             {
-                return LeftTemplate;
+                return ReplyListLeftItemTemplate;
             }
         }
 
