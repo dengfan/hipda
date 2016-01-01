@@ -67,7 +67,7 @@ namespace Hipda.Html
             }
 
             // 替换引用链接为按钮
-            MatchCollection matchsForRefLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/redirect\.php\?goto\=findpost&amp;pid\=(\d*)&amp;ptid\=(\d*)[^\""]*""[^>]*>(<img\s[^>]*>|\d+#)</a>").Matches(htmlContent);
+            MatchCollection matchsForRefLink = new Regex(@"<a\s+href=""http:\/\/(www|cnc)\.hi\-pda\.com\/forum\/redirect\.php\?goto\=findpost&amp;pid\=(\d*)&amp;ptid\=(\d*)[^\""]*""[^>]*>(<img\s[^>]*>|\d+#)</a>").Matches(htmlContent);
             if (matchsForRefLink != null && matchsForRefLink.Count > 0)
             {
                 for (int i = 0; i < matchsForRefLink.Count; i++)
@@ -75,9 +75,9 @@ namespace Hipda.Html
                     var m = matchsForRefLink[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string postIdStr = m.Groups[1].Value;
-                    string threadIdStr = m.Groups[2].Value;
-                    string linkContent = m.Groups[3].Value;
+                    string postIdStr = m.Groups[2].Value;
+                    string threadIdStr = m.Groups[3].Value;
+                    string linkContent = m.Groups[4].Value;
 
                     string linkXaml = string.Empty;
                     if (linkContent.StartsWith("<img"))
@@ -142,7 +142,7 @@ namespace Hipda.Html
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string fontText = m.Groups[1].Value;
-                    
+
                     string fontXaml = string.Format(@"[Span FontSize=""{{ThemeResource ToolTipContentThemeFontSize}}""]{0}[/Span]", fontText);
                     htmlContent = htmlContent.Replace(placeHolder, fontXaml);
                 }
