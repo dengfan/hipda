@@ -91,6 +91,11 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         async Task LoadReplyDataAsync(int threadId, int threadAuthorUserId, int pageNo, CancellationTokenSource cts)
         {
+            if (pageNo > 1 && pageNo > _replyMaxPageNo)
+            {
+                return;
+            }
+
             // 如果页面已存在，则不重新从网站拉取数据，以便节省流量， 
             var threadReply = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
             if (threadReply != null)
@@ -117,44 +122,20 @@ namespace Hipda.Client.Uwp.Pro.Services
             // 载入HTML
             doc.LoadHtml(htmlStr);
 
-            #region 先判断页码是否已超过最大页码，以免造成重复加载
-            if (pageNo > 1)
+            // 读取最大页码
+            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+            if (pagesNode != null)
             {
-                var forumControlNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("forumcontrol s_clear"));
-                var pagesNode = forumControlNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-                if (pagesNode == null) // 没有超过两页
-                {
-                    return;
-                }
-                else
-                {
-                    var actualCurrentPageNode = pagesNode.Descendants().FirstOrDefault(n => n.NodeType == HtmlNodeType.Element && n.Name == "strong");
-                    if (actualCurrentPageNode != null)
-                    {
-                        int currentPage = Convert.ToInt32(actualCurrentPageNode.InnerText);
-                        if (pageNo > currentPage)
-                        {
-                            return;
-                        }
-                    }
-                }
+                var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
+                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
+                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
+                _replyMaxPageNo = Convert.ToInt32(lastPageNodeValue);
             }
-            #endregion
 
             var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
             if (data == null)
             {
                 return;
-            }
-
-            // 读取最大页码
-            var pagesNode2 = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            if (pagesNode2 != null)
-            {
-                var nodeList = pagesNode2.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
-                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
-                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
-                _replyMaxPageNo = Convert.ToInt32(lastPageNodeValue);
             }
 
             int i = threadReply.Replies.Count();
