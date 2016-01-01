@@ -96,7 +96,7 @@ namespace Hipda.Client.Uwp.Pro.Models
                 }
                 catch
                 {
-                    string errorDetails = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0} 楼层{1}内容解析出错。", ThreadId, FloorNo);
+                    string errorDetails = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0} 楼层{1}内容解析出错。\r\n{2}", ThreadId, FloorNo, XamlStr);
                     Common.PostErrorEmailToDeveloper("回复内容解析出现异常", errorDetails);
 
                     string text = Regex.Replace(TextStr, @"[^a-zA-Z\d\u4e00-\u9fa5]", " ");

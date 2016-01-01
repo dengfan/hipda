@@ -143,7 +143,7 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string fontText = m.Groups[1].Value;
                     
-                    string fontXaml = string.Format(@"[Run FontSize=""{{ThemeResource ToolTipContentThemeFontSize}}""]{0}[/Run]", fontText);
+                    string fontXaml = string.Format(@"[Span FontSize=""{{ThemeResource ToolTipContentThemeFontSize}}""]{0}[/Span]", fontText);
                     htmlContent = htmlContent.Replace(placeHolder, fontXaml);
                 }
             }

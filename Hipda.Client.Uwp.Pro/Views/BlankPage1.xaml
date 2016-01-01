@@ -207,6 +207,30 @@
                 </InlineUIContainer>
             </Paragraph>
         </RichTextBlock>
+        <RichTextBlock xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:local="using:Hipda.Client.Uwp.Pro">
+            <Paragraph>
+                <Run Text="本帖最后由 hellojesson 于 2016-1-1 15:32 编辑" Foreground="DimGray" FontSize="12"/>
+                <LineBreak/>
+                <LineBreak/> 今年最后一步新机了，入了一个可能考虑出掉S6了，主要对三星这颗CPU非常有好感，看看会不会剁手吧
+                <Span FontSize="{ThemeResource ToolTipContentThemeFontSize}">
+                    <InlineUIContainer>
+                        <local:MyLink ThreadId="1579403" LinkContent="HiPDA·NG"/>
+                    </InlineUIContainer>
+                </Span>
+                <LineBreak/> 今天终于有时间整了下机器，说说感受
+                <LineBreak/> 先照例歌奔下
+                <LineBreak/> 速度速度速度，重要的事说三遍。和6SP相比，Pro5的速度有95%的接近，不光是界面还有App，魅族虽然不上2K屏，但是速度真的得到了最大程度的保证。
+                <LineBreak/> 指纹进步很大，特别是在习惯了6SP那种快如闪电的指纹后，魅族这个MTouch 2.1进步也相当大，不说100%，说个90%应该没问题
+                <LineBreak/> 做工没有明显槽点，比6SP轻便许多。卡槽做工一般，好在不会经常拿出来，泰普C好处还没看出来
+                <LineBreak/> 电池电池电池，强悍的电池不多说了，比掉电如撒尿的S6强太多了，亮屏估计7-8小时了
+                <LineBreak/> 11.15第一时间升级了bugme 5.5，24号第二次升级系统后，Pro5的速度优势更加明显
+                <LineBreak/> 指纹识别速度和6sp不相上下，某些时候还感觉比6sp略快一点；系统反应速度就是快快快，常用的微信、网易新闻、地板客户端都是快快快；相机还是短板，这个前面也说了；电池很强悍，亮屏绝对有7-8小时了；屏幕说实话真的没感觉出来有多差
+                <LineBreak/> 总体还是非常推荐购买
+                <LineBreak/> 使用55天后第二次更新
+                <LineBreak/> 最近bugme每周都在更新，感觉小优化有不少，但是相机等有槽点的地方没多大进步
+                <LineBreak/> 还是那句话，这是2015年最均衡的国产手机之一，目前价格有下调，我建议可以入手
+            </Paragraph>
+        </RichTextBlock>
 
         <ContentDialog x:Name="aaae"></ContentDialog>
     </StackPanel>
