@@ -373,6 +373,17 @@ namespace Hipda.Client.Uwp.Pro
                 OpenUserMessageDialog();
             }
         }
+
+        public void CloseUserDialog()
+        {
+            if (UserDialog != null)
+            {
+                _isDialogShown = false;
+                UserDialog.Hide();
+                UserDialog.DataContext = null;
+            }
+            
+        }
         #endregion
 
         private void userDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

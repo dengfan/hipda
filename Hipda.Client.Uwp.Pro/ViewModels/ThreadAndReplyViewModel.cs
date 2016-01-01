@@ -300,11 +300,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                                 _ds.ClearThreadDataForMyFavorites();
                                 LoadDataForMyFavorites(1);
 
-                                var options = new LauncherOptions();
-                                options.TreatAsUntrusted = false;
-
-                                string tipContent = Uri.EscapeUriString("操作成功！");
-                                await Launcher.LaunchUriAsync(new Uri(string.Format("hipda:tip={0}", tipContent)), options);
+                                var frame = Window.Current.Content as Frame;
+                                var mp = frame.Content as MainPage;
+                                if (mp != null)
+                                {
+                                    mp.ShowTipBar("操作成功！");
+                                }
                             }
                         }
                     };

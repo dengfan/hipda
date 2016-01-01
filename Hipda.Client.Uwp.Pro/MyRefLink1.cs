@@ -60,13 +60,16 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("LinkContent", typeof(string), typeof(MyRefLink1), new PropertyMetadata(string.Empty));
 
 
-        protected override async void OnTapped(TappedRoutedEventArgs e)
+        protected override void OnTapped(TappedRoutedEventArgs e)
         {
             base.OnTapped(e);
 
-            var options = new LauncherOptions();
-            options.TreatAsUntrusted = false;
-            await Launcher.LaunchUriAsync(new Uri(string.Format("hipda:openref={0},{1}", PostId, ThreadId)), options);
+            var frame = Window.Current.Content as Frame;
+            var mp = frame.Content as MainPage;
+            if (mp != null)
+            {
+                mp.OpenPostDetailDialog(PostId, ThreadId);
+            }
         }
     }
 }

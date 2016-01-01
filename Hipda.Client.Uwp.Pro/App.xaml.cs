@@ -211,26 +211,6 @@ namespace Hipda.Client.Uwp.Pro
                         int tid = Convert.ToInt32(uri.Substring("hipda:tid=".Length));
                         await OpenThreadInNewView(tid);
                     }
-                    else if (uri.StartsWith("hipda:tip=")) // 弹出提示标签
-                    {
-                        MainPage mp = rootFrame.Content as MainPage;
-                        if (mp != null)
-                        {
-                            mp.ShowTipBar(uri.Substring("hipda:tip=".Length));
-                        }
-                    }
-                    else if (uri.StartsWith("hipda:openref=")) // 打开回复页之引用楼层之详细之对话框
-                    {
-                        string[] param = uri.Substring("hipda:openref=".Length).Split(',');
-                        int postId = Convert.ToInt32(param[0]);
-                        int threadId = Convert.ToInt32(param[1]);
-
-                        MainPage mp = rootFrame.Content as MainPage;
-                        if (mp != null)
-                        {
-                            mp.OpenPostDetailDialog(postId, threadId);
-                        }
-                    }
                 }
             }
         }

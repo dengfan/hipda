@@ -48,20 +48,20 @@ namespace Hipda.Client.Uwp.Pro
 
 
 
-        protected override async void OnTapped(TappedRoutedEventArgs e)
+        protected override void OnTapped(TappedRoutedEventArgs e)
         {
             base.OnTapped(e);
 
-            var parentPage = Common.FindParent<ThreadAndReplyPage>(this);
-            if (parentPage != null)
+            var frame = Window.Current.Content as Frame;
+            var mp = frame.Content as MainPage;
+            if (mp != null)
             {
-                parentPage.OpenReplyPageByThreadId(ThreadId);
-            }
-            else
-            {
-                var options = new LauncherOptions();
-                options.TreatAsUntrusted = false;
-                await Launcher.LaunchUriAsync(new Uri("hipda:tid=" + ThreadId), options);
+                mp.CloseUserDialog();
+                var p = mp.AppFrame.Content as ThreadAndReplyPage;
+                if (p != null)
+                {
+                    p.OpenReplyPageByThreadId(ThreadId);
+                }
             }
         }
     }
