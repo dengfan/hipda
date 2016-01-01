@@ -9,6 +9,17 @@ namespace Hipda.Html
 {
     public static class HtmlToXaml
     {
+        /// <summary>
+        /// 过滤掉不能出现在XML中的字符
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
+        public static string ReplaceHexadecimalSymbols(string txt)
+        {
+            string r = "[\x00-\x08\x0B\x0C\x0E-\x1F\x26]";
+            return Regex.Replace(txt, r, "", RegexOptions.Compiled);
+        }
+
         public static string ConvertPost(int threadId, string htmlContent, int maxImageCount, ref int imageCount)
         {
             //string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
@@ -240,9 +251,9 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("↵", "\r\n"); // 解析换行符
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
-            htmlContent = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
 
-            return htmlContent;
+            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            return ReplaceHexadecimalSymbols(xamlStr);
         }
 
         /// <summary>
@@ -341,9 +352,9 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("↵", "\r\n"); // 解析换行符
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
-            htmlContent = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
 
-            return htmlContent;
+            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            return ReplaceHexadecimalSymbols(xamlStr);
         }
 
         public static string ConvertUserMessage(string htmlContent)
@@ -434,14 +445,14 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("↵", "\r\n"); // 解析换行符
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
-            htmlContent = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
 
-            return htmlContent;
+            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            return ReplaceHexadecimalSymbols(xamlStr);
         }
 
         public static string ConvertSearchThreadTitle(string title, string imageFontIcon, string fileFontIcon, string viewInfo)
         {
-            string xaml = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumBrush}}"" TextWrapping=""Wrap""><Run FontFamily=""Segoe MDL2 Assets"" Foreground=""OrangeRed"" Text=""{1}"" /><Run FontFamily=""Segoe MDL2 Assets"" Foreground=""DeepSkyBlue"" Text=""{2}"" /> {0} <Run Text=""{3}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"" /></TextBlock>";
+            string xamlStr = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumBrush}}"" TextWrapping=""Wrap""><Run FontFamily=""Segoe MDL2 Assets"" Foreground=""OrangeRed"" Text=""{1}"" /><Run FontFamily=""Segoe MDL2 Assets"" Foreground=""DeepSkyBlue"" Text=""{2}"" /> {0} <Run Text=""{3}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"" /></TextBlock>";
 
             MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(title);
             if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
@@ -458,7 +469,8 @@ namespace Hipda.Html
                 }
             }
 
-            return string.Format(xaml, title, imageFontIcon, fileFontIcon, viewInfo);
+            xamlStr = string.Format(xamlStr, title, imageFontIcon, fileFontIcon, viewInfo);
+            return ReplaceHexadecimalSymbols(xamlStr);
         }
 
         public static string ConvertSearchResultSummary(string titleHtml, string searchResultSummaryHtml, string viewInfo)
@@ -468,7 +480,7 @@ namespace Hipda.Html
                 .Replace("\n", string.Empty)
                 .Replace("\r", string.Empty);
 
-            string xaml = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumBrush}}"" TextWrapping=""Wrap"">{0}</TextBlock>";
+            string xamlStr = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumBrush}}"" TextWrapping=""Wrap"">{0}</TextBlock>";
 
             MatchCollection matchsForInvalidStr = new Regex(@"\[[^\]]*\]").Matches(searchResultHtml);
             if (matchsForInvalidStr != null && matchsForInvalidStr.Count > 0)
@@ -497,7 +509,8 @@ namespace Hipda.Html
                 }
             }
 
-            return string.Format(xaml, searchResultHtml);
+            xamlStr = string.Format(xamlStr, searchResultHtml);
+            return ReplaceHexadecimalSymbols(xamlStr);
         }
     }
 }
