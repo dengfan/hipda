@@ -231,16 +231,16 @@ namespace Hipda.Html
             #endregion
 
             htmlContent = new Regex("<[^>]*>").Replace(htmlContent, string.Empty); // 移除所有HTML标签
-            htmlContent = new Regex("\r\n").Replace(htmlContent, string.Empty); // 忽略源换行
-            htmlContent = new Regex("\r").Replace(htmlContent, string.Empty); // 忽略源换行
-            htmlContent = new Regex("\n").Replace(htmlContent, string.Empty); // 忽略源换行
+            htmlContent = htmlContent.Replace("\r\n", string.Empty); // 忽略源换行
+            htmlContent = htmlContent.Replace("\r", string.Empty); // 忽略源换行
+            htmlContent = htmlContent.Replace("\n", string.Empty); // 忽略源换行
             htmlContent = new Regex(@"↵{1,}").Replace(htmlContent, "↵"); // 将多个换行符合并成一个
             htmlContent = new Regex(@"^↵").Replace(htmlContent, string.Empty); // 移除行首的换行符
             htmlContent = new Regex(@"↵$").Replace(htmlContent, string.Empty); // 移除行末的换行符
-            htmlContent = htmlContent.Replace("↵", "[LineBreak/]"); // 解析换行符
+            htmlContent = htmlContent.Replace("↵", "\r\n"); // 解析换行符
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
-            htmlContent = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            htmlContent = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
 
             return htmlContent;
         }
@@ -332,16 +332,16 @@ namespace Hipda.Html
             #endregion
 
             htmlContent = new Regex("<[^>]*>").Replace(htmlContent, string.Empty); // 移除所有HTML标签
-            htmlContent = new Regex("\r\n").Replace(htmlContent, string.Empty); // 忽略源换行
-            htmlContent = new Regex("\r").Replace(htmlContent, string.Empty); // 忽略源换行
-            htmlContent = new Regex("\n").Replace(htmlContent, string.Empty); // 忽略源换行
+            htmlContent = htmlContent.Replace("\r\n", string.Empty); // 忽略源换行
+            htmlContent = htmlContent.Replace("\r", string.Empty); // 忽略源换行
+            htmlContent = htmlContent.Replace("\n", string.Empty); // 忽略源换行
             htmlContent = new Regex(@"↵{1,}").Replace(htmlContent, "↵"); // 将多个换行符合并成一个
             htmlContent = new Regex(@"^↵").Replace(htmlContent, string.Empty); // 移除行首的换行符
             htmlContent = new Regex(@"↵$").Replace(htmlContent, string.Empty); // 移除行末的换行符
-            htmlContent = htmlContent.Replace("↵", "[LineBreak/]"); // 解析换行符
+            htmlContent = htmlContent.Replace("↵", "\r\n"); // 解析换行符
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
-            htmlContent = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            htmlContent = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
 
             return htmlContent;
         }
@@ -425,16 +425,16 @@ namespace Hipda.Html
             #endregion
 
             htmlContent = new Regex("<[^>]*>").Replace(htmlContent, string.Empty); // 移除所有HTML标签
-            htmlContent = new Regex("\r\n").Replace(htmlContent, string.Empty); // 忽略源换行
-            htmlContent = new Regex("\r").Replace(htmlContent, string.Empty); // 忽略源换行
-            htmlContent = new Regex("\n").Replace(htmlContent, string.Empty); // 忽略源换行
+            htmlContent = htmlContent.Replace("\r\n", string.Empty); // 忽略源换行
+            htmlContent = htmlContent.Replace("\r", string.Empty); // 忽略源换行
+            htmlContent = htmlContent.Replace("\n", string.Empty); // 忽略源换行
             htmlContent = new Regex(@"↵{1,}").Replace(htmlContent, "↵"); // 将多个换行符合并成一个
             htmlContent = new Regex(@"^↵").Replace(htmlContent, string.Empty); // 移除行首的换行符
             htmlContent = new Regex(@"↵$").Replace(htmlContent, string.Empty); // 移除行末的换行符
-            htmlContent = htmlContent.Replace("↵", "[LineBreak/]"); // 解析换行符
+            htmlContent = htmlContent.Replace("↵", "\r\n"); // 解析换行符
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
-            htmlContent = string.Format(@"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            htmlContent = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
 
             return htmlContent;
         }

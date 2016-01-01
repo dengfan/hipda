@@ -209,26 +209,137 @@
         </RichTextBlock>
         <RichTextBlock xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:local="using:Hipda.Client.Uwp.Pro">
             <Paragraph>
-                <Run Text="本帖最后由 hellojesson 于 2016-1-1 15:32 编辑" Foreground="DimGray" FontSize="12"/>
+                <Span Foreground="#ff0000">本贴软件大多搜集于PDAfans、Hi-PDA、IOICN等论坛，转贴至本贴的软件基本都经过测试适用于WM5系统。（因为软件搜集于网络所以大多软件原作者已无法注明，请谅解。若是软件原作者不希望被大家共享请回帖说明，我将在第一时间删除。）</Span>
                 <LineBreak/>
-                <LineBreak/> 今年最后一步新机了，入了一个可能考虑出掉S6了，主要对三星这颗CPU非常有好感，看看会不会剁手吧
-                <Span FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                    <InlineUIContainer>
-                        <local:MyLink ThreadId="1579403" LinkContent="HiPDA·NG"/>
-                    </InlineUIContainer>
-                </Span>
-                <LineBreak/> 今天终于有时间整了下机器，说说感受
-                <LineBreak/> 先照例歌奔下
-                <LineBreak/> 速度速度速度，重要的事说三遍。和6SP相比，Pro5的速度有95%的接近，不光是界面还有App，魅族虽然不上2K屏，但是速度真的得到了最大程度的保证。
-                <LineBreak/> 指纹进步很大，特别是在习惯了6SP那种快如闪电的指纹后，魅族这个MTouch 2.1进步也相当大，不说100%，说个90%应该没问题
-                <LineBreak/> 做工没有明显槽点，比6SP轻便许多。卡槽做工一般，好在不会经常拿出来，泰普C好处还没看出来
-                <LineBreak/> 电池电池电池，强悍的电池不多说了，比掉电如撒尿的S6强太多了，亮屏估计7-8小时了
-                <LineBreak/> 11.15第一时间升级了bugme 5.5，24号第二次升级系统后，Pro5的速度优势更加明显
-                <LineBreak/> 指纹识别速度和6sp不相上下，某些时候还感觉比6sp略快一点；系统反应速度就是快快快，常用的微信、网易新闻、地板客户端都是快快快；相机还是短板，这个前面也说了；电池很强悍，亮屏绝对有7-8小时了；屏幕说实话真的没感觉出来有多差
-                <LineBreak/> 总体还是非常推荐购买
-                <LineBreak/> 使用55天后第二次更新
-                <LineBreak/> 最近bugme每周都在更新，感觉小优化有不少，但是相机等有槽点的地方没多大进步
-                <LineBreak/> 还是那句话，这是2015年最均衡的国产手机之一，目前价格有下调，我建议可以入手
+                <Span Foreground="#ff0000"></Span>
+                <LineBreak/> 软件有:
+                <LineBreak/>
+                <Hyperlink NavigateUri="http://bbs.pdask.net/viewthread.php?tid=1691&amp;extra=page%3D1" Foreground="DodgerBlue">
+                        软件有:
+                        &#x0a; 01、注册表编辑软件
+                        <LineBreak/> 02、PC上运行的PDA截屏软件
+                        <LineBreak/> 03、HaaliReader电子图书阅读器 forWM5 WM3
+                        <LineBreak/> 04、最新掌心万年历正式版
+                        <LineBreak/> 05、掌上管家（个人财务管理）
+                        <LineBreak/> 06、Gsplayer v2.25绿色汉化版 mp3播放器
+                        <LineBreak/> 07、金山词霸
+                        <LineBreak/> 08、QQ for WM5（可运行与CMNET、CMWAP）
+                        <LineBreak/> 09、WM5 FOR DOP700（HELMI-WM52K5）刷机ROM
+                        <LineBreak/> 10、Microsoft ActiveSync4.2同步软件
+                        <LineBreak/> 11、支持VGA和远程操作的PC端截图工具 PLUM老大提供
+                        <LineBreak/> 12、将mp3等格式歌曲变成你的PDA铃声
+                        <LineBreak/> 13、天气预报软件最新简体中文SpbWeather1.6.2,build 729
+                        <LineBreak/> 14、铃声《上海滩》
+                        <LineBreak/> 15、庞龙《你是我的玫瑰花》
+                        <LineBreak/> 16、上传几部军事题材的电子小说
+                        <LineBreak/> 17、BryhtFlash。V2.0绿色汉化版
+                        <LineBreak/> 18、flashplayer 插件
+                        <LineBreak/> 19、Mdict最新绿色版 plum老大提供
+                        <LineBreak/> 20、Mdict词库
+                        <LineBreak/> 21、Mdict for pc plum老大提供
+                        <LineBreak/> 22、GPRS 流量计量器
+                        <LineBreak/> 23、PocketMusicBundle 4.33 　　　　　　　　　　　　　　　
+                        <LineBreak/> 24、用PC机的鼠标操作你的PDA
+                        <LineBreak/> 25、大拨号界面和面板恢复2in1forwm5
+                        <LineBreak/> 26、简体中文输入
+                        <LineBreak/> 27、优秀备份软件SpbBackup V1.50简体版/ SpbBackup V1.55 E文版
+                        <LineBreak/> 28、WisMencoder 1.89 bate1 -- 最新最快的视频转换工具
+                        <LineBreak/> 29、Opera 8.6 简体中文浏览器破解版(WM5)
+                        <LineBreak/> 30、讯飞语音电子书绿色整合版V1.2
+                        <LineBreak/> 31、红色警戒PDA绿色版
+                        <LineBreak/> 32、中国传统文化中的一支奇葩---《黄历》
+                        <LineBreak/> 33、闹钟软件Chronos V2.2正式版(完美XX )
+                        <LineBreak/> 34、沧海一声笑flash
+                        <LineBreak/> 35、TCPMP 0.81a 简体中文版 （AVI、WMV、MPG、MJPEG、3GP
+                        <LineBreak/> 36、你说我容易吗flash
+                        <LineBreak/> 37、秋天不回来 flash
+                        <LineBreak/> 38、Pocket player 2.8 /Pocket player
+                </Hyperlink>
+                <Span>3.0版本的破解版(已经汉化）
+                    <LineBreak/> 39、香水有毒flash
+                    <LineBreak/>
+                </Span> 40、寂寞沙洲冷flash
+                <LineBreak/> 41、官方简体Spb Diary 2.0.2
+                <LineBreak/> 42、HA_RescoExplorer_535资源管理器
+                <LineBreak/> 43、XCPUScalar 2007 v3&#8968;1&#8971;.00 简体中文版
+                <LineBreak/> 44、蒙恬手写(含注册）
+                <LineBreak/> 45、拖拉机、连连看、中国象棋三款小游戏
+                <LineBreak/> 46、文字输入—怪兽简体中文输入4㊣cn
+                <LineBreak/> 47、军棋（WM5版）
+                <LineBreak/> 48、最新简体中文
+                <Span>Spb Pocket Plus v3.2.0 Build 5538 B1</Span> 含XX
+                <LineBreak/> 49、手机保护神2.35破解版
+                <LineBreak/> 50、绘图和图片制作软件 Pocket Artist 3.2 绿色汉化版
+                <LineBreak/> 51、DSP_高低音设置
+                <LineBreak/> 52、Spb Finance随身携带的理财软件（含XX）
+                <LineBreak/> 53、智能手机工作室1.1（含XX）
+                <LineBreak/> 54、plum老大提供的两种系统字体（幼圆、雅黑）
+                <LineBreak/> 55、来电精灵 Pro 0.85b XXXXX版
+                <Span>最新来电精灵V0.91 FOR PPC6月11日修正版</Span>
+                <LineBreak/> 56、PC“WORD”功能的SoftMaker Office 2006绿色中文版(11.5更新的XX)
+                <LineBreak/> 57、盛名列车时刻表PPC版 （2007-4-18最新更新）
+                <LineBreak/> 58、WisBar Advance2 v2.7.0.1简体中文正式版
+                <LineBreak/> 59、名片识别系统
+                <LineBreak/> 60、漂亮的拨号界面（ for wm5 ）
+                <LineBreak/> 61、spb Finance2.7绿色汉化注册版XX
+                <LineBreak/> 62、Messenger支持CMWAP的HTTP代理,完美的MSN登录
+                <LineBreak/> 63、SpaceTime 2.06b Retail 零售完全版册 XX
+                <LineBreak/> 65、Spb Time 2.1.1 简体中文版- Pocket PC时钟工具 XX66、WM5 PPC电话拨号具有语音提示
+                <LineBreak/> 67、新版SIM卡管理器
+                <LineBreak/> 68、所有SPB软件通用XX
+                <LineBreak/> 69、eXPerience2.09绿色汉化版－PPC上的仿XP系统
+                <LineBreak/> 70、所有军号铃音
+                <LineBreak/> 71、 短信背景 绝对诱惑
+                <LineBreak/> 72、WM5 Rom刷机方法 （提供2003升WM5必需的合并空间工具）
+                <LineBreak/> 73、696 2003se rom刷回方法及rom和必备软件
+                <LineBreak/> 74、好用的psShutXP重启软件XX
+                <LineBreak/> 75、TCPMP 所出正式版本 CorePlayer v1.0.4 播放器 XX
+                <LineBreak/> 76、MMS3.5.1.5彩信最新版本-HAHA2008
+                <LineBreak/> 77、 WM5.0 用的JAVA模拟器 、最强模拟器POCKETGBA最新版PocketGBA rel
+                <LineBreak/> 78、灵图5.0.29R圣诞版免安装,免激活版
+                <LineBreak/> 79、好用且免费的看图软件XnView Pocket 1.31
+                <LineBreak/> 80、绿色全能任务管理程序IndiBar，带电池状态、开始菜单等功能
+                <LineBreak/> 81、遥控器软件NoviiRemote Deluxe 4.0汉化XX版
+                <LineBreak/> 82、网络上传说是最好用的闹钟最新版（WM5）
+                <LineBreak/> 83、怪兽输入法
+                <LineBreak/> 84、PhoneAlarm 1.51发布(支持简体中文 WM5下超稳定）微软认证
+                <LineBreak/> 85、WM5新建菜单 WM5NewMenu2.0.2汉化版
+                <LineBreak/> 86、看书软件BookStar
+                <LineBreak/> 87、极品时刻表PPC版&#8968;免费绿色1201数据&#8971;
+                <LineBreak/> 88、电话自动双向录音软件XX
+                <LineBreak/> 89、696.5.0系统专用录像软件for HAHA2008 wm5.0
+                <LineBreak/> 90、来电防火墙(MagiCallBeta1.21)最新多国语言（带注册机）
+                <LineBreak/> 91、短信防火墙破解版
+                <LineBreak/> 92、PPC IE浏览辅助PIEPLUS(2.20 \2.11简体版 ）
+                <LineBreak/> 93、完美的今日插件PIToday（WM5.0 2003） 95、附Pocket Informant 2005 正式版2007汉化版XX
+                <LineBreak/> 96、来电精灵0.87b1(大头贴/超强防火墙/照片联系人/支持SIM联系人)
+                <LineBreak/> 97、Microsoft ActiveSync 4.5 简体中文版
+                <LineBreak/> 98、汉王马兰花输入法 /2007年1月更新
+                <LineBreak/> 99、正版CEBook3.5中文版 100、RescoExplorer 5.42简体中文版（附注册机）
+                <LineBreak/> 101、智能手机小秘书Ver2.21 XX 版
+                <LineBreak/> 102、最新Resco Photo Viewer v6.01绿色简体中文版+注册器
+                <LineBreak/> 103、梅花输入法
+                <LineBreak/> 104、GSPlayer version 2.25 媒体播放绿色汉化版（20060810）
+                <LineBreak/> 105、帝国时代--黄金版. 即时战略经典
+                <LineBreak/> 106、ＭＳＲ越野摩托中文绿色版
+                <LineBreak/> 107、&#8968;rrambo汉化&#8971;最新超级日历supercalendar3.5汉化版！！！
+                <LineBreak/> 108、最新股票软件
+                <LineBreak/> 109、简单好用的天气软件fizz_weather_2.31汉化版
+                <LineBreak/> 110、Google Maps(卫星地图）移动版（已汉化）
+                <LineBreak/> 111、skype绿色最新版本1.1.0.20（ppc唯一能打网络电话的软件）
+                <LineBreak/> 112、shinebean 修改的spb weather最新数据源
+                <LineBreak/> 113、无与伦比的桌面软件spb mobile shell简体中文正式版
+                <LineBreak/>
+                <Span>115、最新版Spb Mobile DVD 1.10</Span> 116、金版管家—中文版本3.55
+                <LineBreak/> 117、WebCamera PlusV1.05XX汉化版
+                <Span>（</Span> 将手机当PC摄像头）
+                <LineBreak/> 118、forticlient 最好来电防火墙ＸＸ（已停机/不在服务区）含自动答录机/杀毒 （来自：gmgdc）
+                <LineBreak/> 119【最佳播放器】CorePlayer v1.1.0 简体中文版 by zalhym
+                <LineBreak/> 120、PocketController-Pro（掌上设备控制器专业版）V5.01版
+                <LineBreak/> 121、QuickMenu 2.0 正式版 最棒的 PocketPC 开始菜单和任务切换工具
+                <LineBreak/>
+                <Span Foreground="magenta">点击下载</Span>
+                <LineBreak/> &#8968; 本帖最后由 yunlai001 于 2007-12-4 11:25 编辑 &#8971;
             </Paragraph>
         </RichTextBlock>
 
