@@ -148,8 +148,8 @@
                 <CommandBar x:Name="ThreadCommandBar" Grid.Row="0" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
 
                 <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
-                    <ListView x:Name="LeftListView" SelectionChanged="ThreadListView_SelectionChanged" IncrementalLoadingTrigger="Edge"
-                          VerticalAlignment="Top" IsItemClickEnabled="False" ShowsScrollingPlaceholders="False"/>
+                    <ListView x:Name="LeftListView" ItemClick="LeftListView_ItemClick" IncrementalLoadingTrigger="Edge" SelectionMode="Single"
+                          VerticalAlignment="Top" IsItemClickEnabled="True" ShowsScrollingPlaceholders="False"/>
                 </pr:PullToRefreshBox>
 
                 <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
@@ -160,14 +160,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="welcomePanel" Grid.Column="1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock FontSize="120" Text="🍐" HorizontalAlignment="Center"></TextBlock>
-                    <TextBlock HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Text="来自D版带着爱"/>
-                </StackPanel>
-            </Grid>
-
-            <Grid x:Name="RightWrap" Grid.Column="1" Visibility="Collapsed" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
+            <Grid x:Name="RightWrap" Grid.Column="1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*" />

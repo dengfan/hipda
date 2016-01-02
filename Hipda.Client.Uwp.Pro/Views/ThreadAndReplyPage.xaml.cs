@@ -338,7 +338,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             EntranceNavigationTransitionInfo.SetIsTargetElement(LeftListView, isNarrow);
         }
 
-        private async void ThreadListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void LeftListView_ItemClick(object sender, ItemClickEventArgs e) 
         {
             // 如果进入了选择模式，则不打开主题
             if (LeftListView.SelectionMode == ListViewSelectionMode.Multiple)
@@ -346,18 +346,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
-            if (e.AddedItems.Count == 0)
-            {
-                return;
-            }
-
-            if (RightWrap.Visibility == Visibility.Collapsed)
-            {
-                welcomePanel.Visibility = Visibility.Collapsed;
-                RightWrap.Visibility = Visibility.Visible;
-            }
-
-            var selectedItem = e.AddedItems[0];
+            var selectedItem = e.ClickedItem;
             switch (_threadDataType)
             {
                 case ThreadDataType.MyThreads:
