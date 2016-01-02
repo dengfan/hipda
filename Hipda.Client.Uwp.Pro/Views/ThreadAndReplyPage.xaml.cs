@@ -554,20 +554,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             PostReplyTextBox.Text = data.TextStr;
         }
 
-        private void ReadListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ReadListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (e.AddedItems.Count == 0)
-            {
-                return;
-            }
-
-            var data = e.AddedItems[0] as ThreadItemModelBase;
+            var data = e.ClickedItem as ThreadItemModelBase;
             OpenReplyPageByThreadId(data.ThreadId);
 
             LeftListView.SelectedItem = null;
         }
-
-        
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         //{
