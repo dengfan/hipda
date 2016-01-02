@@ -394,9 +394,8 @@
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <SymbolIcon Symbol="Mail" />
-                                    <TextBlock Text="提醒"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
+                                    <TextBlock Text="提醒" Margin="24,0,0,0" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding PromptAll}"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
@@ -404,9 +403,8 @@
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                                    <TextBlock Text="短消息"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
+                                    <TextBlock Text="短消息" Margin="24,0,0,0" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding PromptPm}"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>

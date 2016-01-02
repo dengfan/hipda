@@ -35,7 +35,7 @@ namespace Hipda.Client.Uwp.Lite
 {
     public sealed partial class TabPlainPage : Page
     {
-        HttpHandle httpClient = HttpHandle.getInstance();
+        HttpHandle httpClient = HttpHandle.GetInstance();
 
         // 最后发布消息时间，用于限制发布速度（30秒限制）
         private DateTime lastPostTime = DateTime.Now.AddSeconds(-31);

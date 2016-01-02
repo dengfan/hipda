@@ -36,6 +36,8 @@ namespace Hipda.Client.Uwp.Pro
         public MainPage()
         {
             this.InitializeComponent();
+
+            DataContext = PromptViewModel.GetInstance();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

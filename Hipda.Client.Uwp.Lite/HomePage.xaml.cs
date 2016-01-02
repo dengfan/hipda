@@ -30,7 +30,7 @@ namespace Hipda.Client.Uwp.Lite
         private readonly NavigationHelper navigationHelper;
         private readonly ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("Resources");
         private ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-        private HttpHandle httpClient = HttpHandle.getInstance();
+        private HttpHandle httpClient = HttpHandle.GetInstance();
 
         public HomePage()
         {

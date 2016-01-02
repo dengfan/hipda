@@ -271,7 +271,7 @@ namespace HipdaUwpLite.Data
 
         private static DataSource _dataSource = new DataSource();
 
-        private static HttpHandle httpClient = HttpHandle.getInstance();
+        private static HttpHandle httpClient = HttpHandle.GetInstance();
 
         /// <summary>
         /// 用于发布信息的 formhash 值

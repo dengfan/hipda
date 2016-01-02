@@ -17,20 +17,15 @@ namespace Hipda.Http
     public class HttpHandle
     {
         private Encoding gbk = null;
-        private static HttpHandle instance = null;
+        private static readonly HttpHandle instance = new HttpHandle();
 
         public HttpHandle()
         {
             gbk = DBCSEncoding.GetDBCSEncoding("gb2312");
         }
 
-        public static HttpHandle getInstance()
+        public static HttpHandle GetInstance()
         {
-            if (instance == null)
-            {
-                instance = new HttpHandle();
-            }
-
             return instance;
         }
 

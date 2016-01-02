@@ -25,7 +25,56 @@ namespace Hipda.Client.Uwp.Pro.Services
         static int _replyPageSize = 50;
         static int _searchPageSize = 50;
 
-        static HttpHandle _httpClient = HttpHandle.getInstance();
+        static HttpHandle _httpClient = HttpHandle.GetInstance();
+
+        #region prompt
+        static void GetPromptData(HtmlNode promptContentNode)
+        {
+            try
+            {
+                if (promptContentNode != null)
+                {
+                    var promtpViewModel = PromptViewModel.GetInstance();
+                    var ulNode = promptContentNode.ChildNodes[1];
+                    promtpViewModel.PromptPm = Convert.ToInt32(ulNode.ChildNodes[0].InnerText.Trim().Substring("私人消息 (".Length).Replace(")", string.Empty));
+                    promtpViewModel.PromptAnnouncePm = Convert.ToInt32(ulNode.ChildNodes[1].InnerText.Trim().Substring("公共消息 (".Length).Replace(")", string.Empty));
+                    promtpViewModel.PromptSystemPm = Convert.ToInt32(ulNode.ChildNodes[2].InnerText.Trim().Substring("系统消息 (".Length).Replace(")", string.Empty));
+                    promtpViewModel.PromptFriend = Convert.ToInt32(ulNode.ChildNodes[3].InnerText.Trim().Substring("好友消息 (".Length).Replace(")", string.Empty));
+                    promtpViewModel.PromptThreads = Convert.ToInt32(ulNode.ChildNodes[4].InnerText.Trim().Substring("帖子消息 (".Length).Replace(")", string.Empty));
+                }
+            }
+            catch (Exception e)
+            {
+                string errorDetails = string.Format("{0}", e.Message);
+                Common.PostErrorEmailToDeveloper("提醒数据解析出现异常", errorDetails);
+            }
+        }
+        #endregion
+
+        #region page number
+        static int GetMaxPageNo(HtmlNode pagesNode)
+        {
+            int maxPageNo = 1;
+
+            try
+            {
+                if (pagesNode != null)
+                {
+                    var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
+                    nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
+                    string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
+                    maxPageNo = Convert.ToInt32(lastPageNodeValue);
+                }
+            }
+            catch (Exception e)
+            {
+                string errorDetails = string.Format("{0}", e.Message);
+                Common.PostErrorEmailToDeveloper("页码数据解析出现异常", errorDetails);
+            }
+
+            return maxPageNo;
+        }
+        #endregion
 
         #region thread
         public static ObservableCollection<ThreadItemModelBase> ReadHistoryData = new ObservableCollection<ThreadItemModelBase>();

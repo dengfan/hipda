@@ -32,7 +32,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private async void loginButton_Click(object sender, RoutedEventArgs e)
         {
-            HttpHandle httpClient = HttpHandle.getInstance();
+            HttpHandle httpClient = HttpHandle.GetInstance();
             string username = usernameTextBox.Text.Trim().ToLower();
             string password = passwordBox.Password.Trim();
             int question = questionComboBox.SelectedIndex;

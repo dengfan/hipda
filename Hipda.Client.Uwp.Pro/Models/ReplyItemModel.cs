@@ -92,7 +92,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             {
                 try
                 {
-                    return XamlReader.Load(XamlStr) as FrameworkElement;
+                    return XamlReader.Load(XamlStr);
                 }
                 catch
                 {

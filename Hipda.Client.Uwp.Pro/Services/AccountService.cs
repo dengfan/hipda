@@ -31,7 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public AccountService()
         {
-            _httpClient = HttpHandle.getInstance();
+            _httpClient = HttpHandle.GetInstance();
             _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
 
             if (_container.Values.ContainsKey(_dataKey))

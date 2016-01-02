@@ -39,6 +39,11 @@ namespace Hipda.Client.Uwp.Pro.Services
             // 载入HTML
             doc.LoadHtml(htmlContent);
 
+            // 最先读取提醒数据
+            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("promptcontent"));
+            GetPromptData(promptContentNode);
+
+            // 读取主内容
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
@@ -47,13 +52,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            if (pagesNode != null)
-            {
-                var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
-                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
-                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
-                _threadMaxPageNo = Convert.ToInt32(lastPageNodeValue);
-            }
+            _threadMaxPageNo = GetMaxPageNo(pagesNode);
 
             if (pageNo > _threadMaxPageNo)
             {

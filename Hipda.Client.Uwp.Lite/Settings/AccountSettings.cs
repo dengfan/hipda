@@ -56,7 +56,7 @@ namespace HipdaUwpLite.Settings
             }
         }
 
-        private static HttpHandle httpClient = HttpHandle.getInstance();
+        private static HttpHandle httpClient = HttpHandle.GetInstance();
 
         public static async Task AutoLogin()
         {
