@@ -33,11 +33,27 @@ namespace Hipda.Client.Uwp.Pro
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
+        void ElementAdapter()
+        {
+            PromptAllBorder.Visibility = ActualWidth >= 1000 ? Visibility.Collapsed : Visibility.Visible;
+            BottomButtonContentControl.ContentTemplate = MainSplitView.IsPaneOpen ? Resources["BottomHorizontalButtonTemplate"] as DataTemplate : Resources["BottomVerticalButtonTemplate"] as DataTemplate;
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
 
             DataContext = PromptViewModel.GetInstance();
+
+            this.SizeChanged += (s, e) =>
+            {
+                ElementAdapter();
+            };
+        }
+
+        private void Page1_Loaded(object sender, RoutedEventArgs e)
+        {
+            ElementAdapter();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -51,6 +67,7 @@ namespace Hipda.Client.Uwp.Pro
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
         {
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
+            BottomButtonContentControl.ContentTemplate = MainSplitView.IsPaneOpen ? Resources["BottomHorizontalButtonTemplate"] as DataTemplate : Resources["BottomVerticalButtonTemplate"] as DataTemplate;
         }
 
         private void pageGrid_Tapped(object sender, TappedRoutedEventArgs e)
