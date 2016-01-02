@@ -716,8 +716,8 @@
         <DataTemplate x:Name="NoticeQuoteOrReplyItemTemplate">
             <Grid>
                 <local:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource userIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <StackPanel Margin="60,4,0,12">
-                    <RichTextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <RichTextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Paragraph>
                             <Run Text="{Binding Username}" FontWeight="Bold" />
                             <Run Text="{Binding ActionTime}" />
@@ -732,13 +732,11 @@
                             <Run Text="{Binding ActionInfo[3]}"/>
                             <LineBreak/>
                             <Run Text="他说：" FontWeight="Bold"/>
-                            <Underline>
-                                <Run Text="{Binding ActionInfo[4]}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                            </Underline>
+                            <Run Text="{Binding ActionInfo[4]}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         </Paragraph>
                     </RichTextBlock>
-                    <StackPanel Margin="0,4,0,0" Orientation="Horizontal">
-                        <Button Margin="0,0,4,0" Content="回复"/>
+                    <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+                        <Button Margin="0,0,8,0" Content="回复"/>
                         <Button Content="查看"/>
                     </StackPanel>
                 </StackPanel>
@@ -746,14 +744,43 @@
         </DataTemplate>
 
         <DataTemplate x:Name="NoticeThreadItemTemplate">
-            <Grid MinHeight="0">
-                
-            </Grid>
+            <StackPanel Margin="60,4,0,12">
+                <RichTextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                    <Paragraph>
+                        <Run Text="{Binding Username}" FontWeight="Bold" />
+                        <Run Text="{Binding ActionTime}" />
+                        <LineBreak/>
+                        <Run Text="回复了您关注的主题" />
+                        <LineBreak/>
+                        <InlineUIContainer>
+                            <HyperlinkButton Content="{Binding ActionInfo[1]}"/>
+                        </InlineUIContainer>
+                    </Paragraph>
+                </RichTextBlock>
+                <Button Margin="0,0,8,0" Content="查看" Background="LightBlue"/>
+            </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Name="NoticeBuddyItemTemplate">
-            <Grid MinHeight="0">
-
+            <Grid>
+                <local:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource userIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <RichTextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                        <Paragraph>
+                            <Run Text="{Binding Username}" FontWeight="Bold" />
+                            <Run Text="{Binding ActionTime}" />
+                            <LineBreak/>
+                            <Run Text="添加您为好友" />
+                        </Paragraph>
+                    </RichTextBlock>
+                    <Button Margin="0,8,0,0" Background="LightGreen">
+                        <TextBlock>
+                            <Run Text="加 "/>
+                            <Run Text="{Binding Username}"/>
+                            <Run Text=" 为好友"/>
+                        </TextBlock>
+                    </Button>
+                </StackPanel>
             </Grid>
         </DataTemplate>
 

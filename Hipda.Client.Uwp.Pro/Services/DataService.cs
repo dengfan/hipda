@@ -762,10 +762,12 @@ namespace Hipda.Client.Uwp.Pro.Services
                         string[] idsAry = linkUrlStr.Split('&');
                         postId = idsAry[0];
                         threadId = idsAry[1];
+                        threadTitle = threadLinkNode.InnerText.Trim();
                         actionTime = divNode.ChildNodes[4].InnerText.Trim();
 
                         NoticeData.Add(new NoticeItemModel(noticeType, username, actionTime, new string[] {
                             threadId,
+                            threadTitle,
                             postId
                         }));
                         break;
