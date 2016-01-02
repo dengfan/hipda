@@ -418,7 +418,7 @@
                 <Border Margin="54,0,64,32" Padding="8" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
-                            <Run Text="楼主 " Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                            <Run Text="&#x1F451;" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>

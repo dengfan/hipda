@@ -149,8 +149,7 @@
 
                 <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
                     <ListView x:Name="LeftListView" SelectionChanged="ThreadListView_SelectionChanged" IncrementalLoadingTrigger="Edge"
-                          VerticalAlignment="Top" IsItemClickEnabled="False" IsSwipeEnabled="False"
-                          CanDrag="False" CanDragItems="False" CanReorderItems="False" ShowsScrollingPlaceholders="False"/>
+                          VerticalAlignment="Top" IsItemClickEnabled="False" ShowsScrollingPlaceholders="False"/>
                 </pr:PullToRefreshBox>
 
                 <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
