@@ -55,9 +55,9 @@ namespace Hipda.Client.Uwp.Pro
             CloseView.Begin();
         }
 
-        private void btnMore_Tapped(object sender, TappedRoutedEventArgs e)
+        private void btnMore_Click(object sender, RoutedEventArgs e)
         {
-            e.Handled = true;
+            //e.Handled = true;
 
             if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
             {
@@ -340,17 +340,17 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        private void openUserInfoDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void openUserInfoDialogButton_Click(object sender, RoutedEventArgs e)
         {
             OpenUserInfoDialog();
         }
 
-        private void openUserMessageListButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void openUserMessageListButton_Click(object sender, RoutedEventArgs e)
         {
             OpenUserMessageListDialog();
         }
 
-        private void openUserMessageDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void openUserMessageDialogButton_Click(object sender, RoutedEventArgs e)
         {
             OpenUserMessageDialog();
         }

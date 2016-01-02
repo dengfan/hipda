@@ -92,17 +92,17 @@
                             HorizontalContentAlignment="Stretch"
                             Content="{Binding XamlContent}"/>
                 <CommandBar Grid.Row="2">
-                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageListButton_Tapped">
+                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Click="openUserMessageListButton_Click">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         </AppBarButton.Icon>
                     </AppBarButton>
-                    <AppBarButton Label="发短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageDialogButton_Tapped">
+                    <AppBarButton Label="发短消息" IsEnabled="{Binding IsButtonEnable}" Click="openUserMessageDialogButton_Click">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE15F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         </AppBarButton.Icon>
                     </AppBarButton>
-                    <AppBarButton Label="个人资料" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserInfoDialogButton_Tapped">
+                    <AppBarButton Label="个人资料" IsEnabled="{Binding IsButtonEnable}" Click="openUserInfoDialogButton_Click">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE2AF;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         </AppBarButton.Icon>
@@ -133,12 +133,12 @@
                     </Grid>
                 </ScrollViewer>
                 <CommandBar Grid.Row="1">
-                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageListButton_Tapped">
+                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Click="openUserMessageListButton_Click">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         </AppBarButton.Icon>
                     </AppBarButton>
-                    <AppBarButton Label="发短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageDialogButton_Tapped">
+                    <AppBarButton Label="发短消息" IsEnabled="{Binding IsButtonEnable}" Click="openUserMessageDialogButton_Click">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE15F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         </AppBarButton.Icon>
@@ -167,12 +167,12 @@
                     <c:UserMessageBox UserId="{Binding UserId}" Submit="UserMessageBox_Submit"></c:UserMessageBox>
                 </Border>
                 <CommandBar Grid.Row="2">
-                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserMessageListButton_Tapped">
+                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Click="openUserMessageListButton_Click">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         </AppBarButton.Icon>
                     </AppBarButton>
-                    <AppBarButton Label="个人资料" IsEnabled="{Binding IsButtonEnable}" Tapped="openUserInfoDialogButton_Tapped">
+                    <AppBarButton Label="个人资料" IsEnabled="{Binding IsButtonEnable}" Click="openUserInfoDialogButton_Click">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE2AF;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         </AppBarButton.Icon>
@@ -376,7 +376,7 @@
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button x:Name="btnMore" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnMore_Tapped">
+                            <Button x:Name="btnMore" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="btnMore_Click">
                                 <Button.Content>
                                     <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                         <SymbolIcon Symbol="More" />
@@ -400,7 +400,7 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <Button Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="openUserMessageListButton_Tapped">
+                        <Button Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="openUserMessageListButton_Click">
                             <Button.Content>
                                 <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
                                     <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
