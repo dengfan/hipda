@@ -65,7 +65,7 @@ namespace Hipda.Client.Uwp.Pro
                 MainSplitView.IsPaneOpen = false;
             }
 
-            this.FindName(nameof(FullSebjectPanel));
+            FindName("FullSebjectPanel");
             OpenView.Begin();
         }
 
