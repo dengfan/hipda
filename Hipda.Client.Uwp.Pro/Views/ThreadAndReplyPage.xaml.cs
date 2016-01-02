@@ -72,7 +72,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
         {
-            ThreadListView.SelectedItem = _lastSelectedItem;
+            LeftListView.SelectedItem = _lastSelectedItem;
         }
 
         #region 委托事件
@@ -213,7 +213,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 {
                     _threadDataType = ThreadDataType.Default;
                     int fid = Convert.ToInt32(param.Substring("fid=".Length));
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, ThreadListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, LeftListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("item="))
@@ -236,7 +236,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                         _threadDataType = ThreadDataType.Notice;
                     }
 
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, threadType, ThreadListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, threadType, LeftListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("search="))
@@ -250,7 +250,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     _threadDataType = (searchType == 0) ? ThreadDataType.SearchTitle : ThreadDataType.SearchFullText;
 
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, ThreadListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
@@ -335,13 +335,13 @@ namespace Hipda.Client.Uwp.Pro.Views
                 Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
             }
 
-            EntranceNavigationTransitionInfo.SetIsTargetElement(ThreadListView, isNarrow);
+            EntranceNavigationTransitionInfo.SetIsTargetElement(LeftListView, isNarrow);
         }
 
         private async void ThreadListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // 如果进入了选择模式，则不打开主题
-            if (ThreadListView.SelectionMode == ListViewSelectionMode.Multiple)
+            if (LeftListView.SelectionMode == ListViewSelectionMode.Multiple)
             {
                 return;
             }
@@ -575,7 +575,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             var data = e.AddedItems[0] as ThreadItemModelBase;
             OpenReplyPageByThreadId(data.ThreadId);
 
-            ThreadListView.SelectedItem = null;
+            LeftListView.SelectedItem = null;
         }
 
         

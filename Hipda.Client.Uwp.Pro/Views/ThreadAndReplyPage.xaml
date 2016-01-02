@@ -148,7 +148,7 @@
                 <CommandBar x:Name="ThreadCommandBar" Grid.Row="0" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
 
                 <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
-                    <ListView x:Name="ThreadListView" SelectionChanged="ThreadListView_SelectionChanged" IncrementalLoadingTrigger="Edge"
+                    <ListView x:Name="LeftListView" SelectionChanged="ThreadListView_SelectionChanged" IncrementalLoadingTrigger="Edge"
                           VerticalAlignment="Top" IsItemClickEnabled="False" IsSwipeEnabled="False"
                           CanDrag="False" CanDragItems="False" CanReorderItems="False" ShowsScrollingPlaceholders="False"/>
                 </pr:PullToRefreshBox>
