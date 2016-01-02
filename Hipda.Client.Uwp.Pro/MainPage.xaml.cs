@@ -26,6 +26,8 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        bool _isShowFullForumPanel = false;
+
         public static int CurrentForumId = 2;
         public static string CurrentNavButtonName = "DiButton"; // 默认为地板
 
@@ -52,12 +54,17 @@ namespace Hipda.Client.Uwp.Pro
         private void pageGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
             e.Handled = true;
-            CloseView.Begin();
+
+            if (_isShowFullForumPanel)
+            {
+                _isShowFullForumPanel = false;
+                CloseView.Begin();
+            }
         }
 
-        private void btnMore_Click(object sender, RoutedEventArgs e)
+        private void btnMore_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            //e.Handled = true;
+            e.Handled = true;
 
             if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
             {
@@ -66,10 +73,11 @@ namespace Hipda.Client.Uwp.Pro
             }
 
             FindName("FullSebjectPanel");
+            _isShowFullForumPanel = true;
             OpenView.Begin();
         }
 
-        private void FullSebjectPanel_Tapped(object sender, TappedRoutedEventArgs e)
+        private void FullSebjectPanel_Tapped(object sender, TappedRoutedEventArgs e) 
         {
             e.Handled = true;
         }
