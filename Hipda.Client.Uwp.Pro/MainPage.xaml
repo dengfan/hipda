@@ -34,27 +34,31 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="NoticeButton" Width="48" Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click">
+                <Button x:Name="NoticeButton" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click">
                     <Button.Content>
                         <Grid>
-                            <SymbolIcon Symbol="Mail" HorizontalAlignment="Center" VerticalAlignment="Top" />
-                            <TextBlock Text="{Binding PromptAll}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            <SymbolIcon Symbol="Mail"/>
+                            <Border Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                                <TextBlock Text="{Binding PromptAll}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                            </Border>
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="1" Width="48" Style="{StaticResource NavButtonNormalStyle}" Click="openUserMessageListButton_Click">
+                <Button Grid.Column="1" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" Click="openUserMessageListButton_Click">
                     <Button.Content>
                         <Grid>
-                            <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" HorizontalAlignment="Center" VerticalAlignment="Top" />
-                            <TextBlock Text="{Binding PromptPm}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+                            <Border Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                                <TextBlock Text="{Binding PromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                            </Border>
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="2" x:Name="btnSettings" Width="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Right" Click="btnSettings_Click">
+                <Button Grid.Column="2" x:Name="btnSettings" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Right" Click="btnSettings_Click">
                     <Button.Content>
-                        <StackPanel Orientation="Horizontal">
+                        <Grid>
                             <SymbolIcon Symbol="Setting" />
-                        </StackPanel>
+                        </Grid>
                     </Button.Content>
                 </Button>
             </Grid>
@@ -62,27 +66,31 @@
 
         <DataTemplate x:Name="BottomVerticalButtonTemplate">
             <StackPanel BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
-                <Button x:Name="NoticeButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="NoticeButton_Click">
+                <Button x:Name="NoticeButton" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="NoticeButton_Click">
                     <Button.Content>
                         <Grid>
-                            <SymbolIcon Symbol="Mail" HorizontalAlignment="Center" VerticalAlignment="Top" />
-                            <TextBlock Text="{Binding PromptAll}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            <SymbolIcon Symbol="Mail"/>
+                            <Border Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                                <TextBlock Text="{Binding PromptAll}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                            </Border>
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="openUserMessageListButton_Click">
+                <Button Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="openUserMessageListButton_Click">
                     <Button.Content>
                         <Grid>
-                            <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" HorizontalAlignment="Center" VerticalAlignment="Top" />
-                            <TextBlock Text="{Binding PromptPm}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+                            <Border Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                                <TextBlock Text="{Binding PromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                            </Border>
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button x:Name="btnSettings" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="btnSettings_Click">
+                <Button x:Name="btnSettings" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="btnSettings_Click">
                     <Button.Content>
-                        <StackPanel Width="48" Orientation="Horizontal">
+                        <Grid>
                             <SymbolIcon Symbol="Setting" />
-                        </StackPanel>
+                        </Grid>
                     </Button.Content>
                 </Button>
             </StackPanel>
