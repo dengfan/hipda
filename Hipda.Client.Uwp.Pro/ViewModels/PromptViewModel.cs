@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -29,7 +32,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 _promptPm = value;
                 this.RaisePropertyChanged("PromptPm");
-                this.RaisePropertyChanged("PromptAll");
+                this.RaisePropertyChanged("PmNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 
@@ -41,8 +45,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             set
             {
                 _promptAnnouncePm = value;
-                this.RaisePropertyChanged("PromptAnnouncePm");
-                this.RaisePropertyChanged("PromptAll");
+                this.RaisePropertyChanged("PromptAllWithoutPromptPm");
+                this.RaisePropertyChanged("NoticeNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 
@@ -54,8 +59,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             set
             {
                 _promptSystemPm = value;
-                this.RaisePropertyChanged("PromptSystemPm");
-                this.RaisePropertyChanged("PromptAll");
+                this.RaisePropertyChanged("PromptAllWithoutPromptPm");
+                this.RaisePropertyChanged("NoticeNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 
@@ -67,8 +73,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             set
             {
                 _promptFriend = value;
-                this.RaisePropertyChanged("PromptFriend");
-                this.RaisePropertyChanged("PromptAll");
+                this.RaisePropertyChanged("PromptAllWithoutPromptPm");
+                this.RaisePropertyChanged("NoticeNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 
@@ -80,12 +87,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             set
             {
                 _promptThreads = value;
-                this.RaisePropertyChanged("PromptThreads");
-                this.RaisePropertyChanged("PromptAll");
+                this.RaisePropertyChanged("PromptAllWithoutPromptPm");
+                this.RaisePropertyChanged("NoticeNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 
-        public int PromptAll
+        public int PromptAllWithoutPromptPm
         {
             get
             {
@@ -93,5 +101,30 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 return PromptAnnouncePm + PromptSystemPm + PromptFriend + PromptThreads;
             }
         }
+
+        public Visibility NoticeNoVisibility
+        {
+            get
+            {
+                return (PromptAnnouncePm + PromptSystemPm + PromptFriend + PromptThreads) > 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public Visibility PmNoVisibility
+        {
+            get
+            {
+                return PromptPm > 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public SolidColorBrush PromptColor
+        {
+            get
+            {
+                return (PromptPm + PromptAnnouncePm + PromptSystemPm + PromptFriend + PromptThreads) > 0 ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Transparent);
+            }
+        }
+
     }
 }
