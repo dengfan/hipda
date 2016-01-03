@@ -497,11 +497,11 @@
             
         </SplitView>
 
-        <Button x:Name="MainSplitViewToggle" Style="{StaticResource NavButtonNormalStyle}" Width="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
+        <Button x:Name="MainSplitViewToggle" Padding="0" Style="{StaticResource NavButtonNormalStyle}" Width="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
             <Button.Content>
                 <Grid>
                     <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"/>
-                    <Ellipse x:Name="PromptAllBorder" Margin="0,4,0,0" Fill="Red" Width="6" Height="6" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Ellipse x:Name="PromptAllBorder" Margin="6,6,0,0" Fill="Red" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 </Grid>
             </Button.Content>
         </Button>
