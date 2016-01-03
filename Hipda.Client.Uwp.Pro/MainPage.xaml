@@ -23,7 +23,7 @@
                         </VisualState>
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
-                <ContentPresenter x:Name="ContentPresenter" Padding="{TemplateBinding Padding}" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}"/>
             </Grid>
         </ControlTemplate>
 
@@ -38,7 +38,7 @@
                     <Button.Content>
                         <Grid>
                             <SymbolIcon Symbol="Mail"/>
-                            <Border Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                            <Border Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
                                 <TextBlock Text="{Binding PromptAll}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                             </Border>
                         </Grid>
@@ -48,7 +48,7 @@
                     <Button.Content>
                         <Grid>
                             <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
-                            <Border Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                            <Border Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
                                 <TextBlock Text="{Binding PromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                             </Border>
                         </Grid>
@@ -70,7 +70,7 @@
                     <Button.Content>
                         <Grid>
                             <SymbolIcon Symbol="Mail"/>
-                            <Border Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                            <Border Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
                                 <TextBlock Text="{Binding PromptAll}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                             </Border>
                         </Grid>
@@ -80,7 +80,7 @@
                     <Button.Content>
                         <Grid>
                             <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
-                            <Border Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                            <Border Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
                                 <TextBlock Text="{Binding PromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                             </Border>
                         </Grid>
@@ -360,7 +360,7 @@
                         <StackPanel>
                             <Button x:Name="SearchButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="SearchButton_Click">
                                 <Button.Content>
-                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
                                         <SymbolIcon Symbol="Zoom" />
                                         <TextBlock Text="搜索贴子"
                                            Margin="24,0,0,0"
@@ -387,7 +387,7 @@
                             </StackPanel>
                             <Button x:Name="MyThreadsButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="MyThreadsButton_Click">
                                 <Button.Content>
-                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="&#xEA4A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                                         <TextBlock Text="我的贴子"
                                            Margin="24,0,0,0"
@@ -397,7 +397,7 @@
                             </Button>
                             <Button x:Name="MyPostsButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="MyPostsButton_Click">
                                 <Button.Content>
-                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="&#xE89B;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                                         <TextBlock Text="我的回复"
                                            Margin="24,0,0,0"
@@ -407,7 +407,7 @@
                             </Button>
                             <Button x:Name="MyFavoritesButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="MyFavoritesButton_Click">
                                 <Button.Content>
-                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="&#xE1CE;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                                         <TextBlock Text="我的收藏"
                                            Margin="24,0,0,0"
@@ -417,7 +417,7 @@
                             </Button>
                             <Button x:Name="DiButton" Style="{StaticResource NavButtonSelectedStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="DiButton_Click">
                                 <Button.Content>
-                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="Di" FontFamily="Consolas" />
                                         <TextBlock Text="Discovery 版"
                                            Margin="24,0,0,0"
@@ -427,7 +427,7 @@
                             </Button>
                             <Button x:Name="BsButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="BsButton_Click">
                                 <Button.Content>
-                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="BS" FontFamily="Consolas" />
                                         <TextBlock Text="Buy &amp; Sell 版"
                                            Margin="24,0,0,0"
@@ -437,7 +437,7 @@
                             </Button>
                             <Button x:Name="EiButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="EiButton_Click">
                                 <Button.Content>
-                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
                                         <FontIcon Glyph="EI" FontFamily="Consolas" />
                                         <TextBlock Text="E-Ink 版"
                                            Margin="24,0,0,0"
@@ -447,7 +447,7 @@
                             </Button>
                             <Button x:Name="btnMore" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnMore_Tapped">
                                 <Button.Content>
-                                    <StackPanel Padding="5 0 0 0" Orientation="Horizontal">
+                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
                                         <SymbolIcon Symbol="More" />
                                         <TextBlock Text="更多版块"
                                            Margin="24,0,0,0"

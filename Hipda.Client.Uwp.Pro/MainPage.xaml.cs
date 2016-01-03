@@ -215,6 +215,7 @@ namespace Hipda.Client.Uwp.Pro
         private void MainSplitView_PaneClosed(SplitView sender, object args)
         {
             SearchPanel.Visibility = Visibility.Collapsed;
+            ElementAdapter();
         }
 
         private void SearchDefaultSubmit()
