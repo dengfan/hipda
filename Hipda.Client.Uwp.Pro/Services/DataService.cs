@@ -179,7 +179,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
             _replyMaxPageNo = GetMaxPageNo(pagesNode);
 
-            var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
+            var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
             if (data == null)
             {
                 return;
@@ -199,7 +199,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 int authorUserId = 0;
                 string authorUsername = string.Empty;
-                var authorNode = postAuthorNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
+                var authorNode = postAuthorNode.ChildNodes.FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("postinfo"));
                 if (authorNode != null)
                 {
                     authorNode = authorNode.ChildNodes[1]; // a
@@ -215,7 +215,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     authorUsername = authorNode.InnerText;
                 }
 
-                var floorPostInfoNode = postContentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
+                var floorPostInfoNode = postContentNode.ChildNodes.FirstOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
                 var floorLinkNode = floorPostInfoNode.ChildNodes[1].ChildNodes[0]; // a
                 int postId = Convert.ToInt32(floorLinkNode.Attributes["id"].Value.Replace("postnum", string.Empty));
                 var floorNumNode = floorLinkNode.ChildNodes[0]; // em
@@ -223,7 +223,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string threadTitle = string.Empty;
                 if (floor == 1)
                 {
-                    var threadTitleNode = postContentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("threadtitle"));
+                    var threadTitleNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("threadtitle"));
                     if (threadTitleNode != null)
                     {
                         var h1 = threadTitleNode.ChildNodes[1];
@@ -238,7 +238,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 string postTime = string.Empty;
-                var postTimeNode = postContentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
+                var postTimeNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("em") && n.GetAttributeValue("id", "").StartsWith("authorposton")); // em
                 if (postTimeNode != null)
                 {
                     postTime = postTimeNode.InnerText
@@ -251,7 +251,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
-                var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
+                var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
                     // 用于回复引用
