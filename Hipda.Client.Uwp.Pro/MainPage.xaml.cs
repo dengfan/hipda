@@ -89,6 +89,7 @@ namespace Hipda.Client.Uwp.Pro
             {
                 // 以免 pane 挡住 full sebject panel
                 MainSplitView.IsPaneOpen = false;
+                ElementAdapter();
             }
 
             FindName("FullSebjectPanel");
@@ -156,6 +157,8 @@ namespace Hipda.Client.Uwp.Pro
             if (SearchPanel.Visibility == Visibility.Collapsed)
             {
                 MainSplitView.IsPaneOpen = true;
+                ElementAdapter();
+
                 SearchPanel.Visibility = Visibility.Visible;
                 KeywordTextBox.Focus(FocusState.Programmatic);
             }
