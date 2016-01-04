@@ -744,7 +744,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             // 载入HTML
             doc.LoadHtml(htmlStr);
 
-            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("feed")).ChildNodes;
+            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("feed")).ChildNodes;
             if (items == null)
             {
                 return null;
@@ -856,6 +856,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         userId = userLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/space.php?from=notice&uid=".Length);
                         username = userLinkNode.InnerText.Trim();
                         actionTime = divNode.ChildNodes[2].InnerText.Trim();
+                        isNew = divNode.ChildNodes[3].Name.Equals("img");
 
                         data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
                             userId
