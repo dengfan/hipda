@@ -4,12 +4,15 @@ using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
+using Windows.Data.Xml.Dom;
 using Windows.Foundation;
+using Windows.UI.Notifications;
 
 namespace Hipda.BackgroundTask
 {
@@ -26,18 +29,18 @@ namespace Hipda.BackgroundTask
             deferral.Complete();
         }
 
-        private IAsyncOperation<string> GetPromptData()
+        private async Task GetPromptData()
         {
             try
             {
-                return AsyncInfo.Run(token => LoadPromptData());
+                var cts = new CancellationTokenSource();
+                var promptData = await LoadNoticeDataAsync(cts);
+                UpdatePrimaryTile(promptData);
             }
             catch (Exception)
             {
                 // 忽略
             }
-
-            return null;
         }
 
         async Task<List<NoticeItemModel>> LoadNoticeDataAsync(CancellationTokenSource cts)
@@ -154,18 +157,21 @@ namespace Hipda.BackgroundTask
                                 postId
                             }));
                         }
-                        
                         break;
                     case "f_buddy":
-                        noticeType = NoticeType.Buddy;
-                        userLinkNode = divNode.ChildNodes[0];
-                        userId = userLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/space.php?from=notice&uid=".Length);
-                        username = userLinkNode.InnerText.Trim();
-                        actionTime = divNode.ChildNodes[2].InnerText.Trim();
+                        isNew = divNode.ChildNodes[3].Name.Equals("img");
+                        if (isNew)
+                        {
+                            noticeType = NoticeType.Buddy;
+                            userLinkNode = divNode.ChildNodes[0];
+                            userId = userLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/space.php?from=notice&uid=".Length);
+                            username = userLinkNode.InnerText.Trim();
+                            actionTime = divNode.ChildNodes[2].InnerText.Trim();
 
-                        data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
-                            userId
-                        }));
+                            data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
+                                userId
+                            }));
+                        }
                         break;
                 }
             }
@@ -173,37 +179,90 @@ namespace Hipda.BackgroundTask
             return data;
         }
 
-        private async Task<string> LoadPromptData()
+        private const string TileTemplateXml = @"<tile>
+  <visual branding=""nameAndLogo"">
+    <binding template=""TileMedium"" hint-textStacking=""center"">
+      <image src=""{{0}}"" placement=""peek"" hint-crop=""circle""/>
+      <text hint-style=""captionSubtle"" hint-align=""center"">{{1}}</text>
+      <text hint-style=""captionSubtle"" hint-align=""center"">{{2}}</text>
+    </binding>
+
+    <binding template=""TileWide"">
+      <group>
+        <subgroup hint-weight=""33"">
+          <image src=""{{0}}"" hint-crop=""circle"" />
+        </subgroup>
+        <subgroup hint-textStacking=""center"">
+          <text hint-style=""subtitleSubtle"">{{1}}</text>
+          <text hint-style=""subtitleSubtle"">{{2}}</text>
+        </subgroup>
+      </group>
+    </binding>
+
+    <binding template=""TileLarge"" hint-textStacking=""center"">
+      <group>
+        <subgroup hint-weight=""1""/>
+        <subgroup hint-weight=""2"">
+          <image src=""{{0}}"" hint-crop=""circle""/>
+        </subgroup>
+        <subgroup hint-weight=""1""/>
+      </group>
+      <text hint-style=""title"" hint-align=""center"">{{1}}</text>
+      <text hint-style=""subtitleSubtle"" hint-align=""center"">{{2}}</text>
+    </binding>
+  </visual>
+</tile>";
+
+        private void UpdatePrimaryTile(List<NoticeItemModel> promptData)
         {
+            if (promptData == null || !promptData.Any())
+            {
+                return;
+            }
+
             try
             {
-                // 读取提醒页数据
+                var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+                updater.EnableNotificationQueueForWide310x150(true);
+                updater.EnableNotificationQueueForSquare150x150(true);
+                updater.EnableNotificationQueueForSquare310x310(true);
+                updater.EnableNotificationQueue(true);
+                updater.Clear();
 
+                foreach (var promptItem in promptData)
+                {
+                    var doc = new XmlDocument();
+                    if (promptItem.NoticeType == NoticeType.QuoteOrReply)
+                    {
+                        var xml = string.Format(TileTemplateXml, GetSmallAvatarUrlByUserId(Convert.ToInt32(promptItem.ActionInfo[0])), promptItem.Username, promptItem.ActionInfo[4]);
+                        doc.LoadXml(WebUtility.HtmlDecode(xml), new XmlLoadSettings
+                        {
+                            ProhibitDtd = false,
+                            ValidateOnParse = false,
+                            ElementContentWhiteSpace = false,
+                            ResolveExternals = false
+                        });
 
-                //var response = await ApiService.GetHotNewsListAsync();
-                //if (response?.Data != null)
-                //{
-                //    var news = response.Data.Take(5).ToList();
-                //    UpdatePrimaryTile(news);
-                //    UpdateSecondaryTile(news);
-                //}
+                        updater.Update(new TileNotification(doc));
+                    }
+                }
             }
             catch (Exception)
             {
-                // 忽略
+                // ignored
+            }
+        }
+
+        private static string GetSmallAvatarUrlByUserId(int userId)
+        {
+            var s = new int[10];
+            for (int i = 0; i < s.Length - 1; ++i)
+            {
+                s[i] = userId % 10;
+                userId = (userId - s[i]) / 10;
             }
 
-            return null;
-        }
-
-        private void UpdateSecondaryTile(object news)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void UpdatePrimaryTile(object news)
-        {
-            throw new NotImplementedException();
+            return "http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_small.jpg";
         }
     }
 }
