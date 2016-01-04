@@ -55,10 +55,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             doc.LoadHtml(htmlContent);
 
             // 读取发布文字信息所需要的 hash 值
-            var postNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("class", "").Equals("content editorcontent"));
-            if (postNode != null)
+            var formNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("form") && n.GetAttributeValue("id", "").Equals("postform"));
+            if (formNode != null)
             {
-                var formHashInputNode = postNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
+                var formHashInputNode = formNode.ChildNodes.FirstOrDefault(n => n.GetAttributeValue("name", "").Equals("formhash"));
                 if (formHashInputNode != null)
                 {
                     FormHash = formHashInputNode.Attributes[3].Value.ToString();
@@ -66,16 +66,16 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 读取 上载图片所需的 uid 和 hash 值
-            var imgAttachNode = doc.DocumentNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("id", "").Equals("imgattachbtnhidden"));
-            if (imgAttachNode != null)
+            var imgAttachFormNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("form") && n.GetAttributeValue("id", "").Equals("imgattachform"));
+            if (imgAttachFormNode != null)
             {
-                var userIdNode = imgAttachNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("uid"));
+                var userIdNode = imgAttachFormNode.ChildNodes.FirstOrDefault(n => n.GetAttributeValue("name", "").Equals("uid"));
                 if (userIdNode != null)
                 {
                     UserId = Convert.ToInt32(userIdNode.Attributes[2].Value);
                 }
 
-                var hashNode = imgAttachNode.Descendants().SingleOrDefault(n => n.GetAttributeValue("name", "").Equals("hash"));
+                var hashNode = imgAttachFormNode.ChildNodes.FirstOrDefault(n => n.GetAttributeValue("name", "").Equals("hash"));
                 if (hashNode != null)
                 {
                     Hash = hashNode.Attributes[2].Value;
