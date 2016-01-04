@@ -584,7 +584,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
             GetPromptData(promptContentNode);
 
-            var node = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("profilecontent"));
+            var node = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("profilecontent"));
             if (node != null)
             {
                 string xaml = Html.HtmlToXaml.ConvertUserInfo(node.InnerHtml);
