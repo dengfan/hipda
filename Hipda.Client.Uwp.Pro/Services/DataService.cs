@@ -172,7 +172,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             doc.LoadHtml(htmlStr);
 
             // 最先读取提醒数据
-            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("promptcontent"));
+            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
             GetPromptData(promptContentNode);
 
             // 读取最大页码
@@ -581,7 +581,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             doc.LoadHtml(htmlContent);
 
             // 最先读取提醒数据
-            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("promptcontent"));
+            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
             GetPromptData(promptContentNode);
 
             var node = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("profilecontent"));
@@ -619,7 +619,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             doc.LoadHtml(htmlContent);
 
             // 最先读取提醒数据
-            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("promptcontent"));
+            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
             GetPromptData(promptContentNode);
 
             var messageListNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pm_list"));

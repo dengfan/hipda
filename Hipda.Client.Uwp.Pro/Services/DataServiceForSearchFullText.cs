@@ -64,7 +64,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             doc.LoadHtml(htmlContent);
 
             // 最先读取提醒数据
-            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("promptcontent"));
+            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
             GetPromptData(promptContentNode);
 
             // 读取主内容

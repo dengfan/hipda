@@ -40,18 +40,18 @@ namespace Hipda.Client.Uwp.Pro.Services
             doc.LoadHtml(htmlContent);
 
             // 最先读取提醒数据
-            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("promptcontent"));
+            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
             GetPromptData(promptContentNode);
 
             // 读取主内容
-            var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
+            var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
                 return false;
             }
 
             // 读取最大页码
-            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("pages"));
             _threadMaxPageNo = GetMaxPageNo(pagesNode);
 
             if (pageNo > _threadMaxPageNo)
@@ -60,7 +60,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 如果置顶贴数过多，只取非置顶贴的话，第一页数据项过少，会导致不会自动触发加载下一页数据
-            var tbodies = dataTable.Descendants().Where(n => n.GetAttributeValue("id", "").Contains("stickthread_") || n.GetAttributeValue("id", "").Contains("normalthread_"));
+            var tbodies = dataTable.ChildNodes.Where(n => n.GetAttributeValue("id", "").Contains("stickthread_") || n.GetAttributeValue("id", "").Contains("normalthread_"));
             if (tbodies == null)
             {
                 return false;
@@ -71,7 +71,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             {
                 var tr = item.ChildNodes[1];
                 var th = tr.ChildNodes[5];
-                var span = th.Descendants().Single(n => n.GetAttributeValue("id", "").StartsWith("thread_"));
+                var span = th.ChildNodes.FirstOrDefault(n => n.Name.Equals("span") && n.GetAttributeValue("id", "").StartsWith("thread_"));
                 var a = span.ChildNodes[0];
                 var tdAuthor = tr.ChildNodes[7];
                 var tdNums = tr.ChildNodes[9];
@@ -83,7 +83,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string title = a.InnerText.Trim();
 
                 int attachType = -1;
-                var attachIconNode = th.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("attach"));
+                var attachIconNode = th.ChildNodes.FirstOrDefault(n => n.Name.Equals("img") && n.GetAttributeValue("class", "").Equals("attach"));
                 if (attachIconNode != null)
                 {
                     string attachString = attachIconNode.Attributes[1].Value;
@@ -101,7 +101,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var authorName = string.Empty;
                 int authorUserId = 0;
                 var authorNameNode = tdAuthor.ChildNodes[1]; // cite 此节点有出“匿名”的可能
-                var authorNameLink = authorNameNode.Descendants().FirstOrDefault(n => n.Name.Equals("a"));
+                var authorNameLink = authorNameNode.ChildNodes.FirstOrDefault(n => n.Name.Equals("a"));
                 if (authorNameLink == null)
                 {
                     authorName = authorNameNode.InnerText.Trim();
