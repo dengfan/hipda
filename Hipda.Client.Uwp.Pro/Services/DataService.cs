@@ -731,9 +731,10 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region notice
-        public static List<NoticeItemModel> NoticeData = new List<NoticeItemModel>();
-        async Task LoadNoticeDataAsync(CancellationTokenSource cts)
+        async Task<List<NoticeItemModel>> LoadNoticeDataAsync(CancellationTokenSource cts)
         {
+            var data = new List<NoticeItemModel>();
+
             string url = string.Format("http://www.hi-pda.com/forum/notice.php?_={0}", DateTime.Now.Ticks.ToString("x"));
             string htmlStr = await _httpClient.GetAsync(url, cts);
 
@@ -746,12 +747,13 @@ namespace Hipda.Client.Uwp.Pro.Services
             var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("feed")).ChildNodes;
             if (items == null)
             {
-                return;
+                return null;
             }
 
             foreach (var item in items)
             {
                 NoticeType noticeType;
+                bool isNew = false;
                 string userId = string.Empty;
                 string username = string.Empty;
                 string actionTime = string.Empty;
@@ -782,7 +784,21 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                         actionTime = divNode.ChildNodes[4].InnerText.Trim();
 
-                        var actionContentNode = divNode.ChildNodes[6];
+                        HtmlNode actionContentNode;
+                        HtmlNode buttonsNode;
+                        if (divNode.ChildNodes[5].Name.Equals("img"))
+                        {
+                            isNew = true;
+
+                            actionContentNode = divNode.ChildNodes[7];
+                            buttonsNode = divNode.ChildNodes[9];
+                        }
+                        else
+                        {
+                            actionContentNode = divNode.ChildNodes[6];
+                            buttonsNode = divNode.ChildNodes[8];
+                        }
+                        
                         originalText = actionContentNode.ChildNodes[0].ChildNodes[1].ChildNodes[0]
                             .InnerText.Trim()
                             .Replace("\r", " ")
@@ -791,14 +807,13 @@ namespace Hipda.Client.Uwp.Pro.Services
                             .InnerText.Trim()
                             .Replace("\r", " ")
                             .Replace("\n", " ");
-
-                        var buttonsNode = divNode.ChildNodes[8];
+                        
                         var replyLinkNode = buttonsNode.ChildNodes[0];
                         repostStr = replyLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/post.php?from=notice&action=reply&fid=2&tid=1778684&reppost=".Length).Split('&')[0];
                         var viewLinkNode = buttonsNode.ChildNodes[2];
                         postId = viewLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/redirect.php?from=notice&goto=findpost&pid=".Length).Split('&')[0];
 
-                        NoticeData.Add(new NoticeItemModel(noticeType, username, actionTime, new string[] {
+                        data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
                             userId,         // 0
                             threadId,       // 1
                             threadTitle,    // 2
@@ -810,17 +825,26 @@ namespace Hipda.Client.Uwp.Pro.Services
                         break;
                     case "f_thread":
                         noticeType = NoticeType.Thread;
-                        userLinkNode = divNode.ChildNodes[0];
-                        username = userLinkNode.Attributes[0].Value.Substring("space.php?username=".Length).Split('&')[0];
-                        threadLinkNode = divNode.ChildNodes[2];
+                        var nodes = divNode.ChildNodes;
+                        var usernames = new List<string>();
+                        var usernameNodes = nodes.Where(n => n.Name.Equals("a") && n.Attributes[0].Value.StartsWith("space.php?username="));
+                        foreach (var n in usernameNodes)
+                        {
+                            usernames.Add(n.InnerText.Trim());
+                        }
+                        username = string.Join(",", usernames);
+
+                        threadLinkNode = nodes.FirstOrDefault(n => n.Name.Equals("a") && n.Attributes[0].Value.StartsWith("http://www.hi-pda.com/forum/redirect.php?from=notice&goto=findpost&pid="));
                         string linkUrlStr = threadLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/redirect.php?from=notice&goto=findpost&pid=".Length).Replace("ptid=", string.Empty);
                         string[] idsAry = linkUrlStr.Split('&');
                         postId = idsAry[0];
                         threadId = idsAry[1];
                         threadTitle = threadLinkNode.InnerText.Trim();
-                        actionTime = divNode.ChildNodes[4].InnerText.Trim();
 
-                        NoticeData.Add(new NoticeItemModel(noticeType, username, actionTime, new string[] {
+                        actionTime = nodes.FirstOrDefault(n => n.Name.Equals("em")).InnerText.Trim();
+                        isNew = nodes.Count(n => n.Name.Equals("img") && n.GetAttributeValue("alt", "").Equals("NEW")) == 1;
+
+                        data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
                             threadId,
                             threadTitle,
                             postId
@@ -833,18 +857,20 @@ namespace Hipda.Client.Uwp.Pro.Services
                         username = userLinkNode.InnerText.Trim();
                         actionTime = divNode.ChildNodes[2].InnerText.Trim();
 
-                        NoticeData.Add(new NoticeItemModel(noticeType, username, actionTime, new string[] {
+                        data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
                             userId
                         }));
                         break;
                 }
             }
+
+            return data;
         }
 
-        public async Task GetNoticeData()
+        public async Task<List<NoticeItemModel>> GetNoticeData()
         {
             var cts = new CancellationTokenSource();
-            await LoadNoticeDataAsync(cts);
+            return await LoadNoticeDataAsync(cts);
         }
         #endregion
 

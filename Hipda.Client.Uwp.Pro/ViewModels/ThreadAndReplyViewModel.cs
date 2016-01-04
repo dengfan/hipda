@@ -134,12 +134,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 _leftListView.ItemsSource = cv;
             }
         }
-
-        async void LoadDataForNotice()
-        {
-            await _ds.GetNoticeData();
-            _leftListView.ItemsSource = DataService.NoticeData;
-        }
         #endregion
 
         #region 从开始页的上一页开始加载，用于下滑刷新
@@ -344,12 +338,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     _leftListView.ItemTemplateSelector = App.Current.Resources["noticeListItemTemplateSelector"] as DataTemplateSelector;
                     _leftListView.ItemContainerStyle = App.Current.Resources["NoticeItemContainerStyle"] as Style;
 
-                    LoadDataForNotice();
+                    var vm = new NoticeViewModel();
+                    _leftListView.DataContext = vm;
+                    Binding b = new Binding { Source = vm, Path = new PropertyPath("NoticeData") };
+                    _leftListView.SetBinding(ListView.ItemsSourceProperty, b);
 
                     var btnRefreshForNotice = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
                     btnRefreshForNotice.Tapped += (s, e) => {
-                        DataService.NoticeData.Clear();
-                        LoadDataForNotice();
+                        
                     };
 
                     _leftCommandBar.PrimaryCommands.Add(btnRefreshForNotice);

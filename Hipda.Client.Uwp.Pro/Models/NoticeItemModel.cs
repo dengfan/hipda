@@ -24,61 +24,29 @@ namespace Hipda.Client.Uwp.Pro.Models
         Buddy
     }
 
-    public class NoticeItemForThreadModel
-    {
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public int ThreadId { get; set; }
-        public string ThreadTitle { get; set; }
-        public int PostId { get; set; }
-        public string ActionTime { get; set; }
-    }
-
-    public class NoticeItemForQuoteModel
-    {
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public int ThreadId { get; set; }
-        public string ThreadTitle { get; set; }
-        public string ActionTime { get; set; }
-        public string OriginalContent { get; set; }
-        public string ActionContent { get; set; }
-    }
-
-    public class NoticeItemForReplyModel
-    {
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public int ThreadId { get; set; }
-        public string ThreadTitle { get; set; }
-        public string ActionTime { get; set; }
-        public string ActionContent { get; set; }
-    }
-
-    /// <summary>
-    /// http://www.hi-pda.com/forum/my.php?from=notice&item=buddylist&newbuddyid=759715&buddysubmit=yes
-    /// </summary>
-    public class NoticeItemForBuddyModel
-    {
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public string ActionTime { get; set; }
-        public int NewBuddyId { get; set; }
-    }
-
     public class NoticeItemModel
     {
-        public NoticeItemModel(NoticeType noticeType, string username, string actionTime, string[] actionInfo)
+        public NoticeItemModel(NoticeType noticeType, bool isNew, string username, string actionTime, string[] actionInfo)
         {
-            this.NoticeType = noticeType;
+            NoticeType = noticeType;
+            IsNew = isNew;
             Username = username;
             ActionTime = actionTime;
             ActionInfo = actionInfo;
         }
 
         public NoticeType NoticeType { get; set; }
+        public bool IsNew { get; set; }
         public string Username { get; set; }
         public string ActionTime { get; set; }
         public string[] ActionInfo { get; set; }
+
+        public string NewSign
+        {
+            get
+            {
+                return IsNew ? "NEW" : string.Empty;
+            }
+        }
     }
 }

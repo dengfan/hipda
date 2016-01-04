@@ -719,8 +719,9 @@
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <RichTextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Paragraph>
-                            <Run Text="{Binding Username}" FontWeight="Bold" />
+                            <Run Text="{Binding Username}" FontWeight="Bold"/>
                             <Run Text="{Binding ActionTime}" />
+                            <Run Text="{Binding NewSign}" Foreground="Red"/>
                             <LineBreak/>
                             <Run Text="引用或答复了您在此主题的贴子" />
                             <LineBreak/>
@@ -748,7 +749,9 @@
                 <RichTextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                     <Paragraph>
                         <Run Text="{Binding Username}" FontWeight="Bold" />
+                        <LineBreak/>
                         <Run Text="{Binding ActionTime}" />
+                        <Run Text="{Binding NewSign}" Foreground="Red"/>
                         <LineBreak/>
                         <Run Text="回复了您关注的主题" />
                         <LineBreak/>
@@ -757,7 +760,7 @@
                         </InlineUIContainer>
                     </Paragraph>
                 </RichTextBlock>
-                <Button Margin="0,0,8,0" Content="查看" Background="LightBlue"/>
+                <Button Margin="0,0,8,0" Content="查看"/>
             </StackPanel>
         </DataTemplate>
 
@@ -769,6 +772,7 @@
                         <Paragraph>
                             <Run Text="{Binding Username}" FontWeight="Bold" />
                             <Run Text="{Binding ActionTime}" />
+                            <Run Text="{Binding NewSign}" Foreground="Red"/>
                             <LineBreak/>
                             <Run Text="添加您为好友" />
                         </Paragraph>
