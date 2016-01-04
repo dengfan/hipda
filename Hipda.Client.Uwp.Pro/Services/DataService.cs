@@ -176,7 +176,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             GetPromptData(promptContentNode);
 
             // 读取最大页码
-            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
+            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("pages"));
             _replyMaxPageNo = GetMaxPageNo(pagesNode);
 
             var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
@@ -901,21 +901,19 @@ namespace Hipda.Client.Uwp.Pro.Services
             // 载入HTML
             doc.LoadHtml(htmlStr);
 
-            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pm_list")).ChildNodes;
+            // 最先读取提醒数据
+            var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
+            GetPromptData(promptContentNode);
+
+            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("pm_list")).ChildNodes;
             if (items == null)
             {
                 return;
             }
 
             // 读取最大页码
-            var pagesNode2 = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            if (pagesNode2 != null)
-            {
-                var nodeList = pagesNode2.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
-                nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
-                string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
-                _userMessageListMaxPageNo = Convert.ToInt32(lastPageNodeValue);
-            }
+            var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("pages"));
+            _userMessageListMaxPageNo = GetMaxPageNo(pagesNode);
 
             int i = _userMessageListData.Count;
             foreach (var item in items)
