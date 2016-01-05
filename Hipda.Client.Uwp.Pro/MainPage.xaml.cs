@@ -26,8 +26,6 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        bool _isShowFullForumPanel = false;
-
         public static int CurrentForumId = 2;
         public static string CurrentNavButtonName = "DiButton"; // 默认为地板
 
@@ -91,13 +89,13 @@ namespace Hipda.Client.Uwp.Pro
 
         private void TopNavButtonListBox_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            // 如果事件源是来自“更多版块”按钮，则阻止事件继续向上冒泡并停止继续执行
             var item = Common.FindParent<ListBoxItem>(e.OriginalSource as FrameworkElement);
             if (item != null)
             {
                 var data = item.DataContext as NavButtonItemModel;
                 if (data.TypeValue.Equals("more"))
                 {
-                    // 阻止事件继续向上冒泡
                     e.Handled = true;
                     return;
                 }
@@ -133,11 +131,6 @@ namespace Hipda.Client.Uwp.Pro
 
                 TopNavButtonListBox.SelectedItem = null;
             }
-        }
-
-        private void LeftSwipePanel_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            e.Handled = true;
         }
 
         private void MaskGrid_Tapped(object sender, TappedRoutedEventArgs e)

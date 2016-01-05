@@ -434,8 +434,10 @@
                 </Grid>
 
                 <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy" Background="DimGray" Opacity="0" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
-                
-                <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy" Background="White" HorizontalAlignment="Left" Margin="-300,0,0,0" Width="300" Tapped="LeftSwipePanel_Tapped">
+
+                <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy"
+                      Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                      Margin="-300,0,0,0" Width="300" HorizontalAlignment="Left">
                     <Grid.RenderTransform>
                         <CompositeTransform/>
                     </Grid.RenderTransform>
