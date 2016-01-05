@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.Models
 {
@@ -41,11 +43,11 @@ namespace Hipda.Client.Uwp.Pro.Models
         public string ActionTime { get; set; }
         public string[] ActionInfo { get; set; }
 
-        public string NewSign
+        public SolidColorBrush StatusColorBrush
         {
             get
             {
-                return IsNew ? "NEW" : string.Empty;
+                return IsNew ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Transparent);
             }
         }
     }

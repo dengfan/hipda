@@ -105,7 +105,7 @@
 
         <Style x:Key="NavButtonSelectedStyle" TargetType="Button">
             <Setter Property="Height" Value="48"/>
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
             <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
             <Setter Property="Template" Value="{StaticResource NavButtonTemplate}"/>
         </Style>

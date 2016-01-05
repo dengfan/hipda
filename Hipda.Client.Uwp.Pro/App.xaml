@@ -715,13 +715,13 @@
         <cvt:UserIdStringToInt32Converter x:Key="userIdStringToInt32Converter" />
         <DataTemplate x:Name="NoticeQuoteOrReplyItemTemplate">
             <Grid>
+                <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 <local:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource userIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <RichTextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Paragraph>
                             <Run Text="{Binding Username}" FontWeight="Bold"/>
                             <Run Text="{Binding ActionTime}" />
-                            <Run Text="{Binding NewSign}" Foreground="Red"/>
                             <LineBreak/>
                             <Run Text="引用或答复了您在此主题的贴子" />
                             <LineBreak/>
@@ -745,27 +745,32 @@
         </DataTemplate>
 
         <DataTemplate x:Name="NoticeThreadItemTemplate">
-            <StackPanel Margin="60,4,0,12">
-                <RichTextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
-                    <Paragraph>
-                        <Run Text="{Binding Username}" FontWeight="Bold" />
-                        <LineBreak/>
-                        <Run Text="{Binding ActionTime}" />
-                        <Run Text="{Binding NewSign}" Foreground="Red"/>
-                        <LineBreak/>
-                        <Run Text="回复了您关注的主题" />
-                        <LineBreak/>
-                        <InlineUIContainer>
-                            <HyperlinkButton Content="{Binding ActionInfo[1]}"/>
-                        </InlineUIContainer>
-                    </Paragraph>
-                </RichTextBlock>
-                <Button Margin="0,0,8,0" Content="查看"/>
-            </StackPanel>
+            <Grid>
+                <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                <Border Margin="14,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20"/>
+                <StackPanel Margin="60,4,0,12">
+                    <RichTextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                        <Paragraph>
+                            <Run Text="{Binding Username}" FontWeight="Bold" />
+                            <LineBreak/>
+                            <Run Text="{Binding ActionTime}" />
+                            <Run Text="{Binding NewSign}" Foreground="Red"/>
+                            <LineBreak/>
+                            <Run Text="回复了您关注的主题" />
+                            <LineBreak/>
+                            <InlineUIContainer>
+                                <HyperlinkButton Content="{Binding ActionInfo[1]}"/>
+                            </InlineUIContainer>
+                        </Paragraph>
+                    </RichTextBlock>
+                    <Button Margin="0,0,8,0" Content="查看"/>
+                </StackPanel>
+            </Grid>
         </DataTemplate>
 
         <DataTemplate x:Name="NoticeBuddyItemTemplate">
             <Grid>
+                <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 <local:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource userIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <RichTextBlock FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
