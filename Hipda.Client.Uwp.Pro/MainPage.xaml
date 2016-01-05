@@ -138,7 +138,7 @@
 
         <Storyboard x:Name="OpenView">
             <DoubleAnimation Duration="0:0:0.2" To="0.6" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
-            <DoubleAnimation Duration="0:0:0.2" To="300" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LeftSwipePanel">
+            <DoubleAnimation Duration="0:0:0.2" To="260" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LeftSwipePanel">
                 <DoubleAnimation.EasingFunction>
                     <ExponentialEase EasingMode="EaseIn" />
                 </DoubleAnimation.EasingFunction>
@@ -437,7 +437,7 @@
 
                 <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy"
                       Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
-                      Margin="-300,0,0,0" Width="300" HorizontalAlignment="Left">
+                      Margin="-260,0,0,0" Width="260" HorizontalAlignment="Left">
                     <Grid.RenderTransform>
                         <CompositeTransform/>
                     </Grid.RenderTransform>
