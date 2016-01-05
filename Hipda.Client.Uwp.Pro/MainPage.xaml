@@ -11,6 +11,32 @@
     x:Name="Page1" RequestedTheme="Light" Loaded="Page1_Loaded">
 
     <Page.Resources>
+        <local:NavButtonListItemTemplateSelector x:Key="navButtonListItemTemplateSelector"
+                                                 NavButtonBySearchItemTemplate="{StaticResource NavButtonBySearchItemTemplate}"
+                                                 NavButtonByMyItemItemTemplate="{StaticResource NavButtonByMyItemItemTemplate}"
+                                                 NavButtonByForumIdItemTemplate="{StaticResource NavButtonByForumIdItemTemplate}"
+                                                 />
+        <DataTemplate x:Key="NavButtonBySearchItemTemplate">
+            <StackPanel Padding="2 0 0 0" Orientation="Horizontal">
+                <FontIcon Glyph="{Binding Icon}"/>
+                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="NavButtonByForumIdItemTemplate">
+            <StackPanel Padding="2 0 0 0" Orientation="Horizontal">
+                <FontIcon Glyph="{Binding Icon}" FontFamily="Consolas"/>
+                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="NavButtonByMyItemItemTemplate">
+            <StackPanel Padding="2 0 0 0" Orientation="Horizontal">
+                <FontIcon Glyph="{Binding Icon}"/>
+                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+
         <ControlTemplate x:Key="NavButtonTemplate" TargetType="Button">
             <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
                 <VisualStateManager.VisualStateGroups>
@@ -111,14 +137,14 @@
         </Style>
 
         <Storyboard x:Name="OpenView">
-            <DoubleAnimation Duration="0:0:0.2" To="300" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="FullSebjectPanel">
+            <DoubleAnimation Duration="0:0:0.2" To="300" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LeftSwipePanel">
                 <DoubleAnimation.EasingFunction>
                     <ExponentialEase EasingMode="EaseIn" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
         <Storyboard x:Name="CloseView">
-            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="FullSebjectPanel">
+            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LeftSwipePanel">
                 <DoubleAnimation.EasingFunction>
                     <ExponentialEase EasingMode="EaseOut" />
                 </DoubleAnimation.EasingFunction>
@@ -277,7 +303,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid x:Name="pageGrid" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Tapped="pageGrid_Tapped">
+    <Grid x:Name="pageGrid" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
@@ -345,10 +371,6 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <!--<Grid.Background>
-            <ImageBrush ImageSource="Assets/bg.jpg" />
-        </Grid.Background>-->
-
         <SplitView x:Name="MainSplitView" OpenPaneLength="200" PaneBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" PaneClosed="MainSplitView_PaneClosed">
             <SplitView.Pane>
                 <Grid>
@@ -356,107 +378,32 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <ScrollViewer Grid.Row="0" Margin="0 48 0 0" VerticalScrollBarVisibility="Hidden">
-                        <StackPanel>
-                            <Button x:Name="SearchButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="SearchButton_Click">
-                                <Button.Content>
-                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
-                                        <SymbolIcon Symbol="Zoom" />
-                                        <TextBlock Text="搜索贴子"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <StackPanel x:Name="SearchPanel" Margin="8" Visibility="Collapsed">
-                                <TextBox x:Name="KeywordTextBox" PlaceholderText="关键字" KeyUp="KeywordTextBox_KeyUp"/>
-                                <ComboBox x:Name="SearchTypeComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                                    <x:String>标题</x:String>
-                                    <x:String>全文</x:String>
-                                </ComboBox>
-                                <TextBox x:Name="AuthorTextBox" Margin="0,4,0,0" PlaceholderText="作者"/>
-                                <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                                    <x:String>全部时间</x:String>
-                                    <x:String>1周以内</x:String>
-                                    <x:String>1个月以内</x:String>
-                                    <x:String>3个月以内</x:String>
-                                    <x:String>1年以内</x:String>
-                                </ComboBox>
-                                <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton1_Click"/>
-                                <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton2_Click"/>
-                            </StackPanel>
-                            <Button x:Name="MyThreadsButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="MyThreadsButton_Click">
-                                <Button.Content>
-                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
-                                        <FontIcon Glyph="&#xEA4A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                                        <TextBlock Text="我的贴子"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button x:Name="MyPostsButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="MyPostsButton_Click">
-                                <Button.Content>
-                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
-                                        <FontIcon Glyph="&#xE89B;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                                        <TextBlock Text="我的回复"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button x:Name="MyFavoritesButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="MyFavoritesButton_Click">
-                                <Button.Content>
-                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
-                                        <FontIcon Glyph="&#xE1CE;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                                        <TextBlock Text="我的收藏"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button x:Name="DiButton" Style="{StaticResource NavButtonSelectedStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="DiButton_Click">
-                                <Button.Content>
-                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
-                                        <FontIcon Glyph="Di" FontFamily="Consolas" />
-                                        <TextBlock Text="Discovery 版"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button x:Name="BsButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="BsButton_Click">
-                                <Button.Content>
-                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
-                                        <FontIcon Glyph="BS" FontFamily="Consolas" />
-                                        <TextBlock Text="Buy &amp; Sell 版"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button x:Name="EiButton" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Click="EiButton_Click">
-                                <Button.Content>
-                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
-                                        <FontIcon Glyph="EI" FontFamily="Consolas" />
-                                        <TextBlock Text="E-Ink 版"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                            <Button x:Name="btnMore" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Tapped="btnMore_Tapped">
-                                <Button.Content>
-                                    <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
-                                        <SymbolIcon Symbol="More" />
-                                        <TextBlock Text="更多版块"
-                                           Margin="24,0,0,0"
-                                           VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-                        </StackPanel>
-                    </ScrollViewer>
+
+                    <StackPanel x:Name="SearchPanel" Margin="8" Visibility="Collapsed">
+                        <TextBox x:Name="KeywordTextBox" PlaceholderText="关键字" KeyUp="KeywordTextBox_KeyUp"/>
+                        <ComboBox x:Name="SearchTypeComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                            <x:String>标题</x:String>
+                            <x:String>全文</x:String>
+                        </ComboBox>
+                        <TextBox x:Name="AuthorTextBox" Margin="0,4,0,0" PlaceholderText="作者"/>
+                        <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                            <x:String>全部时间</x:String>
+                            <x:String>1周以内</x:String>
+                            <x:String>1个月以内</x:String>
+                            <x:String>3个月以内</x:String>
+                            <x:String>1年以内</x:String>
+                        </ComboBox>
+                        <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton1_Click"/>
+                        <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton2_Click"/>
+                    </StackPanel>
+
+                    <ListBox x:Name="TopNavButtonListBox" Margin="0 48 0 0"
+                             Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                             Background="Transparent" ItemsSource="{Binding NavButtons}"
+                             ItemTemplateSelector="{StaticResource navButtonListItemTemplateSelector}"
+                             SelectionMode="Single"
+                             SelectionChanged="TopNavButtonListBox_SelectionChanged"
+                             Tapped="TopNavButtonListBox_Tapped"/>
 
                     <ContentControl x:Name="BottomButtonContentControl" Grid.Row="1" VerticalAlignment="Bottom"/>
                 </Grid>
@@ -484,14 +431,13 @@
                     </Frame>
                 </Grid>
 
-                <Grid x:Name="FullSebjectPanel" x:DeferLoadStrategy="Lazy" Background="White" HorizontalAlignment="Left" Margin="-300,0,0,0" Width="300" Tapped="FullSebjectPanel_Tapped">
+                <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy" Background="Transparent" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
+                
+                <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy" Background="White" HorizontalAlignment="Left" Margin="-300,0,0,0" Width="300" Tapped="LeftSwipePanel_Tapped">
                     <Grid.RenderTransform>
                         <CompositeTransform/>
                     </Grid.RenderTransform>
-                    <ListBox Name="listbox" Background="Yellow">
-                        <ListBoxItem Content="123"/>
-                        <ListBoxItem Content="123"/>
-                    </ListBox>
+                    <ContentControl/>
                 </Grid>
             </Grid>
             

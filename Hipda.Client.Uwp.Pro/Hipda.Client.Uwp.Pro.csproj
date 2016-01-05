@@ -104,6 +104,9 @@
     <Compile Include="Controls\UserMessageBox.xaml.cs">
       <DependentUpon>UserMessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UserSearchPanel.xaml.cs">
+      <DependentUpon>UserSearchPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\UserIdStringToInt32Converter.cs" />
     <Compile Include="Converters\UserIdToAvatarUriConverter.cs" />
     <Compile Include="LoginPage.xaml.cs">
@@ -114,6 +117,7 @@
     </Compile>
     <Compile Include="Models\AccountItemModel.cs" />
     <Compile Include="Models\FaceItemModel.cs" />
+    <Compile Include="Models\NavButtonItemModel.cs" />
     <Compile Include="Models\NoticeItemModel.cs" />
     <Compile Include="Models\OpenNewViewParameterModel.cs" />
     <Compile Include="Models\ThreadItemForMyFavoritesModel.cs" />
@@ -131,6 +135,7 @@
     <Compile Include="MyLink.cs" />
     <Compile Include="MyRefLink1.cs" />
     <Compile Include="MyRefLink2.cs" />
+    <Compile Include="NavButtonListItemTemplateSelector.cs" />
     <Compile Include="NoticeListItemTemplateSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReplyListItemTemplateSelector.cs" />
@@ -151,10 +156,11 @@
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
     <Compile Include="Triggers\InputTypeTrigger.cs" />
     <Compile Include="UserMessageListItemTemplateSelector.cs" />
+    <Compile Include="ViewModels\NavButtonViewModel.cs" />
     <Compile Include="ViewModels\NoticeViewModel.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\PostDetailDialogViewModel.cs" />
-    <Compile Include="ViewModels\PromptViewModel.cs" />
+    <Compile Include="ViewModels\PromptNumViewModel.cs" />
     <Compile Include="ViewModels\ReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyFavoritesViewModel.cs" />
@@ -291,6 +297,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Controls\UserMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UserSearchPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

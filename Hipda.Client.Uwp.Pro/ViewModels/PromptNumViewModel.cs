@@ -9,16 +9,16 @@ using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class PromptViewModel : NotificationObject
+    public class PromptNumViewModel : NotificationObject
     {
         // 饿汉模式，确保只有一个实例
-        private static readonly PromptViewModel instance = new PromptViewModel();
+        private static readonly PromptNumViewModel instance = new PromptNumViewModel();
 
-        private PromptViewModel()
+        private PromptNumViewModel()
         {
         }
 
-        public static PromptViewModel GetInstance()
+        public static PromptNumViewModel GetInstance()
         {
             return instance;
         }

@@ -43,7 +43,8 @@ namespace Hipda.Client.Uwp.Pro
         {
             this.InitializeComponent();
 
-            DataContext = PromptViewModel.GetInstance();
+            TopNavButtonListBox.DataContext = NavButtonViewModel.GetInstance();
+            BottomButtonContentControl.DataContext = PromptNumViewModel.GetInstance();
 
             this.SizeChanged += (s, e) =>
             {
@@ -70,86 +71,79 @@ namespace Hipda.Client.Uwp.Pro
             BottomButtonContentControl.ContentTemplate = MainSplitView.IsPaneOpen ? Resources["BottomHorizontalButtonTemplate"] as DataTemplate : Resources["BottomVerticalButtonTemplate"] as DataTemplate;
         }
 
-        private void pageGrid_Tapped(object sender, TappedRoutedEventArgs e)
+        private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            e.Handled = true;
-
-            if (_isShowFullForumPanel)
+            if (e.AddedItems.Count != 1)
             {
-                _isShowFullForumPanel = false;
-                CloseView.Begin();
+                return;
+            }
+
+            var data = e.AddedItems[0] as NavButtonItemModel;
+            if (data.TypeValue.Equals("more"))
+            {
+                ShowLeftSwipePanel();
+            }
+            else
+            {
+                AppFrame.Navigate(typeof(ThreadAndReplyPage), data.TypeValue);
             }
         }
 
-        private void btnMore_Tapped(object sender, TappedRoutedEventArgs e)
+        private void TopNavButtonListBox_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            e.Handled = true;
+            var item = Common.FindParent<ListBoxItem>(e.OriginalSource as FrameworkElement);
+            if (item != null)
+            {
+                var data = item.DataContext as NavButtonItemModel;
+                if (data.TypeValue.Equals("more"))
+                {
+                    // 阻止事件继续向上冒泡
+                    e.Handled = true;
+                    return;
+                }
+            }
 
+            CloseLeftSwipePanel();
+        }
+
+        void ShowLeftSwipePanel()
+        {
             if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
             {
-                // 以免 pane 挡住 full sebject panel
+                // 以免 pane 挡住 left swipe panel
                 MainSplitView.IsPaneOpen = false;
                 ElementAdapter();
             }
+            
+            FindName("MaskGrid");
+            MaskGrid.Visibility = Visibility.Visible;
 
-            FindName("FullSebjectPanel");
-            _isShowFullForumPanel = true;
+            FindName("LeftSwipePanel");
             OpenView.Begin();
         }
 
-        private void FullSebjectPanel_Tapped(object sender, TappedRoutedEventArgs e) 
+        void CloseLeftSwipePanel()
+        {
+            FindName("MaskGrid");
+            FindName("LeftSwipePanel");
+            if (MaskGrid.Visibility == Visibility.Visible)
+            {
+                MaskGrid.Visibility = Visibility.Collapsed;
+                CloseView.Begin();
+
+                TopNavButtonListBox.SelectedItem = null;
+            }
+        }
+
+        private void LeftSwipePanel_Tapped(object sender, TappedRoutedEventArgs e)
         {
             e.Handled = true;
         }
 
-        private async void SetSelected(Button button)
+        private void MaskGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                var btn1 = this.FindName(CurrentNavButtonName) as Button;
-                if (btn1 != null)
-                {
-                    btn1.Style = this.Resources["NavButtonNormalStyle"] as Style;
-                }
-
-                button.Style = this.Resources["NavButtonSelectedStyle"] as Style;
-                CurrentNavButtonName = button.Name;
-            });
-        }
-
-        private void DiButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetSelected(sender as Button);
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=2");
-        }
-
-        private void BsButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetSelected(sender as Button);
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=14");
-        }
-
-        private void EiButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetSelected(sender as Button);
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), "fid=57");
-        }
-
-        private void MyThreadsButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetSelected(sender as Button);
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=threads");
-        }
-
-        private void MyPostsButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetSelected(sender as Button);
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=posts");
-        }
-
-        private void MyFavoritesButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetSelected(sender as Button);
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=favorites");
+            e.Handled = true;
+            CloseLeftSwipePanel();
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -223,9 +217,6 @@ namespace Hipda.Client.Uwp.Pro
 
         private void SearchDefaultSubmit()
         {
-            var btn = this.FindName("SearchButton") as Button;
-            SetSelected(btn);
-
             string paramFormat = "search={0},{1},{2},{3},1";
 
             string searchKeyword = Uri.EscapeUriString(KeywordTextBox.Text.Trim().Replace(",", " "));
@@ -244,10 +235,6 @@ namespace Hipda.Client.Uwp.Pro
 
         private void SearchButton2_Click(object sender, RoutedEventArgs e)
         {
-            
-            var btn = this.FindName("SearchButton") as Button;
-            SetSelected(btn);
-
             string paramFormat = "search={0},{1},{2},{3},2";
 
             string searchKeyword = Uri.EscapeUriString(KeywordTextBox.Text.Trim().Replace(",", " "));
@@ -261,7 +248,6 @@ namespace Hipda.Client.Uwp.Pro
 
         private void NoticeButton_Click(object sender, RoutedEventArgs e)
         {
-            SetSelected(sender as Button);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=notice");
         }
 
