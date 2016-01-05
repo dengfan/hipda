@@ -136,7 +136,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private void MaskGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            e.Handled = true;
+            //e.Handled = true;
             CloseLeftSwipePanel();
         }
 

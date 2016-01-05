@@ -103,9 +103,7 @@
                 <ColumnDefinition x:Name="RightSideColumn" Width="0" />
             </Grid.ColumnDefinitions>
 
-            <Grid x:Name="LeftWrap" Grid.Column="0" 
-              BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
-              BorderThickness="1,0,0,0">
+            <Grid x:Name="LeftWrap" Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*" />
@@ -160,13 +158,13 @@
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="RightWrap" Grid.Column="1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="1,0,0,0">
+            <Grid x:Name="RightWrap" Grid.Column="1" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+                <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
                     <AppBarButton Icon="Edit" Label="评论"/>
                     <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
                     <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
@@ -202,9 +200,7 @@
                 <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
                 <StackPanel Grid.Row="1" x:Name="ReplyPanel" VerticalAlignment="Bottom"
-                        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
-                        BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderThickness="0,1,0,0" Opacity="0.8">
+                        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
                     <Grid>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
@@ -246,9 +242,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="RightSideWrap" Grid.Column="2" 
-              BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
-              BorderThickness="1,0,0,0">
+            <Grid x:Name="RightSideWrap" Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
