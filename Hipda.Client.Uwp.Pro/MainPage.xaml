@@ -142,6 +142,7 @@
                     <ExponentialEase EasingMode="EaseIn" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
+            <DoubleAnimation Duration="0:0:0.2" To="0.6" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
         </Storyboard>
         <Storyboard x:Name="CloseView">
             <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LeftSwipePanel">
@@ -149,6 +150,7 @@
                     <ExponentialEase EasingMode="EaseOut" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
+            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
         </Storyboard>
         <Storyboard x:Name="ShowTipBarAnimation">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="TipBar">
@@ -431,7 +433,7 @@
                     </Frame>
                 </Grid>
 
-                <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy" Background="Transparent" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
+                <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy" Background="DimGray" Opacity="0" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
                 
                 <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy" Background="White" HorizontalAlignment="Left" Margin="-300,0,0,0" Width="300" Tapped="LeftSwipePanel_Tapped">
                     <Grid.RenderTransform>
