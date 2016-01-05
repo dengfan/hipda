@@ -69,6 +69,36 @@ namespace Hipda.Client.Uwp.Pro
             BottomButtonContentControl.ContentTemplate = MainSplitView.IsPaneOpen ? Resources["BottomHorizontalButtonTemplate"] as DataTemplate : Resources["BottomVerticalButtonTemplate"] as DataTemplate;
         }
 
+        void ShowLeftSwipePanel()
+        {
+            FindName("MaskGrid");
+            FindName("LeftSwipePanel");
+
+            if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
+            {
+                // 以免 pane 挡住 left swipe panel
+                MainSplitView.IsPaneOpen = false;
+                ElementAdapter();
+            }
+            
+            MaskGrid.Visibility = Visibility.Visible;
+            OpenView.Begin();
+        }
+
+        void CloseLeftSwipePanel()
+        {
+            FindName("MaskGrid");
+            FindName("LeftSwipePanel");
+
+            if (MaskGrid.Visibility == Visibility.Visible)
+            {
+                MaskGrid.Visibility = Visibility.Collapsed;
+                CloseView.Begin();
+
+                TopNavButtonListBox.SelectedItem = null;
+            }
+        }
+
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count != 1)
@@ -102,35 +132,6 @@ namespace Hipda.Client.Uwp.Pro
             }
 
             CloseLeftSwipePanel();
-        }
-
-        void ShowLeftSwipePanel()
-        {
-            if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
-            {
-                // 以免 pane 挡住 left swipe panel
-                MainSplitView.IsPaneOpen = false;
-                ElementAdapter();
-            }
-            
-            FindName("MaskGrid");
-            MaskGrid.Visibility = Visibility.Visible;
-
-            FindName("LeftSwipePanel");
-            OpenView.Begin();
-        }
-
-        void CloseLeftSwipePanel()
-        {
-            FindName("MaskGrid");
-            FindName("LeftSwipePanel");
-            if (MaskGrid.Visibility == Visibility.Visible)
-            {
-                MaskGrid.Visibility = Visibility.Collapsed;
-                CloseView.Begin();
-
-                TopNavButtonListBox.SelectedItem = null;
-            }
         }
 
         private void MaskGrid_Tapped(object sender, TappedRoutedEventArgs e)
