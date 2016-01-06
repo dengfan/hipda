@@ -64,10 +64,24 @@ namespace Hipda.Client.Uwp.Pro
             _mainPageViewModel.SelectedNavButton = _mainPageViewModel.NavButtons.FirstOrDefault(b => b.TypeValue.Equals(param));
         }
 
+        public async void ShowTipBar(string tipContent)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                TipTextBlock.Text = Uri.UnescapeDataString(tipContent);
+                ShowTipBarAnimation.Begin();
+            });
+        }
+
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
         {
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
             BottomButtonContentControl.ContentTemplate = MainSplitView.IsPaneOpen ? Resources["BottomHorizontalButtonTemplate"] as DataTemplate : Resources["BottomVerticalButtonTemplate"] as DataTemplate;
+        }
+
+        private void MainSplitView_PaneClosed(SplitView sender, object args)
+        {
+            SearchPanel.Visibility = Visibility.Collapsed;
+            ElementAdapter();
         }
 
         void ShowLeftSwipePanel()
@@ -165,7 +179,7 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
@@ -194,20 +208,6 @@ namespace Hipda.Client.Uwp.Pro
                 titleBar.ButtonForegroundColor = null;
                 titleBar.ButtonHoverBackgroundColor = null;
             }
-        }
-
-        public async void ShowTipBar(string tipContent)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                TipTextBlock.Text = Uri.UnescapeDataString(tipContent);
-                ShowTipBarAnimation.Begin();
-            });
-        }
-
-        private void MainSplitView_PaneClosed(SplitView sender, object args)
-        {
-            SearchPanel.Visibility = Visibility.Collapsed;
-            ElementAdapter();
         }
 
         private void SearchDefaultSubmit()

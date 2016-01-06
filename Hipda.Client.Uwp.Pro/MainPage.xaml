@@ -188,7 +188,7 @@
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="2" x:Name="btnSettings" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Right" Click="btnSettings_Click">
+                <Button Grid.Column="2" x:Name="btnSettings" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Right" Click="SettingsButton_Click">
                     <Button.Content>
                         <Grid>
                             <SymbolIcon Symbol="Setting" />
@@ -220,7 +220,7 @@
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button x:Name="btnSettings" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="btnSettings_Click">
+                <Button x:Name="btnSettings" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="SettingsButton_Click">
                     <Button.Content>
                         <Grid>
                             <SymbolIcon Symbol="Setting" />
