@@ -133,7 +133,7 @@
         
         <DataTemplate x:Key="NavButtonByForumIdItemTemplate">
             <StackPanel Padding="2 0 0 0" Orientation="Horizontal">
-                <FontIcon Glyph="{Binding Icon}" FontFamily="Consolas"/>
+                <FontIcon Glyph="{Binding Icon}" FontFamily="Calibri" Width="20"/>
                 <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center" />
             </StackPanel>
         </DataTemplate>
