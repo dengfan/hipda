@@ -96,7 +96,7 @@ namespace Hipda.Client.Uwp.Pro
                 MaskGrid.Visibility = Visibility.Collapsed;
                 CloseView.Begin();
 
-                TopNavButtonListBox.SelectedItem = _mainPageViewModel.SelectedNavButton;
+                
             }
         }
 
@@ -114,7 +114,6 @@ namespace Hipda.Client.Uwp.Pro
             }
             else
             {
-                _mainPageViewModel.SelectedNavButton = data;
                 AppFrame.Navigate(typeof(ThreadAndReplyPage), data.TypeValue);
             }
         }
@@ -139,6 +138,7 @@ namespace Hipda.Client.Uwp.Pro
         private void MaskGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
             CloseLeftSwipePanel();
+            TopNavButtonListBox.SelectedItem = null;
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
