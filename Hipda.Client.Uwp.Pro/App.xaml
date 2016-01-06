@@ -782,7 +782,7 @@
                             <Run Text="添加您为好友" />
                         </Paragraph>
                     </RichTextBlock>
-                    <Button Margin="0,8,0,0" Background="LightGreen">
+                    <Button Margin="0,8,0,0">
                         <TextBlock>
                             <Run Text="加 "/>
                             <Run Text="{Binding Username}"/>

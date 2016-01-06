@@ -145,22 +145,6 @@
             </StackPanel>
         </DataTemplate>
 
-        <ControlTemplate x:Key="NavButtonTemplate" TargetType="Button">
-            <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal" />
-                        <VisualState x:Name="PointerOver">
-                            <VisualState.Setters>
-                                <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>
-                <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}"/>
-            </Grid>
-        </ControlTemplate>
-
         <DataTemplate x:Name="BottomHorizontalButtonTemplate">
             <Grid Width="{Binding OpenPaneLength,ElementName=MainSplitView}" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
                 <Grid.ColumnDefinitions>
@@ -168,7 +152,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="NoticeButton" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click">
+                <Button x:Name="NoticeButton" Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click">
                     <Button.Content>
                         <Grid>
                             <SymbolIcon Symbol="Mail"/>
@@ -178,7 +162,7 @@
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="1" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" Click="openUserMessageListButton_Click">
+                <Button Grid.Column="1" Style="{StaticResource NavButtonNormalStyle}" Click="openUserMessageListButton_Click">
                     <Button.Content>
                         <Grid>
                             <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
@@ -188,7 +172,7 @@
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="2" x:Name="btnSettings" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Right" Click="SettingsButton_Click">
+                <Button Grid.Column="2" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Right" Click="SettingsButton_Click">
                     <Button.Content>
                         <Grid>
                             <SymbolIcon Symbol="Setting" />
@@ -200,7 +184,7 @@
 
         <DataTemplate x:Name="BottomVerticalButtonTemplate">
             <StackPanel BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
-                <Button x:Name="NoticeButton" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="NoticeButton_Click">
+                <Button Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click">
                     <Button.Content>
                         <Grid>
                             <SymbolIcon Symbol="Mail"/>
@@ -210,7 +194,7 @@
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="openUserMessageListButton_Click">
+                <Button Style="{StaticResource NavButtonNormalStyle}" Click="openUserMessageListButton_Click">
                     <Button.Content>
                         <Grid>
                             <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
@@ -220,7 +204,7 @@
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button x:Name="btnSettings" Width="48" Height="48" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Stretch" Click="SettingsButton_Click">
+                <Button Style="{StaticResource NavButtonNormalStyle}" Click="SettingsButton_Click">
                     <Button.Content>
                         <Grid>
                             <SymbolIcon Symbol="Setting" />
@@ -231,17 +215,29 @@
         </DataTemplate>
 
         <Style x:Key="NavButtonNormalStyle" TargetType="Button">
+            <Setter Property="Width" Value="48"/>
             <Setter Property="Height" Value="48"/>
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Template" Value="{StaticResource NavButtonTemplate}"/>
-        </Style>
-
-        <Style x:Key="NavButtonSelectedStyle" TargetType="Button">
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}"/>
-            <Setter Property="Template" Value="{StaticResource NavButtonTemplate}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="RootGrid" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Background="{TemplateBinding Background}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="PointerOver">
+                                        <VisualState.Setters>
+                                            <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" Foreground="{TemplateBinding Foreground}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Storyboard x:Name="OpenView">
@@ -557,7 +553,7 @@
             
         </SplitView>
 
-        <Button x:Name="MainSplitViewToggle" Padding="0" Style="{StaticResource NavButtonNormalStyle}" Width="48" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
+        <Button x:Name="MainSplitViewToggle" Style="{StaticResource NavButtonNormalStyle}" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
             <Button.Content>
                 <Grid>
                     <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"/>
