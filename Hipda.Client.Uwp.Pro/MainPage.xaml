@@ -512,6 +512,7 @@
                              Background="Transparent" ItemsSource="{Binding NavButtons}"
                              ItemTemplateSelector="{StaticResource navButtonListItemTemplateSelector}"
                              ItemContainerStyle="{StaticResource ListBoxItemStyle1}"
+                             SelectedItem="{Binding SelectedNavButton}"
                              SelectionMode="Single"
                              SelectionChanged="TopNavButtonListBox_SelectionChanged"
                              Tapped="TopNavButtonListBox_Tapped"/>

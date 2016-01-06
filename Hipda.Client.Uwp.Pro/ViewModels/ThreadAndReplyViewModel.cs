@@ -338,7 +338,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     _leftListView.ItemTemplateSelector = App.Current.Resources["noticeListItemTemplateSelector"] as DataTemplateSelector;
                     _leftListView.ItemContainerStyle = App.Current.Resources["NoticeItemContainerStyle"] as Style;
 
-                    var vm = new NoticeViewModel();
+                    var vm = new NoticePageViewModel();
                     _leftListView.DataContext = vm;
                     Binding b = new Binding { Source = vm, Path = new PropertyPath("NoticeData") };
                     _leftListView.SetBinding(ListView.ItemsSourceProperty, b);

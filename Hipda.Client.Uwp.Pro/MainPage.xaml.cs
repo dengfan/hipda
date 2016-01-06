@@ -26,8 +26,7 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public static int CurrentForumId = 2;
-        public static string CurrentNavButtonName = "DiButton"; // 默认为地板
+        MainPageViewModel _mainPageViewModel;
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
@@ -41,8 +40,8 @@ namespace Hipda.Client.Uwp.Pro
         {
             this.InitializeComponent();
 
-            TopNavButtonListBox.DataContext = NavButtonViewModel.GetInstance();
-            BottomButtonContentControl.DataContext = PromptNumViewModel.GetInstance();
+            _mainPageViewModel = MainPageViewModel.GetInstance();
+            DataContext = _mainPageViewModel;
 
             this.SizeChanged += (s, e) =>
             {
@@ -61,6 +60,8 @@ namespace Hipda.Client.Uwp.Pro
 
             string param = e.Parameter.ToString();
             AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
+
+            _mainPageViewModel.SelectedNavButton = _mainPageViewModel.NavButtons.FirstOrDefault(b => b.TypeValue.Equals(param));
         }
 
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
@@ -95,7 +96,7 @@ namespace Hipda.Client.Uwp.Pro
                 MaskGrid.Visibility = Visibility.Collapsed;
                 CloseView.Begin();
 
-                TopNavButtonListBox.SelectedItem = null;
+                TopNavButtonListBox.SelectedItem = _mainPageViewModel.SelectedNavButton;
             }
         }
 
@@ -113,6 +114,7 @@ namespace Hipda.Client.Uwp.Pro
             }
             else
             {
+                _mainPageViewModel.SelectedNavButton = data;
                 AppFrame.Navigate(typeof(ThreadAndReplyPage), data.TypeValue);
             }
         }
@@ -136,7 +138,6 @@ namespace Hipda.Client.Uwp.Pro
 
         private void MaskGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            //e.Handled = true;
             CloseLeftSwipePanel();
         }
 

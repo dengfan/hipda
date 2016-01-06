@@ -34,7 +34,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             {
                 if (promptContentNode != null)
                 {
-                    var promtpViewModel = PromptNumViewModel.GetInstance();
+                    var promtpViewModel = MainPageViewModel.GetInstance();
                     var ulNode = promptContentNode.ChildNodes[1];
                     promtpViewModel.PromptPm = Convert.ToInt32(ulNode.ChildNodes[0].InnerText.Trim().Substring("私人消息 (".Length).Replace(")", string.Empty));
                     promtpViewModel.PromptAnnouncePm = Convert.ToInt32(ulNode.ChildNodes[1].InnerText.Trim().Substring("公共消息 (".Length).Replace(")", string.Empty));

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class NoticeViewModel : NotificationObject
+    public class NoticePageViewModel : NotificationObject
     {
         DataService _ds;
 
@@ -24,7 +24,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public NoticeViewModel()
+        public NoticePageViewModel()
         {
             _ds = new DataService();
 

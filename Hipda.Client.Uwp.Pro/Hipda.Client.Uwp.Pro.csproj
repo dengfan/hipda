@@ -156,11 +156,10 @@
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
     <Compile Include="Triggers\InputTypeTrigger.cs" />
     <Compile Include="UserMessageListItemTemplateSelector.cs" />
-    <Compile Include="ViewModels\NavButtonViewModel.cs" />
-    <Compile Include="ViewModels\NoticeViewModel.cs" />
+    <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\NoticePageViewModel.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\PostDetailDialogViewModel.cs" />
-    <Compile Include="ViewModels\PromptNumViewModel.cs" />
     <Compile Include="ViewModels\ReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyFavoritesViewModel.cs" />
