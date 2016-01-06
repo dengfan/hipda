@@ -11,7 +11,7 @@
     x:Name="Page1" RequestedTheme="Light" Loaded="Page1_Loaded">
 
     <Page.Resources>
-        <Style x:Key="ListBoxItemStyle1" TargetType="ListBoxItem">
+        <Style x:Key="MainMenuListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="Local"/>
             <Setter Property="Padding" Value="8,11,12,13"/>
@@ -507,7 +507,7 @@
                              Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                              Background="Transparent" ItemsSource="{Binding NavButtons}"
                              ItemTemplateSelector="{StaticResource navButtonListItemTemplateSelector}"
-                             ItemContainerStyle="{StaticResource ListBoxItemStyle1}"
+                             ItemContainerStyle="{StaticResource MainMenuListBoxItemStyle}"
                              SelectedItem="{Binding SelectedNavButton}"
                              SelectionMode="Single"
                              SelectionChanged="TopNavButtonListBox_SelectionChanged"
