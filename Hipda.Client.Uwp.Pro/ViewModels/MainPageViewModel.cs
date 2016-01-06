@@ -19,14 +19,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public MainPageViewModel()
         {
             NavButtons = new ObservableCollection<NavButtonItemModel>();
-            NavButtons.Add(new NavButtonItemModel { Icon = "\uE1A3", Text = "搜索贴子", Type = NavButtonType.BySearch, TypeValue = "item=search" });
-            NavButtons.Add(new NavButtonItemModel { Icon = "\uEA4A", Text = "我的贴子", Type = NavButtonType.ByMyItem, TypeValue = "item=threads" });
-            NavButtons.Add(new NavButtonItemModel { Icon = "\uE89B", Text = "我的回复", Type = NavButtonType.ByMyItem, TypeValue = "item=posts" });
-            NavButtons.Add(new NavButtonItemModel { Icon = "\uE1CE", Text = "我的收藏", Type = NavButtonType.ByMyItem, TypeValue = "item=favorites" });
-            NavButtons.Add(new NavButtonItemModel { Icon = "Di", Text = "Discovery 版", Type = NavButtonType.ByForumId, TypeValue = "fid=2" });
-            NavButtons.Add(new NavButtonItemModel { Icon = "BS", Text = "Buy & Sell 版", Type = NavButtonType.ByForumId, TypeValue = "fid=6" });
-            NavButtons.Add(new NavButtonItemModel { Icon = "EI", Text = "E-Ink 版", Type = NavButtonType.ByForumId, TypeValue = "fid=57" });
-            NavButtons.Add(new NavButtonItemModel { Icon = "\uE712", Text = "更多版块", Type = NavButtonType.ByMyItem, TypeValue = "more" });
+            NavButtons.Add(new NavButtonItemModel { Icon = "\uE1A3", Text = "搜索贴子", TypeValue = "item=search" });
+            NavButtons.Add(new NavButtonItemModel { Icon = "\uEA4A", Text = "我的贴子", TypeValue = "item=threads" });
+            NavButtons.Add(new NavButtonItemModel { Icon = "\uE89B", Text = "我的回复", TypeValue = "item=posts" });
+            NavButtons.Add(new NavButtonItemModel { Icon = "\uE1CE", Text = "我的收藏", TypeValue = "item=favorites" });
+            NavButtons.Add(new NavButtonItemModel { Icon = "Di", Text = "Discovery 版", TypeValue = "fid=2" });
+            NavButtons.Add(new NavButtonItemModel { Icon = "BS", Text = "Buy & Sell 版", TypeValue = "fid=6" });
+            NavButtons.Add(new NavButtonItemModel { Icon = "EI", Text = "E-Ink 版", TypeValue = "fid=57" });
+            NavButtons.Add(new NavButtonItemModel { Icon = "\uE712", Text = "更多版块", TypeValue = "more" });
         }
 
         public static MainPageViewModel GetInstance()
