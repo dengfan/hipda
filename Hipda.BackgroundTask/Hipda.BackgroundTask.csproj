@@ -108,8 +108,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LiveTileTask.cs" />
-    <Compile Include="Models\NoticeItemModel.cs" />
+    <Compile Include="UpdateToastTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

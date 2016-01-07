@@ -4,11 +4,13 @@ using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -29,6 +31,31 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     sealed partial class App : Application
     {
+        async void RegisterBackgroundTask()
+        {
+            // 判断一下是否允许访问后台任务
+            var res = await BackgroundExecutionManager.RequestAccessAsync();
+            if (res == BackgroundAccessStatus.Denied || res == BackgroundAccessStatus.Unspecified)
+            {
+                return;
+            }
+
+            Type taskType = typeof(BackgroundTask.UpdateToastTask);
+            var task = BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(t => t.Name == taskType.Name);
+            if (task == null)
+            {
+                // 注册后台任务
+                BackgroundTaskBuilder bd = new BackgroundTaskBuilder();
+                bd.Name = taskType.Name;
+                bd.TaskEntryPoint = taskType.FullName;
+
+                // 声明触发器
+                TimeTrigger trigger = new TimeTrigger(15, false);
+                bd.SetTrigger(trigger);
+                task = bd.Register();
+            }
+        }
+
         public ObservableCollection<ViewLifetimeControl> SecondaryViews = new ObservableCollection<ViewLifetimeControl>();
 
         private CoreDispatcher mainDispatcher;
@@ -103,6 +130,8 @@ namespace Hipda.Client.Uwp.Pro
                 // 将框架放在当前窗口中
                 Window.Current.Content = rootFrame;
             }
+
+            RegisterBackgroundTask();
 
             if (rootFrame.Content == null)
             {

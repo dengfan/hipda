@@ -1,52 +1,77 @@
-﻿using Hipda.BackgroundTask.Models;
-using Hipda.Http;
+﻿using Hipda.Http;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Data.Xml.Dom;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Notifications;
+using Windows.UI.Xaml.Media;
 
 namespace Hipda.BackgroundTask
 {
-    public sealed class LiveTileTask : IBackgroundTask
+    public sealed class UpdateToastTask : IBackgroundTask
     {
-        static HttpHandle _httpClient = HttpHandle.GetInstance();
+        HttpHandle _httpClient = HttpHandle.GetInstance();
 
-        public async void Run(IBackgroundTaskInstance taskInstance)
+        string _xmlForLogin = @"<toast>" +
+                        "<visual>" +
+                            "<binding template='ToastGeneric'>" +
+                                "<text>登录状态已过期</text>" +
+                                "<text>请打开APP以便刷新登录状态，并继续给您推送个人消息。</text>" +
+                            "</binding>" +
+                        "</visual>" +
+                     "</toast>";
+
+        string _xmlForQuoteOrReply = @"<toast>" +
+                        "<visual>" +
+                            "<binding template='ToastGeneric'>" +
+                                "<text>{0}</text>" +
+                                "<text>引用或答复了您在《{1}》主题的贴子</text>" +
+                                "<image placement='appLogoOverride' src='{2}' hint-crop='circle'/>" +
+                                "<text>“{3}”</text>" +
+                            "</binding>" +
+                        "</visual>" +
+                        "<actions>" +
+                            "<input id='replyContent' type='text' placeHolderContent='输入回复内容' />" +
+                            "<action content='查看' arguments='view' />" +
+                            "<action content='回复' arguments='post' />" +
+                        "</actions>" +
+                     "</toast>";
+
+        string _xmlForThread = @"<toast>" +
+                        "<visual>" +
+                            "<binding template='ToastGeneric'>" +
+                                "<text>{0}</text>" +
+                                "<text>回复了您关注的主题《{1}》</text>" +
+                            "</binding>" +
+                        "</visual>" +
+                     "</toast>";
+
+        string _xmlForBuddy = @"<toast>" +
+                        "<visual>" +
+                            "<binding template='ToastGeneric'>" +
+                                "<text>{0}</text>" +
+                                "<text>添加您为好友</text>" +
+                                "<image placement='appLogoOverride' src='{1}' hint-crop='circle'/>" +
+                            "</binding>" +
+                        "</visual>" +
+                        "<actions>" +
+                            "<action content='加对方为好友' arguments='post' />" +
+                        "</actions>" +
+                     "</toast>";
+
+        async Task UpdateToastAsync(CancellationTokenSource cts)
         {
-            var deferral = taskInstance.GetDeferral();
-
-            await GetPromptData();
-
-            deferral.Complete();
-        }
-
-        private async Task GetPromptData()
-        {
-            try
-            {
-                var cts = new CancellationTokenSource();
-                var promptData = await LoadNoticeDataAsync(cts);
-                UpdatePrimaryTile(promptData);
-            }
-            catch (Exception)
-            {
-                // 忽略
-            }
-        }
-
-        async Task<List<NoticeItemModel>> LoadNoticeDataAsync(CancellationTokenSource cts)
-        {
-            var data = new List<NoticeItemModel>();
-
             string url = string.Format("http://www.hi-pda.com/forum/notice.php?_={0}", DateTime.Now.Ticks.ToString("x"));
             string htmlStr = await _httpClient.GetAsync(url, cts);
 
@@ -59,12 +84,12 @@ namespace Hipda.BackgroundTask
             var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("feed")).ChildNodes;
             if (items == null)
             {
-                return null;
+                SendToast(_xmlForLogin);
+                return;
             }
 
             foreach (var item in items)
             {
-                NoticeType noticeType;
                 bool isNew = false;
                 string userId = string.Empty;
                 string username = string.Empty;
@@ -88,7 +113,6 @@ namespace Hipda.BackgroundTask
                         isNew = divNode.ChildNodes[5].Name.Equals("img");
                         if (isNew)
                         {
-                            noticeType = NoticeType.QuoteOrReply;
                             userLinkNode = divNode.ChildNodes[0];
                             userId = userLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/space.php?from=notice&uid=".Length).Split('&')[0];
                             username = userLinkNode.InnerText.Trim();
@@ -116,15 +140,8 @@ namespace Hipda.BackgroundTask
                             var viewLinkNode = buttonsNode.ChildNodes[2];
                             postId = viewLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/redirect.php?from=notice&goto=findpost&pid=".Length).Split('&')[0];
 
-                            data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
-                                userId,         // 0
-                                threadId,       // 1
-                                threadTitle,    // 2
-                                originalText,   // 3
-                                actionText,     // 4
-                                repostStr,      // 5
-                                postId          // 6
-                            }));
+                            _xmlForQuoteOrReply = string.Format(_xmlForQuoteOrReply, username, threadTitle, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)), actionText);
+                            SendToast(_xmlForQuoteOrReply);
                         }
                         break;
                     case "f_thread":
@@ -132,8 +149,6 @@ namespace Hipda.BackgroundTask
                         isNew = nodes.Count(n => n.Name.Equals("img") && n.GetAttributeValue("alt", "").Equals("NEW")) == 1;
                         if (isNew)
                         {
-                            noticeType = NoticeType.Thread;
-
                             var usernames = new List<string>();
                             var usernameNodes = nodes.Where(n => n.Name.Equals("a") && n.Attributes[0].Value.StartsWith("space.php?username="));
                             foreach (var n in usernameNodes)
@@ -149,35 +164,81 @@ namespace Hipda.BackgroundTask
                             threadId = idsAry[1];
                             threadTitle = threadLinkNode.InnerText.Trim();
 
-                            actionTime = nodes.FirstOrDefault(n => n.Name.Equals("em")).InnerText.Trim();
-
-                            data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
-                                threadId,
-                                threadTitle,
-                                postId
-                            }));
+                            _xmlForThread = string.Format(_xmlForThread, username, threadTitle);
+                            SendToast(_xmlForThread);
                         }
                         break;
                     case "f_buddy":
                         isNew = divNode.ChildNodes[3].Name.Equals("img");
                         if (isNew)
                         {
-                            noticeType = NoticeType.Buddy;
                             userLinkNode = divNode.ChildNodes[0];
                             userId = userLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/space.php?from=notice&uid=".Length);
                             username = userLinkNode.InnerText.Trim();
-                            actionTime = divNode.ChildNodes[2].InnerText.Trim();
 
-                            data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
-                                userId
-                            }));
+                            _xmlForBuddy = string.Format(_xmlForBuddy, username, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)));
+                            SendToast(_xmlForBuddy);
                         }
                         break;
                 }
             }
-
-            return data;
         }
+
+        void SendToast(string toastXml)
+        {
+            toastXml = ReplaceHexadecimalSymbols(toastXml);
+
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(toastXml);
+
+            // 创建通知实例
+            var notification = new ToastNotification(xmlDoc);
+
+            // 单击响应
+            notification.Activated += OnNotification;
+
+            // 显示通知
+            var tn = ToastNotificationManager.CreateToastNotifier();
+            tn.Show(notification);
+        }
+
+        public async void Run(IBackgroundTaskInstance taskInstance)
+        {
+            var cost = BackgroundWorkCost.CurrentBackgroundWorkCost;
+            if (cost == BackgroundWorkCostValue.High)
+            {
+                Debug.Write("任务取消（cost is high）");
+            }
+
+            var cancel = new CancellationTokenSource();
+            taskInstance.Canceled += (s, e) => 
+            {
+                cancel.Cancel();
+                cancel.Dispose();
+            };
+
+            var deferral = taskInstance.GetDeferral();
+            try
+            {
+                var cts = new CancellationTokenSource();
+                await UpdateToastAsync(cts);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("出错了：" + ex.Message);
+            }
+            finally
+            {
+                deferral.Complete();
+            }
+        }
+
+        private void OnNotification(ToastNotification sender, object args)
+        {
+            Debug.WriteLine("[Toast] in OnNotification");
+        }
+
+
 
         private const string TileTemplateXml = @"<tile>
   <visual branding=""nameAndLogo"">
@@ -213,47 +274,47 @@ namespace Hipda.BackgroundTask
   </visual>
 </tile>";
 
-        private void UpdatePrimaryTile(List<NoticeItemModel> promptData)
-        {
-            if (promptData == null || !promptData.Any())
-            {
-                return;
-            }
+        //private void UpdatePrimaryTile(List<NoticeItemModel> promptData)
+        //{
+        //    if (promptData == null || !promptData.Any())
+        //    {
+        //        return;
+        //    }
 
-            try
-            {
-                var updater = TileUpdateManager.CreateTileUpdaterForApplication();
-                updater.EnableNotificationQueueForWide310x150(true);
-                updater.EnableNotificationQueueForSquare150x150(true);
-                updater.EnableNotificationQueueForSquare310x310(true);
-                updater.EnableNotificationQueue(true);
-                updater.Clear();
+        //    try
+        //    {
+        //        var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+        //        updater.EnableNotificationQueueForWide310x150(true);
+        //        updater.EnableNotificationQueueForSquare150x150(true);
+        //        updater.EnableNotificationQueueForSquare310x310(true);
+        //        updater.EnableNotificationQueue(true);
+        //        updater.Clear();
 
-                foreach (var promptItem in promptData)
-                {
-                    var doc = new XmlDocument();
-                    if (promptItem.NoticeType == NoticeType.QuoteOrReply)
-                    {
-                        var xml = string.Format(TileTemplateXml, GetSmallAvatarUrlByUserId(Convert.ToInt32(promptItem.ActionInfo[0])), promptItem.Username, promptItem.ActionInfo[4]);
-                        doc.LoadXml(WebUtility.HtmlDecode(xml), new XmlLoadSettings
-                        {
-                            ProhibitDtd = false,
-                            ValidateOnParse = false,
-                            ElementContentWhiteSpace = false,
-                            ResolveExternals = false
-                        });
+        //        foreach (var promptItem in promptData)
+        //        {
+        //            var doc = new XmlDocument();
+        //            if (promptItem.NoticeType == NoticeType.QuoteOrReply)
+        //            {
+        //                var xml = string.Format(TileTemplateXml, GetSmallAvatarUrlByUserId(Convert.ToInt32(promptItem.ActionInfo[0])), promptItem.Username, promptItem.ActionInfo[4]);
+        //                doc.LoadXml(WebUtility.HtmlDecode(xml), new XmlLoadSettings
+        //                {
+        //                    ProhibitDtd = false,
+        //                    ValidateOnParse = false,
+        //                    ElementContentWhiteSpace = false,
+        //                    ResolveExternals = false
+        //                });
 
-                        updater.Update(new TileNotification(doc));
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-        }
+        //                updater.Update(new TileNotification(doc));
+        //            }
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // ignored
+        //    }
+        //}
 
-        private static string GetSmallAvatarUrlByUserId(int userId)
+        static string GetSmallAvatarUrlByUserId(int userId)
         {
             var s = new int[10];
             for (int i = 0; i < s.Length - 1; ++i)
@@ -261,8 +322,18 @@ namespace Hipda.BackgroundTask
                 s[i] = userId % 10;
                 userId = (userId - s[i]) / 10;
             }
-
             return "http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_small.jpg";
+        }
+
+        /// <summary>
+        /// 过滤掉不能出现在XML中的字符
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
+        static string ReplaceHexadecimalSymbols(string txt)
+        {
+            string r = "[\x00-\x08\x0B\x0C\x0E-\x1F\x26]";
+            return Regex.Replace(txt, r, "", RegexOptions.Compiled);
         }
     }
 }

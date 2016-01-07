@@ -338,6 +338,10 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Hipda.BackgroundTask\Hipda.BackgroundTask.csproj">
+      <Project>{2940360e-7089-4841-9da3-942264d577e7}</Project>
+      <Name>Hipda.BackgroundTask</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Hipda.Html\Hipda.Html.csproj">
       <Project>{45dd5136-afb6-4cd5-84bf-75edad3ad626}</Project>
       <Name>Hipda.Html</Name>
