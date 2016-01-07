@@ -70,6 +70,21 @@ namespace Hipda.BackgroundTask
                         "</actions>" +
                      "</toast>";
 
+        string _xmlForPm = @"<toast>" +
+                        "<visual>" +
+                            "<binding template='ToastGeneric'>" +
+                                "<text>{0} 发来私信</text>" +
+                                "<text>“{1}”</text>" +
+                                "<image placement='appLogoOverride' src='{2}' hint-crop='circle'/>" +
+                            "</binding>" +
+                        "</visual>" +
+                        "<actions>" +
+                            "<input id='replyPmContent' type='text' placeHolderContent='输入回复内容' />" +
+                            "<action content='查看' arguments='view' />" +
+                            "<action content='回复' arguments='post' />" +
+                        "</actions>" +
+                     "</toast>";
+
         async Task UpdateToastAsync(CancellationTokenSource cts)
         {
             string url = string.Format("http://www.hi-pda.com/forum/notice.php?_={0}", DateTime.Now.Ticks.ToString("x"));
