@@ -131,8 +131,6 @@ namespace Hipda.Client.Uwp.Pro
                 Window.Current.Content = rootFrame;
             }
 
-            RegisterBackgroundTask();
-
             if (rootFrame.Content == null)
             {
                 // 当导航堆栈尚未还原时，导航到第一页，
@@ -174,6 +172,9 @@ namespace Hipda.Client.Uwp.Pro
             //titleBar.ButtonInactiveBackgroundColor = c;
             //titleBar.ForegroundColor = Colors.White;
             //titleBar.ButtonForegroundColor = Colors.White;
+
+            // 注册后台任务
+            RegisterBackgroundTask();
         }
 
         /// <summary>
