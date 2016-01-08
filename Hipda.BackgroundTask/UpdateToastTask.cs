@@ -26,8 +26,8 @@ namespace Hipda.BackgroundTask
         string _xmlForLogin = @"<toast>" +
                         "<visual>" +
                             "<binding template='ToastGeneric'>" +
-                                "<text>登录状态已过期</text>" +
-                                "<text>请打开APP以便刷新登录状态，并继续给您推送个人消息。</text>" +
+                                "<text>登录状态已过期，无法为继续您推送个人消息</text>" +
+                                "<text>点击此处打开APP以便刷新登录状态</text>" +
                             "</binding>" +
                         "</visual>" +
                      "</toast>";
@@ -38,12 +38,11 @@ namespace Hipda.BackgroundTask
                                 "<text>{0}</text>" +
                                 "<text>引用或答复了您在《{1}》主题的贴子</text>" +
                                 "<image placement='appLogoOverride' src='{2}' hint-crop='circle'/>" +
-                                "<text>“{3}”</text>" +
+                                "<text>“ {3} ”</text>" +
                             "</binding>" +
                         "</visual>" +
                         "<actions>" +
                             "<input id='replyContent' type='text' placeHolderContent='输入回复内容' />" +
-                            "<action content='查看' arguments='view' />" +
                             "<action content='回复' arguments='post' />" +
                         "</actions>" +
                      "</toast>";
@@ -73,19 +72,18 @@ namespace Hipda.BackgroundTask
         string _xmlForPm = @"<toast>" +
                         "<visual>" +
                             "<binding template='ToastGeneric'>" +
-                                "<text>{0} 发来私信</text>" +
-                                "<text>“{1}”</text>" +
+                                "<text>{0}</text>" +
+                                "<text>发来私信 “ {1} ”</text>" +
                                 "<image placement='appLogoOverride' src='{2}' hint-crop='circle'/>" +
                             "</binding>" +
                         "</visual>" +
                         "<actions>" +
                             "<input id='replyPmContent' type='text' placeHolderContent='输入回复内容' />" +
-                            "<action content='查看' arguments='view' />" +
                             "<action content='回复' arguments='post' />" +
                         "</actions>" +
                      "</toast>";
 
-        async Task UpdateToastAsync(CancellationTokenSource cts)
+        async Task UpdateNoticeToastAsync(CancellationTokenSource cts)
         {
             string url = string.Format("http://www.hi-pda.com/forum/notice.php?_={0}", DateTime.Now.Ticks.ToString("x"));
             string htmlStr = await _httpClient.GetAsync(url, cts);
@@ -199,6 +197,44 @@ namespace Hipda.BackgroundTask
             }
         }
 
+        async Task UpdatePmToastAsync(CancellationTokenSource cts)
+        {
+            // 读取数据
+            string url = string.Format("http://www.hi-pda.com/forum/pm.php?filter=privatepm&_={0}", DateTime.Now.Ticks.ToString("x"));
+            string htmlStr = await _httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlStr);
+
+            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("pm_list")).ChildNodes;
+            if (items == null)
+            {
+                SendToast(_xmlForLogin);
+                return;
+            }
+
+            foreach (var item in items)
+            {
+                var newImageNode = item.ChildNodes[3].ChildNodes[3];
+                var isNew = newImageNode != null;
+                if (isNew)
+                {
+                    var citeNode = item.ChildNodes[3].ChildNodes[1];
+                    var linkNode = citeNode.ChildNodes[0];
+                    int userId = Convert.ToInt32(linkNode.Attributes[0].Value.Substring("space.php?uid=".Length).Split('&')[0]);
+                    string username = linkNode.InnerText.Trim();
+                    string lastMessageTime = item.ChildNodes[3].ChildNodes[2].InnerText.Trim();
+                    string lastMessageText = item.ChildNodes[5].InnerText.Trim();
+
+                    _xmlForPm = string.Format(_xmlForPm, username, lastMessageText, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)));
+                    SendToast(_xmlForPm);
+                }
+            }
+        }
+
         void SendToast(string toastXml)
         {
             toastXml = ReplaceHexadecimalSymbols(toastXml);
@@ -236,7 +272,8 @@ namespace Hipda.BackgroundTask
             try
             {
                 var cts = new CancellationTokenSource();
-                await UpdateToastAsync(cts);
+                await UpdateNoticeToastAsync(cts);
+                await UpdatePmToastAsync(cts);
             }
             catch (Exception ex)
             {
