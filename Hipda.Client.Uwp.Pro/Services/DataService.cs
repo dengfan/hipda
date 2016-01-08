@@ -865,6 +865,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
             }
 
+            #region 还原通知数据的“NEW”状态后，清除 toast notice data
             string toastNoticeData = GetToastNoticeData();
             if (!string.IsNullOrEmpty(toastNoticeData))
             {
@@ -877,12 +878,15 @@ namespace Hipda.Client.Uwp.Pro.Services
                         if (key.Equals(item) && item2.IsNew == false)
                         {
                             item2.IsNew = true;
+                            break;
                         }
                     }
                 }
             }
 
             ClearToastNoticeData();
+            #endregion
+
             return data;
         }
 
