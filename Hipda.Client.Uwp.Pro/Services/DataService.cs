@@ -865,6 +865,24 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
             }
 
+            string toastNoticeData = GetToastNoticeData();
+            if (!string.IsNullOrEmpty(toastNoticeData))
+            {
+                string[] tdata = toastNoticeData.Split('$');
+                foreach (var item in tdata)
+                {
+                    foreach (var item2 in data)
+                    {
+                        string key = string.Format("{0}#{1}", (int)item2.NoticeType, item2.ActionTime);
+                        if (key.Equals(item) && item2.IsNew == false)
+                        {
+                            item2.IsNew = true;
+                        }
+                    }
+                }
+            }
+
+            ClearToastNoticeData();
             return data;
         }
 
@@ -872,6 +890,27 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             var cts = new CancellationTokenSource();
             return await LoadNoticeDataAsync(cts);
+        }
+
+        string GetToastNoticeData()
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "ToastNoticeData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+            if (_container.Values.ContainsKey(_dataKey))
+            {
+                return _container.Values[_dataKey].ToString();
+            }
+
+            return string.Empty;
+        }
+
+        void ClearToastNoticeData()
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "ToastNoticeData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+            _container.Values.Remove(_dataKey);
         }
         #endregion
 

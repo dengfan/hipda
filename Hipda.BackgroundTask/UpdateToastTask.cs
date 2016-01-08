@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Data.Xml.Dom;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml.Media;
@@ -94,7 +95,7 @@ namespace Hipda.BackgroundTask
             // 载入HTML
             doc.LoadHtml(htmlStr);
 
-            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("feed")).ChildNodes;
+            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("feed"))?.ChildNodes;
             if (items == null)
             {
                 SendToast(_xmlForLogin);
@@ -153,6 +154,10 @@ namespace Hipda.BackgroundTask
                             var viewLinkNode = buttonsNode.ChildNodes[2];
                             postId = viewLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/redirect.php?from=notice&goto=findpost&pid=".Length).Split('&')[0];
 
+                            // 保存数据，以便打开APP时还原“NEW”状态
+                            SaveToastData(0, actionTime);
+
+                            // 发送
                             _xmlForQuoteOrReply = string.Format(_xmlForQuoteOrReply, username, threadTitle, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)), actionText);
                             SendToast(_xmlForQuoteOrReply);
                         }
@@ -177,6 +182,10 @@ namespace Hipda.BackgroundTask
                             threadId = idsAry[1];
                             threadTitle = threadLinkNode.InnerText.Trim();
 
+                            // 保存数据，以便打开APP时还原“NEW”状态
+                            SaveToastData(1, actionTime);
+
+                            // 发送
                             _xmlForThread = string.Format(_xmlForThread, username, threadTitle);
                             SendToast(_xmlForThread);
                         }
@@ -188,7 +197,12 @@ namespace Hipda.BackgroundTask
                             userLinkNode = divNode.ChildNodes[0];
                             userId = userLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/space.php?from=notice&uid=".Length);
                             username = userLinkNode.InnerText.Trim();
+                            actionTime = divNode.ChildNodes[2].InnerText.Trim();
 
+                            // 保存数据，以便打开APP时还原“NEW”状态
+                            SaveToastData(2, actionTime);
+
+                            // 发送
                             _xmlForBuddy = string.Format(_xmlForBuddy, username, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)));
                             SendToast(_xmlForBuddy);
                         }
@@ -209,7 +223,7 @@ namespace Hipda.BackgroundTask
             // 载入HTML
             doc.LoadHtml(htmlStr);
 
-            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("pm_list")).ChildNodes;
+            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("pm_list"))?.ChildNodes;
             if (items == null)
             {
                 SendToast(_xmlForLogin);
@@ -251,6 +265,24 @@ namespace Hipda.BackgroundTask
             // 显示通知
             var tn = ToastNotificationManager.CreateToastNotifier();
             tn.Show(notification);
+        }
+
+        void SaveToastData(int noticeType, string actionTime)
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "ToastNoticeData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+
+            // 保存数据，以便打开APP时还原“NEW”状态
+            string toastData = string.Format("{0}#{1}", noticeType, actionTime);
+            if (_container.Values.ContainsKey(_dataKey))
+            {
+                _container.Values[_dataKey] = _container.Values[_dataKey].ToString().Trim() + "$" + toastData;
+            }
+            else
+            {
+                _container.Values[_dataKey] = toastData;
+            }
         }
 
         public async void Run(IBackgroundTaskInstance taskInstance)
