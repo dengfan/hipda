@@ -27,8 +27,8 @@ namespace Hipda.BackgroundTask
         string _xmlForLogin = @"<toast>" +
                         "<visual>" +
                             "<binding template='ToastGeneric'>" +
-                                "<text>登录状态已过期，无法为继续您推送个人消息</text>" +
-                                "<text>点击此处打开APP以便刷新登录状态</text>" +
+                                "<text>登录状态已过期，无法为您推送消息</text>" +
+                                "<text>打开APP以便刷新登录状态</text>" +
                             "</binding>" +
                         "</visual>" +
                      "</toast>";
@@ -155,7 +155,7 @@ namespace Hipda.BackgroundTask
                             postId = viewLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/redirect.php?from=notice&goto=findpost&pid=".Length).Split('&')[0];
 
                             // 保存数据，以便打开APP时还原“NEW”状态
-                            SaveToastData(0, actionTime);
+                            SaveNoticeToastTempData(0, actionTime);
 
                             // 发送
                             _xmlForQuoteOrReply = string.Format(_xmlForQuoteOrReply, username, threadTitle, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)), actionText);
@@ -181,9 +181,10 @@ namespace Hipda.BackgroundTask
                             postId = idsAry[0];
                             threadId = idsAry[1];
                             threadTitle = threadLinkNode.InnerText.Trim();
+                            actionTime = nodes.FirstOrDefault(n => n.Name.Equals("em")).InnerText.Trim();
 
                             // 保存数据，以便打开APP时还原“NEW”状态
-                            SaveToastData(1, actionTime);
+                            SaveNoticeToastTempData(1, actionTime);
 
                             // 发送
                             _xmlForThread = string.Format(_xmlForThread, username, threadTitle);
@@ -200,7 +201,7 @@ namespace Hipda.BackgroundTask
                             actionTime = divNode.ChildNodes[2].InnerText.Trim();
 
                             // 保存数据，以便打开APP时还原“NEW”状态
-                            SaveToastData(2, actionTime);
+                            SaveNoticeToastTempData(2, actionTime);
 
                             // 发送
                             _xmlForBuddy = string.Format(_xmlForBuddy, username, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)));
@@ -232,8 +233,7 @@ namespace Hipda.BackgroundTask
 
             foreach (var item in items)
             {
-                var newImageNode = item.ChildNodes[3].ChildNodes[3];
-                var isNew = newImageNode != null;
+                var isNew = item.ChildNodes[3].ChildNodes.Count >= 4 && item.ChildNodes[3].ChildNodes[3].Name.Equals("img");
                 if (isNew)
                 {
                     var citeNode = item.ChildNodes[3].ChildNodes[1];
@@ -243,8 +243,15 @@ namespace Hipda.BackgroundTask
                     string lastMessageTime = item.ChildNodes[3].ChildNodes[2].InnerText.Trim();
                     string lastMessageText = item.ChildNodes[5].InnerText.Trim();
 
-                    _xmlForPm = string.Format(_xmlForPm, username, lastMessageText, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)));
-                    SendToast(_xmlForPm);
+                    var flag = CheckIsExistedForPmToastTempData(userId);
+                    if (flag == false)
+                    {
+                        // 保存数据，以便打开APP时还原“NEW”状态
+                        SavePmToastTempData(userId);
+
+                        _xmlForPm = string.Format(_xmlForPm, username, lastMessageText, GetSmallAvatarUrlByUserId(userId));
+                        SendToast(_xmlForPm);
+                    }
                 }
             }
         }
@@ -267,22 +274,55 @@ namespace Hipda.BackgroundTask
             tn.Show(notification);
         }
 
-        void SaveToastData(int noticeType, string actionTime)
+        void SaveNoticeToastTempData(int noticeType, string actionTime)
         {
             string _containerKey = "HIPDA";
-            string _dataKey = "ToastNoticeData";
+            string _dataKey = "NoticeToastTempData";
             var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
 
             // 保存数据，以便打开APP时还原“NEW”状态
             string toastData = string.Format("{0}#{1}", noticeType, actionTime);
             if (_container.Values.ContainsKey(_dataKey))
             {
-                _container.Values[_dataKey] = _container.Values[_dataKey].ToString().Trim() + "$" + toastData;
+                _container.Values[_dataKey] = _container.Values[_dataKey].ToString().Trim() + "," + toastData;
             }
             else
             {
                 _container.Values[_dataKey] = toastData;
             }
+        }
+
+        void SavePmToastTempData(int userId)
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "PmToastTempData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+
+            // 保存数据，以便打开APP时还原“NEW”状态
+            string toastData = userId.ToString();
+            if (_container.Values.ContainsKey(_dataKey))
+            {
+                _container.Values[_dataKey] = _container.Values[_dataKey].ToString().Trim() + "," + toastData;
+            }
+            else
+            {
+                _container.Values[_dataKey] = toastData;
+            }
+        }
+
+        bool CheckIsExistedForPmToastTempData(int userId)
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "PmToastTempData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+
+            if (_container.Values.ContainsKey(_dataKey))
+            {
+                var list = _container.Values[_dataKey].ToString().Split(',').ToList();
+                return list.Any(u => u.Equals(userId.ToString()));
+            }
+
+            return false;
         }
 
         public async void Run(IBackgroundTaskInstance taskInstance)

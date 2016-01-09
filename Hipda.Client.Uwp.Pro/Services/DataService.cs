@@ -641,6 +641,9 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
             }
 
+            // 清除此用户的私信标识为“NEW”状态的 toast temp data
+            ClearPmToastTempData(userId);
+
             return new UserMessageDataModel { ListData = listData, Total = total };
         }
 
@@ -866,25 +869,24 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             #region 还原通知数据的“NEW”状态后，清除 toast notice data
-            string toastNoticeData = GetToastNoticeData();
-            if (!string.IsNullOrEmpty(toastNoticeData))
+            var noticeToastTempData = GetNoticeToastTempData();
+            if (noticeToastTempData != null)
             {
-                string[] tdata = toastNoticeData.Split('$');
-                foreach (var item in tdata)
+                foreach (var i in noticeToastTempData)
                 {
-                    foreach (var item2 in data)
+                    foreach (var j in data)
                     {
-                        string key = string.Format("{0}#{1}", (int)item2.NoticeType, item2.ActionTime);
-                        if (key.Equals(item) && item2.IsNew == false)
+                        string key = string.Format("{0}#{1}", (int)j.NoticeType, j.ActionTime);
+                        if (key.Equals(i) && j.IsNew == false)
                         {
-                            item2.IsNew = true;
+                            j.IsNew = true;
                             break;
                         }
                     }
                 }
             }
 
-            ClearToastNoticeData();
+            ClearNoticeToastTempData();
             #endregion
 
             return data;
@@ -894,27 +896,6 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             var cts = new CancellationTokenSource();
             return await LoadNoticeDataAsync(cts);
-        }
-
-        string GetToastNoticeData()
-        {
-            string _containerKey = "HIPDA";
-            string _dataKey = "ToastNoticeData";
-            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
-            if (_container.Values.ContainsKey(_dataKey))
-            {
-                return _container.Values[_dataKey].ToString();
-            }
-
-            return string.Empty;
-        }
-
-        void ClearToastNoticeData()
-        {
-            string _containerKey = "HIPDA";
-            string _dataKey = "ToastNoticeData";
-            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
-            _container.Values.Remove(_dataKey);
         }
         #endregion
 
@@ -1051,6 +1032,43 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             var cts = new CancellationTokenSource();
             return await DeleteUserMessageListItemAsync(delUserIdList, cts);
+        }
+        #endregion
+
+        #region toast temp data
+        List<string> GetNoticeToastTempData()
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "NoticeToastTempData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+            if (_container.Values.ContainsKey(_dataKey))
+            {
+                return _container.Values[_dataKey].ToString().Split(',').ToList();
+            }
+
+            return null;
+        }
+
+        void ClearNoticeToastTempData()
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "ToastNoticeTempData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+            _container.Values.Remove(_dataKey);
+        }
+
+        void ClearPmToastTempData(int userId)
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "PmToastTempData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+            string value = _container.Values[_dataKey]?.ToString();
+            if (!string.IsNullOrEmpty(value))
+            {
+                var list = value.Split(',').ToList();
+                list.RemoveAll(u => u.Equals(userId.ToString()));
+                _container.Values[_dataKey] = string.Join(",", list);
+            }
         }
         #endregion
     }
