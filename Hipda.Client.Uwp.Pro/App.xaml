@@ -838,6 +838,8 @@
                         <Run Text="{Binding Username}"/>
                         <Run Text=" "/>
                         <Run Text="{Binding LastMessageTime}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding NewLabel}" Foreground="Red"/>
                     </TextBlock>
                     <TextBlock Text="{Binding LastMessageText}" MaxWidth="360"
                                Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"

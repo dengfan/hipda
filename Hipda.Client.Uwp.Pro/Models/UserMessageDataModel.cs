@@ -16,9 +16,10 @@ namespace Hipda.Client.Uwp.Pro.Models
     /// </summary>
     public class UserMessageListItemModel
     {
-        public UserMessageListItemModel(int index, int pageNo, int userId, string username, string lastMessageTime, string lastMessageText)
+        public UserMessageListItemModel(int index, bool isNew, int pageNo, int userId, string username, string lastMessageTime, string lastMessageText)
         {
             this.Index = index;
+            this.IsNew = isNew;
             this.PageNo = pageNo;
             this.UserId = userId;
             this.Username = username;
@@ -26,6 +27,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.LastMessageText = lastMessageText;
         }
         public int Index { get; set; }
+        public bool IsNew { get; set; }
         public int PageNo { get; set; }
         public int UserId { get; set; }
         public string Username { get; set; }
@@ -37,6 +39,14 @@ namespace Hipda.Client.Uwp.Pro.Models
             get
             {
                 return Common.GetAvatarUriByUserId(UserId);
+            }
+        }
+
+        public string NewLabel
+        {
+            get
+            {
+                return IsNew ? "NEW" : string.Empty;
             }
         }
     }

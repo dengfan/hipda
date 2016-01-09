@@ -943,13 +943,14 @@ namespace Hipda.Client.Uwp.Pro.Services
             int i = _userMessageListData.Count;
             foreach (var item in items)
             {
+                var isNew = item.ChildNodes[3].ChildNodes.Count >= 4 && item.ChildNodes[3].ChildNodes[3].Name.Equals("img");
                 var linkNode = item.ChildNodes[3].ChildNodes[1].ChildNodes[0];
                 int userId = Convert.ToInt32(linkNode.Attributes[0].Value.Substring("space.php?uid=".Length).Split('&')[0]);
                 string username = linkNode.InnerText.Trim();
-                string lastMessageTime = item.ChildNodes[3].ChildNodes[2].InnerText.Trim();
+                string lastMessageTime = item.ChildNodes[3].ChildNodes[2].InnerText.Trim().Replace("&nbsp;", string.Empty);
                 string lastMessageText = item.ChildNodes[5].InnerText.Trim();
 
-                var userMessageListItem = new UserMessageListItemModel(i, pageNo, userId, username, lastMessageTime, lastMessageText);
+                var userMessageListItem = new UserMessageListItemModel(i, isNew, pageNo, userId, username, lastMessageTime, lastMessageText);
                 _userMessageListData.Add(userMessageListItem);
 
                 i++;

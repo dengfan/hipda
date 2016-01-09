@@ -327,11 +327,7 @@ namespace Hipda.BackgroundTask
 
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            var cost = BackgroundWorkCost.CurrentBackgroundWorkCost;
-            if (cost == BackgroundWorkCostValue.High)
-            {
-                Debug.Write("任务取消（cost is high）");
-            }
+            // 先检查登录状态，如果没有登录，则不推送
 
             var cancel = new CancellationTokenSource();
             taskInstance.Canceled += (s, e) => 

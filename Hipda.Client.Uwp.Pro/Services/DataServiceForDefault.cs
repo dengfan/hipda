@@ -28,6 +28,13 @@ namespace Hipda.Client.Uwp.Pro.Services
                 _threadData.RemoveAll(t => t.ForumId == forumId && t.PageNo == pageNo);
             }
 
+            if (pageNo == 1)
+            {
+                // 第一次打开或刷新时，先请求一下，看看是否有新私信
+                // 这是论坛的一种机制，否则APP过了一段时间之后不能从HTML中解析私人消息的数量
+                await _httpClient.GetAsync(string.Format("http://www.hi-pda.com/forum/pm.php?checknewpm={0}&inajax=1&ajaxtarget=myprompt_check", DateTime.Now.Ticks.ToString("x")), cts);
+            }
+
             // 读取数据
             string ThreadListPageOrderBy = string.Empty;
             string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&orderby={1}&page={2}&_={3}", forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.Ticks.ToString("x"));
