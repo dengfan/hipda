@@ -570,6 +570,7 @@
         </Border>
 
         <ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy"
+                       FullSizeDesired="True"
                        Template="{StaticResource ContentDialogTemplate}"
                        Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                        SecondaryButtonText="关闭"
