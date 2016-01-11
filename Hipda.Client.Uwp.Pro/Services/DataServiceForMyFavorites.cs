@@ -126,7 +126,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return vm;
         }
 
-        public async Task<ICollectionView> GetViewForThreadPageForMyFavorites(int startPageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ICollectionView GetViewForThreadPageForMyFavorites(int startPageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyFavoritesViewModel>(

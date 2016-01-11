@@ -188,7 +188,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return vm;
         }
 
-        public async Task<ICollectionView> GetViewForThreadPageForSearchTitle(int startPageNo, string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ICollectionView GetViewForThreadPageForSearchTitle(int startPageNo, string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForSearchTitleViewModel>(
