@@ -69,9 +69,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         }
 
         #region 从指定页开始加载数据
-        async void LoadData(int pageNo, int forumId)
+        void LoadData(int pageNo, int forumId)
         {
-            var cv = await _ds.GetViewForThreadPage(pageNo, forumId, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPage(pageNo, forumId, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();

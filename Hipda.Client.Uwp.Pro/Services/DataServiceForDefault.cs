@@ -16,12 +16,12 @@ namespace Hipda.Client.Uwp.Pro.Services
         static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
         int _threadMaxPageNo = 1;
 
-        async Task<bool> LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
+        async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadData.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
             if (count == _threadPageSize)
             {
-                return true;
+                return;
             }
             else
             {
@@ -54,7 +54,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
-                return false;
+                return;
             }
 
             // 读取最大页码
@@ -63,14 +63,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             if (pageNo > _threadMaxPageNo)
             {
-                return false;
+                return;
             }
 
             // 如果置顶贴数过多，只取非置顶贴的话，第一页数据项过少，会导致不会自动触发加载下一页数据
             var tbodies = dataTable.ChildNodes.Where(n => n.GetAttributeValue("id", "").Contains("stickthread_") || n.GetAttributeValue("id", "").Contains("normalthread_"));
             if (tbodies == null)
             {
-                return false;
+                return;
             }
 
             int i = _threadData.Count(t => t.ForumId == forumId);
@@ -149,15 +149,17 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 i++;
             }
-
-            return true;
         }
 
-        async Task<int> GetMoreThreadItemsAsync(int forumId, int pageNo, Action beforeLoad, Action afterLoad)
+        async Task<int> GetMoreThreadItemsAsync(int forumId, int pageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
             await LoadThreadDataAsync(forumId, pageNo, cts);
+            if (_threadData.Count == 0 && noDataNotice != null)
+            {
+                noDataNotice();
+            }
             if (afterLoad != null) afterLoad();
 
             return _threadData.Count(t => t.ForumId == forumId);
@@ -177,16 +179,8 @@ namespace Hipda.Client.Uwp.Pro.Services
             return vm;
         }
 
-        public async Task<ICollectionView> GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ICollectionView GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
-            // 预先加载一次，以判断是否有数据，不会浪费性能，因为如果本次载入了数据，后面就不用再载入了
-            var hasData = await LoadThreadDataAsync(forumId, startPageNo, new CancellationTokenSource());
-            if (hasData == false)
-            {
-                noDataNotice();
-                return null;
-            }
-
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemViewModel>(
                 startPageNo,
@@ -194,7 +188,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsAsync(forumId, pageNo, beforeLoad, afterLoad);
+                    return await GetMoreThreadItemsAsync(forumId, pageNo, beforeLoad, afterLoad, noDataNotice);
                 },
                 (index) =>
                 {
