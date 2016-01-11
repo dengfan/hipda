@@ -233,78 +233,79 @@ namespace Hipda.Client.Uwp.Pro
                 if (eventArgs.Uri.Scheme == "hipda")
                 {
                     string uri = eventArgs.Uri.AbsoluteUri;
-                    if (uri.StartsWith("hipda:tid=")) // 在新窗口中打开指定的回复列表
-                    {
-                        int tid = Convert.ToInt32(uri.Substring("hipda:tid=".Length));
-                        await OpenThreadInNewView(tid);
-                    }
+                    // 在新窗口中打开指定的回复列表
+                    //if (uri.StartsWith("hipda:tid="))
+                    //{
+                    //    int tid = Convert.ToInt32(uri.Substring("hipda:tid=".Length));
+                    //    await OpenThreadInNewView(tid);
+                    //}
                 }
             }
         }
 
-        private async Task OpenThreadInNewView(int threadId)
-        {
-            ViewLifetimeControl viewControl = null;
-            await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                // This object is used to keep track of the views and important
-                // details about the contents of those views across threads
-                // In your app, you would probably want to track information
-                // like the open document or page inside that window
-                viewControl = ViewLifetimeControl.CreateForCurrentView();
-                viewControl.Title = "坐和放宽";
-                // Increment the ref count because we just created the view and we have a reference to it                
-                viewControl.StartViewInUse();
+        //private async Task OpenThreadInNewView(int threadId)
+        //{
+        //    ViewLifetimeControl viewControl = null;
+        //    await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+        //    {
+        //        // This object is used to keep track of the views and important
+        //        // details about the contents of those views across threads
+        //        // In your app, you would probably want to track information
+        //        // like the open document or page inside that window
+        //        viewControl = ViewLifetimeControl.CreateForCurrentView();
+        //        viewControl.Title = "坐和放宽";
+        //        // Increment the ref count because we just created the view and we have a reference to it                
+        //        viewControl.StartViewInUse();
 
-                var param = new OpenNewViewParameterModel
-                {
-                    ElementTheme = ElementTheme.Dark,
-                    ThreadId = threadId,
-                    NewView = viewControl
-                };
-                var frame = new Frame();
-                frame.Navigate(typeof(ReplyNewViewPage), param);
-                Window.Current.Content = frame;
-                Window.Current.Activate();
-            });
+        //        var param = new OpenNewViewParameterModel
+        //        {
+        //            ElementTheme = ElementTheme.Dark,
+        //            ThreadId = threadId,
+        //            NewView = viewControl
+        //        };
+        //        var frame = new Frame();
+        //        frame.Navigate(typeof(ReplyNewViewPage), param);
+        //        Window.Current.Content = frame;
+        //        Window.Current.Activate();
+        //    });
 
-            // Be careful! This collection is bound to the current thread,
-            // so make sure to update it only from this thread
-            ((App)App.Current).SecondaryViews.Add(viewControl);
+        //    // Be careful! This collection is bound to the current thread,
+        //    // so make sure to update it only from this thread
+        //    ((App)App.Current).SecondaryViews.Add(viewControl);
 
-            var selectedView = viewControl;
-            var sizePreference = ViewSizePreference.Default;
-            var anchorSizePreference = ViewSizePreference.Default;
+        //    var selectedView = viewControl;
+        //    var sizePreference = ViewSizePreference.Default;
+        //    var anchorSizePreference = ViewSizePreference.Default;
 
-            if (viewControl != null)
-            {
-                try
-                {
-                    // Prevent the view from closing while
-                    // switching to it
-                    selectedView.StartViewInUse();
+        //    if (viewControl != null)
+        //    {
+        //        try
+        //        {
+        //            // Prevent the view from closing while
+        //            // switching to it
+        //            selectedView.StartViewInUse();
 
-                    // Show the previously created secondary view, using the size
-                    // preferences the user specified. In your app, you should
-                    // choose a size that's best for your scenario and code it,
-                    // instead of requiring the user to decide.
-                    var viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(
-                        selectedView.Id,
-                        sizePreference,
-                        ApplicationView.GetForCurrentView().Id,
-                        anchorSizePreference);
+        //            // Show the previously created secondary view, using the size
+        //            // preferences the user specified. In your app, you should
+        //            // choose a size that's best for your scenario and code it,
+        //            // instead of requiring the user to decide.
+        //            var viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(
+        //                selectedView.Id,
+        //                sizePreference,
+        //                ApplicationView.GetForCurrentView().Id,
+        //                anchorSizePreference);
 
-                    // Signal that switching has completed and let the view close
-                    selectedView.StopViewInUse();
-                }
-                catch (InvalidOperationException)
-                {
-                    // The view could be in the process of closing, and
-                    // this thread just hasn't updated. As part of being closed,
-                    // this thread will be informed to clean up its list of
-                    // views (see SecondaryViewPage.xaml.cs)
-                }
-            }
-        }
+        //            // Signal that switching has completed and let the view close
+        //            selectedView.StopViewInUse();
+        //        }
+        //        catch (InvalidOperationException)
+        //        {
+        //            // The view could be in the process of closing, and
+        //            // this thread just hasn't updated. As part of being closed,
+        //            // this thread will be informed to clean up its list of
+        //            // views (see SecondaryViewPage.xaml.cs)
+        //        }
+        //    }
+        //}
     }
 }
