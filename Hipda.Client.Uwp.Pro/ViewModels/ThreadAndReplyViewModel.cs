@@ -80,9 +80,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        async void LoadDataForMyThreads(int pageNo)
+        void LoadDataForMyThreads(int pageNo)
         {
-            var cv = await _ds.GetViewForThreadPageForMyThreads(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForMyThreads(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyThreads();
@@ -91,9 +91,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        async void LoadDataForMyPosts(int pageNo)
+        void LoadDataForMyPosts(int pageNo)
         {
-            var cv = await _ds.GetViewForThreadPageForMyPosts(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForMyPosts(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyPosts();
@@ -102,9 +102,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        async void LoadDataForMyFavorites(int pageNo)
+        void LoadDataForMyFavorites(int pageNo)
         {
-            var cv = await _ds.GetViewForThreadPageForMyFavorites(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForMyFavorites(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyFavorites();
@@ -113,9 +113,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        async void LoadDataForSearchTitle(int pageNo)
+        void LoadDataForSearchTitle(int pageNo)
         {
-            var cv = await _ds.GetViewForThreadPageForSearchTitle(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForSearchTitle(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchTitle();
@@ -124,9 +124,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        async void LoadDataForSearchFullText(int pageNo)
+        void LoadDataForSearchFullText(int pageNo)
         {
-            var cv = await _ds.GetViewForThreadPageForSearchFullText(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForSearchFullText(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchFullText();
