@@ -294,21 +294,20 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                                 _ds.ClearThreadDataForMyFavorites();
                                 LoadDataForMyFavorites(1);
 
-                                var frame = Window.Current.Content as Frame;
-                                var mp = frame.Content as MainPage;
-                                if (mp != null)
-                                {
-                                    mp.ShowTipBar("操作成功！");
-                                }
+                                //var frame = Window.Current.Content as Frame;
+                                //var mp = frame.Content as MainPage;
+                                //if (mp != null)
+                                //{
+                                //    mp.ShowTipBar("操作成功！");
+                                //}
                             }
                         }
                     };
 
-                    var btnMultipleSelect = new AppBarToggleButton { Icon = new FontIcon { Glyph = "\uE762", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label = "选择", IsThreeState = false };
+                    var btnMultipleSelect = new AppBarButton { Icon = new FontIcon { Glyph = "\uE762", FontFamily = new FontFamily("Segoe MDL2 Assets") }, Label = "选择" };
                     btnMultipleSelect.Tapped += (s, e) =>
                     {
-                        var btn = s as AppBarToggleButton;
-                        if (btn.IsChecked == true)
+                        if (_leftListView.SelectionMode == ListViewSelectionMode.Single)
                         {
                             _leftListView.SelectionMode = ListViewSelectionMode.Multiple;
                             btnDeleteSelected.IsEnabled = true;
@@ -323,7 +322,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     var btnRefreshForFavorites = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
                     btnRefreshForFavorites.Tapped += (s, e) => {
                         _leftListView.SelectionMode = ListViewSelectionMode.Single;
-                        btnMultipleSelect.IsChecked = false;
                         btnDeleteSelected.IsEnabled = false;
 
                         _ds.ClearThreadDataForMyFavorites();

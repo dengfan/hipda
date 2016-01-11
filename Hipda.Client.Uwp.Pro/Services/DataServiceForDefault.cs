@@ -156,10 +156,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
             await LoadThreadDataAsync(forumId, pageNo, cts);
-            if (_threadData.Count == 0 && noDataNotice != null)
-            {
-                noDataNotice();
-            }
+            if (_threadData.Count == 0 && noDataNotice != null) noDataNotice();
             if (afterLoad != null) afterLoad();
 
             return _threadData.Count(t => t.ForumId == forumId);

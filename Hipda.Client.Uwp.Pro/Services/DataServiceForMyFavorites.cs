@@ -16,12 +16,12 @@ namespace Hipda.Client.Uwp.Pro.Services
         static List<ThreadItemForMyFavoritesModel> _threadDataForMyFavorites = new List<ThreadItemForMyFavoritesModel>();
         int _threadMaxPageNoForMyFavorites = 1;
 
-        async Task<bool> LoadThreadDataForMyFavoritesAsync(int pageNo, CancellationTokenSource cts)
+        async Task LoadThreadDataForMyFavoritesAsync(int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForMyFavorites.Count(t => t.PageNo == pageNo);
             if (count == _threadPageSize)
             {
-                return true;
+                return;
             }
             else
             {
@@ -46,7 +46,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null || dataTable.InnerText.Trim().Equals("暂无数据"))
             {
-                return false;
+                return;
             }
 
             // 读取最大页码
@@ -55,13 +55,13 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             if (pageNo > _threadMaxPageNoForMyFavorites)
             {
-                return false;
+                return;
             }
 
             var rows = dataTable.ChildNodes[3].Descendants().Where(n => n.Name.Equals("tr")).ToList();
             if (rows == null)
             {
-                return false;
+                return;
             }
 
             // 移除最后一行，注：最后一行是批量删除的按钮
@@ -100,15 +100,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 i++;
             }
-
-            return true;
         }
 
-        async Task<int> GetMoreThreadItemsForMyFavoritesAsync(int pageNo, Action beforeLoad, Action afterLoad)
+        async Task<int> GetMoreThreadItemsForMyFavoritesAsync(int pageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
             await LoadThreadDataForMyFavoritesAsync(pageNo, cts);
+            if (_threadDataForMyFavorites.Count == 0 && noDataNotice != null) noDataNotice();
             if (afterLoad != null) afterLoad();
 
             return _threadDataForMyFavorites.Count;
@@ -129,14 +128,6 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public async Task<ICollectionView> GetViewForThreadPageForMyFavorites(int startPageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
-            // 预先加载一次，以判断是否有数据，不会浪费性能，因为如果本次载入了数据，后面就不用再载入了
-            var hasData = await LoadThreadDataForMyFavoritesAsync(startPageNo, new CancellationTokenSource());
-            if (hasData == false)
-            {
-                noDataNotice();
-                return null;
-            }
-
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyFavoritesViewModel>(
                 startPageNo,
@@ -144,7 +135,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsForMyFavoritesAsync(pageNo, beforeLoad, afterLoad);
+                    return await GetMoreThreadItemsForMyFavoritesAsync(pageNo, beforeLoad, afterLoad, noDataNotice);
                 },
                 (index) =>
                 {

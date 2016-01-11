@@ -17,12 +17,12 @@ namespace Hipda.Client.Uwp.Pro.Services
         static List<ThreadItemForSearchTitleModel> _threadDataForSearchTitle = new List<ThreadItemForSearchTitleModel>();
         int _threadMaxPageNoForSearchTitle = 1;
 
-        async Task<bool> LoadThreadDataForSearchTitleAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
+        async Task LoadThreadDataForSearchTitleAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForSearchTitle.Count(t => t.PageNo == pageNo);
             if (count == _searchPageSize)
             {
-                return true;
+                return;
             }
             else
             {
@@ -70,7 +70,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null || dataTable.ChildNodes[2].InnerText.Trim().Equals("对不起，没有找到匹配结果。"))
             {
-                return false;
+                return;
             }
 
             // 读取最大页码
@@ -79,13 +79,13 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             if (pageNo > _threadMaxPageNoForSearchTitle)
             {
-                return false;
+                return;
             }
 
             var tbodies = dataTable.Descendants().Where(n => n.Name.Equals("tbody"));
             if (tbodies == null)
             {
-                return false;
+                return;
             }
 
             int i = _threadDataForSearchTitle.Count;
@@ -161,15 +161,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 i++;
             }
-
-            return true;
         }
 
-        async Task<int> GetMoreThreadItemsForSearchTitleAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, Action beforeLoad, Action afterLoad)
+        async Task<int> GetMoreThreadItemsForSearchTitleAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
             await LoadThreadDataForSearchTitleAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, pageNo, cts);
+            if (_threadDataForSearchTitle.Count == 0 && noDataNotice != null) noDataNotice();
             if (afterLoad != null) afterLoad();
 
             return _threadDataForSearchTitle.Count;
@@ -191,14 +190,6 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public async Task<ICollectionView> GetViewForThreadPageForSearchTitle(int startPageNo, string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
-            // 预先加载一次，以判断是否有数据，不会浪费性能，因为如果本次载入了数据，后面就不用再载入了
-            var hasData = await LoadThreadDataForSearchTitleAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, startPageNo, new CancellationTokenSource());
-            if (hasData == false)
-            {
-                noDataNotice();
-                return null;
-            }
-
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForSearchTitleViewModel>(
                 startPageNo,
@@ -206,7 +197,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsForSearchTitleAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, pageNo, beforeLoad, afterLoad);
+                    return await GetMoreThreadItemsForSearchTitleAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, pageNo, beforeLoad, afterLoad, noDataNotice);
                 },
                 (index) =>
                 {

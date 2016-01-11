@@ -18,12 +18,12 @@ namespace Hipda.Client.Uwp.Pro.Services
         static List<ThreadItemForSearchFullTextModel> _threadDataForSearchFullText = new List<ThreadItemForSearchFullTextModel>();
         int _threadMaxPageNoForSearchFullText = 1;
 
-        async Task<bool> LoadThreadDataForSearchFullTextAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
+        async Task LoadThreadDataForSearchFullTextAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForSearchFullText.Count(t => t.PageNo == pageNo);
             if (count == _searchPageSize)
             {
-                return true;
+                return;
             }
             else
             {
@@ -71,7 +71,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null || dataTable.InnerText.Trim().Equals("对不起，没有找到匹配结果。"))
             {
-                return false;
+                return;
             }
 
             // 读取最大页码
@@ -80,13 +80,13 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             if (pageNo > _threadMaxPageNoForSearchFullText)
             {
-                return false;
+                return;
             }
 
             var rows = dataTable.Descendants().Where(n => n.Name.Equals("tr"));
             if (rows == null)
             {
-                return false;
+                return;
             }
 
             int i = _threadDataForSearchFullText.Count;
@@ -137,15 +137,14 @@ namespace Hipda.Client.Uwp.Pro.Services
                     Common.PostErrorEmailToDeveloper("全文搜索解析出现异常", errorDetails);
                 }
             }
-
-            return true;
         }
 
-        async Task<int> GetMoreThreadItemsForSearchFullTextAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, Action beforeLoad, Action afterLoad)
+        async Task<int> GetMoreThreadItemsForSearchFullTextAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
             await LoadThreadDataForSearchFullTextAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, pageNo, cts);
+            if (_threadDataForSearchFullText.Count == 0 && noDataNotice != null) noDataNotice();
             if (afterLoad != null) afterLoad();
 
             return _threadDataForSearchFullText.Count;
@@ -167,14 +166,6 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public async Task<ICollectionView> GetViewForThreadPageForSearchFullText(int startPageNo, string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
-            // 预先加载一次，以判断是否有数据，不会浪费性能，因为如果本次载入了数据，后面就不用再载入了
-            var hasData = await LoadThreadDataForSearchFullTextAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, startPageNo, new CancellationTokenSource());
-            if (hasData == false)
-            {
-                noDataNotice();
-                return null;
-            }
-
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForSearchFullTextViewModel>(
                 startPageNo,
@@ -182,7 +173,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsForSearchFullTextAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, pageNo, beforeLoad, afterLoad);
+                    return await GetMoreThreadItemsForSearchFullTextAsync(searchKeyword, searchAuthor, searchTimeSpan, searchForumSpan, pageNo, beforeLoad, afterLoad, noDataNotice);
                 },
                 (index) =>
                 {

@@ -15,6 +15,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         int _pageNo;
         int _loadedCount = 0; // 已载入的项的数量
         uint _showedCount = 0; // 已显示的项的数量
+        bool _isFirstLoad = true;
 
         public GeneratorIncrementalLoadingClass(int pageNo, Func<int, Task<int>> getMore, Func<int, T> getOne, Func<int> getMaxPageNo)
         {
@@ -26,7 +27,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         protected override bool HasMoreItemsOverride()
         {
-            if (_loadedCount == 0)
+            if (_isFirstLoad)
             {
                 return true;
             }
@@ -68,6 +69,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             _showedCount += readyShowCount;
 
+            _isFirstLoad = false;
             return values.ToArray();
         }
     }

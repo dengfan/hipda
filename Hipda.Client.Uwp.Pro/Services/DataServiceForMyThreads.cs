@@ -16,12 +16,12 @@ namespace Hipda.Client.Uwp.Pro.Services
         static List<ThreadItemForMyThreadsModel> _threadDataForMyThreads = new List<ThreadItemForMyThreadsModel>();
         int _threadMaxPageNoForMyThreads = 1;
 
-        async Task<bool> LoadThreadDataForMyThreadsAsync(int pageNo, CancellationTokenSource cts)
+        async Task LoadThreadDataForMyThreadsAsync(int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForMyThreads.Count(t => t.PageNo == pageNo);
             if (count == _threadPageSize)
             {
-                return true;
+                return;
             }
             else
             {
@@ -46,7 +46,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
-                return false;
+                return;
             }
 
             // 读取最大页码
@@ -55,13 +55,13 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             if (pageNo > _threadMaxPageNoForMyThreads)
             {
-                return false;
+                return;
             }
 
             var rows = dataTable.ChildNodes[3].Descendants().Where(n => n.Name.Equals("tr"));
             if (rows == null)
             {
-                return false;
+                return;
             }
 
             int i = _threadDataForMyThreads.Count;
@@ -92,15 +92,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 i++;
             }
-
-            return true;
         }
 
-        async Task<int> GetMoreThreadItemsForMyThreadsAsync(int pageNo, Action beforeLoad, Action afterLoad)
+        async Task<int> GetMoreThreadItemsForMyThreadsAsync(int pageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
             await LoadThreadDataForMyThreadsAsync(pageNo, cts);
+            if (_threadDataForMyThreads.Count == 0 && noDataNotice != null) noDataNotice();
             if (afterLoad != null) afterLoad();
 
             return _threadDataForMyThreads.Count;
@@ -121,14 +120,6 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public async Task<ICollectionView> GetViewForThreadPageForMyThreads(int startPageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
-            // 预先加载一次，以判断是否有数据，不会浪费性能，因为如果本次载入了数据，后面就不用再载入了
-            var hasData = await LoadThreadDataForMyThreadsAsync(startPageNo, new CancellationTokenSource());
-            if (hasData == false)
-            {
-                noDataNotice();
-                return null;
-            }
-
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyThreadsViewModel>(
                 startPageNo,
@@ -136,7 +127,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsForMyThreadsAsync(pageNo, beforeLoad, afterLoad);
+                    return await GetMoreThreadItemsForMyThreadsAsync(pageNo, beforeLoad, afterLoad, noDataNotice);
                 },
                 (index) =>
                 {
