@@ -31,7 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         CoreDispatcher _mainDispatcher;
 
         int _threadId;
-        ReplyViewModel _replyViewModel;
+        ReplyListPageViewModel _replyViewModel;
 
         public ReplyNewViewPage()
         {
@@ -48,7 +48,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             _threadId = param.ThreadId;
             RequestedTheme = param.ElementTheme;
 
-            _replyViewModel = new ReplyViewModel(
+            _replyViewModel = new ReplyListPageViewModel(
                     1,
                     _threadId,
                     0,

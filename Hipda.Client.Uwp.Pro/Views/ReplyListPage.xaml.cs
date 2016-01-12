@@ -49,7 +49,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             DependencyProperty.Register("PopupThreadId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0));
         #endregion
 
-        private ReplyViewModel _replyViewModel;
+        private ReplyListPageViewModel _replyViewModel;
         private int _threadId;
         private int _threadAuthorUserId;
 
@@ -136,7 +136,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 // Realize the main page content.
                 FindName("RightWrap");
 
-                _replyViewModel = new ReplyViewModel(
+                _replyViewModel = new ReplyListPageViewModel(
                     1,
                     _threadId,
                     _threadAuthorUserId,

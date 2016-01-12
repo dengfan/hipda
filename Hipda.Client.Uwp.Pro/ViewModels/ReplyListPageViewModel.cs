@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ReplyViewModel : NotificationObject
+    public class ReplyListPageViewModel : NotificationObject
     {
         private int _threadId;
         private int _threadAuthorUserId;
@@ -43,7 +43,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ReplyViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
+        public ReplyListPageViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
         {
             _threadId = threadId;
             _threadAuthorUserId = threadAuthorUserId;

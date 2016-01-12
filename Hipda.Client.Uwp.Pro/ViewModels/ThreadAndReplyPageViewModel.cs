@@ -26,7 +26,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     /// 2. 按主题类别来初始化，如我的贴子、我的回复
     /// 2. 按搜索条件来初始化
     /// </summary>
-    public class ThreadAndReplyViewModel : NotificationObject
+    public class ThreadAndReplyPageViewModel : NotificationObject
     {
         #region 仅用于按版块ID来初始化的情况
         /// <summary>
@@ -183,7 +183,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// <param name="leftCommandBar"></param>
         /// <param name="beforeLoad"></param>
         /// <param name="afterLoad"></param>
-        public ThreadAndReplyViewModel(int pageNo, int forumId, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ThreadAndReplyPageViewModel(int pageNo, int forumId, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _forumId = forumId;
             _leftListView = leftListView;
@@ -233,7 +233,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// <param name="leftCommandBar"></param>
         /// <param name="beforeLoad"></param>
         /// <param name="afterLoad"></param>
-        public ThreadAndReplyViewModel(int pageNo, string threadType, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ThreadAndReplyPageViewModel(int pageNo, string threadType, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
@@ -365,7 +365,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// <param name="leftCommandBar"></param>
         /// <param name="beforeLoad"></param>
         /// <param name="afterLoad"></param>
-        public ThreadAndReplyViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ThreadAndReplyPageViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _searchKeyword = searchKeyword;
             _searchAuthor = searchAuthor;

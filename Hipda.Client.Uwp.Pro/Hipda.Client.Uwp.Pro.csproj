@@ -160,8 +160,8 @@
     <Compile Include="ViewModels\NoticePageViewModel.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\PostDetailDialogViewModel.cs" />
-    <Compile Include="ViewModels\ReplyViewModel.cs" />
-    <Compile Include="ViewModels\ThreadAndReplyViewModel.cs" />
+    <Compile Include="ViewModels\ReplyListPageViewModel.cs" />
+    <Compile Include="ViewModels\ThreadAndReplyPageViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyFavoritesViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForSearchFullTextViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForSearchTitleViewModel.cs" />

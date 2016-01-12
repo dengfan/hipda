@@ -38,7 +38,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         ThreadDataType _threadDataType;
 
         object _lastSelectedItem;
-        ThreadAndReplyViewModel _threadAndReplyViewModel;
+        ThreadAndReplyPageViewModel _threadAndReplyViewModel;
 
         public ThreadAndReplyPage()
         {
@@ -214,7 +214,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 {
                     _threadDataType = ThreadDataType.Default;
                     int fid = Convert.ToInt32(param.Substring("fid=".Length));
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    _threadAndReplyViewModel = new ThreadAndReplyPageViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("item="))
@@ -237,7 +237,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                         _threadDataType = ThreadDataType.Notice;
                     }
 
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, threadType, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    _threadAndReplyViewModel = new ThreadAndReplyPageViewModel(1, threadType, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("search="))
@@ -251,7 +251,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     _threadDataType = (searchType == 0) ? ThreadDataType.SearchTitle : ThreadDataType.SearchFullText;
 
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    _threadAndReplyViewModel = new ThreadAndReplyPageViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
