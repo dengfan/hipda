@@ -321,7 +321,7 @@ namespace Hipda.Client.Uwp.Pro
             }
 
             UserDialog.DataContext = vm;
-            UserDialog.Title = "查看引用楼之详情";
+            UserDialog.Title = "查看引用楼";
             UserDialog.ContentTemplate = this.Resources["PostDetailDialogContentTemplate"] as DataTemplate;
 
             if (_isDialogShown == false)

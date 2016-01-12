@@ -53,9 +53,7 @@
         <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
         <StackPanel x:Name="ReplyPanel" Grid.Row="1" VerticalAlignment="Bottom" 
-                    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
-                    BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" 
-                    BorderThickness="0,1,0,0" Opacity="0.8">
+                    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">

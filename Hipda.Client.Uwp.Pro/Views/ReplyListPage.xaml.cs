@@ -62,6 +62,11 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             base.OnNavigatedTo(e);
 
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            {
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            }
+
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;
 
@@ -94,13 +99,31 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             base.OnNavigatedFrom(e);
 
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            {
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+            }
+
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
             SystemNavigationManager.GetForCurrentView().BackRequested -= BackRequested;
         }
 
+        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        {
+            if (Frame.CanGoBack)
+            {
+                e.Handled = true;
+                Frame.GoBack(new SuppressNavigationTransitionInfo());
+            }
+        }
+
         private void BackRequested(object sender, BackRequestedEventArgs e)
         {
-            Frame.GoBack(new SuppressNavigationTransitionInfo());
+            if (Frame.CanGoBack)
+            {
+                e.Handled = true;
+                Frame.GoBack(new SuppressNavigationTransitionInfo());
+            }
         }
 
         void NavigateBackForWideState(bool useTransition)
