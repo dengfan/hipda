@@ -574,6 +574,7 @@
                        Template="{StaticResource ContentDialogTemplate}"
                        Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                        SecondaryButtonText="关闭"
-                       SecondaryButtonClick="userDialog_SecondaryButtonClick"/>
+                       SecondaryButtonClick="userDialog_SecondaryButtonClick"
+                       Closed="UserDialog_Closed"/>
     </Grid>
 </Page>

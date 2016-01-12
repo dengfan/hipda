@@ -394,14 +394,18 @@ namespace Hipda.Client.Uwp.Pro
                 UserDialog.Hide();
                 UserDialog.DataContext = null;
             }
-            
+
         }
-        #endregion
 
         private void userDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            _isDialogShown = false;
-            UserDialog.DataContext = null;
+            CloseUserDialog();
         }
+
+        private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
+        {
+            CloseUserDialog();
+        }
+        #endregion
     }
 }
