@@ -65,7 +65,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemForMyFavoritesViewModel(ThreadItemForMyFavoritesModel threadItem)
         {
-            StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyFavorites;
             _threadId = threadItem.ThreadId;
             ThreadItem = threadItem;
@@ -73,7 +72,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemForMyFavoritesViewModel(int pageNo, int threadId, ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int, int> afterLoad)
         {
-            StartPageNo = 1;
             ThreadDataType = ThreadDataType.MyFavorites;
             _threadId = threadId;
             _replyListView = replyListView;

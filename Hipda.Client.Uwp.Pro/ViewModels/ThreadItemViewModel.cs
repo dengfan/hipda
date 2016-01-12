@@ -66,7 +66,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemViewModel(ThreadItemModel threadItem)
         {
-            StartPageNo = 1;
             ThreadDataType = ThreadDataType.Default;
             _threadId = threadItem.ThreadId;
             _threadAuthorUserId = threadItem.AuthorUserId;
@@ -75,7 +74,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int, int> afterLoad)
         {
-            StartPageNo = 1;
             ThreadDataType = ThreadDataType.Default;
             _threadId = threadId;
             _threadAuthorUserId = threadAuthorUserId;

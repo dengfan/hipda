@@ -15,6 +15,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ReplyListPageViewModel : NotificationObject
     {
+        /// <summary>
+        /// 加载的起始页
+        /// 如“我的回复”之回复列表页并不一定是从第一页开始加载的，所以需要用此属性来判断是否显示“加载上一页”的按钮。
+        /// </summary>
+        public int StartPageNo { get; set; } = 1;
+
         private int _threadId;
         private int _threadAuthorUserId;
         private ListView _replyListView { get; set; }
@@ -24,7 +30,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand RefreshReplyCommand { get; set; }
 
-        public ICollectionView ReplyItemCollection { get; set; }
+        ICollectionView _replyItemCollection;
+
+        public ICollectionView ReplyItemCollection
+        {
+            get { return _replyItemCollection; }
+            set
+            {
+                _replyItemCollection = value;
+                this.RaisePropertyChanged("ReplyItemCollection");
+            }
+        }
 
         public List<FaceItemModel> FaceData
         {
@@ -34,11 +50,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private void LoadData(int pageNo)
+        void LoadData(int pageNo)
         {
             var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _threadAuthorUserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
+                StartPageNo = pageNo;
                 ReplyItemCollection = cv;
             }
         }
@@ -53,31 +70,22 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds = new DataService();
 
             RefreshReplyCommand = new DelegateCommand();
-            RefreshReplyCommand.ExecuteAction = new Action<object>(RefreshReplyExecute);
+            RefreshReplyCommand.ExecuteAction = (p) =>
+            {
+                _ds.ClearReplyData(_threadId);
+                LoadData(1);
+            };
 
             LoadData(pageNo);
         }
 
-        private void RefreshReplyExecute(object parameter)
-        {
-            _replyListView.ItemsSource = null;
-            _ds.ClearReplyData(_threadId);
-
-            LoadData(1);
-            _replyListView.ItemsSource = ReplyItemCollection;
-        }
-
         public void RefreshReplyDataFromPrevPage()
         {
-            // 先获取当前数据中已存在的最小页码
-            int minPageNo = _ds.GetReplyMinPageNoInLoadedData(_threadId);
-            int startPageNo = minPageNo > 1 ? minPageNo - 1 : 1;
-
-            _replyListView.ItemsSource = null;
-            _ds.ClearReplyData(_threadId);
-
-            LoadData(1);
-            _replyListView.ItemsSource = ReplyItemCollection;
+            if (StartPageNo > 1)
+            {
+                _ds.ClearReplyData(_threadId);
+                LoadData(StartPageNo - 1);
+            }
         }
     }
 }

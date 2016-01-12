@@ -165,7 +165,6 @@
                 </Grid.RowDefinitions>
 
                 <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-                    <AppBarButton Icon="Edit" Label="评论"/>
                     <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
                     <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
                     <CommandBar.SecondaryCommands>
@@ -175,7 +174,7 @@
                 </CommandBar>
 
                 <pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-                    <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
+                    <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
                               VerticalAlignment="Top" SelectionMode="None" ShowsScrollingPlaceholders="False"
                               ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                               ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"

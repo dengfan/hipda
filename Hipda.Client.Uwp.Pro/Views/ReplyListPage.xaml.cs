@@ -15,43 +15,25 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ReplyListPage : Page
     {
-        #region 两个依赖属性，用于接收点击头像的参数
-        public int PopupUserId
+        ReplyListPageViewModel _replyViewModel;
+        int _threadId;
+        int _threadAuthorUserId;
+
+        #region 委托事件
+        void BeforeLoaded()
         {
-            get { return (int)GetValue(PopupUserIdProperty); }
-            set { SetValue(PopupUserIdProperty, value); }
+            rightProgress.IsActive = true;
+            rightProgress.Visibility = Visibility.Visible;
+            ReplyRefreshButton.IsEnabled = false;
         }
 
-        // Using a DependencyProperty as the backing store for PopupUserId.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PopupUserIdProperty =
-            DependencyProperty.Register("PopupUserId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0));
-
-
-        public string PopupUsername
+        void AfterLoaded(int threadId, int pageNo)
         {
-            get { return (string)GetValue(PopupUsernameProperty); }
-            set { SetValue(PopupUsernameProperty, value); }
+            rightProgress.IsActive = false;
+            rightProgress.Visibility = Visibility.Collapsed;
+            ReplyRefreshButton.IsEnabled = true;
         }
-
-        // Using a DependencyProperty as the backing store for PopupUsername.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PopupUsernameProperty =
-            DependencyProperty.Register("PopupUsername", typeof(string), typeof(ThreadAndReplyPage), new PropertyMetadata(string.Empty));
-
-
-        public int PopupThreadId
-        {
-            get { return (int)GetValue(PopupThreadIdProperty); }
-            set { SetValue(PopupThreadIdProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for PopupThreadId.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PopupThreadIdProperty =
-            DependencyProperty.Register("PopupThreadId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0));
         #endregion
-
-        private ReplyListPageViewModel _replyViewModel;
-        private int _threadId;
-        private int _threadAuthorUserId;
 
         public ReplyListPage()
         {
@@ -108,7 +90,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             SystemNavigationManager.GetForCurrentView().BackRequested -= BackRequested;
         }
 
-        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
             if (Frame.CanGoBack)
             {
@@ -117,7 +99,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        private void BackRequested(object sender, BackRequestedEventArgs e)
+        void BackRequested(object sender, BackRequestedEventArgs e)
         {
             if (Frame.CanGoBack)
             {
@@ -141,12 +123,12 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        private bool ShouldGoToWideState()
+        bool ShouldGoToWideState()
         {
             return Window.Current.Bounds.Width >= 720;
         }
 
-        private void PageRoot_Loaded(object sender, RoutedEventArgs e)
+        void PageRoot_Loaded(object sender, RoutedEventArgs e)
         {
             if (ShouldGoToWideState())
             {
@@ -156,37 +138,21 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
             else
             {
-                // Realize the main page content.
                 FindName("RightWrap");
 
-                _replyViewModel = new ReplyListPageViewModel(
-                    1,
-                    _threadId,
-                    _threadAuthorUserId,
-                    ReplyListView,
-                    () => {
-                        rightProgress.IsActive = true;
-                        rightProgress.Visibility = Visibility.Visible;
-                        ReplyRefreshButton.IsEnabled = false;
-                    },
-                    (tid, pageNo) => {
-                        rightProgress.IsActive = false;
-                        rightProgress.Visibility = Visibility.Collapsed;
-                        ReplyRefreshButton.IsEnabled = true;
-                    });
-
+                _replyViewModel = new ReplyListPageViewModel(1, _threadId, _threadAuthorUserId, ReplyListView, BeforeLoaded, AfterLoaded);
                 DataContext = _replyViewModel;
             }
 
             Window.Current.SizeChanged += Window_SizeChanged;
         }
 
-        private void PageRoot_Unloaded(object sender, RoutedEventArgs e)
+        void PageRoot_Unloaded(object sender, RoutedEventArgs e)
         {
             Window.Current.SizeChanged -= Window_SizeChanged;
         }
 
-        private void Window_SizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
+        void Window_SizeChanged(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
         {
             if (ShouldGoToWideState())
             {
@@ -198,7 +164,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        private void rightPr_RefreshInvoked(DependencyObject sender, object args)
+        void rightPr_RefreshInvoked(DependencyObject sender, object args)
         {
             _replyViewModel.RefreshReplyDataFromPrevPage();
         }

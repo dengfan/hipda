@@ -61,14 +61,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemForSearchFullTextViewModel(ThreadItemForSearchFullTextModel threadItem)
         {
-            StartPageNo = 1;
             ThreadDataType = ThreadDataType.SearchFullText;
             ThreadItem = threadItem;
         }
 
         public ThreadItemForSearchFullTextViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int, int> afterLoad)
         {
-            StartPageNo = 1;
             ThreadDataType = ThreadDataType.SearchFullText;
             _threadId = threadId;
             _replyListView = replyListView;

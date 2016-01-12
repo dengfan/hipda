@@ -68,7 +68,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// 加载的起始页
         /// 如“我的回复”之回复列表页并不一定是从第一页开始加载的，所以需要用此属性来判断是否显示“加载上一页”的按钮。
         /// </summary>
-        public int StartPageNo { get; set; }
+        public int StartPageNo { get; set; } = 1;
 
         private Style _statusColorStyle;
 

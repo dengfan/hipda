@@ -18,23 +18,23 @@
         </Grid.RowDefinitions>
 
         <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
-                        Background="{Binding Background,ElementName=LayoutRoot}">
-            <AppBarButton Icon="Edit" Label="评论"/>
+                    Background="{Binding Background,ElementName=LayoutRoot}">
             <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
             <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
             <CommandBar.SecondaryCommands>
+                <AppBarButton Label="复制链接"/>
                 <AppBarButton Label="在浏览器中打开"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
 
         <pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-            <ListView x:Name="ReplyListView" IsItemClickEnabled="False" IsSwipeEnabled="False" CanDragItems="False"
-                              VerticalAlignment="Top" SelectionMode="Single" ShowsScrollingPlaceholders="False"
+            <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
+                              VerticalAlignment="Top" SelectionMode="None" ShowsScrollingPlaceholders="False"
                               ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                               ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                               ItemsSource="{Binding ReplyItemCollection}">
                 <ListView.Footer>
-                    <StackPanel x:Name="rightFooter" Margin="0,80,0,160">
+                    <StackPanel x:Name="rightFooter" Margin="0,80,0,160" Visibility="Collapsed">
                         <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
                         <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
                             <Button.Template>

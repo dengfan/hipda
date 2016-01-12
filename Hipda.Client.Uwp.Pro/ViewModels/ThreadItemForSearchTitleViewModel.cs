@@ -57,7 +57,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemForSearchTitleViewModel(ThreadItemForSearchTitleModel threadItem)
         {
-            StartPageNo = 1;
             ThreadDataType = ThreadDataType.SearchTitle;
             _threadId = threadItem.ThreadId;
             ThreadItem = threadItem;
@@ -65,7 +64,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ThreadItemForSearchTitleViewModel(int pageNo, int threadId, int threadAuthorUserId, ListView replyListView, TextBox postReplyTextBox, Action beforeLoad, Action<int, int> afterLoad)
         {
-            StartPageNo = 1;
             ThreadDataType = ThreadDataType.SearchTitle;
             _threadId = threadId;
             _replyListView = replyListView;
