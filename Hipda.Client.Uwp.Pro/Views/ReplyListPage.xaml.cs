@@ -44,13 +44,11 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             base.OnNavigatedTo(e);
 
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            if (Frame.CanGoBack)
             {
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;
             }
-
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-            SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;
 
             string[] p = e.Parameter.ToString().Split(',');
             _threadId = Convert.ToInt32(p[0]);
@@ -81,31 +79,17 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             base.OnNavigatedFrom(e);
 
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
-            {
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
-            }
-
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-            SystemNavigationManager.GetForCurrentView().BackRequested -= BackRequested;
-        }
-
-        void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
-        {
             if (Frame.CanGoBack)
             {
-                Frame.GoBack(new CommonNavigationTransitionInfo());
-                e.Handled = true;
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+                SystemNavigationManager.GetForCurrentView().BackRequested -= BackRequested;
             }
         }
 
         void BackRequested(object sender, BackRequestedEventArgs e)
         {
-            if (Frame.CanGoBack)
-            {
-                Frame.GoBack(new CommonNavigationTransitionInfo());
-                e.Handled = true;
-            }
+            Frame.GoBack(new CommonNavigationTransitionInfo());
+            e.Handled = true;
         }
 
         void NavigateBackForWideState(bool useTransition)
