@@ -94,6 +94,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void LeftNoDataNotice()
         {
+            LeftCommandBar.Visibility = Visibility.Collapsed;
             leftNoDataNoticePanel.Visibility = Visibility.Visible;
         }
 
@@ -213,7 +214,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 {
                     _threadDataType = ThreadDataType.Default;
                     int fid = Convert.ToInt32(param.Substring("fid=".Length));
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, LeftListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("item="))
@@ -236,7 +237,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                         _threadDataType = ThreadDataType.Notice;
                     }
 
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, threadType, LeftListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, threadType, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("search="))
@@ -250,7 +251,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     _threadDataType = (searchType == 0) ? ThreadDataType.SearchTitle : ThreadDataType.SearchFullText;
 
-                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, ThreadCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    _threadAndReplyViewModel = new ThreadAndReplyViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
@@ -525,16 +526,11 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
-        /// <summary>
-        /// 头像之上下文菜单项之事件
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void openThreadInNewView_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var uri = new Uri("hipda:tid=" + MainPage.PopupThreadId);
-            await Launcher.LaunchUriAsync(uri, new LauncherOptions { TreatAsUntrusted = false });
-        }
+        //private async void openThreadInNewView_Tapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    var uri = new Uri("hipda:tid=" + MainPage.PopupThreadId);
+        //    await Launcher.LaunchUriAsync(uri, new LauncherOptions { TreatAsUntrusted = false });
+        //}
 
         private void openUserInfoDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
         {

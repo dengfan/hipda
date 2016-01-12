@@ -14,7 +14,7 @@
 
     <Page.Resources>
         <MenuFlyout x:Key="avatarContextMenu">
-            <MenuFlyoutItem Text="在新窗口中打开此主题" Tapped="openThreadInNewView_Tapped"/>
+            <!--<MenuFlyoutItem Text="在新窗口中打开此主题" Tapped="openThreadInNewView_Tapped"/>-->
             <MenuFlyoutItem Text="收藏此主题"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="查看详细资料" Tapped="openUserInfoDialogButton_Tapped"/>
@@ -143,7 +143,7 @@
                     </CommandBar.SecondaryCommands>
                 </CommandBar>-->
 
-                <CommandBar x:Name="ThreadCommandBar" Grid.Row="0" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
+                <CommandBar x:Name="LeftCommandBar" Grid.Row="0" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Visibility="Collapsed"/>
 
                 <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
                     <ListView x:Name="LeftListView" ItemClick="LeftListView_ItemClick" IncrementalLoadingTrigger="Edge" SelectionMode="Single"

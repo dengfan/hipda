@@ -179,20 +179,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// </summary>
         /// <param name="pageNo"></param>
         /// <param name="forumId"></param>
-        /// <param name="threadListView"></param>
-        /// <param name="threadCommandBar"></param>
+        /// <param name="leftListView"></param>
+        /// <param name="leftCommandBar"></param>
         /// <param name="beforeLoad"></param>
         /// <param name="afterLoad"></param>
-        public ThreadAndReplyViewModel(int pageNo, int forumId, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ThreadAndReplyViewModel(int pageNo, int forumId, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _forumId = forumId;
-            _leftListView = threadListView;
+            _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
             _leftListView.ItemsSource = null;
             _leftListView.ItemTemplateSelector = App.Current.Resources["threadListItemTemplateSelector"] as DataTemplateSelector;
             _leftListView.ItemContainerStyle = App.Current.Resources["ThreadItemContainerStyle"] as Style;
 
-            _leftCommandBar = threadCommandBar;
+            _leftCommandBar = leftCommandBar;
+            _leftCommandBar.Visibility = Visibility.Visible;
             _leftCommandBar.PrimaryCommands.Clear();
             _leftCommandBar.SecondaryCommands.Clear();
 
@@ -228,19 +229,20 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// </summary>
         /// <param name="pageNo"></param>
         /// <param name="threadType"></param>
-        /// <param name="threadListView"></param>
-        /// <param name="threadCommandBar"></param>
+        /// <param name="leftListView"></param>
+        /// <param name="leftCommandBar"></param>
         /// <param name="beforeLoad"></param>
         /// <param name="afterLoad"></param>
-        public ThreadAndReplyViewModel(int pageNo, string threadType, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ThreadAndReplyViewModel(int pageNo, string threadType, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
-            _leftListView = threadListView;
+            _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
             _leftListView.ItemsSource = null;
             _leftListView.ItemTemplateSelector = App.Current.Resources["threadListItemTemplateSelector"] as DataTemplateSelector;
             _leftListView.ItemContainerStyle = App.Current.Resources["ThreadItemContainerStyle"] as Style;
 
-            _leftCommandBar = threadCommandBar;
+            _leftCommandBar = leftCommandBar;
+            _leftCommandBar.Visibility = Visibility.Visible;
             _leftCommandBar.PrimaryCommands.Clear();
             _leftCommandBar.SecondaryCommands.Clear();
 
@@ -359,11 +361,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         /// <param name="searchType"></param>
         /// <param name="searchTimeSpan"></param>
         /// <param name="searchForumSpan"></param>
-        /// <param name="threadListView"></param>
-        /// <param name="threadCommandBar"></param>
+        /// <param name="leftListView"></param>
+        /// <param name="leftCommandBar"></param>
         /// <param name="beforeLoad"></param>
         /// <param name="afterLoad"></param>
-        public ThreadAndReplyViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView threadListView, CommandBar threadCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ThreadAndReplyViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _searchKeyword = searchKeyword;
             _searchAuthor = searchAuthor;
@@ -371,11 +373,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _searchTimeSpan = searchTimeSpan;
             _searchForumSpan = searchForumSpan;
 
-            _leftListView = threadListView;
+            _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
             _leftListView.ItemsSource = null;
 
-            _leftCommandBar = threadCommandBar;
+            _leftCommandBar = leftCommandBar;
+            _leftCommandBar.Visibility = Visibility.Visible;
             _leftCommandBar.PrimaryCommands.Clear();
             _leftCommandBar.SecondaryCommands.Clear();
 
