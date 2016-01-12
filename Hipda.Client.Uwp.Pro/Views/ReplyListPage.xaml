@@ -34,7 +34,7 @@
                               ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
                               ItemsSource="{Binding ReplyItemCollection}">
                 <ListView.Footer>
-                    <StackPanel x:Name="rightFooter" Margin="0,80,0,160" Visibility="Collapsed">
+                    <StackPanel x:Name="rightFooter" Margin="0,80,0,160">
                         <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
                         <Button x:Name="ReplyRefreshButton2" Margin="10" Command="{Binding RefreshReplyCommand}" HorizontalAlignment="Center">
                             <Button.Template>

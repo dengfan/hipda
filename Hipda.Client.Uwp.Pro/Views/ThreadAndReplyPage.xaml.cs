@@ -358,7 +358,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
                         string p = string.Format("{0},{1}", itemForMyThreads.ThreadItem.ThreadId, AccountService.UserId);
-                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
                     {
@@ -375,7 +375,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
                         string p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, 0);
-                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
                     {
@@ -392,7 +392,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
                         string p = string.Format("{0},{1}", itemForMyFavorites.ThreadItem.ThreadId, 0);
-                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
                     {
@@ -409,7 +409,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
                         string p = string.Format("{0},{1}", itemForSearchTitle.ThreadItem.ThreadId, 0);
-                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
                     {
@@ -426,7 +426,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
                         string p = string.Format("{0},{1}", itemForSearchFullText.ThreadItem.ThreadId, 0);
-                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
                     {
@@ -443,7 +443,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     {
                         
                         string p = string.Format("{0},{1}", item.ThreadItem.ThreadId, item.ThreadItem.AuthorUserId);
-                        Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
                     {

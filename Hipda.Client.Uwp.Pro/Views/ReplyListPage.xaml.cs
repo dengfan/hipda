@@ -94,8 +94,8 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             if (Frame.CanGoBack)
             {
+                Frame.GoBack(new CommonNavigationTransitionInfo());
                 e.Handled = true;
-                Frame.GoBack(new SuppressNavigationTransitionInfo());
             }
         }
 
@@ -103,8 +103,8 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             if (Frame.CanGoBack)
             {
+                Frame.GoBack(new CommonNavigationTransitionInfo());
                 e.Handled = true;
-                Frame.GoBack(new SuppressNavigationTransitionInfo());
             }
         }
 
@@ -115,7 +115,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
             if (useTransition)
             {
-                Frame.GoBack(new EntranceNavigationTransitionInfo());
+                Frame.GoBack(new SlideNavigationTransitionInfo());
             }
             else
             {
