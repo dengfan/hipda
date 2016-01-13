@@ -29,6 +29,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             if (_isFirstLoad)
             {
+                _isFirstLoad = false;
                 return true;
             }
 
@@ -69,7 +70,6 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             _showedCount += readyShowCount;
 
-            _isFirstLoad = false;
             return values.ToArray();
         }
     }

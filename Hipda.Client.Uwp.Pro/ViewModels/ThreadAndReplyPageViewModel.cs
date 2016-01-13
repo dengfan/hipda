@@ -437,7 +437,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public bool CheckIsShowButtonForLoadPrevReplyPage(int threadId)
         {
-            return _ds.CheckIsShowButtonForLoadPrevReplyPage(threadId);
+            return _ds.CanShowButtonForLoadPrevReplyPage(threadId);
         }
 
         public void AddToReadHistory(int threadId)

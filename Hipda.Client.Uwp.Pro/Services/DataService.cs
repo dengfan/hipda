@@ -179,7 +179,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("pages"));
             _replyMaxPageNo = GetMaxPageNo(pagesNode);
 
-            var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
+            var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("postlist"))?.ChildNodes;
             if (data == null)
             {
                 return;
@@ -526,10 +526,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _isScrollCompleted;
         }
 
-        public bool CheckIsShowButtonForLoadPrevReplyPage(int threadId)
+        public bool CanShowButtonForLoadPrevReplyPage(int threadId)
         {
             var data = _replyData.FirstOrDefault(d => d.ThreadId == threadId);
-            if (data != null)
+            if (data != null && data.Replies != null && data.Replies.Count > 0)
             {
                 if (data.Replies.Min(r => r.PageNo) != 1)
                 {
