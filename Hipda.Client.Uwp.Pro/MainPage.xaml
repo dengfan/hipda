@@ -483,6 +483,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <StackPanel x:Name="SearchPanel" Margin="8" Visibility="Collapsed">
@@ -514,6 +515,8 @@
                              Tapped="TopNavButtonListBox_Tapped"/>
 
                     <ContentControl x:Name="BottomButtonContentControl" Grid.Row="1" VerticalAlignment="Bottom"/>
+
+                    <Button Content="x" Command="{Binding ClearCookiesCommand}"/>
                 </Grid>
             </SplitView.Pane>
 

@@ -135,7 +135,10 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
                     int count = ReadListView.Items.Count;
-                    ReadListView.ScrollIntoView(ReadListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                    if (count > 0)
+                    {
+                        ReadListView.ScrollIntoView(ReadListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                    }
                 });
             }
         }

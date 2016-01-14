@@ -54,6 +54,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
+                _threadMaxPageNo = -1; // 找不到目标数据，一般为得到的是提示登录的页面的HTML，故在此将最大页标记为-1，以便增量加载不再继续
                 return;
             }
 

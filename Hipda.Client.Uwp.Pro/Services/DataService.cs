@@ -747,7 +747,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             // 载入HTML
             doc.LoadHtml(htmlStr);
 
-            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("feed")).ChildNodes;
+            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("feed"))?.ChildNodes;
             if (items == null)
             {
                 return null;
@@ -930,7 +930,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
             GetPromptData(promptContentNode);
 
-            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("pm_list")).ChildNodes;
+            var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("pm_list"))?.ChildNodes;
             if (items == null)
             {
                 return;
@@ -962,10 +962,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var cts = new CancellationTokenSource();
             await LoadUserMessageListDataAsync(pageNo, cts);
 
-            if (afterLoaded != null)
-            {
-                afterLoaded();
-            }
+            if (afterLoaded != null) afterLoaded();
 
             return _userMessageListData.Count;
         }

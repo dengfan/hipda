@@ -1,4 +1,7 @@
-﻿using Hipda.Client.Uwp.Pro.Models;
+﻿using Hipda.Client.Uwp.Pro.Commands;
+using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.Services;
+using Hipda.Http;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,12 +30,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             NavButtons.Add(new NavButtonItemModel { Icon = "BS", Text = "Buy & Sell 版", TypeValue = "fid=6" });
             NavButtons.Add(new NavButtonItemModel { Icon = "EI", Text = "E-Ink 版", TypeValue = "fid=57" });
             NavButtons.Add(new NavButtonItemModel { Icon = "\uE712", Text = "更多版块", TypeValue = "more" });
+
+            ClearCookiesCommand = new DelegateCommand();
+            ClearCookiesCommand.ExecuteAction = (p) => {
+                var _httpClient = HttpHandle.GetInstance();
+                _httpClient.ClearCookies();
+            };
         }
 
         public static MainPageViewModel GetInstance()
         {
             return instance;
         }
+
+        public DelegateCommand ClearCookiesCommand { get; set; }
+
 
         private ObservableCollection<NavButtonItemModel> _navButtons;
 
