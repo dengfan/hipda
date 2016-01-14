@@ -42,7 +42,6 @@ namespace Hipda.Http
         public async Task<string> GetAsync(string url, CancellationTokenSource cts)
         {
             var result = string.Empty;
-            //var cts = new CancellationTokenSource();
 
             try
             {
@@ -68,7 +67,6 @@ namespace Hipda.Http
         {
             var result = string.Empty;
             string postData = GetQueryString(toPost);
-            //var cts = new CancellationTokenSource();
 
             try
             {
@@ -95,7 +93,6 @@ namespace Hipda.Http
         public async Task<string> PostFileAsync(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer, CancellationTokenSource cts)
         {
             var result = string.Empty;
-            //var cts = new CancellationTokenSource();
 
             try
             {
