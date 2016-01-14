@@ -58,7 +58,7 @@ namespace Hipda.Http
             catch (Exception ex)
             {
                 cts.Cancel();
-                //await new MessageDialog(ex.Message + "\n\n请尝试刷新或检查网络连接是否正常！", "GET请求失败").ShowAsync();
+                cts.Dispose();
             }
 
             return result;
@@ -86,7 +86,7 @@ namespace Hipda.Http
             catch (Exception ex)
             {
                 cts.Cancel();
-                await new MessageDialog(ex.Message + "\n\n请尝试刷新或检查网络连接是否正常！", "POST请求失败").ShowAsync();
+                cts.Dispose();
             }
 
             return result;
@@ -122,7 +122,7 @@ namespace Hipda.Http
             catch (Exception ex)
             {
                 cts.Cancel();
-                await new MessageDialog(ex.Message + "\n\n请尝试刷新或检查网络连接是否正常！", "POSTFILE请求失败").ShowAsync();
+                cts.Dispose();
             }
             
             return result;
