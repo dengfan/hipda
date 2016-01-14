@@ -1,5 +1,6 @@
 ﻿using Hipda.Http;
 using HtmlAgilityPack;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,18 +21,40 @@ using Windows.UI.Xaml.Media;
 
 namespace Hipda.BackgroundTask
 {
+    public sealed class AccountItemModel
+    {
+        public AccountItemModel(string username, string password, int questionId, string answer, bool isDefault)
+        {
+            this.Username = username;
+            this.Password = password;
+            this.QuestionId = questionId;
+            this.Answer = answer;
+            this.IsDefault = isDefault;
+        }
+
+        public string Username { get; set; }
+
+        public string Password { get; set; }
+
+        public int QuestionId { get; set; }
+
+        public string Answer { get; set; }
+
+        public bool IsDefault { get; set; }
+    }
+
     public sealed class UpdateToastTask : IBackgroundTask
     {
-        HttpHandle _httpClient = HttpHandle.GetInstance();
+        static HttpHandle _httpClient = HttpHandle.GetInstance();
 
-        string _xmlForLogin = @"<toast>" +
-                        "<visual>" +
-                            "<binding template='ToastGeneric'>" +
-                                "<text>登录状态已过期，无法为您推送消息</text>" +
-                                "<text>打开APP以便刷新登录状态</text>" +
-                            "</binding>" +
-                        "</visual>" +
-                     "</toast>";
+        //string _xmlForLogin = @"<toast>" +
+        //                "<visual>" +
+        //                    "<binding template='ToastGeneric'>" +
+        //                        "<text>登录状态已过期，无法为您推送消息</text>" +
+        //                        "<text>打开APP以便刷新登录状态</text>" +
+        //                    "</binding>" +
+        //                "</visual>" +
+        //             "</toast>";
 
         string _xmlForQuoteOrReply = @"<toast>" +
                         "<visual>" +
@@ -98,7 +121,6 @@ namespace Hipda.BackgroundTask
             var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("feed"))?.ChildNodes;
             if (items == null)
             {
-                SendToast(_xmlForLogin);
                 return;
             }
 
@@ -227,7 +249,6 @@ namespace Hipda.BackgroundTask
             var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("pm_list"))?.ChildNodes;
             if (items == null)
             {
-                SendToast(_xmlForLogin);
                 return;
             }
 
@@ -327,7 +348,8 @@ namespace Hipda.BackgroundTask
 
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            // 先检查登录状态，如果没有登录，则不推送
+            // 先登录
+            Login();
 
             var cancel = new CancellationTokenSource();
             taskInstance.Canceled += (s, e) => 
@@ -433,6 +455,39 @@ namespace Hipda.BackgroundTask
         //        // ignored
         //    }
         //}
+
+        static async void Login()
+        {
+            // 先从 settings 中读取是否有账号
+            string _containerKey = "HIPDA";
+            string _dataKey = "AccountData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+            var data = _container.Values[_dataKey];
+            if (data == null)
+            {
+                return;
+            }
+
+            string jsonText = data.ToString();
+            var accountData = JsonConvert.DeserializeObject<List<AccountItemModel>>(jsonText);
+            var defaultAccount = accountData.FirstOrDefault(a => a.IsDefault);
+            if (defaultAccount == null)
+            {
+                return;
+            }
+
+            // 先清除 cookie
+            _httpClient.ClearCookies();
+
+            var postData = new List<KeyValuePair<string, object>>();
+            postData.Add(new KeyValuePair<string, object>("username", defaultAccount.Username));
+            postData.Add(new KeyValuePair<string, object>("password", defaultAccount.Password));
+            postData.Add(new KeyValuePair<string, object>("questionid", defaultAccount.QuestionId));
+            postData.Add(new KeyValuePair<string, object>("answer", defaultAccount.Answer));
+
+            var cts = new CancellationTokenSource();
+            await _httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData, cts);
+        }
 
         static string GetSmallAvatarUrlByUserId(int userId)
         {
