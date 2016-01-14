@@ -39,6 +39,11 @@ namespace Hipda.Http
             }
         }
 
+        async void ShowError(string errorText, string errorTitle)
+        {
+            await new MessageDialog(errorText, errorTitle).ShowAsync();
+        }
+
         public async Task<string> GetAsync(string url, CancellationTokenSource cts)
         {
             var result = string.Empty;
@@ -58,6 +63,9 @@ namespace Hipda.Http
             {
                 cts.Cancel();
                 cts.Dispose();
+
+                string err = $"请检查网络连接是否正常。\r\n{ex.Message}";
+                ShowError(err, "GetAsync 请求失败");
             }
 
             return result;
@@ -85,6 +93,9 @@ namespace Hipda.Http
             {
                 cts.Cancel();
                 cts.Dispose();
+
+                string err = $"请检查网络连接是否正常。\r\n{ex.Message}";
+                ShowError(err, "PostAsync 请求失败");
             }
 
             return result;
@@ -120,6 +131,9 @@ namespace Hipda.Http
             {
                 cts.Cancel();
                 cts.Dispose();
+
+                string err = $"请检查网络连接是否正常。\r\n{ex.Message}";
+                ShowError(err, "PostFileAsync 请求失败");
             }
             
             return result;
