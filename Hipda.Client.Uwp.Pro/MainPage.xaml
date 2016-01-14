@@ -434,15 +434,7 @@
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1000" />
-                    </VisualState.StateTriggers>
-                </VisualState>
-                <VisualState>
-                    <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
-                    </VisualState.Setters>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="720" />
+                        <AdaptiveTrigger MinWindowWidth="500" />
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState>
