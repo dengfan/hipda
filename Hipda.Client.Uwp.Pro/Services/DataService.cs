@@ -1050,7 +1050,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         void ClearNoticeToastTempData()
         {
             string _containerKey = "HIPDA";
-            string _dataKey = "ToastNoticeTempData";
+            string _dataKey = "NoticeToastTempData";
             var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
             _container.Values.Remove(_dataKey);
         }
