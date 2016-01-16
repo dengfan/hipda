@@ -27,29 +27,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         static HttpHandle _httpClient = HttpHandle.GetInstance();
 
-        #region prompt
-        static void GetPromptData(HtmlNode promptContentNode)
-        {
-            try
-            {
-                if (promptContentNode != null)
-                {
-                    var promtpViewModel = MainPageViewModel.GetInstance();
-                    var ulNode = promptContentNode.ChildNodes[1];
-                    promtpViewModel.PromptPm = Convert.ToInt32(ulNode.ChildNodes[0].InnerText.Trim().Substring("私人消息 (".Length).Replace(")", string.Empty));
-                    promtpViewModel.PromptAnnouncePm = Convert.ToInt32(ulNode.ChildNodes[1].InnerText.Trim().Substring("公共消息 (".Length).Replace(")", string.Empty));
-                    promtpViewModel.PromptSystemPm = Convert.ToInt32(ulNode.ChildNodes[2].InnerText.Trim().Substring("系统消息 (".Length).Replace(")", string.Empty));
-                    promtpViewModel.PromptFriend = Convert.ToInt32(ulNode.ChildNodes[3].InnerText.Trim().Substring("好友消息 (".Length).Replace(")", string.Empty));
-                    promtpViewModel.PromptThreads = Convert.ToInt32(ulNode.ChildNodes[4].InnerText.Trim().Substring("帖子消息 (".Length).Replace(")", string.Empty));
-                }
-            }
-            catch (Exception e)
-            {
-                string errorDetails = string.Format("{0}", e.Message);
-                Common.PostErrorEmailToDeveloper("提醒数据解析出现异常", errorDetails);
-            }
-        }
-        #endregion
+        
 
         #region page number
         static int GetMaxPageNo(HtmlNode pagesNode)
@@ -1066,6 +1044,45 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var list = value.Split(',').ToList();
                 list.RemoveAll(u => u.Equals(userId.ToString()));
                 _container.Values[_dataKey] = string.Join(",", list);
+            }
+        }
+        #endregion
+
+        #region prompt
+        static int GetNoticeCountFromNoticeToastTempData()
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "NoticeToastTempData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+            if (_container.Values.ContainsKey(_dataKey))
+            {
+                return _container.Values[_dataKey].ToString().Split(',').ToList().Count(i => i.Length > 0);
+            }
+
+            return 0;
+        }
+
+        static void GetPromptData(HtmlNode promptContentNode)
+        {
+            try
+            {
+                if (promptContentNode != null)
+                {
+                    var promtpViewModel = MainPageViewModel.GetInstance();
+                    var ulNode = promptContentNode.ChildNodes[1];
+                    promtpViewModel.PromptPm = Convert.ToInt32(ulNode.ChildNodes[0].InnerText.Trim().Substring("私人消息 (".Length).Replace(")", string.Empty));
+                    promtpViewModel.PromptAnnouncePm = Convert.ToInt32(ulNode.ChildNodes[1].InnerText.Trim().Substring("公共消息 (".Length).Replace(")", string.Empty));
+                    promtpViewModel.PromptSystemPm = Convert.ToInt32(ulNode.ChildNodes[2].InnerText.Trim().Substring("系统消息 (".Length).Replace(")", string.Empty));
+                    promtpViewModel.PromptFriend = Convert.ToInt32(ulNode.ChildNodes[3].InnerText.Trim().Substring("好友消息 (".Length).Replace(")", string.Empty));
+                    promtpViewModel.PromptThreads = Convert.ToInt32(ulNode.ChildNodes[4].InnerText.Trim().Substring("帖子消息 (".Length).Replace(")", string.Empty));
+
+                    promtpViewModel.PromptNoticeCountInToastTempData = GetNoticeCountFromNoticeToastTempData();
+                }
+            }
+            catch (Exception e)
+            {
+                string errorDetails = string.Format("{0}", e.Message);
+                Common.PostErrorEmailToDeveloper("提醒数据解析出现异常", errorDetails);
             }
         }
         #endregion

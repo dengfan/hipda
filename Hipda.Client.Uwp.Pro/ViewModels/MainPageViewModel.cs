@@ -141,12 +141,26 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        private int _promptNoticeCountInToastTempData;
+
+        public int PromptNoticeCountInToastTempData
+        {
+            get { return _promptNoticeCountInToastTempData; }
+            set
+            {
+                _promptNoticeCountInToastTempData = value;
+                this.RaisePropertyChanged("PromptAllWithoutPromptPm");
+                this.RaisePropertyChanged("NoticeNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
+            }
+        }
+
         public int PromptAllWithoutPromptPm
         {
             get
             {
                 // 这里不包含私信数量，私信数量会被单独显示
-                return PromptAnnouncePm + PromptSystemPm + PromptFriend + PromptThreads;
+                return PromptAnnouncePm + PromptSystemPm + PromptFriend + PromptThreads + PromptNoticeCountInToastTempData;
             }
         }
 
@@ -154,7 +168,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             get
             {
-                return (PromptAnnouncePm + PromptSystemPm + PromptFriend + PromptThreads) > 0 ? Visibility.Visible : Visibility.Collapsed;
+                return PromptAllWithoutPromptPm > 0 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -170,7 +184,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             get
             {
-                return (PromptPm + PromptAnnouncePm + PromptSystemPm + PromptFriend + PromptThreads) > 0 ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Transparent);
+                return (PromptPm + PromptAllWithoutPromptPm) > 0 ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Transparent);
             }
         }
         #endregion
