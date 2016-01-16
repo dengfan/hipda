@@ -497,7 +497,7 @@
         </DataTemplate>
 
         <DataTemplate x:Name="ReplyListHighLightItemTemplate">
-            <StackPanel Padding="16,0,16,8" BorderThickness="1" BorderBrush="#3285D6">
+            <StackPanel Padding="16,0,16,8" BorderThickness="0,1,0,1" BorderBrush="#3285D6">
                 <Border Margin="0,0,0,8" Padding="8" Background="#3285D6" HorizontalAlignment="Center">
                     <TextBlock Text="以下是你搜索的回复" Foreground="#3EE8FF" FontSize="{ThemeResource ToolTipContentThemeFontSize}" />
                 </Border>

@@ -5,14 +5,16 @@ using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
+using Windows.Data.Xml.Dom;
 using Windows.Storage;
 using Windows.UI;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
@@ -26,8 +28,6 @@ namespace Hipda.Client.Uwp.Pro.Services
         static int _searchPageSize = 50;
 
         static HttpHandle _httpClient = HttpHandle.GetInstance();
-
-        
 
         #region page number
         static int GetMaxPageNo(HtmlNode pagesNode)
@@ -1031,6 +1031,8 @@ namespace Hipda.Client.Uwp.Pro.Services
             string _dataKey = "NoticeToastTempData";
             var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
             _container.Values.Remove(_dataKey);
+
+            UpdateBadge();
         }
 
         void ClearPmToastTempData(int userId)
@@ -1044,11 +1046,11 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var list = value.Split(',').ToList();
                 list.RemoveAll(u => u.Equals(userId.ToString()));
                 _container.Values[_dataKey] = string.Join(",", list);
+
+                UpdateBadge();
             }
         }
-        #endregion
 
-        #region prompt
         static int GetNoticeCountFromNoticeToastTempData()
         {
             string _containerKey = "HIPDA";
@@ -1062,6 +1064,36 @@ namespace Hipda.Client.Uwp.Pro.Services
             return 0;
         }
 
+        static int GetPmCountFromPmToastTempData()
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "PmToastTempData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+            if (_container.Values.ContainsKey(_dataKey))
+            {
+                return _container.Values[_dataKey].ToString().Split(',').ToList().Count(i => i.Length > 0);
+            }
+
+            return 0;
+        }
+
+        void UpdateBadge()
+        {
+            Debug.WriteLine("更新 badge 数量 开始");
+            int count = GetNoticeCountFromNoticeToastTempData();
+            count += GetPmCountFromPmToastTempData();
+
+            XmlDocument badgeXml = BadgeUpdateManager.GetTemplateContent(BadgeTemplateType.BadgeNumber);
+            XmlElement badgeElement = (XmlElement)badgeXml.SelectSingleNode("/badge");
+            badgeElement.SetAttribute("value", count.ToString());
+            BadgeNotification badgeNotification = new BadgeNotification(badgeXml);
+            BadgeUpdater badgeUpdater = BadgeUpdateManager.CreateBadgeUpdaterForApplication();
+            badgeUpdater.Update(badgeNotification);
+            Debug.WriteLine(string.Format("更新 badge 数量 {0} 结束", count));
+        }
+        #endregion
+
+        #region prompt
         static void GetPromptData(HtmlNode promptContentNode)
         {
             try
