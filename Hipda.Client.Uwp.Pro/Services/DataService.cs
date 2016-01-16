@@ -1077,21 +1077,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             return 0;
         }
 
-        static void UpdateBadge()
-        {
-            Debug.WriteLine("更新 badge 数量 开始");
-            int count = GetNoticeCountFromNoticeToastTempData();
-            count += GetPmCountFromPmToastTempData();
-
-            XmlDocument badgeXml = BadgeUpdateManager.GetTemplateContent(BadgeTemplateType.BadgeNumber);
-            XmlElement badgeElement = (XmlElement)badgeXml.SelectSingleNode("/badge");
-            badgeElement.SetAttribute("value", count.ToString());
-            BadgeNotification badgeNotification = new BadgeNotification(badgeXml);
-            BadgeUpdater badgeUpdater = BadgeUpdateManager.CreateBadgeUpdaterForApplication();
-            badgeUpdater.Update(badgeNotification);
-            Debug.WriteLine(string.Format("更新 badge 数量 {0} 结束", count));
-        }
-
         static void UpdateBadge(int count)
         {
             Debug.WriteLine("更新 badge 数量 开始");
@@ -1102,6 +1087,15 @@ namespace Hipda.Client.Uwp.Pro.Services
             BadgeUpdater badgeUpdater = BadgeUpdateManager.CreateBadgeUpdaterForApplication();
             badgeUpdater.Update(badgeNotification);
             Debug.WriteLine(string.Format("更新 badge 数量 {0} 结束", count));
+        }
+
+        static void UpdateBadge()
+        {
+            Debug.WriteLine("更新 badge 数量 开始");
+            int count = GetNoticeCountFromNoticeToastTempData();
+            count += GetPmCountFromPmToastTempData();
+
+            UpdateBadge(count);
         }
         #endregion
 
