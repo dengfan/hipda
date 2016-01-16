@@ -109,6 +109,7 @@ namespace Hipda.BackgroundTask
 
         async Task UpdateNoticeToastAsync(CancellationTokenSource cts)
         {
+            Debug.WriteLine("====================== 执行了 UpdateNoticeToastAsync 开始");
             string url = string.Format("http://www.hi-pda.com/forum/notice.php?_={0}", DateTime.Now.Ticks.ToString("x"));
             string htmlStr = await _httpClient.GetAsync(url, cts);
 
@@ -121,6 +122,7 @@ namespace Hipda.BackgroundTask
             var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("feed"))?.ChildNodes;
             if (items == null)
             {
+                Debug.WriteLine("====================== 执行了 UpdateNoticeToastAsync 结束1");
                 return;
             }
 
@@ -232,10 +234,22 @@ namespace Hipda.BackgroundTask
                         break;
                 }
             }
+
+            Debug.WriteLine("====================== 执行了 UpdateNoticeToastAsync 结束2");
+        }
+
+        async void FirstRequestPm()
+        {
+            // 先请求一下，看看是否有新私信
+            // 这是论坛的一种机制，否则APP过了一段时间之后不能从HTML中解析私人消息的数量
+            await _httpClient.GetAsync(string.Format("http://www.hi-pda.com/forum/pm.php?checknewpm={0}&inajax=1&ajaxtarget=myprompt_check", DateTime.Now.Ticks.ToString("x")), new CancellationTokenSource());
         }
 
         async Task UpdatePmToastAsync(CancellationTokenSource cts)
         {
+            Debug.WriteLine("====================== 执行了 UpdatePmToastAsync 开始");
+            FirstRequestPm();
+
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/pm.php?filter=privatepm&_={0}", DateTime.Now.Ticks.ToString("x"));
             string htmlStr = await _httpClient.GetAsync(url, cts);
@@ -249,6 +263,7 @@ namespace Hipda.BackgroundTask
             var items = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("ul") && n.GetAttributeValue("class", "").Equals("pm_list"))?.ChildNodes;
             if (items == null)
             {
+                Debug.WriteLine("====================== 执行了 UpdatePmToastAsync 结束1");
                 return;
             }
 
@@ -275,6 +290,23 @@ namespace Hipda.BackgroundTask
                     }
                 }
             }
+
+            Debug.WriteLine("====================== 执行了 UpdatePmToastAsync 结束2");
+        }
+
+        void UpdateBadge()
+        {
+            Debug.WriteLine("更新 badge 数量 开始");
+            int count = GetNoticeCountFromNoticeToastTempData();
+            count += GetPmCountFromPmToastTempData();
+
+            XmlDocument badgeXml = BadgeUpdateManager.GetTemplateContent(BadgeTemplateType.BadgeNumber);
+            XmlElement badgeElement = (XmlElement)badgeXml.SelectSingleNode("/badge");
+            badgeElement.SetAttribute("value", count.ToString());
+            BadgeNotification badgeNotification = new BadgeNotification(badgeXml);
+            BadgeUpdater badgeUpdater = BadgeUpdateManager.CreateBadgeUpdaterForApplication();
+            badgeUpdater.Update(badgeNotification);
+            Debug.WriteLine(string.Format("更新 badge 数量 {0} 结束", count));
         }
 
         void SendToast(string toastXml)
@@ -313,6 +345,19 @@ namespace Hipda.BackgroundTask
             }
         }
 
+        int GetNoticeCountFromNoticeToastTempData()
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "NoticeToastTempData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+            if (_container.Values.ContainsKey(_dataKey))
+            {
+                return _container.Values[_dataKey].ToString().Split(',').ToList().Count(i => i.Length > 0);
+            }
+
+            return 0;
+        }
+
         void SavePmToastTempData(int userId)
         {
             string _containerKey = "HIPDA";
@@ -329,6 +374,19 @@ namespace Hipda.BackgroundTask
             {
                 _container.Values[_dataKey] = toastData;
             }
+        }
+
+        int GetPmCountFromPmToastTempData()
+        {
+            string _containerKey = "HIPDA";
+            string _dataKey = "PmToastTempData";
+            var _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+            if (_container.Values.ContainsKey(_dataKey))
+            {
+                return _container.Values[_dataKey].ToString().Split(',').ToList().Count(i => i.Length > 0);
+            }
+
+            return 0;
         }
 
         bool CheckIsExistedForPmToastTempData(int userId)
@@ -348,9 +406,6 @@ namespace Hipda.BackgroundTask
 
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            // 先登录
-            Login();
-
             var cancel = new CancellationTokenSource();
             taskInstance.Canceled += (s, e) => 
             {
@@ -362,8 +417,10 @@ namespace Hipda.BackgroundTask
             try
             {
                 var cts = new CancellationTokenSource();
+                await Login(cts); // 先登录
                 await UpdateNoticeToastAsync(cts);
                 await UpdatePmToastAsync(cts);
+                UpdateBadge();
             }
             catch (Exception ex)
             {
@@ -456,7 +513,7 @@ namespace Hipda.BackgroundTask
         //    }
         //}
 
-        static async void Login()
+        static async Task Login(CancellationTokenSource cts)
         {
             // 先从 settings 中读取是否有账号
             string _containerKey = "HIPDA";
@@ -476,17 +533,14 @@ namespace Hipda.BackgroundTask
                 return;
             }
 
-            // 先清除 cookie
-            _httpClient.ClearCookies();
-
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("username", defaultAccount.Username));
             postData.Add(new KeyValuePair<string, object>("password", defaultAccount.Password));
             postData.Add(new KeyValuePair<string, object>("questionid", defaultAccount.QuestionId));
             postData.Add(new KeyValuePair<string, object>("answer", defaultAccount.Answer));
 
-            var cts = new CancellationTokenSource();
-            await _httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData, cts);
+            string loginResultMessage = await _httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData, cts);
+            Debug.WriteLine(string.Format("登录结果：{0}", (loginResultMessage.Contains("欢迎") && !loginResultMessage.Contains("错误") && !loginResultMessage.Contains("失败") && !loginResultMessage.Contains("非激活"))));
         }
 
         static string GetSmallAvatarUrlByUserId(int userId)
