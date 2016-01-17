@@ -421,7 +421,7 @@ namespace Hipda.BackgroundTask
             {
                 var cts = new CancellationTokenSource();
                 await LoginAsync(cts); // 先登录
-                await GetFormHashAsync(cts); // 再获取formhash
+                if (cts.IsCancellationRequested) return;
                 await UpdateNoticeToastAsync(cts);
                 await UpdatePmToastAsync(cts);
                 UpdateBadge();
@@ -545,42 +545,6 @@ namespace Hipda.BackgroundTask
 
             string loginResultMessage = await _httpClient.PostAsync("http://www.hi-pda.com/forum/logging.php?action=login&loginsubmit=yes&inajax=1", postData, cts);
             Debug.WriteLine(string.Format("登录结果：{0}", (loginResultMessage.Contains("欢迎") && !loginResultMessage.Contains("错误") && !loginResultMessage.Contains("失败") && !loginResultMessage.Contains("非激活"))));
-        }
-
-        async Task GetFormHashAsync(CancellationTokenSource cts)
-        {
-            string url = "http://www.hi-pda.com/forum/post.php?action=newthread&fid=2&_=" + DateTime.Now.Ticks.ToString("x");
-            string htmlContent = await _httpClient.GetAsync(url, cts);
-
-            // 实例化 HtmlAgilityPack.HtmlDocument 对象
-            HtmlDocument doc = new HtmlDocument();
-
-            // 载入HTML
-            doc.LoadHtml(htmlContent);
-
-            var nodes = doc.DocumentNode.Descendants();
-
-            // 读取发布文字信息所需要的 hash 值
-            var formHashInputNode = nodes.FirstOrDefault(n => n.Name.Equals("input") && n.GetAttributeValue("id", "").Equals("formhash"));
-            if (formHashInputNode != null)
-            {
-                _formHash = formHashInputNode.Attributes[3].Value.ToString();
-            }
-
-            // 读取 上载图片所需的 uid 和 hash 值
-            var userIdNode = nodes.FirstOrDefault(n => n.Name.Equals("input") && n.GetAttributeValue("name", "").Equals("uid"));
-            if (userIdNode != null)
-            {
-                _userId = Convert.ToInt32(userIdNode.Attributes[2].Value);
-            }
-
-            var hashNode = nodes.FirstOrDefault(n => n.Name.Equals("input") && n.GetAttributeValue("name", "").Equals("hash"));
-            if (hashNode != null)
-            {
-                _hash = hashNode.Attributes[2].Value;
-            }
-
-            Debug.WriteLine("获取HASH码：" + _formHash + ", " + _userId + ", " + _hash);
         }
 
         string GetSmallAvatarUrlByUserId(int userId)

@@ -31,6 +31,7 @@ namespace Hipda.BackgroundTask
             {
                 var cts = new CancellationTokenSource();
                 await LoginAsync(cts); // 先登录
+                if (cts.IsCancellationRequested) return;
                 await GetFormHashAsync(cts); // 再获取formhash
 
                 if (taskInstance.TriggerDetails is ToastNotificationActionTriggerDetail)
