@@ -148,17 +148,14 @@
         <DataTemplate x:Name="BottomHorizontalButtonTemplate">
             <Grid Width="{Binding OpenPaneLength,ElementName=MainSplitView}" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="NoticeButton" Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click">
+                <Button Style="{StaticResource NavButtonNormalStyle}" Click="SettingsButton_Click">
                     <Button.Content>
                         <Grid>
-                            <SymbolIcon Symbol="Mail"/>
-                            <Border Visibility="{Binding NoticeNoVisibility}" Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
-                                <TextBlock Text="{Binding PromptAllWithoutPromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
-                            </Border>
+                            <SymbolIcon Symbol="Setting" />
                         </Grid>
                     </Button.Content>
                 </Button>
@@ -172,10 +169,13 @@
                         </Grid>
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="2" Style="{StaticResource NavButtonNormalStyle}" HorizontalAlignment="Right" Click="SettingsButton_Click">
+                <Button Grid.Column="2" x:Name="NoticeButton" Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click">
                     <Button.Content>
                         <Grid>
-                            <SymbolIcon Symbol="Setting" />
+                            <SymbolIcon Symbol="Mail"/>
+                            <Border Visibility="{Binding NoticeNoVisibility}" Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                                <TextBlock Text="{Binding PromptAllWithoutPromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                            </Border>
                         </Grid>
                     </Button.Content>
                 </Button>
