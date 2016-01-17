@@ -108,6 +108,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HandleToastActionTask.cs" />
     <Compile Include="UpdateToastTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

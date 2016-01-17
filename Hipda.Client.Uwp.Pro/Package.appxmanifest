@@ -25,14 +25,19 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
-        <uap:Extension Category="windows.protocol">
-          <uap:Protocol Name="hipda" />
-        </uap:Extension>
+        <Extension Category="windows.backgroundTasks" EntryPoint="Hipda.BackgroundTask.HandleToastActionTask">
+          <BackgroundTasks>
+            <Task Type="systemEvent" />
+          </BackgroundTasks>
+        </Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="Hipda.BackgroundTask.UpdateToastTask">
           <BackgroundTasks>
             <Task Type="timer" />
           </BackgroundTasks>
         </Extension>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="hipda" />
+        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>

@@ -102,8 +102,8 @@ namespace Hipda.BackgroundTask
                             "</binding>" +
                         "</visual>" +
                         "<actions>" +
-                            "<input id='replyPmContent' type='text' placeHolderContent='输入回复内容' />" +
-                            "<action content='回复' arguments='post' />" +
+                            "<input id='inputPm' type='text' placeHolderContent='输入回复内容' />" +
+                            "<action content='回复' arguments='reply_pm={3}' activationType='background' />" +
                         "</actions>" +
                      "</toast>";
 
@@ -279,15 +279,15 @@ namespace Hipda.BackgroundTask
                     string lastMessageTime = item.ChildNodes[3].ChildNodes[2].InnerText.Trim();
                     string lastMessageText = item.ChildNodes[5].InnerText.Trim();
 
-                    var flag = CheckIsExistedForPmToastTempData(userId);
-                    if (flag == false)
-                    {
+                    //var flag = CheckIsExistedForPmToastTempData(userId);
+                    //if (flag == false)
+                    //{
                         // 保存数据，以便打开APP时还原“NEW”状态
                         SavePmToastTempData(userId);
 
-                        _xmlForPm = string.Format(_xmlForPm, username, lastMessageText, GetSmallAvatarUrlByUserId(userId));
+                        _xmlForPm = string.Format(_xmlForPm, username, lastMessageText, GetSmallAvatarUrlByUserId(userId), userId);
                         SendToast(_xmlForPm);
-                    }
+                    //}
                 }
             }
 
@@ -417,7 +417,7 @@ namespace Hipda.BackgroundTask
             try
             {
                 var cts = new CancellationTokenSource();
-                await Login(cts); // 先登录
+                await LoginAsync(cts); // 先登录
                 await UpdateNoticeToastAsync(cts);
                 await UpdatePmToastAsync(cts);
                 UpdateBadge();
@@ -513,7 +513,7 @@ namespace Hipda.BackgroundTask
         //    }
         //}
 
-        static async Task Login(CancellationTokenSource cts)
+        async Task LoginAsync(CancellationTokenSource cts)
         {
             // 先从 settings 中读取是否有账号
             string _containerKey = "HIPDA";
@@ -543,7 +543,7 @@ namespace Hipda.BackgroundTask
             Debug.WriteLine(string.Format("登录结果：{0}", (loginResultMessage.Contains("欢迎") && !loginResultMessage.Contains("错误") && !loginResultMessage.Contains("失败") && !loginResultMessage.Contains("非激活"))));
         }
 
-        static string GetSmallAvatarUrlByUserId(int userId)
+        string GetSmallAvatarUrlByUserId(int userId)
         {
             var s = new int[10];
             for (int i = 0; i < s.Length - 1; ++i)
@@ -559,7 +559,7 @@ namespace Hipda.BackgroundTask
         /// </summary>
         /// <param name="txt"></param>
         /// <returns></returns>
-        static string ReplaceHexadecimalSymbols(string txt)
+        string ReplaceHexadecimalSymbols(string txt)
         {
             string r = "[\x00-\x08\x0B\x0C\x0E-\x1F\x26]";
             return Regex.Replace(txt, r, "", RegexOptions.Compiled);

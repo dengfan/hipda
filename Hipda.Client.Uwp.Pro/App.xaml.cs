@@ -52,7 +52,21 @@ namespace Hipda.Client.Uwp.Pro
                 // 声明触发器
                 TimeTrigger trigger = new TimeTrigger(15, false);
                 bd.SetTrigger(trigger);
-                task = bd.Register();
+                bd.Register();
+            }
+
+            Type taskType2 = typeof(BackgroundTask.HandleToastActionTask);
+            var task2 = BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(t => t.Name == taskType2.Name);
+            if (task2 == null)
+            {
+                // 注册后台任务
+                BackgroundTaskBuilder bd = new BackgroundTaskBuilder();
+                bd.Name = taskType2.Name;
+                bd.TaskEntryPoint = taskType2.FullName;
+
+                // 声明触发器
+                bd.SetTrigger(new ToastNotificationActionTrigger());
+                bd.Register();
             }
         }
 
