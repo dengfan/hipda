@@ -1115,7 +1115,10 @@ namespace Hipda.Client.Uwp.Pro.Services
                     promtpViewModel.PromptThreads = Convert.ToInt32(ulNode.ChildNodes[4].InnerText.Trim().Substring("帖子消息 (".Length).Replace(")", string.Empty));
                     promtpViewModel.PromptNoticeCountInToastTempData = GetNoticeCountFromNoticeToastTempData();
 
-                    UpdateBadge(promtpViewModel.PromptAllWithoutPromptPm + promtpViewModel.PromptPm);
+                    if (promtpViewModel.PromptAllWithoutPromptPm + promtpViewModel.PromptPm > 0)
+                    {
+                        UpdateBadge(promtpViewModel.PromptAllWithoutPromptPm + promtpViewModel.PromptPm);
+                    }
                 }
             }
             catch (Exception e)

@@ -71,7 +71,7 @@ namespace Hipda.BackgroundTask
             string url = string.Format("http://www.hi-pda.com/forum/pm.php?action=send&uid={0}&pmsubmit=yes&infloat=yes&inajax=1&_={1}", userId, DateTime.Now.Ticks.ToString("x"));
             string resultContent = await _httpClient.PostAsync(url, postData, cts);
             bool flag = resultContent.StartsWith(@"<?xml version=""1.0"" encoding=""gbk""?><root><![CDATA[<li id=""pm_") && resultContent.Contains(@"images/default/notice_newpm.gif");
-            if (flag == false)
+            if (cts.IsCancellationRequested || flag == false)
             {
                 string _xml = @"<toast>" +
                                 "<visual>" +
