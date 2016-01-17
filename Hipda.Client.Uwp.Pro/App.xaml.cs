@@ -261,10 +261,13 @@ namespace Hipda.Client.Uwp.Pro
                 if (eventArgs.StartsWith("reply_pm="))
                 {
                     int userId = Convert.ToInt32(eventArgs.Substring("reply_pm=".Length));
-                    MainPage mp = rootFrame.Content as MainPage;
-                    MainPage.PopupUserId = userId;
-                    MainPage.PopupUsername = "test name";
-                    mp.OpenUserMessageDialog();
+                    if (userId > 0)
+                    {
+                        MainPage.PopupUserId = userId;
+                        MainPage.PopupUsername = "test name";
+                        var mp = rootFrame.Content as MainPage;
+                        mp.OpenUserMessageDialog();
+                    }
                 }
             }
         }
