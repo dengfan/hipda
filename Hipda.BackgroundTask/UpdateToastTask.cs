@@ -106,6 +106,7 @@ namespace Hipda.BackgroundTask
                         "</visual>" +
                         "<actions>" +
                             "<input id='inputPm' type='text' placeHolderContent='输入回复内容' />" +
+                            "<action content='查看' arguments='reply_pm={3}' />" +
                             "<action content='回复' arguments='reply_pm={3}' activationType='background' />" +
                         "</actions>" +
                      "</toast>";

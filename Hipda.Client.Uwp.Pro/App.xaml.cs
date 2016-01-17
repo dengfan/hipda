@@ -219,31 +219,31 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnActivated(args);
 
+            // 自动登录
+            var accountService = new AccountService();
+            bool isLogin = await accountService.AutoLogin();
+
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            // 不要在窗口已包含内容时重复应用程序初始化，
+            // 只需确保窗口处于活动状态
+            if (rootFrame == null)
+            {
+                // 创建要充当导航上下文的框架，并导航到第一页
+                rootFrame = new Frame();
+
+                rootFrame.NavigationFailed += OnNavigationFailed;
+
+                mainDispatcher = Window.Current.Dispatcher;
+                mainViewId = ApplicationView.GetForCurrentView().Id;
+
+                // 将框架放在当前窗口中
+                Window.Current.Content = rootFrame;
+            }
+
             if (args.Kind == ActivationKind.Protocol)
             {
-                // 自动登录
-                var accountService = new AccountService();
-                bool isLogin = await accountService.AutoLogin();
-
-                Frame rootFrame = Window.Current.Content as Frame;
-
-                // 不要在窗口已包含内容时重复应用程序初始化，
-                // 只需确保窗口处于活动状态
-                if (rootFrame == null)
-                {
-                    // 创建要充当导航上下文的框架，并导航到第一页
-                    rootFrame = new Frame();
-
-                    rootFrame.NavigationFailed += OnNavigationFailed;
-
-                    mainDispatcher = Window.Current.Dispatcher;
-                    mainViewId = ApplicationView.GetForCurrentView().Id;
-
-                    // 将框架放在当前窗口中
-                    Window.Current.Content = rootFrame;
-                }
-
-                ProtocolActivatedEventArgs eventArgs = args as ProtocolActivatedEventArgs;
+                var eventArgs = args as ProtocolActivatedEventArgs;
                 if (eventArgs.Uri.Scheme == "hipda")
                 {
                     string uri = eventArgs.Uri.AbsoluteUri;
@@ -253,6 +253,18 @@ namespace Hipda.Client.Uwp.Pro
                     //    int tid = Convert.ToInt32(uri.Substring("hipda:tid=".Length));
                     //    await OpenThreadInNewView(tid);
                     //}
+                }
+            }
+            else if (args.Kind == ActivationKind.ToastNotification)
+            {
+                var eventArgs = ((ToastNotificationActivatedEventArgs)args).Argument;
+                if (eventArgs.StartsWith("reply_pm="))
+                {
+                    int userId = Convert.ToInt32(eventArgs.Substring("reply_pm=".Length));
+                    MainPage mp = rootFrame.Content as MainPage;
+                    MainPage.PopupUserId = userId;
+                    MainPage.PopupUsername = "test name";
+                    mp.OpenUserMessageDialog();
                 }
             }
         }
