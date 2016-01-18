@@ -74,11 +74,12 @@ namespace Hipda.BackgroundTask
             bool flag = resultContent.StartsWith(@"<?xml version=""1.0"" encoding=""gbk""?><root><![CDATA[<li id=""pm_") && resultContent.Contains(@"images/default/notice_newpm.gif");
             if (cts.IsCancellationRequested || flag == false)
             {
-                string _xml = @"<toast>" +
+                string simpleContent = replyContent.Length > 10 ? replyContent.Substring(0, 9) + "..." : replyContent;
+                string _xml = "<toast>" +
                                 "<visual>" +
                                     "<binding template='ToastGeneric'>" +
                                         "<text>对不起</text>" +
-                                        "<text>您的消息“{0}”发送不成功！</text>" +
+                                        $"<text>您的消息“{simpleContent}”发送不成功！</text>" +
                                     "</binding>" +
                                 "</visual>" +
                                 "</toast>";
