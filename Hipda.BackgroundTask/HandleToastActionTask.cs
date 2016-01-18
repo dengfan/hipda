@@ -38,7 +38,11 @@ namespace Hipda.BackgroundTask
                 {
                     var details = taskInstance.TriggerDetails as ToastNotificationActionTriggerDetail;
                     var args = details.Argument;
-                    if (args.StartsWith("reply_pm="))
+                    if (args.StartsWith("reply_post="))
+                    {
+                        await HandleReplyPost(details, args, cts);
+                    }
+                    else if (args.StartsWith("reply_pm="))
                     {
                         await HandleReplyPm(details, args, cts);
                     }
@@ -56,6 +60,11 @@ namespace Hipda.BackgroundTask
             {
                 deferral.Complete();
             }
+        }
+
+        async Task HandleReplyPost(ToastNotificationActionTriggerDetail details, string args, CancellationTokenSource cts)
+        {
+
         }
 
         async Task HandleReplyPm(ToastNotificationActionTriggerDetail details, string args, CancellationTokenSource cts)

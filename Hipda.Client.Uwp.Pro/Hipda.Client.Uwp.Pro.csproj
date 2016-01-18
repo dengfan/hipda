@@ -165,6 +165,7 @@
     <Compile Include="ViewModels\ThreadItemForMyFavoritesViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForSearchFullTextViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForSearchTitleViewModel.cs" />
+    <Compile Include="ViewModels\ThreadItemForSpecifiedPostViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyPostsViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyThreadsViewModel.cs" />

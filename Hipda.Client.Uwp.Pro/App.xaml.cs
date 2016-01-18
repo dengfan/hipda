@@ -105,7 +105,7 @@ namespace Hipda.Client.Uwp.Pro
             this.Suspending += OnSuspending;
         }
 
-        async Task CreateRootFrame()
+        async Task<bool> CreateRootFrame()
         {
             // 自动登录
             var accountService = new AccountService();
@@ -147,6 +147,8 @@ namespace Hipda.Client.Uwp.Pro
             Window.Current.Activate();
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 320, Height = 320 });
+
+            return isLogin;
         }
 
         /// <summary>
@@ -221,7 +223,11 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnActivated(args);
 
-            await CreateRootFrame();
+            var flag = await CreateRootFrame();
+            if (flag == false)
+            {
+                return;
+            }
 
             if (args.Kind == ActivationKind.Protocol)
             {
@@ -240,18 +246,37 @@ namespace Hipda.Client.Uwp.Pro
             else if (args.Kind == ActivationKind.ToastNotification)
             {
                 var eventArgs = ((ToastNotificationActivatedEventArgs)args).Argument;
-                if (eventArgs.StartsWith("reply_pm="))
+                if (eventArgs.StartsWith("view_post="))
                 {
-                    string[] targs = eventArgs.Substring("reply_pm=".Length).Split(',');
-                    int userId = Convert.ToInt32(targs[0]);
-                    string username = targs[1];
+                    string[] tary = eventArgs.Substring("view_post=".Length).Split(',');
+                    int postId = Convert.ToInt32(tary[0]);
+                    int threadId = Convert.ToInt32(tary[1]);
+                    if (postId > 0 && threadId > 0)
+                    {
+                        var mainPage = _rootFrame.Content as MainPage;
+                        if (mainPage != null)
+                        {
+                            var threadAndReplyPage = mainPage.AppFrame.Content as ThreadAndReplyPage;
+                            if (threadAndReplyPage != null)
+                            {
+                                threadAndReplyPage.OpenReplyPageByThreadId(postId, threadId);
+                            }
+                        }
+                        
+                    }
+                }
+                else if (eventArgs.StartsWith("view_pm="))
+                {
+                    string[] tary = eventArgs.Substring("view_pm=".Length).Split(',');
+                    int userId = Convert.ToInt32(tary[0]);
+                    string username = tary[1];
                     if (userId > 0)
                     {
                         MainPage.PopupUserId = userId;
                         MainPage.PopupUsername = username;
-                        var mp = _rootFrame.Content as MainPage;
-                        mp.Loaded += (s, e) => {
-                            mp.OpenUserMessageDialog();
+                        var mainPage = _rootFrame.Content as MainPage;
+                        mainPage.Loaded += (s, e) => {
+                            mainPage.OpenUserMessageDialog();
                         };
                     }
                 }

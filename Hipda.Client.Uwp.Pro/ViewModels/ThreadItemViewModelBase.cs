@@ -43,20 +43,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         SearchFullText,
 
         /// <summary>
-        /// 被引用、回复提醒
+        /// 通知
         /// </summary>
-        NoticeQuoteOrReply,
-
-        /// <summary>
-        /// 关注的主题被回复
-        /// </summary>
-        NoticeThread,
-
-        /// <summary>
-        /// 被加为好友之提醒
-        /// </summary>
-        NoticeBuddy,
-
         Notice
     }
 

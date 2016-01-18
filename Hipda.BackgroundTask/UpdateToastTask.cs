@@ -47,17 +47,6 @@ namespace Hipda.BackgroundTask
     {
         HttpHandle _httpClient = HttpHandle.GetInstance();
         string _formHash = string.Empty;
-        int _userId = 0;
-        string _hash = string.Empty;
-
-        //string _xmlForLogin = @"<toast>" +
-        //                "<visual>" +
-        //                    "<binding template='ToastGeneric'>" +
-        //                        "<text>登录状态已过期，无法为您推送消息</text>" +
-        //                        "<text>打开APP以便刷新登录状态</text>" +
-        //                    "</binding>" +
-        //                "</visual>" +
-        //             "</toast>";
 
         string _xmlForQuoteOrReply = @"<toast>" +
                         "<visual>" +
@@ -81,6 +70,9 @@ namespace Hipda.BackgroundTask
                                 "<text>回复了您关注的主题《{1}》</text>" +
                             "</binding>" +
                         "</visual>" +
+                        "<actions>" +
+                            "<action content='查看' arguments='view_post={2},{3}' />" +
+                        "</actions>" +
                      "</toast>";
 
         string _xmlForBuddy = @"<toast>" +
@@ -106,7 +98,7 @@ namespace Hipda.BackgroundTask
                         "</visual>" +
                         "<actions>" +
                             "<input id='inputPm' type='text' placeHolderContent='输入回复内容' />" +
-                            "<action content='查看' arguments='reply_pm={3},{4}' />" +
+                            "<action content='查看' arguments='view_pm={3},{4}' />" +
                             "<action content='回复' arguments='reply_pm={3}' activationType='background' />" +
                         "</actions>" +
                      "</toast>";
@@ -215,7 +207,7 @@ namespace Hipda.BackgroundTask
                             SaveNoticeToastTempData(1, actionTime);
 
                             // 发送
-                            _xmlForThread = string.Format(_xmlForThread, username, threadTitle);
+                            _xmlForThread = string.Format(_xmlForThread, username, threadTitle, postId, threadId);
                             SendToast(_xmlForThread);
                         }
                         break;

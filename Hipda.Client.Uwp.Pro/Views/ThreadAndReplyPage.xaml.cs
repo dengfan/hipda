@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.System;
 using Windows.UI;
@@ -181,9 +182,29 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
             });
         }
+
+        private async void ReplyListViewScrollForSpecifiedPost(int index)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                var vm = ReplyListView.DataContext as ThreadItemForSpecifiedPostViewModel;
+                int count = ReplyListView.Items.Count;
+
+                if (count > 0 && count <= index + 1)
+                {
+                    ReplyListView.ScrollIntoView(ReplyListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                }
+
+                if (count > index + 1 && vm.GetScrollState() == false)
+                {
+                    ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
+                    vm.SetScrollState(true);
+                }
+            });
+        }
         #endregion
 
-        #region 公开的方法，可用URI SCHEME方法调用
+            #region 公开的方法，可用URI SCHEME方法调用
         public void OpenReplyPageByThreadId(int threadId)
         {
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
@@ -201,7 +222,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        
+        public void OpenReplyPageByThreadId(int postId, int threadId)
+        {
+            _threadAndReplyViewModel.ClearReplyData(threadId);
+            var cts = new CancellationTokenSource();
+            var vm = new ThreadItemForSpecifiedPostViewModel(cts, postId, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            RightWrap.DataContext = vm;
+        }
         #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
