@@ -242,11 +242,13 @@ namespace Hipda.Client.Uwp.Pro
                 var eventArgs = ((ToastNotificationActivatedEventArgs)args).Argument;
                 if (eventArgs.StartsWith("reply_pm="))
                 {
-                    int userId = Convert.ToInt32(eventArgs.Substring("reply_pm=".Length));
+                    string[] targs = eventArgs.Substring("reply_pm=".Length).Split(',');
+                    int userId = Convert.ToInt32(targs[0]);
+                    string username = targs[1];
                     if (userId > 0)
                     {
                         MainPage.PopupUserId = userId;
-                        MainPage.PopupUsername = "test name";
+                        MainPage.PopupUsername = username;
                         var mp = _rootFrame.Content as MainPage;
                         mp.Loaded += (s, e) => {
                             mp.OpenUserMessageDialog();

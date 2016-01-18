@@ -106,8 +106,8 @@ namespace Hipda.BackgroundTask
                         "</visual>" +
                         "<actions>" +
                             "<input id='inputPm' type='text' placeHolderContent='输入回复内容' />" +
-                            "<action content='查看' arguments='reply_pm={3}' />" +
-                            "<action content='回复' arguments='reply_pm={3}' activationType='background' />" +
+                            "<action content='查看' arguments='reply_pm={3},{4}' />" +
+                            "<action content='回复' arguments='reply_pm={3},{4}' activationType='background' />" +
                         "</actions>" +
                      "</toast>";
 
@@ -289,7 +289,7 @@ namespace Hipda.BackgroundTask
                         // 保存数据，以便打开APP时还原“NEW”状态
                         SavePmToastTempData(userId);
 
-                        _xmlForPm = string.Format(_xmlForPm, username, lastMessageText, GetSmallAvatarUrlByUserId(userId), userId);
+                        _xmlForPm = string.Format(_xmlForPm, username, lastMessageText, GetSmallAvatarUrlByUserId(userId), userId, username);
                         SendToast(_xmlForPm);
                     //}
                 }
