@@ -15,8 +15,9 @@ using Windows.UI.Xaml;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadItemForSpecifiedPostViewModel : ThreadItemViewModelBase
+    public class RightSpecifiedPostViewModel : NotificationObject
     {
+        int _startPageNo = 1;
         int _postId;
         int _threadId;
         ListView _replyListView;
@@ -39,7 +40,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ThreadItemForSpecifiedPostViewModel(CancellationTokenSource cts, int postId, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
+        public RightSpecifiedPostViewModel(CancellationTokenSource cts, int postId, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
         {
             _postId = postId;
             _threadId = threadId;
@@ -53,7 +54,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand.ExecuteAction = (p) =>
             {
                 _ds.ClearReplyData(_threadId);
-                LoadData(StartPageNo);
+                LoadData(_startPageNo);
             };
 
             FirstLoad(cts);
@@ -73,7 +74,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 if (cv != null)
                 {
                     ReplyItemCollection = cv;
-                    StartPageNo = pageNo;
+                    _startPageNo = pageNo;
                 }
             }
         }
@@ -83,17 +84,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, AccountService.UserId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
-                StartPageNo = pageNo;
+                _startPageNo = pageNo;
                 ReplyItemCollection = cv;
             }
         }
 
         public void RefreshReplyDataFromPrevPage()
         {
-            if (StartPageNo > 1)
+            if (_startPageNo > 1)
             {
                 _ds.ClearReplyData(_threadId);
-                LoadData(StartPageNo - 1);
+                LoadData(_startPageNo - 1);
             }
         }
 

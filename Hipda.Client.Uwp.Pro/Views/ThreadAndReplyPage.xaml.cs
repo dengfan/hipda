@@ -187,7 +187,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                var vm = ReplyListView.DataContext as ThreadItemForSpecifiedPostViewModel;
+                var vm = ReplyListView.DataContext as RightSpecifiedPostViewModel;
                 int count = ReplyListView.Items.Count;
 
                 if (count > 0 && count <= index + 1)
@@ -204,7 +204,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
-            #region 公开的方法，可用URI SCHEME方法调用
+        #region 公开的方法，可用URI SCHEME方法调用
         public void OpenReplyPageByThreadId(int threadId)
         {
             var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
@@ -226,7 +226,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             _threadAndReplyViewModel.ClearReplyData(threadId);
             var cts = new CancellationTokenSource();
-            var vm = new ThreadItemForSpecifiedPostViewModel(cts, postId, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            var vm = new RightSpecifiedPostViewModel(cts, postId, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
             RightWrap.DataContext = vm;
         }
         #endregion
