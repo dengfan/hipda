@@ -113,7 +113,7 @@ namespace Hipda.BackgroundTask
                                 "<visual>" +
                                     "<binding template='ToastGeneric'>" +
                                         "<text>恭喜你</text>" +
-                                        $"<text>成功添加“{username}”为好友！</text>" +
+                                        $"<text>成功添加 “{username}” 为好友！</text>" +
                                     "</binding>" +
                                 "</visual>" +
                                 "</toast>";
