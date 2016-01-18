@@ -31,6 +31,8 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     sealed partial class App : Application
     {
+        Frame _rootFrame;
+
         async void RegisterBackgroundTask()
         {
             // 判断一下是否允许访问后台任务
@@ -103,6 +105,50 @@ namespace Hipda.Client.Uwp.Pro
             this.Suspending += OnSuspending;
         }
 
+        async Task CreateRootFrame()
+        {
+            // 自动登录
+            var accountService = new AccountService();
+            bool isLogin = await accountService.AutoLogin();
+
+            _rootFrame = Window.Current.Content as Frame;
+
+            // 不要在窗口已包含内容时重复应用程序初始化，
+            // 只需确保窗口处于活动状态
+            if (_rootFrame == null)
+            {
+                // 创建要充当导航上下文的框架，并导航到第一页
+                _rootFrame = new Frame();
+
+                _rootFrame.NavigationFailed += OnNavigationFailed;
+
+                mainDispatcher = Window.Current.Dispatcher;
+                mainViewId = ApplicationView.GetForCurrentView().Id;
+
+                // 将框架放在当前窗口中
+                Window.Current.Content = _rootFrame;
+            }
+
+            if (_rootFrame.Content == null)
+            {
+                // 当导航堆栈尚未还原时，导航到第一页，
+                // 并通过将所需信息作为导航参数传入来配置
+                // 参数
+                if (isLogin)
+                {
+                    _rootFrame.Navigate(typeof(MainPage), "fid=2");
+                }
+                else
+                {
+                    _rootFrame.Navigate(typeof(LoginPage));
+                }
+            }
+            // 确保当前窗口处于活动状态
+            Window.Current.Activate();
+
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 320, Height = 320 });
+        }
+
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
         /// 将在启动应用程序以打开特定文件等情况下使用。
@@ -118,51 +164,7 @@ namespace Hipda.Client.Uwp.Pro
             }
 #endif
 
-            // 自动登录
-            var accountService = new AccountService();
-            bool isLogin = await accountService.AutoLogin();
-
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            // 不要在窗口已包含内容时重复应用程序初始化，
-            // 只需确保窗口处于活动状态
-            if (rootFrame == null)
-            {
-                // 创建要充当导航上下文的框架，并导航到第一页
-                rootFrame = new Frame();
-
-                rootFrame.NavigationFailed += OnNavigationFailed;
-
-                mainDispatcher = Window.Current.Dispatcher;
-                mainViewId = ApplicationView.GetForCurrentView().Id;
-
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    //TODO: 从之前挂起的应用程序加载状态
-                }
-
-                // 将框架放在当前窗口中
-                Window.Current.Content = rootFrame;
-            }
-
-            if (rootFrame.Content == null)
-            {
-                // 当导航堆栈尚未还原时，导航到第一页，
-                // 并通过将所需信息作为导航参数传入来配置
-                // 参数
-                if (isLogin)
-                {
-                    rootFrame.Navigate(typeof(MainPage), "fid=2");
-                }
-                else
-                {
-                    rootFrame.Navigate(typeof(LoginPage));
-                }
-            }
-            // 确保当前窗口处于活动状态
-            Window.Current.Activate();
-
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 320, Height = 320 });
+            await CreateRootFrame();
 
             //App.Current.Resources["ControlContentThemeFontSize"] = 15;
             //App.Current.Resources["ToolTipContentThemeFontSize"] = 12;
@@ -219,47 +221,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             base.OnActivated(args);
 
-            // 自动登录
-            var accountService = new AccountService();
-            bool isLogin = await accountService.AutoLogin();
-
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            // 不要在窗口已包含内容时重复应用程序初始化，
-            // 只需确保窗口处于活动状态
-            if (rootFrame == null)
-            {
-                // 创建要充当导航上下文的框架，并导航到第一页
-                rootFrame = new Frame();
-
-                rootFrame.NavigationFailed += OnNavigationFailed;
-
-                mainDispatcher = Window.Current.Dispatcher;
-                mainViewId = ApplicationView.GetForCurrentView().Id;
-
-                // 将框架放在当前窗口中
-                Window.Current.Content = rootFrame;
-            }
-
-            if (rootFrame.Content == null)
-            {
-                // 当导航堆栈尚未还原时，导航到第一页，
-                // 并通过将所需信息作为导航参数传入来配置
-                // 参数
-                if (isLogin)
-                {
-                    rootFrame.Navigate(typeof(MainPage), "fid=2");
-                }
-                else
-                {
-                    rootFrame.Navigate(typeof(LoginPage));
-                }
-            }
-
-            // 确保当前窗口处于活动状态
-            Window.Current.Activate();
-
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 320, Height = 320 });
+            await CreateRootFrame();
 
             if (args.Kind == ActivationKind.Protocol)
             {
@@ -285,7 +247,7 @@ namespace Hipda.Client.Uwp.Pro
                     {
                         MainPage.PopupUserId = userId;
                         MainPage.PopupUsername = "test name";
-                        var mp = rootFrame.Content as MainPage;
+                        var mp = _rootFrame.Content as MainPage;
                         mp.Loaded += (s, e) => {
                             mp.OpenUserMessageDialog();
                         };
