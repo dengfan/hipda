@@ -63,6 +63,11 @@ namespace Hipda.BackgroundTask
 
         async Task ReplyPmAsync(int userId, string replyContent, CancellationTokenSource cts)
         {
+            if (string.IsNullOrEmpty(replyContent))
+            {
+                return;
+            }
+
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", _formHash));
             postData.Add(new KeyValuePair<string, object>("handlekey", "pmreply"));
