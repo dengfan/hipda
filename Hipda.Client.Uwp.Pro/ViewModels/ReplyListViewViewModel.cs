@@ -15,18 +15,22 @@ using Windows.UI.Xaml;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class RightSpecifiedPostViewModel : NotificationObject
+    /// <summary>
+    /// 回复列表之视图模型
+    /// </summary>
+    public class ReplyListViewViewModel : NotificationObject
     {
         int _startPageNo = 1;
-        int _postId;
         int _threadId;
         ListView _replyListView;
         Action _beforeLoad;
         Action<int, int> _afterLoad;
-        Action<int> _listViewScroll;
         DataService _ds;
 
         public DelegateCommand RefreshReplyCommand { get; set; }
+
+        public DelegateCommand LoadPrevPageDataCommand { get; set; }
+
 
         ICollectionView _replyItemCollection;
 
@@ -40,14 +44,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public RightSpecifiedPostViewModel(CancellationTokenSource cts, int postId, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
+        public ReplyListViewViewModel(CancellationTokenSource cts, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
         {
-            _postId = postId;
             _threadId = threadId;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
-            _listViewScroll = listViewScroll;
             _ds = new DataService();
 
             RefreshReplyCommand = new DelegateCommand();
@@ -57,44 +59,26 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 LoadData(_startPageNo);
             };
 
-            FirstLoad(cts);
-        }
-
-        async void FirstLoad(CancellationTokenSource cts)
-        {
-            // 先载入第一个转跳到的页面的数据，并得到页码之后即可进入正常流程
-            int[] data = await _ds.LoadReplyDataForRedirectReplyPageAsync(_postId, cts);
-            if (data != null)
+            LoadPrevPageDataCommand = new DelegateCommand();
+            LoadPrevPageDataCommand.ExecuteAction = (p) =>
             {
-                int pageNo = data[0];
-                int index = data[1];
-                _threadId = data[2];
-                _ds.SetScrollState(false);
-                var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, 0, index, _beforeLoad, _afterLoad, _listViewScroll);
-                if (cv != null)
+                if (_startPageNo > 1)
                 {
-                    ReplyItemCollection = cv;
-                    _startPageNo = pageNo;
+                    _ds.ClearReplyData(_threadId);
+                    LoadData(_startPageNo - 1);
                 }
-            }
+            };
+
+            LoadData(_startPageNo);
         }
 
         void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, AccountService.UserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, 0, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 _startPageNo = pageNo;
                 ReplyItemCollection = cv;
-            }
-        }
-
-        public void RefreshReplyDataFromPrevPage()
-        {
-            if (_startPageNo > 1)
-            {
-                _ds.ClearReplyData(_threadId);
-                LoadData(_startPageNo - 1);
             }
         }
 

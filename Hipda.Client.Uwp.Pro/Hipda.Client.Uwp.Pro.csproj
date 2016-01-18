@@ -161,11 +161,12 @@
     <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\PostDetailDialogViewModel.cs" />
     <Compile Include="ViewModels\ReplyListPageViewModel.cs" />
+    <Compile Include="ViewModels\ReplyListViewViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyPageViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyFavoritesViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForSearchFullTextViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForSearchTitleViewModel.cs" />
-    <Compile Include="ViewModels\RightSpecifiedPostViewModel.cs" />
+    <Compile Include="ViewModels\ReplyListViewForSpecifiedPostViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyPostsViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyThreadsViewModel.cs" />

@@ -187,7 +187,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                var vm = ReplyListView.DataContext as RightSpecifiedPostViewModel;
+                var vm = ReplyListView.DataContext as ReplyListViewForSpecifiedPostViewModel;
                 int count = ReplyListView.Items.Count;
 
                 if (count > 0 && count <= index + 1)
@@ -207,26 +207,15 @@ namespace Hipda.Client.Uwp.Pro.Views
         #region 公开的方法，可用URI SCHEME方法调用
         public void OpenReplyPageByThreadId(int threadId)
         {
-            var threadItem = _threadAndReplyViewModel.GetThreadItem(threadId);
-            if (threadItem == null)
-            {
-                _threadAndReplyViewModel.ClearReplyData(threadId);
-                var item = new ThreadItemViewModel(1, threadId, 0, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
-                RightWrap.DataContext = item;
-            }
-            else
-            {
-                var item = new ThreadItemViewModel(threadItem);
-                item.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
-                RightWrap.DataContext = item;
-            }
+            var cts = new CancellationTokenSource();
+            var vm = new ReplyListViewViewModel(cts, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+            RightWrap.DataContext = vm;
         }
 
         public void OpenReplyPageByThreadId(int postId, int threadId)
         {
-            _threadAndReplyViewModel.ClearReplyData(threadId);
             var cts = new CancellationTokenSource();
-            var vm = new RightSpecifiedPostViewModel(cts, postId, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            var vm = new ReplyListViewForSpecifiedPostViewModel(cts, postId, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
             RightWrap.DataContext = vm;
         }
         #endregion
@@ -531,29 +520,29 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        private void LoadPrevReplyPageButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            if (_lastSelectedItem != null)
-            {
-                // 根据回复列表页所属的主题类别来加载其下的回复列表的上一页
-                var threadItemViewModelBase = _lastSelectedItem as ThreadItemViewModelBase;
-                switch (threadItemViewModelBase.ThreadDataType)
-                {
-                    case ThreadDataType.MyThreads:
-                        ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                        break;
-                    case ThreadDataType.MyPosts:
-                        ((ThreadItemForMyPostsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                        break;
-                    case ThreadDataType.MyFavorites:
-                        ((ThreadItemForMyFavoritesViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                        break;
-                    default:
-                        ((ThreadItemViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                        break;
-                }
-            }
-        }
+        //private void LoadPrevReplyPageButton_Tapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    if (_lastSelectedItem != null)
+        //    {
+        //        // 根据回复列表页所属的主题类别来加载其下的回复列表的上一页
+        //        var threadItemViewModelBase = _lastSelectedItem as ThreadItemViewModelBase;
+        //        switch (threadItemViewModelBase.ThreadDataType)
+        //        {
+        //            case ThreadDataType.MyThreads:
+        //                ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+        //                break;
+        //            case ThreadDataType.MyPosts:
+        //                ((ThreadItemForMyPostsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+        //                break;
+        //            case ThreadDataType.MyFavorites:
+        //                ((ThreadItemForMyFavoritesViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+        //                break;
+        //            default:
+        //                ((ThreadItemViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
+        //                break;
+        //        }
+        //    }
+        //}
         #endregion
 
         //private async void openThreadInNewView_Tapped(object sender, TappedRoutedEventArgs e)
