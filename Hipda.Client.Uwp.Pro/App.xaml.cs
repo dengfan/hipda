@@ -241,6 +241,26 @@ namespace Hipda.Client.Uwp.Pro
                 Window.Current.Content = rootFrame;
             }
 
+            if (rootFrame.Content == null)
+            {
+                // 当导航堆栈尚未还原时，导航到第一页，
+                // 并通过将所需信息作为导航参数传入来配置
+                // 参数
+                if (isLogin)
+                {
+                    rootFrame.Navigate(typeof(MainPage), "fid=2");
+                }
+                else
+                {
+                    rootFrame.Navigate(typeof(LoginPage));
+                }
+            }
+
+            // 确保当前窗口处于活动状态
+            Window.Current.Activate();
+
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 320, Height = 320 });
+
             if (args.Kind == ActivationKind.Protocol)
             {
                 var eventArgs = args as ProtocolActivatedEventArgs;
@@ -266,7 +286,9 @@ namespace Hipda.Client.Uwp.Pro
                         MainPage.PopupUserId = userId;
                         MainPage.PopupUsername = "test name";
                         var mp = rootFrame.Content as MainPage;
-                        mp.OpenUserMessageDialog();
+                        mp.Loaded += (s, e) => {
+                            mp.OpenUserMessageDialog();
+                        };
                     }
                 }
             }
