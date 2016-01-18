@@ -42,6 +42,10 @@ namespace Hipda.BackgroundTask
                     {
                         await HandleReplyPm(details, args, cts);
                     }
+                    else if (args.StartsWith("add_buddy="))
+                    {
+                        await HandleAddBuddy(details, args, cts);
+                    }
                 }
             }
             catch (Exception ex)
@@ -58,11 +62,19 @@ namespace Hipda.BackgroundTask
         {
             int userId = Convert.ToInt32(args.Substring("reply_pm=".Length));
             string replyContent = details.UserInput["inputPm"].ToString();
-            await ReplyPmAsync(userId, replyContent, cts);
-        }
+            if (string.IsNullOrEmpty(replyContent))
+            {
+                string _xml = "<toast>" +
+                                "<visual>" +
+                                    "<binding template='ToastGeneric'>" +
+                                        "<text>对不起</text>" +
+                                        "<text>您输入的内容有误，消息发送不成功！</text>" +
+                                    "</binding>" +
+                                "</visual>" +
+                                "</toast>";
+                SendToast(_xml);
+            }
 
-        async Task ReplyPmAsync(int userId, string replyContent, CancellationTokenSource cts)
-        {
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", _formHash));
             postData.Add(new KeyValuePair<string, object>("handlekey", "pmreply"));
@@ -86,6 +98,26 @@ namespace Hipda.BackgroundTask
                 SendToast(_xml);
             }
             Debug.WriteLine("回复结果：" + flag);
+        }
+
+        async Task HandleAddBuddy(ToastNotificationActionTriggerDetail details, string args, CancellationTokenSource cts)
+        {
+            string[] tary = args.Substring("add_buddy=".Length).Split(',');
+            int userId = Convert.ToInt32(tary[0]);
+            string username = tary[1];
+
+            string url = string.Format("http://www.hi-pda.com/forum/my.php?from=notice&item=buddylist&newbuddyid={0}&buddysubmit=yes&inajax=1&_={1}", userId, DateTime.Now.Ticks.ToString("x"));
+            await _httpClient.GetAsync(url, cts);
+
+            string _xml = "<toast>" +
+                                "<visual>" +
+                                    "<binding template='ToastGeneric'>" +
+                                        "<text>恭喜你</text>" +
+                                        $"<text>成功添加“{username}”为好友！</text>" +
+                                    "</binding>" +
+                                "</visual>" +
+                                "</toast>";
+            SendToast(_xml);
         }
 
         void SendToast(string toastXml)

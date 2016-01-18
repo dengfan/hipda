@@ -92,7 +92,7 @@ namespace Hipda.BackgroundTask
                             "</binding>" +
                         "</visual>" +
                         "<actions>" +
-                            "<action content='加对方为好友' arguments='post' />" +
+                            "<action content='加对方为好友' arguments='add_buddy={2},{3}' activationType='background' />" +
                         "</actions>" +
                      "</toast>";
 
@@ -232,7 +232,7 @@ namespace Hipda.BackgroundTask
                             SaveNoticeToastTempData(2, actionTime);
 
                             // 发送
-                            _xmlForBuddy = string.Format(_xmlForBuddy, username, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)));
+                            _xmlForBuddy = string.Format(_xmlForBuddy, username, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)), userId, username);
                             SendToast(_xmlForBuddy);
                         }
                         break;
