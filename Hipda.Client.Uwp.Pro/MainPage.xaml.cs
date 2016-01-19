@@ -335,7 +335,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             FindName("UserDialog");
 
-            var vm = new ContentDialogUserMessageSetViewModel();
+            var vm = new ContentDialogUserMessageHubViewModel();
             if (vm == null)
             {
                 return;

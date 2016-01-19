@@ -172,7 +172,7 @@
     <Compile Include="ViewModels\ThreadListViewViewModel.cs" />
     <Compile Include="ViewModels\ContentDialogForUserInfoViewModel.cs" />
     <Compile Include="ViewModels\ContentDialogUserMessageViewModel.cs" />
-    <Compile Include="ViewModels\ContentDialogUserMessageSetViewModel.cs" />
+    <Compile Include="ViewModels\ContentDialogUserMessageHubViewModel.cs" />
     <Compile Include="Views\BlankPage1.xaml.cs">
       <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>

@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ContentDialogUserMessageSetViewModel : NotificationObject
+    public class ContentDialogUserMessageHubViewModel : NotificationObject
     {
         DataService _ds;
 
@@ -93,7 +93,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             IsButtonEnable = true;
         }
 
-        public ContentDialogUserMessageSetViewModel()
+        public ContentDialogUserMessageHubViewModel()
         {
             _ds = new DataService();
 
