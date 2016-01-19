@@ -23,15 +23,12 @@ namespace Hipda.Client.Uwp.Pro.Views
         public ThreadAndReplyPage()
         {
             this.InitializeComponent();
-
-            RightSideWrap.DataContext = _vmForThreadHistory;
-
             this.SizeChanged += ThreadAndReplyPage_SizeChanged;
+            RightSideWrap.DataContext = _vmForThreadHistory;
         }
 
         private void ThreadAndReplyPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            this.SizeChanged -= ThreadAndReplyPage_SizeChanged;
             string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
             if (userInteractionType.Equals("Touch"))
             {
