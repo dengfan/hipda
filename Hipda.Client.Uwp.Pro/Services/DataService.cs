@@ -23,14 +23,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public partial class DataService
     {
-        static int _threadPageSize = 75;
-        static int _replyPageSize = 50;
-        static int _searchPageSize = 50;
+        int _threadPageSize = 75;
+        int _replyPageSize = 50;
+        int _searchPageSize = 50;
 
-        static HttpHandle _httpClient = HttpHandle.GetInstance();
+        HttpHandle _httpClient = HttpHandle.GetInstance();
 
         #region page number
-        static int GetMaxPageNo(HtmlNode pagesNode)
+        public static int GetMaxPageNo(HtmlNode pagesNode)
         {
             int maxPageNo = 1;
 
@@ -68,47 +68,47 @@ namespace Hipda.Client.Uwp.Pro.Services
             return ThreadHistoryData.Count(h => h.ThreadId == threadId) > 0;
         }
 
-        public string GetThreadTitleFromReplyData(int threadId)
-        {
-            var replyData = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
-            if (replyData != null)
-            {
-                var replyItem = replyData.Replies.FirstOrDefault(i => i.PageNo == 1 && i.Index == 0);
-                if (replyItem != null)
-                {
-                    return replyItem.ThreadTitle;
-                }
-            }
+        //public string GetThreadTitleFromReplyData(int threadId)
+        //{
+        //    var replyData = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
+        //    if (replyData != null)
+        //    {
+        //        var replyItem = replyData.Replies.FirstOrDefault(i => i.PageNo == 1 && i.Index == 0);
+        //        if (replyItem != null)
+        //        {
+        //            return replyItem.ThreadTitle;
+        //        }
+        //    }
 
-            return string.Empty;
-        }
+        //    return string.Empty;
+        //}
 
-        public string GetThreadTitleFromThreadData(int threadId)
-        {
-            var threadData = _threadData.FirstOrDefault(t => t.ThreadId == threadId);
-            if (threadData != null)
-            {
-                return threadData.Title;
-            }
-            else
-            {
-                var threadDataForMyPosts = _threadDataForMyPosts.FirstOrDefault(t => t.ThreadId == threadId);
-                if (threadDataForMyPosts != null)
-                {
-                    return threadDataForMyPosts.Title;
-                }
-                else
-                {
-                    var threadDataForMyThreads = _threadDataForMyThreads.FirstOrDefault(t => t.ThreadId == threadId);
-                    if (threadDataForMyThreads != null)
-                    {
-                        return threadDataForMyThreads.Title;
-                    }
-                }
-            }
+        //public string GetThreadTitleFromThreadData(int threadId)
+        //{
+        //    var threadData = _threadData.FirstOrDefault(t => t.ThreadId == threadId);
+        //    if (threadData != null)
+        //    {
+        //        return threadData.Title;
+        //    }
+        //    else
+        //    {
+        //        var threadDataForMyPosts = _threadDataForMyPosts.FirstOrDefault(t => t.ThreadId == threadId);
+        //        if (threadDataForMyPosts != null)
+        //        {
+        //            return threadDataForMyPosts.Title;
+        //        }
+        //        else
+        //        {
+        //            var threadDataForMyThreads = _threadDataForMyThreads.FirstOrDefault(t => t.ThreadId == threadId);
+        //            if (threadDataForMyThreads != null)
+        //            {
+        //                return threadDataForMyThreads.Title;
+        //            }
+        //        }
+        //    }
 
-            return string.Empty;
-        }
+        //    return string.Empty;
+        //}
         #endregion
 
         #region reply
@@ -1100,7 +1100,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region prompt
-        static void GetPromptData(HtmlNode promptContentNode)
+        public static void GetPromptData(HtmlNode promptContentNode)
         {
             try
             {
