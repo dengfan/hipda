@@ -1,5 +1,6 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.ViewModels;
+using Hipda.Http;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,17 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public partial class DataService
+    public class DataServiceForMyThreads
     {
         static List<ThreadItemForMyThreadsModel> _threadDataForMyThreads = new List<ThreadItemForMyThreadsModel>();
+        static HttpHandle _httpClient = HttpHandle.GetInstance();
+        static int _pageSize = 75;
         int _threadMaxPageNoForMyThreads = 1;
 
         async Task LoadThreadDataForMyThreadsAsync(int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForMyThreads.Count(t => t.PageNo == pageNo);
-            if (count == _threadPageSize)
+            if (count == _pageSize)
             {
                 return;
             }
@@ -40,7 +43,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 最先读取提醒数据
             var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
-            GetPromptData(promptContentNode);
+            DataService.GetPromptData(promptContentNode);
 
             // 读取主内容
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
@@ -51,7 +54,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            _threadMaxPageNoForMyThreads = GetMaxPageNo(pagesNode);
+            _threadMaxPageNoForMyThreads = DataService.GetMaxPageNo(pagesNode);
 
             if (pageNo > _threadMaxPageNoForMyThreads)
             {

@@ -1,5 +1,6 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.ViewModels;
+using Hipda.Http;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -13,15 +14,17 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public partial class DataService
+    public class DataServiceForSearchFullText
     {
         static List<ThreadItemForSearchFullTextModel> _threadDataForSearchFullText = new List<ThreadItemForSearchFullTextModel>();
+        static HttpHandle _httpClient = HttpHandle.GetInstance();
+        static int _pageSize = 50;
         int _threadMaxPageNoForSearchFullText = 1;
 
         async Task LoadThreadDataForSearchFullTextAsync(string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForSearchFullText.Count(t => t.PageNo == pageNo);
-            if (count == _searchPageSize)
+            if (count == _pageSize)
             {
                 return;
             }
@@ -65,7 +68,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 最先读取提醒数据
             var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
-            GetPromptData(promptContentNode);
+            DataService.GetPromptData(promptContentNode);
 
             // 读取主内容
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
@@ -76,7 +79,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            _threadMaxPageNoForSearchFullText = GetMaxPageNo(pagesNode);
+            _threadMaxPageNoForSearchFullText = DataService.GetMaxPageNo(pagesNode);
 
             if (pageNo > _threadMaxPageNoForSearchFullText)
             {
