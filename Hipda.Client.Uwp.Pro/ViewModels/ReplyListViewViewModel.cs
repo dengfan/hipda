@@ -83,17 +83,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public bool GetScrollState()
-        {
-            return _ds.GetScrollState();
-        }
-
-        public void SetScrollState(bool isCompleted)
-        {
-            _ds.SetScrollState(isCompleted);
-        }
-
-        public void RefreshReplyDataFromPrevPage()
+        public void LoadPrevPageData()
         {
             if (_startPageNo > 1)
             {

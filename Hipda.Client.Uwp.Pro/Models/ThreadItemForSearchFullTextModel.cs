@@ -25,6 +25,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.AuthorUsername = authorUsername;
             this.AuthorUserId = authorUserId;
             this.LastReplyTime = lastReplyTime;
+            this.ThreadType = ThreadDataType.SearchFullText;
         }
 
         public int Index { get; private set; }

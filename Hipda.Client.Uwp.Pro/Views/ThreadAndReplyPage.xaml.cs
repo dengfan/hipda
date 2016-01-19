@@ -32,14 +32,7 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ThreadAndReplyPage : Page
     {
-        /// <summary>
-        /// 用于记录当前页的类型，如常规、我的贴子、我的回复等等类型
-        /// 在打开相应版块时赋值
-        /// </summary>
-        ThreadDataType _threadDataType;
-
-        object _lastSelectedItem;
-        ThreadAndReplyPageViewModel _threadAndReplyViewModel;
+        ThreadItemModelBase _lastSelectedItem;
 
         public ThreadAndReplyPage()
         {
@@ -73,7 +66,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
         {
-            LeftListView.SelectedItem = _lastSelectedItem;
+            
         }
 
         #region 委托事件
@@ -147,39 +140,39 @@ namespace Hipda.Client.Uwp.Pro.Views
         private async void ReplyListViewScroll(int index)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                switch (_threadDataType)
-                {
-                    case ThreadDataType.SearchFullText:
-                        var itemForSearchFullText = _lastSelectedItem as ThreadItemForSearchFullTextViewModel;
-                        int countForSearchFullText = ReplyListView.Items.Count;
+                //switch (_threadDataType)
+                //{
+                //    case ThreadDataType.SearchFullText:
+                //        var itemForSearchFullText = _lastSelectedItem as ThreadItemForSearchFullTextViewModel;
+                //        int countForSearchFullText = ReplyListView.Items.Count;
 
-                        if (countForSearchFullText > 0 && countForSearchFullText <= index + 1)
-                        {
-                            ReplyListView.ScrollIntoView(ReplyListView.Items[countForSearchFullText - 1], ScrollIntoViewAlignment.Leading);
-                        }
+                //        if (countForSearchFullText > 0 && countForSearchFullText <= index + 1)
+                //        {
+                //            ReplyListView.ScrollIntoView(ReplyListView.Items[countForSearchFullText - 1], ScrollIntoViewAlignment.Leading);
+                //        }
 
-                        if (countForSearchFullText > index + 1 && itemForSearchFullText.GetScrollState() == false)
-                        {
-                            ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
-                            itemForSearchFullText.SetScrollState(true);
-                        }
-                        break;
-                    default:
-                        var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsViewModel;
-                        int countForMyPosts = ReplyListView.Items.Count;
+                //        if (countForSearchFullText > index + 1 && itemForSearchFullText.GetScrollState() == false)
+                //        {
+                //            ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
+                //            itemForSearchFullText.SetScrollState(true);
+                //        }
+                //        break;
+                //    default:
+                //        var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsViewModel;
+                //        int countForMyPosts = ReplyListView.Items.Count;
 
-                        if (countForMyPosts > 0 && countForMyPosts <= index + 1)
-                        {
-                            ReplyListView.ScrollIntoView(ReplyListView.Items[countForMyPosts - 1], ScrollIntoViewAlignment.Leading);
-                        }
+                //        if (countForMyPosts > 0 && countForMyPosts <= index + 1)
+                //        {
+                //            ReplyListView.ScrollIntoView(ReplyListView.Items[countForMyPosts - 1], ScrollIntoViewAlignment.Leading);
+                //        }
 
-                        if (countForMyPosts > index + 1 && itemForMyPosts.GetScrollState() == false)
-                        {
-                            ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
-                            itemForMyPosts.SetScrollState(true);
-                        }
-                        break;
-                }
+                //        if (countForMyPosts > index + 1 && itemForMyPosts.GetScrollState() == false)
+                //        {
+                //            ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
+                //            itemForMyPosts.SetScrollState(true);
+                //        }
+                //        break;
+                //}
             });
         }
 
@@ -229,33 +222,28 @@ namespace Hipda.Client.Uwp.Pro.Views
                 string param = e.Parameter.ToString();
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
-                    _threadDataType = ThreadDataType.Default;
                     int fid = Convert.ToInt32(param.Substring("fid=".Length));
-                    //_threadAndReplyViewModel = new ThreadAndReplyPageViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
-                    RightWrap.DataContext = new ThreadListViewViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    LeftWrap.DataContext = new ThreadListViewViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                 }
                 else if (param.StartsWith("item="))
                 {
                     string threadType = param.Substring("item=".Length);
                     if (threadType.Equals("threads"))
                     {
-                        _threadDataType = ThreadDataType.MyThreads;
+                        LeftWrap.DataContext = new ThreadListViewForMyThreadsViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     }
                     else if (threadType.Equals("posts"))
                     {
-                        _threadDataType = ThreadDataType.MyPosts;
+                        LeftWrap.DataContext = new ThreadListViewForMyPostsViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     }
                     else if (threadType.Equals("favorites"))
                     {
-                        _threadDataType = ThreadDataType.MyFavorites;
+                        LeftWrap.DataContext = new ThreadListViewForMyFavoritesViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     }
                     else if (threadType.Equals("notice"))
                     {
-                        _threadDataType = ThreadDataType.Notice;
+                        LeftWrap.DataContext = new ThreadListViewForNoticeViewModel(LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     }
-
-                    _threadAndReplyViewModel = new ThreadAndReplyPageViewModel(1, threadType, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
-                    DataContext = _threadAndReplyViewModel;
                 }
                 else if (param.StartsWith("search="))
                 {
@@ -266,10 +254,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                     int searchTimeSpan = Convert.ToInt32(paramaters[3]);
                     int searchForumSpan = Convert.ToInt32(paramaters[4]);
 
-                    _threadDataType = (searchType == 0) ? ThreadDataType.SearchTitle : ThreadDataType.SearchFullText;
-
-                    _threadAndReplyViewModel = new ThreadAndReplyPageViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
-                    DataContext = _threadAndReplyViewModel;
+                    if (searchType == 0)
+                    {
+                        LeftWrap.DataContext = new ThreadListViewForSearchTitleViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    }
+                    else
+                    {
+                        LeftWrap.DataContext = new ThreadListViewForSearchFullTextViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    }
                 }
                 else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
                 {
@@ -277,28 +269,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     int threadId = Convert.ToInt32(p[0]);
                     int threadAuthorUserId = Convert.ToInt32(p[1]);
 
-                    switch (_threadDataType)
-                    {
-                        case ThreadDataType.MyThreads:
-                            var itemForMyThreads = new ThreadItemForMyThreadsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-                            _lastSelectedItem = itemForMyThreads;
-                            RightWrap.DataContext = itemForMyThreads;
-                            break;
-                        case ThreadDataType.MyPosts:
-                            var itemForMyPosts = new ThreadItemForMyPostsViewModel(1, threadId, threadAuthorUserId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-                            _lastSelectedItem = itemForMyPosts;
-                            RightWrap.DataContext = itemForMyPosts;
-                            break;
-                        case ThreadDataType.SearchTitle:
-                            break;
-                        case ThreadDataType.SearchFullText:
-                            break;
-                        default:
-                            var item = new ThreadItemViewModel(1, threadId, threadAuthorUserId, ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
-                            _lastSelectedItem = item;
-                            RightWrap.DataContext = item;
-                            break;
-                    }
+                    OpenReplyPageByThreadId(threadId);
                 }
             }
 
@@ -321,32 +292,31 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (isNarrow && oldState == DefaultState && _lastSelectedItem != null) // 如果是窄视图，则跳转到 reply list page 页面
             {
                 string p = string.Empty;
-
-                switch (_threadDataType)
+                switch (_lastSelectedItem.ThreadType)
                 {
                     case ThreadDataType.MyThreads:
-                        var itemForMyThreads = _lastSelectedItem as ThreadItemForMyThreadsViewModel;
-                        p = string.Format("{0},{1}", itemForMyThreads.ThreadItem.ThreadId, AccountService.UserId);
+                        var itemForMyThreads = _lastSelectedItem as ThreadItemForMyThreadsModel;
+                        p = string.Format("{0},{1}", itemForMyThreads.ThreadId, AccountService.UserId);
                         break;
                     case ThreadDataType.MyPosts:
-                        var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsViewModel;
-                        p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, 0);
+                        var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsModel;
+                        p = string.Format("{0},{1}", itemForMyPosts.ThreadId, 0);
                         break;
                     case ThreadDataType.MyFavorites:
-                        var itemForMyFavorites = _lastSelectedItem as ThreadItemForMyFavoritesViewModel;
-                        p = string.Format("{0},{1}", itemForMyFavorites.ThreadItem.ThreadId, 0);
+                        var itemForMyFavorites = _lastSelectedItem as ThreadItemForMyFavoritesModel;
+                        p = string.Format("{0},{1}", itemForMyFavorites.ThreadId, 0);
                         break;
                     case ThreadDataType.SearchTitle:
-                        var itemForSearchTitle = _lastSelectedItem as ThreadItemForSearchTitleViewModel;
-                        p = string.Format("{0},{1}", itemForSearchTitle.ThreadItem.ThreadId, 0);
+                        var itemForSearchTitle = _lastSelectedItem as ThreadItemForSearchTitleModel;
+                        p = string.Format("{0},{1}", itemForSearchTitle.ThreadId, 0);
                         break;
                     case ThreadDataType.SearchFullText:
-                        var itemForSearchFullText = _lastSelectedItem as ThreadItemForSearchFullTextViewModel;
-                        p = string.Format("{0},{1}", itemForSearchFullText.ThreadItem.ThreadId, 0);
+                        var itemForSearchFullText = _lastSelectedItem as ThreadItemForSearchFullTextModel;
+                        p = string.Format("{0},{1}", itemForSearchFullText.ThreadId, 0);
                         break;
                     default:
-                        var item = _lastSelectedItem as ThreadItemViewModel;
-                        p = string.Format("{0},{1}", item.ThreadItem.ThreadId, item.ThreadItem.AuthorUserId);
+                        var item = _lastSelectedItem as ThreadItemModel;
+                        p = string.Format("{0},{1}", item.ThreadId, item.AuthorUserId);
                         break;
                 }
 
@@ -364,93 +334,75 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
-            var selectedItem = (ThreadItemModelBase)e.ClickedItem;
-            switch (selectedItem.ThreadType)
+            var selectedItem = e.ClickedItem;
+            _lastSelectedItem = (ThreadItemModelBase)selectedItem;
+            switch (_lastSelectedItem.ThreadType)
             {
-                //case ThreadDataType.MyThreads:
-                //    var itemForMyThreads = (ThreadItemForMyThreadsViewModel)selectedItem;
-                //    itemForMyThreads.SetRead();
-                //    _lastSelectedItem = itemForMyThreads;
+                case ThreadDataType.MyThreads:
+                    var itemForMyThreads = (ThreadItemForMyThreadsModel)selectedItem;
 
-                //    if (AdaptiveStates.CurrentState == NarrowState)
-                //    {
-                //        string p = string.Format("{0},{1}", itemForMyThreads.ThreadItem.ThreadId, AccountService.UserId);
-                //        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                //    }
-                //    else
-                //    {
-                //        itemForMyThreads.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-                //        RightWrap.DataContext = itemForMyThreads;
-                //    }
-                //    break;
-                //case ThreadDataType.MyPosts:
-                //    var itemForMyPosts = (ThreadItemForMyPostsViewModel)selectedItem;
-                //    itemForMyPosts.SetRead();
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        string p = string.Format("{0},{1}", itemForMyThreads.ThreadId, AccountService.UserId);
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        OpenReplyPageByThreadId(itemForMyThreads.ThreadId);
+                    }
+                    break;
+                case ThreadDataType.MyPosts:
+                    var itemForMyPosts = (ThreadItemForMyPostsModel)selectedItem;
 
-                //    _lastSelectedItem = itemForMyPosts;
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        string p = string.Format("{0},{1}", itemForMyPosts.ThreadId, 0);
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        OpenReplyPageByThreadId(itemForMyPosts.ThreadId);
+                    }
+                    break;
+                case ThreadDataType.MyFavorites:
+                    var itemForMyFavorites = (ThreadItemForMyFavoritesModel)selectedItem;
 
-                //    if (AdaptiveStates.CurrentState == NarrowState)
-                //    {
-                //        string p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, 0);
-                //        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                //    }
-                //    else
-                //    {
-                //        await itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
-                //        RightWrap.DataContext = itemForMyPosts;
-                //    }
-                //    break;
-                //case ThreadDataType.MyFavorites:
-                //    var itemForMyFavorites = (ThreadItemForMyFavoritesViewModel)selectedItem;
-                //    itemForMyFavorites.SetRead();
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        string p = string.Format("{0},{1}", itemForMyFavorites.ThreadId, 0);
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        OpenReplyPageByThreadId(itemForMyFavorites.ThreadId);
+                    }
+                    break;
+                case ThreadDataType.SearchTitle:
+                    var itemForSearchTitle = (ThreadItemForSearchTitleModel)selectedItem;
 
-                //    _lastSelectedItem = itemForMyFavorites;
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        string p = string.Format("{0},{1}", itemForSearchTitle.ThreadId, 0);
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        OpenReplyPageByThreadId(itemForSearchTitle.ThreadId);
+                    }
+                    break;
+                case ThreadDataType.SearchFullText:
+                    var itemForSearchFullText = (ThreadItemForSearchFullTextModel)selectedItem;
 
-                //    if (AdaptiveStates.CurrentState == NarrowState)
-                //    {
-                //        string p = string.Format("{0},{1}", itemForMyFavorites.ThreadItem.ThreadId, 0);
-                //        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                //    }
-                //    else
-                //    {
-                //        itemForMyFavorites.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
-                //        RightWrap.DataContext = itemForMyFavorites;
-                //    }
-                //    break;
-                //case ThreadDataType.SearchTitle:
-                //    var itemForSearchTitle = (ThreadItemForSearchTitleViewModel)selectedItem;
-                //    itemForSearchTitle.SetRead();
-
-                //    _lastSelectedItem = itemForSearchTitle;
-
-                //    if (AdaptiveStates.CurrentState == NarrowState)
-                //    {
-                //        string p = string.Format("{0},{1}", itemForSearchTitle.ThreadItem.ThreadId, 0);
-                //        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                //    }
-                //    else
-                //    {
-                //        itemForSearchTitle.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
-                //        RightWrap.DataContext = itemForSearchTitle;
-                //    }
-                //    break;
-                //case ThreadDataType.SearchFullText:
-                //    var itemForSearchFullText = (ThreadItemForSearchFullTextViewModel)selectedItem;
-                //    itemForSearchFullText.SetRead();
-
-                //    _lastSelectedItem = itemForSearchFullText;
-
-                //    if (AdaptiveStates.CurrentState == NarrowState)
-                //    {
-                //        string p = string.Format("{0},{1}", itemForSearchFullText.ThreadItem.ThreadId, 0);
-                //        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                //    }
-                //    else
-                //    {
-                //        await itemForSearchFullText.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
-                //        RightWrap.DataContext = itemForSearchFullText;
-                //    }
-                //    break;
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        string p = string.Format("{0},{1}", itemForSearchFullText.ThreadId, 0);
+                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        OpenReplyPageByThreadId(itemForSearchFullText.ThreadId);
+                    }
+                    break;
                 default:
                     var item = (ThreadItemModel)selectedItem;
 
@@ -461,8 +413,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        var cts = new CancellationTokenSource();
-                        RightWrap.DataContext = new ReplyListViewViewModel(cts, item.ThreadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+                        OpenReplyPageByThreadId(item.ThreadId);
                     }
                     break;
             }
@@ -473,19 +424,23 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             if (_lastSelectedItem != null)
             {
-                switch (_threadDataType)
+                switch (_lastSelectedItem.ThreadType)
                 {
                     case ThreadDataType.MyThreads:
-                        _threadAndReplyViewModel.RefreshThreadDataForMyThreadsFromPrevPage();
+                        var vmForMyThreads = LeftWrap.DataContext as ThreadListViewForMyThreadsViewModel;
+                        vmForMyThreads.LoadPrevPageData();
                         break;
                     case ThreadDataType.MyPosts:
-                        _threadAndReplyViewModel.RefreshThreadDataForMyPostsFromPrevPage();
+                        var vmForMyPosts = LeftWrap.DataContext as ThreadListViewForMyPostsViewModel;
+                        vmForMyPosts.LoadPrevPageData();
                         break;
                     case ThreadDataType.MyFavorites:
-                        _threadAndReplyViewModel.RefreshThreadDataForMyFavoritesFromPrevPage();
+                        var vmForMyFavorites = LeftWrap.DataContext as ThreadListViewForMyFavoritesViewModel;
+                        vmForMyFavorites.LoadPrevPageData();
                         break;
                     default:
-                        _threadAndReplyViewModel.RefreshThreadDataFromPrevPage();
+                        var vm = LeftWrap.DataContext as ThreadListViewViewModel;
+                        vm.LoadPrevPageData();
                         break;
                 }
             }
@@ -493,25 +448,20 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void rightPr_RefreshInvoked(DependencyObject sender, object args)
         {
-            if (_lastSelectedItem != null)
+            if (RightWrap.DataContext == null)
             {
-                // 根据回复列表页所属的主题类别来加载其下的回复列表的上一页
-                var threadItemViewModelBase = _lastSelectedItem as ThreadItemViewModelBase;
-                switch (threadItemViewModelBase.ThreadDataType)
-                {
-                    case ThreadDataType.MyThreads:
-                        ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                        break;
-                    case ThreadDataType.MyPosts:
-                        ((ThreadItemForMyPostsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                        break;
-                    case ThreadDataType.MyFavorites:
-                        ((ThreadItemForMyFavoritesViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                        break;
-                    default:
-                        ((ThreadItemViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-                        break;
-                }
+                return;
+            }
+
+            if (RightWrap.DataContext.GetType().Equals(typeof(ReplyListViewViewModel)))
+            {
+                var vm = RightWrap.DataContext as ReplyListViewViewModel;
+                vm.LoadPrevPageData();
+            }
+            else if (RightWrap.DataContext.GetType().Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
+            {
+                var vm = RightWrap.DataContext as ReplyListViewForSpecifiedPostViewModel;
+                vm.LoadPrevPageData();
             }
         }
 

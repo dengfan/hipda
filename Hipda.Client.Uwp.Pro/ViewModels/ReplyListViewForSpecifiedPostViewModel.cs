@@ -106,6 +106,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        public void LoadPrevPageData()
+        {
+            if (_startPageNo > 1)
+            {
+                _ds.ClearReplyData(_threadId);
+                LoadData(_startPageNo - 1);
+            }
+        }
+
         public bool GetScrollState()
         {
             return _ds.GetScrollState();

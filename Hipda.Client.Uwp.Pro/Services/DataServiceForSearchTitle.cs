@@ -174,24 +174,15 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadDataForSearchTitle.Count;
         }
 
-        ThreadItemForSearchTitleViewModel GetOneThreadItemForSearchTitle(int index)
+        ThreadItemForSearchTitleModel GetOneThreadItemForSearchTitle(int index)
         {
-            var threadItem = _threadDataForSearchTitle.FirstOrDefault(t => t.Index == index);
-            if (threadItem == null)
-            {
-                return null;
-            }
-
-            var vm = new ThreadItemForSearchTitleViewModel(threadItem);
-            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
-
-            return vm;
+            return _threadDataForSearchTitle.FirstOrDefault(t => t.Index == index);
         }
 
         public ICollectionView GetViewForThreadPageForSearchTitle(int startPageNo, string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForSearchTitleViewModel>(
+            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForSearchTitleModel>(
                 startPageNo,
                 async pageNo =>
                 {

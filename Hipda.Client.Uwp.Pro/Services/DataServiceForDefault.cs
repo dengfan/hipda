@@ -192,44 +192,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             return cvs.View;
         }
 
-        ThreadItemViewModel GetOneThreadItem(int forumId, int index)
-        {
-            var threadItem = _threadData.FirstOrDefault(t => t.ForumId == forumId && t.Index == index);
-            if (threadItem == null)
-            {
-                return null;
-            }
-
-            var vm = new ThreadItemViewModel(threadItem);
-            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
-
-            return vm;
-        }
-
-        public ICollectionView GetViewForThreadPage(int startPageNo, int forumId, Action beforeLoad, Action afterLoad, Action noDataNotice)
-        {
-            var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemViewModel>(
-                startPageNo,
-                async pageNo =>
-                {
-                    // 加载分页数据，并写入静态类中
-                    // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsAsync(forumId, pageNo, beforeLoad, afterLoad, noDataNotice);
-                },
-                (index) =>
-                {
-                    // 从静态类中返回需要显示出来的数据
-                    return GetOneThreadItem(forumId, index);
-                },
-                () =>
-                {
-                    return GetThreadMaxPageNo();
-                });
-
-            return cvs.View;
-        }
-
         public int GetThreadMaxPageNo()
         {
             return _threadMaxPageNo;

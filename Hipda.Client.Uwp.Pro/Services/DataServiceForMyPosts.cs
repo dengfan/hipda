@@ -109,23 +109,15 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadDataForMyPosts.Count;
         }
 
-        ThreadItemForMyPostsViewModel GetOneThreadItemForMyPosts(int index)
+        ThreadItemForMyPostsModel GetOneThreadItemForMyPosts(int index)
         {
-            var threadItem = _threadDataForMyPosts.FirstOrDefault(t => t.Index == index);
-            if (threadItem == null)
-            {
-                return null;
-            }
-
-            var vm = new ThreadItemForMyPostsViewModel(threadItem);
-            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
-            return vm;
+            return _threadDataForMyPosts.FirstOrDefault(t => t.Index == index);
         }
 
         public ICollectionView GetViewForThreadPageForMyPosts(int startPageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyPostsViewModel>(
+            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyPostsModel>(
                 startPageNo,
                 async pageNo =>
                 {

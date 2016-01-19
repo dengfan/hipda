@@ -113,23 +113,15 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadDataForMyFavorites.Count;
         }
 
-        ThreadItemForMyFavoritesViewModel GetOneThreadItemForMyFavorites(int index)
+        ThreadItemForMyFavoritesModel GetOneThreadItemForMyFavorites(int index)
         {
-            var threadItem = _threadDataForMyFavorites.FirstOrDefault(t => t.Index == index);
-            if (threadItem == null)
-            {
-                return null;
-            }
-
-            var vm = new ThreadItemForMyFavoritesViewModel(threadItem);
-            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
-            return vm;
+            return _threadDataForMyFavorites.FirstOrDefault(t => t.Index == index);
         }
 
         public ICollectionView GetViewForThreadPageForMyFavorites(int startPageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyFavoritesViewModel>(
+            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForMyFavoritesModel>(
                 startPageNo,
                 async pageNo =>
                 {

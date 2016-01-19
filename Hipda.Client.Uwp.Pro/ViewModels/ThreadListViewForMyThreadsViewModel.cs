@@ -7,13 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadListViewViewModel
+    public class ThreadListViewForMyThreadsViewModel
     {
-        int _forumId;
-
         int _startPageNo = 1;
         ListView _leftListView;
         CommandBar _leftCommandBar;
@@ -24,9 +24,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public int ThreadMaxPageNo { get; set; }
 
-        public ThreadListViewViewModel(int pageNo, int forumId, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ThreadListViewForMyThreadsViewModel(int pageNo, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
-            _forumId = forumId;
             _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
             _leftListView.ItemsSource = null;
@@ -43,29 +42,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _noDataNotice = noDataNotice;
             _ds = new DataService();
 
-            LoadData(pageNo, _forumId);
+            LoadDataForMyThreads(pageNo);
 
-            var refreshThreadCommand = new DelegateCommand();
-            refreshThreadCommand.ExecuteAction = (p) => {
-                _ds.ClearThreadData(_forumId);
-                LoadData(1, _forumId);
+            var refreshThreadForThreadsCommand = new DelegateCommand();
+            refreshThreadForThreadsCommand.ExecuteAction = (p) => {
+                _ds.ClearThreadDataForMyThreads();
+                LoadDataForMyThreads(1);
             };
-
-            var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
-            var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
-            btnRefresh.Command = refreshThreadCommand;
-            var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
-            _leftCommandBar.PrimaryCommands.Add(btnAdd);
-            _leftCommandBar.PrimaryCommands.Add(btnRefresh);
-            _leftCommandBar.PrimaryCommands.Add(btnSort);
         }
 
-        void LoadData(int pageNo, int forumId)
+        void LoadDataForMyThreads(int pageNo)
         {
-            var cv = _ds.GetViewForThreadItems(pageNo, forumId, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForMyThreads(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
-                ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyThreads();
                 _startPageNo = pageNo;
                 _leftListView.ItemsSource = cv;
             }
@@ -75,8 +66,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             if (_startPageNo > 1)
             {
-                _ds.ClearThreadData(_forumId);
-                LoadData(_startPageNo, _forumId);
+                _ds.ClearThreadDataForMyThreads();
+                LoadDataForMyThreads(_startPageNo);
             }
         }
     }

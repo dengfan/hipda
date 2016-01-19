@@ -18,6 +18,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.ReplyCount = replyCount;
             this.LastReplyUsername = lastReplyUsername;
             this.LastReplyTime = lastReplyTime;
+            this.ThreadType = ThreadDataType.MyFavorites;
         }
 
         public int Index { get; private set; }

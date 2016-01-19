@@ -152,7 +152,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         void rightPr_RefreshInvoked(DependencyObject sender, object args)
         {
-            _replyViewModel.RefreshReplyDataFromPrevPage();
+            _replyViewModel.LoadPrevPageData();
         }
     }
 }

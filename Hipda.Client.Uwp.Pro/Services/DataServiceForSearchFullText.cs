@@ -150,24 +150,15 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadDataForSearchFullText.Count;
         }
 
-        ThreadItemForSearchFullTextViewModel GetOneThreadItemForSearchFullText(int index)
+        ThreadItemForSearchFullTextModel GetOneThreadItemForSearchFullText(int index)
         {
-            var threadItem = _threadDataForSearchFullText.FirstOrDefault(t => t.Index == index);
-            if (threadItem == null)
-            {
-                return null;
-            }
-
-            var vm = new ThreadItemForSearchFullTextViewModel(threadItem);
-            vm.StatusColorStyle = GetReadStatusStyle(threadItem.ThreadId);
-
-            return vm;
+            return _threadDataForSearchFullText.FirstOrDefault(t => t.Index == index);
         }
 
         public ICollectionView GetViewForThreadPageForSearchFullText(int startPageNo, string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             var cvs = new CollectionViewSource();
-            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForSearchFullTextViewModel>(
+            cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForSearchFullTextModel>(
                 startPageNo,
                 async pageNo =>
                 {

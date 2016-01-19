@@ -162,15 +162,13 @@
     <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\PostDetailDialogViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewViewModel.cs" />
-    <Compile Include="ViewModels\ThreadAndReplyPageViewModel.cs" />
-    <Compile Include="ViewModels\ThreadItemForMyFavoritesViewModel.cs" />
-    <Compile Include="ViewModels\ThreadItemForSearchFullTextViewModel.cs" />
-    <Compile Include="ViewModels\ThreadItemForSearchTitleViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForSpecifiedPostViewModel.cs" />
-    <Compile Include="ViewModels\ThreadItemViewModel.cs" />
-    <Compile Include="ViewModels\ThreadItemForMyPostsViewModel.cs" />
-    <Compile Include="ViewModels\ThreadItemForMyThreadsViewModel.cs" />
-    <Compile Include="ViewModels\ThreadItemViewModelBase.cs" />
+    <Compile Include="ViewModels\ThreadListViewForMyFavoritesViewModel.cs" />
+    <Compile Include="ViewModels\ThreadListViewForMyPostsViewModel.cs" />
+    <Compile Include="ViewModels\ThreadListViewForMyThreadsViewModel.cs" />
+    <Compile Include="ViewModels\ThreadListViewForNoticeViewModel.cs" />
+    <Compile Include="ViewModels\ThreadListViewForSearchFullTextViewModel.cs" />
+    <Compile Include="ViewModels\ThreadListViewForSearchTitleViewModel.cs" />
     <Compile Include="ViewModels\ThreadListViewViewModel.cs" />
     <Compile Include="ViewModels\UserInfoDialogViewModel.cs" />
     <Compile Include="ViewModels\UserMessageDialogViewModel.cs" />
@@ -180,9 +178,6 @@
     </Compile>
     <Compile Include="Views\ReplyListPage.xaml.cs">
       <DependentUpon>ReplyListPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ReplyNewViewPage.xaml.cs">
-      <DependentUpon>ReplyNewViewPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ThreadAndReplyPage.xaml.cs">
       <DependentUpon>ThreadAndReplyPage.xaml</DependentUpon>
@@ -325,10 +320,6 @@
     <Page Include="Views\ReplyListPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ReplyNewViewPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ThreadAndReplyPage.xaml">
       <Generator>MSBuild:Compile</Generator>
