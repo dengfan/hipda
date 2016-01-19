@@ -261,7 +261,7 @@ namespace Hipda.Client.Uwp.Pro
             }
 
             FindName("UserDialog");
-            UserDialog.DataContext = new UserInfoDialogViewModel(PopupUserId);
+            UserDialog.DataContext = new UserInfoContentDialogViewModel(PopupUserId);
             UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
             UserDialog.ContentTemplate = this.Resources["UserInfoDialogContentTemplate"] as DataTemplate;
 
@@ -280,7 +280,7 @@ namespace Hipda.Client.Uwp.Pro
             }
 
             FindName("UserDialog");
-            UserDialog.DataContext = new UserMessageDialogViewModel(PopupUserId);
+            UserDialog.DataContext = new UserMessageContentDialogViewModel(PopupUserId);
             UserDialog.Title = string.Format("与 {0} 聊天", PopupUsername);
             UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
 
@@ -296,7 +296,7 @@ namespace Hipda.Client.Uwp.Pro
             UserMessageBox umb = sender as UserMessageBox;
             TextBox tb = umb.FindName("UserMessageTextBox") as TextBox;
             var msg = tb.Text.Trim();
-            var vm = umb.DataContext as UserMessageDialogViewModel;
+            var vm = umb.DataContext as UserMessageContentDialogViewModel;
             bool isOk = await vm.PostUserMessage(msg, umb.UserId);
             tb.Text = string.Empty;
 
@@ -335,7 +335,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             FindName("UserDialog");
 
-            var vm = new UserMessageListDialogViewModel();
+            var vm = new UserMessageListContentDialogViewModel();
             if (vm == null)
             {
                 return;

@@ -1,29 +1,14 @@
-﻿using Hipda.Client.Uwp.Pro.Controls;
-using Hipda.Client.Uwp.Pro.Models;
+﻿using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using Windows.System;
-using Windows.UI;
 using Windows.UI.Core;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-
-// “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
 namespace Hipda.Client.Uwp.Pro.Views
 {
@@ -135,45 +120,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                 });
             }
-        }
-
-        private async void ReplyListViewScroll(int index)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                //switch (_threadDataType)
-                //{
-                //    case ThreadDataType.SearchFullText:
-                //        var itemForSearchFullText = _lastSelectedItem as ThreadItemForSearchFullTextViewModel;
-                //        int countForSearchFullText = ReplyListView.Items.Count;
-
-                //        if (countForSearchFullText > 0 && countForSearchFullText <= index + 1)
-                //        {
-                //            ReplyListView.ScrollIntoView(ReplyListView.Items[countForSearchFullText - 1], ScrollIntoViewAlignment.Leading);
-                //        }
-
-                //        if (countForSearchFullText > index + 1 && itemForSearchFullText.GetScrollState() == false)
-                //        {
-                //            ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
-                //            itemForSearchFullText.SetScrollState(true);
-                //        }
-                //        break;
-                //    default:
-                //        var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsViewModel;
-                //        int countForMyPosts = ReplyListView.Items.Count;
-
-                //        if (countForMyPosts > 0 && countForMyPosts <= index + 1)
-                //        {
-                //            ReplyListView.ScrollIntoView(ReplyListView.Items[countForMyPosts - 1], ScrollIntoViewAlignment.Leading);
-                //        }
-
-                //        if (countForMyPosts > index + 1 && itemForMyPosts.GetScrollState() == false)
-                //        {
-                //            ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
-                //            itemForMyPosts.SetScrollState(true);
-                //        }
-                //        break;
-                //}
-            });
         }
 
         private async void ReplyListViewScrollForSpecifiedPost(int index)

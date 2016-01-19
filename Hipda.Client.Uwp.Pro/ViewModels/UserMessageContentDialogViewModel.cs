@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class UserMessageDialogViewModel : NotificationObject
+    public class UserMessageContentDialogViewModel : NotificationObject
     {
         int limitCount = 3;
 
@@ -66,7 +66,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public UserMessageDialogViewModel(int userId)
+        public UserMessageContentDialogViewModel(int userId)
         {
             _ds = new DataService();
             _userId = userId;

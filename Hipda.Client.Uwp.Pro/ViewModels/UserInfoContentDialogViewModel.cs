@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Markup;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class UserInfoDialogViewModel : NotificationObject
+    public class UserInfoContentDialogViewModel : NotificationObject
     {
         DataService _ds;
 
@@ -64,7 +64,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public UserInfoDialogViewModel(int userId)
+        public UserInfoContentDialogViewModel(int userId)
         {
             _ds = new DataService();
             _userId = userId;
