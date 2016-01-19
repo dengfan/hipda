@@ -16,38 +16,24 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     {
         ListView _leftListView;
         CommandBar _leftCommandBar;
-        Action _beforeLoad;
-        Action _afterLoad;
-        Action _noDataNotice;
         DataService _ds;
-
-        public int ThreadMaxPageNo { get; set; }
 
         public ThreadListViewForNoticeViewModel(ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
             _leftListView.ItemsSource = null;
-            _leftListView.ItemTemplateSelector = App.Current.Resources["threadListItemTemplateSelector"] as DataTemplateSelector;
-            _leftListView.ItemContainerStyle = App.Current.Resources["ThreadItemContainerStyle"] as Style;
+            _leftListView.ItemTemplateSelector = App.Current.Resources["noticeListItemTemplateSelector"] as DataTemplateSelector;
+            _leftListView.ItemContainerStyle = App.Current.Resources["NoticeItemContainerStyle"] as Style;
 
             _leftCommandBar = leftCommandBar;
             _leftCommandBar.Visibility = Visibility.Visible;
             _leftCommandBar.PrimaryCommands.Clear();
             _leftCommandBar.SecondaryCommands.Clear();
 
-            _beforeLoad = beforeLoad;
-            _afterLoad = afterLoad;
-            _noDataNotice = noDataNotice;
             _ds = new DataService();
 
-            _leftListView.ItemTemplateSelector = App.Current.Resources["noticeListItemTemplateSelector"] as DataTemplateSelector;
-            _leftListView.ItemContainerStyle = App.Current.Resources["NoticeItemContainerStyle"] as Style;
-
-            var vm = new NoticePageViewModel();
-            var b = new Binding { Source = vm, Path = new PropertyPath("NoticeData") };
-            _leftListView.DataContext = vm;
-            _leftListView.SetBinding(ListView.ItemsSourceProperty, b);
+            LoadData();
 
             var btnRefreshForNotice = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
             btnRefreshForNotice.Tapped += (s, e) => {
@@ -55,6 +41,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             };
 
             _leftCommandBar.PrimaryCommands.Add(btnRefreshForNotice);
+        }
+
+        async void LoadData()
+        {
+            var data = await _ds.GetNoticeData();
+            if (data != null)
+            {
+                _leftListView.ItemsSource = data;
+            }
         }
     }
 }
