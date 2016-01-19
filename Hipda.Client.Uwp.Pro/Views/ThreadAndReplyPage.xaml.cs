@@ -228,21 +228,20 @@ namespace Hipda.Client.Uwp.Pro.Views
                 else if (param.StartsWith("item="))
                 {
                     string threadType = param.Substring("item=".Length);
-                    if (threadType.Equals("threads"))
+                    switch (threadType)
                     {
-                        LeftWrap.DataContext = new ThreadListViewForMyThreadsViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
-                    }
-                    else if (threadType.Equals("posts"))
-                    {
-                        LeftWrap.DataContext = new ThreadListViewForMyPostsViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
-                    }
-                    else if (threadType.Equals("favorites"))
-                    {
-                        LeftWrap.DataContext = new ThreadListViewForMyFavoritesViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
-                    }
-                    else if (threadType.Equals("notice"))
-                    {
-                        LeftWrap.DataContext = new ThreadListViewForNoticeViewModel(LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                        case "threads":
+                            LeftWrap.DataContext = new ThreadListViewForMyThreadsViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                            break;
+                        case "posts":
+                            LeftWrap.DataContext = new ThreadListViewForMyPostsViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                            break;
+                        case "favorites":
+                            LeftWrap.DataContext = new ThreadListViewForMyFavoritesViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                            break;
+                        case "notice":
+                            LeftWrap.DataContext = new ThreadListViewForNoticeViewModel(LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                            break;
                     }
                 }
                 else if (param.StartsWith("search="))
@@ -361,7 +360,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     }
                     else
                     {
-                        OpenReplyPageByThreadId(itemForMyPosts.ThreadId);
+                        OpenReplyPageByThreadId(itemForMyPosts.PostId, itemForMyPosts.ThreadId);
                     }
                     break;
                 case ThreadDataType.MyFavorites:
