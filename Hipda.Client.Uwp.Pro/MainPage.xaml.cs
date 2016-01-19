@@ -280,7 +280,7 @@ namespace Hipda.Client.Uwp.Pro
             }
 
             FindName("UserDialog");
-            UserDialog.DataContext = new ContentDialogUserMessageViewModel(PopupUserId);
+            UserDialog.DataContext = new ContentDialogForUserMessageViewModel(PopupUserId);
             UserDialog.Title = string.Format("与 {0} 聊天", PopupUsername);
             UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
 
@@ -296,7 +296,7 @@ namespace Hipda.Client.Uwp.Pro
             UserMessageBox umb = sender as UserMessageBox;
             TextBox tb = umb.FindName("UserMessageTextBox") as TextBox;
             var msg = tb.Text.Trim();
-            var vm = umb.DataContext as ContentDialogUserMessageViewModel;
+            var vm = umb.DataContext as ContentDialogForUserMessageViewModel;
             bool isOk = await vm.PostUserMessage(msg, umb.UserId);
             tb.Text = string.Empty;
 
@@ -314,7 +314,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             FindName("UserDialog");
 
-            var vm = new PostDetailDialogViewModel(postId, threadId);
+            var vm = new ContentDialogForPostDetailViewModel(postId, threadId);
             if (vm == null)
             {
                 return;
@@ -335,7 +335,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             FindName("UserDialog");
 
-            var vm = new ContentDialogUserMessageHubViewModel();
+            var vm = new ContentDialogForUserMessageHubViewModel();
             if (vm == null)
             {
                 return;
