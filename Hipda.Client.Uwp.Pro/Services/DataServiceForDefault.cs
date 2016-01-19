@@ -16,13 +16,13 @@ namespace Hipda.Client.Uwp.Pro.Services
     {
         static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
-        static int _threadPageSize = 75;
-        int _threadMaxPageNo = 1;
+        static int _pageSize = 75;
+        int _maxPageNo = 1;
 
         async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
             int count = _threadData.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
-            if (count == _threadPageSize)
+            if (count == _pageSize)
             {
                 return;
             }
@@ -57,15 +57,15 @@ namespace Hipda.Client.Uwp.Pro.Services
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("class", "").Equals("datatable"));
             if (dataTable == null)
             {
-                _threadMaxPageNo = -1; // 找不到目标数据，一般为得到的是提示登录的页面的HTML，故在此将最大页标记为-1，以便增量加载不再继续
+                _maxPageNo = -1; // 找不到目标数据，一般为得到的是提示登录的页面的HTML，故在此将最大页标记为-1，以便增量加载不再继续
                 return;
             }
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("pages"));
-            _threadMaxPageNo = DataService.GetMaxPageNo(pagesNode);
+            _maxPageNo = DataService.GetMaxPageNo(pagesNode);
 
-            if (pageNo > _threadMaxPageNo)
+            if (pageNo > _maxPageNo)
             {
                 return;
             }
@@ -197,7 +197,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public int GetThreadMaxPageNo()
         {
-            return _threadMaxPageNo;
+            return _maxPageNo;
         }
 
         public void ClearThreadData(int forumId)

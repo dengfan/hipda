@@ -16,13 +16,13 @@ namespace Hipda.Client.Uwp.Pro.Services
     {
         static List<ThreadItemForMyFavoritesModel> _threadDataForMyFavorites = new List<ThreadItemForMyFavoritesModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
-        static int _threadPageSize = 75;
-        int _threadMaxPageNoForMyFavorites = 1;
+        static int _pageSize = 75;
+        int _maxPageNo = 1;
 
         async Task LoadThreadDataForMyFavoritesAsync(int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForMyFavorites.Count(t => t.PageNo == pageNo);
-            if (count == _threadPageSize)
+            if (count == _pageSize)
             {
                 return;
             }
@@ -54,9 +54,9 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            _threadMaxPageNoForMyFavorites = DataService.GetMaxPageNo(pagesNode);
+            _maxPageNo = DataService.GetMaxPageNo(pagesNode);
 
-            if (pageNo > _threadMaxPageNoForMyFavorites)
+            if (pageNo > _maxPageNo)
             {
                 return;
             }
@@ -147,7 +147,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public int GetThreadMaxPageNoForMyFavorites()
         {
-            return _threadMaxPageNoForMyFavorites;
+            return _maxPageNo;
         }
 
         public void ClearThreadDataForMyFavorites()

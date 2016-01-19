@@ -1,5 +1,6 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.ViewModels;
+using Hipda.Http;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,17 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public partial class DataService
+    public class DataServiceForMyPosts
     {
         static List<ThreadItemForMyPostsModel> _threadDataForMyPosts = new List<ThreadItemForMyPostsModel>();
-        int _threadMaxPageNoForMyPosts = 1;
+        static HttpHandle _httpClient = HttpHandle.GetInstance();
+        static int _pageSize = 75;
+        int _maxPageNo = 1;
 
         async Task LoadThreadDataForMyPostsAsync(int pageNo, CancellationTokenSource cts)
         {
             int count = _threadDataForMyPosts.Count(t => t.PageNo == pageNo);
-            if (count == _threadPageSize)
+            if (count == _pageSize)
             {
                 return;
             }
@@ -40,7 +43,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 最先读取提醒数据
             var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
-            GetPromptData(promptContentNode);
+            DataService.GetPromptData(promptContentNode);
 
             // 读取主内容
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
@@ -51,9 +54,9 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            _threadMaxPageNoForMyPosts = GetMaxPageNo(pagesNode);
+            _maxPageNo = DataService.GetMaxPageNo(pagesNode);
 
-            if (pageNo > _threadMaxPageNoForMyPosts)
+            if (pageNo > _maxPageNo)
             {
                 return;
             }
@@ -65,7 +68,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             int i = _threadDataForMyPosts.Count;
-            for (int j = 0; j < _threadPageSize * 2; j += 2)
+            for (int j = 0; j < _pageSize * 2; j += 2)
             {
                 var tr = rows[j];
                 var tr2 = rows[j + 1];
@@ -140,7 +143,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public int GetThreadMaxPageNoForMyPosts()
         {
-            return _threadMaxPageNoForMyPosts;
+            return _maxPageNo;
         }
 
         public void ClearThreadDataForMyPosts()
