@@ -17,6 +17,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     /// <summary>
     /// 查看指定的POST之回复列表之视图模型
+    /// 根据 post id 及 thread id 加载
     /// </summary>
     public class ReplyListViewForSpecifiedPostViewModel : NotificationObject
     {

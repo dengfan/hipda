@@ -116,7 +116,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             ReplyRefreshButton2.IsEnabled = true;
             rightFooter.Visibility = Visibility.Visible;
 
-            _threadAndReplyViewModel.AddToReadHistory(threadId);
+            //_threadAndReplyViewModel.AddToReadHistory(threadId);
 
             // 如果加载到了第一页，则移除回复列表页的“加载上一页”的按钮，无论其有没有显示
             if (pageNo == 1)
@@ -124,12 +124,12 @@ namespace Hipda.Client.Uwp.Pro.Views
                 ReplyListView.HeaderTemplate = null;
             }
 
-            bool isShown = _threadAndReplyViewModel.CheckIsShowButtonForLoadPrevReplyPage(threadId);
-            if (isShown && Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop"))
-            {
-                // 只在桌面环境及最小页码不是1才显示此按钮
-                ReplyListView.HeaderTemplate = Resources["ReplyListViewHeaderTemplate"] as DataTemplate;
-            }
+            //bool isShown = _threadAndReplyViewModel.CheckIsShowButtonForLoadPrevReplyPage(threadId);
+            //if (isShown && Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop"))
+            //{
+            //    // 只在桌面环境及最小页码不是1才显示此按钮
+            //    ReplyListView.HeaderTemplate = Resources["ReplyListViewHeaderTemplate"] as DataTemplate;
+            //}
 
             // 最宽屏模式下，自动滚到最底部
             if (RightSideColumn.ActualWidth > 0)
@@ -204,19 +204,17 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
-        #region 公开的方法，可用URI SCHEME方法调用
+        #region 公开的方法，可用协议调用
         public void OpenReplyPageByThreadId(int threadId)
         {
             var cts = new CancellationTokenSource();
-            var vm = new ReplyListViewViewModel(cts, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-            RightWrap.DataContext = vm;
+            RightWrap.DataContext = new ReplyListViewViewModel(cts, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
         }
 
         public void OpenReplyPageByThreadId(int postId, int threadId)
         {
             var cts = new CancellationTokenSource();
-            var vm = new ReplyListViewForSpecifiedPostViewModel(cts, postId, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
-            RightWrap.DataContext = vm;
+            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, postId, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
         }
         #endregion
 
@@ -233,8 +231,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                 {
                     _threadDataType = ThreadDataType.Default;
                     int fid = Convert.ToInt32(param.Substring("fid=".Length));
-                    _threadAndReplyViewModel = new ThreadAndReplyPageViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
-                    DataContext = _threadAndReplyViewModel;
+                    //_threadAndReplyViewModel = new ThreadAndReplyPageViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    RightWrap.DataContext = new ThreadListViewViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                 }
                 else if (param.StartsWith("item="))
                 {
@@ -358,7 +356,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             EntranceNavigationTransitionInfo.SetIsTargetElement(LeftListView, isNarrow);
         }
 
-        private async void LeftListView_ItemClick(object sender, ItemClickEventArgs e) 
+        private void LeftListView_ItemClick(object sender, ItemClickEventArgs e) 
         {
             // 如果进入了选择模式，则不打开主题
             if (LeftListView.SelectionMode == ListViewSelectionMode.Multiple)
@@ -366,108 +364,105 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
-            var selectedItem = e.ClickedItem;
-            switch (_threadDataType)
+            var selectedItem = (ThreadItemModelBase)e.ClickedItem;
+            switch (selectedItem.ThreadType)
             {
-                case ThreadDataType.MyThreads:
-                    var itemForMyThreads = (ThreadItemForMyThreadsViewModel)selectedItem;
-                    itemForMyThreads.SetRead();
-                    _lastSelectedItem = itemForMyThreads;
+                //case ThreadDataType.MyThreads:
+                //    var itemForMyThreads = (ThreadItemForMyThreadsViewModel)selectedItem;
+                //    itemForMyThreads.SetRead();
+                //    _lastSelectedItem = itemForMyThreads;
 
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = string.Format("{0},{1}", itemForMyThreads.ThreadItem.ThreadId, AccountService.UserId);
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        itemForMyThreads.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
-                        RightWrap.DataContext = itemForMyThreads;
-                    }
-                    break;
-                case ThreadDataType.MyPosts:
-                    var itemForMyPosts = (ThreadItemForMyPostsViewModel)selectedItem;
-                    itemForMyPosts.SetRead();
+                //    if (AdaptiveStates.CurrentState == NarrowState)
+                //    {
+                //        string p = string.Format("{0},{1}", itemForMyThreads.ThreadItem.ThreadId, AccountService.UserId);
+                //        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                //    }
+                //    else
+                //    {
+                //        itemForMyThreads.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+                //        RightWrap.DataContext = itemForMyThreads;
+                //    }
+                //    break;
+                //case ThreadDataType.MyPosts:
+                //    var itemForMyPosts = (ThreadItemForMyPostsViewModel)selectedItem;
+                //    itemForMyPosts.SetRead();
 
-                    _lastSelectedItem = itemForMyPosts;
+                //    _lastSelectedItem = itemForMyPosts;
 
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, 0);
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        await itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
-                        RightWrap.DataContext = itemForMyPosts;
-                    }
-                    break;
-                case ThreadDataType.MyFavorites:
-                    var itemForMyFavorites = (ThreadItemForMyFavoritesViewModel)selectedItem;
-                    itemForMyFavorites.SetRead();
+                //    if (AdaptiveStates.CurrentState == NarrowState)
+                //    {
+                //        string p = string.Format("{0},{1}", itemForMyPosts.ThreadItem.ThreadId, 0);
+                //        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                //    }
+                //    else
+                //    {
+                //        await itemForMyPosts.SelectThreadItem(ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
+                //        RightWrap.DataContext = itemForMyPosts;
+                //    }
+                //    break;
+                //case ThreadDataType.MyFavorites:
+                //    var itemForMyFavorites = (ThreadItemForMyFavoritesViewModel)selectedItem;
+                //    itemForMyFavorites.SetRead();
 
-                    _lastSelectedItem = itemForMyFavorites;
+                //    _lastSelectedItem = itemForMyFavorites;
 
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = string.Format("{0},{1}", itemForMyFavorites.ThreadItem.ThreadId, 0);
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        itemForMyFavorites.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
-                        RightWrap.DataContext = itemForMyFavorites;
-                    }
-                    break;
-                case ThreadDataType.SearchTitle:
-                    var itemForSearchTitle = (ThreadItemForSearchTitleViewModel)selectedItem;
-                    itemForSearchTitle.SetRead();
+                //    if (AdaptiveStates.CurrentState == NarrowState)
+                //    {
+                //        string p = string.Format("{0},{1}", itemForMyFavorites.ThreadItem.ThreadId, 0);
+                //        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                //    }
+                //    else
+                //    {
+                //        itemForMyFavorites.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
+                //        RightWrap.DataContext = itemForMyFavorites;
+                //    }
+                //    break;
+                //case ThreadDataType.SearchTitle:
+                //    var itemForSearchTitle = (ThreadItemForSearchTitleViewModel)selectedItem;
+                //    itemForSearchTitle.SetRead();
 
-                    _lastSelectedItem = itemForSearchTitle;
+                //    _lastSelectedItem = itemForSearchTitle;
 
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = string.Format("{0},{1}", itemForSearchTitle.ThreadItem.ThreadId, 0);
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        itemForSearchTitle.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
-                        RightWrap.DataContext = itemForSearchTitle;
-                    }
-                    break;
-                case ThreadDataType.SearchFullText:
-                    var itemForSearchFullText = (ThreadItemForSearchFullTextViewModel)selectedItem;
-                    itemForSearchFullText.SetRead();
+                //    if (AdaptiveStates.CurrentState == NarrowState)
+                //    {
+                //        string p = string.Format("{0},{1}", itemForSearchTitle.ThreadItem.ThreadId, 0);
+                //        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                //    }
+                //    else
+                //    {
+                //        itemForSearchTitle.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
+                //        RightWrap.DataContext = itemForSearchTitle;
+                //    }
+                //    break;
+                //case ThreadDataType.SearchFullText:
+                //    var itemForSearchFullText = (ThreadItemForSearchFullTextViewModel)selectedItem;
+                //    itemForSearchFullText.SetRead();
 
-                    _lastSelectedItem = itemForSearchFullText;
+                //    _lastSelectedItem = itemForSearchFullText;
 
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = string.Format("{0},{1}", itemForSearchFullText.ThreadItem.ThreadId, 0);
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        await itemForSearchFullText.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
-                        RightWrap.DataContext = itemForSearchFullText;
-                    }
-                    break;
+                //    if (AdaptiveStates.CurrentState == NarrowState)
+                //    {
+                //        string p = string.Format("{0},{1}", itemForSearchFullText.ThreadItem.ThreadId, 0);
+                //        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                //    }
+                //    else
+                //    {
+                //        await itemForSearchFullText.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScroll);
+                //        RightWrap.DataContext = itemForSearchFullText;
+                //    }
+                //    break;
                 default:
-                    var item = (ThreadItemViewModel)selectedItem;
-                    item.SetRead();
-                    _lastSelectedItem = item;
+                    var item = (ThreadItemModel)selectedItem;
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        
-                        string p = string.Format("{0},{1}", item.ThreadItem.ThreadId, item.ThreadItem.AuthorUserId);
+                        string p = string.Format("{0},{1}", item.ThreadId, item.AuthorUserId);
                         Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
                     {
-                        item.SelectThreadItem(ReplyListView, PostReplyTextBox, RightBeforeLoaded, RightAfterLoaded);
-                        RightWrap.DataContext = item;
+                        var cts = new CancellationTokenSource();
+                        RightWrap.DataContext = new ReplyListViewViewModel(cts, item.ThreadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
                     }
                     break;
             }

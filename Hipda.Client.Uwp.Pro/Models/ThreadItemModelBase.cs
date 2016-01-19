@@ -11,6 +11,8 @@ namespace Hipda.Client.Uwp.Pro.Models
     /// </summary>
     public class ThreadItemModelBase
     {
+        public ThreadDataType ThreadType { get; set; }
+
         public int ThreadId { get; set; }
 
         public string Title { get; set; }

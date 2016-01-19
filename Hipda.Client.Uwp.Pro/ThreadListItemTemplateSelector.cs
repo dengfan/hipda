@@ -1,4 +1,5 @@
-﻿using Hipda.Client.Uwp.Pro.ViewModels;
+﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,8 @@ namespace Hipda.Client.Uwp.Pro
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
-            ThreadItemViewModelBase b = (ThreadItemViewModelBase)item;
-            switch (b.ThreadDataType)
+            var data = (ThreadItemModelBase)item;
+            switch (data.ThreadType)
             {
                 case ThreadDataType.MyThreads:
                     return ThreadListMyThreadsItemTemplate;

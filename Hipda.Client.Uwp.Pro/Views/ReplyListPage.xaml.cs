@@ -1,5 +1,6 @@
 ﻿using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
+using System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -15,7 +16,7 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ReplyListPage : Page
     {
-        ReplyListPageViewModel _replyViewModel;
+        ReplyListViewViewModel _replyViewModel;
         int _threadId;
         int _threadAuthorUserId;
 
@@ -124,7 +125,8 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 FindName("RightWrap");
 
-                _replyViewModel = new ReplyListPageViewModel(1, _threadId, _threadAuthorUserId, ReplyListView, BeforeLoaded, AfterLoaded);
+                var cts = new CancellationTokenSource();
+                _replyViewModel = new ReplyListViewViewModel(cts, _threadId, _threadAuthorUserId, ReplyListView, BeforeLoaded, AfterLoaded);
                 DataContext = _replyViewModel;
             }
 

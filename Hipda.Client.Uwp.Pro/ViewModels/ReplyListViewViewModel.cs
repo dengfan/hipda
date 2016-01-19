@@ -17,6 +17,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     /// <summary>
     /// 回复列表之视图模型
+    /// 根据 thread id 加载
     /// </summary>
     public class ReplyListViewViewModel : NotificationObject
     {
@@ -90,6 +91,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public void SetScrollState(bool isCompleted)
         {
             _ds.SetScrollState(isCompleted);
+        }
+
+        public void RefreshReplyDataFromPrevPage()
+        {
+            if (_startPageNo > 1)
+            {
+                _ds.ClearReplyData(_threadId);
+                LoadData(_startPageNo - 1);
+            }
         }
     }
 }

@@ -120,6 +120,7 @@
     <Compile Include="Models\NavButtonItemModel.cs" />
     <Compile Include="Models\NoticeItemModel.cs" />
     <Compile Include="Models\OpenNewViewParameterModel.cs" />
+    <Compile Include="Models\ThreadDataType.cs" />
     <Compile Include="Models\ThreadItemForMyFavoritesModel.cs" />
     <Compile Include="Models\ThreadItemForSearchFullTextModel.cs" />
     <Compile Include="Models\UserMessageDataModel.cs" />
@@ -160,7 +161,6 @@
     <Compile Include="ViewModels\NoticePageViewModel.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\PostDetailDialogViewModel.cs" />
-    <Compile Include="ViewModels\ReplyListPageViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewViewModel.cs" />
     <Compile Include="ViewModels\ThreadAndReplyPageViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyFavoritesViewModel.cs" />
@@ -171,6 +171,7 @@
     <Compile Include="ViewModels\ThreadItemForMyPostsViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemForMyThreadsViewModel.cs" />
     <Compile Include="ViewModels\ThreadItemViewModelBase.cs" />
+    <Compile Include="ViewModels\ThreadListViewViewModel.cs" />
     <Compile Include="ViewModels\UserInfoDialogViewModel.cs" />
     <Compile Include="ViewModels\UserMessageDialogViewModel.cs" />
     <Compile Include="ViewModels\UserMessageListDialogViewModel.cs" />

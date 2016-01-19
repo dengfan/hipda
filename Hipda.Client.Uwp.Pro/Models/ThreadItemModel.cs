@@ -22,6 +22,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.LastReplyUsername = lastReplyUsername;
             this.LastReplyTime = lastReplyTime;
             this.IsMine = isMine;
+            this.ThreadType = ThreadDataType.Default;
         }
 
         public int Index { get; private set; }
