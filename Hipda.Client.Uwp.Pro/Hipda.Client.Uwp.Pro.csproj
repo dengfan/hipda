@@ -170,9 +170,9 @@
     <Compile Include="ViewModels\ThreadListViewForSearchFullTextViewModel.cs" />
     <Compile Include="ViewModels\ThreadListViewForSearchTitleViewModel.cs" />
     <Compile Include="ViewModels\ThreadListViewViewModel.cs" />
-    <Compile Include="ViewModels\UserInfoContentDialogViewModel.cs" />
-    <Compile Include="ViewModels\UserMessageContentDialogViewModel.cs" />
-    <Compile Include="ViewModels\UserMessageListContentDialogViewModel.cs" />
+    <Compile Include="ViewModels\ContentDialogForUserInfoViewModel.cs" />
+    <Compile Include="ViewModels\ContentDialogUserMessageViewModel.cs" />
+    <Compile Include="ViewModels\ContentDialogUserMessageSetViewModel.cs" />
     <Compile Include="Views\BlankPage1.xaml.cs">
       <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>
