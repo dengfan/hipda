@@ -21,13 +21,9 @@ using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public partial class DataService
+    public class DataService
     {
-        int _threadPageSize = 75;
-        int _replyPageSize = 50;
-        int _searchPageSize = 50;
-
-        HttpHandle _httpClient = HttpHandle.GetInstance();
+        static HttpHandle _httpClient = HttpHandle.GetInstance();
 
         #region page number
         public static int GetMaxPageNo(HtmlNode pagesNode)
