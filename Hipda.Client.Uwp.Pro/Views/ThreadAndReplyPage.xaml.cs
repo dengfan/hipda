@@ -18,37 +18,41 @@ namespace Hipda.Client.Uwp.Pro.Views
     public sealed partial class ThreadAndReplyPage : Page
     {
         ThreadItemModelBase _lastSelectedItem;
+        ThreadHistoryListViewViewModel _vmForThreadHistory = new ThreadHistoryListViewViewModel();
 
         public ThreadAndReplyPage()
         {
             this.InitializeComponent();
 
-            this.SizeChanged += (s, e) =>
+            RightSideWrap.DataContext = _vmForThreadHistory;
+
+            this.SizeChanged += ThreadAndReplyPage_SizeChanged;
+        }
+
+        private void ThreadAndReplyPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.SizeChanged -= ThreadAndReplyPage_SizeChanged;
+            string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
+            if (userInteractionType.Equals("Touch"))
             {
-                string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
-                if (userInteractionType.Equals("Touch"))
-                {
-                    FaceButton.Width = 80;
-                    FaceButton.Height = 40;
-                    FileButton.Width = 80;
-                    FileButton.Height = 40;
-                    SendButton.Width = 80;
-                    SendButton.Height = 40;
-                }
-                else if (userInteractionType.Equals("Mouse"))
-                {
-                    FaceButton.Width = 36;
-                    FaceButton.Height = 32;
-                    FileButton.Width = 36;
-                    FileButton.Height = 32;
-                    SendButton.Width = 80;
-                    SendButton.Height = 32;
-                }
+                FaceButton.Width = 80;
+                FaceButton.Height = 40;
+                FileButton.Width = 80;
+                FileButton.Height = 40;
+                SendButton.Width = 80;
+                SendButton.Height = 40;
+            }
+            else if (userInteractionType.Equals("Mouse"))
+            {
+                FaceButton.Width = 36;
+                FaceButton.Height = 32;
+                FileButton.Width = 36;
+                FileButton.Height = 32;
+                SendButton.Width = 80;
+                SendButton.Height = 32;
+            }
 
-                PostReplyTextBox.MaxHeight = this.ActualHeight / 2;
-            };
-
-            RightSideWrap.DataContext = new ThreadHistoryListViewViewModel();
+            PostReplyTextBox.MaxHeight = this.ActualHeight / 2;
         }
 
         #region 委托事件
