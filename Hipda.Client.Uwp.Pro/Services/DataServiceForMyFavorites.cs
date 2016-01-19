@@ -1,5 +1,6 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.ViewModels;
+using Hipda.Http;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,11 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public partial class DataService
+    public class DataServiceForMyFavorites
     {
         static List<ThreadItemForMyFavoritesModel> _threadDataForMyFavorites = new List<ThreadItemForMyFavoritesModel>();
+        static HttpHandle _httpClient = HttpHandle.GetInstance();
+        static int _threadPageSize = 75;
         int _threadMaxPageNoForMyFavorites = 1;
 
         async Task LoadThreadDataForMyFavoritesAsync(int pageNo, CancellationTokenSource cts)
@@ -40,7 +43,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 最先读取提醒数据
             var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
-            GetPromptData(promptContentNode);
+            DataService.GetPromptData(promptContentNode);
 
             // 读取主内容
             var dataTable = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("datatable"));
@@ -51,7 +54,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            _threadMaxPageNoForMyFavorites = GetMaxPageNo(pagesNode);
+            _threadMaxPageNoForMyFavorites = DataService.GetMaxPageNo(pagesNode);
 
             if (pageNo > _threadMaxPageNoForMyFavorites)
             {
