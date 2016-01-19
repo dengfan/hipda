@@ -47,11 +47,8 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                 PostReplyTextBox.MaxHeight = this.ActualHeight / 2;
             };
-        }
 
-        private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
-        {
-            
+            RightSideWrap.DataContext = new ThreadHistoryListViewViewModel();
         }
 
         #region 委托事件
@@ -113,10 +110,10 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (RightSideColumn.ActualWidth > 0)
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                    int count = ReadListView.Items.Count;
+                    int count = ThreadHistoryListView.Items.Count;
                     if (count > 0)
                     {
-                        ReadListView.ScrollIntoView(ReadListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                        ThreadHistoryListView.ScrollIntoView(ThreadHistoryListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
                     }
                 });
             }

@@ -36,7 +36,7 @@
         
     </Page.Resources>
 
-    <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">
+    <Grid x:Name="LayoutRoot">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">
                 <VisualState>
@@ -253,7 +253,7 @@
                     <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
                 </CommandBar>
 
-                <ListView x:Name="ReadListView" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="Single" ShowsScrollingPlaceholders="False"
+                <ListView x:Name="ThreadHistoryListView" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="Single" ShowsScrollingPlaceholders="False"
                       ItemsSource="{Binding ReadData}" ItemClick="ReadListView_ItemClick">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">

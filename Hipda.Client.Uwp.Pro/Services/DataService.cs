@@ -55,7 +55,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region thread
-        public static ObservableCollection<ThreadItemModelBase> ReadHistoryData = new ObservableCollection<ThreadItemModelBase>();
+        public static ObservableCollection<ThreadItemModelBase> ThreadHistoryData = new ObservableCollection<ThreadItemModelBase>();
 
         Style GetReadStatusStyle(int threadId)
         {
@@ -65,7 +65,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public bool IsRead(int threadId)
         {
-            return ReadHistoryData.Count(h => h.ThreadId == threadId) > 0;
+            return ThreadHistoryData.Count(h => h.ThreadId == threadId) > 0;
         }
 
         public string GetThreadTitleFromReplyData(int threadId)

@@ -163,6 +163,7 @@
     <Compile Include="ViewModels\PostDetailDialogViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForSpecifiedPostViewModel.cs" />
+    <Compile Include="ViewModels\ThreadHistoryListViewViewModel.cs" />
     <Compile Include="ViewModels\ThreadListViewForMyFavoritesViewModel.cs" />
     <Compile Include="ViewModels\ThreadListViewForMyPostsViewModel.cs" />
     <Compile Include="ViewModels\ThreadListViewForMyThreadsViewModel.cs" />
