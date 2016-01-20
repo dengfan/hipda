@@ -530,7 +530,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _isScrollCompleted;
         }
 
-        public bool CanShowButtonForLoadPrevReplyPage(int threadId)
+        public static bool CanShowButtonForLoadPrevReplyPage(int threadId)
         {
             var data = _replyData.FirstOrDefault(d => d.ThreadId == threadId);
             if (data != null && data.Replies != null && data.Replies.Count > 0)
