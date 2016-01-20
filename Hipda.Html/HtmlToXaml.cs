@@ -93,11 +93,11 @@ namespace Hipda.Html
                     string linkXaml = string.Empty;
                     if (linkContent.StartsWith("<img"))
                     {
-                        linkXaml = string.Format(@"[InlineUIContainer][local:MyRefLink2 PostId=""{0}"" ThreadId=""{1}""/][/InlineUIContainer]", postIdStr, threadIdStr);
+                        linkXaml = string.Format(@"[InlineUIContainer][c:MyRefLink2 PostId=""{0}"" ThreadId=""{1}""/][/InlineUIContainer]", postIdStr, threadIdStr);
                     }
                     else
                     {
-                        linkXaml = string.Format(@"[InlineUIContainer][local:MyRefLink1 PostId=""{0}"" ThreadId=""{1}"" LinkContent=""{2}""/][/InlineUIContainer]", postIdStr, threadIdStr, linkContent);
+                        linkXaml = string.Format(@"[InlineUIContainer][c:MyRefLink1 PostId=""{0}"" ThreadId=""{1}"" LinkContent=""{2}""/][/InlineUIContainer]", postIdStr, threadIdStr, linkContent);
                     }
 
                     htmlContent = htmlContent.Replace(placeHolder, linkXaml);
@@ -117,7 +117,7 @@ namespace Hipda.Html
                     string linkContent = m.Groups[2].Value;
                     linkContent = Regex.Replace(linkContent, @"<[^>]*>", string.Empty);
 
-                    string linkXaml = string.Format(@"[InlineUIContainer][local:MyLink ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent);
+                    string linkXaml = string.Format(@"[InlineUIContainer][c:MyLink ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent);
                     htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                 }
             }
@@ -215,7 +215,7 @@ namespace Hipda.Html
                     string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = @"[InlineUIContainer][local:MyImage FolderName=""{0}"" Url=""{1}""/][/InlineUIContainer]";
+                    string imgXaml = @"[InlineUIContainer][c:MyImage FolderName=""{0}"" Url=""{1}""/][/InlineUIContainer]";
                     imgXaml = string.Format(imgXaml, threadId, imgUrl);
 
                     htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
@@ -233,7 +233,7 @@ namespace Hipda.Html
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = @"[InlineUIContainer][local:MyImage FolderName=""{0}"" Url=""{1}""/][/InlineUIContainer]";
+                    string imgXaml = @"[InlineUIContainer][c:MyImage FolderName=""{0}"" Url=""{1}""/][/InlineUIContainer]";
                     imgXaml = string.Format(imgXaml, threadId, imgUrl);
 
                     htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
@@ -252,7 +252,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
 
-            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
@@ -334,7 +334,7 @@ namespace Hipda.Html
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = @"[InlineUIContainer][local:MyImage FolderName=""0"" Url=""{0}""/][/InlineUIContainer]";
+                    string imgXaml = @"[InlineUIContainer][c:MyImage FolderName=""0"" Url=""{0}""/][/InlineUIContainer]";
                     imgXaml = string.Format(imgXaml, imgUrl);
 
                     htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
@@ -353,7 +353,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
 
-            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
@@ -389,7 +389,7 @@ namespace Hipda.Html
                     string linkContent = m.Groups[2].Value;
                     linkContent = Regex.Replace(linkContent, @"<[^>]*>", string.Empty);
 
-                    string linkXaml = string.Format(@"[InlineUIContainer][local:MyLink ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent);
+                    string linkXaml = string.Format(@"[InlineUIContainer][c:MyLink ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent);
                     htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                 }
             }
@@ -427,7 +427,7 @@ namespace Hipda.Html
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = @"[InlineUIContainer][local:MyImage FolderName=""0"" Url=""{0}""/][/InlineUIContainer]";
+                    string imgXaml = @"[InlineUIContainer][c:MyImage FolderName=""0"" Url=""{0}""/][/InlineUIContainer]";
                     imgXaml = string.Format(imgXaml, imgUrl);
 
                     htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
@@ -446,7 +446,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
 
-            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:local=""using:Hipda.Client.Uwp.Pro""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 

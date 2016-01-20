@@ -38,7 +38,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return Common.GetAvatarUriByUserId(UserId);
+                return Common.GetMiddleAvatarUriByUserId(UserId);
             }
         }
 

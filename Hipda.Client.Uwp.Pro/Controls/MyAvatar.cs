@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 // The Templated Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234235
 
-namespace Hipda.Client.Uwp.Pro
+namespace Hipda.Client.Uwp.Pro.Controls
 {
     public sealed class MyAvatar : Control
     {
@@ -102,7 +102,7 @@ namespace Hipda.Client.Uwp.Pro
             if (instance._grid1 != null)
             {
                 BitmapImage bi = new BitmapImage();
-                bi.UriSource = Common.GetAvatarUriByUserId(userId);
+                bi.UriSource = Common.GetSmallAvatarUriByUserId(userId);
                 bi.DecodePixelWidth = 40;
                 ImageBrush ib = new ImageBrush();
                 ib.Stretch = Stretch.UniformToFill;

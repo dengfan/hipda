@@ -110,7 +110,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return Common.GetAvatarUriByUserId(AuthorUserId);
+                return Common.GetMiddleAvatarUriByUserId(AuthorUserId);
             }
         }
     }

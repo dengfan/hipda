@@ -131,11 +131,11 @@
     <Compile Include="Models\ThreadItemModel.cs" />
     <Compile Include="Models\ThreadItemForMyPostsModel.cs" />
     <Compile Include="Models\ThreadItemForMyThreadsModel.cs" />
-    <Compile Include="MyAvatar.cs" />
-    <Compile Include="MyImage.cs" />
-    <Compile Include="MyLink.cs" />
-    <Compile Include="MyRefLink1.cs" />
-    <Compile Include="MyRefLink2.cs" />
+    <Compile Include="Controls\MyAvatar.cs" />
+    <Compile Include="Controls\MyImage.cs" />
+    <Compile Include="Controls\MyLink.cs" />
+    <Compile Include="Controls\MyRefLink1.cs" />
+    <Compile Include="Controls\MyRefLink2.cs" />
     <Compile Include="NavButtonListItemTemplateSelector.cs" />
     <Compile Include="NoticeListItemTemplateSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -11,7 +11,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public static class Common
     {
-        public static Uri GetAvatarUriByUserId(int userId)
+        public static Uri GetMiddleAvatarUriByUserId(int userId)
         {
             var s = new int[10];
             for (int i = 0; i < s.Length - 1; ++i)
@@ -21,6 +21,30 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_middle.jpg");
+        }
+
+        public static Uri GetBigAvatarUriByUserId(int userId)
+        {
+            var s = new int[10];
+            for (int i = 0; i < s.Length - 1; ++i)
+            {
+                s[i] = userId % 10;
+                userId = (userId - s[i]) / 10;
+            }
+
+            return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_big.jpg");
+        }
+
+        public static Uri GetSmallAvatarUriByUserId(int userId)
+        {
+            var s = new int[10];
+            for (int i = 0; i < s.Length - 1; ++i)
+            {
+                s[i] = userId % 10;
+                userId = (userId - s[i]) / 10;
+            }
+
+            return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_small.jpg");
         }
 
         public static async void PostErrorEmailToDeveloper(string errorTitle, string errorDetails)

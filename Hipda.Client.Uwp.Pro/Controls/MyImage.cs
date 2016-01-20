@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Web.Http;
 
-namespace Hipda.Client.Uwp.Pro
+namespace Hipda.Client.Uwp.Pro.Controls
 {
     public sealed class MyImage : Control
     {
