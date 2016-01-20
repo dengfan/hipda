@@ -28,7 +28,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _beforeLoad;
         Action<int, int> _afterLoad;
         Action<int> _listViewScroll;
-        DataService _ds;
+        DataServiceForReply _ds;
 
         public DelegateCommand RefreshReplyCommand { get; set; }
 
@@ -55,7 +55,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _listViewScroll = listViewScroll;
-            _ds = new DataService();
+            _ds = new DataServiceForReply();
 
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) =>
@@ -87,7 +87,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 int index = data[1];
                 _threadId = data[2];
                 _ds.SetScrollState(false);
-                var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, 0, index, _beforeLoad, _afterLoad, _listViewScroll);
+                var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, index, _beforeLoad, _afterLoad, _listViewScroll);
                 if (cv != null)
                 {
                     ReplyItemCollection = cv;
@@ -98,7 +98,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, AccountService.UserId, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 _startPageNo = pageNo;

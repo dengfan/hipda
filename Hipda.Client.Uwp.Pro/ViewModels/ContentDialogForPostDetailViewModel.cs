@@ -11,7 +11,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ContentDialogForPostDetailViewModel : NotificationObject
     {
-        DataService _ds;
+        DataServiceForReply _ds;
         int _postId;
         int _threadId;
 
@@ -89,7 +89,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ContentDialogForPostDetailViewModel(int postId, int threadId)
         {
-            _ds = new DataService();
+            _ds = new DataServiceForReply();
             _postId = postId;
             _threadId = threadId;
 

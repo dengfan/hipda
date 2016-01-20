@@ -39,8 +39,8 @@ namespace Hipda.Client.Uwp.Pro.Models
         public int PostId { get; private set; }
         public int PageNo { get; private set; }
         public int ThreadId { get; private set; }
-        public string ThreadTitle { get; private set; }
-        public int ThreadAuthorUserId { get; private set; }
+        public string ThreadTitle { get; set; }
+        public int ThreadAuthorUserId { get; set; }
         public string AuthorUsername { get; private set; }
 
         public int AuthorUserId { get; private set; }

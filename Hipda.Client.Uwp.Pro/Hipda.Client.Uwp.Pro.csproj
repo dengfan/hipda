@@ -147,6 +147,7 @@
     <Compile Include="Services\DataServiceForMyFavorites.cs" />
     <Compile Include="Services\DataServiceForMyPosts.cs" />
     <Compile Include="Services\DataServiceForMyThreads.cs" />
+    <Compile Include="Services\DataServiceForReply.cs" />
     <Compile Include="Services\DataServiceForSearchFullText.cs" />
     <Compile Include="Services\DataServiceForSearchTitle.cs" />
     <Compile Include="Services\FaceService.cs" />

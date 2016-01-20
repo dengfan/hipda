@@ -26,7 +26,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         ListView _replyListView;
         Action _beforeLoad;
         Action<int, int> _afterLoad;
-        DataService _ds;
+        DataServiceForReply _ds;
 
         public DelegateCommand RefreshReplyCommand { get; set; }
 
@@ -51,7 +51,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
-            _ds = new DataService();
+            _ds = new DataServiceForReply();
 
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) =>
@@ -75,7 +75,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, 0, _beforeLoad, _afterLoad);
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 _startPageNo = pageNo;
