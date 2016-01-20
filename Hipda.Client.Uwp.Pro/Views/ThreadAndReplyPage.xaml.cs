@@ -15,13 +15,12 @@ namespace Hipda.Client.Uwp.Pro.Views
     public sealed partial class ThreadAndReplyPage : Page
     {
         ThreadItemModelBase _lastSelectedItem;
-        ThreadHistoryListViewViewModel _vmForThreadHistory = new ThreadHistoryListViewViewModel();
 
         public ThreadAndReplyPage()
         {
             this.InitializeComponent();
             this.SizeChanged += ThreadAndReplyPage_SizeChanged;
-            RightSideWrap.DataContext = _vmForThreadHistory;
+            RightSideWrap.DataContext = new ThreadHistoryListViewViewModel();
         }
 
         private void ThreadAndReplyPage_SizeChanged(object sender, SizeChangedEventArgs e)
