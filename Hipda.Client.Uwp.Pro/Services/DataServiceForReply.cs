@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
@@ -181,6 +182,12 @@ namespace Hipda.Client.Uwp.Pro.Services
                 threadReply.Replies.Add(reply);
 
                 i++;
+            }
+
+            if (!DataService.ThreadHistoryData.Any(t => t.ThreadId == threadId))
+            {
+                ApplicationView.GetForCurrentView().Title = threadTitle;
+                DataService.ThreadHistoryData.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle });
             }
         }
 

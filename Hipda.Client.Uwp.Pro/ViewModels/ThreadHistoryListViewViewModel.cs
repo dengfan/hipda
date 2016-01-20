@@ -29,16 +29,5 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 DataService.ThreadHistoryData.Clear();
             };
         }
-
-        public void Add(int threadId, string threadTitle)
-        {
-            var data = new ThreadItemModelBase
-            {
-                ThreadId = threadId,
-                Title = threadTitle
-            };
-
-            DataService.ThreadHistoryData.Add(data);
-        }
     }
 }

@@ -254,7 +254,7 @@
                 </CommandBar>
 
                 <ListView x:Name="ThreadHistoryListView" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="Single" ShowsScrollingPlaceholders="False"
-                      ItemsSource="{Binding ReadData}" ItemClick="ReadListView_ItemClick">
+                      ItemsSource="{Binding ThreadHistoryData}" ItemClick="ReadListView_ItemClick">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="Padding" Value="2,4,20,4"/>
