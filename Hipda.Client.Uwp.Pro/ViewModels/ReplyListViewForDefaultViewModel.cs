@@ -12,6 +12,7 @@ using System.Threading;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
 using Windows.UI.Xaml;
+using System.Collections.ObjectModel;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -19,7 +20,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     /// 回复列表之视图模型
     /// 根据 thread id 加载
     /// </summary>
-    public class ReplyListViewViewModel : NotificationObject
+    public class ReplyListViewForDefaultViewModel : NotificationObject
     {
         int _startPageNo = 1;
         int _threadId;
@@ -45,7 +46,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ReplyListViewViewModel(CancellationTokenSource cts, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
+        public ReplyListViewForDefaultViewModel(CancellationTokenSource cts, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
         {
             _threadId = threadId;
             _replyListView = replyListView;

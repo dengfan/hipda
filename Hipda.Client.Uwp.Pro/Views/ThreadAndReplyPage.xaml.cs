@@ -12,9 +12,6 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Hipda.Client.Uwp.Pro.Views
 {
-    /// <summary>
-    /// 可用于自身或导航至 Frame 内部的空白页。
-    /// </summary>
     public sealed partial class ThreadAndReplyPage : Page
     {
         ThreadItemModelBase _lastSelectedItem;
@@ -145,7 +142,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         public void OpenReplyPageByThreadId(int threadId)
         {
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewViewModel(cts, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
         }
 
         public void OpenReplyPageByThreadId(int postId, int threadId)
@@ -396,9 +393,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
-            if (RightWrap.DataContext.GetType().Equals(typeof(ReplyListViewViewModel)))
+            if (RightWrap.DataContext.GetType().Equals(typeof(ReplyListViewForDefaultViewModel)))
             {
-                var vm = RightWrap.DataContext as ReplyListViewViewModel;
+                var vm = RightWrap.DataContext as ReplyListViewForDefaultViewModel;
                 vm.LoadPrevPageData();
             }
             else if (RightWrap.DataContext.GetType().Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))

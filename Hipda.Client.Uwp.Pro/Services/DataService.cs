@@ -107,8 +107,6 @@ namespace Hipda.Client.Uwp.Pro.Services
         //}
         #endregion
 
-        
-
         #region user
         static Dictionary<int, string> _userInfoData = new Dictionary<int, string>();
 

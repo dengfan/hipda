@@ -16,7 +16,7 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ReplyListPage : Page
     {
-        ReplyListViewViewModel _replyViewModel;
+        ReplyListViewForDefaultViewModel _replyViewModel;
         int _threadId;
         int _threadAuthorUserId;
 
@@ -126,7 +126,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 FindName("RightWrap");
 
                 var cts = new CancellationTokenSource();
-                _replyViewModel = new ReplyListViewViewModel(cts, _threadId, _threadAuthorUserId, ReplyListView, BeforeLoaded, AfterLoaded);
+                _replyViewModel = new ReplyListViewForDefaultViewModel(cts, _threadId, _threadAuthorUserId, ReplyListView, BeforeLoaded, AfterLoaded);
                 DataContext = _replyViewModel;
             }
 
