@@ -169,7 +169,7 @@
     <Compile Include="ViewModels\ThreadListViewForNoticeViewModel.cs" />
     <Compile Include="ViewModels\ThreadListViewForSearchFullTextViewModel.cs" />
     <Compile Include="ViewModels\ThreadListViewForSearchTitleViewModel.cs" />
-    <Compile Include="ViewModels\ThreadListViewViewModel.cs" />
+    <Compile Include="ViewModels\ThreadListViewForDefaultViewModel.cs" />
     <Compile Include="ViewModels\ContentDialogForUserInfoViewModel.cs" />
     <Compile Include="ViewModels\ContentDialogForUserMessageViewModel.cs" />
     <Compile Include="ViewModels\ContentDialogForUserMessageHubViewModel.cs" />

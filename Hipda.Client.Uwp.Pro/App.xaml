@@ -372,7 +372,7 @@
 
                 <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow}"/>
 
-                <Border Margin="54,0,64,32" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Border Margin="54,0,16,32" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
@@ -415,7 +415,7 @@
 
                 <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow2}"/>
 
-                <Border Margin="54,0,64,32" Padding="8" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Border Margin="54,0,16,32" Padding="8" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="&#x1F451;" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
@@ -459,7 +459,7 @@
 
                 <ContentControl Margin="0 16 48 0" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource ReplyRightArrow}"/>
 
-                <Border Margin="64,0,54,32" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Border Margin="16,0,54,32" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />

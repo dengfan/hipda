@@ -167,7 +167,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
                     int fid = Convert.ToInt32(param.Substring("fid=".Length));
-                    LeftWrap.DataContext = new ThreadListViewViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    LeftWrap.DataContext = new ThreadListViewForDefaultViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                 }
                 else if (param.StartsWith("item="))
                 {
@@ -382,7 +382,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                         vmForMyFavorites.LoadPrevPageData();
                         break;
                     default:
-                        var vm = LeftWrap.DataContext as ThreadListViewViewModel;
+                        var vm = LeftWrap.DataContext as ThreadListViewForDefaultViewModel;
                         vm.LoadPrevPageData();
                         break;
                 }
