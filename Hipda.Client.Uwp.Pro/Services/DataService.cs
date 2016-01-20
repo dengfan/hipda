@@ -63,48 +63,6 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             return ThreadHistoryData.Count(h => h.ThreadId == threadId) > 0;
         }
-
-        //public string GetThreadTitleFromReplyData(int threadId)
-        //{
-        //    var replyData = _replyData.FirstOrDefault(r => r.ThreadId == threadId);
-        //    if (replyData != null)
-        //    {
-        //        var replyItem = replyData.Replies.FirstOrDefault(i => i.PageNo == 1 && i.Index == 0);
-        //        if (replyItem != null)
-        //        {
-        //            return replyItem.ThreadTitle;
-        //        }
-        //    }
-
-        //    return string.Empty;
-        //}
-
-        //public string GetThreadTitleFromThreadData(int threadId)
-        //{
-        //    var threadData = _threadData.FirstOrDefault(t => t.ThreadId == threadId);
-        //    if (threadData != null)
-        //    {
-        //        return threadData.Title;
-        //    }
-        //    else
-        //    {
-        //        var threadDataForMyPosts = _threadDataForMyPosts.FirstOrDefault(t => t.ThreadId == threadId);
-        //        if (threadDataForMyPosts != null)
-        //        {
-        //            return threadDataForMyPosts.Title;
-        //        }
-        //        else
-        //        {
-        //            var threadDataForMyThreads = _threadDataForMyThreads.FirstOrDefault(t => t.ThreadId == threadId);
-        //            if (threadDataForMyThreads != null)
-        //            {
-        //                return threadDataForMyThreads.Title;
-        //            }
-        //        }
-        //    }
-
-        //    return string.Empty;
-        //}
         #endregion
 
         #region user
