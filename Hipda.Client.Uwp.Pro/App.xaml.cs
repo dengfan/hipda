@@ -32,6 +32,7 @@ namespace Hipda.Client.Uwp.Pro
     sealed partial class App : Application
     {
         Frame _rootFrame;
+        bool _isLaunched = false;
 
         async void RegisterBackgroundTask()
         {
@@ -168,6 +169,8 @@ namespace Hipda.Client.Uwp.Pro
 
             await CreateRootFrame();
 
+            _isLaunched = true;
+
             //App.Current.Resources["ControlContentThemeFontSize"] = 15;
             //App.Current.Resources["ToolTipContentThemeFontSize"] = 12;
 
@@ -275,9 +278,16 @@ namespace Hipda.Client.Uwp.Pro
                         MainPage.PopupUserId = userId;
                         MainPage.PopupUsername = username;
                         var mainPage = _rootFrame.Content as MainPage;
-                        mainPage.Loaded += (s, e) => {
+                        if (_isLaunched)
+                        {
                             mainPage.OpenUserMessageDialog();
-                        };
+                        }
+                        else
+                        {
+                            mainPage.Loaded += (s, e) => {
+                                mainPage.OpenUserMessageDialog();
+                            };
+                        }
                     }
                 }
             }
