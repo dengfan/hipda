@@ -89,8 +89,8 @@ namespace Hipda.BackgroundTask
                 string _xml = "<toast>" +
                                 "<visual>" +
                                     "<binding template='ToastGeneric'>" +
-                                        "<text>对不起</text>" +
-                                        $"<text>“{simpleContent}”回复不成功！</text>" +
+                                        "<text>对不起，您两次发表间隔少于 30 秒，请不要灌水！</text>" +
+                                        $"<text>“ {simpleContent} ” 回复不成功！</text>" +
                                     "</binding>" +
                                 "</visual>" +
                                 "</toast>";
@@ -132,7 +132,7 @@ namespace Hipda.BackgroundTask
                                 "<visual>" +
                                     "<binding template='ToastGeneric'>" +
                                         "<text>对不起</text>" +
-                                        $"<text>“{simpleContent}”发送不成功！</text>" +
+                                        $"<text>“ {simpleContent} ” 发送不成功！</text>" +
                                     "</binding>" +
                                 "</visual>" +
                                 "</toast>";

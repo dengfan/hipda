@@ -48,61 +48,13 @@ namespace Hipda.BackgroundTask
         HttpHandle _httpClient = HttpHandle.GetInstance();
         string _formHash = string.Empty;
 
-        string _xmlForQuoteOrReply = @"<toast>" +
-                        "<visual>" +
-                            "<binding template='ToastGeneric'>" +
-                                "<text>{0}</text>" +
-                                "<text>引用或答复了您在《{1}》主题的贴子</text>" +
-                                "<image placement='appLogoOverride' src='{2}' hint-crop='circle'/>" +
-                                "<text>“ {3} ”</text>" +
-                            "</binding>" +
-                        "</visual>" +
-                        "<actions>" +
-                            "<input id='inputPost' type='text' placeHolderContent='输入回复内容' />" +
-                            "<action content='查看' arguments='view_post={4},{5}' />" +
-                            "<action content='回复' arguments='reply_post={5},{6},{7},{8}' activationType='background' />" +
-                        "</actions>" +
-                     "</toast>";
+        
 
-        string _xmlForThread = @"<toast>" +
-                        "<visual>" +
-                            "<binding template='ToastGeneric'>" +
-                                "<text>{0}</text>" +
-                                "<text>回复了您关注的主题《{1}》</text>" +
-                            "</binding>" +
-                        "</visual>" +
-                        "<actions>" +
-                            "<action content='查看' arguments='view_post={2},{3}' />" +
-                        "</actions>" +
-                     "</toast>";
+        
 
-        string _xmlForBuddy = @"<toast>" +
-                        "<visual>" +
-                            "<binding template='ToastGeneric'>" +
-                                "<text>{0}</text>" +
-                                "<text>添加您为好友</text>" +
-                                "<image placement='appLogoOverride' src='{1}' hint-crop='circle'/>" +
-                            "</binding>" +
-                        "</visual>" +
-                        "<actions>" +
-                            "<action content='加对方为好友' arguments='add_buddy={2},{3}' activationType='background' />" +
-                        "</actions>" +
-                     "</toast>";
+        
 
-        string _xmlForPm = @"<toast>" +
-                        "<visual>" +
-                            "<binding template='ToastGeneric'>" +
-                                "<text>{0}</text>" +
-                                "<text>发来私信 “ {1} ”</text>" +
-                                "<image placement='appLogoOverride' src='{2}' hint-crop='circle'/>" +
-                            "</binding>" +
-                        "</visual>" +
-                        "<actions>" +
-                            "<input id='inputPm' type='text' placeHolderContent='输入回复内容' />" +
-                            "<action content='查看' arguments='view_pm={3},{4}' />" +
-                            "<action content='回复' arguments='reply_pm={3}' activationType='background' />" +
-                        "</actions>" +
-                     "</toast>";
+        
 
         async Task UpdateNoticeToastAsync(CancellationTokenSource cts)
         {
@@ -185,6 +137,21 @@ namespace Hipda.BackgroundTask
                             string noticeauthor = $"q|{userId}|{username}";
                             string noticetrimstr = $"[quote]{actionText}\r\n[size=2][color=#999999]{username} 发表于 {actionTime}[/color] [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost__AND__pid={postId}__AND__ptid={threadId}][img]http://www.hi-pda.com/forum/images/common/back.gif[/img][/url][/size][/quote]\r\n\r\n    ";
                             string noticeauthormsg = actionText;
+                            string _xmlForQuoteOrReply = @"<toast>" +
+                                "<visual>" +
+                                    "<binding template='ToastGeneric'>" +
+                                        "<text>{0}</text>" +
+                                        "<text>引用或答复了您在《{1}》主题的贴子</text>" +
+                                        "<image placement='appLogoOverride' src='{2}' hint-crop='circle'/>" +
+                                        "<text>“ {3} ”</text>" +
+                                    "</binding>" +
+                                "</visual>" +
+                                "<actions>" +
+                                    "<input id='inputPost' type='text' placeHolderContent='输入回复内容' />" +
+                                    "<action content='查看' arguments='view_post={4},{5}' />" +
+                                    "<action content='回复' arguments='reply_post={5},{6},{7},{8}' activationType='background' />" +
+                                "</actions>" +
+                                "</toast>";
                             _xmlForQuoteOrReply = string.Format(_xmlForQuoteOrReply, username, threadTitle, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)), actionText, postId, threadId, noticeauthor, noticetrimstr, noticeauthormsg);
                             SendToast(_xmlForQuoteOrReply);
                         }
@@ -214,6 +181,17 @@ namespace Hipda.BackgroundTask
                             SaveNoticeToastTempData(1, actionTime);
 
                             // 发送
+                            string _xmlForThread = @"<toast>" +
+                                "<visual>" +
+                                    "<binding template='ToastGeneric'>" +
+                                        "<text>{0}</text>" +
+                                        "<text>回复了您关注的主题《{1}》</text>" +
+                                    "</binding>" +
+                                "</visual>" +
+                                "<actions>" +
+                                    "<action content='查看' arguments='view_post={2},{3}' />" +
+                                "</actions>" +
+                                "</toast>";
                             _xmlForThread = string.Format(_xmlForThread, username, threadTitle, postId, threadId);
                             SendToast(_xmlForThread);
                         }
@@ -231,6 +209,18 @@ namespace Hipda.BackgroundTask
                             SaveNoticeToastTempData(2, actionTime);
 
                             // 发送
+                            string _xmlForBuddy = @"<toast>" +
+                                "<visual>" +
+                                    "<binding template='ToastGeneric'>" +
+                                        "<text>{0}</text>" +
+                                        "<text>添加您为好友</text>" +
+                                        "<image placement='appLogoOverride' src='{1}' hint-crop='circle'/>" +
+                                    "</binding>" +
+                                "</visual>" +
+                                "<actions>" +
+                                    "<action content='加对方为好友' arguments='add_buddy={2},{3}' activationType='background' />" +
+                                "</actions>" +
+                                "</toast>";
                             _xmlForBuddy = string.Format(_xmlForBuddy, username, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)), userId, username);
                             SendToast(_xmlForBuddy);
                         }
@@ -282,15 +272,29 @@ namespace Hipda.BackgroundTask
                     string lastMessageTime = item.ChildNodes[3].ChildNodes[2].InnerText.Trim();
                     string lastMessageText = item.ChildNodes[5].InnerText.Trim();
 
-                    //var flag = CheckIsExistedForPmToastTempData(userId);
-                    //if (flag == false)
-                    //{
+                    var flag = CheckIsExistedForPmToastTempData(userId);
+                    if (flag == false)
+                    {
                         // 保存数据，以便打开APP时还原“NEW”状态
                         SavePmToastTempData(userId);
 
+                        string _xmlForPm = @"<toast>" +
+                            "<visual>" +
+                                "<binding template='ToastGeneric'>" +
+                                    "<text>{0}</text>" +
+                                    "<text>发来私信 “ {1} ”</text>" +
+                                    "<image placement='appLogoOverride' src='{2}' hint-crop='circle'/>" +
+                                "</binding>" +
+                            "</visual>" +
+                            "<actions>" +
+                                "<input id='inputPm' type='text' placeHolderContent='输入回复内容' />" +
+                                "<action content='查看' arguments='view_pm={3},{4}' />" +
+                                "<action content='回复' arguments='reply_pm={3}' activationType='background' />" +
+                            "</actions>" +
+                            "</toast>";
                         _xmlForPm = string.Format(_xmlForPm, username, lastMessageText, GetSmallAvatarUrlByUserId(userId), userId, username);
                         SendToast(_xmlForPm);
-                    //}
+                    }
                 }
             }
 
