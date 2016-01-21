@@ -262,12 +262,12 @@ namespace Hipda.Client.Uwp.Pro.Services
             await LoadReplyDataAsync(threadId, pageNo, cts);
             if (afterLoad != null) afterLoad(threadId, pageNo);
 
-            return _replyData.Single(t => t.ThreadId == threadId).Replies.Count;
+            return _replyData.FirstOrDefault(t => t.ThreadId == threadId).Replies.Count;
         }
 
         public static ReplyItemModel GetReplyItemByIndex(int threadId, int index)
         {
-            return _replyData.Single(t => t.ThreadId == threadId).Replies[index];
+            return _replyData.FirstOrDefault(t => t.ThreadId == threadId).Replies[index];
         }
 
         public ICollectionView GetViewForReplyPageByThreadId(int startPageNo, int threadId, Action beforeLoad, Action<int, int> afterLoad)
@@ -500,7 +500,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 i++;
             }
 
-            int index = threadReply.Replies.Single(r => r.PostId == targetPostId).Index;
+            int index = threadReply.Replies.FirstOrDefault(r => r.PostId == targetPostId).Index;
             return new int[] { pageNo, index, threadId };
         }
 
@@ -511,7 +511,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public int GetReplyMinPageNoInLoadedData(int threadId)
         {
-            var data = _replyData.Single(d => d.ThreadId == threadId);
+            var data = _replyData.FirstOrDefault(d => d.ThreadId == threadId);
             return data.Replies.Min(r => r.PageNo);
         }
 
