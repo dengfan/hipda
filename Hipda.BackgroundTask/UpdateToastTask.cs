@@ -58,8 +58,9 @@ namespace Hipda.BackgroundTask
                             "</binding>" +
                         "</visual>" +
                         "<actions>" +
-                            "<input id='replyContent' type='text' placeHolderContent='输入回复内容' />" +
-                            "<action content='回复' arguments='post' />" +
+                            "<input id='inputPost' type='text' placeHolderContent='输入回复内容' />" +
+                            "<action content='查看' arguments='view_post={4},{5}' />" +
+                            "<action content='回复' arguments='reply_post={5},{6},{7},{8}' activationType='background' />" +
                         "</actions>" +
                      "</toast>";
 
@@ -167,7 +168,10 @@ namespace Hipda.BackgroundTask
                             actionText = actionContentNode.ChildNodes[0].ChildNodes[1].ChildNodes[2]
                                 .InnerText.Trim()
                                 .Replace("\r", " ")
-                                .Replace("\n", " ");
+                                .Replace("\n", " ")
+                                .Replace(",", " ")
+                                .Replace("\\\'", " ")
+                                .Replace("\\\"", " ");
 
                             var replyLinkNode = buttonsNode.ChildNodes[0];
                             repostStr = replyLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/post.php?from=notice&action=reply&fid=2&tid=1778684&reppost=".Length).Split('&')[0];
@@ -178,7 +182,10 @@ namespace Hipda.BackgroundTask
                             SaveNoticeToastTempData(0, actionTime);
 
                             // 发送
-                            _xmlForQuoteOrReply = string.Format(_xmlForQuoteOrReply, username, threadTitle, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)), actionText);
+                            string noticeauthor = $"q|{userId}|{username}";
+                            string noticetrimstr = $"[quote]{actionText}\r\n[size=2][color=#999999]{username} 发表于 {actionTime}[/color] [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost__AND__pid={postId}__AND__ptid={threadId}][img]http://www.hi-pda.com/forum/images/common/back.gif[/img][/url][/size][/quote]\r\n\r\n    ";
+                            string noticeauthormsg = actionText;
+                            _xmlForQuoteOrReply = string.Format(_xmlForQuoteOrReply, username, threadTitle, GetSmallAvatarUrlByUserId(Convert.ToInt32(userId)), actionText, postId, threadId, noticeauthor, noticetrimstr, noticeauthormsg);
                             SendToast(_xmlForQuoteOrReply);
                         }
                         break;

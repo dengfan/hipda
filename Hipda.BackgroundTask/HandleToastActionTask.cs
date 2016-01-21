@@ -64,7 +64,39 @@ namespace Hipda.BackgroundTask
 
         async Task HandleReplyPost(ToastNotificationActionTriggerDetail details, string args, CancellationTokenSource cts)
         {
+            string[] tary = args.Replace("__AND__", "&").Substring("reply_post=".Length).Split(',');
+            int threadId = Convert.ToInt32(tary[0]);
+            string noticeauthor = tary[1];
+            string noticetrimstr = tary[2];
+            string noticeauthormsg = tary[3];
+            string replyContent = details.UserInput["inputPost"].ToString();
 
+            var postData = new List<KeyValuePair<string, object>>();
+            postData.Add(new KeyValuePair<string, object>("formhash", _formHash));
+            postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
+            postData.Add(new KeyValuePair<string, object>("noticeauthor", noticeauthor));
+            postData.Add(new KeyValuePair<string, object>("noticetrimstr", noticetrimstr));
+            postData.Add(new KeyValuePair<string, object>("noticeauthormsg", noticeauthormsg));
+            postData.Add(new KeyValuePair<string, object>("subject", string.Empty));
+            postData.Add(new KeyValuePair<string, object>("message", $"{noticetrimstr}{replyContent}\r\n \r\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]"));
+
+            string url = string.Format("http://www.hi-pda.com/forum/post.php?action=reply&tid={0}&replysubmit=yes&handlekey=fastpost&inajax=1", threadId);
+            string resultContent = await _httpClient.PostAsync(url, postData, cts);
+            var flag = resultContent.Contains("您的回复已经发布");
+            if (cts.IsCancellationRequested || flag == false)
+            {
+                string simpleContent = replyContent.Length > 10 ? replyContent.Substring(0, 9) + "..." : replyContent;
+                string _xml = "<toast>" +
+                                "<visual>" +
+                                    "<binding template='ToastGeneric'>" +
+                                        "<text>对不起</text>" +
+                                        $"<text>“{simpleContent}”回复不成功！</text>" +
+                                    "</binding>" +
+                                "</visual>" +
+                                "</toast>";
+                SendToast(_xml);
+            }
+            Debug.WriteLine("贴子回复结果：" + flag);
         }
 
         async Task HandleReplyPm(ToastNotificationActionTriggerDetail details, string args, CancellationTokenSource cts)
@@ -100,13 +132,13 @@ namespace Hipda.BackgroundTask
                                 "<visual>" +
                                     "<binding template='ToastGeneric'>" +
                                         "<text>对不起</text>" +
-                                        $"<text>您的消息“{simpleContent}”发送不成功！</text>" +
+                                        $"<text>“{simpleContent}”发送不成功！</text>" +
                                     "</binding>" +
                                 "</visual>" +
                                 "</toast>";
                 SendToast(_xml);
             }
-            Debug.WriteLine("回复结果：" + flag);
+            Debug.WriteLine("短消息回复结果：" + flag);
         }
 
         async Task HandleAddBuddy(ToastNotificationActionTriggerDetail details, string args, CancellationTokenSource cts)
