@@ -27,6 +27,7 @@ namespace Hipda.Client.Uwp.Pro
     public sealed partial class MainPage : Page
     {
         MainPageViewModel _mainPageViewModel;
+        ThreadHistoryListViewViewModel _threadHistoryListViewViewModel;
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
@@ -43,7 +44,8 @@ namespace Hipda.Client.Uwp.Pro
             _mainPageViewModel = MainPageViewModel.GetInstance();
             DataContext = _mainPageViewModel;
 
-            RightSideWrap.DataContext = new ThreadHistoryListViewViewModel();
+            _threadHistoryListViewViewModel = new ThreadHistoryListViewViewModel();
+            RightSideWrap.DataContext = _threadHistoryListViewViewModel;
 
             this.SizeChanged += (s, e) =>
             {
@@ -140,7 +142,17 @@ namespace Hipda.Client.Uwp.Pro
         void HideRightSwipePanel()
         {
             CloseMaskAnimation.Begin();
-            CloseRightSwipePanelAnimation.Begin();
+
+            if (AdaptiveStates.CurrentState == Min1200 || AdaptiveStates.CurrentState == Min1600)
+            {
+                // 宽视图（已显示历史记录）下，直接隐藏，无过渡
+                CloseRightSwipePanelAnimation2.Begin();
+            }
+            else
+            {
+                CloseRightSwipePanelAnimation.Begin();
+            }
+            
 
             MaskGrid.Visibility = Visibility.Collapsed;
         }
@@ -440,6 +452,7 @@ namespace Hipda.Client.Uwp.Pro
         private void userDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             CloseUserDialog();
+            ElementAdapter();
         }
 
         private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
@@ -450,6 +463,10 @@ namespace Hipda.Client.Uwp.Pro
 
         private void HistoryRecordButton_Click(object sender, RoutedEventArgs e)
         {
+            FindName("RightSwipePanel");
+            RightSwipeContentControl.DataContext = _threadHistoryListViewViewModel;
+            RightSwipeContentControl.ContentTemplate = Resources["HistoryRecordContentControl"] as DataTemplate;
+
             ShowRightSwipePanel();
         }
     }

@@ -162,6 +162,11 @@
                                             <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" />
                                         </VisualState.Setters>
                                     </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <VisualState.Setters>
+                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlForegroundBaseLowBrush}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                             <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" Foreground="{TemplateBinding Foreground}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
@@ -205,6 +210,9 @@
                     <ExponentialEase EasingMode="EaseOut" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Name="CloseRightSwipePanelAnimation2">
+            <DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="RightSwipePanel"/>
         </Storyboard>
         <Storyboard x:Name="ShowTipBarAnimation">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="TipBar">
@@ -395,21 +403,23 @@
 
     <Grid x:Name="pageGrid" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState>
+            <VisualStateGroup x:Name="AdaptiveStates">
+                <VisualState x:Name="Min1600">
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
                         <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
                         <Setter Target="RightSideColumn.Width" Value="260" />
+                        <Setter Target="HistoryRecordButton.IsEnabled" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1600" />
                     </VisualState.StateTriggers>
                 </VisualState>
-                <VisualState>
+                <VisualState x:Name="Min1200">
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
                         <Setter Target="RightSideColumn.Width" Value="260" />
+                        <Setter Target="HistoryRecordButton.IsEnabled" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1200" />
@@ -419,6 +429,7 @@
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
                         <Setter Target="RightSideColumn.Width" Value="0" />
+                        <Setter Target="HistoryRecordButton.IsEnabled" Value="True" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="500" />
@@ -428,6 +439,7 @@
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="Overlay"/>
                         <Setter Target="RightSideColumn.Width" Value="0" />
+                        <Setter Target="HistoryRecordButton.IsEnabled" Value="True" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />
@@ -553,7 +565,7 @@
                     <Grid.RenderTransform>
                         <CompositeTransform/>
                     </Grid.RenderTransform>
-                    <ContentControl/>
+                    <ContentControl x:Name="RightSwipeContentControl" HorizontalContentAlignment="Stretch"/>
                 </Grid>
             </Grid>
             
