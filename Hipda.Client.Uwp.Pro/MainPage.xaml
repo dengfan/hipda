@@ -408,11 +408,14 @@
                 </StackPanel>
                 <ScrollViewer>
                     <StackPanel Padding="12,0,20,0">
+                        <TextBlock Margin="0,0,0,8" Text="账号"/>
                         <TextBlock Margin="0,0,0,8" Text="选择主题"/>
                         <ComboBox Margin="0,0,0,16" HorizontalAlignment="Stretch" PlaceholderText="亮" SelectionChanged="ThemeComboBox_SelectionChanged">
                             <x:String>亮</x:String>
                             <x:String>暗</x:String>
                         </ComboBox>
+                        <TextBlock Margin="0,0,0,8" Text="字号"/>
+                        <TextBlock Margin="0,0,0,8" Text="行高"/>
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>
