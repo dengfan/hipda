@@ -20,7 +20,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             this.InitializeComponent();
             this.SizeChanged += ThreadAndReplyPage_SizeChanged;
-            RightSideWrap.DataContext = new ThreadHistoryListViewViewModel();
         }
 
         private void ThreadAndReplyPage_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -102,16 +101,16 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             // 最宽屏模式下，自动滚到最底部
-            if (RightSideColumn.ActualWidth > 0)
-            {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                    int count = ThreadHistoryListView.Items.Count;
-                    if (count > 0)
-                    {
-                        ThreadHistoryListView.ScrollIntoView(ThreadHistoryListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
-                    }
-                });
-            }
+            //if (RightSideColumn.ActualWidth > 0)
+            //{
+            //    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+            //        int count = ThreadHistoryListView.Items.Count;
+            //        if (count > 0)
+            //        {
+            //            ThreadHistoryListView.ScrollIntoView(ThreadHistoryListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+            //        }
+            //    });
+            //}
         }
 
         private async void ReplyListViewScrollForSpecifiedPost(int index)
@@ -265,7 +264,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void LeftListView_ItemClick(object sender, ItemClickEventArgs e) 
         {
-            ThreadHistoryListView.SelectedItem = null;
+            //ThreadHistoryListView.SelectedItem = null;
 
             // 如果进入了选择模式，则不打开主题
             if (LeftListView.SelectionMode == ListViewSelectionMode.Multiple)
@@ -453,13 +452,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             PostReplyTextBox.Text = data.TextStr;
         }
 
-        private void ReadListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var data = e.ClickedItem as ThreadItemModelBase;
-            OpenReplyPageByThreadId(data.ThreadId);
-
-            LeftListView.SelectedItem = null;
-        }
+        
 
         //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         //{

@@ -33,7 +33,7 @@ namespace Hipda.Client.Uwp.Pro
         void ElementAdapter()
         {
             PromptAllBorder.Visibility = ActualWidth >= 1000 ? Visibility.Collapsed : Visibility.Visible;
-            BottomButtonContentControl.ContentTemplate = MainSplitView.IsPaneOpen ? Resources["BottomHorizontalButtonTemplate"] as DataTemplate : Resources["BottomVerticalButtonTemplate"] as DataTemplate;
+            BottomButtonPanel.Orientation = MainSplitView.IsPaneOpen ? Orientation.Horizontal : Orientation.Vertical;
         }
 
         public MainPage()
@@ -43,13 +43,15 @@ namespace Hipda.Client.Uwp.Pro
             _mainPageViewModel = MainPageViewModel.GetInstance();
             DataContext = _mainPageViewModel;
 
+            RightSideWrap.DataContext = new ThreadHistoryListViewViewModel();
+
             this.SizeChanged += (s, e) =>
             {
                 ElementAdapter();
             };
         }
 
-        private void Page1_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             ElementAdapter();
         }
@@ -75,7 +77,6 @@ namespace Hipda.Client.Uwp.Pro
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
         {
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
-            BottomButtonContentControl.ContentTemplate = MainSplitView.IsPaneOpen ? Resources["BottomHorizontalButtonTemplate"] as DataTemplate : Resources["BottomVerticalButtonTemplate"] as DataTemplate;
         }
 
         private void MainSplitView_PaneClosed(SplitView sender, object args)
@@ -183,9 +184,9 @@ namespace Hipda.Client.Uwp.Pro
         {
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
-            if (Page1.RequestedTheme == ElementTheme.Light)
+            if (this.RequestedTheme == ElementTheme.Light)
             {
-                Page1.RequestedTheme = ElementTheme.Dark;
+                this.RequestedTheme = ElementTheme.Dark;
 
                 Color c = Colors.Black;
                 titleBar.BackgroundColor = c;
@@ -198,7 +199,7 @@ namespace Hipda.Client.Uwp.Pro
             }
             else
             {
-                Page1.RequestedTheme = ElementTheme.Light;
+                this.RequestedTheme = ElementTheme.Light;
 
                 titleBar.BackgroundColor = null;
                 titleBar.InactiveBackgroundColor = null;
@@ -244,6 +245,14 @@ namespace Hipda.Client.Uwp.Pro
         private void NoticeButton_Click(object sender, RoutedEventArgs e)
         {
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=notice");
+        }
+
+        private void ReadListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var data = e.ClickedItem as ThreadItemModelBase;
+            //OpenReplyPageByThreadId(data.ThreadId);
+
+            //LeftListView.SelectedItem = null;
         }
 
         #region 坛友资料及短消息之弹窗
