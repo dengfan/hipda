@@ -328,7 +328,7 @@
             <Setter Property="Height" Value="40"/>
         </Style>
 
-        <DataTemplate x:Name="ReplyListTopItemTemplate">
+        <DataTemplate x:Key="ReplyListTopItemTemplate">
             <StackPanel>
                 <Grid>
                     <c:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -367,7 +367,7 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Name="ReplyListLeftItemTemplate">
+        <DataTemplate x:Key="ReplyListLeftItemTemplate">
             <Grid>
                 <c:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
@@ -410,7 +410,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="ReplyListLeft2ItemTemplate">
+        <DataTemplate x:Key="ReplyListLeft2ItemTemplate">
             <Grid>
                 <c:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
@@ -454,7 +454,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="ReplyListRightItemTemplate">
+        <DataTemplate x:Key="ReplyListRightItemTemplate">
             <Grid>
                 <c:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" HorizontalAlignment="Right" VerticalAlignment="Top"/>
 
@@ -497,7 +497,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="ReplyListHighLightItemTemplate">
+        <DataTemplate x:Key="ReplyListHighLightItemTemplate">
             <StackPanel Padding="16,0,16,8" BorderThickness="0,1,0,1" BorderBrush="#3285D6">
                 <Border Margin="0,0,0,8" Padding="8" Background="#3285D6" HorizontalAlignment="Center">
                     <TextBlock Text="以下是你搜索的回复" Foreground="#3EE8FF" FontSize="{ThemeResource ToolTipContentThemeFontSize}" />
@@ -534,11 +534,11 @@
             </StackPanel>
         </DataTemplate>
 
-        <Style x:Name="UnReadColorStyle" TargetType="Ellipse">
+        <Style x:Key="UnReadColorStyle" TargetType="Ellipse">
             <Setter Property="Fill" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
         </Style>
 
-        <Style x:Name="ReadColorStyle" TargetType="Ellipse">
+        <Style x:Key="ReadColorStyle" TargetType="Ellipse">
             <Setter Property="Fill" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
         </Style>
 
@@ -577,7 +577,7 @@
 
 
 
-        <DataTemplate x:Name="ThreadListNormalItemTemplate">
+        <DataTemplate x:Key="ThreadListNormalItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
@@ -603,7 +603,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="ThreadListMyThreadsItemTemplate">
+        <DataTemplate x:Key="ThreadListMyThreadsItemTemplate">
             <Grid>
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
@@ -624,7 +624,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="ThreadListMyPostsItemTemplate">
+        <DataTemplate x:Key="ThreadListMyPostsItemTemplate">
             <Grid>
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
@@ -647,7 +647,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="ThreadListMyFavoritesItemTemplate">
+        <DataTemplate x:Key="ThreadListMyFavoritesItemTemplate">
             <Grid>
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
@@ -668,7 +668,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="ThreadListSearchTitleItemTemplate">
+        <DataTemplate x:Key="ThreadListSearchTitleItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
@@ -690,7 +690,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="ThreadListSearchFullTextItemTemplate">
+        <DataTemplate x:Key="ThreadListSearchFullTextItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
@@ -714,7 +714,7 @@
 
 
         <cvt:UserIdStringToInt32Converter x:Key="userIdStringToInt32Converter" />
-        <DataTemplate x:Name="NoticeQuoteOrReplyItemTemplate">
+        <DataTemplate x:Key="NoticeQuoteOrReplyItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 <c:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource userIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -745,7 +745,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="NoticeThreadItemTemplate">
+        <DataTemplate x:Key="NoticeThreadItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 <Border Margin="14,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20"/>
@@ -768,7 +768,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="NoticeBuddyItemTemplate">
+        <DataTemplate x:Key="NoticeBuddyItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 <c:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource userIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -798,7 +798,7 @@
                                                    UserMessageLeftItemTemplate="{StaticResource UserMessageLeftItemTemplate}"
                                                    UserMessageRightItemTemplate="{StaticResource UserMessageRightItemTemplate}"/>
 
-        <DataTemplate x:Name="UserMessageLeftItemTemplate">
+        <DataTemplate x:Key="UserMessageLeftItemTemplate">
             <Grid>
                 <ContentControl Margin="8 0 0 0" Template="{StaticResource MessageUpArrow}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="0,8,40,0" Padding="8" Background="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -812,7 +812,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="UserMessageRightItemTemplate">
+        <DataTemplate x:Key="UserMessageRightItemTemplate">
             <Grid>
                 <StackPanel Margin="40,0,0,8" Padding="8" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
@@ -827,7 +827,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Name="UserMessageListItemTemplate">
+        <DataTemplate x:Key="UserMessageListItemTemplate">
             <Grid>
                 <Border Margin="0,8" Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
