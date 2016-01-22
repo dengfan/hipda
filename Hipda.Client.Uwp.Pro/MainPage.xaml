@@ -416,6 +416,9 @@
                         </ComboBox>
                         <TextBlock Margin="0,0,0,8" Text="字号"/>
                         <TextBlock Margin="0,0,0,8" Text="行高"/>
+                        <TextBlock Margin="0,0,0,8" Text="屏蔽的用户"/>
+                        <TextBlock Margin="0,0,0,8" Text="屏蔽的主题"/>
+                        <TextBlock Margin="0,0,0,8" Text="屏蔽的关键字"/>
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>
