@@ -7,8 +7,7 @@
     xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    RequestedTheme="Light" Loaded="Page_Loaded">
+    mc:Ignorable="d">
 
     <Page.Resources>
         <Style x:Key="MainMenuListBoxItemStyle" TargetType="ListBoxItem">
@@ -172,17 +171,36 @@
             </Setter>
         </Style>
 
-        <Storyboard x:Name="OpenView">
+        <Storyboard x:Name="OpenMaskAnimation">
             <DoubleAnimation Duration="0:0:0.2" To="0.6" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
+        </Storyboard>
+        <Storyboard x:Name="CloseMaskAnimation">
+            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
+        </Storyboard>
+        
+        <Storyboard x:Name="OpenLeftSwipePanelAnimation">
             <DoubleAnimation Duration="0:0:0.2" To="260" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LeftSwipePanel">
                 <DoubleAnimation.EasingFunction>
                     <ExponentialEase EasingMode="EaseIn" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
-        <Storyboard x:Name="CloseView">
-            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
+        <Storyboard x:Name="CloseLeftSwipePanelAnimation">
             <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LeftSwipePanel">
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Name="OpenRightSwipePanelAnimation">
+            <DoubleAnimation Duration="0:0:0.2" To="-260" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="RightSwipePanel">
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseIn" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Name="CloseRightSwipePanelAnimation">
+            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="RightSwipePanel">
                 <DoubleAnimation.EasingFunction>
                     <ExponentialEase EasingMode="EaseOut" />
                 </DoubleAnimation.EasingFunction>
@@ -476,7 +494,7 @@
                                 </Grid>
                             </Button.Content>
                         </Button>
-                        <Button x:Name="HistoryRecordButton" Style="{StaticResource NavButtonNormalStyle}">
+                        <Button x:Name="HistoryRecordButton" Style="{StaticResource NavButtonNormalStyle}" Click="HistoryRecordButton_Click">
                             <Button.Content>
                                 <Grid>
                                     <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
@@ -523,6 +541,15 @@
                 <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy"
                       Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
                       Margin="-260,0,0,0" Width="260" HorizontalAlignment="Left">
+                    <Grid.RenderTransform>
+                        <CompositeTransform/>
+                    </Grid.RenderTransform>
+                    <ContentControl/>
+                </Grid>
+
+                <Grid x:Name="RightSwipePanel" x:DeferLoadStrategy="Lazy"
+                      Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
+                      Margin="0,0,-260,0" Width="260" HorizontalAlignment="Right">
                     <Grid.RenderTransform>
                         <CompositeTransform/>
                     </Grid.RenderTransform>

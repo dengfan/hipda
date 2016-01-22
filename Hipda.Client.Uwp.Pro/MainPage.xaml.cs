@@ -49,11 +49,11 @@ namespace Hipda.Client.Uwp.Pro
             {
                 ElementAdapter();
             };
-        }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            ElementAdapter();
+            this.Loaded += (s, e) =>
+            {
+                ElementAdapter();
+            };
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -77,6 +77,7 @@ namespace Hipda.Client.Uwp.Pro
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
         {
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
+            ElementAdapter();
         }
 
         private void MainSplitView_PaneClosed(SplitView sender, object args)
@@ -89,6 +90,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             FindName("MaskGrid");
             FindName("LeftSwipePanel");
+            FindName("RightSwipePanel");
 
             if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
             {
@@ -98,21 +100,49 @@ namespace Hipda.Client.Uwp.Pro
             }
             
             MaskGrid.Visibility = Visibility.Visible;
-            OpenView.Begin();
+            OpenMaskAnimation.Begin();
+            OpenLeftSwipePanelAnimation.Begin();
+            CloseRightSwipePanelAnimation.Begin();
         }
 
-        void CloseLeftSwipePanel()
+        void HideLeftSwipePanel()
+        {
+            CloseMaskAnimation.Begin();
+
+            CloseLeftSwipePanelAnimation.Begin();
+            TopNavButtonListBox.SelectedItem = null;
+
+            MaskGrid.Visibility = Visibility.Collapsed;
+        }
+
+        void ShowRightSwipePanel()
         {
             FindName("MaskGrid");
             FindName("LeftSwipePanel");
+            FindName("RightSwipePanel");
 
-            if (MaskGrid.Visibility == Visibility.Visible)
+            if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
             {
-                MaskGrid.Visibility = Visibility.Collapsed;
-                CloseView.Begin();
-
-                
+                // 以免 pane 挡住 left swipe panel
+                MainSplitView.IsPaneOpen = false;
+                ElementAdapter();
             }
+
+            MaskGrid.Visibility = Visibility.Visible;
+
+            OpenMaskAnimation.Begin();
+            OpenRightSwipePanelAnimation.Begin();
+
+            CloseLeftSwipePanelAnimation.Begin();
+            TopNavButtonListBox.SelectedItem = null;
+        }
+
+        void HideRightSwipePanel()
+        {
+            CloseMaskAnimation.Begin();
+            CloseRightSwipePanelAnimation.Begin();
+
+            MaskGrid.Visibility = Visibility.Collapsed;
         }
 
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -147,13 +177,14 @@ namespace Hipda.Client.Uwp.Pro
                 }
             }
 
-            CloseLeftSwipePanel();
+            HideLeftSwipePanel();
+            HideRightSwipePanel();
         }
 
         private void MaskGrid_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            CloseLeftSwipePanel();
-            TopNavButtonListBox.SelectedItem = null;
+            HideLeftSwipePanel();
+            HideRightSwipePanel();
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -416,5 +447,10 @@ namespace Hipda.Client.Uwp.Pro
             CloseUserDialog();
         }
         #endregion
+
+        private void HistoryRecordButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowRightSwipePanel();
+        }
     }
 }
