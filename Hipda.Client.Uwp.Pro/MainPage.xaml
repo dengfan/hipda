@@ -180,7 +180,7 @@
             <DoubleAnimation Duration="0:0:0.2" To="0.6" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
         </Storyboard>
         <Storyboard x:Name="CloseMaskAnimation">
-            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
+            <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
         </Storyboard>
         
         <Storyboard x:Name="OpenLeftSwipePanelAnimation">
@@ -191,7 +191,7 @@
             </DoubleAnimation>
         </Storyboard>
         <Storyboard x:Name="CloseLeftSwipePanelAnimation">
-            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LeftSwipePanel">
+            <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LeftSwipePanel">
                 <DoubleAnimation.EasingFunction>
                     <ExponentialEase EasingMode="EaseOut" />
                 </DoubleAnimation.EasingFunction>
@@ -205,7 +205,7 @@
             </DoubleAnimation>
         </Storyboard>
         <Storyboard x:Name="CloseRightSwipePanelAnimation">
-            <DoubleAnimation Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="RightSwipePanel">
+            <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="RightSwipePanel">
                 <DoubleAnimation.EasingFunction>
                     <ExponentialEase EasingMode="EaseOut" />
                 </DoubleAnimation.EasingFunction>
