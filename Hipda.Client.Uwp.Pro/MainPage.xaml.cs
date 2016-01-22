@@ -223,35 +223,21 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
+        private void HistoryRecordButton_Click(object sender, RoutedEventArgs e)
+        {
+            FindName("RightSwipePanel");
+            RightSwipeContentControl.DataContext = _threadHistoryListViewViewModel;
+            RightSwipeContentControl.ContentTemplate = Resources["HistoryRecordContentControl"] as DataTemplate;
+
+            ShowRightSwipePanel();
+        }
+
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            FindName("RightSwipePanel");
+            RightSwipeContentControl.ContentTemplate = Resources["SettingsContentControl"] as DataTemplate;
 
-            if (this.RequestedTheme == ElementTheme.Light)
-            {
-                this.RequestedTheme = ElementTheme.Dark;
-
-                Color c = Colors.Black;
-                titleBar.BackgroundColor = c;
-                titleBar.InactiveBackgroundColor = c;
-                titleBar.ForegroundColor = Colors.White;
-                titleBar.ButtonBackgroundColor = c;
-                titleBar.ButtonInactiveBackgroundColor = c;
-                titleBar.ButtonForegroundColor = Colors.White;
-                titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
-            }
-            else
-            {
-                this.RequestedTheme = ElementTheme.Light;
-
-                titleBar.BackgroundColor = null;
-                titleBar.InactiveBackgroundColor = null;
-                titleBar.ForegroundColor = null;
-                titleBar.ButtonBackgroundColor = null;
-                titleBar.ButtonInactiveBackgroundColor = null;
-                titleBar.ButtonForegroundColor = null;
-                titleBar.ButtonHoverBackgroundColor = null;
-            }
+            ShowRightSwipePanel();
         }
 
         private void SearchDefaultSubmit()
@@ -461,13 +447,36 @@ namespace Hipda.Client.Uwp.Pro
         }
         #endregion
 
-        private void HistoryRecordButton_Click(object sender, RoutedEventArgs e)
+        private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FindName("RightSwipePanel");
-            RightSwipeContentControl.DataContext = _threadHistoryListViewViewModel;
-            RightSwipeContentControl.ContentTemplate = Resources["HistoryRecordContentControl"] as DataTemplate;
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
-            ShowRightSwipePanel();
+            var comboBox = (ComboBox)sender;
+            if (comboBox.SelectedIndex == 0)
+            {
+                this.RequestedTheme = ElementTheme.Light;
+
+                titleBar.BackgroundColor = null;
+                titleBar.InactiveBackgroundColor = null;
+                titleBar.ForegroundColor = null;
+                titleBar.ButtonBackgroundColor = null;
+                titleBar.ButtonInactiveBackgroundColor = null;
+                titleBar.ButtonForegroundColor = null;
+                titleBar.ButtonHoverBackgroundColor = null;
+            }
+            else if (comboBox.SelectedIndex == 1)
+            {
+                this.RequestedTheme = ElementTheme.Dark;
+
+                Color c = Colors.Black;
+                titleBar.BackgroundColor = c;
+                titleBar.InactiveBackgroundColor = c;
+                titleBar.ForegroundColor = Colors.White;
+                titleBar.ButtonBackgroundColor = c;
+                titleBar.ButtonInactiveBackgroundColor = c;
+                titleBar.ButtonForegroundColor = Colors.White;
+                titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
+            }
         }
     }
 }
