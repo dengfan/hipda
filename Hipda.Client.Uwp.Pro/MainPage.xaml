@@ -373,12 +373,12 @@
                       ItemsSource="{Binding ThreadHistoryData}" ItemClick="ReadListView_ItemClick">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                            <Setter Property="Padding" Value="2,4,20,4"/>
+                            <Setter Property="Padding" Value="8,4,20,4"/>
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="2,0,0,0">
+                            <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="1,0,0,0">
                                 <TextBlock TextWrapping="Wrap" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
                             </Border>
                         </DataTemplate>
@@ -400,7 +400,7 @@
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
                         <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
-                        <Setter Target="RightSideColumn.Width" Value="220" />
+                        <Setter Target="RightSideColumn.Width" Value="260" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1600" />
@@ -409,7 +409,7 @@
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
-                        <Setter Target="RightSideColumn.Width" Value="220" />
+                        <Setter Target="RightSideColumn.Width" Value="260" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1200" />
@@ -533,7 +533,7 @@
                         </Frame.ContentTransitions>
                     </Frame>
 
-                    <ContentControl x:Name="RightSideWrap" Grid.Column="1" ContentTemplate="{StaticResource HistoryRecordContentControl}"/>
+                    <ContentControl x:Name="RightSideWrap" Grid.Column="1" HorizontalContentAlignment="Stretch" ContentTemplate="{StaticResource HistoryRecordContentControl}"/>
                 </Grid>
 
                 <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy" Background="DimGray" Opacity="0" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
