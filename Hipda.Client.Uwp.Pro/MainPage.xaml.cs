@@ -110,11 +110,14 @@ namespace Hipda.Client.Uwp.Pro
         void HideLeftSwipePanel()
         {
             CloseMaskAnimation.Begin();
-
             CloseLeftSwipePanelAnimation.Begin();
-            TopNavButtonListBox.SelectedItem = null;
-
             MaskGrid.Visibility = Visibility.Collapsed;
+
+            var selectedItem = (NavButtonItemModel)TopNavButtonListBox.SelectedItem;
+            if (selectedItem != null && selectedItem.TypeValue.Equals("more"))
+            {
+                TopNavButtonListBox.SelectedItem = null;
+            }
         }
 
         void ShowRightSwipePanel()
