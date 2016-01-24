@@ -191,7 +191,7 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string infoContent = m.Groups[1].Value.Trim();
 
-                    string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""DimGray"" FontSize=""12""/][LineBreak/]", infoContent);
+                    string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""DimGray"" FontSize=""{{Binding MyFontSize2,Source={{StaticResource MyText}}}}""/][LineBreak/]", infoContent);
                     htmlContent = htmlContent.Replace(placeHolder, infoXaml);
                 }
             }
@@ -252,7 +252,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
 
-            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"" LineHeight=""{{Binding MyLineHeight,Source={{StaticResource MyText}}}}""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 

@@ -387,7 +387,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="1,0,0,0">
-                                <TextBlock TextWrapping="Wrap" FontSize="{Binding MyFontSize,Source={StaticResource FontSize2}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
+                                <TextBlock TextWrapping="Wrap" FontSize="{Binding MyFontSize2,Source={StaticResource MyText}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
                             </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -430,7 +430,7 @@
                             </ComboBoxItem>
                         </ComboBox>
                         <TextBlock Margin="0,0,0,8" Text="行高"/>
-                        <Slider Minimum="12" Maximum="30" />
+                        <Slider x:Name="LineHeightSlider" Minimum="22" Maximum="48" Value="{Binding MyLineHeight,Source={StaticResource MyText},Mode=TwoWay}" ValueChanged="LineHeightSlider_ValueChanged" />
                         <Grid Margin="0,0,0,8">
                             <TextBlock Text="显示置顶贴" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                             <ToggleSwitch HorizontalAlignment="Right" VerticalAlignment="Center"/>

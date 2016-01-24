@@ -136,7 +136,7 @@
     <Compile Include="Controls\MyLink.cs" />
     <Compile Include="Controls\MyRefLink1.cs" />
     <Compile Include="Controls\MyRefLink2.cs" />
-    <Compile Include="MyFontSizeDependencyObject.cs" />
+    <Compile Include="MyTextDependencyObject.cs" />
     <Compile Include="NavButtonListItemTemplateSelector.cs" />
     <Compile Include="NoticeListItemTemplateSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

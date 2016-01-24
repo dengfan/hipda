@@ -484,26 +484,36 @@ namespace Hipda.Client.Uwp.Pro
 
         private void FontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var myText = ((MyTextDependencyObject)App.Current.Resources["MyText"]);
             int i = ((ComboBox)sender).SelectedIndex;
             switch (i)
             {
                 case 0:
-                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize1"]).MyFontSize = 14;
-                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize2"]).MyFontSize = 12;
+                    myText.MyFontSize1 = 14;
+                    myText.MyFontSize2 = 12;
+                    myText.MyLineHeight = 22;
                     return;
                 case 1:
-                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize1"]).MyFontSize = 15;
-                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize2"]).MyFontSize = 12;
+                    myText.MyFontSize1 = 15;
+                    myText.MyFontSize2 = 12;
+                    myText.MyLineHeight = 22;
                     return;
                 case 2:
-                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize1"]).MyFontSize = 18;
-                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize2"]).MyFontSize = 15;
+                    myText.MyFontSize1 = 18;
+                    myText.MyFontSize2 = 15;
+                    myText.MyLineHeight = 28;
                     return;
                 case 3:
-                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize1"]).MyFontSize = 20;
-                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize2"]).MyFontSize = 15;
+                    myText.MyFontSize1 = 20;
+                    myText.MyFontSize2 = 15;
+                    myText.MyLineHeight = 34;
                     return;
             }
+        }
+
+        private void LineHeightSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+        {
+            ((MyTextDependencyObject)App.Current.Resources["MyText"]).MyLineHeight = e.NewValue;
         }
     }
 }
