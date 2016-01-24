@@ -501,12 +501,12 @@ namespace Hipda.Client.Uwp.Pro
                 case 2:
                     myText.MyFontSize1 = 18;
                     myText.MyFontSize2 = 15;
-                    myText.MyLineHeight = 28;
+                    myText.MyLineHeight = 30;
                     return;
                 case 3:
                     myText.MyFontSize1 = 20;
                     myText.MyFontSize2 = 15;
-                    myText.MyLineHeight = 34;
+                    myText.MyLineHeight = 36;
                     return;
             }
         }

@@ -154,7 +154,7 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string fontText = m.Groups[1].Value;
 
-                    string fontXaml = string.Format(@"[Span FontSize=""{{ThemeResource ToolTipContentThemeFontSize}}""]{0}[/Span]", fontText);
+                    string fontXaml = string.Format(@"[Span FontSize=""{{Binding MyFontSize2,Source={{StaticResource MyText}}}}""]{0}[/Span]", fontText);
                     htmlContent = htmlContent.Replace(placeHolder, fontXaml);
                 }
             }
@@ -191,13 +191,13 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string infoContent = m.Groups[1].Value.Trim();
 
-                    string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""DimGray"" FontSize=""{{Binding MyFontSize2,Source={{StaticResource MyText}}}}""/][LineBreak/]", infoContent);
+                    string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""{{ThemeResource SystemControlForegroundBaseLowBrush}}"" FontSize=""{{Binding MyFontSize2,Source={{StaticResource MyText}}}}""/][LineBreak/]", infoContent);
                     htmlContent = htmlContent.Replace(placeHolder, infoXaml);
                 }
             }
 
             // 替换引用文字标签
-            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,20,0"" Foreground=""DimGray"" FontStyle=""Italic""]");
+            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,20,0"" Foreground=""{ThemeResource SystemControlForegroundBaseLowBrush}"" FontStyle=""Italic""]");
             htmlContent = htmlContent.Replace("</blockquote>", "[/Paragraph][Paragraph]");
 
             // 移除无意义图片HTML
