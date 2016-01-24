@@ -17,17 +17,17 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public class AccountService
     {
-        private static string _containerKey = "HIPDA";
-        private static string _dataKey = "AccountData";
+        static string _containerKey = "HIPDA";
+        static string _dataKey = "AccountData";
 
-        private HttpHandle _httpClient;
-        private ApplicationDataContainer _container;
-        private List<AccountItemModel> _accountData = new List<AccountItemModel>();
+        HttpHandle _httpClient;
+        ApplicationDataContainer _container;
+        List<AccountItemModel> _accountData = new List<AccountItemModel>();
 
-        public string LoginResultMessage { get; private set; }
-        public static string FormHash { get; private set; } = "7b19acd9";
-        public static int UserId { get; private set; }
-        public static string Hash { get; private set; }
+        public string LoginResultMessage { get; set; }
+        public static string FormHash { get; set; }
+        public static int UserId { get; set; }
+        public static string Hash { get; set; }
 
         public AccountService()
         {
@@ -42,7 +42,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        private async Task LoadHashAndUserId()
+        async Task LoadHashAndUserId()
         {
             string url = "http://www.hi-pda.com/forum/post.php?action=newthread&fid=2&_=" + DateTime.Now.Ticks.ToString("x");
             var cts = new CancellationTokenSource();
