@@ -414,14 +414,14 @@
 
         <DataTemplate x:Key="ReplyListLeft2ItemTemplate">
             <Grid>
-                <c:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatar Margin="0,14,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Margin="12,0,0,0" Text="&#x1F451;" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow2}"/>
 
                 <Border Margin="54,0,16,32" Padding="8" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding MyFontSize2,Source={StaticResource MyText}}">
-                            <Run Text="&#x1F451;" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>

@@ -420,10 +420,13 @@
                                 <TextBlock Text="小" FontSize="14"/>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <TextBlock Text="中" FontSize="15"/>
+                                <TextBlock Text="中（默认）" FontSize="15"/>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <TextBlock Text="大" FontSize="18"/>
+                                <TextBlock Text="大" FontSize="16"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="很大" FontSize="17"/>
                             </ComboBoxItem>
                             <ComboBoxItem>
                                 <TextBlock Text="超大" FontSize="20"/>
@@ -431,10 +434,11 @@
                         </ComboBox>
                         <TextBlock Margin="0,0,0,8" Text="行高"/>
                         <Slider x:Name="LineHeightSlider" Minimum="22" Maximum="48" Value="{Binding MyLineHeight,Source={StaticResource MyText},Mode=TwoWay}" ValueChanged="LineHeightSlider_ValueChanged" />
-                        <Grid Margin="0,0,0,8">
-                            <TextBlock Text="显示置顶贴" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <ToggleSwitch HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        </Grid>
+                        <ToggleSwitch Margin="0,0,0,8">
+                            <ToggleSwitch.Header>
+                                <TextBlock Text="显示置顶贴"/>
+                            </ToggleSwitch.Header>
+                        </ToggleSwitch>
 
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的用户"/>
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的主题"/>
