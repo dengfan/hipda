@@ -481,5 +481,29 @@ namespace Hipda.Client.Uwp.Pro
                 titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
             }
         }
+
+        private void FontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int i = ((ComboBox)sender).SelectedIndex;
+            switch (i)
+            {
+                case 0:
+                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize1"]).MyFontSize = 14;
+                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize2"]).MyFontSize = 12;
+                    return;
+                case 1:
+                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize1"]).MyFontSize = 15;
+                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize2"]).MyFontSize = 12;
+                    return;
+                case 2:
+                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize1"]).MyFontSize = 18;
+                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize2"]).MyFontSize = 15;
+                    return;
+                case 3:
+                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize1"]).MyFontSize = 20;
+                    ((MyFontSizeDependencyObject)App.Current.Resources["FontSize2"]).MyFontSize = 15;
+                    return;
+            }
+        }
     }
 }

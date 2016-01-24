@@ -121,21 +121,21 @@
         <DataTemplate x:Key="NavButtonBySearchItemTemplate">
             <StackPanel Padding="2 0 0 0" Orientation="Horizontal">
                 <FontIcon Glyph="{Binding Icon}"/>
-                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
         
         <DataTemplate x:Key="NavButtonByForumIdItemTemplate">
             <StackPanel Padding="2 0 0 0" Orientation="Horizontal">
                 <FontIcon Glyph="{Binding Icon}" FontFamily="Calibri" Width="20"/>
-                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="NavButtonByMyItemItemTemplate">
             <StackPanel Padding="2 0 0 0" Orientation="Horizontal">
                 <FontIcon Glyph="{Binding Icon}"/>
-                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
 
@@ -387,7 +387,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="1,0,0,0">
-                                <TextBlock TextWrapping="Wrap" FontSize="{ThemeResource ToolTipContentThemeFontSize}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
+                                <TextBlock TextWrapping="Wrap" FontSize="{Binding MyFontSize,Source={StaticResource FontSize2}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
                             </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -415,8 +415,27 @@
                             <x:String>暗</x:String>
                         </ComboBox>
                         <TextBlock Margin="0,0,0,8" Text="字号"/>
+                        <ComboBox Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="1" SelectionChanged="FontSizeComboBox_SelectionChanged">
+                            <ComboBoxItem>
+                                <TextBlock Text="小" FontSize="14"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="中" FontSize="15"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="大" FontSize="18"/>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <TextBlock Text="超大" FontSize="20"/>
+                            </ComboBoxItem>
+                        </ComboBox>
                         <TextBlock Margin="0,0,0,8" Text="行高"/>
-                        <TextBlock Margin="0,0,0,8" Text="显示置顶贴"/>
+                        <Slider Minimum="12" Maximum="30" />
+                        <Grid Margin="0,0,0,8">
+                            <TextBlock Text="显示置顶贴" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <ToggleSwitch HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的用户"/>
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的主题"/>
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的关键字"/>

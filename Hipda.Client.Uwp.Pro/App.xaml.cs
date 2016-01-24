@@ -171,9 +171,6 @@ namespace Hipda.Client.Uwp.Pro
 
             _isLaunched = true;
 
-            //App.Current.Resources["ControlContentThemeFontSize"] = 15;
-            //App.Current.Resources["ToolTipContentThemeFontSize"] = 12;
-
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
                 //var applicationView = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView();
