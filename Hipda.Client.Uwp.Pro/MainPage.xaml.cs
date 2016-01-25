@@ -48,6 +48,7 @@ namespace Hipda.Client.Uwp.Pro
             if (_settings.ThemeType == -1)
             {
                 _settings.ThemeType = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
+                SettingsService.Save(_settings);
             }
 
             _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
@@ -85,38 +86,9 @@ namespace Hipda.Client.Uwp.Pro
                     break;
             }
 
-            _mySettings.FontSizeType = _settings.FontSizeType;
-            switch (_mySettings.FontSizeType)
-            {
-                case 0:
-                    _mySettings.FontSize1 = 14;
-                    _mySettings.FontSize2 = 12;
-                    break;
-                case 1:
-                    _mySettings.FontSize1 = 15;
-                    _mySettings.FontSize2 = 12;
-                    break;
-                case 2:
-                    _mySettings.FontSize1 = 16;
-                    _mySettings.FontSize2 = 14;
-                    break;
-                case 3:
-                    _mySettings.FontSize1 = 17;
-                    _mySettings.FontSize2 = 14;
-                    break;
-                case 4:
-                    _mySettings.FontSize1 = 21;
-                    _mySettings.FontSize2 = 15;
-                    break;
-                default:
-                    _mySettings.FontSize1 = 15;
-                    _mySettings.FontSize2 = 12;
-                    break;
-            }
-            
+            _mySettings.FontSize1 = _settings.FontSize1;
+            _mySettings.FontSize2 = _settings.FontSize2;
             _mySettings.LineHeight = _settings.LineHeight;
-
-            SettingsService.Save(_settings);
             #endregion
 
             _mainPageViewModel = MainPageViewModel.GetInstance();
@@ -236,6 +208,9 @@ namespace Hipda.Client.Uwp.Pro
             
 
             MaskGrid.Visibility = Visibility.Collapsed;
+
+            // 保存设置
+            SettingsService.Save(_settings);
         }
 
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -530,10 +505,10 @@ namespace Hipda.Client.Uwp.Pro
 
         private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-
             var comboBox = (ComboBox)sender;
-            if (comboBox.SelectedIndex == 0)
+            var val = comboBox.SelectedIndex;
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            if (val == 0)
             {
                 this.RequestedTheme = ElementTheme.Light;
 
@@ -545,60 +520,22 @@ namespace Hipda.Client.Uwp.Pro
                 titleBar.ButtonForegroundColor = null;
                 titleBar.ButtonHoverBackgroundColor = null;
             }
-            else if (comboBox.SelectedIndex == 1)
+            else if (val == 1)
             {
                 this.RequestedTheme = ElementTheme.Dark;
 
                 Color c = Colors.Black;
                 titleBar.BackgroundColor = c;
                 titleBar.InactiveBackgroundColor = c;
-                titleBar.ForegroundColor = Colors.White;
+                titleBar.ForegroundColor = Colors.Silver;
                 titleBar.ButtonBackgroundColor = c;
                 titleBar.ButtonInactiveBackgroundColor = c;
-                titleBar.ButtonForegroundColor = Colors.White;
+                titleBar.ButtonForegroundColor = Colors.Silver;
                 titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
             }
 
-            _settings.ThemeType = comboBox.SelectedIndex;
-            _mySettings.ThemeType = comboBox.SelectedIndex;
-            SettingsService.Save(_settings);
-        }
-
-        private void FontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            int i = ((ComboBox)sender).SelectedIndex;
-            switch (i)
-            {
-                case 0:
-                    _mySettings.FontSize1 = 14;
-                    _mySettings.FontSize2 = 12;
-                    _mySettings.LineHeight = 22;
-                    break;
-                case 1:
-                    _mySettings.FontSize1 = 15;
-                    _mySettings.FontSize2 = 12;
-                    _mySettings.LineHeight = 22;
-                    break;
-                case 2:
-                    _mySettings.FontSize1 = 16;
-                    _mySettings.FontSize2 = 14;
-                    _mySettings.LineHeight = 25;
-                    break;
-                case 3:
-                    _mySettings.FontSize1 = 17;
-                    _mySettings.FontSize2 = 14;
-                    _mySettings.LineHeight = 28;
-                    break;
-                case 4:
-                    _mySettings.FontSize1 = 21;
-                    _mySettings.FontSize2 = 15;
-                    _mySettings.LineHeight = 36;
-                    break;
-            }
-
-            _settings.FontSizeType = i;
-            _mySettings.ThemeType = i;
-            SettingsService.Save(_settings);
+            _settings.ThemeType = val;
+            _mySettings.ThemeType = _settings.ThemeType;
         }
 
         private void FontSizeSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
@@ -607,6 +544,10 @@ namespace Hipda.Client.Uwp.Pro
             _mySettings.FontSize1 = val;
             _mySettings.FontSize2 = val > 15 ? 14 : 12;
             _mySettings.LineHeight = val * 1.6;
+
+            _settings.FontSize1 = _mySettings.FontSize1;
+            _settings.FontSize2 = _mySettings.FontSize2;
+            _settings.LineHeight = _mySettings.LineHeight;
         }
 
         private void LineHeightSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
@@ -614,7 +555,6 @@ namespace Hipda.Client.Uwp.Pro
             double val = e.NewValue;
             _settings.LineHeight = val;
             _mySettings.LineHeight = val;
-            SettingsService.Save(_settings);
         }
     }
 }

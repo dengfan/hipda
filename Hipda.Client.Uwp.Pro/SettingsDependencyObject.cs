@@ -10,7 +10,6 @@ namespace Hipda.Client.Uwp.Pro
     public class SettingsDependencyObject : DependencyObject
     {
         public int ThemeType { get; set; }
-        public int FontSizeType { get; set; }
 
         public double FontSize1
         {
