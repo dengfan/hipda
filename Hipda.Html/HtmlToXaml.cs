@@ -154,7 +154,7 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string fontText = m.Groups[1].Value;
 
-                    string fontXaml = string.Format(@"[Span FontSize=""{{Binding MyFontSize2,Source={{StaticResource MyText}}}}""]{0}[/Span]", fontText);
+                    string fontXaml = string.Format(@"[Span FontSize=""{{Binding FontSize2,Source={{StaticResource MySettings}}}}""]{0}[/Span]", fontText);
                     htmlContent = htmlContent.Replace(placeHolder, fontXaml);
                 }
             }
@@ -191,7 +191,7 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string infoContent = m.Groups[1].Value.Trim();
 
-                    string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""{{ThemeResource SystemControlForegroundBaseLowBrush}}"" FontSize=""{{Binding MyFontSize2,Source={{StaticResource MyText}}}}""/][LineBreak/]", infoContent);
+                    string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""{{ThemeResource SystemControlForegroundBaseLowBrush}}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MySettings}}}}""/][LineBreak/]", infoContent);
                     htmlContent = htmlContent.Replace(placeHolder, infoXaml);
                 }
             }
@@ -252,7 +252,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
 
-            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"" LineHeight=""{{Binding MyLineHeight,Source={{StaticResource MyText}}}}""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MySettings}}}}""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 

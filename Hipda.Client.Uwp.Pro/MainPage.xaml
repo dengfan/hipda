@@ -388,7 +388,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="1,0,0,0">
-                                <TextBlock TextWrapping="Wrap" FontSize="{Binding MyFontSize2,Source={StaticResource MyText}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
+                                <TextBlock TextWrapping="Wrap" FontSize="{Binding FontSize2,Source={StaticResource MySettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
                             </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -411,16 +411,16 @@
                     <StackPanel Padding="12,0,20,0">
                         <TextBlock Margin="0,0,0,8" Text="账号"/>
                         <TextBlock Margin="0,0,0,8" Text="选择主题"/>
-                        <ComboBox Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MyText}}" SelectionChanged="ThemeComboBox_SelectionChanged">
+                        <ComboBox Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings}}" SelectionChanged="ThemeComboBox_SelectionChanged">
                             <x:String>亮</x:String>
                             <x:String>暗</x:String>
                         </ComboBox>
                         <TextBlock Text="图片明暗度"/>
-                        <Slider x:Name="PictureOpacitySlider" Minimum="0.1" Maximum="1.0" StepFrequency="0.1" Value="{Binding PictureOpacity,Source={StaticResource MyText},Mode=TwoWay}"/>
+                        <Slider x:Name="PictureOpacitySlider" Minimum="0.1" Maximum="1.0" StepFrequency="0.1" Value="{Binding PictureOpacity,Source={StaticResource MySettings},Mode=TwoWay}"/>
                         <TextBlock Text="字号"/>
-                        <Slider x:Name="FontSizeSlider" Minimum="14" Maximum="21" Value="{Binding MyFontSize1,Source={StaticResource MyText},Mode=TwoWay}" ValueChanged="FontSizeSlider_ValueChanged" />
+                        <Slider x:Name="FontSizeSlider" Minimum="14" Maximum="21" Value="{Binding FontSize1,Source={StaticResource MySettings},Mode=TwoWay}" ValueChanged="FontSizeSlider_ValueChanged" />
                         <TextBlock Text="行高"/>
-                        <Slider x:Name="LineHeightSlider" Minimum="22" Maximum="48" Value="{Binding MyLineHeight,Source={StaticResource MyText},Mode=TwoWay}" ValueChanged="LineHeightSlider_ValueChanged" />
+                        <Slider x:Name="LineHeightSlider" Minimum="22" Maximum="48" Value="{Binding LineHeight,Source={StaticResource MySettings},Mode=TwoWay}" ValueChanged="LineHeightSlider_ValueChanged" />
                         <ToggleSwitch Margin="0,0,0,8">
                             <ToggleSwitch.Header>
                                 <TextBlock Text="显示置顶贴"/>

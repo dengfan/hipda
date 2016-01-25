@@ -27,7 +27,7 @@ namespace Hipda.Client.Uwp.Pro
     public sealed partial class MainPage : Page
     {
         SettingsModel _settings;
-        SettingsDependencyObject _myText;
+        SettingsDependencyObject _mySettings;
         MainPageViewModel _mainPageViewModel;
         ThreadHistoryListViewViewModel _threadHistoryListViewViewModel;
 
@@ -50,11 +50,11 @@ namespace Hipda.Client.Uwp.Pro
                 _settings.ThemeType = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
             }
 
-            _myText = ((SettingsDependencyObject)App.Current.Resources["MyText"]);
-            _myText.ThemeType = _settings.ThemeType;
+            _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
+            _mySettings.ThemeType = _settings.ThemeType;
 
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            switch (_myText.ThemeType)
+            switch (_mySettings.ThemeType)
             {
                 case 0:
                     this.RequestedTheme = ElementTheme.Light;
@@ -67,7 +67,7 @@ namespace Hipda.Client.Uwp.Pro
                     titleBar.ButtonForegroundColor = null;
                     titleBar.ButtonHoverBackgroundColor = null;
 
-                    _myText.PictureOpacity = 1;
+                    _mySettings.PictureOpacity = 1;
                     break;
                 case 1:
                     this.RequestedTheme = ElementTheme.Dark;
@@ -81,40 +81,40 @@ namespace Hipda.Client.Uwp.Pro
                     titleBar.ButtonForegroundColor = Colors.Silver;
                     titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
 
-                    _myText.PictureOpacity = _settings.PictureOpacity;
+                    _mySettings.PictureOpacity = _settings.PictureOpacity;
                     break;
             }
 
-            _myText.FontSizeType = _settings.FontSizeType;
-            switch (_myText.FontSizeType)
+            _mySettings.FontSizeType = _settings.FontSizeType;
+            switch (_mySettings.FontSizeType)
             {
                 case 0:
-                    _myText.FontSize1 = 14;
-                    _myText.FontSize2 = 12;
+                    _mySettings.FontSize1 = 14;
+                    _mySettings.FontSize2 = 12;
                     break;
                 case 1:
-                    _myText.FontSize1 = 15;
-                    _myText.FontSize2 = 12;
+                    _mySettings.FontSize1 = 15;
+                    _mySettings.FontSize2 = 12;
                     break;
                 case 2:
-                    _myText.FontSize1 = 16;
-                    _myText.FontSize2 = 14;
+                    _mySettings.FontSize1 = 16;
+                    _mySettings.FontSize2 = 14;
                     break;
                 case 3:
-                    _myText.FontSize1 = 17;
-                    _myText.FontSize2 = 14;
+                    _mySettings.FontSize1 = 17;
+                    _mySettings.FontSize2 = 14;
                     break;
                 case 4:
-                    _myText.FontSize1 = 21;
-                    _myText.FontSize2 = 15;
+                    _mySettings.FontSize1 = 21;
+                    _mySettings.FontSize2 = 15;
                     break;
                 default:
-                    _myText.FontSize1 = 15;
-                    _myText.FontSize2 = 12;
+                    _mySettings.FontSize1 = 15;
+                    _mySettings.FontSize2 = 12;
                     break;
             }
             
-            _myText.LineHeight = _settings.LineHeight;
+            _mySettings.LineHeight = _settings.LineHeight;
 
             SettingsService.Save(_settings);
             #endregion
@@ -560,7 +560,7 @@ namespace Hipda.Client.Uwp.Pro
             }
 
             _settings.ThemeType = comboBox.SelectedIndex;
-            _myText.ThemeType = comboBox.SelectedIndex;
+            _mySettings.ThemeType = comboBox.SelectedIndex;
             SettingsService.Save(_settings);
         }
 
@@ -570,50 +570,50 @@ namespace Hipda.Client.Uwp.Pro
             switch (i)
             {
                 case 0:
-                    _myText.FontSize1 = 14;
-                    _myText.FontSize2 = 12;
-                    _myText.LineHeight = 22;
+                    _mySettings.FontSize1 = 14;
+                    _mySettings.FontSize2 = 12;
+                    _mySettings.LineHeight = 22;
                     break;
                 case 1:
-                    _myText.FontSize1 = 15;
-                    _myText.FontSize2 = 12;
-                    _myText.LineHeight = 22;
+                    _mySettings.FontSize1 = 15;
+                    _mySettings.FontSize2 = 12;
+                    _mySettings.LineHeight = 22;
                     break;
                 case 2:
-                    _myText.FontSize1 = 16;
-                    _myText.FontSize2 = 14;
-                    _myText.LineHeight = 25;
+                    _mySettings.FontSize1 = 16;
+                    _mySettings.FontSize2 = 14;
+                    _mySettings.LineHeight = 25;
                     break;
                 case 3:
-                    _myText.FontSize1 = 17;
-                    _myText.FontSize2 = 14;
-                    _myText.LineHeight = 28;
+                    _mySettings.FontSize1 = 17;
+                    _mySettings.FontSize2 = 14;
+                    _mySettings.LineHeight = 28;
                     break;
                 case 4:
-                    _myText.FontSize1 = 21;
-                    _myText.FontSize2 = 15;
-                    _myText.LineHeight = 36;
+                    _mySettings.FontSize1 = 21;
+                    _mySettings.FontSize2 = 15;
+                    _mySettings.LineHeight = 36;
                     break;
             }
 
             _settings.FontSizeType = i;
-            _myText.ThemeType = i;
+            _mySettings.ThemeType = i;
             SettingsService.Save(_settings);
         }
 
         private void FontSizeSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
         {
             double val = e.NewValue;
-            _myText.FontSize1 = val;
-            _myText.FontSize2 = val > 15 ? 14 : 12;
-            _myText.LineHeight = val * 1.6;
+            _mySettings.FontSize1 = val;
+            _mySettings.FontSize2 = val > 15 ? 14 : 12;
+            _mySettings.LineHeight = val * 1.6;
         }
 
         private void LineHeightSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
         {
             double val = e.NewValue;
             _settings.LineHeight = val;
-            _myText.LineHeight = val;
+            _mySettings.LineHeight = val;
             SettingsService.Save(_settings);
         }
     }

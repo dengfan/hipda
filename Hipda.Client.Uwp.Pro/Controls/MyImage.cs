@@ -108,7 +108,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                 }
 
                 ContentControl content1 = GetTemplateChild("content1") as ContentControl;
-                var myDependencyObject = (SettingsDependencyObject)App.Current.Resources["MyText"];
+                var myDependencyObject = (SettingsDependencyObject)App.Current.Resources["MySettings"];
                 Binding b = new Binding { Source = myDependencyObject, Path = new PropertyPath("PictureOpacity") };
 
                 Image img = new Image();
