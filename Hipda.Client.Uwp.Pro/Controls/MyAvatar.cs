@@ -22,7 +22,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
     public sealed class MyAvatar : Control
     {
         private Border _border1;
-        private Grid _grid1;
+        private Border _border2;
 
         public MyAvatar()
         {
@@ -91,7 +91,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             base.OnApplyTemplate();
 
             _border1 = GetTemplateChild("border1") as Border;
-            _grid1 = GetTemplateChild("grid1") as Grid;
+            _border2 = GetTemplateChild("border2") as Border;
         }
 
         private static void OnUserIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -99,7 +99,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var instance = d as MyAvatar;
             int userId = (int)e.NewValue;
 
-            if (instance._grid1 != null)
+            if (instance._border2 != null)
             {
                 BitmapImage bi = new BitmapImage();
                 bi.UriSource = Common.GetSmallAvatarUriByUserId(userId);
@@ -108,7 +108,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                 ib.Stretch = Stretch.UniformToFill;
                 ib.ImageSource = bi;
                 ib.ImageFailed += (s, e2) => { return; };
-                instance._grid1.Background = ib;
+                instance._border2.Background = ib;
             }
         }
 
