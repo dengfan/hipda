@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Hipda.Client.Uwp.Pro"
+    xmlns:m="using:Hipda.Client.Uwp.Pro.Models"
     xmlns:t="using:Hipda.Client.Uwp.Pro.Triggers"
     xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -410,12 +411,12 @@
                     <StackPanel Padding="12,0,20,0">
                         <TextBlock Margin="0,0,0,8" Text="账号"/>
                         <TextBlock Margin="0,0,0,8" Text="选择主题"/>
-                        <ComboBox Margin="0,0,0,16" HorizontalAlignment="Stretch" PlaceholderText="亮" SelectionChanged="ThemeComboBox_SelectionChanged">
+                        <ComboBox Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="{Binding Settings.ThemeType}" SelectionChanged="ThemeComboBox_SelectionChanged">
                             <x:String>亮</x:String>
                             <x:String>暗</x:String>
                         </ComboBox>
                         <TextBlock Margin="0,0,0,8" Text="字号"/>
-                        <ComboBox Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="1" SelectionChanged="FontSizeComboBox_SelectionChanged">
+                        <ComboBox Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="{Binding Settings.FontSizeType}" SelectionChanged="FontSizeComboBox_SelectionChanged">
                             <ComboBoxItem>
                                 <TextBlock Text="小" FontSize="14"/>
                             </ComboBoxItem>
@@ -440,9 +441,12 @@
                             </ToggleSwitch.Header>
                         </ToggleSwitch>
 
+                        <TextBlock Margin="0,0,0,8" Text="小尾巴"/>
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的用户"/>
+                        
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的主题"/>
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的关键字"/>
+                        <Button Content="购买“去广告” ￥18.00" HorizontalAlignment="Stretch"/>
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>

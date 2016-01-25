@@ -7,7 +7,7 @@
     xmlns:local="using:Hipda.Client.Uwp.Pro">
 
     <Application.Resources>
-        <local:MyTextDependencyObject x:Key="MyText" MyFontSize1="15" MyFontSize2="12" MyLineHeight="22"></local:MyTextDependencyObject>
+        <local:MyDependencyObject x:Key="MyText"/>
         
         <ControlTemplate x:Key="TextBoxTemplate1" TargetType="TextBox">
             <Grid>

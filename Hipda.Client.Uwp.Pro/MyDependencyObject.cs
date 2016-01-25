@@ -7,7 +7,7 @@ using Windows.UI.Xaml;
 
 namespace Hipda.Client.Uwp.Pro
 {
-    public class MyTextDependencyObject : DependencyObject
+    public class MyDependencyObject : DependencyObject
     {
 
 
@@ -19,7 +19,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for MyFontSize.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MyFontSizeProperty =
-            DependencyProperty.Register("MyFontSize1", typeof(double), typeof(MyTextDependencyObject), new PropertyMetadata(15));
+            DependencyProperty.Register("MyFontSize1", typeof(double), typeof(MyDependencyObject), new PropertyMetadata(15));
 
 
         public double MyFontSize2
@@ -30,7 +30,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for MyFontSize2.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MyFontSize2Property =
-            DependencyProperty.Register("MyFontSize2", typeof(double), typeof(MyTextDependencyObject), new PropertyMetadata(12));
+            DependencyProperty.Register("MyFontSize2", typeof(double), typeof(MyDependencyObject), new PropertyMetadata(12));
 
 
         public double MyLineHeight
@@ -41,7 +41,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for MyLineHeight.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MyLineHeightProperty =
-            DependencyProperty.Register("MyLineHeight", typeof(double), typeof(MyTextDependencyObject), new PropertyMetadata(22));
+            DependencyProperty.Register("MyLineHeight", typeof(double), typeof(MyDependencyObject), new PropertyMetadata(22));
 
 
     }
