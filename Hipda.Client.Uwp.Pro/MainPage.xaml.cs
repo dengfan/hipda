@@ -27,7 +27,7 @@ namespace Hipda.Client.Uwp.Pro
     public sealed partial class MainPage : Page
     {
         SettingsModel _settings;
-        MyDependencyObject _myText;
+        SettingsDependencyObject _myText;
         MainPageViewModel _mainPageViewModel;
         ThreadHistoryListViewViewModel _threadHistoryListViewViewModel;
 
@@ -50,7 +50,7 @@ namespace Hipda.Client.Uwp.Pro
                 _settings.ThemeType = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
             }
 
-            _myText = ((MyDependencyObject)App.Current.Resources["MyText"]);
+            _myText = ((SettingsDependencyObject)App.Current.Resources["MyText"]);
             _myText.ThemeType = _settings.ThemeType;
 
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
@@ -89,32 +89,32 @@ namespace Hipda.Client.Uwp.Pro
             switch (_myText.FontSizeType)
             {
                 case 0:
-                    _myText.MyFontSize1 = 14;
-                    _myText.MyFontSize2 = 12;
+                    _myText.FontSize1 = 14;
+                    _myText.FontSize2 = 12;
                     break;
                 case 1:
-                    _myText.MyFontSize1 = 15;
-                    _myText.MyFontSize2 = 12;
+                    _myText.FontSize1 = 15;
+                    _myText.FontSize2 = 12;
                     break;
                 case 2:
-                    _myText.MyFontSize1 = 16;
-                    _myText.MyFontSize2 = 14;
+                    _myText.FontSize1 = 16;
+                    _myText.FontSize2 = 14;
                     break;
                 case 3:
-                    _myText.MyFontSize1 = 17;
-                    _myText.MyFontSize2 = 14;
+                    _myText.FontSize1 = 17;
+                    _myText.FontSize2 = 14;
                     break;
                 case 4:
-                    _myText.MyFontSize1 = 21;
-                    _myText.MyFontSize2 = 15;
+                    _myText.FontSize1 = 21;
+                    _myText.FontSize2 = 15;
                     break;
                 default:
-                    _myText.MyFontSize1 = 15;
-                    _myText.MyFontSize2 = 12;
+                    _myText.FontSize1 = 15;
+                    _myText.FontSize2 = 12;
                     break;
             }
             
-            _myText.MyLineHeight = _settings.LineHeight;
+            _myText.LineHeight = _settings.LineHeight;
 
             SettingsService.Save(_settings);
             #endregion
@@ -570,29 +570,29 @@ namespace Hipda.Client.Uwp.Pro
             switch (i)
             {
                 case 0:
-                    _myText.MyFontSize1 = 14;
-                    _myText.MyFontSize2 = 12;
-                    _myText.MyLineHeight = 22;
+                    _myText.FontSize1 = 14;
+                    _myText.FontSize2 = 12;
+                    _myText.LineHeight = 22;
                     break;
                 case 1:
-                    _myText.MyFontSize1 = 15;
-                    _myText.MyFontSize2 = 12;
-                    _myText.MyLineHeight = 22;
+                    _myText.FontSize1 = 15;
+                    _myText.FontSize2 = 12;
+                    _myText.LineHeight = 22;
                     break;
                 case 2:
-                    _myText.MyFontSize1 = 16;
-                    _myText.MyFontSize2 = 14;
-                    _myText.MyLineHeight = 25;
+                    _myText.FontSize1 = 16;
+                    _myText.FontSize2 = 14;
+                    _myText.LineHeight = 25;
                     break;
                 case 3:
-                    _myText.MyFontSize1 = 17;
-                    _myText.MyFontSize2 = 14;
-                    _myText.MyLineHeight = 28;
+                    _myText.FontSize1 = 17;
+                    _myText.FontSize2 = 14;
+                    _myText.LineHeight = 28;
                     break;
                 case 4:
-                    _myText.MyFontSize1 = 21;
-                    _myText.MyFontSize2 = 15;
-                    _myText.MyLineHeight = 36;
+                    _myText.FontSize1 = 21;
+                    _myText.FontSize2 = 15;
+                    _myText.LineHeight = 36;
                     break;
             }
 
@@ -604,16 +604,16 @@ namespace Hipda.Client.Uwp.Pro
         private void FontSizeSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
         {
             double val = e.NewValue;
-            _myText.MyFontSize1 = val;
-            _myText.MyFontSize2 = val > 15 ? 14 : 12;
-            _myText.MyLineHeight = val * 1.6;
+            _myText.FontSize1 = val;
+            _myText.FontSize2 = val > 15 ? 14 : 12;
+            _myText.LineHeight = val * 1.6;
         }
 
         private void LineHeightSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
         {
             double val = e.NewValue;
             _settings.LineHeight = val;
-            _myText.MyLineHeight = val;
+            _myText.LineHeight = val;
             SettingsService.Save(_settings);
         }
     }
