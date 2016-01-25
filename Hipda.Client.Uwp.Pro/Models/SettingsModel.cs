@@ -23,6 +23,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         public int ThemeType { get; set; } = -1; // -1表示未设定
         public int FontSizeType { get; set; } = 1;
         public double LineHeight { get; set; } = 22;
+        public double PictureOpacity { get; set; } = 0.4;
         public bool CanShowTopTheme { get; set; } = true;
         public string MessageTail { get; set; } = string.Empty;
         public string BlockKeywords { get; set; } = string.Empty;

@@ -119,7 +119,6 @@
     <Compile Include="Models\FaceItemModel.cs" />
     <Compile Include="Models\NavButtonItemModel.cs" />
     <Compile Include="Models\NoticeItemModel.cs" />
-    <Compile Include="Models\OpenNewViewParameterModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\ThreadDataType.cs" />
     <Compile Include="Models\ThreadItemForMyFavoritesModel.cs" />
@@ -156,7 +155,6 @@
     <Compile Include="Services\GeneratorIncrementalLoadingClass.cs" />
     <Compile Include="Services\IncrementalLoadingBase.cs" />
     <Compile Include="Services\SettingsService.cs" />
-    <Compile Include="ViewLifetimeControl.cs" />
     <Compile Include="ThreadListItemTemplateSelector.cs" />
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
     <Compile Include="Triggers\InputTypeTrigger.cs" />

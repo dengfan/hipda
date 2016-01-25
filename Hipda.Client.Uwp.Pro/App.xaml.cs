@@ -63,7 +63,7 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        public ObservableCollection<ViewLifetimeControl> SecondaryViews = new ObservableCollection<ViewLifetimeControl>();
+        //public ObservableCollection<ViewLifetimeControl> SecondaryViews = new ObservableCollection<ViewLifetimeControl>();
 
         private CoreDispatcher mainDispatcher;
         public CoreDispatcher MainDispatcher

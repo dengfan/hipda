@@ -26,7 +26,8 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public SettingsModel Settings;
+        SettingsModel _settings;
+        MyDependencyObject _myText;
         MainPageViewModel _mainPageViewModel;
         ThreadHistoryListViewViewModel _threadHistoryListViewViewModel;
 
@@ -43,15 +44,17 @@ namespace Hipda.Client.Uwp.Pro
             this.InitializeComponent();
 
             #region 读取并启用设置
-            Settings = SettingsService.Read();
-            var myText = App.Current.Resources["MyText"] as MyDependencyObject;
-            if (Settings.ThemeType == -1)
+            _settings = SettingsService.Read();
+            if (_settings.ThemeType == -1)
             {
-                Settings.ThemeType = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
+                _settings.ThemeType = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
             }
 
+            _myText = ((MyDependencyObject)App.Current.Resources["MyText"]);
+            _myText.ThemeType = _settings.ThemeType;
+
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            switch (Settings.ThemeType)
+            switch (_myText.ThemeType)
             {
                 case 0:
                     this.RequestedTheme = ElementTheme.Light;
@@ -63,6 +66,8 @@ namespace Hipda.Client.Uwp.Pro
                     titleBar.ButtonInactiveBackgroundColor = null;
                     titleBar.ButtonForegroundColor = null;
                     titleBar.ButtonHoverBackgroundColor = null;
+
+                    _myText.PictureOpacity = 1;
                     break;
                 case 1:
                     this.RequestedTheme = ElementTheme.Dark;
@@ -70,45 +75,48 @@ namespace Hipda.Client.Uwp.Pro
                     Color c = Colors.Black;
                     titleBar.BackgroundColor = c;
                     titleBar.InactiveBackgroundColor = c;
-                    titleBar.ForegroundColor = Colors.White;
+                    titleBar.ForegroundColor = Colors.Silver;
                     titleBar.ButtonBackgroundColor = c;
                     titleBar.ButtonInactiveBackgroundColor = c;
-                    titleBar.ButtonForegroundColor = Colors.White;
+                    titleBar.ButtonForegroundColor = Colors.Silver;
                     titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
+
+                    _myText.PictureOpacity = _settings.PictureOpacity;
                     break;
             }
 
-            switch (Settings.FontSizeType)
+            _myText.FontSizeType = _settings.FontSizeType;
+            switch (_myText.FontSizeType)
             {
                 case 0:
-                    myText.MyFontSize1 = 14;
-                    myText.MyFontSize2 = 12;
+                    _myText.MyFontSize1 = 14;
+                    _myText.MyFontSize2 = 12;
                     break;
                 case 1:
-                    myText.MyFontSize1 = 15;
-                    myText.MyFontSize2 = 12;
+                    _myText.MyFontSize1 = 15;
+                    _myText.MyFontSize2 = 12;
                     break;
                 case 2:
-                    myText.MyFontSize1 = 16;
-                    myText.MyFontSize2 = 14;
+                    _myText.MyFontSize1 = 16;
+                    _myText.MyFontSize2 = 14;
                     break;
                 case 3:
-                    myText.MyFontSize1 = 17;
-                    myText.MyFontSize2 = 14;
+                    _myText.MyFontSize1 = 17;
+                    _myText.MyFontSize2 = 14;
                     break;
                 case 4:
-                    myText.MyFontSize1 = 21;
-                    myText.MyFontSize2 = 15;
+                    _myText.MyFontSize1 = 21;
+                    _myText.MyFontSize2 = 15;
                     break;
                 default:
-                    myText.MyFontSize1 = 15;
-                    myText.MyFontSize2 = 12;
+                    _myText.MyFontSize1 = 15;
+                    _myText.MyFontSize2 = 12;
                     break;
             }
+            
+            _myText.MyLineHeight = _settings.LineHeight;
 
-            myText.MyLineHeight = Settings.LineHeight;
-
-            SettingsService.Save(Settings);
+            SettingsService.Save(_settings);
             #endregion
 
             _mainPageViewModel = MainPageViewModel.GetInstance();
@@ -551,53 +559,62 @@ namespace Hipda.Client.Uwp.Pro
                 titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
             }
 
-            Settings.ThemeType = comboBox.SelectedIndex;
-            SettingsService.Save(Settings);
+            _settings.ThemeType = comboBox.SelectedIndex;
+            _myText.ThemeType = comboBox.SelectedIndex;
+            SettingsService.Save(_settings);
         }
 
         private void FontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var myText = ((MyDependencyObject)App.Current.Resources["MyText"]);
             int i = ((ComboBox)sender).SelectedIndex;
             switch (i)
             {
                 case 0:
-                    myText.MyFontSize1 = 14;
-                    myText.MyFontSize2 = 12;
-                    myText.MyLineHeight = 22;
-                    return;
+                    _myText.MyFontSize1 = 14;
+                    _myText.MyFontSize2 = 12;
+                    _myText.MyLineHeight = 22;
+                    break;
                 case 1:
-                    myText.MyFontSize1 = 15;
-                    myText.MyFontSize2 = 12;
-                    myText.MyLineHeight = 22;
-                    return;
+                    _myText.MyFontSize1 = 15;
+                    _myText.MyFontSize2 = 12;
+                    _myText.MyLineHeight = 22;
+                    break;
                 case 2:
-                    myText.MyFontSize1 = 16;
-                    myText.MyFontSize2 = 14;
-                    myText.MyLineHeight = 25;
-                    return;
+                    _myText.MyFontSize1 = 16;
+                    _myText.MyFontSize2 = 14;
+                    _myText.MyLineHeight = 25;
+                    break;
                 case 3:
-                    myText.MyFontSize1 = 17;
-                    myText.MyFontSize2 = 14;
-                    myText.MyLineHeight = 28;
-                    return;
+                    _myText.MyFontSize1 = 17;
+                    _myText.MyFontSize2 = 14;
+                    _myText.MyLineHeight = 28;
+                    break;
                 case 4:
-                    myText.MyFontSize1 = 21;
-                    myText.MyFontSize2 = 15;
-                    myText.MyLineHeight = 36;
-                    return;
+                    _myText.MyFontSize1 = 21;
+                    _myText.MyFontSize2 = 15;
+                    _myText.MyLineHeight = 36;
+                    break;
             }
 
-            Settings.FontSizeType = i;
-            SettingsService.Save(Settings);
+            _settings.FontSizeType = i;
+            _myText.ThemeType = i;
+            SettingsService.Save(_settings);
+        }
+
+        private void FontSizeSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+        {
+            double val = e.NewValue;
+            _myText.MyFontSize1 = val;
+            _myText.MyFontSize2 = val > 15 ? 14 : 12;
+            _myText.MyLineHeight = val * 1.6;
         }
 
         private void LineHeightSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
         {
             double val = e.NewValue;
-            ((MyDependencyObject)App.Current.Resources["MyText"]).MyLineHeight = val;
-            Settings.LineHeight = val;
-            SettingsService.Save(Settings);
+            _settings.LineHeight = val;
+            _myText.MyLineHeight = val;
+            SettingsService.Save(_settings);
         }
     }
 }
