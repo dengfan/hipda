@@ -21,7 +21,8 @@ namespace Hipda.Client.Uwp.Pro.Models
     public class SettingsModel
     {
         public int ThemeType { get; set; } = -1; // -1表示未设定
-        public int FontSizeType { get; set; } = 1;
+        public double FontSize1 { get; set; } = 15;
+        public double FontSize2 { get; set; } = 12;
         public double LineHeight { get; set; } = 22;
         public double PictureOpacity { get; set; } = 0.4;
         public bool CanShowTopTheme { get; set; } = true;
