@@ -57,7 +57,7 @@
                 <ControlTemplate TargetType="c:MyAvatar">
                     <Border x:Name="border1" Style="{StaticResource AvatarStyle}"
                             Background="{ThemeResource SystemControlBackgroundListLowBrush}">
-                        <Grid x:Name="grid1" CornerRadius="20" Width="40" Height="40"/>
+                        <Border x:Name="border2" CornerRadius="20" Width="40" Height="40" Opacity="{Binding PictureOpacity,Source={StaticResource MyText}}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
