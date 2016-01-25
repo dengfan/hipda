@@ -10,6 +10,7 @@ using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -107,8 +108,11 @@ namespace Hipda.Client.Uwp.Pro.Controls
                 }
 
                 ContentControl content1 = GetTemplateChild("content1") as ContentControl;
+                var myDependencyObject = (MyDependencyObject)App.Current.Resources["MyText"];
+                Binding b = new Binding { Source = myDependencyObject, Path = new PropertyPath("PictureOpacity") };
 
                 Image img = new Image();
+                img.SetBinding(Image.OpacityProperty, b);
                 img.Stretch = Stretch.None;
                 img.ImageFailed += (s, e) =>
                 {
@@ -158,6 +162,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                             if (isGif) // GIF图片且不是论坛表情图标，则使用WebView控件显示
                             {
                                 WebView webView = new WebView();
+                                webView.SetBinding(WebView.OpacityProperty, b);
                                 webView.DefaultBackgroundColor = Colors.Transparent;
                                 webView.Width = imgWidth;
                                 webView.Height = imgHeight;
@@ -166,7 +171,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                                     await OpenPhoto();
                                 };
 
-                                string imgHtml = @"<html><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""GIF Image"" /></body></html>";
+                                string imgHtml = @"<html><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""Gif Image"" /></body></html>";
                                 imgHtml = string.Format(imgHtml, Url);
                                 webView.NavigateToString(imgHtml);
 
