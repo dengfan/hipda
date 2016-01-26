@@ -66,6 +66,8 @@ namespace Hipda.Client.Uwp.Pro
                     titleBar.ButtonInactiveBackgroundColor = null;
                     titleBar.ButtonForegroundColor = null;
                     titleBar.ButtonHoverBackgroundColor = null;
+
+                    _mySettings.PictureOpacity = 1;
                     break;
                 case 1:
                     this.RequestedTheme = ElementTheme.Dark;
@@ -77,13 +79,15 @@ namespace Hipda.Client.Uwp.Pro
                     titleBar.ButtonInactiveBackgroundColor = c;
                     titleBar.ButtonForegroundColor = Colors.Silver;
                     titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
+
+                    _mySettings.PictureOpacity = _settings.PictureOpacity;
                     break;
             }
 
             _mySettings.FontSize1 = _settings.FontSize1;
             _mySettings.FontSize2 = _settings.FontSize2;
             _mySettings.LineHeight = _settings.LineHeight;
-            _mySettings.PictureOpacity = _settings.PictureOpacity;
+            _mySettings.PictureOpacityBak = _settings.PictureOpacity;
         }
 
         public MainPage()
