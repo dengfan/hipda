@@ -39,16 +39,16 @@ namespace Hipda.Client.Uwp.Pro
             BottomButtonPanel.Orientation = MainSplitView.IsPaneOpen ? Orientation.Horizontal : Orientation.Vertical;
         }
 
-        public MainPage()
+        /// <summary>
+        /// 读取并启用设置
+        /// </summary>
+        void InitSettings()
         {
-            this.InitializeComponent();
-
-            #region 读取并启用设置
             _settings = SettingsService.Read();
             if (_settings.ThemeType == -1)
             {
                 _settings.ThemeType = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
-                SettingsService.Save(_settings);
+                SettingsService.Save();
             }
 
             _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
@@ -59,7 +59,6 @@ namespace Hipda.Client.Uwp.Pro
             {
                 case 0:
                     this.RequestedTheme = ElementTheme.Light;
-
                     titleBar.BackgroundColor = null;
                     titleBar.InactiveBackgroundColor = null;
                     titleBar.ForegroundColor = null;
@@ -72,7 +71,6 @@ namespace Hipda.Client.Uwp.Pro
                     break;
                 case 1:
                     this.RequestedTheme = ElementTheme.Dark;
-
                     Color c = Colors.Black;
                     titleBar.BackgroundColor = c;
                     titleBar.InactiveBackgroundColor = c;
@@ -89,7 +87,13 @@ namespace Hipda.Client.Uwp.Pro
             _mySettings.FontSize1 = _settings.FontSize1;
             _mySettings.FontSize2 = _settings.FontSize2;
             _mySettings.LineHeight = _settings.LineHeight;
-            #endregion
+            _mySettings.PictureOpacity = _settings.PictureOpacity;
+        }
+
+        public MainPage()
+        {
+            this.InitializeComponent();
+            InitSettings();
 
             _mainPageViewModel = MainPageViewModel.GetInstance();
             DataContext = _mainPageViewModel;
@@ -210,7 +214,7 @@ namespace Hipda.Client.Uwp.Pro
             MaskGrid.Visibility = Visibility.Collapsed;
 
             // 保存设置
-            SettingsService.Save(_settings);
+            SettingsService.Save();
         }
 
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

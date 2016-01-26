@@ -3,13 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.Uwp.Pro
 {
     public class SettingsDependencyObject : DependencyObject
     {
-        public int ThemeType { get; set; }
+        private int themeType;
+
+        public int ThemeType
+        {
+            get { return themeType; }
+            set
+            {
+                themeType = value;
+
+                var frame = Window.Current.Content as Frame;
+                var mp = frame.Content as MainPage;
+                if (mp != null)
+                {
+                    var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                    if (themeType == 0)
+                    {
+                        mp.RequestedTheme = ElementTheme.Light;
+                        titleBar.BackgroundColor = null;
+                        titleBar.InactiveBackgroundColor = null;
+                        titleBar.ForegroundColor = null;
+                        titleBar.ButtonBackgroundColor = null;
+                        titleBar.ButtonInactiveBackgroundColor = null;
+                        titleBar.ButtonForegroundColor = null;
+                        titleBar.ButtonHoverBackgroundColor = null;
+                    }
+                    else if (themeType == 1)
+                    {
+                        mp.RequestedTheme = ElementTheme.Dark;
+                        Color c = Colors.Black;
+                        titleBar.BackgroundColor = c;
+                        titleBar.InactiveBackgroundColor = c;
+                        titleBar.ForegroundColor = Colors.Silver;
+                        titleBar.ButtonBackgroundColor = c;
+                        titleBar.ButtonInactiveBackgroundColor = c;
+                        titleBar.ButtonForegroundColor = Colors.Silver;
+                        titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
+                    }
+                }
+            }
+        }
 
         public double FontSize1
         {

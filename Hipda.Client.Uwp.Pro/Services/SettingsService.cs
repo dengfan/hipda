@@ -26,9 +26,20 @@ namespace Hipda.Client.Uwp.Pro.Services
             return new SettingsModel();
         }
 
-        public static void Save(SettingsModel settingsData)
+        public static void Save()
         {
-            string jsonStr = JsonConvert.SerializeObject(settingsData);
+            var mySettings = (SettingsDependencyObject)App.Current.Resources["MySettings"];
+
+            var data = new SettingsModel
+            {
+                ThemeType = mySettings.ThemeType,
+                FontSize1 = mySettings.FontSize1,
+                FontSize2 = mySettings.FontSize2,
+                LineHeight = mySettings.LineHeight,
+                PictureOpacity = mySettings.PictureOpacity
+            };
+
+            string jsonStr = JsonConvert.SerializeObject(data);
             _container.Values[_dataKey] = jsonStr;
         }
     }
