@@ -248,6 +248,14 @@
             <Polygon Points="6,0 0,6 0,-6" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
         </ControlTemplate>
 
+        <Style TargetType="AppBarButton">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
+
+        <Style TargetType="AppBarToggleButton">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
+
         <Style x:Key="FaceButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
             <Setter Property="Background" Value="Transparent"/>

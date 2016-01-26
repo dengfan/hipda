@@ -395,8 +395,8 @@
                 </ListView>
 
                 <StackPanel Orientation="Horizontal" Margin="12,0,0,0" Height="48">
-                    <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center" />
-                    <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center" />
+                    <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                    <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -537,7 +537,7 @@
                         <Button Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click">
                             <Button.Content>
                                 <Grid>
-                                    <SymbolIcon Symbol="Mail"/>
+                                    <FontIcon Glyph="&#xEA8F;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
                                     <Border Visibility="{Binding NoticeNoVisibility}" Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
                                         <TextBlock Text="{Binding PromptAllWithoutPromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                                     </Border>
@@ -573,56 +573,56 @@
                     <Button Content="x" Command="{Binding ClearCookiesCommand}" VerticalAlignment="Bottom"/>
                 </Grid>
             </SplitView.Pane>
-
-            <Grid>
+            <SplitView.Content>
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition x:Name="RightSideColumn" Width="0" />
-                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition x:Name="RightSideColumn" Width="0" />
+                        </Grid.ColumnDefinitions>
 
-                    <Frame x:Name="MainFrame">
-                        <Frame.ContentTransitions>
-                            <TransitionCollection>
-                                <NavigationThemeTransition>
-                                    <NavigationThemeTransition.DefaultNavigationTransitionInfo>
-                                        <EntranceNavigationTransitionInfo/>
-                                    </NavigationThemeTransition.DefaultNavigationTransitionInfo>
-                                </NavigationThemeTransition>
-                            </TransitionCollection>
-                        </Frame.ContentTransitions>
-                    </Frame>
+                        <Frame x:Name="MainFrame">
+                            <Frame.ContentTransitions>
+                                <TransitionCollection>
+                                    <NavigationThemeTransition>
+                                        <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                                            <EntranceNavigationTransitionInfo/>
+                                        </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                                    </NavigationThemeTransition>
+                                </TransitionCollection>
+                            </Frame.ContentTransitions>
+                        </Frame>
 
-                    <ContentControl x:Name="RightSideWrap" Grid.Column="1" HorizontalContentAlignment="Stretch" ContentTemplate="{StaticResource HistoryRecordContentControl}"/>
-                </Grid>
+                        <ContentControl x:Name="RightSideWrap" Grid.Column="1" HorizontalContentAlignment="Stretch" ContentTemplate="{StaticResource HistoryRecordContentControl}"/>
+                    </Grid>
 
-                <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy" Background="DimGray" Opacity="0" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
+                    <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy" Background="DimGray" Opacity="0" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
 
-                <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy"
+                    <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy"
                       Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
                       Margin="-260,0,0,0" Width="260" HorizontalAlignment="Left">
-                    <Grid.RenderTransform>
-                        <CompositeTransform/>
-                    </Grid.RenderTransform>
-                    <ContentControl/>
-                </Grid>
+                        <Grid.RenderTransform>
+                            <CompositeTransform/>
+                        </Grid.RenderTransform>
+                        <ContentControl/>
+                    </Grid>
 
-                <Grid x:Name="RightSwipePanel" x:DeferLoadStrategy="Lazy"
+                    <Grid x:Name="RightSwipePanel" x:DeferLoadStrategy="Lazy"
                       Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
                       Margin="0,0,-260,0" Width="260" HorizontalAlignment="Right">
-                    <Grid.RenderTransform>
-                        <CompositeTransform/>
-                    </Grid.RenderTransform>
-                    <ContentControl x:Name="RightSwipeContentControl" HorizontalContentAlignment="Stretch"/>
+                        <Grid.RenderTransform>
+                            <CompositeTransform/>
+                        </Grid.RenderTransform>
+                        <ContentControl x:Name="RightSwipeContentControl" HorizontalContentAlignment="Stretch"/>
+                    </Grid>
                 </Grid>
-            </Grid>
-            
+            </SplitView.Content>
         </SplitView>
 
         <Button x:Name="MainSplitViewToggle" Style="{StaticResource NavButtonNormalStyle}" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
             <Button.Content>
                 <Grid>
-                    <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"/>
+                    <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                     <Ellipse x:Name="PromptAllBorder" Margin="6,6,0,0" Fill="{Binding PromptColor}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 </Grid>
             </Button.Content>
