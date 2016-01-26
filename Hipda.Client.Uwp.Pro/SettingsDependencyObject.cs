@@ -55,12 +55,12 @@ namespace Hipda.Client.Uwp.Pro
 
         public double FontSize1
         {
-            get { return (double)GetValue(MyFontSizeProperty); }
-            set { SetValue(MyFontSizeProperty, value); }
+            get { return (double)GetValue(FontSizeProperty); }
+            set { SetValue(FontSizeProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for MyFontSize.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MyFontSizeProperty =
+        public static readonly DependencyProperty FontSizeProperty =
             DependencyProperty.Register("FontSize1", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(15, new PropertyChangedCallback(OnFontSize1Changed)));
 
         private static void OnFontSize1Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -72,23 +72,23 @@ namespace Hipda.Client.Uwp.Pro
 
         public double FontSize2
         {
-            get { return (double)GetValue(MyFontSize2Property); }
-            set { SetValue(MyFontSize2Property, value); }
+            get { return (double)GetValue(FontSize2Property); }
+            set { SetValue(FontSize2Property, value); }
         }
 
         // Using a DependencyProperty as the backing store for MyFontSize2.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MyFontSize2Property =
+        public static readonly DependencyProperty FontSize2Property =
             DependencyProperty.Register("FontSize2", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(12));
 
 
         public double LineHeight
         {
-            get { return (double)GetValue(MyLineHeightProperty); }
-            set { SetValue(MyLineHeightProperty, value); }
+            get { return (double)GetValue(LineHeightProperty); }
+            set { SetValue(LineHeightProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for MyLineHeight.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MyLineHeightProperty =
+        public static readonly DependencyProperty LineHeightProperty =
             DependencyProperty.Register("LineHeight", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(22));
 
 
