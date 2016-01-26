@@ -404,42 +404,46 @@
 
         <cvt:ThemeTypeNameToVisibilityConverter x:Key="themeTypeNameToVisibilityConverter"/>
         <DataTemplate x:Key="SettingsContentControl">
-            <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Margin="12,0,0,0" Height="48">
                     <SymbolIcon Symbol="Setting"/>
-                    <TextBlock Margin="8,0,0,0" Text="设置" VerticalAlignment="Center" />
+                    <TextBlock Margin="8,0,0,0" Text="设置" VerticalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
                 </StackPanel>
-                <ScrollViewer>
+                <ScrollViewer Grid.Row="1">
                     <StackPanel Padding="12,0,20,0">
-                        <TextBlock Margin="0,0,0,8" Text="账号"/>
-                        <TextBlock Margin="0,0,0,8" Text="选择主题"/>
-                        <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings},Mode=TwoWay}">
+                        <TextBlock Margin="0,0,0,8" Text="账号" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Margin="0,0,0,8" Text="选择主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings},Mode=TwoWay}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                             <x:String>白天模式</x:String>
                             <x:String>夜间模式</x:String>
                         </ComboBox>
                         <StackPanel Visibility="{Binding SelectedValue,ElementName=ThemeTypeComboBox,Converter={StaticResource themeTypeNameToVisibilityConverter}}">
-                            <TextBlock Text="图片亮度调节"/>
+                            <TextBlock Text="图片亮度调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                             <Slider Minimum="0.1" Maximum="1.0" StepFrequency="0.1" Value="{Binding PictureOpacity,Source={StaticResource MySettings},Mode=TwoWay}"/>
                         </StackPanel>
-                        <TextBlock Text="字号调节"/>
+                        <TextBlock Text="字号调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <Slider Minimum="14" Maximum="22" Value="{Binding FontSize1,Source={StaticResource MySettings},Mode=TwoWay}"/>
-                        <TextBlock Text="行高调节"/>
+                        <TextBlock Text="行高调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <Slider Minimum="20" Maximum="48" Value="{Binding LineHeight,Source={StaticResource MySettings},Mode=TwoWay}"/>
-                        <ToggleSwitch Margin="0,0,0,8">
+                        <ToggleSwitch Margin="0,0,0,8" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                             <ToggleSwitch.Header>
-                                <TextBlock Text="显示置顶贴"/>
+                                <TextBlock Text="显示置顶贴" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                             </ToggleSwitch.Header>
                         </ToggleSwitch>
 
-                        <TextBlock Margin="0,0,0,8" Text="小尾巴"/>
-                        <TextBlock Margin="0,0,0,8" Text="屏蔽的用户"/>
-                        
-                        <TextBlock Margin="0,0,0,8" Text="屏蔽的主题"/>
-                        <TextBlock Margin="0,0,0,8" Text="屏蔽的关键字"/>
-                        <Button Content="购买“去广告” ￥18.00" HorizontalAlignment="Stretch"/>
+                        <TextBlock Margin="0,0,0,8" Text="小尾巴" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Margin="0,0,0,8" Text="屏蔽的用户" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+
+                        <TextBlock Margin="0,0,0,8" Text="屏蔽的主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Margin="0,0,0,8" Text="屏蔽的关键字" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <Button Content="购买“去广告” ￥18.00" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                     </StackPanel>
                 </ScrollViewer>
-            </StackPanel>
+            </Grid>
         </DataTemplate>
     </Page.Resources>
 
