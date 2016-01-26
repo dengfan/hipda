@@ -66,8 +66,6 @@ namespace Hipda.Client.Uwp.Pro
                     titleBar.ButtonInactiveBackgroundColor = null;
                     titleBar.ButtonForegroundColor = null;
                     titleBar.ButtonHoverBackgroundColor = null;
-
-                    _mySettings.PictureOpacity = 1;
                     break;
                 case 1:
                     this.RequestedTheme = ElementTheme.Dark;
@@ -79,8 +77,6 @@ namespace Hipda.Client.Uwp.Pro
                     titleBar.ButtonInactiveBackgroundColor = c;
                     titleBar.ButtonForegroundColor = Colors.Silver;
                     titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
-
-                    _mySettings.PictureOpacity = _settings.PictureOpacity;
                     break;
             }
 
@@ -506,59 +502,5 @@ namespace Hipda.Client.Uwp.Pro
             CloseUserDialog();
         }
         #endregion
-
-        private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var comboBox = (ComboBox)sender;
-            var val = comboBox.SelectedIndex;
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            if (val == 0)
-            {
-                this.RequestedTheme = ElementTheme.Light;
-
-                titleBar.BackgroundColor = null;
-                titleBar.InactiveBackgroundColor = null;
-                titleBar.ForegroundColor = null;
-                titleBar.ButtonBackgroundColor = null;
-                titleBar.ButtonInactiveBackgroundColor = null;
-                titleBar.ButtonForegroundColor = null;
-                titleBar.ButtonHoverBackgroundColor = null;
-            }
-            else if (val == 1)
-            {
-                this.RequestedTheme = ElementTheme.Dark;
-
-                Color c = Colors.Black;
-                titleBar.BackgroundColor = c;
-                titleBar.InactiveBackgroundColor = c;
-                titleBar.ForegroundColor = Colors.Silver;
-                titleBar.ButtonBackgroundColor = c;
-                titleBar.ButtonInactiveBackgroundColor = c;
-                titleBar.ButtonForegroundColor = Colors.Silver;
-                titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
-            }
-
-            _settings.ThemeType = val;
-            _mySettings.ThemeType = _settings.ThemeType;
-        }
-
-        private void FontSizeSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
-        {
-            double val = e.NewValue;
-            _mySettings.FontSize1 = val;
-            _mySettings.FontSize2 = val > 15 ? 14 : 12;
-            _mySettings.LineHeight = val * 1.6;
-
-            _settings.FontSize1 = _mySettings.FontSize1;
-            _settings.FontSize2 = _mySettings.FontSize2;
-            _settings.LineHeight = _mySettings.LineHeight;
-        }
-
-        private void LineHeightSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
-        {
-            double val = e.NewValue;
-            _settings.LineHeight = val;
-            _mySettings.LineHeight = val;
-        }
     }
 }

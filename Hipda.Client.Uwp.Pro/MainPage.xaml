@@ -6,6 +6,7 @@
     xmlns:m="using:Hipda.Client.Uwp.Pro.Models"
     xmlns:t="using:Hipda.Client.Uwp.Pro.Triggers"
     xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
+    xmlns:cvt="using:Hipda.Client.Uwp.Pro.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -401,6 +402,7 @@
             </Grid>
         </DataTemplate>
 
+        <cvt:ThemeTypeNameToVisibilityConverter x:Key="themeTypeNameToVisibilityConverter"/>
         <DataTemplate x:Key="SettingsContentControl">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="12,0,0,0" Height="48">
@@ -411,12 +413,14 @@
                     <StackPanel Padding="12,0,20,0">
                         <TextBlock Margin="0,0,0,8" Text="账号"/>
                         <TextBlock Margin="0,0,0,8" Text="选择主题"/>
-                        <ComboBox Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings},Mode=TwoWay}">
-                            <x:String>亮</x:String>
-                            <x:String>暗</x:String>
+                        <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings},Mode=TwoWay}">
+                            <x:String>白天模式</x:String>
+                            <x:String>夜间模式</x:String>
                         </ComboBox>
-                        <TextBlock Text="图片亮度调节"/>
-                        <Slider Minimum="0.1" Maximum="1.0" StepFrequency="0.1" Value="{Binding PictureOpacity,Source={StaticResource MySettings},Mode=TwoWay}"/>
+                        <StackPanel Visibility="{Binding SelectedValue,ElementName=ThemeTypeComboBox,Converter={StaticResource themeTypeNameToVisibilityConverter}}">
+                            <TextBlock Text="图片亮度调节（仅适用于夜间模式）"/>
+                            <Slider Minimum="0.1" Maximum="1.0" StepFrequency="0.1" Value="{Binding PictureOpacity,Source={StaticResource MySettings},Mode=TwoWay}"/>
+                        </StackPanel>
                         <TextBlock Text="字号调节"/>
                         <Slider Minimum="14" Maximum="22" Value="{Binding FontSize1,Source={StaticResource MySettings},Mode=TwoWay}"/>
                         <TextBlock Text="行高调节"/>
