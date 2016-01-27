@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,8 @@ namespace Hipda.Client.Uwp.Pro.Models
         public double LineHeight { get; set; } = 22d;
         public double PictureOpacity { get; set; } = 0.4d;
         public bool CanShowTopThread { get; set; } = true;
-        public string MessageTail { get; set; } = string.Empty;
+        public ObservableCollection<BlockUser> BlockUsers { get; set; } = new ObservableCollection<BlockUser>();
+        public ObservableCollection<BlockThread> BlockThreads { get; set; } = new ObservableCollection<BlockThread>();
         public string BlockKeywords { get; set; } = string.Empty;
     }
 }

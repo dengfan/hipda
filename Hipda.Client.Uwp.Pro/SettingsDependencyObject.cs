@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Hipda.Client.Uwp.Pro.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -127,6 +129,18 @@ namespace Hipda.Client.Uwp.Pro
         // Using a DependencyProperty as the backing store for CanShowTopThread.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CanShowTopThreadProperty =
             DependencyProperty.Register("CanShowTopThread", typeof(bool), typeof(SettingsDependencyObject), new PropertyMetadata(true));
+
+
+        public ObservableCollection<BlockUser> BlockUsers
+        {
+            get { return (ObservableCollection<BlockUser>)GetValue(BlockUsersProperty); }
+            set { SetValue(BlockUsersProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for BlockUsers.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BlockUsersProperty =
+            DependencyProperty.Register("BlockUsers", typeof(ObservableCollection<BlockUser>), typeof(SettingsDependencyObject), new PropertyMetadata(null));
+
 
 
     }

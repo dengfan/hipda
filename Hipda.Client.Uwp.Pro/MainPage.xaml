@@ -405,6 +405,7 @@
         </DataTemplate>
 
         <cvt:ThemeTypeNameToVisibilityConverter x:Key="ThemeTypeNameToVisibilityConverter"/>
+        <cvt:SelectedIndexToVisibility x:Key="SelectedIndexToVisibility"/>
         <DataTemplate x:Key="SettingsContentControl">
             <Grid>
                 <Grid.RowDefinitions>
@@ -437,12 +438,25 @@
                             </ToggleSwitch.Header>
                         </ToggleSwitch>
 
-                        <TextBlock Margin="0,0,0,8" Text="小尾巴" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的用户" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-
+                        <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MySettings},Mode=TwoWay}" SelectionMode="Multiple" MaxHeight="100">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Username}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibility}}" Margin="0,0,0,16" Content="从屏蔽的用户中移除" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Margin="0,0,0,8" Text="屏蔽的关键字" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <Button Content="购买“去广告” ￥18.00" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <ListBox x:Name="BlockThreadsListBox" ItemsSource="{Binding BlockThreads,Source={StaticResource MySettings},Mode=TwoWay}" SelectionMode="Multiple" MaxHeight="100">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ThreadTitle}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibility}}" Margin="0,0,0,16" Content="从屏蔽的主题中移除" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <Button Margin="0,0,0,16" Content="购买“去广告” ￥18.00" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
@@ -544,7 +558,7 @@
                              Tapped="TopNavButtonListBox_Tapped"/>
 
                     <StackPanel x:Name="BottomButtonPanel" Grid.Row="1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0" VerticalAlignment="Bottom">
-                        <Button Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click">
+                        <Button Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click" ToolTipService.ToolTip="提醒">
                             <Button.Content>
                                 <Grid>
                                     <FontIcon Glyph="&#xEA8F;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
@@ -554,7 +568,7 @@
                                 </Grid>
                             </Button.Content>
                         </Button>
-                        <Button Style="{StaticResource NavButtonNormalStyle}" Click="openUserMessageListButton_Click">
+                        <Button Style="{StaticResource NavButtonNormalStyle}" Click="openUserMessageListButton_Click" ToolTipService.ToolTip="短消息">
                             <Button.Content>
                                 <Grid>
                                     <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
@@ -564,14 +578,14 @@
                                 </Grid>
                             </Button.Content>
                         </Button>
-                        <Button x:Name="HistoryRecordButton" Style="{StaticResource NavButtonNormalStyle}" Click="HistoryRecordButton_Click">
+                        <Button x:Name="HistoryRecordButton" Style="{StaticResource NavButtonNormalStyle}" Click="HistoryRecordButton_Click" ToolTipService.ToolTip="历史记录">
                             <Button.Content>
                                 <Grid>
                                     <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
                                 </Grid>
                             </Button.Content>
                         </Button>
-                        <Button x:Name="SettingsButton" Style="{StaticResource NavButtonNormalStyle}" Click="SettingsButton_Click">
+                        <Button x:Name="SettingsButton" Style="{StaticResource NavButtonNormalStyle}" Click="SettingsButton_Click" ToolTipService.ToolTip="设置">
                             <Button.Content>
                                 <Grid>
                                     <SymbolIcon Symbol="Setting" />

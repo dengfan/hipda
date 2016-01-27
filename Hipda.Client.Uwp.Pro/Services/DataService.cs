@@ -50,7 +50,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         }
         #endregion
 
-        #region thread
+        #region history record
         public static ObservableCollection<ThreadItemModelBase> ThreadHistoryData = new ObservableCollection<ThreadItemModelBase>();
 
         Style GetReadStatusStyle(int threadId)
