@@ -6,8 +6,10 @@ using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.IO;
 using System.Linq;
+using Windows.Data.Xml.Dom;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -90,6 +92,7 @@ namespace Hipda.Client.Uwp.Pro
             _mySettings.PictureOpacityBak = _settings.PictureOpacity;
             _mySettings.CanShowTopThread = _settings.CanShowTopThread;
             _mySettings.BlockUsers = _settings.BlockUsers;
+            _mySettings.BlockThreads = _settings.BlockThreads;
         }
 
         public MainPage()
@@ -346,6 +349,21 @@ namespace Hipda.Client.Uwp.Pro
             //LeftListView.SelectedItem = null;
         }
 
+        void SendToast(string toastXml)
+        {
+            toastXml = Common.ReplaceHexadecimalSymbols(toastXml);
+
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(toastXml);
+
+            // 创建通知实例
+            var notification = new ToastNotification(xmlDoc);
+
+            // 显示通知
+            var tn = ToastNotificationManager.CreateToastNotifier();
+            tn.Show(notification);
+        }
+
         #region 头像上下文菜单
         //private async void openThreadInNewView_Tapped(object sender, TappedRoutedEventArgs e)
         //{
@@ -353,14 +371,54 @@ namespace Hipda.Client.Uwp.Pro
         //    await Launcher.LaunchUriAsync(uri, new LauncherOptions { TreatAsUntrusted = false });
         //}
 
-        private void openUserInfoDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void OpenUserInfoDialogMenuItem_Click(object sender, RoutedEventArgs e)
         {
             OpenUserInfoDialog();
         }
 
-        private void openUserMessageDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void OpenUserMessageDialogMenuItem_Click(object sender, RoutedEventArgs e)
         {
             OpenUserMessageDialog();
+        }
+
+        private void BlockUserMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (PopupUserId > 0 && !string.IsNullOrEmpty(PopupUsername))
+            {
+                var mySettings = (SettingsDependencyObject)App.Current.Resources["MySettings"];
+                mySettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername });
+
+                string _xml = "<toast>" +
+                    "<visual>" +
+                        "<binding template='ToastGeneric'>" +
+                            $"<text>已将用户 {PopupUsername} 加入屏蔽名单</text>" +
+                            $"<text>刷新后生效</text>" +
+                        "</binding>" +
+                    "</visual>" +
+                    "</toast>";
+
+                SendToast(_xml);
+            }
+        }
+
+        private void BlockThreadMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (PopupThreadId > 0 && !string.IsNullOrEmpty(PopupThreadTitle))
+            {
+                var mySettings = (SettingsDependencyObject)App.Current.Resources["MySettings"];
+                mySettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle });
+
+                string _xml = "<toast>" +
+                    "<visual>" +
+                        "<binding template='ToastGeneric'>" +
+                            $"<text>已将主题 《{PopupThreadTitle}》 加入屏蔽列表</text>" +
+                            $"<text>刷新后生效</text>" +
+                        "</binding>" +
+                    "</visual>" +
+                    "</toast>";
+
+                SendToast(_xml);
+            }
         }
         #endregion
 
@@ -368,6 +426,7 @@ namespace Hipda.Client.Uwp.Pro
         public static int PopupUserId { get; set; }
         public static string PopupUsername { get; set; }
         public static int PopupThreadId { get; set; }
+        public static string PopupThreadTitle { get; set; }
 
         bool _isDialogShown = false;
 
@@ -525,6 +584,9 @@ namespace Hipda.Client.Uwp.Pro
         {
             CloseUserDialog();
         }
+
         #endregion
+
+        
     }
 }

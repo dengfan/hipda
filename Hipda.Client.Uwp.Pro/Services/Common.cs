@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.System;
 using Windows.UI.Xaml;
@@ -11,6 +12,17 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public static class Common
     {
+        /// <summary>
+        /// 过滤掉不能出现在XML中的字符
+        /// </summary>
+        /// <param name="txt"></param>
+        /// <returns></returns>
+        public static string ReplaceHexadecimalSymbols(string txt)
+        {
+            string r = "[\x00-\x08\x0B\x0C\x0E-\x1F\x26]";
+            return Regex.Replace(txt, r, "", RegexOptions.Compiled);
+        }
+
         public static Uri GetMiddleAvatarUriByUserId(int userId)
         {
             var s = new int[10];

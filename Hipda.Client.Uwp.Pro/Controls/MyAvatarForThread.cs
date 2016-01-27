@@ -63,6 +63,17 @@ namespace Hipda.Client.Uwp.Pro.Controls
             DependencyProperty.Register("ThreadId", typeof(int), typeof(MyAvatarForThread), new PropertyMetadata(0));
 
 
+        public string ThreadTitle
+        {
+            get { return (string)GetValue(ThreadTitleProperty); }
+            set { SetValue(ThreadTitleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ThreadName.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ThreadTitleProperty =
+            DependencyProperty.Register("ThreadTitle", typeof(string), typeof(MyAvatarForThread), new PropertyMetadata(string.Empty));
+
+
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -110,6 +121,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                 MainPage.PopupUserId = UserId;
                 MainPage.PopupUsername = Username;
                 MainPage.PopupThreadId = ThreadId;
+                MainPage.PopupThreadTitle = ThreadTitle;
                 var menu = mp.Resources["AvatarContextMenuForThread"] as MenuFlyout;
                 menu.ShowAt(this);
             }

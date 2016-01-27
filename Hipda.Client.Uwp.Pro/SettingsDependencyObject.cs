@@ -142,6 +142,18 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("BlockUsers", typeof(ObservableCollection<BlockUser>), typeof(SettingsDependencyObject), new PropertyMetadata(null));
 
 
+        public ObservableCollection<BlockThread> BlockThreads
+        {
+            get { return (ObservableCollection<BlockThread>)GetValue(BlockThreadsProperty); }
+            set { SetValue(BlockThreadsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for BlockThreads.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BlockThreadsProperty =
+            DependencyProperty.Register("BlockThreads", typeof(ObservableCollection<BlockThread>), typeof(SettingsDependencyObject), new PropertyMetadata(null));
+
+
+
 
     }
 }

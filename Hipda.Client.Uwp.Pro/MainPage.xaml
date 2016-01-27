@@ -126,22 +126,22 @@
             <!--<MenuFlyoutItem Text="在新窗口中打开此主题" Tapped="openThreadInNewView_Tapped"/>-->
             <MenuFlyoutItem Text="收藏此主题"/>
             <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="查看详细资料" Tapped="openUserInfoDialogButton_Tapped"/>
+            <MenuFlyoutItem Text="查看详细资料" Tapped="OpenUserInfoDialogMenuItem_Click"/>
             <MenuFlyoutItem Text="查看发贴记录"/>
-            <MenuFlyoutItem Text="发短消息" Tapped="openUserMessageDialogButton_Tapped"/>
+            <MenuFlyoutItem Text="发短消息" Tapped="OpenUserMessageDialogMenuItem_Click"/>
             <MenuFlyoutItem Text="加为好友"/>
             <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="屏蔽此人" />
-            <MenuFlyoutItem Text="屏蔽此主题" />
+            <MenuFlyoutItem Text="屏蔽此人" Click="BlockUserMenuItem_Click" />
+            <MenuFlyoutItem Text="屏蔽此主题" Click="BlockThreadMenuItem_Click" />
         </MenuFlyout>
 
         <MenuFlyout x:Key="AvatarContextMenuForReply">
-            <MenuFlyoutItem Text="查看详细资料" Tapped="openUserInfoDialogButton_Tapped"/>
+            <MenuFlyoutItem Text="查看详细资料" Tapped="OpenUserInfoDialogMenuItem_Click"/>
             <MenuFlyoutItem Text="查看发贴记录"/>
-            <MenuFlyoutItem Text="发短消息" Tapped="openUserMessageDialogButton_Tapped"/>
+            <MenuFlyoutItem Text="发短消息" Tapped="OpenUserMessageDialogMenuItem_Click"/>
             <MenuFlyoutItem Text="加为好友"/>
             <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="屏蔽此人" />
+            <MenuFlyoutItem Text="屏蔽此人" Click="BlockUserMenuItem_Click" />
         </MenuFlyout>
 
         <DataTemplate x:Key="NavButtonBySearchItemTemplate">
@@ -442,7 +442,7 @@
                     <StackPanel Padding="12,0,20,0">
                         <TextBlock Margin="0,0,0,8" Text="账号" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <TextBlock Margin="0,0,0,8" Text="选择主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,16" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings},Mode=TwoWay}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                        <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,12" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings},Mode=TwoWay}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                             <x:String>白天模式</x:String>
                             <x:String>夜间模式</x:String>
                         </ComboBox>
@@ -461,24 +461,34 @@
                         </ToggleSwitch>
 
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的用户" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MySettings},Mode=TwoWay}" SelectionMode="Multiple" MaxHeight="100">
+                        <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MySettings},Mode=TwoWay}" SelectionMode="Multiple" MaxHeight="160" BorderThickness="1" BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Username}"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Margin="0,0,8,0" Width="24" Height="24" Stretch="UniformToFill" Source="{Binding AvatarUri}"/>
+                                        <TextBlock Text="{Binding Username}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibility}}" Margin="0,0,0,16" Content="从屏蔽的用户中移除" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <TextBlock Margin="0,0,0,8" Text="屏蔽的主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <ListBox x:Name="BlockThreadsListBox" ItemsSource="{Binding BlockThreads,Source={StaticResource MySettings},Mode=TwoWay}" SelectionMode="Multiple" MaxHeight="100">
+                        <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibility}}" Content="从屏蔽的用户中移除" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Margin="0,12,0,8" Text="屏蔽的主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <ListBox x:Name="BlockThreadsListBox" ItemsSource="{Binding BlockThreads,Source={StaticResource MySettings},Mode=TwoWay}" SelectionMode="Multiple" MaxHeight="160" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding ThreadTitle}"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Margin="0,0,8,0" Width="24" Height="24" Stretch="UniformToFill" Source="{Binding AvatarUri}"/>
+                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                                            <Run Text="{Binding Username}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                            <LineBreak/>
+                                            <Run Text="{Binding ThreadTitle}"/>
+                                        </TextBlock>
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibility}}" Margin="0,0,0,16" Content="从屏蔽的主题中移除" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <Button Margin="0,0,0,16" Content="购买“去广告” ￥18.00" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibility}}" Content="从屏蔽的主题中移除" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <Button Margin="0,12,0,8" Content="购买“去广告” ￥18.00" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>

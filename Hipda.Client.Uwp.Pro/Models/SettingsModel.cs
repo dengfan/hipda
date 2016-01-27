@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hipda.Client.Uwp.Pro.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,12 +12,28 @@ namespace Hipda.Client.Uwp.Pro.Models
     {
         public int UserId { get; set; }
         public string Username { get; set; }
+        public Uri AvatarUri
+        {
+            get
+            {
+                return Common.GetSmallAvatarUriByUserId(UserId);
+            }
+        }
     }
 
     public struct BlockThread
     {
+        public int UserId { get; set; }
+        public string Username { get; set; }
         public int ThreadId { get; set; }
         public string ThreadTitle { get; set; }
+        public Uri AvatarUri
+        {
+            get
+            {
+                return Common.GetSmallAvatarUriByUserId(UserId);
+            }
+        }
     }
 
     public class SettingsModel
