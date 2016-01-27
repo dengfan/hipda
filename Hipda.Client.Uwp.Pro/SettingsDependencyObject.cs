@@ -116,5 +116,18 @@ namespace Hipda.Client.Uwp.Pro
                 instance.PictureOpacityBak = val;
             }
         }
+
+
+        public bool CanShowTopThread
+        {
+            get { return (bool)GetValue(CanShowTopThreadProperty); }
+            set { SetValue(CanShowTopThreadProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanShowTopThread.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CanShowTopThreadProperty =
+            DependencyProperty.Register("CanShowTopThread", typeof(bool), typeof(SettingsDependencyObject), new PropertyMetadata(true));
+
+
     }
 }

@@ -25,7 +25,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         public double FontSize2 { get; set; } = 12d;
         public double LineHeight { get; set; } = 22d;
         public double PictureOpacity { get; set; } = 0.4d;
-        public bool CanShowTopTheme { get; set; } = true;
+        public bool CanShowTopThread { get; set; } = true;
         public string MessageTail { get; set; } = string.Empty;
         public string BlockKeywords { get; set; } = string.Empty;
     }

@@ -431,7 +431,7 @@
                         <Slider Minimum="14" Maximum="22" Value="{Binding FontSize1,Source={StaticResource MySettings},Mode=TwoWay}"/>
                         <TextBlock Text="行高调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <Slider Minimum="20" Maximum="48" Value="{Binding LineHeight,Source={StaticResource MySettings},Mode=TwoWay}"/>
-                        <ToggleSwitch Margin="0,0,0,8" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                        <ToggleSwitch Margin="0,0,0,8" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" IsOn="{Binding CanShowTopThread,Source={StaticResource MySettings},Mode=TwoWay}">
                             <ToggleSwitch.Header>
                                 <TextBlock Text="显示置顶贴" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                             </ToggleSwitch.Header>

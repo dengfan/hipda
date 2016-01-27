@@ -344,11 +344,11 @@
                     <c:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                     <StackPanel Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <TextBlock Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontSize="{Binding FontSize1,Source={StaticResource MySettings}}" FontWeight="Bold" TextWrapping="Wrap" MaxLines="2"/>
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MySettings}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
+                        <TextBlock Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontSize="{Binding FontSize1,Source={StaticResource MySettings}}" FontWeight="Bold" TextWrapping="Wrap" MaxLines="2"/>
                     </StackPanel>
                 </Grid>
 

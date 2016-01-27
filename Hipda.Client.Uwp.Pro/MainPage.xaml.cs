@@ -88,6 +88,7 @@ namespace Hipda.Client.Uwp.Pro
             _mySettings.FontSize2 = _settings.FontSize2;
             _mySettings.LineHeight = _settings.LineHeight;
             _mySettings.PictureOpacityBak = _settings.PictureOpacity;
+            _mySettings.CanShowTopThread = _settings.CanShowTopThread;
         }
 
         public MainPage()

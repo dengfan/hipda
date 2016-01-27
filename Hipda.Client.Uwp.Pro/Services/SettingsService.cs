@@ -36,7 +36,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                 FontSize1 = mySettings.FontSize1,
                 FontSize2 = mySettings.FontSize2,
                 LineHeight = mySettings.LineHeight,
-                PictureOpacity = mySettings.PictureOpacityBak
+                PictureOpacity = mySettings.PictureOpacityBak,
+                CanShowTopThread = mySettings.CanShowTopThread
             };
 
             string jsonStr = JsonConvert.SerializeObject(data);
