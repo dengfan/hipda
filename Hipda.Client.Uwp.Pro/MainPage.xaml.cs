@@ -346,6 +346,24 @@ namespace Hipda.Client.Uwp.Pro
             //LeftListView.SelectedItem = null;
         }
 
+        #region 头像上下文菜单
+        //private async void openThreadInNewView_Tapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    var uri = new Uri("hipda:tid=" + MainPage.PopupThreadId);
+        //    await Launcher.LaunchUriAsync(uri, new LauncherOptions { TreatAsUntrusted = false });
+        //}
+
+        private void openUserInfoDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            OpenUserInfoDialog();
+        }
+
+        private void openUserMessageDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            OpenUserMessageDialog();
+        }
+        #endregion
+
         #region 坛友资料及短消息之弹窗
         public static int PopupUserId { get; set; }
         public static string PopupUsername { get; set; }

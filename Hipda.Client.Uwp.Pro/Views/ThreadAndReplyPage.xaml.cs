@@ -428,23 +428,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         //}
         #endregion
 
-        //private async void openThreadInNewView_Tapped(object sender, TappedRoutedEventArgs e)
-        //{
-        //    var uri = new Uri("hipda:tid=" + MainPage.PopupThreadId);
-        //    await Launcher.LaunchUriAsync(uri, new LauncherOptions { TreatAsUntrusted = false });
-        //}
-
-        private void openUserInfoDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var mainPage = Common.FindParent<Page>(Frame) as MainPage;
-            mainPage.OpenUserInfoDialog();
-        }
-
-        private void openUserMessageDialogButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            var mainPage = Common.FindParent<Page>(Frame) as MainPage;
-            mainPage.OpenUserMessageDialog();
-        }
+        
 
         private void PostDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {

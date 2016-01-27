@@ -100,6 +100,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Controls\MyAvatarForReply.cs" />
     <Compile Include="Controls\MyListViewForUserMessageList.cs" />
     <Compile Include="Controls\UserMessageBox.xaml.cs">
       <DependentUpon>UserMessageBox.xaml</DependentUpon>
@@ -134,7 +135,7 @@
     <Compile Include="Models\ThreadItemModel.cs" />
     <Compile Include="Models\ThreadItemForMyPostsModel.cs" />
     <Compile Include="Models\ThreadItemForMyThreadsModel.cs" />
-    <Compile Include="Controls\MyAvatar.cs" />
+    <Compile Include="Controls\MyAvatarForThread.cs" />
     <Compile Include="Controls\MyImage.cs" />
     <Compile Include="Controls\MyLink.cs" />
     <Compile Include="Controls\MyRefLink1.cs" />

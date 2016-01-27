@@ -51,10 +51,23 @@
         </Setter>
     </Style>
 
-    <Style TargetType="c:MyAvatar" >
+    <Style TargetType="c:MyAvatarForThread" >
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="c:MyAvatar">
+                <ControlTemplate TargetType="c:MyAvatarForThread">
+                    <Border x:Name="border1" Style="{StaticResource AvatarStyle}"
+                            Background="{ThemeResource SystemControlBackgroundListLowBrush}">
+                        <Border x:Name="border2" CornerRadius="20" Width="40" Height="40" Opacity="{Binding PictureOpacity,Source={StaticResource MySettings}}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="c:MyAvatarForReply" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:MyAvatarForReply">
                     <Border x:Name="border1" Style="{StaticResource AvatarStyle}"
                             Background="{ThemeResource SystemControlBackgroundListLowBrush}">
                         <Border x:Name="border2" CornerRadius="20" Width="40" Height="40" Opacity="{Binding PictureOpacity,Source={StaticResource MySettings}}"/>

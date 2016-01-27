@@ -341,7 +341,7 @@
         <DataTemplate x:Key="ReplyListTopItemTemplate">
             <StackPanel>
                 <Grid>
-                    <c:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <c:MyAvatarForThread UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                     <StackPanel Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                         <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MySettings}}">
@@ -379,7 +379,7 @@
 
         <DataTemplate x:Key="ReplyListLeftItemTemplate">
             <Grid>
-                <c:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatarForReply UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow}"/>
 
@@ -422,7 +422,7 @@
 
         <DataTemplate x:Key="ReplyListLeft2ItemTemplate">
             <Grid>
-                <c:MyAvatar Margin="0,14,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatarForThread Margin="0,14,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <TextBlock Margin="12,0,0,0" Text="&#x1F451;" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow2}"/>
@@ -466,7 +466,7 @@
 
         <DataTemplate x:Key="ReplyListRightItemTemplate">
             <Grid>
-                <c:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                <c:MyAvatarForReply UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
 
                 <ContentControl Margin="0 16 48 0" HorizontalAlignment="Right" VerticalAlignment="Top" Template="{StaticResource ReplyRightArrow}"/>
 
@@ -512,7 +512,7 @@
                 <Border Margin="0,0,0,8" Padding="8" Background="#3285D6" HorizontalAlignment="Center">
                     <TextBlock Text="以下是你搜索的回复" Foreground="#3EE8FF" FontSize="{Binding FontSize2,Source={StaticResource MySettings}}" />
                 </Border>
-                <c:MyAvatar UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" IsNotAssociateThreadId="True" HorizontalAlignment="Center"/>
+                <c:MyAvatarForReply UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" HorizontalAlignment="Center"/>
 
                 <TextBlock Margin="0,4" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MySettings}}" HorizontalAlignment="Center">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
@@ -591,7 +591,7 @@
             <Grid>
                 <Ellipse Margin="6,6,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-                <c:MyAvatar Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatarForThread Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MySettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
@@ -682,7 +682,7 @@
             <Grid>
                 <Ellipse Margin="6,6,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-                <c:MyAvatar Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatarForThread Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MySettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Run Text="{Binding ForumName}"/>
@@ -704,7 +704,7 @@
             <Grid>
                 <Ellipse Margin="6,6,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
-                <c:MyAvatar Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatarForReply Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MySettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Run Text="{Binding ForumName}"/>
@@ -727,7 +727,7 @@
         <DataTemplate x:Key="NoticeQuoteOrReplyItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <c:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource UserIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatarForReply Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource UserIdStringToInt32Converter}}" Username="{Binding Username}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MySettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Paragraph>
@@ -781,7 +781,7 @@
         <DataTemplate x:Key="NoticeBuddyItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <c:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource UserIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatarForReply Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource UserIdStringToInt32Converter}}" Username="{Binding Username}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MySettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Paragraph>

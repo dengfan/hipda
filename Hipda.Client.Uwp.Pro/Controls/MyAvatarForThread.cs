@@ -19,16 +19,15 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace Hipda.Client.Uwp.Pro.Controls
 {
-    public sealed class MyAvatar : Control
+    public sealed class MyAvatarForThread : Control
     {
         private Border _border1;
         private Border _border2;
 
-        public MyAvatar()
+        public MyAvatarForThread()
         {
-            this.DefaultStyleKey = typeof(MyAvatar);
+            this.DefaultStyleKey = typeof(MyAvatarForThread);
         }
-
 
 
         public int UserId
@@ -39,7 +38,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         // Using a DependencyProperty as the backing store for UserId.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty UserIdProperty =
-            DependencyProperty.Register("UserId", typeof(int), typeof(MyAvatar), new PropertyMetadata(0, new PropertyChangedCallback(OnUserIdChanged)));
+            DependencyProperty.Register("UserId", typeof(int), typeof(MyAvatarForThread), new PropertyMetadata(0, new PropertyChangedCallback(OnUserIdChanged)));
 
 
         public string Username
@@ -50,7 +49,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         // Using a DependencyProperty as the backing store for Username.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty UsernameProperty =
-            DependencyProperty.Register("Username", typeof(string), typeof(MyAvatar), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("Username", typeof(string), typeof(MyAvatarForThread), new PropertyMetadata(string.Empty));
 
 
         public int ThreadId
@@ -61,29 +60,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ThreadIdProperty =
-            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyAvatar), new PropertyMetadata(0));
-
-
-        public bool IsRightTappedEnable
-        {
-            get { return (bool)GetValue(IsRightTappedEnableProperty); }
-            set { SetValue(IsRightTappedEnableProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for IsRightTappedEnable.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsRightTappedEnableProperty =
-            DependencyProperty.Register("IsRightTappedEnable", typeof(bool), typeof(MyAvatar), new PropertyMetadata(true));
-
-
-        public bool IsNotAssociateThreadId
-        {
-            get { return (bool)GetValue(IsNotAssociateThreadIdProperty); }
-            set { SetValue(IsNotAssociateThreadIdProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for IsNotAssociateThreadId.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsNotAssociateThreadIdProperty =
-            DependencyProperty.Register("IsNotAssociateThreadId", typeof(bool), typeof(MyAvatar), new PropertyMetadata(false));
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(MyAvatarForThread), new PropertyMetadata(0));
 
 
         protected override void OnApplyTemplate()
@@ -96,7 +73,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         private static void OnUserIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var instance = d as MyAvatar;
+            var instance = d as MyAvatarForThread;
             int userId = (int)e.NewValue;
 
             if (instance._border2 != null)
@@ -112,18 +89,28 @@ namespace Hipda.Client.Uwp.Pro.Controls
             }
         }
 
+        protected override void OnHolding(HoldingRoutedEventArgs e)
+        {
+            base.OnHolding(e);
+            Show();
+        }
+
         protected override void OnRightTapped(RightTappedRoutedEventArgs e)
         {
             base.OnRightTapped(e);
+            Show();
+        }
 
-            if (IsRightTappedEnable)
+        void Show()
+        {
+            var frame = Window.Current.Content as Frame;
+            var mp = frame.Content as MainPage;
+            if (mp != null)
             {
-                var parentPage = Common.FindParent<ThreadAndReplyPage>(this);
                 MainPage.PopupUserId = UserId;
                 MainPage.PopupUsername = Username;
                 MainPage.PopupThreadId = ThreadId;
-                var menu = parentPage.Resources["avatarContextMenu"] as MenuFlyout;
-                menu.Items[4].Visibility = IsNotAssociateThreadId ? Visibility.Collapsed : Visibility.Visible;
+                var menu = mp.Resources["AvatarContextMenuForThread"] as MenuFlyout;
                 menu.ShowAt(this);
             }
         }
