@@ -9,9 +9,11 @@
     xmlns:cvt="using:Hipda.Client.Uwp.Pro.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d" x:Name="MyMainPage">
 
     <Page.Resources>
+        <cvt:ElementThemeToMaskBackgroundBrush x:Key="ElementThemeToMaskBackgroundBrush"/>
+        
         <Style x:Key="MainMenuListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="Local"/>
@@ -402,7 +404,7 @@
             </Grid>
         </DataTemplate>
 
-        <cvt:ThemeTypeNameToVisibilityConverter x:Key="themeTypeNameToVisibilityConverter"/>
+        <cvt:ThemeTypeNameToVisibilityConverter x:Key="ThemeTypeNameToVisibilityConverter"/>
         <DataTemplate x:Key="SettingsContentControl">
             <Grid>
                 <Grid.RowDefinitions>
@@ -421,7 +423,7 @@
                             <x:String>白天模式</x:String>
                             <x:String>夜间模式</x:String>
                         </ComboBox>
-                        <StackPanel Visibility="{Binding SelectedValue,ElementName=ThemeTypeComboBox,Converter={StaticResource themeTypeNameToVisibilityConverter}}">
+                        <StackPanel Visibility="{Binding SelectedValue,ElementName=ThemeTypeComboBox,Converter={StaticResource ThemeTypeNameToVisibilityConverter}}">
                             <TextBlock Text="图片亮度调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                             <Slider Minimum="0.1" Maximum="1.0" StepFrequency="0.1" Value="{Binding PictureOpacity,Source={StaticResource MySettings},Mode=TwoWay}"/>
                         </StackPanel>
@@ -604,7 +606,7 @@
                         <ContentControl x:Name="RightSideWrap" Grid.Column="1" HorizontalContentAlignment="Stretch" ContentTemplate="{StaticResource HistoryRecordContentControl}"/>
                     </Grid>
 
-                    <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy" Background="DimGray" Opacity="0" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
+                    <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy" Background="{Binding RequestedTheme,ElementName=MyMainPage,Converter={StaticResource ElementThemeToMaskBackgroundBrush}}" Opacity="0" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
 
                     <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy"
                       Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"

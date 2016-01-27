@@ -723,11 +723,11 @@
         </DataTemplate>
 
 
-        <cvt:UserIdStringToInt32Converter x:Key="userIdStringToInt32Converter" />
+        <cvt:UserIdStringToInt32Converter x:Key="UserIdStringToInt32Converter" />
         <DataTemplate x:Key="NoticeQuoteOrReplyItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <c:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource userIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource UserIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MySettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Paragraph>
@@ -781,7 +781,7 @@
         <DataTemplate x:Key="NoticeBuddyItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <c:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource userIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatar Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource UserIdStringToInt32Converter}}" Username="{Binding Username}" ThreadId="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MySettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Paragraph>
