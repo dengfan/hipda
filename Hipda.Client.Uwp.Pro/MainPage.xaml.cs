@@ -386,7 +386,7 @@ namespace Hipda.Client.Uwp.Pro
             if (PopupUserId > 0 && !string.IsNullOrEmpty(PopupUsername))
             {
                 var mySettings = (SettingsDependencyObject)App.Current.Resources["MySettings"];
-                mySettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername });
+                mySettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername, ForumId = PopupForumId, ForumName = PopupForumName });
 
                 string _xml = "<toast>" +
                     "<visual>" +
@@ -406,7 +406,7 @@ namespace Hipda.Client.Uwp.Pro
             if (PopupThreadId > 0 && !string.IsNullOrEmpty(PopupThreadTitle))
             {
                 var mySettings = (SettingsDependencyObject)App.Current.Resources["MySettings"];
-                mySettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle });
+                mySettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle, ForumId = PopupForumId, ForumName = PopupForumName });
 
                 string _xml = "<toast>" +
                     "<visual>" +
@@ -427,6 +427,8 @@ namespace Hipda.Client.Uwp.Pro
         public static string PopupUsername { get; set; }
         public static int PopupThreadId { get; set; }
         public static string PopupThreadTitle { get; set; }
+        public static int PopupForumId { get; set; }
+        public static string PopupForumName { get; set; }
 
         bool _isDialogShown = false;
 

@@ -61,6 +61,15 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return;
             }
 
+            // 读取所属版块之名称
+            string forumName = string.Empty;
+            var titleNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("title"));
+            if (titleNode != null)
+            {
+                string[] tary = titleNode.InnerText.Trim().Split('-');
+                forumName = tary[0].Trim();
+            }
+
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("pages"));
             _maxPageNo = DataService.GetMaxPageNo(pagesNode);
@@ -148,7 +157,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
-                var threadItem = new ThreadItemModel(i, forumId, threadId, pageNo, title, attachType, replyNum, viewNum, isTop, authorName, authorUserId, authorCreateTime, lastPostAuthorName, lastPostTime, AccountService.UserId == authorUserId);
+                var threadItem = new ThreadItemModel(i, forumId, forumName, threadId, pageNo, title, attachType, replyNum, viewNum, isTop, authorName, authorUserId, authorCreateTime, lastPostAuthorName, lastPostTime, AccountService.UserId == authorUserId);
                 _threadData.Add(threadItem);
 
                 i++;

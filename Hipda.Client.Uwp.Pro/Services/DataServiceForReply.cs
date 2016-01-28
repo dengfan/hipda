@@ -89,6 +89,17 @@ namespace Hipda.Client.Uwp.Pro.Services
                 return;
             }
 
+            // 读取所属版块之名称及ID
+            int forumId = 0;
+            string forumName = string.Empty;
+            var navNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("nav"));
+            if (navNode != null)
+            {
+                var forumLinkNode = navNode.ChildNodes[3];
+                forumId = Convert.ToInt32(forumLinkNode.Attributes[0].Value.Substring("forumdisplay.php?fid=".Length).Split('&')[0]);
+                forumName = forumLinkNode.InnerText.Trim();
+            }
+
             int i = threadReply.Replies.Count();
             foreach (var item in data)
             {
@@ -178,7 +189,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, false);
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, false);
                 threadReply.Replies.Add(reply);
 
                 i++;
@@ -401,6 +412,17 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             #endregion
 
+            // 读取所属版块之名称及ID
+            int forumId = 0;
+            string forumName = string.Empty;
+            var navNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("nav"));
+            if (navNode != null)
+            {
+                var forumLinkNode = navNode.ChildNodes[3];
+                forumId = Convert.ToInt32(forumLinkNode.Attributes[0].Value.Substring("forumdisplay.php?fid=".Length).Split('&')[0]);
+                forumName = forumLinkNode.InnerText.Trim();
+            }
+
             var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
             int i = 0;
             foreach (var item in data)
@@ -494,7 +516,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, targetPostId == postId);
+                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, targetPostId == postId);
                 threadReply.Replies.Add(reply);
 
                 i++;

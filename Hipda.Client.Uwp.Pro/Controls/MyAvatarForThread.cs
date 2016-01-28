@@ -74,6 +74,28 @@ namespace Hipda.Client.Uwp.Pro.Controls
             DependencyProperty.Register("ThreadTitle", typeof(string), typeof(MyAvatarForThread), new PropertyMetadata(string.Empty));
 
 
+        public int ForumId
+        {
+            get { return (int)GetValue(ForumIdProperty); }
+            set { SetValue(ForumIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ForumId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ForumIdProperty =
+            DependencyProperty.Register("ForumId", typeof(int), typeof(MyAvatarForThread), new PropertyMetadata(0));
+
+
+        public string ForumName
+        {
+            get { return (string)GetValue(ForumNameProperty); }
+            set { SetValue(ForumNameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ForumName.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ForumNameProperty =
+            DependencyProperty.Register("ForumName", typeof(string), typeof(MyAvatarForThread), new PropertyMetadata(string.Empty));
+
+
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -122,6 +144,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
                 MainPage.PopupUsername = Username;
                 MainPage.PopupThreadId = ThreadId;
                 MainPage.PopupThreadTitle = ThreadTitle;
+                MainPage.PopupForumId = ForumId;
+                MainPage.PopupForumName = ForumName;
                 var menu = mp.Resources["AvatarContextMenuForThread"] as MenuFlyout;
                 menu.ShowAt(this);
             }

@@ -12,6 +12,8 @@ namespace Hipda.Client.Uwp.Pro.Models
     {
         public int UserId { get; set; }
         public string Username { get; set; }
+        public int ForumId { get; set; }
+        public string ForumName { get; set; }
         public Uri AvatarUri
         {
             get
@@ -27,6 +29,8 @@ namespace Hipda.Client.Uwp.Pro.Models
         public string Username { get; set; }
         public int ThreadId { get; set; }
         public string ThreadTitle { get; set; }
+        public int ForumId { get; set; }
+        public string ForumName { get; set; }
         public Uri AvatarUri
         {
             get
