@@ -4,6 +4,7 @@ using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using Hipda.Client.Uwp.Pro.Views;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -394,13 +395,15 @@ namespace Hipda.Client.Uwp.Pro
         {
             if (PopupUserId > 0 && !string.IsNullOrEmpty(PopupUsername))
             {
-                var mySettings = (SettingsDependencyObject)App.Current.Resources["MySettings"];
-                mySettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername, ForumId = PopupForumId, ForumName = PopupForumName });
+                if (!_mySettings.BlockUsers.Any(u => u.UserId == PopupUserId && u.ForumId == PopupForumId))
+                {
+                    _mySettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername, ForumId = PopupForumId, ForumName = PopupForumName });
+                }
 
                 string _xml = "<toast>" +
                     "<visual>" +
                         "<binding template='ToastGeneric'>" +
-                            $"<text>已将用户 {PopupUsername} 加入屏蔽名单</text>" +
+                            $"<text>{PopupUsername} 已被加入屏蔽名单</text>" +
                             $"<text>刷新后生效</text>" +
                         "</binding>" +
                     "</visual>" +
@@ -414,13 +417,15 @@ namespace Hipda.Client.Uwp.Pro
         {
             if (PopupThreadId > 0 && !string.IsNullOrEmpty(PopupThreadTitle))
             {
-                var mySettings = (SettingsDependencyObject)App.Current.Resources["MySettings"];
-                mySettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle, ForumId = PopupForumId, ForumName = PopupForumName });
+                if (!_mySettings.BlockThreads.Any(t => t.ThreadId == PopupThreadId))
+                {
+                    _mySettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle, ForumId = PopupForumId, ForumName = PopupForumName });
+                }
 
                 string _xml = "<toast>" +
                     "<visual>" +
                         "<binding template='ToastGeneric'>" +
-                            $"<text>已将主题 《{PopupThreadTitle}》 加入屏蔽列表</text>" +
+                            $"<text>《{PopupThreadTitle}》 已加入屏蔽列表</text>" +
                             $"<text>刷新后生效</text>" +
                         "</binding>" +
                     "</visual>" +
@@ -595,9 +600,11 @@ namespace Hipda.Client.Uwp.Pro
         {
             CloseUserDialog();
         }
-
-
         #endregion
+
+        #region 设置面板相关程序
+        static List<BlockUser> UnblockUserList = new List<BlockUser>();
+        static List<BlockThread> UnblockThreadList = new List<BlockThread>();
 
         private async void OpenImageFolderButton_Click(object sender, RoutedEventArgs e)
         {
@@ -645,5 +652,62 @@ namespace Hipda.Client.Uwp.Pro
             _mySettings.ImageCacheDataSize = 0;
             GetDataSizeInFolder(folder);
         }
+        
+        private void BlockUsersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var _unblockUsers = new List<BlockUser>();
+            var lb = (ListBox)sender;
+            if (lb != null)
+            {
+                foreach (BlockUser item in lb.SelectedItems)
+                {
+                    _unblockUsers.Add(item);
+                }
+            }
+
+            UnblockUserList = _unblockUsers;
+        }
+
+        private void UnblockUsers(object sender, RoutedEventArgs e)
+        {
+            if (UnblockUserList != null)
+            {
+                foreach (var item in UnblockUserList)
+                {
+                    _mySettings.BlockUsers.Remove(item);
+                }
+                UnblockUserList.Clear();
+                SettingsService.Save();
+            }
+        }
+
+        private void BlockThreadsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var _unblockThreads = new List<BlockThread>();
+            var lb = (ListBox)sender;
+            if (lb != null)
+            {
+                foreach (BlockThread item in lb.SelectedItems)
+                {
+                    _unblockThreads.Add(item);
+                }
+            }
+
+            UnblockThreadList = _unblockThreads;
+        }
+
+        private void UnblockThreads(object sender, RoutedEventArgs e)
+        {
+            if (UnblockThreadList != null)
+            {
+                foreach (var item in UnblockThreadList)
+                {
+                    _mySettings.BlockThreads.Remove(item);
+                }
+                UnblockThreadList.Clear();
+                SettingsService.Save();
+            }
+        }
+        #endregion
     }
 }

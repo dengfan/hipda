@@ -468,11 +468,14 @@
                         </ToggleSwitch>
 
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的用户" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MySettings},Mode=TwoWay}" SelectionMode="Multiple" BorderThickness="1" BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                        <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MySettings},Mode=TwoWay}"
+                                 SelectionMode="Multiple" BorderThickness="1" BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
+                                 SelectionChanged="BlockUsersListBox_SelectionChanged">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill" Opacity="{Binding PictureOpacity,Source={StaticResource MySettings}}" Source="{Binding AvatarUri}"/>
+                                        <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill"
+                                               Opacity="{Binding PictureOpacity,Source={StaticResource MySettings}}" Source="{Binding AvatarUri}"/>
                                         <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                                             <Run Text="{Binding Username}" FontWeight="Bold"/>
                                             <LineBreak/>
@@ -482,13 +485,19 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}" Content="移除选中的用户" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
+                                Content="解除选中用户的屏蔽状态" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                Click="UnblockUsers"/>
+                        
                         <TextBlock Margin="0,12,0,8" Text="屏蔽的主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                        <ListBox x:Name="BlockThreadsListBox" ItemsSource="{Binding BlockThreads,Source={StaticResource MySettings},Mode=TwoWay}" SelectionMode="Multiple" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}">
+                        <ListBox x:Name="BlockThreadsListBox" ItemsSource="{Binding BlockThreads,Source={StaticResource MySettings},Mode=TwoWay}"
+                                 SelectionMode="Multiple" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}"
+                                 SelectionChanged="BlockThreadsListBox_SelectionChanged">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill" Opacity="{Binding PictureOpacity,Source={StaticResource MySettings}}" Source="{Binding AvatarUri}"/>
+                                        <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill"
+                                               Opacity="{Binding PictureOpacity,Source={StaticResource MySettings}}" Source="{Binding AvatarUri}"/>
                                         <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                                             <Run Text="{Binding Username}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                                             <LineBreak/>
@@ -500,7 +509,10 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}" Content="移除选中的主题" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
+                                Content="解除选中主题的屏蔽状态" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                Click="UnblockThreads"/>
+                        
                         <Button Margin="0,12,0,12" Content="购买“去广告” ￥18.00" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                     </StackPanel>
                 </ScrollViewer>
