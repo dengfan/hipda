@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Search;
 using Windows.Storage.Streams;
@@ -47,7 +49,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             DependencyProperty.Register("FolderName", typeof(string), typeof(MyImage), new PropertyMetadata(0));
 
 
-        public bool isCommonImage
+        bool isCommon
         {
             get
             {
@@ -55,7 +57,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             }
         }
 
-        public bool isGif
+        bool isGif
         {
             get
             {
@@ -63,14 +65,14 @@ namespace Hipda.Client.Uwp.Pro.Controls
             }
         }
 
-        private StorageFile file;
-        private StorageFolder folder;
+        private StorageFile _file;
+        private StorageFolder _folder;
 
         protected async override void OnTapped(TappedRoutedEventArgs e)
         {
             base.OnTapped(e);
 
-            if (!isCommonImage)
+            if (!isCommon)
             {
                 await OpenPhoto();
             }
@@ -85,10 +87,10 @@ namespace Hipda.Client.Uwp.Pro.Controls
             fileTypeFilter.Add(".bmp");
             fileTypeFilter.Add(".gif");
             var queryOptions = new QueryOptions(CommonFileQuery.DefaultQuery, fileTypeFilter);
-            var query = folder.CreateFileQueryWithOptions(queryOptions);
+            var query = _folder.CreateFileQueryWithOptions(queryOptions);
             var options = new LauncherOptions();
             options.NeighboringFilesQuery = query;
-            await Launcher.LaunchFileAsync(file, options);
+            await Launcher.LaunchFileAsync(_file, options);
         }
 
         protected async override void OnApplyTemplate()
@@ -97,14 +99,14 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
             try
             {
-                folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
-                if (isCommonImage)
+                _folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
+                if (isCommon)
                 {
-                    folder = await folder.CreateFolderAsync("common", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
+                    _folder = await _folder.CreateFolderAsync("common", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
                 }
                 else
                 {
-                    folder = await folder.CreateFolderAsync(FolderName, CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
+                    _folder = await _folder.CreateFolderAsync(FolderName, CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
                 }
 
                 ContentControl content1 = GetTemplateChild("content1") as ContentControl;
@@ -121,10 +123,10 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
                 string[] urlAry = Url.Split('/');
                 string fileFullName = urlAry.Last();
-                IStorageItem existsFile = await folder.TryGetItemAsync(fileFullName);
+                IStorageItem existsFile = await _folder.TryGetItemAsync(fileFullName);
                 if (existsFile != null)
                 {
-                    file = existsFile as StorageFile;
+                    _file = existsFile as StorageFile;
                 }
                 else
                 {
@@ -135,14 +137,14 @@ namespace Hipda.Client.Uwp.Pro.Controls
                         string statusCode = response.ReasonPhrase;
                         var buf = await response.Content.ReadAsBufferAsync();
                         byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
-                        file = await folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
-                        await FileIO.WriteBytesAsync(file, bytes);
+                        _file = await _folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
+                        await FileIO.WriteBytesAsync(_file, bytes);
                     }
                 }
 
-                if (folder != null && file != null)
+                if (_folder != null && _file != null)
                 {
-                    if (isCommonImage)
+                    if (isCommon)
                     {
                         img.Stretch = Stretch.None;
                         var bm = new BitmapImage();
@@ -152,7 +154,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                     else
                     {
                         BitmapImage bitmapImg = new BitmapImage();
-                        IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read);
+                        IRandomAccessStream fileStream = await _file.OpenAsync(FileAccessMode.Read);
                         if (fileStream != null)
                         {
                             await bitmapImg.SetSourceAsync(fileStream);
@@ -199,7 +201,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                     }
                 }
 
-                if (isCommonImage || !isGif) // 公共或非gif图片，使用Image控件显示
+                if (isCommon || !isGif) // 公共或非gif图片，使用Image控件显示
                 {
                     content1.Content = img;
                 }
