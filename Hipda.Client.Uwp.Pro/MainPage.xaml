@@ -447,7 +447,7 @@
                                 <Run Text="{Binding ImageCacheDataSize,Source={StaticResource MySettings},Converter={StaticResource ByteToMegaByteConverter}}"/>
                             </TextBlock>
                         </Button>
-                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Content="查看图片缓存" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="OpenImageFolderButton_Click"/>
+                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Content="查看缓存图片" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="OpenImageFolderButton_Click"/>
                         <TextBlock Margin="0,0,0,8" Text="选择主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,12" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings},Mode=TwoWay}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                             <x:String>白天模式</x:String>
