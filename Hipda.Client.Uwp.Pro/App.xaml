@@ -558,7 +558,6 @@
 
         <Style x:Key="ThreadItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="Padding" Value="0,0,20,0"/>
-            <Setter Property="MinHeight" Value="0"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
 
@@ -576,9 +575,6 @@
             </Setter>
         </Style>
 
-        <DataTemplate x:Key="ThreadListNullItemTemplate">
-            <Grid MinHeight="0"></Grid>
-        </DataTemplate>
 
         <DataTemplate x:Key="ThreadListNormalItemTemplate">
             <Grid>
@@ -716,7 +712,6 @@
         </DataTemplate>
 
         <local:ThreadListItemTemplateSelector x:Key="threadListItemTemplateSelector"
-                                              ThreadListNullItemTemplate="{StaticResource ThreadListNullItemTemplate}"
                                               ThreadListNormalItemTemplate="{StaticResource ThreadListNormalItemTemplate}" 
                                               ThreadListMyThreadsItemTemplate="{StaticResource ThreadListMyThreadsItemTemplate}"
                                               ThreadListMyPostsItemTemplate="{StaticResource ThreadListMyPostsItemTemplate}"

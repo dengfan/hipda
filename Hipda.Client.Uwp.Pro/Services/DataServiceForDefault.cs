@@ -104,8 +104,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                 // 判断当前主题是否已被屏蔽
                 if (_mySettings.BlockThreads.Any(t => t.ThreadId == threadId))
                 {
-                    _threadData.Add(new ThreadItemModel(i, forumId, string.Empty, -1, -1, string.Empty, -1, string.Empty, string.Empty, false, string.Empty, -1, string.Empty, string.Empty, string.Empty, false));
-                    i++;
+                    //_threadData.Add(new ThreadItemModel(i, forumId, string.Empty, -1, -1, string.Empty, -1, string.Empty, string.Empty, false, string.Empty, -1, string.Empty, string.Empty, string.Empty, false));
+                    //i++;
                     continue;
                 }
 
@@ -134,8 +134,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                 // 判断当前用户是否已被屏蔽
                 if (_mySettings.BlockUsers.Any(u => u.UserId == authorUserId))
                 {
-                    _threadData.Add(new ThreadItemModel(i, forumId, string.Empty, -1, -1, string.Empty, -1, string.Empty, string.Empty, false, string.Empty, -1, string.Empty, string.Empty, string.Empty, false));
-                    i++;
+                    //_threadData.Add(new ThreadItemModel(i, forumId, string.Empty, -1, -1, string.Empty, -1, string.Empty, string.Empty, false, string.Empty, -1, string.Empty, string.Empty, string.Empty, false));
+                    //i++;
                     continue;
                 }
 
