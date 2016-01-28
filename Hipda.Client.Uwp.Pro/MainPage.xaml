@@ -440,7 +440,8 @@
                 </StackPanel>
                 <ScrollViewer Grid.Row="1">
                     <StackPanel Padding="12,0,20,0">
-                        <TextBlock Margin="0,0,0,8" Text="账号" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Content="查看图片缓存" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Content="清理图片缓存" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <TextBlock Margin="0,0,0,8" Text="选择主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,12" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings},Mode=TwoWay}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                             <x:String>白天模式</x:String>
