@@ -7,6 +7,8 @@ using System;
 using System.IO;
 using System.Linq;
 using Windows.Data.Xml.Dom;
+using Windows.Storage;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Notifications;
@@ -587,8 +589,13 @@ namespace Hipda.Client.Uwp.Pro
             CloseUserDialog();
         }
 
+
         #endregion
 
-        
+        private async void OpenImageFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            var folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
+            await Launcher.LaunchFolderAsync(folder);
+        }
     }
 }
