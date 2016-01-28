@@ -97,7 +97,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
             try
             {
-                folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
+                folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
                 if (isCommonImage)
                 {
                     folder = await folder.CreateFolderAsync("common", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹

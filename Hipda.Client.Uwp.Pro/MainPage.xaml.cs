@@ -594,7 +594,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private async void OpenImageFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            var folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
+            var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
             await Launcher.LaunchFolderAsync(folder);
         }
     }
