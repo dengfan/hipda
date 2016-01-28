@@ -6,6 +6,7 @@ using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
 using Windows.Storage;
 using Windows.System;
@@ -222,6 +223,9 @@ namespace Hipda.Client.Uwp.Pro
 
             // 保存设置
             SettingsService.Save();
+
+            // 清除值，以便每次打开时都重新计算
+            _mySettings.ImageCacheDataSize = 0;
         }
 
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -299,12 +303,15 @@ namespace Hipda.Client.Uwp.Pro
             ShowRightSwipePanel();
         }
 
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             FindName("RightSwipePanel");
             RightSwipeContentControl.ContentTemplate = Resources["SettingsContentControl"] as DataTemplate;
 
             ShowRightSwipePanel();
+
+            var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
+            GetDataSizeInFolder(folder);
         }
 
         private void SearchDefaultSubmit()
@@ -596,6 +603,22 @@ namespace Hipda.Client.Uwp.Pro
         {
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
             await Launcher.LaunchFolderAsync(folder);
+        }
+
+        private async void GetDataSizeInFolder(StorageFolder folder)
+        {
+            var files = await folder.GetFilesAsync();
+            foreach (var file in files)
+            {
+                var bp = await file.GetBasicPropertiesAsync();
+                _mySettings.ImageCacheDataSize += bp.Size;
+            }
+
+            var folders = await folder.GetFoldersAsync();
+            foreach (var f in folders)
+            {
+                GetDataSizeInFolder(f);
+            }
         }
     }
 }

@@ -67,7 +67,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for MyFontSize.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FontSizeProperty =
-            DependencyProperty.Register("FontSize1", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(15d, new PropertyChangedCallback(OnFontSize1Changed)));
+            DependencyProperty.Register("FontSize1", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(15D, new PropertyChangedCallback(OnFontSize1Changed)));
 
         private static void OnFontSize1Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -84,7 +84,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for MyFontSize2.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FontSize2Property =
-            DependencyProperty.Register("FontSize2", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(12d));
+            DependencyProperty.Register("FontSize2", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(12D));
 
 
         public double LineHeight
@@ -95,7 +95,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for MyLineHeight.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LineHeightProperty =
-            DependencyProperty.Register("LineHeight", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(22d));
+            DependencyProperty.Register("LineHeight", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(22D));
 
 
         public double PictureOpacityBak { get; set; }
@@ -107,7 +107,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for PictureOpacity.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PictureOpacityProperty =
-            DependencyProperty.Register("PictureOpacity", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(1d, new PropertyChangedCallback(OnPictureOpacityChanged)));
+            DependencyProperty.Register("PictureOpacity", typeof(double), typeof(SettingsDependencyObject), new PropertyMetadata(1D, new PropertyChangedCallback(OnPictureOpacityChanged)));
 
         private static void OnPictureOpacityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -151,6 +151,18 @@ namespace Hipda.Client.Uwp.Pro
         // Using a DependencyProperty as the backing store for BlockThreads.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BlockThreadsProperty =
             DependencyProperty.Register("BlockThreads", typeof(ObservableCollection<BlockThread>), typeof(SettingsDependencyObject), new PropertyMetadata(null));
+
+
+        public ulong ImageCacheDataSize
+        {
+            get { return (ulong)GetValue(ImageCacheDataSizeProperty); }
+            set { SetValue(ImageCacheDataSizeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ImageCacheDataSize.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ImageCacheDataSizeProperty =
+            DependencyProperty.Register("ImageCacheDataSize", typeof(ulong), typeof(SettingsDependencyObject), new PropertyMetadata(0UL));
+
 
 
 

@@ -108,8 +108,9 @@
     <Compile Include="Controls\UserSearchPanel.xaml.cs">
       <DependentUpon>UserSearchPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\ByteToMegaByteConverter.cs" />
     <Compile Include="Converters\ElementThemeToMaskBackgroundBrush.cs" />
-    <Compile Include="Converters\SelectedIndexToVisibility.cs" />
+    <Compile Include="Converters\SelectedIndexToVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeTypeNameToVisibilityConverter.cs" />
     <Compile Include="Converters\UserIdStringToInt32Converter.cs" />
     <Compile Include="Converters\UserIdToAvatarUriConverter.cs" />
