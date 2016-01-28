@@ -378,6 +378,7 @@ namespace Hipda.Client.Uwp.Pro
                 if (!_mySettings.BlockUsers.Any(u => u.UserId == PopupUserId && u.ForumId == PopupForumId))
                 {
                     _mySettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername, ForumId = PopupForumId, ForumName = PopupForumName });
+                    SettingsService.Save();
                 }
 
                 SendToast(xml2);
@@ -404,6 +405,7 @@ namespace Hipda.Client.Uwp.Pro
                 if (!_mySettings.BlockThreads.Any(t => t.ThreadId == PopupThreadId))
                 {
                     _mySettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle, ForumId = PopupForumId, ForumName = PopupForumName });
+                    SettingsService.Save();
                 }
 
                 string xml2 = "<toast>" +
