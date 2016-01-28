@@ -270,7 +270,7 @@ namespace Hipda.Client.Uwp.Pro
             ShowRightSwipePanel();
 
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
-            GetDataSizeInFolder(folder);
+            await GetDataSizeInFolder(folder);
         }
 
         private void SearchDefaultSubmit()
@@ -411,7 +411,7 @@ namespace Hipda.Client.Uwp.Pro
                 string xml2 = "<toast>" +
                     "<visual>" +
                         "<binding template='ToastGeneric'>" +
-                            $"<text>《{PopupThreadTitle}》 已加入屏蔽列表</text>" +
+                            $"<text>《{PopupThreadTitle}》 已被加入屏蔽列表</text>" +
                             $"<text>刷新后屏蔽生效</text>" +
                         "</binding>" +
                     "</visual>" +
@@ -605,7 +605,7 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        private async void GetDataSizeInFolder(StorageFolder folder)
+        private async Task GetDataSizeInFolder(StorageFolder folder)
         {
             var files = await folder.GetFilesAsync();
             foreach (var file in files)
@@ -617,7 +617,7 @@ namespace Hipda.Client.Uwp.Pro
             var folders = await folder.GetFoldersAsync();
             foreach (var f in folders)
             {
-                GetDataSizeInFolder(f);
+                await GetDataSizeInFolder(f);
             }
         }
 
@@ -636,7 +636,7 @@ namespace Hipda.Client.Uwp.Pro
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
             await folder.DeleteAsync();
             _mySettings.ImageCacheDataSize = 0;
-            GetDataSizeInFolder(folder);
+            await GetDataSizeInFolder(folder);
         }
         
         private void BlockUsersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

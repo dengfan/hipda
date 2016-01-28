@@ -203,7 +203,7 @@
         </Style>
 
         <Storyboard x:Name="OpenMaskAnimation">
-            <DoubleAnimation Duration="0:0:0.2" To="0.6" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
+            <DoubleAnimation Duration="0:0:0.2" To="0.8" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
         </Storyboard>
         <Storyboard x:Name="CloseMaskAnimation">
             <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
@@ -471,7 +471,7 @@
 
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的用户" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MySettings},Mode=TwoWay}"
-                                 SelectionMode="Multiple" BorderThickness="1" BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
+                                 SelectionMode="Multiple" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                  SelectionChanged="BlockUsersListBox_SelectionChanged">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -493,7 +493,7 @@
                         
                         <TextBlock Margin="0,12,0,8" Text="屏蔽的主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ListBox x:Name="BlockThreadsListBox" ItemsSource="{Binding BlockThreads,Source={StaticResource MySettings},Mode=TwoWay}"
-                                 SelectionMode="Multiple" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}"
+                                 SelectionMode="Multiple" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                  SelectionChanged="BlockThreadsListBox_SelectionChanged">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
