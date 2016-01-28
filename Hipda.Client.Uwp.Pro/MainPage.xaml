@@ -441,7 +441,7 @@
                 </StackPanel>
                 <ScrollViewer Grid.Row="1">
                     <StackPanel Padding="12,0,20,0">
-                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="ClearImageCacheData">
                             <TextBlock>
                                 <Run Text="清除图片缓存 "/>
                                 <Run Text="{Binding ImageCacheDataSize,Source={StaticResource MySettings},Converter={StaticResource ByteToMegaByteConverter}}"/>
