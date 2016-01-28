@@ -461,6 +461,14 @@
                             </ToggleSwitch.Header>
                         </ToggleSwitch>
 
+                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Content="查看缓存图片" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="OpenImageFolderButton_Click"/>
+                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="ClearImageCacheData">
+                            <TextBlock>
+                                <Run Text="清除图片缓存 "/>
+                                <Run Text="{Binding ImageCacheDataSize,Source={StaticResource MySettings},Converter={StaticResource ByteToMegaByteConverter}}"/>
+                            </TextBlock>
+                        </Button>
+
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的用户" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MySettings},Mode=TwoWay}"
                                  SelectionMode="Multiple" BorderThickness="1" BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
@@ -507,15 +515,7 @@
                                 Content="解除选中主题的屏蔽状态" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                 Click="UnblockThreads"/>
                         
-                        <Button Margin="0,12,0,8" HorizontalAlignment="Stretch" Content="查看缓存图片" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="OpenImageFolderButton_Click"/>
-                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="ClearImageCacheData">
-                            <TextBlock>
-                                <Run Text="清除图片缓存 "/>
-                                <Run Text="{Binding ImageCacheDataSize,Source={StaticResource MySettings},Converter={StaticResource ByteToMegaByteConverter}}"/>
-                            </TextBlock>
-                        </Button>
-                        
-                        <Button Margin="0,0,0,12" Content="购买“移除广告”服务" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <Button Margin="0,12,0,12" Content="购买“移除广告”服务" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>

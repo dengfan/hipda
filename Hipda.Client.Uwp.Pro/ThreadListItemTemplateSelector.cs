@@ -22,6 +22,11 @@ namespace Hipda.Client.Uwp.Pro
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
+            if (item == null)
+            {
+                return null;
+            }
+
             var data = (ThreadItemModelBase)item;
             switch (data.ThreadType)
             {
