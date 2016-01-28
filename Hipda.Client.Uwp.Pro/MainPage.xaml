@@ -441,13 +441,7 @@
                 </StackPanel>
                 <ScrollViewer Grid.Row="1">
                     <StackPanel Padding="12,0,20,0">
-                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="ClearImageCacheData">
-                            <TextBlock>
-                                <Run Text="清除图片缓存 "/>
-                                <Run Text="{Binding ImageCacheDataSize,Source={StaticResource MySettings},Converter={StaticResource ByteToMegaByteConverter}}"/>
-                            </TextBlock>
-                        </Button>
-                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Content="查看缓存图片" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="OpenImageFolderButton_Click"/>
+                        
                         <TextBlock Margin="0,0,0,8" Text="选择主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,12" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings},Mode=TwoWay}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                             <x:String>白天模式</x:String>
@@ -513,7 +507,15 @@
                                 Content="解除选中主题的屏蔽状态" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                 Click="UnblockThreads"/>
                         
-                        <Button Margin="0,12,0,12" Content="购买“去广告” ￥18.00" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <Button Margin="0,12,0,8" HorizontalAlignment="Stretch" Content="查看缓存图片" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="OpenImageFolderButton_Click"/>
+                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="ClearImageCacheData">
+                            <TextBlock>
+                                <Run Text="清除图片缓存 "/>
+                                <Run Text="{Binding ImageCacheDataSize,Source={StaticResource MySettings},Converter={StaticResource ByteToMegaByteConverter}}"/>
+                            </TextBlock>
+                        </Button>
+                        
+                        <Button Margin="0,0,0,12" Content="购买“移除广告”服务" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>

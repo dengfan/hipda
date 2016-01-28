@@ -1,13 +1,14 @@
-﻿using Hipda.Client.Uwp.Pro.Services;
+﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.Views;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -95,6 +96,58 @@ namespace Hipda.Client.Uwp.Pro
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
+       
+        void InitSettings()
+        {
+            SettingsModel _settings = SettingsService.Read();
+            SettingsDependencyObject _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
+
+            if (_settings.ThemeType == -1)
+            {
+                _settings.ThemeType = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
+                SettingsService.Save();
+            }
+
+            _mySettings.ThemeType = _settings.ThemeType;
+
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            switch (_mySettings.ThemeType)
+            {
+                case 0:
+                    //this.RequestedTheme = ApplicationTheme.Light;
+                    titleBar.BackgroundColor = null;
+                    titleBar.InactiveBackgroundColor = null;
+                    titleBar.ForegroundColor = null;
+                    titleBar.ButtonBackgroundColor = null;
+                    titleBar.ButtonInactiveBackgroundColor = null;
+                    titleBar.ButtonForegroundColor = null;
+                    titleBar.ButtonHoverBackgroundColor = null;
+
+                    _mySettings.PictureOpacity = 1;
+                    break;
+                case 1:
+                    //this.RequestedTheme = ApplicationTheme.Dark;
+                    Color c = Colors.Black;
+                    titleBar.BackgroundColor = c;
+                    titleBar.InactiveBackgroundColor = c;
+                    titleBar.ForegroundColor = Colors.Silver;
+                    titleBar.ButtonBackgroundColor = c;
+                    titleBar.ButtonInactiveBackgroundColor = c;
+                    titleBar.ButtonForegroundColor = Colors.Silver;
+                    titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
+
+                    _mySettings.PictureOpacity = _settings.PictureOpacity;
+                    break;
+            }
+
+            _mySettings.FontSize1 = _settings.FontSize1;
+            _mySettings.FontSize2 = _settings.FontSize2;
+            _mySettings.LineHeight = _settings.LineHeight;
+            _mySettings.PictureOpacityBak = _settings.PictureOpacity;
+            _mySettings.CanShowTopThread = _settings.CanShowTopThread;
+            _mySettings.BlockUsers = _settings.BlockUsers;
+            _mySettings.BlockThreads = _settings.BlockThreads;
+        }
 
         async Task<bool> CreateRootFrame()
         {
@@ -161,6 +214,8 @@ namespace Hipda.Client.Uwp.Pro
 
             _isLaunched = true;
 
+            this.InitSettings();
+
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
                 //var applicationView = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView();
@@ -218,6 +273,8 @@ namespace Hipda.Client.Uwp.Pro
             {
                 return;
             }
+
+            this.InitSettings();
 
             if (args.Kind == ActivationKind.Protocol)
             {

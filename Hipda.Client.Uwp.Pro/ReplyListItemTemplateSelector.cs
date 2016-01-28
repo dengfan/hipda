@@ -22,6 +22,12 @@ namespace Hipda.Client.Uwp.Pro
         {
             ReplyItemModel data = (ReplyItemModel)item;
 
+            // 如果当前用户已被屏蔽，则不赋予模板
+            if (data.AuthorUserId == -1)
+            {
+                return null;
+            }
+
             if (data.FloorNo == 1)
             {
                 return ReplyListTopItemTemplate;

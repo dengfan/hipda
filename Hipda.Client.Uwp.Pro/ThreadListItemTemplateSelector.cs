@@ -12,6 +12,7 @@ namespace Hipda.Client.Uwp.Pro
 {
     public class ThreadListItemTemplateSelector : DataTemplateSelector
     {
+        public DataTemplate ThreadListNullItemTemplate { get; set; }
         public DataTemplate ThreadListNormalItemTemplate { get; set; }
         public DataTemplate ThreadListMyThreadsItemTemplate { get; set; }
         public DataTemplate ThreadListMyPostsItemTemplate { get; set; }
@@ -22,20 +23,29 @@ namespace Hipda.Client.Uwp.Pro
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
             var data = (ThreadItemModelBase)item;
-            switch (data.ThreadType)
+
+            // 如果当前主题已被屏蔽，则不赋予模板
+            if (data.ThreadId == -1)
             {
-                case ThreadDataType.MyThreads:
-                    return ThreadListMyThreadsItemTemplate;
-                case ThreadDataType.MyPosts:
-                    return ThreadListMyPostsItemTemplate;
-                case ThreadDataType.MyFavorites:
-                    return ThreadListMyFavoritesItemTemplate;
-                case ThreadDataType.SearchTitle:
-                    return ThreadListSearchTitleItemTemplate;
-                case ThreadDataType.SearchFullText:
-                    return ThreadListSearchFullTextItemTemplate;
-                default:
-                    return ThreadListNormalItemTemplate;
+                return ThreadListNullItemTemplate;
+            }
+            else
+            {
+                switch (data.ThreadType)
+                {
+                    case ThreadDataType.MyThreads:
+                        return ThreadListMyThreadsItemTemplate;
+                    case ThreadDataType.MyPosts:
+                        return ThreadListMyPostsItemTemplate;
+                    case ThreadDataType.MyFavorites:
+                        return ThreadListMyFavoritesItemTemplate;
+                    case ThreadDataType.SearchTitle:
+                        return ThreadListSearchTitleItemTemplate;
+                    case ThreadDataType.SearchFullText:
+                        return ThreadListSearchFullTextItemTemplate;
+                    default:
+                        return ThreadListNormalItemTemplate;
+                }
             }
         }
     }

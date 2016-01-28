@@ -14,6 +14,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public class DataServiceForDefault
     {
+        static SettingsDependencyObject _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
         static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         static int _pageSize = 75;
@@ -97,25 +98,15 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var tdNums = tr.ChildNodes[9];
                 var tdLastPost = tr.ChildNodes[11];
 
-                bool isTop = item.GetAttributeValue("id", "").StartsWith("stickthread_");
-
                 int threadId = Convert.ToInt32(span.Attributes[0].Value.Substring("thread_".Length));
                 string title = a.InnerText.Trim();
 
-                int attachType = -1;
-                var attachIconNode = th.ChildNodes.FirstOrDefault(n => n.Name.Equals("img") && n.GetAttributeValue("class", "").Equals("attach"));
-                if (attachIconNode != null)
+                // 判断当前主题是否已被屏蔽
+                if (_mySettings.BlockThreads.Any(t => t.ThreadId == threadId))
                 {
-                    string attachString = attachIconNode.Attributes[1].Value;
-                    if (attachString.Equals("图片附件"))
-                    {
-                        attachType = 1;
-                    }
-
-                    if (attachString.Equals("附件"))
-                    {
-                        attachType = 2;
-                    }
+                    _threadData.Add(new ThreadItemModel(i, forumId, string.Empty, -1, -1, string.Empty, -1, string.Empty, string.Empty, false, string.Empty, -1, string.Empty, string.Empty, string.Empty, false));
+                    i++;
+                    continue;
                 }
 
                 var authorName = string.Empty;
@@ -137,6 +128,32 @@ namespace Hipda.Client.Uwp.Pro.Services
                     else
                     {
                         authorUserId = Convert.ToInt32(authorUserIdStr);
+                    }
+                }
+
+                // 判断当前用户是否已被屏蔽
+                if (_mySettings.BlockUsers.Any(u => u.UserId == authorUserId))
+                {
+                    _threadData.Add(new ThreadItemModel(i, forumId, string.Empty, -1, -1, string.Empty, -1, string.Empty, string.Empty, false, string.Empty, -1, string.Empty, string.Empty, string.Empty, false));
+                    i++;
+                    continue;
+                }
+
+                bool isTop = item.GetAttributeValue("id", "").StartsWith("stickthread_");
+
+                int attachType = -1;
+                var attachIconNode = th.ChildNodes.FirstOrDefault(n => n.Name.Equals("img") && n.GetAttributeValue("class", "").Equals("attach"));
+                if (attachIconNode != null)
+                {
+                    string attachString = attachIconNode.Attributes[1].Value;
+                    if (attachString.Equals("图片附件"))
+                    {
+                        attachType = 1;
+                    }
+
+                    if (attachString.Equals("附件"))
+                    {
+                        attachType = 2;
                     }
                 }
 

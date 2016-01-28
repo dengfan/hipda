@@ -304,15 +304,6 @@
                                              ReplyListHighLightItemTemplate="{StaticResource ReplyListHighLightItemTemplate}"
                                              />
 
-        <local:ThreadListItemTemplateSelector x:Key="threadListItemTemplateSelector"
-                                              ThreadListNormalItemTemplate="{StaticResource ThreadListNormalItemTemplate}" 
-                                              ThreadListMyThreadsItemTemplate="{StaticResource ThreadListMyThreadsItemTemplate}"
-                                              ThreadListMyPostsItemTemplate="{StaticResource ThreadListMyPostsItemTemplate}"
-                                              ThreadListMyFavoritesItemTemplate="{StaticResource ThreadListMyFavoritesItemTemplate}"
-                                              ThreadListSearchTitleItemTemplate="{StaticResource ThreadListSearchTitleItemTemplate}"
-                                              ThreadListSearchFullTextItemTemplate="{StaticResource ThreadListSearchFullTextItemTemplate}"
-                                              />
-
         <local:NoticeListItemTemplateSelector x:Key="noticeListItemTemplateSelector"
                                               NoticeQuoteOrReplyItemTemplate="{StaticResource NoticeQuoteOrReplyItemTemplate}"
                                               NoticeThreadItemTemplate="{StaticResource NoticeThreadItemTemplate}"
@@ -585,7 +576,9 @@
             </Setter>
         </Style>
 
-
+        <DataTemplate x:Key="ThreadListNullItemTemplate">
+            <Grid MinHeight="0"></Grid>
+        </DataTemplate>
 
         <DataTemplate x:Key="ThreadListNormalItemTemplate">
             <Grid>
@@ -721,6 +714,16 @@
                 </TextBlock>
             </Grid>
         </DataTemplate>
+
+        <local:ThreadListItemTemplateSelector x:Key="threadListItemTemplateSelector"
+                                              ThreadListNullItemTemplate="{StaticResource ThreadListNullItemTemplate}"
+                                              ThreadListNormalItemTemplate="{StaticResource ThreadListNormalItemTemplate}" 
+                                              ThreadListMyThreadsItemTemplate="{StaticResource ThreadListMyThreadsItemTemplate}"
+                                              ThreadListMyPostsItemTemplate="{StaticResource ThreadListMyPostsItemTemplate}"
+                                              ThreadListMyFavoritesItemTemplate="{StaticResource ThreadListMyFavoritesItemTemplate}"
+                                              ThreadListSearchTitleItemTemplate="{StaticResource ThreadListSearchTitleItemTemplate}"
+                                              ThreadListSearchFullTextItemTemplate="{StaticResource ThreadListSearchFullTextItemTemplate}"
+                                              />
 
 
         <cvt:UserIdStringToInt32Converter x:Key="UserIdStringToInt32Converter" />

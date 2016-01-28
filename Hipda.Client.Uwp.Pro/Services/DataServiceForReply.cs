@@ -15,6 +15,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public class DataServiceForReply
     {
+        static SettingsDependencyObject _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
         static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         int _maxPageNo = 1;
@@ -128,6 +129,14 @@ namespace Hipda.Client.Uwp.Pro.Services
                         authorUserId = Convert.ToInt32(authorUserIdStr);
                     }
                     authorUsername = authorNode.InnerText;
+                }
+
+                // 判断当前用户是否已被屏蔽
+                if (_mySettings.BlockUsers.Any(u => u.UserId == authorUserId))
+                {
+                    threadReply.Replies.Add(new ReplyItemModel(i, -1, -1, -1, -1, string.Empty, -1, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false));
+                    i++;
+                    continue;
                 }
 
                 var floorPostInfoNode = postContentNode.ChildNodes.FirstOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div

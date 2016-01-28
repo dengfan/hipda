@@ -32,8 +32,7 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        SettingsModel _settings;
-        SettingsDependencyObject _mySettings;
+        static SettingsDependencyObject _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
         MainPageViewModel _mainPageViewModel;
         ThreadHistoryListViewViewModel _threadHistoryListViewViewModel;
 
@@ -48,61 +47,20 @@ namespace Hipda.Client.Uwp.Pro
         /// <summary>
         /// 读取并启用设置
         /// </summary>
-        void InitSettings()
-        {
-            _settings = SettingsService.Read();
-            if (_settings.ThemeType == -1)
-            {
-                _settings.ThemeType = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
-                SettingsService.Save();
-            }
-
-            _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
-            _mySettings.ThemeType = _settings.ThemeType;
-
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            switch (_mySettings.ThemeType)
-            {
-                case 0:
-                    this.RequestedTheme = ElementTheme.Light;
-                    titleBar.BackgroundColor = null;
-                    titleBar.InactiveBackgroundColor = null;
-                    titleBar.ForegroundColor = null;
-                    titleBar.ButtonBackgroundColor = null;
-                    titleBar.ButtonInactiveBackgroundColor = null;
-                    titleBar.ButtonForegroundColor = null;
-                    titleBar.ButtonHoverBackgroundColor = null;
-
-                    _mySettings.PictureOpacity = 1;
-                    break;
-                case 1:
-                    this.RequestedTheme = ElementTheme.Dark;
-                    Color c = Colors.Black;
-                    titleBar.BackgroundColor = c;
-                    titleBar.InactiveBackgroundColor = c;
-                    titleBar.ForegroundColor = Colors.Silver;
-                    titleBar.ButtonBackgroundColor = c;
-                    titleBar.ButtonInactiveBackgroundColor = c;
-                    titleBar.ButtonForegroundColor = Colors.Silver;
-                    titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
-
-                    _mySettings.PictureOpacity = _settings.PictureOpacity;
-                    break;
-            }
-
-            _mySettings.FontSize1 = _settings.FontSize1;
-            _mySettings.FontSize2 = _settings.FontSize2;
-            _mySettings.LineHeight = _settings.LineHeight;
-            _mySettings.PictureOpacityBak = _settings.PictureOpacity;
-            _mySettings.CanShowTopThread = _settings.CanShowTopThread;
-            _mySettings.BlockUsers = _settings.BlockUsers;
-            _mySettings.BlockThreads = _settings.BlockThreads;
-        }
+        
 
         public MainPage()
         {
             this.InitializeComponent();
-            InitSettings();
+
+            if (_mySettings.ThemeType == 0)
+            {
+                this.RequestedTheme = ElementTheme.Light;
+            }
+            else if (_mySettings.ThemeType == 1)
+            {
+                this.RequestedTheme = ElementTheme.Dark;
+            }
 
             _mainPageViewModel = MainPageViewModel.GetInstance();
             DataContext = _mainPageViewModel;
@@ -395,43 +353,69 @@ namespace Hipda.Client.Uwp.Pro
         {
             if (PopupUserId > 0 && !string.IsNullOrEmpty(PopupUsername))
             {
+                if (PopupUserId == AccountService.UserId)
+                {
+                    string xml1 = "<toast>" +
+                        "<visual>" +
+                            "<binding template='ToastGeneric'>" +
+                                "<text>对不起，您不能将自己列入屏蔽名单</text>" +
+                            "</binding>" +
+                        "</visual>" +
+                        "</toast>";
+                    SendToast(xml1);
+                    return;
+                }
+
+                string xml2 = "<toast>" +
+                    "<visual>" +
+                        "<binding template='ToastGeneric'>" +
+                            $"<text>{PopupUsername} 已被加入屏蔽名单</text>" +
+                            $"<text>刷新后屏蔽生效</text>" +
+                        "</binding>" +
+                    "</visual>" +
+                    "</toast>";
+
                 if (!_mySettings.BlockUsers.Any(u => u.UserId == PopupUserId && u.ForumId == PopupForumId))
                 {
                     _mySettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername, ForumId = PopupForumId, ForumName = PopupForumName });
                 }
 
-                string _xml = "<toast>" +
-                    "<visual>" +
-                        "<binding template='ToastGeneric'>" +
-                            $"<text>{PopupUsername} 已被加入屏蔽名单</text>" +
-                            $"<text>刷新后生效</text>" +
-                        "</binding>" +
-                    "</visual>" +
-                    "</toast>";
-
-                SendToast(_xml);
+                SendToast(xml2);
             }
         }
 
         private void BlockThreadMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (PopupThreadId > 0 && !string.IsNullOrEmpty(PopupThreadTitle))
+            if (PopupUserId > 0 && PopupThreadId > 0 && !string.IsNullOrEmpty(PopupThreadTitle))
             {
+                if (PopupUserId == AccountService.UserId)
+                {
+                    string xml1 = "<toast>" +
+                        "<visual>" +
+                            "<binding template='ToastGeneric'>" +
+                                "<text>对不起，您不能将自己的主题列入屏蔽列表</text>" +
+                            "</binding>" +
+                        "</visual>" +
+                        "</toast>";
+                    SendToast(xml1);
+                    return;
+                }
+
                 if (!_mySettings.BlockThreads.Any(t => t.ThreadId == PopupThreadId))
                 {
                     _mySettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle, ForumId = PopupForumId, ForumName = PopupForumName });
                 }
 
-                string _xml = "<toast>" +
+                string xml2 = "<toast>" +
                     "<visual>" +
                         "<binding template='ToastGeneric'>" +
                             $"<text>《{PopupThreadTitle}》 已加入屏蔽列表</text>" +
-                            $"<text>刷新后生效</text>" +
+                            $"<text>刷新后屏蔽生效</text>" +
                         "</binding>" +
                     "</visual>" +
                     "</toast>";
 
-                SendToast(_xml);
+                SendToast(xml2);
             }
         }
         #endregion
