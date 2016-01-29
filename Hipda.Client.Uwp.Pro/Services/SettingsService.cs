@@ -9,7 +9,7 @@ using Windows.Storage;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public static class SettingsService
+    public static class LocalSettingsService
     {
         static string _containerKey = "HIPDA";
         static string _dataKey = "SettingsData";

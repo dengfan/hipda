@@ -181,7 +181,7 @@ namespace Hipda.Client.Uwp.Pro
             MaskGrid.Visibility = Visibility.Collapsed;
 
             // 保存设置
-            SettingsService.Save();
+            LocalSettingsService.Save();
 
             // 清除值，以便每次打开时都重新计算
             _mySettings.ImageCacheDataSize = 0;
@@ -378,7 +378,7 @@ namespace Hipda.Client.Uwp.Pro
                 if (!_mySettings.BlockUsers.Any(u => u.UserId == PopupUserId && u.ForumId == PopupForumId))
                 {
                     _mySettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername, ForumId = PopupForumId, ForumName = PopupForumName });
-                    SettingsService.Save();
+                    LocalSettingsService.Save();
                 }
 
                 SendToast(xml2);
@@ -405,7 +405,7 @@ namespace Hipda.Client.Uwp.Pro
                 if (!_mySettings.BlockThreads.Any(t => t.ThreadId == PopupThreadId))
                 {
                     _mySettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle, ForumId = PopupForumId, ForumName = PopupForumName });
-                    SettingsService.Save();
+                    LocalSettingsService.Save();
                 }
 
                 string xml2 = "<toast>" +
@@ -663,7 +663,7 @@ namespace Hipda.Client.Uwp.Pro
                     _mySettings.BlockUsers.Remove(item);
                 }
                 UnblockUserList.Clear();
-                SettingsService.Save();
+                LocalSettingsService.Save();
             }
         }
 
@@ -691,7 +691,7 @@ namespace Hipda.Client.Uwp.Pro
                     _mySettings.BlockThreads.Remove(item);
                 }
                 UnblockThreadList.Clear();
-                SettingsService.Save();
+                LocalSettingsService.Save();
             }
         }
         #endregion

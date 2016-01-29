@@ -99,13 +99,13 @@ namespace Hipda.Client.Uwp.Pro
        
         void InitSettings()
         {
-            SettingsModel _settings = SettingsService.Read();
+            SettingsModel _settings = LocalSettingsService.Read();
             SettingsDependencyObject _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
 
             if (_settings.ThemeType == -1)
             {
                 _settings.ThemeType = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
-                SettingsService.Save();
+                LocalSettingsService.Save();
             }
 
             _mySettings.ThemeType = _settings.ThemeType;
