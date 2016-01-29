@@ -98,18 +98,6 @@ namespace Hipda.Client.Uwp.Pro
             this.Suspending += OnSuspending;
         }
        
-        /// <summary>
-        /// 读取设置数据并启用
-        /// </summary>
-        void InitSettings()
-        {
-            // 恢复本地设置
-            new LocalSettingsService().ReadAndUpdate();
-
-            // 恢复漫游设置
-            new RoamingSettingsService().ReadAndUpdate();
-        }
-
         async Task<bool> CreateRootFrame()
         {
             // 自动登录
@@ -148,10 +136,17 @@ namespace Hipda.Client.Uwp.Pro
                     _rootFrame.Navigate(typeof(LoginPage));
                 }
             }
+
             // 确保当前窗口处于活动状态
             Window.Current.Activate();
 
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 320, Height = 320 });
+
+            // 恢复本地设置
+            new LocalSettingsService().ReadAndUpdate();
+
+            // 恢复漫游设置
+            new RoamingSettingsService().ReadAndUpdate();
 
             return isLogin;
         }
@@ -174,8 +169,6 @@ namespace Hipda.Client.Uwp.Pro
             await CreateRootFrame();
 
             _isLaunched = true;
-
-            this.InitSettings();
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
@@ -234,8 +227,6 @@ namespace Hipda.Client.Uwp.Pro
             {
                 return;
             }
-
-            this.InitSettings();
 
             if (args.Kind == ActivationKind.Protocol)
             {

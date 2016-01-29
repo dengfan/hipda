@@ -22,7 +22,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public MainPageViewModel()
         {
             NavButtons = new ObservableCollection<NavButtonItemModel>();
-            NavButtons.Add(new NavButtonItemModel { Icon = "\uE1A3", Text = "搜索贴子", TypeValue = "item=search" });
             NavButtons.Add(new NavButtonItemModel { Icon = "\uEA4A", Text = "我的贴子", TypeValue = "item=threads" });
             NavButtons.Add(new NavButtonItemModel { Icon = "\uE89B", Text = "我的回复", TypeValue = "item=posts" });
             NavButtons.Add(new NavButtonItemModel { Icon = "\uE1CE", Text = "我的收藏", TypeValue = "item=favorites" });

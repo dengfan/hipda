@@ -56,11 +56,6 @@ namespace Hipda.Client.Uwp.Pro
             BottomButtonPanel.Orientation = MainSplitView.IsPaneOpen ? Orientation.Horizontal : Orientation.Vertical;
         }
 
-        /// <summary>
-        /// 读取并启用设置
-        /// </summary>
-        
-
         public MainPage()
         {
             this.InitializeComponent();

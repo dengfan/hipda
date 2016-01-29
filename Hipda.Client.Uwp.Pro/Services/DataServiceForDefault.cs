@@ -22,14 +22,18 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         async Task LoadThreadDataAsync(int forumId, int pageNo, CancellationTokenSource cts)
         {
-            int count = _threadData.Count(t => t.ForumId == forumId && t.PageNo == pageNo);
-            if (count == _pageSize)
+            var d = _threadData.Where(t => t.ForumId == forumId && t.PageNo == pageNo);
+            if (d != null && d.Count() > 0)
             {
-                return;
-            }
-            else
-            {
-                _threadData.RemoveAll(t => t.ForumId == forumId && t.PageNo == pageNo);
+                int indexInPage = d.Last().Index2;
+                if (indexInPage == _pageSize)
+                {
+                    return;
+                }
+                else
+                {
+                    _threadData.RemoveAll(t => t.ForumId == forumId && t.PageNo == pageNo);
+                }
             }
 
             if (pageNo == 1)
@@ -88,6 +92,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             int i = _threadData.Count(t => t.ForumId == forumId);
+            int j = 1;
             foreach (var item in tbodies)
             {
                 var tr = item.ChildNodes[1];
@@ -104,6 +109,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 // 判断当前主题是否已被屏蔽，是则跳过
                 if (_myRoamingSettings.BlockThreads.Any(t => t.ThreadId == threadId))
                 {
+                    j++;
                     continue;
                 }
 
@@ -132,6 +138,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 // 判断当前版块下的当前用户是否已被屏蔽，是则跳过
                 if (_myRoamingSettings.BlockUsers.Any(u => u.UserId == authorUserId && u.ForumId == forumId))
                 {
+                    j++;
                     continue;
                 }
 
@@ -140,6 +147,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 // 根据“是否显示置顶贴”的设置值来决定是否跳过当前主题
                 if (!_myRoamingSettings.CanShowTopThread && isTop)
                 {
+                    j++;
                     continue;
                 }
 
@@ -176,10 +184,11 @@ namespace Hipda.Client.Uwp.Pro.Services
                         .Replace(string.Format("{0}-", DateTime.Now.Year), string.Empty);
                 }
 
-                var threadItem = new ThreadItemModel(i, forumId, forumName, threadId, pageNo, title, attachType, replyNum, viewNum, isTop, authorName, authorUserId, authorCreateTime, lastPostAuthorName, lastPostTime, AccountService.UserId == authorUserId);
+                var threadItem = new ThreadItemModel(i, j, forumId, forumName, threadId, pageNo, title, attachType, replyNum, viewNum, isTop, authorName, authorUserId, authorCreateTime, lastPostAuthorName, lastPostTime, AccountService.UserId == authorUserId);
                 _threadData.Add(threadItem);
 
                 i++;
+                j++;
             }
         }
 

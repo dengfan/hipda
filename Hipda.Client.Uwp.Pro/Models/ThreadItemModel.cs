@@ -5,9 +5,10 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ThreadItemModel : ThreadItemModelBase
     {
-        public ThreadItemModel(int index, int forumId, string forumName, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, bool isTop, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime, bool isMine)
+        public ThreadItemModel(int index, int index2, int forumId, string forumName, int threadId, int pageNo, string title, int attachFileType, string replyCount, string viewCount, bool isTop, string authorUsername, int authorUserId, string authorCreateTime, string lastReplyUsername, string lastReplyTime, bool isMine)
         {
             this.Index = index;
+            this.Index2 = index2;
             this.ForumId = forumId;
             this.ForumName = forumName;
             this.ThreadId = threadId;
@@ -26,7 +27,16 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.ThreadType = ThreadDataType.Default;
         }
 
+        /// <summary>
+        /// 加载数据的排序，从0开始
+        /// </summary>
         public int Index { get; private set; }
+
+        /// <summary>
+        /// 数据在所在页的位置，从1开始
+        /// 用于判断某页的数据是否已完全载入
+        /// </summary>
+        public int Index2 { get; private set; }
 
         public int ForumId { get; private set; }
 

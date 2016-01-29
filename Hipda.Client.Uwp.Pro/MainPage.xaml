@@ -595,36 +595,44 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel x:Name="SearchPanel" Margin="8" Visibility="Collapsed">
-                        <TextBox x:Name="KeywordTextBox" PlaceholderText="关键字" KeyUp="KeywordTextBox_KeyUp"/>
-                        <ComboBox x:Name="SearchTypeComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                            <x:String>标题</x:String>
-                            <x:String>全文</x:String>
-                        </ComboBox>
-                        <TextBox x:Name="AuthorTextBox" Margin="0,4,0,0" PlaceholderText="作者"/>
-                        <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                            <x:String>全部时间</x:String>
-                            <x:String>1周以内</x:String>
-                            <x:String>1个月以内</x:String>
-                            <x:String>3个月以内</x:String>
-                            <x:String>1年以内</x:String>
-                        </ComboBox>
-                        <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton1_Click"/>
-                        <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton2_Click"/>
-                    </StackPanel>
-
-                    <ListBox x:Name="TopNavButtonListBox" Margin="0 48 0 0"
-                             Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                             Background="Transparent" ItemsSource="{Binding NavButtons}"
-                             ItemTemplateSelector="{StaticResource navButtonListItemTemplateSelector}"
-                             ItemContainerStyle="{StaticResource MainMenuListBoxItemStyle}"
-                             SelectedItem="{Binding SelectedNavButton}"
-                             SelectionMode="Single"
-                             SelectionChanged="TopNavButtonListBox_SelectionChanged"
-                             Tapped="TopNavButtonListBox_Tapped"/>
+                    <ScrollViewer Margin="0 48 0 0" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Hidden">
+                        <StackPanel>
+                            <Button Padding="0" HorizontalAlignment="Stretch" Height="44" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Left">
+                                <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
+                                    <FontIcon Glyph="&#xE1A3;"/>
+                                    <TextBlock Text="搜索贴子" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <StackPanel x:Name="SearchPanel" Margin="8">
+                                <TextBox x:Name="KeywordTextBox" PlaceholderText="关键字" KeyUp="KeywordTextBox_KeyUp"/>
+                                <ComboBox x:Name="SearchTypeComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                                    <x:String>标题</x:String>
+                                    <x:String>全文</x:String>
+                                </ComboBox>
+                                <TextBox x:Name="AuthorTextBox" Margin="0,4,0,0" PlaceholderText="作者"/>
+                                <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                                    <x:String>全部时间</x:String>
+                                    <x:String>1周以内</x:String>
+                                    <x:String>1个月以内</x:String>
+                                    <x:String>3个月以内</x:String>
+                                    <x:String>1年以内</x:String>
+                                </ComboBox>
+                                <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton1_Click"/>
+                                <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton2_Click"/>
+                            </StackPanel>
+                            <ListBox x:Name="TopNavButtonListBox"
+                                 Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                 Background="Transparent" ItemsSource="{Binding NavButtons}"
+                                 ItemTemplateSelector="{StaticResource navButtonListItemTemplateSelector}"
+                                 ItemContainerStyle="{StaticResource MainMenuListBoxItemStyle}"
+                                 SelectedItem="{Binding SelectedNavButton}"
+                                 SelectionMode="Single"
+                                 SelectionChanged="TopNavButtonListBox_SelectionChanged"
+                                 Tapped="TopNavButtonListBox_Tapped"/>
+                        </StackPanel>
+                    </ScrollViewer>
 
                     <StackPanel x:Name="BottomButtonPanel" Grid.Row="1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0" VerticalAlignment="Bottom">
                         <Button Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click" ToolTipService.ToolTip="提醒">
@@ -713,12 +721,10 @@
         </SplitView>
 
         <Button x:Name="MainSplitViewToggle" Style="{StaticResource NavButtonNormalStyle}" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
-            <Button.Content>
-                <Grid>
-                    <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                    <Ellipse x:Name="PromptAllBorder" Margin="6,6,0,0" Fill="{Binding PromptColor}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                </Grid>
-            </Button.Content>
+            <Grid>
+                <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                <Ellipse x:Name="PromptAllBorder" Margin="6,6,0,0" Fill="{Binding PromptColor}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </Grid>
         </Button>
 
         <Border x:Name="TipBar" Margin="0,48,-260,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Width="260">
