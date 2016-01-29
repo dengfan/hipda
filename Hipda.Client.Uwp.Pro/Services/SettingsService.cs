@@ -176,13 +176,13 @@ namespace Hipda.Client.Uwp.Pro.Services
             foreach (var item in myRoamingSettings.BlockUsers)
             {
                 string jsonStr = JsonConvert.SerializeObject(item);
-                _blockThreadsContainer.Values[item.UserId.ToString()] = jsonStr;
+                _blockUsersContainer.Values[$"{item.UserId}@{item.ForumId}"] = jsonStr;
             }
 
             foreach (var item in myRoamingSettings.BlockThreads)
             {
                 string jsonStr = JsonConvert.SerializeObject(item);
-                _blockThreadsContainer.Values[item.ThreadId.ToString()] = jsonStr;
+                _blockThreadsContainer.Values[$"{item.ThreadId}"] = jsonStr;
             }
         }
     }
