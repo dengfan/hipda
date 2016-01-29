@@ -117,7 +117,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        public void Read()
+        public void ReadAndUpdate()
         {
             _myLocalSettings.ThemeType = ThemeType;
             _myLocalSettings.FontSize1 = FontSize1;
@@ -145,7 +145,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         static ApplicationDataContainer _blockThreadsContainer = _container.CreateContainer("BlockThreads", ApplicationDataCreateDisposition.Always);
         static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
 
-        public static void Read()
+        public static void ReadAndUpdate()
         {
             var data = new RoamingSettingsModel();
 
@@ -193,7 +193,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
             }
 
-            Read();
+            ReadAndUpdate();
         }
 
         public static void UnblockThreads(List<string> UnblockThreadKeys)
@@ -206,7 +206,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
             }
 
-            Read();
+            ReadAndUpdate();
         }
     }
 }

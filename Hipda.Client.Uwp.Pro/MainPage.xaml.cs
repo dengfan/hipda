@@ -285,7 +285,7 @@ namespace Hipda.Client.Uwp.Pro
             ShowRightSwipePanel();
 
             #region 更新黑名单
-            RoamingSettingsService.Read();
+            RoamingSettingsService.ReadAndUpdate();
             #endregion
 
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
