@@ -22,7 +22,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             {
                 if (_container.Values["ThemeType"] == null)
                 {
-                    _container.Values["ThemeType"] = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
+                    _container.Values["ThemeType"] = _myLocalSettings.ThemeType;
                 }
 
                 return (int)_container.Values["ThemeType"];

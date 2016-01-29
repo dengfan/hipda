@@ -22,7 +22,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for ThemeType.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ThemeTypeProperty =
-            DependencyProperty.Register("ThemeType", typeof(int), typeof(LocalSettingsDependencyObject), new PropertyMetadata(-1));
+            DependencyProperty.Register("ThemeType", typeof(int), typeof(LocalSettingsDependencyObject), new PropertyMetadata(App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1));
 
 
         public double FontSize1
