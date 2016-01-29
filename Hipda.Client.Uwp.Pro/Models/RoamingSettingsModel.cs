@@ -21,6 +21,13 @@ namespace Hipda.Client.Uwp.Pro.Models
                 return Common.GetSmallAvatarUriByUserId(UserId);
             }
         }
+        public string ForumNameInfo
+        {
+            get
+            {
+                return $"@{ForumName}";
+            }
+        }
     }
 
     public struct BlockThread
@@ -36,6 +43,13 @@ namespace Hipda.Client.Uwp.Pro.Models
             get
             {
                 return Common.GetSmallAvatarUriByUserId(UserId);
+            }
+        }
+        public string UsernameInfo
+        {
+            get
+            {
+                return $"{Username} @{ForumName}";
             }
         }
     }

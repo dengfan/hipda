@@ -490,17 +490,17 @@
                                     <StackPanel Orientation="Horizontal">
                                         <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill"
                                                Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}" Source="{Binding AvatarUri}"/>
-                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                                            <Run Text="{Binding Username}" FontWeight="Bold"/>
+                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}">
+                                            <Run Text="{Binding Username}"/>
                                             <LineBreak/>
-                                            <Run Text="{Binding ForumName}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                            <Run Text="{Binding ForumNameInfo}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                                         </TextBlock>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
-                                Content="解除选中用户的屏蔽状态" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                Content="解除选中用户" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                 Click="UnblockUsers"/>
                         
                         <TextBlock Margin="0,12,0,8" Text="屏蔽的主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
@@ -512,19 +512,17 @@
                                     <StackPanel Orientation="Horizontal">
                                         <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill"
                                                Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}" Source="{Binding AvatarUri}"/>
-                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
-                                            <Run Text="{Binding Username}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
-                                            <LineBreak/>
+                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}">
                                             <Run Text="{Binding ThreadTitle}"/>
                                             <LineBreak/>
-                                            <Run Text="{Binding ForumName}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                            <Run Text="{Binding UsernameInfo}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                                         </TextBlock>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
-                                Content="解除选中主题的屏蔽状态" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                Content="解除选中主题" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                 Click="UnblockThreads"/>
                         
                         <Button Margin="0,12,0,12" Content="购买“移除广告”服务" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
