@@ -203,7 +203,7 @@
         </Style>
 
         <Storyboard x:Name="OpenMaskAnimation">
-            <DoubleAnimation Duration="0:0:0.2" To="0.8" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
+            <DoubleAnimation Duration="0:0:0.2" To="0.6" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
         </Storyboard>
         <Storyboard x:Name="CloseMaskAnimation">
             <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
@@ -440,17 +440,18 @@
                     <TextBlock Margin="8,0,0,0" Text="设置" VerticalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
                 </StackPanel>
                 <ScrollViewer Grid.Row="1">
-                    <StackPanel Padding="12,0,20,0">
-                        
+                    <StackPanel Padding="12,0">
                         <TextBlock Margin="0,0,0,8" Text="选择主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,12" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MySettings},Mode=TwoWay}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                             <x:String>白天模式</x:String>
                             <x:String>夜间模式</x:String>
                         </ComboBox>
+                        
                         <StackPanel Visibility="{Binding SelectedValue,ElementName=ThemeTypeComboBox,Converter={StaticResource ThemeTypeNameToVisibilityConverter}}">
                             <TextBlock Text="图片亮度调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                             <Slider Minimum="0.1" Maximum="1.0" StepFrequency="0.1" Value="{Binding PictureOpacity,Source={StaticResource MySettings},Mode=TwoWay}"/>
                         </StackPanel>
+                        
                         <TextBlock Text="字号调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <Slider Minimum="14" Maximum="22" Value="{Binding FontSize1,Source={StaticResource MySettings},Mode=TwoWay}"/>
                         <TextBlock Text="行高调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
@@ -461,13 +462,17 @@
                             </ToggleSwitch.Header>
                         </ToggleSwitch>
 
-                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Content="查看缓存图片" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="OpenImageFolderButton_Click"/>
-                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Click="ClearImageCacheData">
+                        <Button Margin="0,0,0,8" HorizontalAlignment="Stretch"
+                                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                Click="OpenImageFolderButton_Click">
                             <TextBlock>
-                                <Run Text="清除图片缓存 "/>
+                                <Run Text="查看缓存图片 "/>
                                 <Run Text="{Binding ImageCacheDataSize,Source={StaticResource MySettings},Converter={StaticResource ByteToMegaByteConverter}}"/>
                             </TextBlock>
                         </Button>
+                        <Button Margin="0,0,0,8" Content="清除图片缓存" HorizontalAlignment="Stretch"
+                                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                Click="ClearImageCacheData"/>
 
                         <TextBlock Margin="0,0,0,8" Text="屏蔽的用户" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MySettings},Mode=TwoWay}"
