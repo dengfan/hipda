@@ -12,23 +12,23 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public class LocalSettingsService
     {
-        static ApplicationDataContainer _container = ApplicationData.Current.LocalSettings.CreateContainer("Common", ApplicationDataCreateDisposition.Always);
+        static ApplicationDataContainer _commonContainer = ApplicationData.Current.LocalSettings.CreateContainer("Common", ApplicationDataCreateDisposition.Always);
         static LocalSettingsDependencyObject _myLocalSettings = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
 
         public int ThemeType
         {
             get
             {
-                if (_container.Values["ThemeType"] == null)
+                if (_commonContainer.Values["ThemeType"] == null)
                 {
-                    _container.Values["ThemeType"] = _myLocalSettings.ThemeType;
+                    _commonContainer.Values["ThemeType"] = _myLocalSettings.ThemeType;
                 }
 
-                return (int)_container.Values["ThemeType"];
+                return (int)_commonContainer.Values["ThemeType"];
             }
             set
             {
-                _container.Values["ThemeType"] = value;
+                _commonContainer.Values["ThemeType"] = value;
             }
         }
 
@@ -36,16 +36,16 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             get
             {
-                if (_container.Values["FontSize1"] == null)
+                if (_commonContainer.Values["FontSize1"] == null)
                 {
-                    _container.Values["FontSize1"] = _myLocalSettings.FontSize1;
+                    _commonContainer.Values["FontSize1"] = _myLocalSettings.FontSize1;
                 }
 
-                return (double)_container.Values["FontSize1"];
+                return (double)_commonContainer.Values["FontSize1"];
             }
             set
             {
-                _container.Values["FontSize1"] = value;
+                _commonContainer.Values["FontSize1"] = value;
             }
         }
 
@@ -53,16 +53,16 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             get
             {
-                if (_container.Values["FontSize2"] == null)
+                if (_commonContainer.Values["FontSize2"] == null)
                 {
-                    _container.Values["FontSize2"] = _myLocalSettings.FontSize2;
+                    _commonContainer.Values["FontSize2"] = _myLocalSettings.FontSize2;
                 }
 
-                return (double)_container.Values["FontSize2"];
+                return (double)_commonContainer.Values["FontSize2"];
             }
             set
             {
-                _container.Values["FontSize2"] = value;
+                _commonContainer.Values["FontSize2"] = value;
             }
         }
 
@@ -70,16 +70,16 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             get
             {
-                if (_container.Values["LineHeight"] == null)
+                if (_commonContainer.Values["LineHeight"] == null)
                 {
-                    _container.Values["LineHeight"] = _myLocalSettings.LineHeight;
+                    _commonContainer.Values["LineHeight"] = _myLocalSettings.LineHeight;
                 }
 
-                return (double)_container.Values["LineHeight"];
+                return (double)_commonContainer.Values["LineHeight"];
             }
             set
             {
-                _container.Values["LineHeight"] = value;
+                _commonContainer.Values["LineHeight"] = value;
             }
         }
 
@@ -87,46 +87,30 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             get
             {
-                if (_container.Values["PictureOpacity"] == null)
+                if (_commonContainer.Values["PictureOpacity"] == null)
                 {
-                    _container.Values["PictureOpacity"] = _myLocalSettings.PictureOpacity;
+                    _commonContainer.Values["PictureOpacity"] = _myLocalSettings.PictureOpacity;
                 }
 
                 if (ThemeType == 0)
                 {
                     // 在打开APP为light主题的情况下，主值为1时，不会联动更新副值，故需要在此先为副值赋于真实的值，以免使用初始值。
-                    _myLocalSettings.PictureOpacityBak = (double)_container.Values["PictureOpacity"];
+                    _myLocalSettings.PictureOpacityBak = (double)_commonContainer.Values["PictureOpacity"];
 
                     return 1D;
                 }
 
-                return (double)_container.Values["PictureOpacity"];
+                return (double)_commonContainer.Values["PictureOpacity"];
             }
             set
             {
                 if (value < 1)
                 {
-                    _container.Values["PictureOpacity"] = value;
+                    _commonContainer.Values["PictureOpacity"] = value;
                 }
             }
         }
-
-        public bool CanShowTopThread
-        {
-            get
-            {
-                if (_container.Values["CanShowTopThread"] == null)
-                {
-                    _container.Values["CanShowTopThread"] = _myLocalSettings.CanShowTopThread;
-                }
-
-                return (bool)_container.Values["CanShowTopThread"];
-            }
-            set
-            {
-                _container.Values["CanShowTopThread"] = value;
-            }
-        }
+        
 
         public void ReadAndUpdate()
         {
@@ -135,7 +119,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             _myLocalSettings.FontSize2 = FontSize2;
             _myLocalSettings.LineHeight = LineHeight;
             _myLocalSettings.PictureOpacity = PictureOpacity;
-            _myLocalSettings.CanShowTopThread = CanShowTopThread;
         }
 
         public void Save()
@@ -145,20 +128,39 @@ namespace Hipda.Client.Uwp.Pro.Services
             FontSize2 = _myLocalSettings.FontSize2;
             LineHeight = _myLocalSettings.LineHeight;
             PictureOpacity = _myLocalSettings.PictureOpacityBak;
-            CanShowTopThread = _myLocalSettings.CanShowTopThread;
         }
     }
 
     public class RoamingSettingsService
     {
         static ApplicationDataContainer _container = ApplicationData.Current.RoamingSettings;
+        static ApplicationDataContainer _commonContainer = _container.CreateContainer("Common", ApplicationDataCreateDisposition.Always);
         static ApplicationDataContainer _blockUsersContainer = _container.CreateContainer("BlockUsers", ApplicationDataCreateDisposition.Always);
         static ApplicationDataContainer _blockThreadsContainer = _container.CreateContainer("BlockThreads", ApplicationDataCreateDisposition.Always);
         static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
 
-        public static void ReadAndUpdate()
+        public bool CanShowTopThread
+        {
+            get
+            {
+                if (_commonContainer.Values["CanShowTopThread"] == null)
+                {
+                    _commonContainer.Values["CanShowTopThread"] = _myRoamingSettings.CanShowTopThread;
+                }
+
+                return (bool)_commonContainer.Values["CanShowTopThread"];
+            }
+            set
+            {
+                _commonContainer.Values["CanShowTopThread"] = value;
+            }
+        }
+
+        public void ReadAndUpdate()
         {
             var data = new RoamingSettingsModel();
+
+            _myRoamingSettings.CanShowTopThread = CanShowTopThread;
 
             var blockUserItems = _blockUsersContainer.Values;
             foreach (var item in blockUserItems)
@@ -179,8 +181,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             _myRoamingSettings.BlockThreads = data.BlockThreads;
         }
 
-        public static void Save()
+        public void Save()
         {
+            CanShowTopThread = _myRoamingSettings.CanShowTopThread;
+
             foreach (var item in _myRoamingSettings.BlockUsers)
             {
                 string jsonStr = JsonConvert.SerializeObject(item);
@@ -194,7 +198,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        public static void UnblockUsers(List<string> UnblockUserKeys)
+        public void UnblockUsers(List<string> UnblockUserKeys)
         {
             foreach (string key in UnblockUserKeys)
             {
@@ -207,7 +211,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             ReadAndUpdate();
         }
 
-        public static void UnblockThreads(List<string> UnblockThreadKeys)
+        public void UnblockThreads(List<string> UnblockThreadKeys)
         {
             foreach (string key in UnblockThreadKeys)
             {

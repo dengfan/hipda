@@ -56,6 +56,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 
     public class RoamingSettingsModel
     {
+        public bool CanShowTopThread { get; set; } = true;
         public ObservableCollection<BlockUser> BlockUsers { get; set; } = new ObservableCollection<BlockUser>();
         public ObservableCollection<BlockThread> BlockThreads { get; set; } = new ObservableCollection<BlockThread>();
     }

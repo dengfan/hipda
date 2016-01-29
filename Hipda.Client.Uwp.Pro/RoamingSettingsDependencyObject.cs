@@ -11,6 +11,17 @@ namespace Hipda.Client.Uwp.Pro
 {
     public class RoamingSettingsDependencyObject : DependencyObject
     {
+        public bool CanShowTopThread
+        {
+            get { return (bool)GetValue(CanShowTopThreadProperty); }
+            set { SetValue(CanShowTopThreadProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanShowTopThread.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CanShowTopThreadProperty =
+            DependencyProperty.Register("CanShowTopThread", typeof(bool), typeof(RoamingSettingsDependencyObject), new PropertyMetadata(true));
+
+
         public ObservableCollection<BlockUser> BlockUsers
         {
             get { return (ObservableCollection<BlockUser>)GetValue(BlockUsersProperty); }
