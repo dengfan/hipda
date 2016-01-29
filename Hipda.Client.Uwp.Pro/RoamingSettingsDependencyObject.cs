@@ -33,14 +33,5 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("BlockThreads", typeof(ObservableCollection<BlockThread>), typeof(RoamingSettingsDependencyObject), new PropertyMetadata(new ObservableCollection<BlockThread>()));
 
 
-        public ulong ImageCacheDataSize
-        {
-            get { return (ulong)GetValue(ImageCacheDataSizeProperty); }
-            set { SetValue(ImageCacheDataSizeProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for ImageCacheDataSize.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ImageCacheDataSizeProperty =
-            DependencyProperty.Register("ImageCacheDataSize", typeof(ulong), typeof(RoamingSettingsDependencyObject), new PropertyMetadata(0UL));
     }
 }
