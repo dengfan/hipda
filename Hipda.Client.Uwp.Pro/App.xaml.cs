@@ -107,7 +107,7 @@ namespace Hipda.Client.Uwp.Pro
             new LocalSettingsService().ReadAndUpdate();
 
             // 恢复漫游设置
-            RoamingSettingsService.ReadAndUpdate();
+            new RoamingSettingsService().ReadAndUpdate();
         }
 
         async Task<bool> CreateRootFrame()

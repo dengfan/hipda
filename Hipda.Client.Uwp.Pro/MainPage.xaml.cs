@@ -199,7 +199,7 @@ namespace Hipda.Client.Uwp.Pro
             new LocalSettingsService().Save();
 
             // 保存漫游设置
-            RoamingSettingsService.Save();
+            new RoamingSettingsService().Save();
         }
 
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -284,10 +284,10 @@ namespace Hipda.Client.Uwp.Pro
 
             ShowRightSwipePanel();
 
-            #region 更新黑名单
-            RoamingSettingsService.ReadAndUpdate();
-            #endregion
+            // 更新黑名单
+            new RoamingSettingsService().ReadAndUpdate();
 
+            // 统计缓存文件大小
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
             await GetDataSizeInFolder(folder);
         }
@@ -397,7 +397,7 @@ namespace Hipda.Client.Uwp.Pro
                 if (!_myRoamingSettings.BlockUsers.Any(u => u.UserId == PopupUserId && u.ForumId == PopupForumId))
                 {
                     _myRoamingSettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername, ForumId = PopupForumId, ForumName = PopupForumName });
-                    RoamingSettingsService.Save();
+                    new RoamingSettingsService().Save();
                 }
 
                 SendToast(xml2);
@@ -424,7 +424,7 @@ namespace Hipda.Client.Uwp.Pro
                 if (!_myRoamingSettings.BlockThreads.Any(t => t.ThreadId == PopupThreadId))
                 {
                     _myRoamingSettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle, ForumId = PopupForumId, ForumName = PopupForumName });
-                    RoamingSettingsService.Save();
+                    new RoamingSettingsService().Save();
                 }
 
                 string xml2 = "<toast>" +
@@ -674,7 +674,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private void UnblockUsers(object sender, RoutedEventArgs e)
         {
-            RoamingSettingsService.UnblockUsers(_unblockUserKeys);
+            new RoamingSettingsService().UnblockUsers(_unblockUserKeys);
             _unblockUserKeys.Clear();
         }
 
@@ -697,7 +697,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private void UnblockThreads(object sender, RoutedEventArgs e)
         {
-            RoamingSettingsService.UnblockThreads(_unblockThreadKeys);
+            new RoamingSettingsService().UnblockThreads(_unblockThreadKeys);
             _unblockThreadKeys.Clear();
         }
         #endregion
