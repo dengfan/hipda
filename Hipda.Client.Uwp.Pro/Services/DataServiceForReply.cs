@@ -131,11 +131,9 @@ namespace Hipda.Client.Uwp.Pro.Services
                     authorUsername = authorNode.InnerText;
                 }
 
-                // 判断当前用户是否已被屏蔽
-                if (_mySettings.BlockUsers.Any(u => u.UserId == authorUserId))
+                // 判断当前用户是否已被屏蔽，是则跳过
+                if (_mySettings.BlockUsers.Any(u => u.UserId == authorUserId && u.ForumId == forumId))
                 {
-                    threadReply.Replies.Add(new ReplyItemModel(i, -1, -1, -1, -1, string.Empty, -1, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false));
-                    i++;
                     continue;
                 }
 

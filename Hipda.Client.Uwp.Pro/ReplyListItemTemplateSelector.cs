@@ -20,14 +20,12 @@ namespace Hipda.Client.Uwp.Pro
 
         protected override DataTemplate SelectTemplateCore (object item, DependencyObject container)
         {
-            ReplyItemModel data = (ReplyItemModel)item;
-
-            // 如果当前用户已被屏蔽，则不赋予模板
-            if (data.AuthorUserId == -1)
+            if (item == null)
             {
                 return null;
             }
 
+            var data = (ReplyItemModel)item;
             if (data.FloorNo == 1)
             {
                 return ReplyListTopItemTemplate;
