@@ -40,16 +40,6 @@ namespace Hipda.Client.Uwp.Pro.Models
         }
     }
 
-    //public class LocalSettingsModel
-    //{
-    //    public int ThemeType { get; set; } = -1; // -1表示未设定
-    //    public double FontSize1 { get; set; } = 15D;
-    //    public double FontSize2 { get; set; } = 12D;
-    //    public double LineHeight { get; set; } = 22D;
-    //    public double PictureOpacity { get; set; } = 0.4D;
-    //    public bool CanShowTopThread { get; set; } = true;
-    //}
-
     public class RoamingSettingsModel
     {
         public ObservableCollection<BlockUser> BlockUsers { get; set; } = new ObservableCollection<BlockUser>();

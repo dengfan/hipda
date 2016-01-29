@@ -12,8 +12,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public class LocalSettingsService
     {
-        static string _containerKey = "Common";
-        static ApplicationDataContainer _container = ApplicationData.Current.LocalSettings.CreateContainer(_containerKey, ApplicationDataCreateDisposition.Always);
+        static ApplicationDataContainer _container = ApplicationData.Current.LocalSettings.CreateContainer("Common", ApplicationDataCreateDisposition.Always);
         static LocalSettingsDependencyObject _myLocalSettings = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
 
         public int ThemeType
@@ -29,7 +28,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             set
             {
-                _myLocalSettings.ThemeType = value;
                 _container.Values["ThemeType"] = value;
             }
         }
@@ -47,7 +45,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             set
             {
-                _myLocalSettings.FontSize1 = value;
                 _container.Values["FontSize1"] = value;
             }
         }
@@ -65,7 +62,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             set
             {
-                _myLocalSettings.FontSize2 = value;
                 _container.Values["FontSize2"] = value;
             }
         }
@@ -83,7 +79,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             set
             {
-                _myLocalSettings.LineHeight = value;
                 _container.Values["LineHeight"] = value;
             }
         }
@@ -101,7 +96,6 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             set
             {
-                _myLocalSettings.PictureOpacity = value;
                 _container.Values["PictureOpacity"] = value;
             }
         }
@@ -119,30 +113,39 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
             set
             {
-                _myLocalSettings.CanShowTopThread = value;
                 _container.Values["CanShowTopThread"] = value;
             }
         }
 
-        public static void Save()
+        public void Read()
         {
-            _container.Values["ThemeType"] = _myLocalSettings.ThemeType;
-            _container.Values["FontSize1"] = _myLocalSettings.FontSize1;
-            _container.Values["FontSize2"] = _myLocalSettings.FontSize2;
-            _container.Values["LineHeight"] = _myLocalSettings.LineHeight;
-            _container.Values["PictureOpacity"] = _myLocalSettings.PictureOpacity;
-            _container.Values["CanShowTopThread"] = _myLocalSettings.CanShowTopThread;
+            _myLocalSettings.ThemeType = ThemeType;
+            _myLocalSettings.FontSize1 = FontSize1;
+            _myLocalSettings.FontSize2 = FontSize2;
+            _myLocalSettings.LineHeight = LineHeight;
+            _myLocalSettings.PictureOpacity = PictureOpacity;
+            _myLocalSettings.CanShowTopThread = CanShowTopThread;
+        }
+
+        public void Save()
+        {
+            ThemeType = _myLocalSettings.ThemeType;
+            FontSize1 = _myLocalSettings.FontSize1;
+            FontSize2 = _myLocalSettings.FontSize2;
+            LineHeight = _myLocalSettings.LineHeight;
+            PictureOpacity = _myLocalSettings.PictureOpacity;
+            CanShowTopThread = _myLocalSettings.CanShowTopThread;
         }
     }
 
-    public static class RoamingSettingsService
+    public class RoamingSettingsService
     {
-        static string _blockUsersContainerKey = "BlockUsers";
-        static string _blockThreadsContainerKey = "BlockThreads";
-        static ApplicationDataContainer _blockUsersContainer = ApplicationData.Current.RoamingSettings.CreateContainer(_blockUsersContainerKey, ApplicationDataCreateDisposition.Always);
-        static ApplicationDataContainer _blockThreadsContainer = ApplicationData.Current.RoamingSettings.CreateContainer(_blockThreadsContainerKey, ApplicationDataCreateDisposition.Always);
+        static ApplicationDataContainer _container = ApplicationData.Current.RoamingSettings;
+        static ApplicationDataContainer _blockUsersContainer = _container.CreateContainer("BlockUsers", ApplicationDataCreateDisposition.Always);
+        static ApplicationDataContainer _blockThreadsContainer = _container.CreateContainer("BlockThreads", ApplicationDataCreateDisposition.Always);
+        static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
 
-        public static RoamingSettingsModel Read()
+        public static void Read()
         {
             var data = new RoamingSettingsModel();
 
@@ -153,6 +156,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var bu = JsonConvert.DeserializeObject<BlockUser>(jsonStr);
                 data.BlockUsers.Add(bu);
             }
+            _myRoamingSettings.BlockUsers = data.BlockUsers;
 
             var blockThreadItems = _blockThreadsContainer.Values;
             foreach (var item in blockThreadItems)
@@ -161,29 +165,48 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var bt = JsonConvert.DeserializeObject<BlockThread>(jsonStr);
                 data.BlockThreads.Add(bt);
             }
-
-            return data;
+            _myRoamingSettings.BlockThreads = data.BlockThreads;
         }
 
         public static void Save()
         {
-            var myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
-            if (myRoamingSettings == null)
-            {
-                return;
-            }
-
-            foreach (var item in myRoamingSettings.BlockUsers)
+            foreach (var item in _myRoamingSettings.BlockUsers)
             {
                 string jsonStr = JsonConvert.SerializeObject(item);
                 _blockUsersContainer.Values[$"{item.UserId}@{item.ForumId}"] = jsonStr;
             }
 
-            foreach (var item in myRoamingSettings.BlockThreads)
+            foreach (var item in _myRoamingSettings.BlockThreads)
             {
                 string jsonStr = JsonConvert.SerializeObject(item);
                 _blockThreadsContainer.Values[$"{item.ThreadId}"] = jsonStr;
             }
+        }
+
+        public static void UnblockUsers(List<string> UnblockUserKeys)
+        {
+            foreach (string key in UnblockUserKeys)
+            {
+                if (_blockUsersContainer.Values[key] != null)
+                {
+                    _blockUsersContainer.Values.Remove(key);
+                }
+            }
+
+            Read();
+        }
+
+        public static void UnblockThreads(List<string> UnblockThreadKeys)
+        {
+            foreach (string key in UnblockThreadKeys)
+            {
+                if (_blockThreadsContainer.Values[key] != null)
+                {
+                    _blockThreadsContainer.Values.Remove(key);
+                }
+            }
+
+            Read();
         }
     }
 }

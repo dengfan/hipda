@@ -103,23 +103,11 @@ namespace Hipda.Client.Uwp.Pro
         /// </summary>
         void InitSettings()
         {
-            #region 恢复本地设置
-            var _localSettingsService = new LocalSettingsService();
-            var _myLocalSettings = ((LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"]);
-            _myLocalSettings.ThemeType = _localSettingsService.ThemeType;
-            _myLocalSettings.FontSize1 = _localSettingsService.FontSize1;
-            _myLocalSettings.FontSize2 = _localSettingsService.FontSize2;
-            _myLocalSettings.LineHeight = _localSettingsService.LineHeight;
-            _myLocalSettings.PictureOpacity = _localSettingsService.PictureOpacity;
-            _myLocalSettings.CanShowTopThread = _localSettingsService.CanShowTopThread;
-            #endregion
+            // 恢复本地设置
+            new LocalSettingsService().Read();
 
-            #region 恢复漫游设置
-            var _roamingSettings = RoamingSettingsService.Read();
-            var _myRoamingSettings = ((RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"]);
-            _myRoamingSettings.BlockUsers = _roamingSettings.BlockUsers;
-            _myRoamingSettings.BlockThreads = _roamingSettings.BlockThreads;
-            #endregion
+            // 恢复漫游设置
+            RoamingSettingsService.Read();
         }
 
         async Task<bool> CreateRootFrame()

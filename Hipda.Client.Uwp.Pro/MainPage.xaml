@@ -472,8 +472,8 @@
                                 Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                 Click="OpenImageFolderButton_Click">
                                 <TextBlock>
-                                <Run Text="查看缓存图片 "/>
-                                <Run Text="{Binding ImageCacheDataSize,Source={StaticResource MyRoamingSettings},Converter={StaticResource ByteToMegaByteConverter}}"/>
+                                    <Run Text="查看缓存图片 "/>
+                                    <Run Text="{Binding ImageCacheDataSize,ElementName=MyMainPage,Converter={StaticResource ByteToMegaByteConverter}}"/>
                                 </TextBlock>
                             </Button>
                             <Button Grid.Column="2" Content="清除" HorizontalAlignment="Stretch"

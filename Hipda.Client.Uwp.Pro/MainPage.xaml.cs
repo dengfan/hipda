@@ -38,6 +38,16 @@ namespace Hipda.Client.Uwp.Pro
         MainPageViewModel _mainPageViewModel;
         ThreadHistoryListViewViewModel _threadHistoryListViewViewModel;
 
+        public ulong ImageCacheDataSize
+        {
+            get { return (ulong)GetValue(ImageCacheDataSizeProperty); }
+            set { SetValue(ImageCacheDataSizeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ImageCacheDataSize.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ImageCacheDataSizeProperty =
+            DependencyProperty.Register("ImageCacheDataSize", typeof(ulong), typeof(MainPage), new PropertyMetadata(0UL));
+
         public Frame AppFrame { get { return this.MainFrame; } }
 
         void ElementAdapter()
@@ -182,12 +192,14 @@ namespace Hipda.Client.Uwp.Pro
 
             MaskGrid.Visibility = Visibility.Collapsed;
 
-            // 保存设置
-            LocalSettingsService.Save();
-            RoamingSettingsService.Save();
-
             // 清除值，以便每次打开时都重新计算
-            _myRoamingSettings.ImageCacheDataSize = 0;
+            ImageCacheDataSize = 0;
+
+            // 保存本地设置
+            new LocalSettingsService().Save();
+
+            // 保存漫游设置
+            RoamingSettingsService.Save();
         }
 
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -271,6 +283,10 @@ namespace Hipda.Client.Uwp.Pro
             RightSwipeContentControl.ContentTemplate = Resources["SettingsContentControl"] as DataTemplate;
 
             ShowRightSwipePanel();
+
+            #region 更新黑名单
+            RoamingSettingsService.Read();
+            #endregion
 
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
             await GetDataSizeInFolder(folder);
@@ -372,8 +388,8 @@ namespace Hipda.Client.Uwp.Pro
                 string xml2 = "<toast>" +
                     "<visual>" +
                         "<binding template='ToastGeneric'>" +
-                            $"<text>{PopupUsername} 已被加入屏蔽名单</text>" +
-                            $"<text>刷新后屏蔽生效</text>" +
+                            $"<text>{PopupUsername} 已加入黑名单</text>" +
+                            $"<text>刷新后生效</text>" +
                         "</binding>" +
                     "</visual>" +
                     "</toast>";
@@ -414,8 +430,8 @@ namespace Hipda.Client.Uwp.Pro
                 string xml2 = "<toast>" +
                     "<visual>" +
                         "<binding template='ToastGeneric'>" +
-                            $"<text>《{PopupThreadTitle}》 已被加入屏蔽列表</text>" +
-                            $"<text>刷新后屏蔽生效</text>" +
+                            $"<text>《{PopupThreadTitle}》</text>" +
+                            $"<text>已加入黑名单，刷新后生效</text>" +
                         "</binding>" +
                     "</visual>" +
                     "</toast>";
@@ -592,9 +608,6 @@ namespace Hipda.Client.Uwp.Pro
         #endregion
 
         #region 设置面板相关程序
-        static List<BlockUser> UnblockUserList = new List<BlockUser>();
-        static List<BlockThread> UnblockThreadList = new List<BlockThread>();
-
         private async void OpenImageFolderButton_Click(object sender, RoutedEventArgs e)
         {
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
@@ -614,7 +627,7 @@ namespace Hipda.Client.Uwp.Pro
             foreach (var file in files)
             {
                 var bp = await file.GetBasicPropertiesAsync();
-                _myRoamingSettings.ImageCacheDataSize += bp.Size;
+                ImageCacheDataSize += bp.Size;
             }
 
             var folders = await folder.GetFoldersAsync();
@@ -638,64 +651,54 @@ namespace Hipda.Client.Uwp.Pro
         {
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
             await folder.DeleteAsync();
-            _myRoamingSettings.ImageCacheDataSize = 0;
+            ImageCacheDataSize = 0;
             await GetDataSizeInFolder(folder);
         }
-        
+
+        static List<string> _unblockUserKeys = new List<string>();
+
         private void BlockUsersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var _unblockUsers = new List<BlockUser>();
+            var list = new List<string>();
             var lb = (ListBox)sender;
             if (lb != null)
             {
                 foreach (BlockUser item in lb.SelectedItems)
                 {
-                    _unblockUsers.Add(item);
+                    list.Add($"{item.UserId}@{item.ForumId}");
                 }
             }
 
-            UnblockUserList = _unblockUsers;
+            _unblockUserKeys = list;
         }
 
         private void UnblockUsers(object sender, RoutedEventArgs e)
         {
-            if (UnblockUserList != null)
-            {
-                foreach (var item in UnblockUserList)
-                {
-                    _myRoamingSettings.BlockUsers.Remove(item);
-                }
-                UnblockUserList.Clear();
-                RoamingSettingsService.Save();
-            }
+            RoamingSettingsService.UnblockUsers(_unblockUserKeys);
+            _unblockUserKeys.Clear();
         }
+
+        static List<string> _unblockThreadKeys = new List<string>();
 
         private void BlockThreadsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var _unblockThreads = new List<BlockThread>();
+            var list = new List<string>();
             var lb = (ListBox)sender;
             if (lb != null)
             {
                 foreach (BlockThread item in lb.SelectedItems)
                 {
-                    _unblockThreads.Add(item);
+                    list.Add($"{item.ThreadId}");
                 }
             }
 
-            UnblockThreadList = _unblockThreads;
+            _unblockThreadKeys = list;
         }
 
         private void UnblockThreads(object sender, RoutedEventArgs e)
         {
-            if (UnblockThreadList != null)
-            {
-                foreach (var item in UnblockThreadList)
-                {
-                    _myRoamingSettings.BlockThreads.Remove(item);
-                }
-                UnblockThreadList.Clear();
-                RoamingSettingsService.Save();
-            }
+            RoamingSettingsService.UnblockThreads(_unblockThreadKeys);
+            _unblockThreadKeys.Clear();
         }
         #endregion
     }

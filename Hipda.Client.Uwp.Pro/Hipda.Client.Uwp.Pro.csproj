@@ -125,7 +125,7 @@
     <Compile Include="Models\FaceItemModel.cs" />
     <Compile Include="Models\NavButtonItemModel.cs" />
     <Compile Include="Models\NoticeItemModel.cs" />
-    <Compile Include="Models\SettingsModel.cs" />
+    <Compile Include="Models\RoamingSettingsModel.cs" />
     <Compile Include="Models\ThreadDataType.cs" />
     <Compile Include="Models\ThreadItemForMyFavoritesModel.cs" />
     <Compile Include="Models\ThreadItemForSearchFullTextModel.cs" />

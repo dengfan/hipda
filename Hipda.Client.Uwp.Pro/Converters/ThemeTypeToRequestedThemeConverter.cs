@@ -31,8 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Converters
                 titleBar.ButtonForegroundColor = Colors.Silver;
                 titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
 
-                var localSettingsService = new LocalSettingsService();
-                _myLocalSettings.PictureOpacity = localSettingsService.PictureOpacity;
+                _myLocalSettings.PictureOpacity = new LocalSettingsService().PictureOpacity;
 
                 return ElementTheme.Dark;
             }
