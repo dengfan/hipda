@@ -112,6 +112,7 @@
     <Compile Include="Converters\ElementThemeToMaskBackgroundBrush.cs" />
     <Compile Include="Converters\SelectedIndexToVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeTypeNameToVisibilityConverter.cs" />
+    <Compile Include="Converters\ThemeTypeToRequestedThemeConverter.cs" />
     <Compile Include="Converters\UserIdStringToInt32Converter.cs" />
     <Compile Include="Converters\UserIdToAvatarUriConverter.cs" />
     <Compile Include="LoginPage.xaml.cs">
@@ -141,11 +142,12 @@
     <Compile Include="Controls\MyLink.cs" />
     <Compile Include="Controls\MyRefLink1.cs" />
     <Compile Include="Controls\MyRefLink2.cs" />
-    <Compile Include="SettingsDependencyObject.cs" />
+    <Compile Include="LocalSettingsDependencyObject.cs" />
     <Compile Include="NavButtonListItemTemplateSelector.cs" />
     <Compile Include="NoticeListItemTemplateSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReplyListItemTemplateSelector.cs" />
+    <Compile Include="RoamingSettingsDependencyObject.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\Common.cs" />
     <Compile Include="Services\DataService.cs" />

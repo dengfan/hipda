@@ -32,7 +32,9 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        static SettingsDependencyObject _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
+        static LocalSettingsDependencyObject _myLocalSettings = ((LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"]);
+        static RoamingSettingsDependencyObject _myRoamingSettings = ((RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"]);
+
         MainPageViewModel _mainPageViewModel;
         ThreadHistoryListViewViewModel _threadHistoryListViewViewModel;
 
@@ -53,11 +55,11 @@ namespace Hipda.Client.Uwp.Pro
         {
             this.InitializeComponent();
 
-            if (_mySettings.ThemeType == 0)
+            if (_myLocalSettings.ThemeType == 0)
             {
                 this.RequestedTheme = ElementTheme.Light;
             }
-            else if (_mySettings.ThemeType == 1)
+            else if (_myLocalSettings.ThemeType == 1)
             {
                 this.RequestedTheme = ElementTheme.Dark;
             }
@@ -182,9 +184,10 @@ namespace Hipda.Client.Uwp.Pro
 
             // 保存设置
             LocalSettingsService.Save();
+            RoamingSettingsService.Save();
 
             // 清除值，以便每次打开时都重新计算
-            _mySettings.ImageCacheDataSize = 0;
+            _myRoamingSettings.ImageCacheDataSize = 0;
         }
 
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -375,10 +378,10 @@ namespace Hipda.Client.Uwp.Pro
                     "</visual>" +
                     "</toast>";
 
-                if (!_mySettings.BlockUsers.Any(u => u.UserId == PopupUserId && u.ForumId == PopupForumId))
+                if (!_myRoamingSettings.BlockUsers.Any(u => u.UserId == PopupUserId && u.ForumId == PopupForumId))
                 {
-                    _mySettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername, ForumId = PopupForumId, ForumName = PopupForumName });
-                    LocalSettingsService.Save();
+                    _myRoamingSettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername, ForumId = PopupForumId, ForumName = PopupForumName });
+                    RoamingSettingsService.Save();
                 }
 
                 SendToast(xml2);
@@ -402,10 +405,10 @@ namespace Hipda.Client.Uwp.Pro
                     return;
                 }
 
-                if (!_mySettings.BlockThreads.Any(t => t.ThreadId == PopupThreadId))
+                if (!_myRoamingSettings.BlockThreads.Any(t => t.ThreadId == PopupThreadId))
                 {
-                    _mySettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle, ForumId = PopupForumId, ForumName = PopupForumName });
-                    LocalSettingsService.Save();
+                    _myRoamingSettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle, ForumId = PopupForumId, ForumName = PopupForumName });
+                    RoamingSettingsService.Save();
                 }
 
                 string xml2 = "<toast>" +
@@ -611,7 +614,7 @@ namespace Hipda.Client.Uwp.Pro
             foreach (var file in files)
             {
                 var bp = await file.GetBasicPropertiesAsync();
-                _mySettings.ImageCacheDataSize += bp.Size;
+                _myRoamingSettings.ImageCacheDataSize += bp.Size;
             }
 
             var folders = await folder.GetFoldersAsync();
@@ -635,7 +638,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
             await folder.DeleteAsync();
-            _mySettings.ImageCacheDataSize = 0;
+            _myRoamingSettings.ImageCacheDataSize = 0;
             await GetDataSizeInFolder(folder);
         }
         
@@ -660,10 +663,10 @@ namespace Hipda.Client.Uwp.Pro
             {
                 foreach (var item in UnblockUserList)
                 {
-                    _mySettings.BlockUsers.Remove(item);
+                    _myRoamingSettings.BlockUsers.Remove(item);
                 }
                 UnblockUserList.Clear();
-                LocalSettingsService.Save();
+                RoamingSettingsService.Save();
             }
         }
 
@@ -688,10 +691,10 @@ namespace Hipda.Client.Uwp.Pro
             {
                 foreach (var item in UnblockThreadList)
                 {
-                    _mySettings.BlockThreads.Remove(item);
+                    _myRoamingSettings.BlockThreads.Remove(item);
                 }
                 UnblockThreadList.Clear();
-                LocalSettingsService.Save();
+                RoamingSettingsService.Save();
             }
         }
         #endregion

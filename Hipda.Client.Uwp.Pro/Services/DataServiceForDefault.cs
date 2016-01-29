@@ -14,7 +14,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public class DataServiceForDefault
     {
-        static SettingsDependencyObject _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
+        static RoamingSettingsDependencyObject _myRoamingSettings = ((RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"]);
         static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         static int _pageSize = 75;
@@ -102,7 +102,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string title = a.InnerText.Trim();
 
                 // 判断当前主题是否已被屏蔽，是则跳过
-                if (_mySettings.BlockThreads.Any(t => t.ThreadId == threadId))
+                if (_myRoamingSettings.BlockThreads.Any(t => t.ThreadId == threadId))
                 {
                     continue;
                 }
@@ -130,7 +130,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 // 判断当前版块下的当前用户是否已被屏蔽，是则跳过
-                if (_mySettings.BlockUsers.Any(u => u.UserId == authorUserId && u.ForumId == forumId))
+                if (_myRoamingSettings.BlockUsers.Any(u => u.UserId == authorUserId && u.ForumId == forumId))
                 {
                     continue;
                 }

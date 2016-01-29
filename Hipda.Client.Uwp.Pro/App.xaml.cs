@@ -8,6 +8,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -97,56 +98,28 @@ namespace Hipda.Client.Uwp.Pro
             this.Suspending += OnSuspending;
         }
        
+        /// <summary>
+        /// 读取设置数据并启用
+        /// </summary>
         void InitSettings()
         {
-            SettingsModel _settings = LocalSettingsService.Read();
-            SettingsDependencyObject _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
+            #region 恢复本地设置
+            var _localSettingsService = new LocalSettingsService();
+            var _myLocalSettings = ((LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"]);
+            _myLocalSettings.ThemeType = _localSettingsService.ThemeType;
+            _myLocalSettings.FontSize1 = _localSettingsService.FontSize1;
+            _myLocalSettings.FontSize2 = _localSettingsService.FontSize2;
+            _myLocalSettings.LineHeight = _localSettingsService.LineHeight;
+            _myLocalSettings.PictureOpacity = _localSettingsService.PictureOpacity;
+            _myLocalSettings.CanShowTopThread = _localSettingsService.CanShowTopThread;
+            #endregion
 
-            if (_settings.ThemeType == -1)
-            {
-                _settings.ThemeType = App.Current.RequestedTheme == ApplicationTheme.Light ? 0 : 1;
-                LocalSettingsService.Save();
-            }
-
-            _mySettings.ThemeType = _settings.ThemeType;
-
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            switch (_mySettings.ThemeType)
-            {
-                case 0:
-                    //this.RequestedTheme = ApplicationTheme.Light;
-                    titleBar.BackgroundColor = null;
-                    titleBar.InactiveBackgroundColor = null;
-                    titleBar.ForegroundColor = null;
-                    titleBar.ButtonBackgroundColor = null;
-                    titleBar.ButtonInactiveBackgroundColor = null;
-                    titleBar.ButtonForegroundColor = null;
-                    titleBar.ButtonHoverBackgroundColor = null;
-
-                    _mySettings.PictureOpacity = 1;
-                    break;
-                case 1:
-                    //this.RequestedTheme = ApplicationTheme.Dark;
-                    Color c = Colors.Black;
-                    titleBar.BackgroundColor = c;
-                    titleBar.InactiveBackgroundColor = c;
-                    titleBar.ForegroundColor = Colors.Silver;
-                    titleBar.ButtonBackgroundColor = c;
-                    titleBar.ButtonInactiveBackgroundColor = c;
-                    titleBar.ButtonForegroundColor = Colors.Silver;
-                    titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
-
-                    _mySettings.PictureOpacity = _settings.PictureOpacity;
-                    break;
-            }
-
-            _mySettings.FontSize1 = _settings.FontSize1;
-            _mySettings.FontSize2 = _settings.FontSize2;
-            _mySettings.LineHeight = _settings.LineHeight;
-            _mySettings.PictureOpacityBak = _settings.PictureOpacity;
-            _mySettings.CanShowTopThread = _settings.CanShowTopThread;
-            _mySettings.BlockUsers = _settings.BlockUsers;
-            _mySettings.BlockThreads = _settings.BlockThreads;
+            #region 恢复漫游设置
+            var _roamingSettings = RoamingSettingsService.Read();
+            var _myRoamingSettings = ((RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"]);
+            _myRoamingSettings.BlockUsers = _roamingSettings.BlockUsers;
+            _myRoamingSettings.BlockThreads = _roamingSettings.BlockThreads;
+            #endregion
         }
 
         async Task<bool> CreateRootFrame()

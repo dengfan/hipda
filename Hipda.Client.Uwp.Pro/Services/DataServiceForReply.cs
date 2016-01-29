@@ -15,7 +15,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public class DataServiceForReply
     {
-        static SettingsDependencyObject _mySettings = ((SettingsDependencyObject)App.Current.Resources["MySettings"]);
+        static RoamingSettingsDependencyObject _myRoamingSettings = ((RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"]);
         static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         int _maxPageNo = 1;
@@ -132,7 +132,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 // 判断当前用户是否已被屏蔽，是则跳过
-                if (_mySettings.BlockUsers.Any(u => u.UserId == authorUserId && u.ForumId == forumId))
+                if (_myRoamingSettings.BlockUsers.Any(u => u.UserId == authorUserId && u.ForumId == forumId))
                 {
                     continue;
                 }
