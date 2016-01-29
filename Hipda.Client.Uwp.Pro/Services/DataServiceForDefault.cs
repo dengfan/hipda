@@ -137,6 +137,12 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 bool isTop = item.GetAttributeValue("id", "").StartsWith("stickthread_");
 
+                // 根据“是否显示置顶贴”的设置值来决定是否跳过当前主题
+                if (!_myRoamingSettings.CanShowTopThread && isTop)
+                {
+                    continue;
+                }
+
                 int attachType = -1;
                 var attachIconNode = th.ChildNodes.FirstOrDefault(n => n.Name.Equals("img") && n.GetAttributeValue("class", "").Equals("attach"));
                 if (attachIconNode != null)
