@@ -32,7 +32,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyRefLink1">
                     <HyperlinkButton>
-                        <TextBlock Text="{TemplateBinding LinkContent}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                        <TextBlock Padding="16,0" Text="{TemplateBinding LinkContent}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
                     </HyperlinkButton>
                 </ControlTemplate>
             </Setter.Value>
@@ -44,7 +44,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyRefLink2">
                     <HyperlinkButton>
-                        <TextBlock Text="&#xE248;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                        <TextBlock Padding="16,0" Text="&#xE248;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
                     </HyperlinkButton>
                 </ControlTemplate>
             </Setter.Value>
