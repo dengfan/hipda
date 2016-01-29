@@ -92,11 +92,22 @@ namespace Hipda.Client.Uwp.Pro.Services
                     _container.Values["PictureOpacity"] = _myLocalSettings.PictureOpacity;
                 }
 
+                if (ThemeType == 0)
+                {
+                    // 在打开APP为light主题的情况下，主值为1时，不会联动更新副值，故需要在此先为副值赋于真实的值，以免使用初始值。
+                    _myLocalSettings.PictureOpacityBak = (double)_container.Values["PictureOpacity"];
+
+                    return 1D;
+                }
+
                 return (double)_container.Values["PictureOpacity"];
             }
             set
             {
-                _container.Values["PictureOpacity"] = value;
+                if (value < 1)
+                {
+                    _container.Values["PictureOpacity"] = value;
+                }
             }
         }
 
@@ -133,7 +144,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             FontSize1 = _myLocalSettings.FontSize1;
             FontSize2 = _myLocalSettings.FontSize2;
             LineHeight = _myLocalSettings.LineHeight;
-            PictureOpacity = _myLocalSettings.PictureOpacity;
+            PictureOpacity = _myLocalSettings.PictureOpacityBak;
             CanShowTopThread = _myLocalSettings.CanShowTopThread;
         }
     }

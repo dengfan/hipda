@@ -64,7 +64,7 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("LineHeight", typeof(double), typeof(LocalSettingsDependencyObject), new PropertyMetadata(22D));
 
 
-        public double PictureOpacityBak { get; set; }
+        public double PictureOpacityBak { get; set; } = 0.4D;
         public double PictureOpacity
         {
             get { return (double)GetValue(PictureOpacityProperty); }
@@ -73,7 +73,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for PictureOpacity.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PictureOpacityProperty =
-            DependencyProperty.Register("PictureOpacity", typeof(double), typeof(LocalSettingsDependencyObject), new PropertyMetadata(1D, new PropertyChangedCallback(OnPictureOpacityChanged)));
+            DependencyProperty.Register("PictureOpacity", typeof(double), typeof(LocalSettingsDependencyObject), new PropertyMetadata(0.4D, new PropertyChangedCallback(OnPictureOpacityChanged)));
 
         private static void OnPictureOpacityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

@@ -22,16 +22,17 @@ namespace Hipda.Client.Uwp.Pro.Converters
             int themeType = (int)value;
             if (themeType == 1)
             {
-                Color c = Colors.Black;
-                titleBar.BackgroundColor = c;
-                titleBar.InactiveBackgroundColor = c;
-                titleBar.ForegroundColor = Colors.Silver;
-                titleBar.ButtonBackgroundColor = c;
-                titleBar.ButtonInactiveBackgroundColor = c;
-                titleBar.ButtonForegroundColor = Colors.Silver;
+                Color b = Colors.Black;
+                Color s = Colors.Silver;
+                titleBar.BackgroundColor = b;
+                titleBar.InactiveBackgroundColor = b;
+                titleBar.ForegroundColor = s;
+                titleBar.ButtonBackgroundColor = b;
+                titleBar.ButtonInactiveBackgroundColor = b;
+                titleBar.ButtonForegroundColor = s;
                 titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
 
-                _myLocalSettings.PictureOpacity = new LocalSettingsService().PictureOpacity;
+                _myLocalSettings.PictureOpacity = _myLocalSettings.PictureOpacityBak;
 
                 return ElementTheme.Dark;
             }
