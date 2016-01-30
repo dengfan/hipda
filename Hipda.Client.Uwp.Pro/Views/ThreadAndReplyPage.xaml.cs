@@ -141,10 +141,10 @@ namespace Hipda.Client.Uwp.Pro.Views
             RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
         }
 
-        public void OpenReplyPageByThreadId(int postId, int threadId)
+        public void OpenReplyPageByPostId(int postId)
         {
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, postId, threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, postId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
         }
         #endregion
 
@@ -278,7 +278,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = string.Format("{0},{1}", itemForMyThreads.ThreadId, AccountService.UserId);
+                        string p = $"tid={itemForMyThreads.ThreadId}";
                         Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
@@ -291,12 +291,12 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = string.Format("{0},{1}", itemForMyPosts.ThreadId, 0);
+                        string p = $"tid={itemForMyPosts.ThreadId}";
                         Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
                     {
-                        OpenReplyPageByThreadId(itemForMyPosts.PostId, itemForMyPosts.ThreadId);
+                        OpenReplyPageByPostId(itemForMyPosts.PostId);
                     }
                     break;
                 case ThreadDataType.MyFavorites:
@@ -304,7 +304,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = string.Format("{0},{1}", itemForMyFavorites.ThreadId, 0);
+                        string p = $"tid={itemForMyFavorites.ThreadId}";
                         Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
@@ -317,7 +317,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = string.Format("{0},{1}", itemForSearchTitle.ThreadId, 0);
+                        string p = $"tid={itemForSearchTitle.ThreadId}";
                         Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
@@ -330,12 +330,12 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = string.Format("{0},{1}", itemForSearchFullText.ThreadId, 0);
+                        string p = $"pid={itemForSearchFullText.ThreadId}";
                         Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
                     {
-                        OpenReplyPageByThreadId(itemForSearchFullText.ThreadId);
+                        OpenReplyPageByPostId(itemForSearchFullText.PostId);
                     }
                     break;
                 default:
@@ -343,7 +343,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = string.Format("{0},{1}", item.ThreadId, item.AuthorUserId);
+                        string p = $"tid={item.ThreadId}";
                         Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else

@@ -383,7 +383,7 @@ namespace Hipda.Client.Uwp.Pro
                 string xml2 = "<toast>" +
                     "<visual>" +
                         "<binding template='ToastGeneric'>" +
-                            $"<text>{PopupUsername} 已加入黑名单</text>" +
+                            $"<text>恭喜您，已将 {PopupUsername} 加入黑名单</text>" +
                             $"<text>刷新后生效</text>" +
                         "</binding>" +
                     "</visual>" +
@@ -425,8 +425,8 @@ namespace Hipda.Client.Uwp.Pro
                 string xml2 = "<toast>" +
                     "<visual>" +
                         "<binding template='ToastGeneric'>" +
-                            $"<text>《{PopupThreadTitle}》</text>" +
-                            $"<text>已加入黑名单，刷新后生效</text>" +
+                            $"<text>恭喜您，已将《{PopupThreadTitle}》加入黑名单</text>" +
+                            $"<text>刷新后生效</text>" +
                         "</binding>" +
                     "</visual>" +
                     "</toast>";

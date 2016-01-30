@@ -153,7 +153,7 @@ namespace Hipda.BackgroundTask
             string _xml = "<toast>" +
                                 "<visual>" +
                                     "<binding template='ToastGeneric'>" +
-                                        "<text>恭喜你</text>" +
+                                        "<text>恭喜您</text>" +
                                         $"<text>成功添加 “{username}” 为好友！</text>" +
                                     "</binding>" +
                                 "</visual>" +

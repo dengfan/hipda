@@ -16,8 +16,8 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ReplyListPage : Page
     {
-        ReplyListViewForDefaultViewModel _replyViewModel;
         int _threadId;
+        int _postId;
 
         #region 委托事件
         void BeforeLoaded()
@@ -32,6 +32,26 @@ namespace Hipda.Client.Uwp.Pro.Views
             rightProgress.IsActive = false;
             rightProgress.Visibility = Visibility.Collapsed;
             ReplyRefreshButton.IsEnabled = true;
+        }
+
+        async void ReplyListViewScrollForSpecifiedPost(int index)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                var vm = ReplyListView.DataContext as ReplyListViewForSpecifiedPostViewModel;
+                int count = ReplyListView.Items.Count;
+
+                if (count > 0 && count <= index + 1)
+                {
+                    ReplyListView.ScrollIntoView(ReplyListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                }
+
+                if (count > index + 1 && vm.GetScrollState() == false)
+                {
+                    ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
+                    vm.SetScrollState(true);
+                }
+            });
         }
         #endregion
 
@@ -50,28 +70,56 @@ namespace Hipda.Client.Uwp.Pro.Views
                 SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;
             }
 
-            string p = e.Parameter.ToString();
-            _threadId = Convert.ToInt32(p.Substring("tid=".Length));
-
-            #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
-            var backStack = Frame.BackStack;
-            var backStackCount = backStack.Count;
-
-            if (backStackCount > 0)
+            string param = e.Parameter.ToString();
+            if (param.StartsWith("tid="))
             {
-                var masterPageEntry = backStack[backStackCount - 1];
-                backStack.RemoveAt(backStackCount - 1);
+                _threadId = Convert.ToInt32(param.Substring("tid=".Length));
 
-                // Doctor the navigation parameter for the master page so it
-                // will show the correct item in the side-by-side view.
-                var modifiedEntry = new PageStackEntry(
-                    masterPageEntry.SourcePageType,
-                    $"tid={_threadId}",
-                    masterPageEntry.NavigationTransitionInfo
-                    );
-                backStack.Add(modifiedEntry);
+                #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
+                var backStack = Frame.BackStack;
+                var backStackCount = backStack.Count;
+
+                if (backStackCount > 0)
+                {
+                    var masterPageEntry = backStack[backStackCount - 1];
+                    backStack.RemoveAt(backStackCount - 1);
+
+                    // Doctor the navigation parameter for the master page so it
+                    // will show the correct item in the side-by-side view.
+                    var modifiedEntry = new PageStackEntry(
+                        masterPageEntry.SourcePageType,
+                        $"tid={_threadId}",
+                        masterPageEntry.NavigationTransitionInfo
+                        );
+                    backStack.Add(modifiedEntry);
+                }
+                #endregion
             }
-            #endregion
+            else if (param.StartsWith("pid="))
+            {
+                _postId = Convert.ToInt32(param.Substring("pid=".Length));
+
+                #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
+                var backStack = Frame.BackStack;
+                var backStackCount = backStack.Count;
+
+                if (backStackCount > 0)
+                {
+                    var masterPageEntry = backStack[backStackCount - 1];
+                    backStack.RemoveAt(backStackCount - 1);
+
+                    // Doctor the navigation parameter for the master page so it
+                    // will show the correct item in the side-by-side view.
+                    var modifiedEntry = new PageStackEntry(
+                        masterPageEntry.SourcePageType,
+                        $"pid={_postId}",
+                        masterPageEntry.NavigationTransitionInfo
+                        );
+                    backStack.Add(modifiedEntry);
+                }
+                #endregion
+            }
+
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -124,8 +172,14 @@ namespace Hipda.Client.Uwp.Pro.Views
                 FindName("RightWrap");
 
                 var cts = new CancellationTokenSource();
-                _replyViewModel = new ReplyListViewForDefaultViewModel(cts, _threadId, ReplyListView, BeforeLoaded, AfterLoaded);
-                DataContext = _replyViewModel;
+                if (_threadId > 0)
+                {
+                    DataContext = new ReplyListViewForDefaultViewModel(cts, _threadId, ReplyListView, BeforeLoaded, AfterLoaded);
+                }
+                else if (_postId > 0)
+                {
+                    DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, _postId, ReplyListView, BeforeLoaded, AfterLoaded, ReplyListViewScrollForSpecifiedPost);
+                }
             }
 
             Window.Current.SizeChanged += Window_SizeChanged;
@@ -150,7 +204,16 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         void rightPr_RefreshInvoked(DependencyObject sender, object args)
         {
-            _replyViewModel.LoadPrevPageData();
+            if (_threadId > 0)
+            {
+                var vm = (ReplyListViewForDefaultViewModel)DataContext;
+                vm.LoadPrevPageData();
+            }
+            else if (_postId > 0)
+            {
+                var vm = (ReplyListViewForSpecifiedPostViewModel)DataContext;
+                vm.LoadPrevPageData();
+            }
         }
     }
 }
