@@ -197,6 +197,7 @@ namespace Hipda.Client.Uwp.Pro
             new RoamingSettingsService().Save();
         }
 
+        string _prevAccessForumIdStr = "2";
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count != 1)
@@ -211,6 +212,10 @@ namespace Hipda.Client.Uwp.Pro
             }
             else
             {
+                if (data.TypeValue.StartsWith("fid="))
+                {
+                    _prevAccessForumIdStr = data.TypeValue.Substring("fid=".Length);
+                }
                 AppFrame.Navigate(typeof(ThreadAndReplyPage), data.TypeValue);
             }
         }
@@ -289,14 +294,12 @@ namespace Hipda.Client.Uwp.Pro
 
         private void SearchDefaultSubmit()
         {
-            string paramFormat = "search={0},{1},{2},{3},1";
-
             string searchKeyword = Uri.EscapeUriString(KeywordTextBox.Text.Trim().Replace(",", " "));
             string searchAuthor = Uri.EscapeUriString(AuthorTextBox.Text.Trim().Replace(",", " "));
             int searchType = SearchTypeComboBox.SelectedIndex;
             int searchTimeSpan = SearchTimeSpanComboBox.SelectedIndex;
 
-            string param = string.Format(paramFormat, searchKeyword, searchAuthor, searchType, searchTimeSpan);
+            string param = $"search={searchKeyword},{searchAuthor},{searchType},{searchTimeSpan},-1";
             AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
 
             TopNavButtonListBox.SelectedItem = null;
@@ -309,14 +312,12 @@ namespace Hipda.Client.Uwp.Pro
 
         private void SearchButton2_Click(object sender, RoutedEventArgs e)
         {
-            string paramFormat = "search={0},{1},{2},{3},2";
-
             string searchKeyword = Uri.EscapeUriString(KeywordTextBox.Text.Trim().Replace(",", " "));
             string searchAuthor = Uri.EscapeUriString(AuthorTextBox.Text.Trim().Replace(",", " "));
             int searchType = SearchTypeComboBox.SelectedIndex;
             int searchTimeSpan = SearchTimeSpanComboBox.SelectedIndex;
 
-            string param = string.Format(paramFormat, searchKeyword, searchAuthor, searchType, searchTimeSpan);
+            string param = $"search={searchKeyword},{searchAuthor},{searchType},{searchTimeSpan},{_prevAccessForumIdStr}";
             AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
 
             TopNavButtonListBox.SelectedItem = null;
