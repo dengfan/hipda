@@ -11,6 +11,19 @@
         <local:RoamingSettingsDependencyObject x:Key="MyRoamingSettings"/>
         
         <cvt:ThemeTypeToRequestedThemeConverter x:Key="ThemeTypeToRequestedThemeConverter"/>
+
+        <Style x:Key="NormalButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        
+        <Style x:Key="SearchButtonSelectedStyle" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
+        </Style>
+
+        <Style x:Key="SearchButtonUnselectedStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
         
         <ControlTemplate x:Key="TextBoxTemplate1" TargetType="TextBox">
             <Grid>

@@ -13,7 +13,8 @@
 
     <Page.Resources>
         <cvt:ElementThemeToMaskBackgroundBrush x:Key="ElementThemeToMaskBackgroundBrush"/>
-        
+        <cvt:SearchPanelVisibilityToSearchButtonBackgroundConverter x:Key="SearchPanelVisibilityToSearchButtonBackgroundConverter"/>
+
         <Style x:Key="MainMenuListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="Local"/>
@@ -458,7 +459,7 @@
                         <Slider Minimum="20" Maximum="48" Value="{Binding LineHeight,Source={StaticResource MyLocalSettings},Mode=TwoWay}"/>
                         <ToggleSwitch Margin="0,0,0,8" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" IsOn="{Binding CanShowTopThread,Source={StaticResource MyRoamingSettings},Mode=TwoWay}">
                             <ToggleSwitch.Header>
-                                <TextBlock Text="显示置顶贴" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                                <TextBlock Text="显示置顶贴，更改后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                             </ToggleSwitch.Header>
                         </ToggleSwitch>
 
@@ -468,20 +469,16 @@
                                 <ColumnDefinition Width="8"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Button HorizontalAlignment="Stretch"
-                                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                Click="OpenImageFolderButton_Click">
+                            <Button Style="{StaticResource NormalButtonStyle}" Click="OpenImageFolderButton_Click">
                                 <TextBlock>
                                     <Run Text="查看缓存图片 "/>
                                     <Run Text="{Binding ImageCacheDataSize,ElementName=MyMainPage,Converter={StaticResource ByteToMegaByteConverter}}"/>
                                 </TextBlock>
                             </Button>
-                            <Button Grid.Column="2" Content="清除" HorizontalAlignment="Stretch"
-                                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                Click="ClearImageCacheData"/>
+                            <Button Grid.Column="2" Content="清除" Style="{StaticResource NormalButtonStyle}" Click="ClearImageCacheData"/>
                         </Grid>
 
-                        <TextBlock Margin="0,0,0,8" Text="屏蔽的用户" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Margin="0,0,0,8" Text="屏蔽的用户，添加后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MyRoamingSettings},Mode=TwoWay}"
                                  SelectionMode="Multiple" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                  SelectionChanged="BlockUsersListBox_SelectionChanged">
@@ -500,10 +497,9 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
-                                Content="解除选中用户" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                Click="UnblockUsers"/>
-                        
-                        <TextBlock Margin="0,12,0,8" Text="屏蔽的主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                                Content="解除选中用户" Style="{StaticResource NormalButtonStyle}" Click="UnblockUsers"/>
+
+                        <TextBlock Margin="0,12,0,8" Text="屏蔽的主题，添加后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ListBox x:Name="BlockThreadsListBox" ItemsSource="{Binding BlockThreads,Source={StaticResource MyRoamingSettings},Mode=TwoWay}"
                                  SelectionMode="Multiple" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                  SelectionChanged="BlockThreadsListBox_SelectionChanged">
@@ -522,10 +518,10 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
-                                Content="解除选中主题" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                Content="解除选中主题" Style="{StaticResource NormalButtonStyle}"
                                 Click="UnblockThreads"/>
-                        
-                        <Button Margin="0,12,0,12" Content="购买“移除广告”服务" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+
+                        <Button Margin="0,12,0,12" Content="购买 [移除广告] 服务" Style="{StaticResource NormalButtonStyle}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
@@ -599,28 +595,48 @@
 
                     <ScrollViewer Margin="0 48 0 0" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Hidden">
                         <StackPanel>
-                            <Button Padding="0" HorizontalAlignment="Stretch" Height="44" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Left">
+                            <Button Style="{Binding Visibility,ElementName=SearchPanel,Converter={StaticResource SearchPanelVisibilityToSearchButtonBackgroundConverter}}"
+                                    BorderThickness="0" Padding="0" HorizontalAlignment="Stretch" Height="44"
+                                    HorizontalContentAlignment="Left" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}"
+                                    Click="SearchButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Grid x:Name="RootGrid" Height="{TemplateBinding Height}" Background="{TemplateBinding Background}">
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal" />
+                                                    <VisualState x:Name="PointerOver">
+                                                        <VisualState.Setters>
+                                                            <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlHighlightListLowBrush}" />
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" Foreground="{TemplateBinding Foreground}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Button.Template>
                                 <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
                                     <FontIcon Glyph="&#xE1A3;"/>
                                     <TextBlock Text="搜索贴子" Margin="24,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <StackPanel x:Name="SearchPanel" Margin="8">
+                            <StackPanel x:Name="SearchPanel" Margin="8" Visibility="Collapsed">
                                 <TextBox x:Name="KeywordTextBox" PlaceholderText="关键字" KeyUp="KeywordTextBox_KeyUp"/>
-                                <ComboBox x:Name="SearchTypeComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                                <ComboBox x:Name="SearchTypeComboBox" Margin="0,8,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                                     <x:String>标题</x:String>
                                     <x:String>全文</x:String>
                                 </ComboBox>
-                                <TextBox x:Name="AuthorTextBox" Margin="0,4,0,0" PlaceholderText="作者"/>
-                                <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,4,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                                <TextBox x:Name="AuthorTextBox" Margin="0,8,0,0" PlaceholderText="作者"/>
+                                <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,8,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
                                     <x:String>全部时间</x:String>
                                     <x:String>1周以内</x:String>
                                     <x:String>1个月以内</x:String>
                                     <x:String>3个月以内</x:String>
                                     <x:String>1年以内</x:String>
                                 </ComboBox>
-                                <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton1_Click"/>
-                                <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,4,0,0" HorizontalAlignment="Stretch" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Click="SearchButton2_Click"/>
+                                <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,8,0,0" Style="{StaticResource NormalButtonStyle}" Click="SearchButton1_Click"/>
+                                <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,8,0,0" Style="{StaticResource NormalButtonStyle}" Click="SearchButton2_Click"/>
                             </StackPanel>
                             <ListBox x:Name="TopNavButtonListBox"
                                  Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"

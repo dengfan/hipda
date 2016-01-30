@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="Converters\ByteToMegaByteConverter.cs" />
     <Compile Include="Converters\ElementThemeToMaskBackgroundBrush.cs" />
+    <Compile Include="Converters\SearchPanelVisibilityToSearchButtonBackgroundConverter.cs" />
     <Compile Include="Converters\SelectedIndexToVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeTypeNameToVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeTypeToRequestedThemeConverter.cs" />
