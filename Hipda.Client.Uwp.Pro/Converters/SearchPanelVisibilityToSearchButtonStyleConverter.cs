@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.Converters
 {
-    public class SearchPanelVisibilityToSearchButtonBackgroundConverter : IValueConverter
+    public class SearchPanelVisibilityToSearchButtonStyleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

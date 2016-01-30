@@ -13,7 +13,7 @@
 
     <Page.Resources>
         <cvt:ElementThemeToMaskBackgroundBrush x:Key="ElementThemeToMaskBackgroundBrush"/>
-        <cvt:SearchPanelVisibilityToSearchButtonBackgroundConverter x:Key="SearchPanelVisibilityToSearchButtonBackgroundConverter"/>
+        <cvt:SearchPanelVisibilityToSearchButtonStyleConverter x:Key="SearchPanelVisibilityToSearchButtonStyleConverter"/>
 
         <Style x:Key="MainMenuListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
@@ -595,7 +595,7 @@
 
                     <ScrollViewer Margin="0 48 0 0" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Hidden">
                         <StackPanel>
-                            <Button Style="{Binding Visibility,ElementName=SearchPanel,Converter={StaticResource SearchPanelVisibilityToSearchButtonBackgroundConverter}}"
+                            <Button Style="{Binding Visibility,ElementName=SearchPanel,Converter={StaticResource SearchPanelVisibilityToSearchButtonStyleConverter}}"
                                     BorderThickness="0" Padding="0" HorizontalAlignment="Stretch" Height="44"
                                     HorizontalContentAlignment="Left" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}"
                                     Click="SearchButton_Click">

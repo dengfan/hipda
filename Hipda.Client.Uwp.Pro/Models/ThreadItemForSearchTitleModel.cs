@@ -79,7 +79,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return AttachFileType == 1 ? "\uEB9F" : string.Empty;
+                return AttachFileType == 1 ? "\uD83C\uDF04" : string.Empty;
             }
         }
 
@@ -87,7 +87,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return AttachFileType == 2 ? "\uE16C" : string.Empty;
+                return AttachFileType == 2 ? "\uD83D\uDCCE" : string.Empty;
             }
         }
 
@@ -95,7 +95,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                string xaml = Html.HtmlToXaml.ConvertSearchThreadTitle(Title, ImageFontIcon, FileFontIcon, ViewInfo);
+                string xaml = Html.HtmlToXaml.ConvertSearchThreadTitle(Title, ForumName, ImageFontIcon, FileFontIcon, ViewInfo);
                 return XamlReader.Load(xaml);
             }
         }

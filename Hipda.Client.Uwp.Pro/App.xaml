@@ -690,16 +690,14 @@
                 <c:MyAvatarForThread Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" ThreadTitle="{Binding Title}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Run Text="{Binding ForumName}"/>
-                    <LineBreak/>
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
 
-                <ContentControl Content="{Binding TitleControl}" Margin="56,40,0,20" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
+                <ContentControl Content="{Binding TitleControl}" Margin="60,22,0,22" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
 
                 <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Run Text=" &#xE25C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                    <Run Text="&#x1F5E9;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                 </TextBlock>
             </Grid>
@@ -712,16 +710,14 @@
                 <c:MyAvatarForReply Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Run Text="{Binding ForumName}"/>
-                    <LineBreak/>
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
 
-                <ContentControl Content="{Binding TitleControl}" Margin="56,40,0,20" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
+                <ContentControl Content="{Binding TitleControl}" Margin="60,22,0,22" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
 
                 <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Run Text=" &#xE25C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                    <Run Text="&#x1F5E9;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                 </TextBlock>
             </Grid>
