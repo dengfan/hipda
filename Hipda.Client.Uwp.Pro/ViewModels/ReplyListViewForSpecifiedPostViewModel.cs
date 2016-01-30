@@ -47,7 +47,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ReplyListViewForSpecifiedPostViewModel(CancellationTokenSource cts, int postId, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
+        public ReplyListViewForSpecifiedPostViewModel(CancellationTokenSource cts, int postId, int threadId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
         {
             _postId = postId;
             _threadId = threadId;

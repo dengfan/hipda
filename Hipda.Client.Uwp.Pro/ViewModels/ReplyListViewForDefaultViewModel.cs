@@ -46,7 +46,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ReplyListViewForDefaultViewModel(CancellationTokenSource cts, int threadId, int threadAuthorUserId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
+        public ReplyListViewForDefaultViewModel(CancellationTokenSource cts, int threadId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
         {
             _threadId = threadId;
             _replyListView = replyListView;

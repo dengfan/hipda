@@ -18,7 +18,6 @@ namespace Hipda.Client.Uwp.Pro.Views
     {
         ReplyListViewForDefaultViewModel _replyViewModel;
         int _threadId;
-        int _threadAuthorUserId;
 
         #region 委托事件
         void BeforeLoaded()
@@ -51,9 +50,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                 SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;
             }
 
-            string[] p = e.Parameter.ToString().Split(',');
-            _threadId = Convert.ToInt32(p[0]);
-            _threadAuthorUserId = Convert.ToInt32(p[1]);
+            string p = e.Parameter.ToString();
+            _threadId = Convert.ToInt32(p.Substring("tid=".Length));
 
             #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
             var backStack = Frame.BackStack;
@@ -68,7 +66,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 // will show the correct item in the side-by-side view.
                 var modifiedEntry = new PageStackEntry(
                     masterPageEntry.SourcePageType,
-                    string.Format("{0},{1}", _threadId, _threadAuthorUserId),
+                    $"tid={_threadId}",
                     masterPageEntry.NavigationTransitionInfo
                     );
                 backStack.Add(modifiedEntry);
@@ -126,7 +124,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 FindName("RightWrap");
 
                 var cts = new CancellationTokenSource();
-                _replyViewModel = new ReplyListViewForDefaultViewModel(cts, _threadId, _threadAuthorUserId, ReplyListView, BeforeLoaded, AfterLoaded);
+                _replyViewModel = new ReplyListViewForDefaultViewModel(cts, _threadId, ReplyListView, BeforeLoaded, AfterLoaded);
                 DataContext = _replyViewModel;
             }
 

@@ -138,13 +138,13 @@ namespace Hipda.Client.Uwp.Pro.Views
         public void OpenReplyPageByThreadId(int threadId)
         {
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
         }
 
         public void OpenReplyPageByThreadId(int postId, int threadId)
         {
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, postId, threadId, 0, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, postId, threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
         }
         #endregion
 
@@ -199,12 +199,9 @@ namespace Hipda.Client.Uwp.Pro.Views
                         LeftWrap.DataContext = new ThreadListViewForSearchFullTextViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     }
                 }
-                else if (param.Contains(",")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
+                else if (param.Contains("tid=")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
                 {
-                    string[] p = param.Split(',');
-                    int threadId = Convert.ToInt32(p[0]);
-                    int threadAuthorUserId = Convert.ToInt32(p[1]);
-
+                    int threadId = Convert.ToInt32(param.Substring("tid=".Length));
                     OpenReplyPageByThreadId(threadId);
                 }
             }
@@ -227,36 +224,36 @@ namespace Hipda.Client.Uwp.Pro.Views
             var isNarrow = newState == NarrowState;
             if (isNarrow && oldState == DefaultState && _lastSelectedItem != null) // 如果是窄视图，则跳转到 reply list page 页面
             {
-                string p = string.Empty;
+                int tid = 0;
                 switch (_lastSelectedItem.ThreadType)
                 {
                     case ThreadDataType.MyThreads:
                         var itemForMyThreads = _lastSelectedItem as ThreadItemForMyThreadsModel;
-                        p = string.Format("{0},{1}", itemForMyThreads.ThreadId, AccountService.UserId);
+                        tid = itemForMyThreads.ThreadId;
                         break;
                     case ThreadDataType.MyPosts:
                         var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsModel;
-                        p = string.Format("{0},{1}", itemForMyPosts.ThreadId, 0);
+                        tid = itemForMyPosts.ThreadId;
                         break;
                     case ThreadDataType.MyFavorites:
                         var itemForMyFavorites = _lastSelectedItem as ThreadItemForMyFavoritesModel;
-                        p = string.Format("{0},{1}", itemForMyFavorites.ThreadId, 0);
+                        tid = itemForMyFavorites.ThreadId;
                         break;
                     case ThreadDataType.SearchTitle:
                         var itemForSearchTitle = _lastSelectedItem as ThreadItemForSearchTitleModel;
-                        p = string.Format("{0},{1}", itemForSearchTitle.ThreadId, 0);
+                        tid = itemForSearchTitle.ThreadId;
                         break;
                     case ThreadDataType.SearchFullText:
                         var itemForSearchFullText = _lastSelectedItem as ThreadItemForSearchFullTextModel;
-                        p = string.Format("{0},{1}", itemForSearchFullText.ThreadId, 0);
+                        tid = itemForSearchFullText.ThreadId;
                         break;
                     default:
                         var item = _lastSelectedItem as ThreadItemModel;
-                        p = string.Format("{0},{1}", item.ThreadId, item.AuthorUserId);
+                        tid = item.ThreadId;
                         break;
                 }
 
-                Frame.Navigate(typeof(ReplyListPage), p, new SuppressNavigationTransitionInfo());
+                Frame.Navigate(typeof(ReplyListPage), $"tid={tid}", new SuppressNavigationTransitionInfo());
             }
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(LeftListView, isNarrow);
