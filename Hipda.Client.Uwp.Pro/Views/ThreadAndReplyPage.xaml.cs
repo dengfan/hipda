@@ -298,7 +298,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = $"tid={itemForMyPosts.ThreadId}";
+                        string p = $"pid={itemForMyPosts.PostId}";
                         Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
