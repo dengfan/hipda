@@ -8,9 +8,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyImage">
                     <ContentControl x:Name="content1" Margin="4">
-                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundAccentBrush}">
-                            <Run Text="&#xEB9F;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
-                        </TextBlock>
+                        <TextBlock Text="&#x1F304;"/>
                     </ContentControl>
                 </ControlTemplate>
             </Setter.Value>
