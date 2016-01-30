@@ -204,6 +204,11 @@ namespace Hipda.Client.Uwp.Pro.Views
                     int threadId = Convert.ToInt32(param.Substring("tid=".Length));
                     OpenReplyPageByThreadId(threadId);
                 }
+                else if (param.Contains("pid=")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
+                {
+                    int postId = Convert.ToInt32(param.Substring("pid=".Length));
+                    OpenReplyPageByPostId(postId);
+                }
             }
 
             UpdateForVisualState(AdaptiveStates.CurrentState);
@@ -224,39 +229,41 @@ namespace Hipda.Client.Uwp.Pro.Views
             var isNarrow = newState == NarrowState;
             if (isNarrow && oldState == DefaultState && _lastSelectedItem != null) // 如果是窄视图，则跳转到 reply list page 页面
             {
-                int tid = 0;
+                int id = 0;
                 switch (_lastSelectedItem.ThreadType)
                 {
                     case ThreadDataType.MyThreads:
                         var itemForMyThreads = _lastSelectedItem as ThreadItemForMyThreadsModel;
-                        tid = itemForMyThreads.ThreadId;
+                        id = itemForMyThreads.ThreadId;
+                        Frame.Navigate(typeof(ReplyListPage), $"tid={id}", new SuppressNavigationTransitionInfo());
                         break;
                     case ThreadDataType.MyPosts:
                         var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsModel;
-                        tid = itemForMyPosts.ThreadId;
+                        id = itemForMyPosts.PostId;
+                        Frame.Navigate(typeof(ReplyListPage), $"pid={id}", new SuppressNavigationTransitionInfo());
                         break;
                     case ThreadDataType.MyFavorites:
                         var itemForMyFavorites = _lastSelectedItem as ThreadItemForMyFavoritesModel;
-                        tid = itemForMyFavorites.ThreadId;
+                        id = itemForMyFavorites.ThreadId;
+                        Frame.Navigate(typeof(ReplyListPage), $"tid={id}", new SuppressNavigationTransitionInfo());
                         break;
                     case ThreadDataType.SearchTitle:
                         var itemForSearchTitle = _lastSelectedItem as ThreadItemForSearchTitleModel;
-                        tid = itemForSearchTitle.ThreadId;
+                        id = itemForSearchTitle.ThreadId;
+                        Frame.Navigate(typeof(ReplyListPage), $"tid={id}", new SuppressNavigationTransitionInfo());
                         break;
                     case ThreadDataType.SearchFullText:
                         var itemForSearchFullText = _lastSelectedItem as ThreadItemForSearchFullTextModel;
-                        tid = itemForSearchFullText.ThreadId;
+                        id = itemForSearchFullText.PostId;
+                        Frame.Navigate(typeof(ReplyListPage), $"pid={id}", new SuppressNavigationTransitionInfo());
                         break;
                     default:
                         var item = _lastSelectedItem as ThreadItemModel;
-                        tid = item.ThreadId;
+                        id = item.ThreadId;
+                        Frame.Navigate(typeof(ReplyListPage), $"tid={id}", new SuppressNavigationTransitionInfo());
                         break;
                 }
-
-                Frame.Navigate(typeof(ReplyListPage), $"tid={tid}", new SuppressNavigationTransitionInfo());
             }
-
-            EntranceNavigationTransitionInfo.SetIsTargetElement(LeftListView, isNarrow);
         }
 
         private void LeftListView_ItemClick(object sender, ItemClickEventArgs e) 
@@ -330,7 +337,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (AdaptiveStates.CurrentState == NarrowState)
                     {
-                        string p = $"pid={itemForSearchFullText.ThreadId}";
+                        string p = $"pid={itemForSearchFullText.PostId}";
                         Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                     }
                     else
