@@ -482,7 +482,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _userMessageListMaxPageNo;
         }
 
-        public ICollectionView GetViewForUserMessageList(int startPageNo, Action afterLoaded)
+        public ICollectionView GetViewForUserMessageList(int startPageNo, Action afterLoaded, Action loadAllFinish)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<UserMessageListItemModel>(
@@ -501,7 +501,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                 () =>
                 {
                     return GetUserMessageListMaxPageNo();
-                });
+                },
+                loadAllFinish);
 
             return cvs.View;
         }

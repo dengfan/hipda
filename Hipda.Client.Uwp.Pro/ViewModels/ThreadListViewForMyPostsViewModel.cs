@@ -51,7 +51,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadDataForMyPosts(int pageNo)
         {
-            var cv = _ds.GetViewForThreadPageForMyPosts(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForMyPosts(pageNo, _beforeLoad, _afterLoad, _noDataNotice, null);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyPosts();

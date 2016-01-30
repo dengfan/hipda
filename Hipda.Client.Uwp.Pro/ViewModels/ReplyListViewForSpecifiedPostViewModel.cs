@@ -78,6 +78,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         async void FirstLoad(CancellationTokenSource cts)
         {
+            Action loadAllFinish = () =>
+            {
+                _replyListView.FooterTemplate = (DataTemplate)App.Current.Resources["ReplyListViewFooterTemplate"];
+            };
+
             // 先载入第一个转跳到的页面的数据，并得到页码之后即可进入正常流程
             int[] data = await _ds.LoadReplyDataForRedirectReplyPageAsync(_postId, cts);
             if (data != null)
@@ -86,7 +91,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 int index = data[1];
                 _threadId = data[2];
                 _ds.SetScrollState(false);
-                var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, index, _beforeLoad, _afterLoad, _listViewScroll);
+                var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, index, _beforeLoad, _afterLoad, _listViewScroll, loadAllFinish);
                 if (cv != null)
                 {
                     ReplyItemCollection = cv;
@@ -97,7 +102,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _beforeLoad, _afterLoad);
+            Action loadAllFinish = () =>
+            {
+                _replyListView.FooterTemplate = (DataTemplate)App.Current.Resources["ReplyListViewFooterTemplate"];
+            };
+
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _beforeLoad, _afterLoad, loadAllFinish);
             if (cv != null)
             {
                 _startPageNo = pageNo;

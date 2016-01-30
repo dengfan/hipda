@@ -208,7 +208,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadData.FirstOrDefault(t => t.ForumId == forumId && t.Index == index);
         }
 
-        public ICollectionView GetViewForThreadItems(int startPageNo, int forumId, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ICollectionView GetViewForThreadItems(int startPageNo, int forumId, Action beforeLoad, Action afterLoad, Action noDataNotice, Action loadAllFinish)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemModel>(
@@ -227,7 +227,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                 () =>
                 {
                     return GetThreadMaxPageNo();
-                });
+                },
+                loadAllFinish);
 
             return cvs.View;
         }

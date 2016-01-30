@@ -102,7 +102,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshCommand = new DelegateCommand();
             RefreshCommand.ExecuteAction = (p) => {
                 _ds.ClearUserMessageListData();
-                DataView = _ds.GetViewForUserMessageList(1, AfterLoaded);
+                DataView = _ds.GetViewForUserMessageList(1, AfterLoaded, null);
             };
 
             IntoMultiSelectionModeCommand = new DelegateCommand();
@@ -128,14 +128,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 if (isOk)
                 {
                     _ds.ClearUserMessageListData();
-                    DataView = _ds.GetViewForUserMessageList(1, AfterLoaded);
+                    DataView = _ds.GetViewForUserMessageList(1, AfterLoaded, null);
                 }
             };
         }
 
         void GetData()
         {
-            DataView = _ds.GetViewForUserMessageList(1, AfterLoaded);
+            DataView = _ds.GetViewForUserMessageList(1, AfterLoaded, null);
         }
     }
 }

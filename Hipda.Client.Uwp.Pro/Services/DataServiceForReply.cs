@@ -289,7 +289,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _replyData.FirstOrDefault(t => t.ThreadId == threadId).Replies[index];
         }
 
-        public ICollectionView GetViewForReplyPageByThreadId(int startPageNo, int threadId, Action beforeLoad, Action<int, int> afterLoad)
+        public ICollectionView GetViewForReplyPageByThreadId(int startPageNo, int threadId, Action beforeLoad, Action<int, int> afterLoad, Action loadAllFinish)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
@@ -308,12 +308,13 @@ namespace Hipda.Client.Uwp.Pro.Services
                 () =>
                 {
                     return GetReplyMaxPageNo();
-                });
+                },
+                loadAllFinish);
 
             return cvs.View;
         }
 
-        public ICollectionView GetViewForRedirectReplyPageByThreadId(int startPageNo, int threadId, int floorIndex, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
+        public ICollectionView GetViewForRedirectReplyPageByThreadId(int startPageNo, int threadId, int floorIndex, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll, Action loadAllFinish)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ReplyItemModel>(
@@ -338,7 +339,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                 () =>
                 {
                     return GetReplyMaxPageNo();
-                });
+                },
+                loadAllFinish);
 
             return cvs.View;
         }
