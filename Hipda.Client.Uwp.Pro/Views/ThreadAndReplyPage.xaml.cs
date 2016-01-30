@@ -75,23 +75,20 @@ namespace Hipda.Client.Uwp.Pro.Views
             ReplyRefreshButton.IsEnabled = false;
         }
 
-        private async void RightAfterLoaded(int threadId, int pageNo)
+        private void RightAfterLoaded(int threadId, int pageNo)
         {
             rightProgress.IsActive = false;
             rightProgress.Visibility = Visibility.Collapsed;
             ReplyRefreshButton.IsEnabled = true;
 
-            // 如果加载到了第一页，则移除回复列表页的“加载上一页”的按钮，无论其有没有显示
-            if (pageNo == 1)
+            bool isShown = DataServiceForReply.CanShowButtonForLoadPrevReplyPage(threadId);
+            if (isShown)
+            {
+                ReplyListView.HeaderTemplate = (DataTemplate)App.Current.Resources["ReplyListViewHeaderTemplate"];
+            }
+            else
             {
                 ReplyListView.HeaderTemplate = null;
-            }
-
-            bool isShown = DataServiceForReply.CanShowButtonForLoadPrevReplyPage(threadId);
-            if (isShown && Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop"))
-            {
-                // 只在桌面环境及最小页码不是1才显示此按钮
-                ReplyListView.HeaderTemplate = App.Current.Resources["ReplyListViewHeaderTemplate"] as DataTemplate;
             }
 
             // 最宽屏模式下，自动滚到最底部

@@ -357,7 +357,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         public async Task<int[]> LoadReplyDataForRedirectReplyPageAsync(int targetPostId, CancellationTokenSource cts)
         {
             // 读取数据
-            string url = string.Format("http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={0}&_={1}", targetPostId, DateTime.Now.Ticks.ToString("x"));
+            string url = string.Format("http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={0}", targetPostId);
             string htmlStr = await _httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象
@@ -367,9 +367,9 @@ namespace Hipda.Client.Uwp.Pro.Services
             doc.LoadHtml(htmlStr);
 
             // 获取当前 thread id
-            var postReplyLink = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("id", "").Equals("post_reply")).ChildNodes[0];
+            var postReplyLink = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("span") && n.GetAttributeValue("id", "").Equals("post_reply")).ChildNodes[0];
             string linkUrl = postReplyLink.Attributes[0].Value.Trim();
-            string threadIdStr = linkUrl.Substring("post.php?action=reply&amp;fid=14&amp;tid=".Length);
+            string threadIdStr = linkUrl.Replace(";tid=", "$").Split('$')[1].Split('&')[0];
             int threadId = 0;
             if (!int.TryParse(threadIdStr, out threadId))
             {

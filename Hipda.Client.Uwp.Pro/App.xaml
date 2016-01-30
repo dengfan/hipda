@@ -313,9 +313,9 @@
         </Style>
 
         <DataTemplate x:Key="ReplyListViewHeaderTemplate">
-            <Button Content="点击这里加载上一页"
-                    FontSize="{ThemeResource ToolTipContentThemeFontSize}"
-                    Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+            <HyperlinkButton Content="点此或下拉加载上一页"
+                    FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                    Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                     HorizontalAlignment="Center" Command="{Binding LoadPrevPageDataCommand}"/>
         </DataTemplate>
 
