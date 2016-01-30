@@ -298,6 +298,8 @@ namespace Hipda.Client.Uwp.Pro
 
             string param = string.Format(paramFormat, searchKeyword, searchAuthor, searchType, searchTimeSpan);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
+
+            TopNavButtonListBox.SelectedItem = null;
         }
 
         private void SearchButton1_Click(object sender, RoutedEventArgs e)
@@ -316,6 +318,8 @@ namespace Hipda.Client.Uwp.Pro
 
             string param = string.Format(paramFormat, searchKeyword, searchAuthor, searchType, searchTimeSpan);
             AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
+
+            TopNavButtonListBox.SelectedItem = null;
         }
 
         private void NoticeButton_Click(object sender, RoutedEventArgs e)

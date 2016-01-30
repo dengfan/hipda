@@ -202,6 +202,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 i++;
             }
 
+            // 加入历史记录
             if (!DataService.ThreadHistoryData.Any(t => t.ThreadId == threadId))
             {
                 ApplicationView.GetForCurrentView().Title = threadTitle;
@@ -530,6 +531,14 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             int index = threadReply.Replies.FirstOrDefault(r => r.PostId == targetPostId).Index;
+
+            // 加入历史记录
+            if (!DataService.ThreadHistoryData.Any(t => t.ThreadId == threadId))
+            {
+                ApplicationView.GetForCurrentView().Title = threadTitle;
+                DataService.ThreadHistoryData.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle });
+            }
+
             return new int[] { pageNo, index, threadId };
         }
 
