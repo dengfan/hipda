@@ -34,6 +34,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand LoadPrevPageDataCommand { get; set; }
 
+        public DelegateCommand LoadLastPageDataCommand { get; set; }
+
 
         ICollectionView _replyItemCollection;
 
@@ -71,6 +73,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     _ds.ClearReplyData(_threadId);
                     LoadData(_startPageNo - 1);
                 }
+            };
+
+            LoadLastPageDataCommand = new DelegateCommand();
+            LoadLastPageDataCommand.ExecuteAction = (p) =>
+            {
+                _ds.ClearReplyData(_threadId);
+                LoadData(_ds.GetReplyMaxPageNo());
             };
 
             FirstLoad(cts);
