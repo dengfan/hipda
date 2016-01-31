@@ -60,6 +60,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) =>
             {
+                _replyListView.ContainerContentChanging -= ReplyListView_ContainerContentChanging;
+
                 _ds.ClearReplyData(_threadId);
                 LoadData(_startPageNo);
             };
@@ -69,6 +71,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 if (_startPageNo > 1)
                 {
+                    _replyListView.ContainerContentChanging -= ReplyListView_ContainerContentChanging;
+
                     _ds.ClearReplyData(_threadId);
                     LoadData(_startPageNo - 1);
                 }
@@ -77,19 +81,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             LoadLastPageDataCommand = new DelegateCommand();
             LoadLastPageDataCommand.ExecuteAction = (p) =>
             {
-                _replyListView.ContainerContentChanging += (s, args) =>
-                {
-                    if (_replyListView.Items.Count > 0)
-                    {
-                        _replyListView.ScrollIntoView(_replyListView.Items.Last());
-                    }
-                };
+                _replyListView.ContainerContentChanging += ReplyListView_ContainerContentChanging;
 
                 _ds.ClearReplyData(_threadId);
                 LoadData(_ds.GetReplyMaxPageNo());
             };
 
             LoadData(_startPageNo);
+        }
+
+        private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            if (sender.Items.Count > 0)
+            {
+                sender.ScrollIntoView(sender.Items.Last());
+            }
         }
 
         void LoadData(int pageNo)
