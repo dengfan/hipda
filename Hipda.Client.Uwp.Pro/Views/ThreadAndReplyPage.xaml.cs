@@ -248,8 +248,6 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void LeftListView_ItemClick(object sender, ItemClickEventArgs e) 
         {
-            //ThreadHistoryListView.SelectedItem = null;
-
             // 如果进入了选择模式，则不打开主题
             if (LeftListView.SelectionMode == ListViewSelectionMode.Multiple)
             {
