@@ -60,7 +60,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
                 var p = mp.AppFrame.Content as ThreadAndReplyPage;
                 if (p != null)
                 {
-                    p.OpenReplyPageByThreadId(ThreadId);
+                    p.ThreadId = ThreadId;
+                    p.OpenReplyPageByThreadId();
                 }
             }
         }

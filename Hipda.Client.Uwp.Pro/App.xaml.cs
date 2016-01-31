@@ -258,7 +258,8 @@ namespace Hipda.Client.Uwp.Pro
                             var threadAndReplyPage = mainPage.AppFrame.Content as ThreadAndReplyPage;
                             if (threadAndReplyPage != null)
                             {
-                                threadAndReplyPage.OpenReplyPageByPostId(postId);
+                                threadAndReplyPage.PostId = postId;
+                                threadAndReplyPage.OpenReplyPageByPostId();
                             }
                         }
                         

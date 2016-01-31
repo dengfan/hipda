@@ -7,17 +7,23 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-// “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
-
 namespace Hipda.Client.Uwp.Pro.Views
 {
     /// <summary>
-    /// 可用于自身或导航至 Frame 内部的空白页。
+    /// 回复列表页
+    /// 用于窄视图
     /// </summary>
     public sealed partial class ReplyListPage : Page
     {
-        int _threadId;
-        int _postId;
+        /// <summary>
+        /// 有的主题是使用 ThreadId 参数加载回复列表页
+        /// </summary>
+        public int ThreadId { get; set; } = 0;
+
+        /// <summary>
+        /// 有的主题是使用 PostId 参数加载回复列表页
+        /// </summary>
+        public int PostId { get; set; } = 0;
 
         #region 委托事件
         void BeforeLoaded()
@@ -107,7 +113,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             string param = e.Parameter.ToString();
             if (param.StartsWith("tid="))
             {
-                _threadId = Convert.ToInt32(param.Substring("tid=".Length));
+                ThreadId = Convert.ToInt32(param.Substring("tid=".Length));
 
                 #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
                 var backStack = Frame.BackStack;
@@ -122,7 +128,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     // will show the correct item in the side-by-side view.
                     var modifiedEntry = new PageStackEntry(
                         masterPageEntry.SourcePageType,
-                        $"tid={_threadId}",
+                        $"tid={ThreadId}",
                         masterPageEntry.NavigationTransitionInfo
                         );
                     backStack.Add(modifiedEntry);
@@ -131,7 +137,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
             else if (param.StartsWith("pid="))
             {
-                _postId = Convert.ToInt32(param.Substring("pid=".Length));
+                PostId = Convert.ToInt32(param.Substring("pid=".Length));
 
                 #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
                 var backStack = Frame.BackStack;
@@ -146,7 +152,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                     // will show the correct item in the side-by-side view.
                     var modifiedEntry = new PageStackEntry(
                         masterPageEntry.SourcePageType,
-                        $"pid={_postId}",
+                        $"pid={PostId}",
                         masterPageEntry.NavigationTransitionInfo
                         );
                     backStack.Add(modifiedEntry);
@@ -206,13 +212,13 @@ namespace Hipda.Client.Uwp.Pro.Views
                 FindName("RightWrap");
 
                 var cts = new CancellationTokenSource();
-                if (_threadId > 0)
+                if (PostId > 0)
                 {
-                    DataContext = new ReplyListViewForDefaultViewModel(cts, _threadId, ReplyListView, BeforeLoaded, AfterLoaded);
+                    DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, PostId, ReplyListView, BeforeLoaded, AfterLoaded, ReplyListViewScrollForSpecifiedPost);
                 }
-                else if (_postId > 0)
+                else if (ThreadId > 0)
                 {
-                    DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, _postId, ReplyListView, BeforeLoaded, AfterLoaded, ReplyListViewScrollForSpecifiedPost);
+                    DataContext = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, BeforeLoaded, AfterLoaded);
                 }
             }
 
@@ -238,14 +244,14 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         void rightPr_RefreshInvoked(DependencyObject sender, object args)
         {
-            if (_threadId > 0)
-            {
-                var vm = (ReplyListViewForDefaultViewModel)DataContext;
-                vm.LoadPrevPageData();
-            }
-            else if (_postId > 0)
+            if (PostId > 0)
             {
                 var vm = (ReplyListViewForSpecifiedPostViewModel)DataContext;
+                vm.LoadPrevPageData();
+            }
+            else if (ThreadId > 0)
+            {
+                var vm = (ReplyListViewForDefaultViewModel)DataContext;
                 vm.LoadPrevPageData();
             }
         }

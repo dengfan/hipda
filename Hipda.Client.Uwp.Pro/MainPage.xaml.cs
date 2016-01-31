@@ -291,7 +291,8 @@ namespace Hipda.Client.Uwp.Pro
                     var page = (ThreadAndReplyPage)AppFrame.Content;
                     if (page != null)
                     {
-                        page.OpenReplyPageByThreadId(selectedItem.ThreadId);
+                        page.ThreadId = selectedItem.ThreadId;
+                        page.OpenReplyPageByThreadId();
                         ApplicationView.GetForCurrentView().Title = $"{selectedItem.Title} - {selectedItem.ForumName}";
                     }
                 }

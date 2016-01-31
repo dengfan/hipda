@@ -15,8 +15,15 @@ namespace Hipda.Client.Uwp.Pro.Views
 {
     public sealed partial class ThreadAndReplyPage : Page
     {
-        int _threadId = 0; // 有的主题是使用 ThreadId 参数加载回复列表页
-        int _postId = 0; // 有的主题是使用 PostId 参数加载回复列表页
+        /// <summary>
+        /// 有的主题是使用 ThreadId 参数加载回复列表页
+        /// </summary>
+        public int ThreadId { get; set; } = 0;
+
+        /// <summary>
+        /// 有的主题是使用 PostId 参数加载回复列表页
+        /// </summary>
+        public int PostId { get; set; } = 0;
 
         public ThreadAndReplyPage()
         {
@@ -119,23 +126,19 @@ namespace Hipda.Client.Uwp.Pro.Views
         /// <summary>
         /// 通过 ThreadId 打开回复列表页，打开后从1楼开始显示
         /// </summary>
-        /// <param name="threadId">主题ID</param>
-        public void OpenReplyPageByThreadId(int threadId)
+        public void OpenReplyPageByThreadId()
         {
-            _threadId = threadId;
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, _threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
         }
 
         /// <summary>
         /// 通过 PostId 打开回复列表页，并且打开后跳到相应的回复楼层
         /// </summary>
-        /// <param name="postId">回复ID</param>
-        public void OpenReplyPageByPostId(int postId)
+        public void OpenReplyPageByPostId()
         {
-            _postId = postId;
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, _postId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, PostId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
         }
         #endregion
 
@@ -192,13 +195,13 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
                 else if (param.Contains("tid=")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
                 {
-                    int threadId = Convert.ToInt32(param.Substring("tid=".Length));
-                    OpenReplyPageByThreadId(threadId);
+                    ThreadId = Convert.ToInt32(param.Substring("tid=".Length));
+                    OpenReplyPageByThreadId();
                 }
                 else if (param.Contains("pid=")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
                 {
-                    int postId = Convert.ToInt32(param.Substring("pid=".Length));
-                    OpenReplyPageByPostId(postId);
+                    PostId = Convert.ToInt32(param.Substring("pid=".Length));
+                    OpenReplyPageByPostId();
                 }
             }
 
@@ -220,16 +223,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             var isNarrow = newState == NarrowState;
             if (isNarrow && oldState == DefaultState) // 从宽视图进入窄视图
             {
-                if (_postId > 0)
+                if (PostId > 0)
                 {
-                    Frame.Navigate(typeof(ReplyListPage), $"pid={_postId}", new SuppressNavigationTransitionInfo());
-                    return;
+                    Frame.Navigate(typeof(ReplyListPage), $"pid={PostId}", new SuppressNavigationTransitionInfo());
                 }
-
-                if (_threadId > 0)
+                else if (ThreadId > 0)
                 {
-                    Frame.Navigate(typeof(ReplyListPage), $"tid={_threadId}", new SuppressNavigationTransitionInfo());
-                    return;
+                    Frame.Navigate(typeof(ReplyListPage), $"tid={ThreadId}", new SuppressNavigationTransitionInfo());
                 }
             }
         }
@@ -243,37 +243,32 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             var selectedItem = (ThreadItemModelBase)e.ClickedItem;
-            _threadId = selectedItem.ThreadId;
-            _postId = selectedItem.PostId;
+            ThreadId = selectedItem.ThreadId;
+            PostId = selectedItem.PostId;
 
-            if (_postId > 0)
+            if (PostId > 0)
             {
                 if (AdaptiveStates.CurrentState == NarrowState)
                 {
-                    string p = $"pid={_postId}";
+                    string p = $"pid={PostId}";
                     Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                 }
                 else
                 {
-                    OpenReplyPageByPostId(_postId);
+                    OpenReplyPageByPostId();
                 }
-
-                return;
             }
-
-            if (_threadId > 0)
+            else if (ThreadId > 0)
             {
                 if (AdaptiveStates.CurrentState == NarrowState)
                 {
-                    string p = $"tid={_threadId}";
+                    string p = $"tid={ThreadId}";
                     Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
                 }
                 else
                 {
-                    OpenReplyPageByThreadId(_threadId);
+                    OpenReplyPageByThreadId();
                 }
-
-                return;
             }
         }
 
