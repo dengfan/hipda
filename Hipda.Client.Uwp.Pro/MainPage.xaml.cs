@@ -35,9 +35,6 @@ namespace Hipda.Client.Uwp.Pro
         static LocalSettingsDependencyObject _myLocalSettings = ((LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"]);
         static RoamingSettingsDependencyObject _myRoamingSettings = ((RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"]);
 
-        MainPageViewModel _mainPageViewModel;
-        ThreadHistoryListViewViewModel _threadHistoryListViewViewModel;
-
         public ulong ImageCacheDataSize
         {
             get { return (ulong)GetValue(ImageCacheDataSizeProperty); }
@@ -47,6 +44,9 @@ namespace Hipda.Client.Uwp.Pro
         // Using a DependencyProperty as the backing store for ImageCacheDataSize.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ImageCacheDataSizeProperty =
             DependencyProperty.Register("ImageCacheDataSize", typeof(ulong), typeof(MainPage), new PropertyMetadata(0UL));
+
+        MainPageViewModel _mainPageViewModel;
+        ThreadHistoryListViewViewModel _threadHistoryListViewViewModel;
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
