@@ -290,6 +290,7 @@ namespace Hipda.Client.Uwp.Pro
                 if (threadAndReplyPage != null)
                 {
                     threadAndReplyPage.OpenReplyPageByThreadId(selectedItem.ThreadId);
+                    ApplicationView.GetForCurrentView().Title = selectedItem.Title;
                 }
             }
         }
