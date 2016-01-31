@@ -264,20 +264,13 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        private void ThreadHistoryListView_Loaded(object sender, RoutedEventArgs e)
+        private void ThreadHistoryListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            var lb = (ListView)sender;
-            lb.Items.VectorChanged += async (s, args) =>
+            sender.SelectedItem = null;
+            if (sender.Items.Count > 0)
             {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    lb.SelectedItem = null;
-                    if (lb.Items.Count > 0)
-                    {
-                        lb.ScrollIntoView(lb.Items.Last());
-                    }
-                });
-            };
+                sender.ScrollIntoView(sender.Items.Last());
+            }
         }
 
         private void ThreadHistoryListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -732,6 +725,7 @@ namespace Hipda.Client.Uwp.Pro
             new RoamingSettingsService().UnblockThreads(_unblockThreadKeys);
             _unblockThreadKeys.Clear();
         }
+
 
         #endregion
 

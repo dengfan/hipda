@@ -416,7 +416,7 @@
                          ItemsSource="{Binding ThreadHistoryData,Source={StaticResource ThreadHistoryListBoxViewModel}}"
                          SelectedItem="{Binding SelectedOne,Source={StaticResource ThreadHistoryListBoxViewModel},Mode=TwoWay}"
                          SelectionChanged="ThreadHistoryListView_SelectionChanged"
-                         Loaded="ThreadHistoryListView_Loaded">
+                          ContainerContentChanging="ThreadHistoryListView_ContainerContentChanging">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="Padding" Value="10,10,20,10"/>

@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI;
 using Windows.UI.Xaml;
 using System.Collections.ObjectModel;
+using Windows.UI.Core;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -76,6 +77,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             LoadLastPageDataCommand = new DelegateCommand();
             LoadLastPageDataCommand.ExecuteAction = (p) =>
             {
+                _replyListView.ContainerContentChanging += (s, args) =>
+                {
+                    if (_replyListView.Items.Count > 0)
+                    {
+                        _replyListView.ScrollIntoView(_replyListView.Items.Last());
+                    }
+                };
+
                 _ds.ClearReplyData(_threadId);
                 LoadData(_ds.GetReplyMaxPageNo());
             };

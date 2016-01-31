@@ -8,6 +8,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     /// <summary>
     /// 主题类别之枚举
+    /// 用于告诉主题 ListView 如何选择数据项模板
     /// </summary>
     public enum ThreadDataType
     {
