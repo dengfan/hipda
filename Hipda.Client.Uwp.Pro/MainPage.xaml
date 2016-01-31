@@ -425,8 +425,8 @@
                                                      ThreadId="{x:Bind ThreadId}" ThreadTitle="{x:Bind Title}" ForumId="{x:Bind ForumId}" ForumName="{x:Bind ForumName}"
                                                      HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                 <StackPanel Margin="48,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top">
-                                    <TextBlock Text="{x:Bind ForumName}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
                                     <TextBlock Text="{x:Bind AuthorUsername}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                                    <TextBlock Text="{x:Bind ForumName}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
                                     <TextBlock Text="{x:Bind Title}" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
                                 </StackPanel>
                             </Grid>

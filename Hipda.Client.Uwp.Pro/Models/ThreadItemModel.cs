@@ -38,8 +38,6 @@ namespace Hipda.Client.Uwp.Pro.Models
         /// </summary>
         public int Index2 { get; private set; }
 
-        public int ForumId { get; private set; }
-
         public int PageNo { get; private set; }
 
         public string ReplyCount { get; private set; }
