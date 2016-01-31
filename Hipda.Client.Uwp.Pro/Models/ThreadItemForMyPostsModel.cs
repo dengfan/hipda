@@ -23,8 +23,6 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public int Index { get; private set; }
 
-        public int PostId { get; private set; }
-
         public int PageNo { get; private set; }
 
         public string LastReplyContent { get; private set; }

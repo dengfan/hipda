@@ -15,7 +15,8 @@ namespace Hipda.Client.Uwp.Pro.Views
 {
     public sealed partial class ThreadAndReplyPage : Page
     {
-        ThreadItemModelBase _lastSelectedItem;
+        int _threadId = 0; // 有的主题是使用 ThreadId 参数加载回复列表页
+        int _postId = 0; // 有的主题是使用 PostId 参数加载回复列表页
 
         public ThreadAndReplyPage()
         {
@@ -114,17 +115,27 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
-        #region 公开的方法，可用协议调用
+        #region 打开回复列表页必须使用以下两种方法之一
+        /// <summary>
+        /// 通过 ThreadId 打开回复列表页，打开后从1楼开始显示
+        /// </summary>
+        /// <param name="threadId">主题ID</param>
         public void OpenReplyPageByThreadId(int threadId)
         {
+            _threadId = threadId;
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
+            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, _threadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded);
         }
 
+        /// <summary>
+        /// 通过 PostId 打开回复列表页，并且打开后跳到相应的回复楼层
+        /// </summary>
+        /// <param name="postId">回复ID</param>
         public void OpenReplyPageByPostId(int postId)
         {
+            _postId = postId;
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, postId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, _postId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
         }
         #endregion
 
@@ -207,41 +218,18 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
         {
             var isNarrow = newState == NarrowState;
-            if (isNarrow && oldState == DefaultState && _lastSelectedItem != null) // 如果是窄视图，则跳转到 reply list page 页面
+            if (isNarrow && oldState == DefaultState) // 从宽视图进入窄视图
             {
-                int id = 0;
-                switch (_lastSelectedItem.ThreadType)
+                if (_postId > 0)
                 {
-                    case ThreadDataType.MyThreads:
-                        var itemForMyThreads = _lastSelectedItem as ThreadItemForMyThreadsModel;
-                        id = itemForMyThreads.ThreadId;
-                        Frame.Navigate(typeof(ReplyListPage), $"tid={id}", new SuppressNavigationTransitionInfo());
-                        break;
-                    case ThreadDataType.MyPosts:
-                        var itemForMyPosts = _lastSelectedItem as ThreadItemForMyPostsModel;
-                        id = itemForMyPosts.PostId;
-                        Frame.Navigate(typeof(ReplyListPage), $"pid={id}", new SuppressNavigationTransitionInfo());
-                        break;
-                    case ThreadDataType.MyFavorites:
-                        var itemForMyFavorites = _lastSelectedItem as ThreadItemForMyFavoritesModel;
-                        id = itemForMyFavorites.ThreadId;
-                        Frame.Navigate(typeof(ReplyListPage), $"tid={id}", new SuppressNavigationTransitionInfo());
-                        break;
-                    case ThreadDataType.SearchTitle:
-                        var itemForSearchTitle = _lastSelectedItem as ThreadItemForSearchTitleModel;
-                        id = itemForSearchTitle.ThreadId;
-                        Frame.Navigate(typeof(ReplyListPage), $"tid={id}", new SuppressNavigationTransitionInfo());
-                        break;
-                    case ThreadDataType.SearchFullText:
-                        var itemForSearchFullText = _lastSelectedItem as ThreadItemForSearchFullTextModel;
-                        id = itemForSearchFullText.PostId;
-                        Frame.Navigate(typeof(ReplyListPage), $"pid={id}", new SuppressNavigationTransitionInfo());
-                        break;
-                    default:
-                        var item = _lastSelectedItem as ThreadItemModel;
-                        id = item.ThreadId;
-                        Frame.Navigate(typeof(ReplyListPage), $"tid={id}", new SuppressNavigationTransitionInfo());
-                        break;
+                    Frame.Navigate(typeof(ReplyListPage), $"pid={_postId}", new SuppressNavigationTransitionInfo());
+                    return;
+                }
+
+                if (_threadId > 0)
+                {
+                    Frame.Navigate(typeof(ReplyListPage), $"tid={_threadId}", new SuppressNavigationTransitionInfo());
+                    return;
                 }
             }
         }
@@ -254,115 +242,69 @@ namespace Hipda.Client.Uwp.Pro.Views
                 return;
             }
 
-            var selectedItem = e.ClickedItem;
-            _lastSelectedItem = (ThreadItemModelBase)selectedItem;
-            switch (_lastSelectedItem.ThreadType)
+            var selectedItem = (ThreadItemModelBase)e.ClickedItem;
+            _threadId = selectedItem.ThreadId;
+            _postId = selectedItem.PostId;
+
+            if (_postId > 0)
             {
-                case ThreadDataType.MyThreads:
-                    var itemForMyThreads = (ThreadItemForMyThreadsModel)selectedItem;
+                if (AdaptiveStates.CurrentState == NarrowState)
+                {
+                    string p = $"pid={_postId}";
+                    Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                }
+                else
+                {
+                    OpenReplyPageByPostId(_postId);
+                }
 
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = $"tid={itemForMyThreads.ThreadId}";
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        OpenReplyPageByThreadId(itemForMyThreads.ThreadId);
-                    }
-                    break;
-                case ThreadDataType.MyPosts:
-                    var itemForMyPosts = (ThreadItemForMyPostsModel)selectedItem;
+                return;
+            }
 
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = $"pid={itemForMyPosts.PostId}";
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        OpenReplyPageByPostId(itemForMyPosts.PostId);
-                    }
-                    break;
-                case ThreadDataType.MyFavorites:
-                    var itemForMyFavorites = (ThreadItemForMyFavoritesModel)selectedItem;
+            if (_threadId > 0)
+            {
+                if (AdaptiveStates.CurrentState == NarrowState)
+                {
+                    string p = $"tid={_threadId}";
+                    Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                }
+                else
+                {
+                    OpenReplyPageByThreadId(_threadId);
+                }
 
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = $"tid={itemForMyFavorites.ThreadId}";
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        OpenReplyPageByThreadId(itemForMyFavorites.ThreadId);
-                    }
-                    break;
-                case ThreadDataType.SearchTitle:
-                    var itemForSearchTitle = (ThreadItemForSearchTitleModel)selectedItem;
-
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = $"tid={itemForSearchTitle.ThreadId}";
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        OpenReplyPageByThreadId(itemForSearchTitle.ThreadId);
-                    }
-                    break;
-                case ThreadDataType.SearchFullText:
-                    var itemForSearchFullText = (ThreadItemForSearchFullTextModel)selectedItem;
-
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = $"pid={itemForSearchFullText.PostId}";
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        OpenReplyPageByPostId(itemForSearchFullText.PostId);
-                    }
-                    break;
-                default:
-                    var item = (ThreadItemModel)selectedItem;
-
-                    if (AdaptiveStates.CurrentState == NarrowState)
-                    {
-                        string p = $"tid={item.ThreadId}";
-                        Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        OpenReplyPageByThreadId(item.ThreadId);
-                    }
-                    break;
+                return;
             }
         }
 
         #region 加载上一页
         private void leftPr_RefreshInvoked(DependencyObject sender, object args)
         {
-            if (_lastSelectedItem != null)
+            if (LeftWrap.DataContext == null)
             {
-                switch (_lastSelectedItem.ThreadType)
-                {
-                    case ThreadDataType.MyThreads:
-                        var vmForMyThreads = LeftWrap.DataContext as ThreadListViewForMyThreadsViewModel;
-                        vmForMyThreads.LoadPrevPageData();
-                        break;
-                    case ThreadDataType.MyPosts:
-                        var vmForMyPosts = LeftWrap.DataContext as ThreadListViewForMyPostsViewModel;
-                        vmForMyPosts.LoadPrevPageData();
-                        break;
-                    case ThreadDataType.MyFavorites:
-                        var vmForMyFavorites = LeftWrap.DataContext as ThreadListViewForMyFavoritesViewModel;
-                        vmForMyFavorites.LoadPrevPageData();
-                        break;
-                    default:
-                        var vm = LeftWrap.DataContext as ThreadListViewForDefaultViewModel;
-                        vm.LoadPrevPageData();
-                        break;
-                }
+                return;
+            }
+
+            var vmType = LeftWrap.DataContext.GetType();
+            if (vmType.Equals(typeof(ThreadListViewForDefaultViewModel)))
+            {
+                var vm = LeftWrap.DataContext as ThreadListViewForDefaultViewModel;
+                vm.LoadPrevPageData();
+            }
+            else if (vmType.Equals(typeof(ThreadListViewForMyThreadsViewModel)))
+            {
+                var vm = LeftWrap.DataContext as ThreadListViewForMyThreadsViewModel;
+                vm.LoadPrevPageData();
+            }
+            else if (vmType.Equals(typeof(ThreadListViewForMyPostsViewModel)))
+            {
+                var vm = LeftWrap.DataContext as ThreadListViewForMyPostsViewModel;
+                vm.LoadPrevPageData();
+            }
+            else if (vmType.Equals(typeof(ThreadListViewForMyFavoritesViewModel)))
+            {
+                var vm = LeftWrap.DataContext as ThreadListViewForMyFavoritesViewModel;
+                vm.LoadPrevPageData();
             }
         }
 
@@ -384,30 +326,6 @@ namespace Hipda.Client.Uwp.Pro.Views
                 vm.LoadPrevPageData();
             }
         }
-
-        //private void LoadPrevReplyPageButton_Tapped(object sender, TappedRoutedEventArgs e)
-        //{
-        //    if (_lastSelectedItem != null)
-        //    {
-        //        // 根据回复列表页所属的主题类别来加载其下的回复列表的上一页
-        //        var threadItemViewModelBase = _lastSelectedItem as ThreadItemViewModelBase;
-        //        switch (threadItemViewModelBase.ThreadDataType)
-        //        {
-        //            case ThreadDataType.MyThreads:
-        //                ((ThreadItemForMyThreadsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-        //                break;
-        //            case ThreadDataType.MyPosts:
-        //                ((ThreadItemForMyPostsViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-        //                break;
-        //            case ThreadDataType.MyFavorites:
-        //                ((ThreadItemForMyFavoritesViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-        //                break;
-        //            default:
-        //                ((ThreadItemViewModel)_lastSelectedItem).RefreshReplyDataFromPrevPage();
-        //                break;
-        //        }
-        //    }
-        //}
         #endregion
 
         
@@ -417,13 +335,5 @@ namespace Hipda.Client.Uwp.Pro.Views
             var data = sender.DataContext as ReplyItemModel;
             PostReplyTextBox.Text = data.TextStr;
         }
-
-        
-
-        //private void ReplyListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
-        //{
-        //    ReplyItemModel item = args.Item as ReplyItemModel;
-        //    Debug.WriteLine(item.FloorNo);
-        //}
     }
 }

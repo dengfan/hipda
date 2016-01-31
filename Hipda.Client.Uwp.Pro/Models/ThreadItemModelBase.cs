@@ -13,7 +13,15 @@ namespace Hipda.Client.Uwp.Pro.Models
     {
         public ThreadDataType ThreadType { get; set; }
 
+        /// <summary>
+        /// 有的主题是使用 ThreadId 参数加载回复列表页
+        /// </summary>
         public int ThreadId { get; set; }
+
+        /// <summary>
+        /// 有的主题是使用 PostId 参数加载回复列表页
+        /// </summary>
+        public int PostId { get; set; }
 
         public string Title { get; set; }
 
