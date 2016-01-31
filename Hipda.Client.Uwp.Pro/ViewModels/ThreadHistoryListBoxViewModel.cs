@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadHistoryListBoxViewModel : NotificationObject
+    public class ThreadHistoryListBoxViewModel
     {
         public DelegateCommand ClearHistoryCommand { get; set; }
 
@@ -41,20 +41,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             if (!_threadHistoryData.Any(t => t.ThreadId == item.ThreadId))
             {
                 _threadHistoryData.Add(item);
-                this.RaisePropertyChanged("LastItemIndex");
-            }
-        }
-
-        public int LastItemIndex
-        {
-            get
-            {
-                if (ThreadHistoryData.Count > 0)
-                {
-                    return ThreadHistoryData.Count - 1;
-                }
-
-                return -1;
             }
         }
     }

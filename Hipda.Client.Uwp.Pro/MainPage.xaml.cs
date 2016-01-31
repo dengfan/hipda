@@ -34,7 +34,6 @@ namespace Hipda.Client.Uwp.Pro
     {
         static LocalSettingsDependencyObject _myLocalSettings = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
         static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
-        static ThreadHistoryListBoxViewModel _threadHistoryListViewViewModel = (ThreadHistoryListBoxViewModel)App.Current.Resources["ThreadHistoryListBoxViewModel"];
 
         public ulong ImageCacheDataSize
         {
@@ -71,8 +70,6 @@ namespace Hipda.Client.Uwp.Pro
 
             _mainPageViewModel = MainPageViewModel.GetInstance();
             DataContext = _mainPageViewModel;
-
-            RightSideWrap.DataContext = _threadHistoryListViewViewModel;
 
             this.SizeChanged += (s, e) =>
             {
@@ -270,7 +267,6 @@ namespace Hipda.Client.Uwp.Pro
         private void HistoryRecordButton_Click(object sender, RoutedEventArgs e)
         {
             FindName("RightSwipePanel");
-            RightSwipeContentControl.DataContext = _threadHistoryListViewViewModel;
             RightSwipeContentControl.ContentTemplate = Resources["HistoryRecordContentControl"] as DataTemplate;
 
             ShowRightSwipePanel();
@@ -692,5 +688,17 @@ namespace Hipda.Client.Uwp.Pro
             _unblockThreadKeys.Clear();
         }
         #endregion
+
+        private void ThreadHistoryListBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            var lb = (ListBox)sender;
+            lb.Items.VectorChanged += (s, args) =>
+            {
+                if (lb.Items.Count > 0)
+                {
+                    lb.ScrollIntoView(lb.Items.Last());
+                }
+            };
+        }
     }
 }

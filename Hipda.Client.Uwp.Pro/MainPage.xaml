@@ -404,7 +404,14 @@
                     <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
                 </CommandBar>
 
-                <ListBox x:Name="ThreadHistoryListBox" Grid.Row="1" SelectionMode="Single" ItemsSource="{Binding ThreadHistoryData}" SelectedIndex="{Binding LastItemIndex}">
+                <StackPanel Orientation="Horizontal" Margin="12,0,0,0" Height="48">
+                    <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                    <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                </StackPanel>
+
+                <ListBox Grid.Row="1" SelectionMode="Single"
+                         ItemsSource="{Binding ThreadHistoryData,Source={StaticResource ThreadHistoryListBoxViewModel}}"
+                         Loaded="ThreadHistoryListBox_Loaded">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="1,0,0,0">
@@ -413,11 +420,6 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-
-                <StackPanel Orientation="Horizontal" Margin="12,0,0,0" Height="48">
-                    <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
-                    <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
-                </StackPanel>
             </Grid>
         </DataTemplate>
 
