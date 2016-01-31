@@ -667,14 +667,14 @@
                                 </Grid>
                             </Button.Content>
                         </Button>
-                        <Button x:Name="HistoryRecordButton" Style="{StaticResource NavButtonNormalStyle}" Click="HistoryRecordButton_Click" ToolTipService.ToolTip="历史记录">
+                        <Button x:Name="HistoryRecordButton" Style="{StaticResource NavButtonNormalStyle}" Click="ShowHistoryRecordButton_Click" ToolTipService.ToolTip="历史记录">
                             <Button.Content>
                                 <Grid>
                                     <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
                                 </Grid>
                             </Button.Content>
                         </Button>
-                        <Button x:Name="SettingsButton" Style="{StaticResource NavButtonNormalStyle}" Click="SettingsButton_Click" ToolTipService.ToolTip="设置">
+                        <Button x:Name="SettingsButton" Style="{StaticResource NavButtonNormalStyle}" Click="ShowSettingsButton_Click" ToolTipService.ToolTip="设置">
                             <Button.Content>
                                 <Grid>
                                     <SymbolIcon Symbol="Setting" />

@@ -264,7 +264,7 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        private void HistoryRecordButton_Click(object sender, RoutedEventArgs e)
+        private void ShowHistoryRecordButton_Click(object sender, RoutedEventArgs e)
         {
             FindName("RightSwipePanel");
             RightSwipeContentControl.ContentTemplate = Resources["HistoryRecordContentControl"] as DataTemplate;
@@ -272,7 +272,7 @@ namespace Hipda.Client.Uwp.Pro
             ShowRightSwipePanel();
         }
 
-        private async void SettingsButton_Click(object sender, RoutedEventArgs e)
+        private async void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             FindName("RightSwipePanel");
             RightSwipeContentControl.ContentTemplate = Resources["SettingsContentControl"] as DataTemplate;
