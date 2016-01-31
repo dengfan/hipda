@@ -173,7 +173,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
-                var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
+                var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && (n.GetAttributeValue("class", "").Equals("t_msgfontfix") || n.GetAttributeValue("class", "").Equals("specialmsg")));
                 if (contentNode != null)
                 {
                     // 用于回复引用
