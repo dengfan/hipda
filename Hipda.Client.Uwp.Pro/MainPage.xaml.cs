@@ -286,11 +286,23 @@ namespace Hipda.Client.Uwp.Pro
             var selectedItem = (ThreadItemModelBase)lb.SelectedItem;
             if (selectedItem != null)
             {
-                var threadAndReplyPage = (ThreadAndReplyPage)AppFrame.Content;
-                if (threadAndReplyPage != null)
+                if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
                 {
-                    threadAndReplyPage.OpenReplyPageByThreadId(selectedItem.ThreadId);
-                    ApplicationView.GetForCurrentView().Title = selectedItem.Title;
+                    var page = (ThreadAndReplyPage)AppFrame.Content;
+                    if (page != null)
+                    {
+                        page.OpenReplyPageByThreadId(selectedItem.ThreadId);
+                        ApplicationView.GetForCurrentView().Title = $"{selectedItem.Title} - {selectedItem.ForumName}";
+                    }
+                }
+                else if (AppFrame.Content.GetType().Equals(typeof(ReplyListPage)))
+                {
+                    var page = (ReplyListPage)AppFrame.Content;
+                    if (page != null)
+                    {
+                        page.OpenReplyPageByThreadId(selectedItem.ThreadId);
+                        ApplicationView.GetForCurrentView().Title = $"{selectedItem.Title} - {selectedItem.ForumName}";
+                    }
                 }
             }
         }

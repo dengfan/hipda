@@ -55,6 +55,20 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
+        #region 公开的方法，可用协议调用
+        public void OpenReplyPageByThreadId(int threadId)
+        {
+            var cts = new CancellationTokenSource();
+            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, threadId, ReplyListView, BeforeLoaded, AfterLoaded);
+        }
+
+        public void OpenReplyPageByPostId(int postId)
+        {
+            var cts = new CancellationTokenSource();
+            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, postId, ReplyListView, BeforeLoaded, AfterLoaded, ReplyListViewScrollForSpecifiedPost);
+        }
+        #endregion
+
         public ReplyListPage()
         {
             this.InitializeComponent();

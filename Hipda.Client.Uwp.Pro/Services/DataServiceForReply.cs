@@ -209,7 +209,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 加入历史记录
-            ApplicationView.GetForCurrentView().Title = threadTitle;
+            ApplicationView.GetForCurrentView().Title = $"{threadTitle} - {forumName}";
             _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
         }
 
@@ -544,7 +544,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             int index = threadReply.Replies.FirstOrDefault(r => r.PostId == targetPostId).Index;
 
             // 加入历史记录
-            ApplicationView.GetForCurrentView().Title = threadTitle;
+            ApplicationView.GetForCurrentView().Title = $"{threadTitle} - {forumName}";
             _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
 
             return new int[] { pageNo, index, threadId };
