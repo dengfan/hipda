@@ -262,11 +262,11 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 if (PostId > 0)
                 {
-                    Frame.Navigate(typeof(ReplyListPage), $"pid={PostId}", new SuppressNavigationTransitionInfo());
+                    Frame.Navigate(typeof(ReplyListPage), $"pid={PostId}");
                 }
                 else if (ThreadId > 0)
                 {
-                    Frame.Navigate(typeof(ReplyListPage), $"tid={ThreadId}", new SuppressNavigationTransitionInfo());
+                    Frame.Navigate(typeof(ReplyListPage), $"tid={ThreadId}");
                 }
             }
         }

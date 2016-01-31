@@ -99,7 +99,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
-        #region 公开的方法，可用协议调用
+        #region 打开回复列表页必须使用以下两种方法之一
         public void OpenReplyPageByThreadId()
         {
             var cts = new CancellationTokenSource();
