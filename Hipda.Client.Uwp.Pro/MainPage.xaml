@@ -411,6 +411,7 @@
 
                 <ListBox Grid.Row="1" SelectionMode="Single"
                          ItemsSource="{Binding ThreadHistoryData,Source={StaticResource ThreadHistoryListBoxViewModel}}"
+                         SelectionChanged="ThreadHistoryListBox_SelectionChanged"
                          Loaded="ThreadHistoryListBox_Loaded">
                     <ListBox.ItemTemplate>
                         <DataTemplate>

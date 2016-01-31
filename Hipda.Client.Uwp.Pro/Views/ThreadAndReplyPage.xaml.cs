@@ -91,18 +91,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             {
                 ReplyListView.HeaderTemplate = null;
             }
-
-            // 最宽屏模式下，自动滚到最底部
-            //if (RightSideColumn.ActualWidth > 0)
-            //{
-            //    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-            //        int count = ThreadHistoryListView.Items.Count;
-            //        if (count > 0)
-            //        {
-            //            ThreadHistoryListView.ScrollIntoView(ThreadHistoryListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
-            //        }
-            //    });
-            //}
         }
 
         async void ReplyListViewScrollForSpecifiedPost(int index)

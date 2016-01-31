@@ -277,6 +277,20 @@ namespace Hipda.Client.Uwp.Pro
             };
         }
 
+        private void ThreadHistoryListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var lb = (ListBox)sender;
+            var selectedItem = (ThreadItemModelBase)lb.SelectedItem;
+            if (selectedItem != null)
+            {
+                var threadAndReplyPage = (ThreadAndReplyPage)AppFrame.Content;
+                if (threadAndReplyPage != null)
+                {
+                    threadAndReplyPage.OpenReplyPageByThreadId(selectedItem.ThreadId);
+                }
+            }
+        }
+
         private void ShowHistoryRecordButton_Click(object sender, RoutedEventArgs e)
         {
             FindName("RightSwipePanel");
@@ -700,6 +714,7 @@ namespace Hipda.Client.Uwp.Pro
             new RoamingSettingsService().UnblockThreads(_unblockThreadKeys);
             _unblockThreadKeys.Clear();
         }
+
         #endregion
 
         
