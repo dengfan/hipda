@@ -15,15 +15,53 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class ReplyListPage : Page
     {
+        #region 两个关键依赖属性，每次打开此页，必须且只能使用此俩参数之一
         /// <summary>
         /// 有的主题是使用 ThreadId 参数加载回复列表页
         /// </summary>
-        public int ThreadId { get; set; } = 0;
+        public int ThreadId
+        {
+            get { return (int)GetValue(ThreadIdProperty); }
+            set { SetValue(ThreadIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ThreadIdProperty =
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(ReplyListPage), new PropertyMetadata(0, new PropertyChangedCallback(OnThreadIdChanged)));
+
+        private static void OnThreadIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if ((int)e.NewValue > 0)
+            {
+                var instance = d as ReplyListPage;
+                instance.PostId = 0;
+            }
+        }
+
 
         /// <summary>
         /// 有的主题是使用 PostId 参数加载回复列表页
         /// </summary>
-        public int PostId { get; set; } = 0;
+        public int PostId
+        {
+            get { return (int)GetValue(PostIdProperty); }
+            set { SetValue(PostIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PostId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PostIdProperty =
+            DependencyProperty.Register("PostId", typeof(int), typeof(ReplyListPage), new PropertyMetadata(0, new PropertyChangedCallback(OnPostIdChanged)));
+
+        private static void OnPostIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if ((int)e.NewValue > 0)
+            {
+                var instance = d as ReplyListPage;
+                instance.ThreadId = 0;
+            }
+        }
+        #endregion
+
 
         #region 委托事件
         void BeforeLoaded()
@@ -134,7 +172,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (param.StartsWith("tid="))
             {
                 ThreadId = Convert.ToInt32(param.Substring("tid=".Length));
-                PostId = 0; // 此时必须把 PostId 重置为 0，以免干扰回复页的加载
 
                 #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
                 var backStack = Frame.BackStack;
@@ -159,7 +196,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             else if (param.StartsWith("pid="))
             {
                 PostId = Convert.ToInt32(param.Substring("pid=".Length));
-                ThreadId = 0; // 此时必须把 ThreadId 重置为 0，以免干扰回复页的加载
 
                 #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
                 var backStack = Frame.BackStack;

@@ -15,15 +15,52 @@ namespace Hipda.Client.Uwp.Pro.Views
 {
     public sealed partial class ThreadAndReplyPage : Page
     {
+        #region 两个关键依赖属性，每次打开此页，必须且只能使用此俩参数之一
         /// <summary>
         /// 有的主题是使用 ThreadId 参数加载回复列表页
         /// </summary>
-        public int ThreadId { get; set; } = 0;
+        public int ThreadId
+        {
+            get { return (int)GetValue(ThreadIdProperty); }
+            set { SetValue(ThreadIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ThreadIdProperty =
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0, new PropertyChangedCallback(OnThreadIdChanged)));
+
+        private static void OnThreadIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if ((int)e.NewValue > 0)
+            {
+                var instance = d as ThreadAndReplyPage;
+                instance.PostId = 0;
+            }
+        }
+
 
         /// <summary>
         /// 有的主题是使用 PostId 参数加载回复列表页
         /// </summary>
-        public int PostId { get; set; } = 0;
+        public int PostId
+        {
+            get { return (int)GetValue(PostIdProperty); }
+            set { SetValue(PostIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PostId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PostIdProperty =
+            DependencyProperty.Register("PostId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0, new PropertyChangedCallback(OnPostIdChanged)));
+
+        private static void OnPostIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if ((int)e.NewValue > 0)
+            {
+                var instance = d as ThreadAndReplyPage;
+                instance.ThreadId = 0;
+            }
+        }
+        #endregion
 
         public ThreadAndReplyPage()
         {
