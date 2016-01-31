@@ -264,6 +264,19 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
+        private void ThreadHistoryListBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            var lb = (ListBox)sender;
+            lb.Items.VectorChanged += (s, args) =>
+            {
+                lb.SelectedItem = null;
+                if (lb.Items.Count > 0)
+                {
+                    lb.ScrollIntoView(lb.Items.Last());
+                }
+            };
+        }
+
         private void ShowHistoryRecordButton_Click(object sender, RoutedEventArgs e)
         {
             FindName("RightSwipePanel");
@@ -689,17 +702,6 @@ namespace Hipda.Client.Uwp.Pro
         }
         #endregion
 
-        private void ThreadHistoryListBox_Loaded(object sender, RoutedEventArgs e)
-        {
-            var lb = (ListBox)sender;
-            lb.Items.VectorChanged += (s, args) =>
-            {
-                lb.SelectedItem = null;
-                if (lb.Items.Count > 0)
-                {
-                    lb.ScrollIntoView(lb.Items.Last());
-                }
-            };
-        }
+        
     }
 }
