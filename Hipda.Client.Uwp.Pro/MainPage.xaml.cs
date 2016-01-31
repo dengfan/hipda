@@ -32,8 +32,8 @@ namespace Hipda.Client.Uwp.Pro
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        static LocalSettingsDependencyObject _myLocalSettings = ((LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"]);
-        static RoamingSettingsDependencyObject _myRoamingSettings = ((RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"]);
+        static LocalSettingsDependencyObject _myLocalSettings = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
+        static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
 
         public ulong ImageCacheDataSize
         {
@@ -46,7 +46,7 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("ImageCacheDataSize", typeof(ulong), typeof(MainPage), new PropertyMetadata(0UL));
 
         MainPageViewModel _mainPageViewModel;
-        ThreadHistoryListViewViewModel _threadHistoryListViewViewModel;
+        static ThreadHistoryListBoxViewModel _threadHistoryListViewViewModel = ((ThreadHistoryListBoxViewModel)App.Current.Resources["ThreadHistoryListBoxViewModel"]);
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
@@ -72,7 +72,6 @@ namespace Hipda.Client.Uwp.Pro
             _mainPageViewModel = MainPageViewModel.GetInstance();
             DataContext = _mainPageViewModel;
 
-            _threadHistoryListViewViewModel = new ThreadHistoryListViewViewModel();
             RightSideWrap.DataContext = _threadHistoryListViewViewModel;
 
             this.SizeChanged += (s, e) =>

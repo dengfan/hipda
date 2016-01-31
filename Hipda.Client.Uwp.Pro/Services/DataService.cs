@@ -51,18 +51,18 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region history record
-        public static ObservableCollection<ThreadItemModelBase> ThreadHistoryData = new ObservableCollection<ThreadItemModelBase>();
+        
 
-        Style GetReadStatusStyle(int threadId)
-        {
-            string styleName = IsRead(threadId) ? "ReadColorStyle" : "UnReadColorStyle";
-            return (Style)App.Current.Resources[styleName];
-        }
+        //Style GetReadStatusStyle(int threadId)
+        //{
+        //    string styleName = IsRead(threadId) ? "ReadColorStyle" : "UnReadColorStyle";
+        //    return (Style)App.Current.Resources[styleName];
+        //}
 
-        public bool IsRead(int threadId)
-        {
-            return ThreadHistoryData.Count(h => h.ThreadId == threadId) > 0;
-        }
+        //public bool IsRead(int threadId)
+        //{
+        //    return ThreadHistoryData.Count(h => h.ThreadId == threadId) > 0;
+        //}
         #endregion
 
         #region user

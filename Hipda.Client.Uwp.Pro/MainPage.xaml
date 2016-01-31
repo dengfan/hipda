@@ -404,7 +404,7 @@
                     <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
                 </CommandBar>
 
-                <ListBox x:Name="ThreadHistoryListView" Grid.Row="1" SelectionMode="Single" ItemsSource="{Binding ThreadHistoryData}">
+                <ListBox x:Name="ThreadHistoryListBox" Grid.Row="1" SelectionMode="Single" ItemsSource="{Binding ThreadHistoryData}" SelectedIndex="{Binding LastItemIndex}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="1,0,0,0">

@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.ViewModels;
 using Hipda.Http;
 using HtmlAgilityPack;
 using System;
@@ -15,7 +16,8 @@ namespace Hipda.Client.Uwp.Pro.Services
 {
     public class DataServiceForReply
     {
-        static RoamingSettingsDependencyObject _myRoamingSettings = ((RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"]);
+        static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
+        static ThreadHistoryListBoxViewModel _threadHistoryListBoxViewModel = (ThreadHistoryListBoxViewModel)App.Current.Resources["ThreadHistoryListBoxViewModel"];
         static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         int _maxPageNo = 1;
@@ -203,11 +205,8 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 加入历史记录
-            if (!DataService.ThreadHistoryData.Any(t => t.ThreadId == threadId))
-            {
-                ApplicationView.GetForCurrentView().Title = threadTitle;
-                DataService.ThreadHistoryData.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle });
-            }
+            ApplicationView.GetForCurrentView().Title = threadTitle;
+            _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle });
         }
 
         async Task<string> LoadTopReplyDataAsync(int threadId, CancellationTokenSource cts)
@@ -535,11 +534,8 @@ namespace Hipda.Client.Uwp.Pro.Services
             int index = threadReply.Replies.FirstOrDefault(r => r.PostId == targetPostId).Index;
 
             // 加入历史记录
-            if (!DataService.ThreadHistoryData.Any(t => t.ThreadId == threadId))
-            {
-                ApplicationView.GetForCurrentView().Title = threadTitle;
-                DataService.ThreadHistoryData.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle });
-            }
+            ApplicationView.GetForCurrentView().Title = threadTitle;
+            _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle });
 
             return new int[] { pageNo, index, threadId };
         }

@@ -4,12 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cvt="using:Hipda.Client.Uwp.Pro.Converters"
     xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
+    xmlns:vm="using:Hipda.Client.Uwp.Pro.ViewModels"
     xmlns:local="using:Hipda.Client.Uwp.Pro">
 
     <Application.Resources>
         <local:LocalSettingsDependencyObject x:Key="MyLocalSettings"/>
         <local:RoamingSettingsDependencyObject x:Key="MyRoamingSettings"/>
-        
+        <vm:ThreadHistoryListBoxViewModel x:Key="ThreadHistoryListBoxViewModel"/>
         <cvt:ThemeTypeToRequestedThemeConverter x:Key="ThemeTypeToRequestedThemeConverter"/>
 
         <Style x:Key="NormalButtonStyle" TargetType="Button">

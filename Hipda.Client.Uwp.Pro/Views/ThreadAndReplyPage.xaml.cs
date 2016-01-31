@@ -2,6 +2,7 @@
 using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
+using System.Linq;
 using System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -104,7 +105,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             //}
         }
 
-        private async void ReplyListViewScrollForSpecifiedPost(int index)
+        async void ReplyListViewScrollForSpecifiedPost(int index)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
