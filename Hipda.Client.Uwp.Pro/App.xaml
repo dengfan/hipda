@@ -655,7 +655,7 @@
                     </TextBlock>
 
                     <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" HorizontalAlignment="Right">
-                        <Run Text=" &#xE25C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        <Run Text="&#x1F5E9;"/>
                         <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     </TextBlock>
                 </StackPanel>
@@ -674,7 +674,7 @@
                     <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
                         <Run Text="{Binding Title}" />
                         <LineBreak/>
-                        <Run Text="&#xE25C; " FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" />
+                        <Run Text="&#x1F5E9;" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
                         <Run Text="{Binding LastReplyContent}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" />
                     </TextBlock>
 
@@ -699,7 +699,7 @@
                     </TextBlock>
 
                     <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" HorizontalAlignment="Right">
-                        <Run Text=" &#xE25C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        <Run Text="&#x1F5E9;"/>
                         <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     </TextBlock>
                 </StackPanel>
