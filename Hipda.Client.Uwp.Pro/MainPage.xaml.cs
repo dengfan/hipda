@@ -694,6 +694,7 @@ namespace Hipda.Client.Uwp.Pro
             var lb = (ListBox)sender;
             lb.Items.VectorChanged += (s, args) =>
             {
+                lb.SelectedItem = null;
                 if (lb.Items.Count > 0)
                 {
                     lb.ScrollIntoView(lb.Items.Last());
