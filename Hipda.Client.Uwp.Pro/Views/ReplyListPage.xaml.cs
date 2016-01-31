@@ -62,10 +62,10 @@ namespace Hipda.Client.Uwp.Pro.Views
         #endregion
 
         #region 公开的方法，可用协议调用
-        public void OpenReplyPageByThreadId(int threadId)
+        public void OpenReplyPageByThreadId()
         {
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, threadId, ReplyListView, BeforeLoaded, AfterLoaded);
+            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, BeforeLoaded, AfterLoaded);
 
             #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
             var backStack = Frame.BackStack;
@@ -80,7 +80,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 // will show the correct item in the side-by-side view.
                 var modifiedEntry = new PageStackEntry(
                     masterPageEntry.SourcePageType,
-                    $"tid={threadId}",
+                    $"tid={ThreadId}",
                     masterPageEntry.NavigationTransitionInfo
                     );
                 backStack.Add(modifiedEntry);
@@ -88,10 +88,30 @@ namespace Hipda.Client.Uwp.Pro.Views
             #endregion
         }
 
-        public void OpenReplyPageByPostId(int postId)
+        public void OpenReplyPageByPostId()
         {
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, postId, ReplyListView, BeforeLoaded, AfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, PostId, ReplyListView, BeforeLoaded, AfterLoaded, ReplyListViewScrollForSpecifiedPost);
+
+            #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
+            var backStack = Frame.BackStack;
+            var backStackCount = backStack.Count;
+
+            if (backStackCount > 0)
+            {
+                var masterPageEntry = backStack[backStackCount - 1];
+                backStack.RemoveAt(backStackCount - 1);
+
+                // Doctor the navigation parameter for the master page so it
+                // will show the correct item in the side-by-side view.
+                var modifiedEntry = new PageStackEntry(
+                    masterPageEntry.SourcePageType,
+                    $"pid={PostId}",
+                    masterPageEntry.NavigationTransitionInfo
+                    );
+                backStack.Add(modifiedEntry);
+            }
+            #endregion
         }
         #endregion
 
