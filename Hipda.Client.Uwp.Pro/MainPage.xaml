@@ -404,21 +404,15 @@
                     <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
                 </CommandBar>
 
-                <ListView x:Name="ThreadHistoryListView" Grid.Row="1" IsItemClickEnabled="True" SelectionMode="Single" ShowsScrollingPlaceholders="False"
-                      ItemsSource="{Binding ThreadHistoryData}" ItemClick="ReadListView_ItemClick">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Padding" Value="8,4,20,4"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
+                <ListBox x:Name="ThreadHistoryListView" Grid.Row="1" SelectionMode="Single" ItemsSource="{Binding ThreadHistoryData}">
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="1,0,0,0">
                                 <TextBlock TextWrapping="Wrap" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
                             </Border>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
                 <StackPanel Orientation="Horizontal" Margin="12,0,0,0" Height="48">
                     <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
