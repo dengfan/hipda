@@ -328,14 +328,6 @@ namespace Hipda.Client.Uwp.Pro
             AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=notice");
         }
 
-        private void ReadListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var data = e.ClickedItem as ThreadItemModelBase;
-            //OpenReplyPageByThreadId(data.ThreadId);
-
-            //LeftListView.SelectedItem = null;
-        }
-
         void SendToast(string toastXml)
         {
             toastXml = Common.ReplaceHexadecimalSymbols(toastXml);
