@@ -14,7 +14,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     {
         public DelegateCommand ClearHistoryCommand { get; set; }
 
-        ObservableCollection<ThreadItemModelBase> _threadHistoryData = new ObservableCollection<ThreadItemModelBase>();
+        public DelegateCommand RemoveSelectedCommand { get; set; }
+
+        private ObservableCollection<ThreadItemModelBase> _threadHistoryData = new ObservableCollection<ThreadItemModelBase>();
 
         public ObservableCollection<ThreadItemModelBase> ThreadHistoryData
         {
@@ -28,11 +30,27 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        private ThreadItemModelBase _selectedOne;
+
+        public ThreadItemModelBase SelectedOne
+        {
+            get { return _selectedOne; }
+            set { _selectedOne = value; }
+        }
+
         public ThreadHistoryListBoxViewModel()
         {
             ClearHistoryCommand = new DelegateCommand();
             ClearHistoryCommand.ExecuteAction = (p) => {
                 _threadHistoryData.Clear();
+            };
+
+            RemoveSelectedCommand = new DelegateCommand();
+            RemoveSelectedCommand.ExecuteAction = (p) => {
+                if (SelectedOne != null)
+                {
+                    _threadHistoryData.Remove(SelectedOne);
+                }
             };
         }
 
