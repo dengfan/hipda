@@ -134,6 +134,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (param.StartsWith("tid="))
             {
                 ThreadId = Convert.ToInt32(param.Substring("tid=".Length));
+                PostId = 0; // 此时必须把 PostId 重置为 0，以免干扰回复页的加载
 
                 #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
                 var backStack = Frame.BackStack;
@@ -158,6 +159,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             else if (param.StartsWith("pid="))
             {
                 PostId = Convert.ToInt32(param.Substring("pid=".Length));
+                ThreadId = 0; // 此时必须把 ThreadId 重置为 0，以免干扰回复页的加载
 
                 #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
                 var backStack = Frame.BackStack;
