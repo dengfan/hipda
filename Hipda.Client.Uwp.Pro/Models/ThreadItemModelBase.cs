@@ -16,5 +16,13 @@ namespace Hipda.Client.Uwp.Pro.Models
         public int ThreadId { get; set; }
 
         public string Title { get; set; }
+
+        public int ForumId { get; set; }
+
+        public string ForumName { get; set; }
+
+        public int AuthorUserId { get; set; }
+
+        public string AuthorUsername { get; set; }
     }
 }

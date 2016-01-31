@@ -31,6 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             int threadAuthorUserId = 0;
+            string threadAuthorUsername = string.Empty;
             string threadTitle = string.Empty;
 
             // 如果页面已存在，则不重新从网站拉取数据，以便节省流量， 
@@ -43,14 +44,16 @@ namespace Hipda.Client.Uwp.Pro.Services
                     var item = threadReply.Replies.FirstOrDefault();
                     if (item == null || item.ThreadAuthorUserId == 0 || string.IsNullOrEmpty(item.ThreadTitle))
                     {
-                        string val = await LoadTopReplyDataAsync(threadId, cts);
+                        string val = await LoadTopReplyDataAsync(threadId, cts); 
                         string[] ary = val.Split(',');
                         threadAuthorUserId = Convert.ToInt32(ary[0]);
-                        threadTitle = ary[1];
+                        threadAuthorUsername = ary[1];
+                        threadTitle = ary[2];
                     }
                     else
                     {
                         threadAuthorUserId = item.ThreadAuthorUserId;
+                        threadAuthorUsername = item.AuthorUsername;
                         threadTitle = item.ThreadTitle;
                     }
                 }
@@ -147,6 +150,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 if (floor == 1)
                 {
                     threadAuthorUserId = authorUserId;
+                    threadAuthorUsername = authorUsername;
                     var threadTitleNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("threadtitle"));
                     if (threadTitleNode != null)
                     {
@@ -206,13 +210,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 加入历史记录
             ApplicationView.GetForCurrentView().Title = threadTitle;
-            _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle });
+            _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
         }
 
         async Task<string> LoadTopReplyDataAsync(int threadId, CancellationTokenSource cts)
         {
             string threadTitle = string.Empty;
             int threadAuthorUserId = 0;
+            string threadAuthorUsername = string.Empty;
 
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page=1", threadId);
@@ -255,6 +260,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     authorUserId = Convert.ToInt32(authorUserIdStr);
                 }
                 threadAuthorUserId = authorUserId;
+                threadAuthorUsername = authorNode.InnerText.Trim();
             }
 
             var threadTitleNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("threadtitle"));
@@ -270,7 +276,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 threadTitle = h1.InnerText.Trim();
             }
 
-            return $"{threadAuthorUserId},{threadTitle}";
+            return $"{threadAuthorUserId},{threadAuthorUsername},{threadTitle}";
         }
 
         public async Task<int> LoadMoreReplyItemsAsync(int threadId, int pageNo, Action beforeLoad, Action<int, int> afterLoad)
@@ -399,6 +405,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             int threadAuthorUserId = 0;
+            string threadAuthorUsername = string.Empty;
             string threadTitle = string.Empty;
 
             #region 如果第一项没有贴子及作者数据，则加载第一页读取贴子标题及作者数据
@@ -408,14 +415,16 @@ namespace Hipda.Client.Uwp.Pro.Services
                 if (item == null || item.ThreadAuthorUserId == 0 || string.IsNullOrEmpty(item.ThreadTitle))
                 {
 
-                    string val = await LoadTopReplyDataAsync(threadId, cts);
+                    string val = await LoadTopReplyDataAsync(threadId, cts); 
                     string[] ary = val.Split(',');
                     threadAuthorUserId = Convert.ToInt32(ary[0]);
-                    threadTitle = ary[1];
+                    threadAuthorUsername = ary[1];
+                    threadTitle = ary[2];
                 }
                 else
                 {
                     threadAuthorUserId = item.ThreadAuthorUserId;
+                    threadAuthorUsername = item.AuthorUsername;
                     threadTitle = item.ThreadTitle;
                 }
             }
@@ -474,6 +483,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 if (floor == 1)
                 {
                     threadAuthorUserId = authorUserId;
+                    threadAuthorUsername = authorUsername;
                     var threadTitleNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("threadtitle"));
                     if (threadTitleNode != null)
                     {
@@ -535,7 +545,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 加入历史记录
             ApplicationView.GetForCurrentView().Title = threadTitle;
-            _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle });
+            _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
 
             return new int[] { pageNo, index, threadId };
         }

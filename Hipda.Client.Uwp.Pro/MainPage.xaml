@@ -401,7 +401,7 @@
                 </Grid.RowDefinitions>
 
                 <CommandBar Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-                    <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand}"/>
+                    <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand,Source={StaticResource ThreadHistoryListBoxViewModel}}"/>
                 </CommandBar>
 
                 <StackPanel Orientation="Horizontal" Margin="12,0,0,0" Height="48">
@@ -409,18 +409,30 @@
                     <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
                 </StackPanel>
 
-                <ListBox Grid.Row="1" SelectionMode="Single"
+                <ListView Grid.Row="1" SelectionMode="Single"
                          ItemsSource="{Binding ThreadHistoryData,Source={StaticResource ThreadHistoryListBoxViewModel}}"
-                         SelectionChanged="ThreadHistoryListBox_SelectionChanged"
-                         Loaded="ThreadHistoryListBox_Loaded">
-                    <ListBox.ItemTemplate>
+                         SelectionChanged="ThreadHistoryListView_SelectionChanged"
+                         Loaded="ThreadHistoryListView_Loaded">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="10,10,20,10"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Padding="8,0,0,0" BorderThickness="1,0,0,0">
-                                <TextBlock TextWrapping="Wrap" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Text="{Binding Title}"/>
-                            </Border>
+                            <Grid>
+                                <c:MyAvatarForThread Margin="0,0,8,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}"
+                                                     ThreadId="{Binding ThreadId}" ThreadTitle="{Binding Title}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}"
+                                                     HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <StackPanel Margin="48,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                    <TextBlock Text="{Binding ForumName}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                                    <TextBlock Text="{Binding AuthorUsername}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                                </StackPanel>
+                            </Grid>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Grid>
         </DataTemplate>
 
@@ -483,11 +495,12 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill"
-                                               Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}" Source="{Binding AvatarUri}"/>
-                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}">
-                                            <Run Text="{Binding Username}"/>
+                                               Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}" Source="{Binding UserId,Converter={StaticResource UserIdToAvatarUriConverter}}"/>
+                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
+                                            <Run Text="{Binding Username}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
                                             <LineBreak/>
-                                            <Run Text="{Binding ForumNameInfo}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                            <Run Text="@" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                            <Run Text="{Binding ForumName}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                                         </TextBlock>
                                     </StackPanel>
                                 </DataTemplate>
@@ -504,11 +517,13 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill"
-                                               Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}" Source="{Binding AvatarUri}"/>
-                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}">
-                                            <Run Text="{Binding ThreadTitle}"/>
+                                               Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}" Source="{Binding UserId,Converter={StaticResource UserIdToAvatarUriConverter}}"/>
+                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
+                                            <Run Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
                                             <LineBreak/>
-                                            <Run Text="{Binding UsernameInfo}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                            <Run Text="{Binding Username}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                            <Run Text=" @" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                            <Run Text="{Binding ForumName}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                                         </TextBlock>
                                     </StackPanel>
                                 </DataTemplate>

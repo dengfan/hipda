@@ -13,7 +13,7 @@ namespace Hipda.Client.Uwp.Pro.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             int userId = (int)value;
-            return Common.GetMiddleAvatarUriByUserId(userId);
+            return Common.GetSmallAvatarUriByUserId(userId);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

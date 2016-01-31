@@ -264,22 +264,25 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        private void ThreadHistoryListBox_Loaded(object sender, RoutedEventArgs e)
+        private void ThreadHistoryListView_Loaded(object sender, RoutedEventArgs e)
         {
-            var lb = (ListBox)sender;
-            lb.Items.VectorChanged += (s, args) =>
+            var lb = (ListView)sender;
+            lb.Items.VectorChanged += async (s, args) =>
             {
-                lb.SelectedItem = null;
-                if (lb.Items.Count > 0)
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    lb.ScrollIntoView(lb.Items.Last());
-                }
+                    lb.SelectedItem = null;
+                    if (lb.Items.Count > 0)
+                    {
+                        lb.ScrollIntoView(lb.Items.Last());
+                    }
+                });
             };
         }
 
-        private void ThreadHistoryListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ThreadHistoryListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var lb = (ListBox)sender;
+            var lb = (ListView)sender;
             var selectedItem = (ThreadItemModelBase)lb.SelectedItem;
             if (selectedItem != null)
             {

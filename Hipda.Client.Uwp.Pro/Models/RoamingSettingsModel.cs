@@ -14,20 +14,6 @@ namespace Hipda.Client.Uwp.Pro.Models
         public string Username { get; set; }
         public int ForumId { get; set; }
         public string ForumName { get; set; }
-        public Uri AvatarUri
-        {
-            get
-            {
-                return Common.GetSmallAvatarUriByUserId(UserId);
-            }
-        }
-        public string ForumNameInfo
-        {
-            get
-            {
-                return $"@{ForumName}";
-            }
-        }
     }
 
     public struct BlockThread
@@ -38,20 +24,6 @@ namespace Hipda.Client.Uwp.Pro.Models
         public string ThreadTitle { get; set; }
         public int ForumId { get; set; }
         public string ForumName { get; set; }
-        public Uri AvatarUri
-        {
-            get
-            {
-                return Common.GetSmallAvatarUriByUserId(UserId);
-            }
-        }
-        public string UsernameInfo
-        {
-            get
-            {
-                return $"{Username} @{ForumName}";
-            }
-        }
     }
 
     public class RoamingSettingsModel

@@ -34,8 +34,6 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public string SearchKeyword { get; private set; }
 
-        public string ForumName { get; private set; }
-
         public int PageNo { get; private set; }
 
         public string ReplyCount { get; private set; }
@@ -43,10 +41,6 @@ namespace Hipda.Client.Uwp.Pro.Models
         public string ViewCount { get; private set; }
 
         public int AttachFileType { get; private set; }
-
-        public string AuthorUsername { get; private set; }
-
-        public int AuthorUserId { get; private set; }
 
         public string AuthorCreateTime { get; private set; }
 

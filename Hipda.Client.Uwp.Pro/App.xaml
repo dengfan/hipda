@@ -12,7 +12,8 @@
         <local:RoamingSettingsDependencyObject x:Key="MyRoamingSettings"/>
         <vm:ThreadHistoryListBoxViewModel x:Key="ThreadHistoryListBoxViewModel"/>
         <cvt:ThemeTypeToRequestedThemeConverter x:Key="ThemeTypeToRequestedThemeConverter"/>
-
+        <cvt:UserIdToAvatarUriConverter x:Key="UserIdToAvatarUriConverter"/>
+        
         <Style x:Key="NormalButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
