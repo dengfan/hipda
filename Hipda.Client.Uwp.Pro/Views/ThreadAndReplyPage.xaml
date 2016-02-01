@@ -194,16 +194,22 @@
                         </Button>
                     </StackPanel>
                     <TextBox Grid.Row="1" x:Name="PostReplyTextBox" Template="{StaticResource TextBoxTemplate1}"
-                             MaxHeight="280" MinHeight="56" Padding="8,4" Background="Transparent" BorderThickness="0"
+                             MaxHeight="280" MinHeight="64" Padding="8,4" Background="Transparent" BorderThickness="0"
                              TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容，回车可换行。"/>
                     <Button Grid.Row="1" x:Name="SendButton" Margin="0,0,12,12" Command="{Binding PostReplyCommand}"
                             Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
                             Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
                             HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                        <StackPanel Orientation="Horizontal">
-                            <SymbolIcon Symbol="Send" />
-                            <TextBlock Text=" 发送"/>
-                        </StackPanel>
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <SymbolIcon Symbol="Send" />
+                                        <TextBlock Text=" 发送"/>
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
                     </Button>
                 </Grid>
             </Grid>
