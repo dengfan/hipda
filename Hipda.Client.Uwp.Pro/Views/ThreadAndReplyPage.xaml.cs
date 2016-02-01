@@ -189,8 +189,16 @@ namespace Hipda.Client.Uwp.Pro.Views
         /// </summary>
         public void OpenReplyPageByThreadId()
         {
-            var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            if (AdaptiveStates.CurrentState == NarrowState)
+            {
+                string p = $"tid={ThreadId}";
+                Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+            }
+            else
+            {
+                var cts = new CancellationTokenSource();
+                RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            }
         }
 
         /// <summary>
@@ -198,8 +206,16 @@ namespace Hipda.Client.Uwp.Pro.Views
         /// </summary>
         public void OpenReplyPageByPostId()
         {
-            var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, PostId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            if (AdaptiveStates.CurrentState == NarrowState)
+            {
+                string p = $"pid={PostId}";
+                Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+            }
+            else
+            {
+                var cts = new CancellationTokenSource();
+                RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, PostId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+            }
         }
         #endregion
 
