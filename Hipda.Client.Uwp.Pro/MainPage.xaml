@@ -537,7 +537,7 @@
                                 Content="解除选中主题" Style="{StaticResource NormalButtonStyle}"
                                 Click="UnblockThreads"/>
 
-                        <Button Margin="0,12,0,12" Content="购买 [移除广告] 服务" Style="{StaticResource NormalButtonStyle}"/>
+                        <HyperlinkButton Margin="0,12,0,12" HorizontalAlignment="Center" Content="购买 [移除广告] 服务"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
