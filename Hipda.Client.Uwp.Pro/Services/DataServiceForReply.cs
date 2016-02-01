@@ -71,6 +71,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 _replyData.Add(threadReply);
             }
 
+            // 先移除 IsLast 为 True 的标记项，确保此标记项永远只出现在最后面
             threadReply.Replies.RemoveAll(r => r.IsLast);
 
             // 读取数据
@@ -109,6 +110,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             int i = threadReply.Replies.Count();
+            int j = 1;
             foreach (var item in data)
             {
                 var mainTable = item.Descendants().FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", "").StartsWith("pid") && n.GetAttributeValue("id", "").Equals(n.GetAttributeValue("summary", "")));
@@ -141,6 +143,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 // 判断当前用户是否已被屏蔽，是则跳过
                 if (_myRoamingSettings.BlockUsers.Any(u => u.UserId == authorUserId && u.ForumId == forumId))
                 {
+                    j++;
                     continue;
                 }
 
@@ -208,12 +211,13 @@ namespace Hipda.Client.Uwp.Pro.Services
                 threadReply.Replies.Add(reply);
 
                 i++;
+                j++;
             }
 
             // 如果本次有加载到数据，则为数据列表的末尾添加一项“载入已完成”的标记项
             // 方便在加载完成时显示“---完---”
             // 注意在下一页开始加载前移除此标记项
-            if (threadAuthorUserId > 0)
+            if (j > 1)
             {
                 var lastItem = threadReply.Replies.Last();
                 var flag = new ReplyItemModel(lastItem.Index + 1, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
@@ -554,12 +558,22 @@ namespace Hipda.Client.Uwp.Pro.Services
                 i++;
             }
 
-            int index = threadReply.Replies.FirstOrDefault(r => r.PostId == targetPostId).Index;
+            // 如果本次有加载到数据，则为数据列表的末尾添加一项“载入已完成”的标记项
+            // 方便在加载完成时显示“---完---”
+            // 注意在下一页开始加载前移除此标记项
+            if (i > 0)
+            {
+                var lastItem = threadReply.Replies.Last();
+                var flag = new ReplyItemModel(lastItem.Index + 1, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                flag.IsLast = true;
+                threadReply.Replies.Add(flag);
+            }
 
             // 加入历史记录
             ApplicationView.GetForCurrentView().Title = $"{threadTitle} - {forumName}";
             _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
 
+            int index = threadReply.Replies.FirstOrDefault(r => r.PostId == targetPostId).Index;
             return new int[] { pageNo, index, threadId };
         }
 
