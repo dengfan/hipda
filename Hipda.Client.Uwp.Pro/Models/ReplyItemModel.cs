@@ -97,6 +97,12 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
+                if (FloorNo == -1)
+                {
+                    // “---完---”项不作处理
+                    return null;
+                }
+
                 try
                 {
                     return XamlReader.Load(XamlStr);
