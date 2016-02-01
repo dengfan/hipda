@@ -57,11 +57,26 @@ namespace Hipda.Client.Uwp.Pro.Controls
             if (mp != null)
             {
                 mp.CloseUserDialog();
-                var p = mp.AppFrame.Content as ThreadAndReplyPage;
-                if (p != null)
+
+                var pageType = mp.AppFrame.Content.GetType();
+                if (pageType.Equals(typeof(ThreadAndReplyPage)))
                 {
-                    p.ThreadId = ThreadId;
-                    p.OpenReplyPageByThreadId();
+                    var p = (ThreadAndReplyPage)mp.AppFrame.Content;
+                    if (p != null)
+                    {
+                        p.ThreadId = ThreadId;
+                        p.OpenReplyPageByThreadId();
+                    }
+                }
+                else if (pageType.Equals(typeof(ReplyListPage)))
+                {
+                    var p = (ReplyListPage)mp.AppFrame.Content;
+                    if (p != null)
+                    {
+                        p.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
+                        p.ThreadId = ThreadId;
+                        p.OpenReplyPageByThreadId();
+                    }
                 }
             }
         }
