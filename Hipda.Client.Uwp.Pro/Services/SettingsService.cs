@@ -184,13 +184,19 @@ namespace Hipda.Client.Uwp.Pro.Services
         public void Save()
         {
             CanShowTopThread = _myRoamingSettings.CanShowTopThread;
+        }
 
+        public void SaveBlockUsers()
+        {
             foreach (var item in _myRoamingSettings.BlockUsers)
             {
                 string jsonStr = JsonConvert.SerializeObject(item);
                 _blockUsersContainer.Values[$"{item.UserId}@{item.ForumId}"] = jsonStr;
             }
+        }
 
+        public void SaveBlockThreads()
+        {
             foreach (var item in _myRoamingSettings.BlockThreads)
             {
                 string jsonStr = JsonConvert.SerializeObject(item);

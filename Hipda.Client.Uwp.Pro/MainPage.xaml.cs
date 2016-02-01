@@ -427,7 +427,7 @@ namespace Hipda.Client.Uwp.Pro
                 if (!_myRoamingSettings.BlockUsers.Any(u => u.UserId == PopupUserId && u.ForumId == PopupForumId))
                 {
                     _myRoamingSettings.BlockUsers.Add(new BlockUser { UserId = PopupUserId, Username = PopupUsername, ForumId = PopupForumId, ForumName = PopupForumName });
-                    new RoamingSettingsService().Save();
+                    new RoamingSettingsService().SaveBlockUsers();
                 }
 
                 SendToast(xml2);
@@ -454,7 +454,7 @@ namespace Hipda.Client.Uwp.Pro
                 if (!_myRoamingSettings.BlockThreads.Any(t => t.ThreadId == PopupThreadId))
                 {
                     _myRoamingSettings.BlockThreads.Add(new BlockThread { UserId = PopupUserId, Username = PopupUsername, ThreadId = PopupThreadId, ThreadTitle = PopupThreadTitle, ForumId = PopupForumId, ForumName = PopupForumName });
-                    new RoamingSettingsService().Save();
+                    new RoamingSettingsService().SaveBlockThreads();
                 }
 
                 string xml2 = "<toast>" +
