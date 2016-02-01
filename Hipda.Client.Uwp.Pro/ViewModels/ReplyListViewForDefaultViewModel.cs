@@ -86,12 +86,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadData(int pageNo)
         {
-            Action loadAllFinish = () =>
-            {
-                _replyListView.FooterTemplate = (DataTemplate)App.Current.Resources["ReplyListViewFooterTemplate"];
-            };
-
-            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _beforeLoad, _afterLoad, loadAllFinish);
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _beforeLoad, _afterLoad, null);
             if (cv != null)
             {
                 _startPageNo = pageNo;

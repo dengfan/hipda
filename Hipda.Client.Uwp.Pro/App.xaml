@@ -321,22 +321,8 @@
                     HorizontalAlignment="Center" Command="{Binding LoadPrevPageDataCommand}"/>
         </DataTemplate>
 
-        <DataTemplate x:Key="ReplyListViewFooterTemplate">
-            <StackPanel Margin="0,80,0,160">
-                <TextBlock Text="---------- 完 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
-                <Button Margin="10" Command="{Binding LoadLastPageDataCommand}" HorizontalAlignment="Center">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
-                                <TextBlock Text="&#xE777;" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </StackPanel>
-        </DataTemplate>
-
         <local:ReplyListItemTemplateSelector x:Key="replyListItemTemplateSelector"
+                                             ReplyListLastItemTemplate ="{StaticResource ReplyListLastItemTemplate}"
                                              ReplyListTopItemTemplate="{StaticResource ReplyListTopItemTemplate}"
                                              ReplyListLeftItemTemplate="{StaticResource ReplyListLeftItemTemplate}"
                                              ReplyListLeft2ItemTemplate="{StaticResource ReplyListLeft2ItemTemplate}"
@@ -368,6 +354,12 @@
             <Setter Property="Width" Value="40"/>
             <Setter Property="Height" Value="40"/>
         </Style>
+
+        <DataTemplate x:Key="ReplyListLastItemTemplate">
+            <StackPanel Margin="0,20,0,160">
+                <TextBlock Text="---------- 没有了 ----------" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
 
         <DataTemplate x:Key="ReplyListTopItemTemplate">
             <StackPanel>

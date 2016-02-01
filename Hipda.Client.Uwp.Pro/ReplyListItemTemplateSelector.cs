@@ -12,6 +12,7 @@ namespace Hipda.Client.Uwp.Pro
 {
     public class ReplyListItemTemplateSelector : DataTemplateSelector
     {
+        public DataTemplate ReplyListLastItemTemplate { get; set; }
         public DataTemplate ReplyListTopItemTemplate { get; set; }
         public DataTemplate ReplyListLeftItemTemplate { get; set; }
         public DataTemplate ReplyListLeft2ItemTemplate { get; set; }
@@ -26,7 +27,11 @@ namespace Hipda.Client.Uwp.Pro
             }
 
             var data = (ReplyItemModel)item;
-            if (data.FloorNo == 1)
+            if (data.IsLast)
+            {
+                return ReplyListLastItemTemplate;
+            }
+            else if (data.FloorNo == 1)
             {
                 return ReplyListTopItemTemplate;
             }

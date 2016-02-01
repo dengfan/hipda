@@ -34,6 +34,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.AuthorCreateTime = authorCreateTime;
             this.ImageCount = imageCount;
             this.IsHighLight = isHighLight;
+            this.IsLast = false;
         }
 
         public int Index { get; private set; }
@@ -60,6 +61,8 @@ namespace Hipda.Client.Uwp.Pro.Models
         public int ImageCount { get; set; }
 
         public bool IsHighLight { get; private set; }
+
+        public bool IsLast { get; set; }
 
         public bool HasThreadTitle
         {

@@ -71,6 +71,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                 _replyData.Add(threadReply);
             }
 
+            threadReply.Replies.RemoveAll(r => r.IsLast);
+
             // 读取数据
             string url = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0}&page={1}&ordertype={2}&_={3}", threadId, pageNo, string.Empty, DateTime.Now.Ticks.ToString("x"));
             string htmlStr = await _httpClient.GetAsync(url, cts);
@@ -206,6 +208,17 @@ namespace Hipda.Client.Uwp.Pro.Services
                 threadReply.Replies.Add(reply);
 
                 i++;
+            }
+
+            // 如果本次有加载到数据，则为数据列表的末尾添加一项“载入已完成”的标记项
+            // 方便在加载完成时显示“---完---”
+            // 注意在下一页开始加载前移除此标记项
+            if (threadAuthorUserId > 0)
+            {
+                var lastItem = threadReply.Replies.Last();
+                var flag = new ReplyItemModel(lastItem.Index + 1, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                flag.IsLast = true;
+                threadReply.Replies.Add(flag);
             }
 
             // 加入历史记录
