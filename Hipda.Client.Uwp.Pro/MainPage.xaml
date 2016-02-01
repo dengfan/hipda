@@ -420,6 +420,7 @@
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="Padding" Value="10,10,20,10"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
@@ -428,11 +429,9 @@
                                 <c:MyAvatarForThread Margin="0,0,8,0" UserId="{x:Bind AuthorUserId}" Username="{x:Bind AuthorUsername}"
                                                      ThreadId="{x:Bind ThreadId}" ThreadTitle="{x:Bind Title}" ForumId="{x:Bind ForumId}" ForumName="{x:Bind ForumName}"
                                                      HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                <StackPanel Margin="48,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top">
-                                    <TextBlock Text="{x:Bind AuthorUsername}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
-                                    <TextBlock Text="{x:Bind ForumName}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
-                                    <TextBlock Text="{x:Bind Title}" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
-                                </StackPanel>
+                                <TextBlock Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind AuthorUsername}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                                <TextBlock Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Text="{x:Bind ForumName}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                                <TextBlock Margin="48,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind Title}" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
