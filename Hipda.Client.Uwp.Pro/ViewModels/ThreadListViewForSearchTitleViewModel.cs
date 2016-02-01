@@ -64,7 +64,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadDataForSearchTitle(int pageNo)
         {
-            var cv = _ds.GetViewForThreadPageForSearchTitle(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad, _noDataNotice, null);
+            var cv = _ds.GetViewForThreadPageForSearchTitle(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchTitle();

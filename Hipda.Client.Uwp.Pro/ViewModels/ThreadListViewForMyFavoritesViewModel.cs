@@ -101,7 +101,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadDataForMyFavorites(int pageNo)
         {
-            var cv = _ds.GetViewForThreadPageForMyFavorites(pageNo, _beforeLoad, _afterLoad, _noDataNotice, null);
+            var cv = _ds.GetViewForThreadPageForMyFavorites(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyFavorites();

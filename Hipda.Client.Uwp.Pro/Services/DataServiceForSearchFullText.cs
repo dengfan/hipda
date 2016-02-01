@@ -158,7 +158,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadDataForSearchFullText.FirstOrDefault(t => t.Index == index);
         }
 
-        public ICollectionView GetViewForThreadPageForSearchFullText(int startPageNo, string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad, Action noDataNotice, Action loadAllFinish)
+        public ICollectionView GetViewForThreadPageForSearchFullText(int startPageNo, string searchKeyword, string searchAuthor, int searchTimeSpan, int searchForumSpan, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemForSearchFullTextModel>(
@@ -177,8 +177,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 () =>
                 {
                     return GetThreadMaxPageNoForSearchFullText();
-                },
-                loadAllFinish);
+                });
 
             return cvs.View;
         }

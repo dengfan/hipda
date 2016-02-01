@@ -501,8 +501,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 () =>
                 {
                     return GetUserMessageListMaxPageNo();
-                },
-                loadAllFinish);
+                });
 
             return cvs.View;
         }

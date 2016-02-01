@@ -95,7 +95,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 int index = data[1];
                 _threadId = data[2];
                 _ds.SetScrollState(false);
-                var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, index, _beforeLoad, _afterLoad, _listViewScroll, null);
+                var cv = _ds.GetViewForRedirectToPostByThreadId(pageNo, _threadId, index, _beforeLoad, _afterLoad, _listViewScroll);
                 if (cv != null)
                 {
                     ReplyItemCollection = cv;
@@ -106,7 +106,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadData(int pageNo)
         {
-            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _beforeLoad, _afterLoad, null);
+            var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _beforeLoad, _afterLoad);
             if (cv != null)
             {
                 _startPageNo = pageNo;
