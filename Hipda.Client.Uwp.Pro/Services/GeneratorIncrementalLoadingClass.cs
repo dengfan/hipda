@@ -12,19 +12,17 @@ namespace Hipda.Client.Uwp.Pro.Services
         Func<int, Task<int>> _getMore;
         Func<int, T> _getOne;
         Func<int> _getMaxPageNo;
-        Action _loadAllFinish; // 所有数据项均载入完毕之后执行的方法，比如为回复页显示“---完---”
         int _pageNo;
         int _loadedCount = 0; // 已载入的项的数量
         uint _showedCount = 0; // 已显示的项的数量
         bool _isFirstLoad = true;
 
-        public GeneratorIncrementalLoadingClass(int pageNo, Func<int, Task<int>> getMore, Func<int, T> getOne, Func<int> getMaxPageNo, Action loadAllFinish)
+        public GeneratorIncrementalLoadingClass(int pageNo, Func<int, Task<int>> getMore, Func<int, T> getOne, Func<int> getMaxPageNo)
         {
             _pageNo = pageNo;
             _getMore = getMore;
             _getOne = getOne;
             _getMaxPageNo = getMaxPageNo;
-            _loadAllFinish = loadAllFinish;
         }
 
         protected override bool HasMoreItemsOverride()
@@ -38,20 +36,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             int maxPage = _getMaxPageNo();
             if (_pageNo == maxPage)
             {
-                bool b1 = _showedCount < _loadedCount;
-                if (b1 == false && _loadAllFinish != null)
-                {
-                    _loadAllFinish();
-                }
-                return b1;
+                return _showedCount < _loadedCount;
             }
 
-            bool b2 = _pageNo < maxPage;
-            if (b2 == false && _loadAllFinish != null)
-            {
-                _loadAllFinish();
-            }
-            return b2;
+            return _pageNo < maxPage;
         }
 
         protected async override Task<IList<object>> LoadMoreItemsOverrideAsync(CancellationToken c, uint count)
