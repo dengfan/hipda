@@ -264,12 +264,17 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
+        int _historyItemMaxIndex = 0;
         private void ThreadHistoryListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
-            sender.SelectedItem = null;
-            if (sender.Items.Count > 0)
+            if (args.InRecycleQueue == false && args.ItemIndex > _historyItemMaxIndex)
             {
-                sender.ScrollIntoView(sender.Items.Last());
+                sender.SelectedItem = null;
+                if (sender.Items.Count > 0)
+                {
+                    sender.ScrollIntoView(sender.Items.Last());
+                    _historyItemMaxIndex = args.ItemIndex;
+                }
             }
         }
 
