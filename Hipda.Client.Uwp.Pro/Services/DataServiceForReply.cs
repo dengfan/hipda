@@ -64,6 +64,10 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     return;
                 }
+                else
+                {
+                    threadReply.Replies.Clear();
+                }
             }
             else
             {
