@@ -84,18 +84,38 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                var vm = ReplyListView.DataContext as ReplyListViewForSpecifiedPostViewModel;
-                int count = ReplyListView.Items.Count;
-
-                if (count > 0 && count <= index + 1)
+                var vmType = ReplyListView.DataContext.GetType();
+                if (vmType.Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
                 {
-                    ReplyListView.ScrollIntoView(ReplyListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                    var vm = (ReplyListViewForSpecifiedPostViewModel)ReplyListView.DataContext;
+                    int count = ReplyListView.Items.Count;
+
+                    if (count > 0 && count <= index + 1)
+                    {
+                        ReplyListView.ScrollIntoView(ReplyListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                    }
+
+                    if (count > index + 1 && vm.GetScrollState() == false)
+                    {
+                        ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
+                        vm.SetScrollState(true);
+                    }
                 }
-
-                if (count > index + 1 && vm.GetScrollState() == false)
+                else if (vmType.Equals(typeof(ReplyListViewForDefaultViewModel)))
                 {
-                    ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
-                    vm.SetScrollState(true);
+                    var vm = (ReplyListViewForDefaultViewModel)ReplyListView.DataContext;
+                    int count = ReplyListView.Items.Count;
+
+                    if (count > 0 && count <= index + 1)
+                    {
+                        ReplyListView.ScrollIntoView(ReplyListView.Items[count - 1], ScrollIntoViewAlignment.Leading);
+                    }
+
+                    if (count > index + 1 && vm.GetScrollState() == false)
+                    {
+                        ReplyListView.ScrollIntoView(ReplyListView.Items[index], ScrollIntoViewAlignment.Leading);
+                        vm.SetScrollState(true);
+                    }
                 }
             });
         }
@@ -105,7 +125,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         public void OpenReplyPageByThreadId()
         {
             var cts = new CancellationTokenSource();
-            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, BeforeLoaded, AfterLoaded);
+            RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, BeforeLoaded, AfterLoaded, ReplyListViewScrollForSpecifiedPost);
 
             #region 避免在窄视图下拖宽窗口时返回到主页时还是显示旧缓存
             var backStack = Frame.BackStack;
@@ -278,7 +298,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
                 else if (ThreadId > 0)
                 {
-                    DataContext = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, BeforeLoaded, AfterLoaded);
+                    DataContext = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, BeforeLoaded, AfterLoaded, ReplyListViewScrollForSpecifiedPost);
                 }
             }
 

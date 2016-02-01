@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Hipda.Client.Uwp.Pro.Models;
 using Windows.UI.Xaml.Data;
 using Hipda.Client.Uwp.Pro.Commands;
 using Hipda.Client.Uwp.Pro.Services;
 using Windows.UI.Xaml.Controls;
 using System.Threading;
-using Windows.UI.Xaml.Media;
-using Windows.UI;
-using Windows.UI.Xaml;
-using System.Collections.ObjectModel;
-using Windows.UI.Core;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -28,6 +18,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         ListView _replyListView;
         Action _beforeLoad;
         Action<int, int> _afterLoad;
+        Action<int> _listViewScroll;
         DataServiceForReply _ds;
 
         public DelegateCommand RefreshReplyCommand { get; set; }
@@ -49,12 +40,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ReplyListViewForDefaultViewModel(CancellationTokenSource cts, int threadId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad)
+        public ReplyListViewForDefaultViewModel(CancellationTokenSource cts, int threadId, ListView replyListView, Action beforeLoad, Action<int, int> afterLoad, Action<int> listViewScroll)
         {
             _threadId = threadId;
             _replyListView = replyListView;
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
+            _listViewScroll = listViewScroll;
             _ds = new DataServiceForReply();
 
             RefreshReplyCommand = new DelegateCommand();
@@ -78,7 +70,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             LoadLastPageDataCommand.ExecuteAction = (p) =>
             {
                 _ds.ClearReplyData(_threadId);
-                LoadData(_ds.GetReplyMaxPageNo());
+                LoadLastData(cts);
             };
 
             LoadData(_startPageNo);
@@ -94,6 +86,25 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        async void LoadLastData(CancellationTokenSource cts)
+        {
+            // 直接载入并定位到最后一个回复
+            int[] data = await _ds.LoadReplyDataForRedirectToLastPostAsync(_threadId, cts);
+            if (data != null)
+            {
+                int pageNo = data[0];
+                int index = data[1];
+                _threadId = data[2];
+                _ds.SetScrollState(false);
+                var cv = _ds.GetViewForRedirectReplyPageByThreadId(pageNo, _threadId, index, _beforeLoad, _afterLoad, _listViewScroll, null);
+                if (cv != null)
+                {
+                    ReplyItemCollection = cv;
+                    _startPageNo = pageNo;
+                }
+            }
+        }
+
         public void LoadPrevPageData()
         {
             if (_startPageNo > 1)
@@ -101,6 +112,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 _ds.ClearReplyData(_threadId);
                 LoadData(_startPageNo - 1);
             }
+        }
+
+        public bool GetScrollState()
+        {
+            return _ds.GetScrollState();
+        }
+
+        public void SetScrollState(bool isCompleted)
+        {
+            _ds.SetScrollState(isCompleted);
         }
     }
 }

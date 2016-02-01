@@ -88,7 +88,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         async void FirstLoad(CancellationTokenSource cts)
         {
             // 先载入第一个转跳到的页面的数据，并得到页码之后即可进入正常流程
-            int[] data = await _ds.LoadReplyDataForRedirectReplyPageAsync(_postId, cts);
+            int[] data = await _ds.LoadReplyDataForRedirectToSpecifiedPostAsync(_postId, cts);
             if (data != null)
             {
                 int pageNo = data[0];
