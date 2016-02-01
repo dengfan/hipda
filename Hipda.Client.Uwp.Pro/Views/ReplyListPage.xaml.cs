@@ -68,14 +68,16 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             rightProgress.IsActive = true;
             rightProgress.Visibility = Visibility.Visible;
-            ReplyRefreshButton.IsEnabled = false;
+            ReplyRefreshToFirstPageButton.IsEnabled = false;
+            ReplyRefreshToLastPageButton.IsEnabled = false;
         }
 
         void AfterLoaded(int threadId, int pageNo)
         {
             rightProgress.IsActive = false;
             rightProgress.Visibility = Visibility.Collapsed;
-            ReplyRefreshButton.IsEnabled = true;
+            ReplyRefreshToFirstPageButton.IsEnabled = true;
+            ReplyRefreshToLastPageButton.IsEnabled = true;
         }
 
         async void ReplyListViewScrollForSpecifiedPost(int index)

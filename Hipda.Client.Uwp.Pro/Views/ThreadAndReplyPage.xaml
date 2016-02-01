@@ -135,9 +135,19 @@
                 </Grid.RowDefinitions>
 
                 <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-                    <AppBarButton x:Name="ReplyRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshReplyCommand}"/>
-                    <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
+                    <AppBarButton x:Name="AddToFavoritesButton" Label="加入收藏" Command="{Binding RefreshReplyCommand}">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE734;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton x:Name="ReplyRefreshToFirstPageButton" Icon="Refresh" Label="刷新到首页" Command="{Binding RefreshReplyCommand}"/>
+                    <AppBarButton x:Name="ReplyRefreshToLastPageButton" Label="刷新到尾页" Command="{Binding LoadLastPageDataCommand}">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE777;"/>
+                        </AppBarButton.Icon>
+                    </AppBarButton>
                     <CommandBar.SecondaryCommands>
+                        <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
                         <AppBarButton Label="复制链接"/>
                         <AppBarButton Label="在浏览器中打开"/>
                     </CommandBar.SecondaryCommands>

@@ -98,14 +98,16 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             leftProgress.IsActive = true;
             leftProgress.Visibility = Visibility.Visible;
-            ReplyRefreshButton.IsEnabled = false;
+            ReplyRefreshToFirstPageButton.IsEnabled = false;
+            ReplyRefreshToLastPageButton.IsEnabled = false;
         }
 
         private void LeftAfterLoaded()
         {
             leftProgress.IsActive = false;
             leftProgress.Visibility = Visibility.Collapsed;
-            ReplyRefreshButton.IsEnabled = true;
+            ReplyRefreshToFirstPageButton.IsEnabled = true;
+            ReplyRefreshToLastPageButton.IsEnabled = true;
         }
 
         private void LeftNoDataNotice()
@@ -118,14 +120,16 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             rightProgress.IsActive = true;
             rightProgress.Visibility = Visibility.Visible;
-            ReplyRefreshButton.IsEnabled = false;
+            ReplyRefreshToFirstPageButton.IsEnabled = false;
+            ReplyRefreshToLastPageButton.IsEnabled = false;
         }
 
         private void RightAfterLoaded(int threadId, int pageNo)
         {
             rightProgress.IsActive = false;
             rightProgress.Visibility = Visibility.Collapsed;
-            ReplyRefreshButton.IsEnabled = true;
+            ReplyRefreshToFirstPageButton.IsEnabled = true;
+            ReplyRefreshToLastPageButton.IsEnabled = true;
 
             bool isShown = DataServiceForReply.CanShowButtonForLoadPrevReplyPage(threadId);
             if (isShown)

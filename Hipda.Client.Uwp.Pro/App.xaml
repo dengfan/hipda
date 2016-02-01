@@ -328,7 +328,7 @@
                     <Button.Template>
                         <ControlTemplate>
                             <Border Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20">
-                                <TextBlock Text="&#xE14A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                                <TextBlock Text="&#xE777;" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
