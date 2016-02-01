@@ -20,6 +20,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         static ThreadHistoryListBoxViewModel _threadHistoryListBoxViewModel = (ThreadHistoryListBoxViewModel)App.Current.Resources["ThreadHistoryListBoxViewModel"];
         static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
+        static int _pageSize = 50;
         int _maxPageNo = 1;
         bool _isScrollCompleted = false;
 
@@ -59,14 +60,28 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
                 #endregion
 
-                int count = threadReply.Replies.Count(r => r.PageNo == pageNo);
-                if (count > 0)
+                var pageData = threadReply.Replies.Where(r => r.PageNo == pageNo);
+                if (pageData != null && pageData.Count() > 0)
                 {
-                    return;
+                    var lastItem = pageData.Last();
+                    if (lastItem != null)
+                    {
+                        if (lastItem.Index2 == _pageSize) // 当前页已加载满
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            threadReply.Replies.RemoveAll(r => r.PageNo == pageNo);
+                        }
+                    }
                 }
                 else
                 {
-                    threadReply.Replies.Clear();
+                    if (pageNo == 1 && threadReply.Replies.Count > 0)
+                    {
+                        threadReply.Replies.Clear();
+                    }
                 }
             }
             else
@@ -211,7 +226,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, false);
+                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, false);
                 threadReply.Replies.Add(reply);
 
                 i++;
@@ -224,7 +239,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (j > 1)
             {
                 var lastItem = threadReply.Replies.Last();
-                var flag = new ReplyItemModel(lastItem.Index + 1, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
                 flag.IsLast = true;
                 threadReply.Replies.Add(flag);
             }
@@ -462,6 +477,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
             int i = 0;
+            int j = 1;
             foreach (var item in data)
             {
                 var mainTable = item.Descendants().FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", "").StartsWith("pid"));
@@ -492,6 +508,13 @@ namespace Hipda.Client.Uwp.Pro.Services
                         authorUserId = Convert.ToInt32(authorUserIdStr);
                     }
                     authorUsername = authorNode.InnerText;
+                }
+
+                // 判断当前用户是否已被屏蔽，是则跳过
+                if (_myRoamingSettings.BlockUsers.Any(u => u.UserId == authorUserId && u.ForumId == forumId))
+                {
+                    j++;
+                    continue;
                 }
 
                 var floorPostInfoNode = postContentNode.ChildNodes.FirstOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
@@ -554,19 +577,20 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, targetPostId == postId);
+                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, targetPostId == postId);
                 threadReply.Replies.Add(reply);
 
                 i++;
+                j++;
             }
 
             // 如果本次有加载到数据，则为数据列表的末尾添加一项“载入已完成”的标记项
             // 方便在加载完成时显示“---完---”
             // 注意在下一页开始加载前移除此标记项
-            if (i > 0)
+            if (j > 1)
             {
                 var lastItem = threadReply.Replies.Last();
-                var flag = new ReplyItemModel(lastItem.Index + 1, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
                 flag.IsLast = true;
                 threadReply.Replies.Add(flag);
             }
@@ -660,6 +684,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("postlist")).ChildNodes;
             int i = 0;
+            int j = 1;
             foreach (var item in data)
             {
                 var mainTable = item.Descendants().FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", "").StartsWith("pid"));
@@ -690,6 +715,13 @@ namespace Hipda.Client.Uwp.Pro.Services
                         authorUserId = Convert.ToInt32(authorUserIdStr);
                     }
                     authorUsername = authorNode.InnerText;
+                }
+
+                // 判断当前用户是否已被屏蔽，是则跳过
+                if (_myRoamingSettings.BlockUsers.Any(u => u.UserId == authorUserId && u.ForumId == forumId))
+                {
+                    j++;
+                    continue;
                 }
 
                 var floorPostInfoNode = postContentNode.ChildNodes.FirstOrDefault(n => n.GetAttributeValue("class", "").StartsWith("postinfo")); // div
@@ -752,10 +784,11 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, false);
+                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, false);
                 threadReply.Replies.Add(reply);
 
                 i++;
+                j++;
             }
 
             // 如果本次有加载到数据，则为数据列表的末尾添加一项“载入已完成”的标记项
@@ -764,7 +797,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (i > 0)
             {
                 var lastItem = threadReply.Replies.Last();
-                var flag = new ReplyItemModel(lastItem.Index + 1, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
                 flag.IsLast = true;
                 threadReply.Replies.Add(flag);
             }
