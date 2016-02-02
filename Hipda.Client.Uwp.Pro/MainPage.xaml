@@ -166,6 +166,10 @@
             </StackPanel>
         </DataTemplate>
 
+        <DataTemplate x:Key="ForumAllCategoryListView">
+            <ListView ItemsSource="{Binding ForumAllCategoryList}"/>
+        </DataTemplate>
+
         <local:NavButtonListItemTemplateSelector x:Key="navButtonListItemTemplateSelector"
                                                  NavButtonBySearchItemTemplate="{StaticResource NavButtonBySearchItemTemplate}"
                                                  NavButtonByMyItemItemTemplate="{StaticResource NavButtonByMyItemItemTemplate}"
@@ -487,11 +491,11 @@
                         
                         <ToggleSwitch Margin="0,0,0,8" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" IsOn="{Binding CanShowTopThread,Source={StaticResource MyRoamingSettings},Mode=TwoWay}">
                             <ToggleSwitch.Header>
-                                <TextBlock Text="&#x2601; 显示置顶贴，更改后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                                <TextBlock Text="&#x2601; 显示置顶贴" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                             </ToggleSwitch.Header>
                         </ToggleSwitch>
 
-                        <TextBlock Margin="0,0,0,8" Text="&#x2601; 屏蔽的用户，添加后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Margin="0,0,0,8" Text="&#x2601; 屏蔽的用户" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MyRoamingSettings},Mode=TwoWay}"
                                  SelectionMode="Multiple" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                  SelectionChanged="BlockUsersListBox_SelectionChanged">
@@ -510,10 +514,11 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+                        <TextBlock Text="-------- 您是一个包容的人 --------" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" HorizontalAlignment="Center"/>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
                                 Content="解除选中用户" Style="{StaticResource NormalButtonStyle}" Click="UnblockUsers"/>
 
-                        <TextBlock Margin="0,12,0,8" Text="&#x2601; 屏蔽的主题，添加后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Margin="0,12,0,8" Text="&#x2601; 屏蔽的主题" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ListBox x:Name="BlockThreadsListBox" ItemsSource="{Binding BlockThreads,Source={StaticResource MyRoamingSettings},Mode=TwoWay}"
                                  SelectionMode="Multiple" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                  SelectionChanged="BlockThreadsListBox_SelectionChanged">
@@ -533,6 +538,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+                        <TextBlock Text="-------- 您是一个豁达的人 --------" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" HorizontalAlignment="Center"/>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
                                 Content="解除选中主题" Style="{StaticResource NormalButtonStyle}"
                                 Click="UnblockThreads"/>
