@@ -469,13 +469,8 @@
                         <Slider Minimum="14" Maximum="22" Value="{Binding FontSize1,Source={StaticResource MyLocalSettings},Mode=TwoWay}"/>
                         <TextBlock Text="行高调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <Slider Minimum="20" Maximum="48" Value="{Binding LineHeight,Source={StaticResource MyLocalSettings},Mode=TwoWay}"/>
-                        <ToggleSwitch Margin="0,0,0,8" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" IsOn="{Binding CanShowTopThread,Source={StaticResource MyRoamingSettings},Mode=TwoWay}">
-                            <ToggleSwitch.Header>
-                                <TextBlock Text="显示置顶贴，更改后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                            </ToggleSwitch.Header>
-                        </ToggleSwitch>
 
-                        <Grid Margin="0,0,0,12">
+                        <Grid Margin="0,0,0,16">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="8"/>
@@ -489,8 +484,14 @@
                             </Button>
                             <Button Grid.Column="2" Content="清除" Style="{StaticResource NormalButtonStyle}" Click="ClearImageCacheData"/>
                         </Grid>
+                        
+                        <ToggleSwitch Margin="0,0,0,8" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" IsOn="{Binding CanShowTopThread,Source={StaticResource MyRoamingSettings},Mode=TwoWay}">
+                            <ToggleSwitch.Header>
+                                <TextBlock Text="&#x2601; 显示置顶贴，更改后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                            </ToggleSwitch.Header>
+                        </ToggleSwitch>
 
-                        <TextBlock Margin="0,0,0,8" Text="屏蔽的用户，添加后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Margin="0,0,0,8" Text="&#x2601; 屏蔽的用户，添加后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ListBox x:Name="BlockUsersListBox" ItemsSource="{Binding BlockUsers,Source={StaticResource MyRoamingSettings},Mode=TwoWay}"
                                  SelectionMode="Multiple" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                  SelectionChanged="BlockUsersListBox_SelectionChanged">
@@ -512,7 +513,7 @@
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
                                 Content="解除选中用户" Style="{StaticResource NormalButtonStyle}" Click="UnblockUsers"/>
 
-                        <TextBlock Margin="0,12,0,8" Text="屏蔽的主题，添加后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Margin="0,12,0,8" Text="&#x2601; 屏蔽的主题，添加后刷新生效" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <ListBox x:Name="BlockThreadsListBox" ItemsSource="{Binding BlockThreads,Source={StaticResource MyRoamingSettings},Mode=TwoWay}"
                                  SelectionMode="Multiple" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
                                  SelectionChanged="BlockThreadsListBox_SelectionChanged">
@@ -536,7 +537,7 @@
                                 Content="解除选中主题" Style="{StaticResource NormalButtonStyle}"
                                 Click="UnblockThreads"/>
 
-                        <HyperlinkButton Margin="0,12,0,12" HorizontalAlignment="Center" Content="购买 [移除广告] 服务"/>
+                        <HyperlinkButton Margin="0,14,0,14" HorizontalAlignment="Center" Content="购买 [移除广告] 服务"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>

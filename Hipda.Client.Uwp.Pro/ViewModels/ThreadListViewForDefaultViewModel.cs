@@ -52,7 +52,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             };
 
             var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
-            var btnRefresh = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
+            var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
             btnRefresh.Command = refreshThreadCommand;
             var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
             _leftCommandBar.PrimaryCommands.Add(btnAdd);
