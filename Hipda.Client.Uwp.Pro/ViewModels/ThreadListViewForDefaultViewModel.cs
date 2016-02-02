@@ -20,7 +20,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _beforeLoad;
         Action _afterLoad;
         Action _noDataNotice;
-        DataServiceForDefault _ds;
+        ThreadService _ds;
 
         public int ThreadMaxPageNo { get; set; }
 
@@ -41,7 +41,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _noDataNotice = noDataNotice;
-            _ds = new DataServiceForDefault();
+            _ds = new ThreadService();
 
             LoadData(pageNo, _forumId);
 

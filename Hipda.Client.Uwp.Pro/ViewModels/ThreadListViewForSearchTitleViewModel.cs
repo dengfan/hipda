@@ -18,7 +18,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _beforeLoad;
         Action _afterLoad;
         Action _noDataNotice;
-        DataServiceForSearchTitle _ds;
+        SearchTitleService _ds;
 
         string _searchKeyword;
         string _searchAuthor;
@@ -48,7 +48,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _noDataNotice = noDataNotice;
-            _ds = new DataServiceForSearchTitle();
+            _ds = new SearchTitleService();
 
             // 先清除已搜索的数据
             _ds.ClearThreadDataForSearchTitle();

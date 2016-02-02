@@ -18,7 +18,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _beforeLoad;
         Action _afterLoad;
         Action _noDataNotice;
-        DataServiceForSearchFullText _ds;
+        SearchFullTextService _ds;
 
         string _searchKeyword;
         string _searchAuthor;
@@ -48,7 +48,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _noDataNotice = noDataNotice;
-            _ds = new DataServiceForSearchFullText();
+            _ds = new SearchFullTextService();
 
             // 先清除已搜索的数据
             _ds.ClearThreadDataForSearchFullText();

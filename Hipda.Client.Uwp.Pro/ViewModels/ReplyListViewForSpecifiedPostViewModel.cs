@@ -28,7 +28,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _beforeLoad;
         Action<int, int> _afterLoad;
         Action<int> _listViewScroll;
-        DataServiceForReply _ds;
+        ReplyService _ds;
 
         public DelegateCommand RefreshReplyCommand { get; set; }
 
@@ -56,7 +56,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _listViewScroll = listViewScroll;
-            _ds = new DataServiceForReply();
+            _ds = new ReplyService();
 
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) =>

@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public class DataServiceForMyFavorites
+    public class MyFavoritesService
     {
         static List<ThreadItemForMyFavoritesModel> _threadDataForMyFavorites = new List<ThreadItemForMyFavoritesModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();

@@ -131,7 +131,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             ReplyRefreshToFirstPageButton.IsEnabled = true;
             ReplyRefreshToLastPageButton.IsEnabled = true;
 
-            bool isShown = DataServiceForReply.CanShowButtonForLoadPrevReplyPage(threadId);
+            bool isShown = ReplyService.CanShowButtonForLoadPrevReplyPage(threadId);
             if (isShown)
             {
                 ReplyListView.HeaderTemplate = (DataTemplate)App.Current.Resources["ReplyListViewHeaderTemplate"];

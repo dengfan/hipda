@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public class DataServiceForSearchTitle
+    public class SearchTitleService
     {
         static List<ThreadItemForSearchTitleModel> _threadDataForSearchTitle = new List<ThreadItemForSearchTitleModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();

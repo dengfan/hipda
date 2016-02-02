@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public class DataServiceForSearchFullText
+    public class SearchFullTextService
     {
         static List<ThreadItemForSearchFullTextModel> _threadDataForSearchFullText = new List<ThreadItemForSearchFullTextModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();

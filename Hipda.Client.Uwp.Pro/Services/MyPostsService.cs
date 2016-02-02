@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public class DataServiceForMyPosts
+    public class MyPostsService
     {
         static List<ThreadItemForMyPostsModel> _threadDataForMyPosts = new List<ThreadItemForMyPostsModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();

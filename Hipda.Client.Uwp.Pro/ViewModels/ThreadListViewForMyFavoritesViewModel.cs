@@ -19,7 +19,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _beforeLoad;
         Action _afterLoad;
         Action _noDataNotice;
-        DataServiceForMyFavorites _ds;
+        MyFavoritesService _ds;
 
         public int ThreadMaxPageNo { get; set; }
 
@@ -39,7 +39,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _noDataNotice = noDataNotice;
-            _ds = new DataServiceForMyFavorites();
+            _ds = new MyFavoritesService();
 
             LoadDataForMyFavorites(pageNo);
 
