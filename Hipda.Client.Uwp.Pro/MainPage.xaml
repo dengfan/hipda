@@ -169,7 +169,10 @@
         <local:ForumAllCategoryListViewGroupStyleSelector x:Key="ForumAllCategoryListViewGroupStyleSelector"/>
         <CollectionViewSource x:Name="ForumAllCategoryListViewCollectionViewSource" IsSourceGrouped="True" ItemsPath="Forums" Source="{Binding ForumAllCategoryList,Source={StaticResource ForumAllCategoryListViewViewModel}}"/>
         <DataTemplate x:Key="ForumAllCategoryListViewDataTemplate">
-            <ListView ItemsSource="{Binding Source={StaticResource ForumAllCategoryListViewCollectionViewSource}}" GroupStyleSelector="{StaticResource ResourceKey=ForumAllCategoryListViewGroupStyleSelector}">
+            <ListView ItemsSource="{Binding Source={StaticResource ForumAllCategoryListViewCollectionViewSource}}"
+                      GroupStyleSelector="{StaticResource ForumAllCategoryListViewGroupStyleSelector}"
+                      SelectionMode="None" IsItemClickEnabled="True"
+                      ItemClick="ForumAllCategoryListView_ItemClick">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>

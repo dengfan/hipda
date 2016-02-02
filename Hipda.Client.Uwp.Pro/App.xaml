@@ -18,7 +18,7 @@
         <GroupStyle x:Key="ForumAllCategoryListViewGroupStyle">
             <GroupStyle.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding ForumGroupName}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
+                    <TextBlock Text="{Binding ForumGroupName}" FontWeight="Bold" FontSize="15" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
                 </DataTemplate>
             </GroupStyle.HeaderTemplate>
         </GroupStyle>

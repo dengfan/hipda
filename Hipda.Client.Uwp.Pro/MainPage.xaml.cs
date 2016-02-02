@@ -310,6 +310,14 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
+        private void ForumAllCategoryListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var item = (ForumModel)e.ClickedItem;
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), $"fid={item.Id}");
+
+            HideLeftSwipePanel();
+        }
+
         private void ShowHistoryRecordButton_Click(object sender, RoutedEventArgs e)
         {
             FindName("RightSwipePanel");
@@ -733,6 +741,7 @@ namespace Hipda.Client.Uwp.Pro
             new RoamingSettingsService().UnblockThreads(_unblockThreadKeys);
             _unblockThreadKeys.Clear();
         }
+
 
 
         #endregion
