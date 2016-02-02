@@ -137,17 +137,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     new FaceItemModel { Image = "/Assets/Faces/baoman_25.png", Value = "[img=100,0]http://www.hi-pda.com/forum/attachments/day_140715/14071522172bd4de9ae043edab.png[/img]", Text = ":暴漫25:"}
                 };
 
-            EmojiIcons.Add(new EmojiItemModel { Label= ":grinning:", Value= "\uD83D\uDE00" }); // 😀
-            EmojiIcons.Add(new EmojiItemModel { Label = ":grin:", Value= "\uD83D\uDE01" }); // 😁
-            EmojiIcons.Add(new EmojiItemModel { Label = ":joy:", Value= "\uD83D\uDE02" }); // 😂
-            EmojiIcons.Add(new EmojiItemModel { Label = ":smiley:", Value= "\uD83D\uDE03" }); // 😃
-            EmojiIcons.Add(new EmojiItemModel { Label = ":smile:", Value= "\uD83D\uDE04" }); // 😄
-            EmojiIcons.Add(new EmojiItemModel { Label = ":sweat_smile:", Value= "\uD83D\uDE05" }); // 😅
-            EmojiIcons.Add(new EmojiItemModel { Label = ":laughing:", Value= "\uD83D\uDE06" }); // 😆
-            EmojiIcons.Add(new EmojiItemModel { Label = ":innocent:", Value= "\uD83D\uDE07" }); // 😇
-            EmojiIcons.Add(new EmojiItemModel { Label = ":smiling_imp:", Value= "\uD83D\uDE08" }); // 😈
-            EmojiIcons.Add(new EmojiItemModel { Label = ":wink:", Value= "\uD83D\uDE09" }); // 😉
-            EmojiIcons.Add(new EmojiItemModel { Label = ":blush:", Value= "\uD83D\uDE0A" }); // 😊
+            foreach (var pair in Common.EmojiDic)
+            {
+                EmojiIcons.Add(new EmojiItemModel { Label = pair.Key, Value = pair.Value });
+            }
         }
 
         public async Task<List<string>> UploadFiles(CancellationTokenSource cts, Action<int, int, string> beforeUpload, Action<string> insertCodeIntoTextBox, Action<int> afterUpload)

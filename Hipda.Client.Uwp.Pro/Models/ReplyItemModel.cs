@@ -107,7 +107,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 
                 try
                 {
-                    return XamlReader.Load(XamlStr);
+                    return XamlReader.Load(Common.ReplaceEmojiLabel(XamlStr));
                 }
                 catch
                 {

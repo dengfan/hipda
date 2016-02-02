@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hipda.Client.Uwp.Pro.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,18 @@ namespace Hipda.Client.Uwp.Pro.Models
         /// </summary>
         public int PostId { get; set; }
 
-        public string Title { get; set; }
+        private string _title;
+        public string Title
+        {
+            get
+            {
+                return Common.ReplaceEmojiLabel(_title);
+            }
+            set
+            {
+                _title = value;
+            }
+        }
 
         public int ForumId { get; set; }
 
