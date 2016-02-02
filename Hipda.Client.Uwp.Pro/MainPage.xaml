@@ -526,7 +526,8 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <TextBlock Text="-------- 您是一个包容的人 --------" HorizontalAlignment="Center"
+                        <TextBlock Text="-------- 赞！您是一个包容的人 --------" HorizontalAlignment="Center"
+                                   FontSize="{ThemeResource ToolTipContentThemeFontSize}"
                                    Visibility="{Binding BlockUsers.Count,Source={StaticResource MyRoamingSettings},Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}"
                                    Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
@@ -553,7 +554,8 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <TextBlock Text="-------- 您是一个豁达的人 --------" HorizontalAlignment="Center"
+                        <TextBlock Text="-------- 赞！您是一个豁达的人 --------" HorizontalAlignment="Center"
+                                   FontSize="{ThemeResource ToolTipContentThemeFontSize}"
                                    Visibility="{Binding BlockThreads.Count,Source={StaticResource MyRoamingSettings},Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}"
                                    Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
