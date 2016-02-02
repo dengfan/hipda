@@ -1,9 +1,11 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -21,7 +23,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
 {
     public sealed partial class QuickReply : UserControl
     {
-
+        static QuickReplyViewModel _vm = (QuickReplyViewModel)App.Current.Resources["QuickReplyViewModel"];
 
         public int ThreadId
         {
@@ -113,11 +115,39 @@ namespace Hipda.Client.Uwp.Pro.Controls
             ReplyContentTextBox.SelectionStart = cursorPosition + faceText.Length;
         }
 
+        static List<string> _imageNameList = new List<string>();
         private async void SendButton_Click(object sender, RoutedEventArgs e)
         {
             if (ThreadId > 0)
             {
+                var cts = new CancellationTokenSource();
+                bool flag = await _vm.Post(cts, ReplyContentTextBox.Text, _imageNameList, ThreadId);
+                await new MessageDialog(flag.ToString()).ShowAsync();
+            }
+        }
 
+        void InsertImageCodeIntoReplyContentTextBox(string imageCode)
+        {
+            int occurences = 0;
+            string originalContent = ReplyContentTextBox.Text;
+
+            for (var i = 0; i < ReplyContentTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = ReplyContentTextBox.SelectionStart + occurences;
+            ReplyContentTextBox.Text = ReplyContentTextBox.Text.Insert(cursorPosition, imageCode);
+        }
+
+        private async void FileButton_Click(object sender, RoutedEventArgs e)
+        {
+            var cts = new CancellationTokenSource();
+            var data = await _vm.UploadFiles(cts, null, InsertImageCodeIntoReplyContentTextBox, null);
+            if (data != null && data.Count > 0)
+            {
+                _imageNameList.AddRange(data);
             }
         }
     }

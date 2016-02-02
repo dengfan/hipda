@@ -380,7 +380,7 @@
                     <c:MyAvatarForThread UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" ThreadTitle="{Binding ThreadTitle}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                     <StackPanel Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
@@ -421,7 +421,7 @@
 
                 <Border Margin="54,0,16,32" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
-                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
@@ -465,7 +465,7 @@
 
                 <Border Margin="54,0,16,32" Padding="8" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
-                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
@@ -508,7 +508,7 @@
 
                 <Border Margin="16,0,54,32" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <StackPanel>
-                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>

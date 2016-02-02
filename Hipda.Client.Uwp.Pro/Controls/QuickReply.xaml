@@ -9,7 +9,8 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <Grid x:Name="ReplyPanel" VerticalAlignment="Bottom" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
+    <Grid x:Name="ReplyPanel" VerticalAlignment="Bottom" DataContext="{Binding Source={StaticResource QuickReplyViewModel}}"
+          Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" />
@@ -21,7 +22,7 @@
                 </Button.Content>
                 <Button.Flyout>
                     <Flyout>
-                        <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource QuickReplyViewModel}}"
+                        <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons}"
                                   SelectionMode="None" IsItemClickEnabled="True" Width="300" Height="290"
                                   ItemClick="FaceGridView_ItemClick">
                             <GridView.ItemContainerStyle>
@@ -45,7 +46,7 @@
                 </Button.Content>
                 <Button.Flyout>
                     <Flyout>
-                        <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource QuickReplyViewModel}}"
+                        <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons}"
                                   SelectionMode="None" IsItemClickEnabled="True" Width="300" Height="290"
                                   ItemClick="EmojiGridView_ItemClick">
                             <GridView.ItemContainerStyle>
@@ -63,7 +64,7 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
-            <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}">
+            <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}" Click="FileButton_Click">
                 <Button.Content>
                     <SymbolIcon Symbol="Attach" />
                 </Button.Content>
