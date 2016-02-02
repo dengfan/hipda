@@ -65,32 +65,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         public ThreadAndReplyPage()
         {
             this.InitializeComponent();
-            this.SizeChanged += ThreadAndReplyPage_SizeChanged;
-        }
-
-        private void ThreadAndReplyPage_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
-            if (userInteractionType.Equals("Touch"))
-            {
-                FaceButton.Width = 80;
-                FaceButton.Height = 40;
-                FileButton.Width = 80;
-                FileButton.Height = 40;
-                SendButton.Width = 80;
-                SendButton.Height = 40;
-            }
-            else if (userInteractionType.Equals("Mouse"))
-            {
-                FaceButton.Width = 36;
-                FaceButton.Height = 32;
-                FileButton.Width = 36;
-                FileButton.Height = 32;
-                SendButton.Width = 80;
-                SendButton.Height = 32;
-            }
-
-            PostReplyTextBox.MaxHeight = this.ActualHeight / 2;
         }
 
         #region 委托事件
@@ -405,7 +379,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void PostDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             var data = sender.DataContext as ReplyItemModel;
-            PostReplyTextBox.Text = data.TextStr;
+            //PostReplyTextBox.Text = data.TextStr;
         }
     }
 }

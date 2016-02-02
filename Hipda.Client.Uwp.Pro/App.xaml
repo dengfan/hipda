@@ -12,6 +12,7 @@
         <local:RoamingSettingsDependencyObject x:Key="MyRoamingSettings"/>
         <vm:ForumAllCategoryListViewViewModel x:Key="ForumAllCategoryListViewViewModel"/>
         <vm:ThreadHistoryListBoxViewModel x:Key="ThreadHistoryListBoxViewModel"/>
+        <vm:QuickReplyViewModel x:Key="QuickReplyViewModel"/>
         <cvt:ThemeTypeToRequestedThemeConverter x:Key="ThemeTypeToRequestedThemeConverter"/>
         <cvt:UserIdToAvatarUriConverter x:Key="UserIdToAvatarUriConverter"/>
 

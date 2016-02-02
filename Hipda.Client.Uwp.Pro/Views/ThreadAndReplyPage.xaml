@@ -6,6 +6,7 @@
     xmlns:root="using:Hipda.Client.Uwp.Pro"
     xmlns:vm="using:Hipda.Client.Uwp.Pro.ViewModels"
     xmlns:t="using:Hipda.Client.Uwp.Pro.Triggers"
+    xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
     xmlns:pr="using:PullToRefresh.UWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -164,54 +165,7 @@
 
                 <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
-                <Grid Grid.Row="1" x:Name="ReplyPanel" VerticalAlignment="Bottom"
-                        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
-                            <Button.Content>
-                                <SymbolIcon Symbol="Emoji2" />
-                            </Button.Content>
-                            <Button.Flyout>
-                                <Flyout>
-                                    <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceData}" SelectionMode="None" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" Width="300" Height="290">
-                                        <GridView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            </DataTemplate>
-                                        </GridView.ItemTemplate>
-                                    </GridView>
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                        <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}">
-                            <Button.Content>
-                                <SymbolIcon Symbol="Attach" />
-                            </Button.Content>
-                        </Button>
-                    </StackPanel>
-                    <TextBox Grid.Row="1" x:Name="PostReplyTextBox" Template="{StaticResource TextBoxTemplate1}"
-                             MaxHeight="280" MinHeight="64" Padding="8,4" Background="Transparent" BorderThickness="0"
-                             TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容，回车可换行。"/>
-                    <Button Grid.Row="1" x:Name="SendButton" Margin="0,0,12,12" Command="{Binding PostReplyCommand}"
-                            Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
-                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
-                            HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Border Background="{TemplateBinding Background}" CornerRadius="8">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <SymbolIcon Symbol="Send" />
-                                        <TextBlock Text=" 发送"/>
-                                    </StackPanel>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-                </Grid>
+                <c:QuickReply Grid.Row="1"/>
             </Grid>
         </Grid>
     </Grid>

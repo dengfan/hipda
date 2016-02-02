@@ -102,6 +102,9 @@
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Controls\MyAvatarForReply.cs" />
     <Compile Include="Controls\MyListViewForUserMessageList.cs" />
+    <Compile Include="Controls\QuickReply.xaml.cs">
+      <DependentUpon>QuickReply.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UserMessageBox.xaml.cs">
       <DependentUpon>UserMessageBox.xaml</DependentUpon>
     </Compile>
@@ -175,6 +178,7 @@
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\ContentDialogForPostDetailViewModel.cs" />
+    <Compile Include="ViewModels\QuickReplyViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForDefaultViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForSpecifiedPostViewModel.cs" />
     <Compile Include="ViewModels\ThreadHistoryListBoxViewModel.cs" />
@@ -308,6 +312,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\QuickReply.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\UserMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
