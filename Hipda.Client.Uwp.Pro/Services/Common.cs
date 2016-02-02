@@ -99,7 +99,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public static string ReplaceEmojiLabel(string txt)
         {
-            var matchs = new Regex(@":[a-z_]{3,16}:").Matches(txt);
+            var matchs = new Regex(@":[a-z_]{3,30}:").Matches(txt);
             if (matchs != null && matchs.Count > 0)
             {
                 for (int i = 0; i < matchs.Count; i++)
