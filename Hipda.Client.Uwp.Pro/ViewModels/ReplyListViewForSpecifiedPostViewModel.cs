@@ -62,7 +62,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand.ExecuteAction = (p) =>
             {
                 _ds.ClearReplyData(_threadId);
-                LoadData(_startPageNo);
+                LoadData(1);
             };
 
             LoadPrevPageDataCommand = new DelegateCommand();
