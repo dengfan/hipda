@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public class ReplyService
+    public class ReplyListService
     {
         static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
         static ThreadHistoryListBoxViewModel _threadHistoryListBoxViewModel = (ThreadHistoryListBoxViewModel)App.Current.Resources["ThreadHistoryListBoxViewModel"];

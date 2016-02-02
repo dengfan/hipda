@@ -143,5 +143,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             EmojiIcons.Add(new EmojiItemModel { Label = ":wink:", Value= "\uD83D\uDE09" }); // 😉
             EmojiIcons.Add(new EmojiItemModel { Label = ":blush:", Value= "\uD83D\uDE0A" }); // 😊
         }
+
+        public async Task<bool> Post(string content, int threadId)
+        {
+
+        }
     }
 }

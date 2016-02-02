@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -20,6 +21,20 @@ namespace Hipda.Client.Uwp.Pro.Controls
 {
     public sealed partial class QuickReply : UserControl
     {
+
+
+        public int ThreadId
+        {
+            get { return (int)GetValue(ThreadIdProperty); }
+            set { SetValue(ThreadIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ThreadIdProperty =
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(QuickReply), new PropertyMetadata(0));
+
+
+
         public QuickReply()
         {
             this.InitializeComponent();
@@ -96,6 +111,14 @@ namespace Hipda.Client.Uwp.Pro.Controls
             int cursorPosition = ReplyContentTextBox.SelectionStart + occurences;
             ReplyContentTextBox.Text = ReplyContentTextBox.Text.Insert(cursorPosition, faceText);
             ReplyContentTextBox.SelectionStart = cursorPosition + faceText.Length;
+        }
+
+        private async void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ThreadId > 0)
+            {
+
+            }
         }
     }
 }

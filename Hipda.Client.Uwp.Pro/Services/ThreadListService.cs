@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public class ThreadService
+    public class ThreadListService
     {
         static RoamingSettingsDependencyObject _myRoamingSettings = ((RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"]);
         static List<ThreadItemModel> _threadData = new List<ThreadItemModel>();

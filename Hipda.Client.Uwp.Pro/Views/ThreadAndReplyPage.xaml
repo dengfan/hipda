@@ -11,7 +11,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    NavigationCacheMode="Enabled">
+    NavigationCacheMode="Enabled"
+    x:Name="MyThreadAndReplyPage">
 
     <Grid x:Name="LayoutRoot">
         <VisualStateManager.VisualStateGroups>
@@ -165,7 +166,7 @@
 
                 <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
-                <c:QuickReply Grid.Row="1"/>
+                <c:QuickReply Grid.Row="1" ThreadId="{Binding ThreadId,ElementName=MyThreadAndReplyPage}"/>
             </Grid>
         </Grid>
     </Grid>

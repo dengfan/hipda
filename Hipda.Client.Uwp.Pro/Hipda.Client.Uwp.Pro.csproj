@@ -159,11 +159,12 @@
     <Compile Include="Services\Common.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\ForumService.cs" />
-    <Compile Include="Services\ThreadService.cs" />
+    <Compile Include="Services\PostMessageService.cs" />
+    <Compile Include="Services\ThreadListService.cs" />
     <Compile Include="Services\MyFavoritesService.cs" />
     <Compile Include="Services\MyPostsService.cs" />
     <Compile Include="Services\MyThreadsService.cs" />
-    <Compile Include="Services\ReplyService.cs" />
+    <Compile Include="Services\ReplyListService.cs" />
     <Compile Include="Services\SearchFullTextService.cs" />
     <Compile Include="Services\SearchTitleService.cs" />
     <Compile Include="Services\FaceService.cs" />
