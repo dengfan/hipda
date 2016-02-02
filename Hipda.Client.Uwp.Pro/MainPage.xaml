@@ -175,7 +175,7 @@
                       ItemClick="ForumAllCategoryListView_ItemClick">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <TextBlock Text="{Binding Name}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -457,6 +457,7 @@
         <cvt:ThemeTypeNameToVisibilityConverter x:Key="ThemeTypeNameToVisibilityConverter"/>
         <cvt:SelectedIndexToVisibilityConverter x:Key="SelectedIndexToVisibilityConverter"/>
         <cvt:ByteToMegaByteConverter x:Key="ByteToMegaByteConverter"/>
+        <cvt:BlockItemCountToEmptyLabelVisibilityConverter x:Key="BlockItemCountToEmptyLabelVisibilityConverter"/>
         <DataTemplate x:Key="SettingsContentControl">
             <Grid>
                 <Grid.RowDefinitions>
@@ -525,7 +526,9 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <TextBlock Text="-------- 您是一个包容的人 --------" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="-------- 您是一个包容的人 --------" HorizontalAlignment="Center"
+                                   Visibility="{Binding BlockUsers.Count,Source={StaticResource MyRoamingSettings},Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}"
+                                   Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
                                 Content="解除选中用户" Style="{StaticResource NormalButtonStyle}" Click="UnblockUsers"/>
 
@@ -537,7 +540,8 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill"
-                                               Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}" Source="{Binding UserId,Converter={StaticResource UserIdToAvatarUriConverter}}"/>
+                                               Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"
+                                               Source="{Binding UserId,Converter={StaticResource UserIdToAvatarUriConverter}}"/>
                                         <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
                                             <Run Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
                                             <LineBreak/>
@@ -549,7 +553,9 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <TextBlock Text="-------- 您是一个豁达的人 --------" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="-------- 您是一个豁达的人 --------" HorizontalAlignment="Center"
+                                   Visibility="{Binding BlockThreads.Count,Source={StaticResource MyRoamingSettings},Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}"
+                                   Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
                                 Content="解除选中主题" Style="{StaticResource NormalButtonStyle}"
                                 Click="UnblockThreads"/>

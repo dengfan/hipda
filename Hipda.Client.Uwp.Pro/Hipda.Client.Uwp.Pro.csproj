@@ -108,6 +108,7 @@
     <Compile Include="Controls\UserSearchPanel.xaml.cs">
       <DependentUpon>UserSearchPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BlockItemCountToEmptyLabelVisibilityConverter.cs" />
     <Compile Include="Converters\ByteToMegaByteConverter.cs" />
     <Compile Include="Converters\ElementThemeToMaskBackgroundBrush.cs" />
     <Compile Include="Converters\SearchPanelVisibilityToSearchButtonStyleConverter.cs" />

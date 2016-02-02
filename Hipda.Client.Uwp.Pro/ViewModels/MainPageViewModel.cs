@@ -26,8 +26,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             NavButtons.Add(new NavButtonItemModel { Icon = "\uE89B", Text = "我的回复", TypeValue = "item=posts" });
             NavButtons.Add(new NavButtonItemModel { Icon = "\uE1CE", Text = "我的收藏", TypeValue = "item=favorites" });
             NavButtons.Add(new NavButtonItemModel { Icon = "Di", Text = "Discovery 版", TypeValue = "fid=2" });
-            NavButtons.Add(new NavButtonItemModel { Icon = "BS", Text = "Buy & Sell 版", TypeValue = "fid=6" });
             NavButtons.Add(new NavButtonItemModel { Icon = "EI", Text = "E-Ink 版", TypeValue = "fid=59" });
+            NavButtons.Add(new NavButtonItemModel { Icon = "BS", Text = "Buy & Sell 版", TypeValue = "fid=6" });
             NavButtons.Add(new NavButtonItemModel { Icon = "\uE712", Text = "更多版块", TypeValue = "more" });
 
             ClearCookiesCommand = new DelegateCommand();
