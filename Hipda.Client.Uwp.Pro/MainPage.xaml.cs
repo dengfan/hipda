@@ -183,9 +183,6 @@ namespace Hipda.Client.Uwp.Pro
 
             MaskGrid.Visibility = Visibility.Collapsed;
 
-            // 清除值，以便每次打开时都重新计算
-            ImageCacheDataSize = 0;
-
             // 保存本地设置
             new LocalSettingsService().Save();
 
@@ -337,8 +334,11 @@ namespace Hipda.Client.Uwp.Pro
             new RoamingSettingsService().ReadAndUpdate();
 
             // 统计缓存文件大小
-            var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
-            await GetDataSizeInFolder(folder);
+            if (ImageCacheDataSize == 0)
+            {
+                var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
+                await GetDataSizeInFolder(folder);
+            }
         }
 
         private void SearchDefaultSubmit()
