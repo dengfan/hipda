@@ -10,10 +10,19 @@
     <Application.Resources>
         <local:LocalSettingsDependencyObject x:Key="MyLocalSettings"/>
         <local:RoamingSettingsDependencyObject x:Key="MyRoamingSettings"/>
+        <vm:ForumAllCategoryListViewViewModel x:Key="ForumAllCategoryListViewViewModel"/>
         <vm:ThreadHistoryListBoxViewModel x:Key="ThreadHistoryListBoxViewModel"/>
         <cvt:ThemeTypeToRequestedThemeConverter x:Key="ThemeTypeToRequestedThemeConverter"/>
         <cvt:UserIdToAvatarUriConverter x:Key="UserIdToAvatarUriConverter"/>
-        
+
+        <GroupStyle x:Key="ForumAllCategoryListViewGroupStyle">
+            <GroupStyle.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding ForumGroupName}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
+                </DataTemplate>
+            </GroupStyle.HeaderTemplate>
+        </GroupStyle>
+
         <Style x:Key="NormalButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>

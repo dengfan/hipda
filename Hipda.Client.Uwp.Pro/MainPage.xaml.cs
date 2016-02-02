@@ -205,6 +205,8 @@ namespace Hipda.Client.Uwp.Pro
             if (data.TypeValue.Equals("more"))
             {
                 ShowLeftSwipePanel();
+
+                LeftSwipeContentControl.ContentTemplate = (DataTemplate)Resources["ForumAllCategoryListViewDataTemplate"];
             }
             else
             {

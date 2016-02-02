@@ -116,6 +116,7 @@
     <Compile Include="Converters\ThemeTypeToRequestedThemeConverter.cs" />
     <Compile Include="Converters\UserIdStringToInt32Converter.cs" />
     <Compile Include="Converters\UserIdToAvatarUriConverter.cs" />
+    <Compile Include="ForumAllCategoryListViewGroupStyleSelector.cs" />
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -124,6 +125,7 @@
     </Compile>
     <Compile Include="Models\AccountItemModel.cs" />
     <Compile Include="Models\FaceItemModel.cs" />
+    <Compile Include="Models\ForumModel.cs" />
     <Compile Include="Models\NavButtonItemModel.cs" />
     <Compile Include="Models\NoticeItemModel.cs" />
     <Compile Include="Models\RoamingSettingsModel.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\Common.cs" />
     <Compile Include="Services\DataService.cs" />
+    <Compile Include="Services\ForumService.cs" />
     <Compile Include="Services\ThreadService.cs" />
     <Compile Include="Services\MyFavoritesService.cs" />
     <Compile Include="Services\MyPostsService.cs" />

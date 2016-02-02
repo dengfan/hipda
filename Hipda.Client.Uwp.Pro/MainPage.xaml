@@ -166,8 +166,16 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="ForumAllCategoryListView">
-            <ListView ItemsSource="{Binding ForumAllCategoryList}"/>
+        <local:ForumAllCategoryListViewGroupStyleSelector x:Key="ForumAllCategoryListViewGroupStyleSelector"/>
+        <CollectionViewSource x:Name="ForumAllCategoryListViewCollectionViewSource" IsSourceGrouped="True" ItemsPath="Forums" Source="{Binding ForumAllCategoryList,Source={StaticResource ForumAllCategoryListViewViewModel}}"/>
+        <DataTemplate x:Key="ForumAllCategoryListViewDataTemplate">
+            <ListView ItemsSource="{Binding Source={StaticResource ForumAllCategoryListViewCollectionViewSource}}" GroupStyleSelector="{StaticResource ResourceKey=ForumAllCategoryListViewGroupStyleSelector}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </DataTemplate>
 
         <local:NavButtonListItemTemplateSelector x:Key="navButtonListItemTemplateSelector"
@@ -743,7 +751,7 @@
                         <Grid.RenderTransform>
                             <CompositeTransform/>
                         </Grid.RenderTransform>
-                        <ContentControl/>
+                        <ContentControl x:Name="LeftSwipeContentControl" HorizontalContentAlignment="Stretch"/>
                     </Grid>
 
                     <Grid x:Name="RightSwipePanel" x:DeferLoadStrategy="Lazy"
