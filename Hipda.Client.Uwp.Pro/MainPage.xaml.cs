@@ -746,6 +746,18 @@ namespace Hipda.Client.Uwp.Pro
 
         #endregion
 
-        
+        public async void OpenCreateThreadPanel()
+        {
+            FindName("UserDialog");
+            UserDialog.DataContext = null;
+            UserDialog.Title = "发表新话题";
+            UserDialog.ContentTemplate = (DataTemplate)Resources["CreateThreadDialogContentTemplate"];
+
+            if (_isDialogShown == false)
+            {
+                _isDialogShown = true;
+                await UserDialog.ShowAsync();
+            }
+        }
     }
 }

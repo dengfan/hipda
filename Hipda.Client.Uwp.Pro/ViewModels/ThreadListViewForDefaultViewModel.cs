@@ -24,7 +24,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public int ThreadMaxPageNo { get; set; }
 
-        public ThreadListViewForDefaultViewModel(int pageNo, int forumId, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ThreadListViewForDefaultViewModel(int pageNo, int forumId, ListView leftListView, CommandBar leftCommandBar, Action openCreateThreadPanel, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _forumId = forumId;
             _leftListView = leftListView;
@@ -51,7 +51,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 LoadData(1, _forumId);
             };
 
-            var btnAdd = new AppBarButton { Icon = new SymbolIcon(Symbol.Add), Label = "发表新贴" };
+            var btnAdd = new AppBarButton { Icon = new FontIcon { Glyph = "\uE104" }, Label = "发表新贴" };
+            btnAdd.Click += (s, e) => openCreateThreadPanel();
             var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
             btnRefresh.Command = refreshThreadCommand;
             var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };

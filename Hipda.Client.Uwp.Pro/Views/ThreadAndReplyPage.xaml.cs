@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -155,6 +156,16 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
             });
         }
+
+        void OpenCreateThreadPanel()
+        {
+            var frame = Window.Current.Content as Frame;
+            var mp = frame.Content as MainPage;
+            if (mp != null)
+            {
+                mp.OpenCreateThreadPanel();
+            }
+        }
         #endregion
 
         #region 打开回复列表页必须使用以下两种方法之一
@@ -205,7 +216,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
                     int fid = Convert.ToInt32(param.Substring("fid=".Length));
-                    LeftWrap.DataContext = new ThreadListViewForDefaultViewModel(1, fid, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    LeftWrap.DataContext = new ThreadListViewForDefaultViewModel(1, fid, LeftListView, LeftCommandBar, OpenCreateThreadPanel, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                 }
                 else if (param.StartsWith("item="))
                 {

@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="Hipda.Client.Uwp.Pro.Controls.QuickReply"
+    x:Class="Hipda.Client.Uwp.Pro.Controls.CreateThread"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Hipda.Client.Uwp.Pro.Controls"
@@ -9,21 +9,29 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <Grid x:Name="ReplyPanel" VerticalAlignment="Bottom" DataContext="{Binding Source={StaticResource QuickReplyViewModel}}"
-          Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto" />
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <Button x:Name="EmojiButton" Style="{StaticResource FaceButtonStyle}">
-                <Button.Content>
-                    <SymbolIcon Symbol="Emoji2" />
-                </Button.Content>
-                <Button.Flyout>
+
+        <TextBox x:Name="TitleTextBox" Margin="8" Template="{StaticResource TextBoxTemplate1}" PlaceholderText="标题"
+                 GotFocus="TitleTextBox_GotFocus"/>
+
+        <TextBox x:Name="ContentTextBox" Margin="8" Grid.Row="1" Template="{StaticResource TextBoxTemplate1}"
+                 PlaceholderText="内容" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch"
+                 GotFocus="ContentTextBox_GotFocus"/>
+
+        <TextBlock Grid.Row="2" Margin="8,0,8,8" x:Name="TipTextBlock" TextWrapping="Wrap"/>
+
+        <CommandBar Grid.Row="3">
+            <AppBarButton Icon="Emoji2" Label="Emoji">
+                <AppBarButton.Flyout>
                     <Flyout>
                         <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
-                                  SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="192"
+                                  SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="180"
                                   ItemClick="EmojiGridView_ItemClick">
                             <GridView.ItemContainerStyle>
                                 <Style TargetType="GridViewItem">
@@ -38,13 +46,10 @@
                             </GridView.ItemTemplate>
                         </GridView>
                     </Flyout>
-                </Button.Flyout>
-            </Button>
-            <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
-                <Button.Content>
-                    <SymbolIcon Symbol="Emoji" />
-                </Button.Content>
-                <Button.Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton Icon="Emoji" Label="表情头像">
+                <AppBarButton.Flyout>
                     <Flyout>
                         <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
                                   SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="192"
@@ -62,26 +67,10 @@
                             </GridView.ItemTemplate>
                         </GridView>
                     </Flyout>
-                </Button.Flyout>
-            </Button>
-            <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}" Click="FileButton_Click">
-                <Button.Content>
-                    <SymbolIcon Symbol="Attach" />
-                </Button.Content>
-            </Button>
-        </StackPanel>
-        <TextBox Grid.Row="1" x:Name="ReplyContentTextBox" Template="{StaticResource TextBoxTemplate1}"
-                             MinHeight="64" Padding="8,4" Background="Transparent" BorderThickness="0"
-                             TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复，回车可换行。"/>
-        <Button Grid.Row="1" x:Name="SendButton" Margin="0,0,12,12"
-                Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
-                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
-                HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                Click="SendButton_Click">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <SymbolIcon Symbol="Send" />
-                <TextBlock Text=" 发送"/>
-            </StackPanel>
-        </Button>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton Icon="Attach" Label="添加附件"/>
+            <AppBarButton Icon="Send" Label="发送"/>
+        </CommandBar>
     </Grid>
 </UserControl>

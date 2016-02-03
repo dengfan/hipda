@@ -9,7 +9,8 @@
     xmlns:cvt="using:Hipda.Client.Uwp.Pro.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" x:Name="MyMainPage" RequestedTheme="{Binding ThemeType,Source={StaticResource MyLocalSettings},Converter={StaticResource ThemeTypeToRequestedThemeConverter},Mode=TwoWay}">
+    mc:Ignorable="d" x:Name="MyMainPage"
+    RequestedTheme="{Binding ThemeType,Source={StaticResource MyLocalSettings},Converter={StaticResource ThemeTypeToRequestedThemeConverter},Mode=TwoWay}">
 
     <Page.Resources>
         <cvt:ElementThemeToMaskBackgroundBrush x:Key="ElementThemeToMaskBackgroundBrush"/>
@@ -167,7 +168,8 @@
         </DataTemplate>
 
         <local:ForumAllCategoryListViewGroupStyleSelector x:Key="ForumAllCategoryListViewGroupStyleSelector"/>
-        <CollectionViewSource x:Name="ForumAllCategoryListViewCollectionViewSource" IsSourceGrouped="True" ItemsPath="Forums" Source="{Binding ForumAllCategoryList,Source={StaticResource ForumAllCategoryListViewViewModel}}"/>
+        <CollectionViewSource x:Name="ForumAllCategoryListViewCollectionViewSource" IsSourceGrouped="True" ItemsPath="Forums"
+                              Source="{Binding ForumAllCategoryList,Source={StaticResource ForumAllCategoryListViewViewModel}}"/>
         <DataTemplate x:Key="ForumAllCategoryListViewDataTemplate">
             <ListView ItemsSource="{Binding Source={StaticResource ForumAllCategoryListViewCollectionViewSource}}"
                       GroupStyleSelector="{StaticResource ForumAllCategoryListViewGroupStyleSelector}"
@@ -265,6 +267,10 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+
+        <DataTemplate x:Key="CreateThreadDialogContentTemplate">
+            <c:CreateThread/>
+        </DataTemplate>
 
         <DataTemplate x:Key="PostDetailDialogContentTemplate">
             <Grid>

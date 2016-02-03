@@ -100,6 +100,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Controls\CreateThread.xaml.cs">
+      <DependentUpon>CreateThread.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MyAvatarForReply.cs" />
     <Compile Include="Controls\MyListViewForUserMessageList.cs" />
     <Compile Include="Controls\QuickReply.xaml.cs">
@@ -175,6 +178,7 @@
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
     <Compile Include="Triggers\InputTypeTrigger.cs" />
     <Compile Include="UserMessageListItemTemplateSelector.cs" />
+    <Compile Include="ViewModels\FaceIconViewModel.cs" />
     <Compile Include="ViewModels\ForumAllCategoryListViewViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
@@ -313,6 +317,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\CreateThread.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\QuickReply.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
