@@ -133,6 +133,18 @@ namespace Hipda.Client.Uwp.Pro.Controls
         }
         #endregion
 
+
+        public int Countdown
+        {
+            get { return (int)GetValue(CountdownProperty); }
+            set { SetValue(CountdownProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Countdown.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CountdownProperty =
+            DependencyProperty.Register("Countdown", typeof(int), typeof(SendControl), new PropertyMetadata(0));
+
+
         public SendControl(SendType sendType, int forumId, Action<string> sentSuccess)
         {
             this.InitializeComponent();

@@ -116,6 +116,8 @@
     </Compile>
     <Compile Include="Converters\BlockItemCountToEmptyLabelVisibilityConverter.cs" />
     <Compile Include="Converters\ByteToMegaByteConverter.cs" />
+    <Compile Include="Converters\CountdownToSendButtonIsEnabledConverter.cs" />
+    <Compile Include="Converters\CountdownToSendDialogTitleConverter.cs" />
     <Compile Include="Converters\ElementThemeToMaskBackgroundBrush.cs" />
     <Compile Include="Converters\SearchPanelVisibilityToSearchButtonStyleConverter.cs" />
     <Compile Include="Converters\SelectedIndexToVisibilityConverter.cs" />

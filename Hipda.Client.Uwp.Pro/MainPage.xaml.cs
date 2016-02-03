@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Pro.Controls;
+using Hipda.Client.Uwp.Pro.Converters;
 using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
@@ -57,6 +58,41 @@ namespace Hipda.Client.Uwp.Pro
         public static readonly DependencyProperty ImageCacheDataSizeProperty =
             DependencyProperty.Register("ImageCacheDataSize", typeof(ulong), typeof(MainPage), new PropertyMetadata(0UL));
 
+
+        #region 发贴计时器
+
+
+        public int Countdown
+        {
+            get { return (int)GetValue(CountdownProperty); }
+            set { SetValue(CountdownProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Countdown.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CountdownProperty =
+            DependencyProperty.Register("Countdown", typeof(int), typeof(MainPage), new PropertyMetadata(0));
+
+
+        DispatcherTimer dispatcherTimer;
+
+        public void DispatcherTimerSetup()
+        {
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += dispatcherTimer_Tick;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Start();
+        }
+
+        void dispatcherTimer_Tick(object sender, object e)
+        {
+            if (Countdown == 0)
+            {
+                dispatcherTimer.Stop();
+            }
+
+            Countdown--;
+        }
+        #endregion
 
         MainPageViewModel _mainPageViewModel;
 
@@ -788,6 +824,10 @@ namespace Hipda.Client.Uwp.Pro
         {
             CloseUserDialog();
 
+            // 
+            Countdown = 30;
+            DispatcherTimerSetup();
+
             // 发贴成功后，刷新主题列表
             if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
             {
@@ -804,8 +844,14 @@ namespace Hipda.Client.Uwp.Pro
         public async void OpenCreateThreadPanel()
         {
             FindName("UserDialog");
-            UserDialog.Title = "发表新话题";
-            UserDialog.Content = new SendControl(SendType.New, ForumId, SendSuccess);
+
+            var sendControl = new SendControl(SendType.New, ForumId, SendSuccess);
+            var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
+            sendControl.SetBinding(SendControl.CountdownProperty, binding);
+
+            var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter() };
+            UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
+            UserDialog.Content = sendControl;
 
             if (_isDialogShown == false)
             {
