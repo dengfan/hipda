@@ -16,30 +16,6 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
-                <Button.Content>
-                    <SymbolIcon Symbol="Emoji" />
-                </Button.Content>
-                <Button.Flyout>
-                    <Flyout>
-                        <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons}"
-                                  SelectionMode="None" IsItemClickEnabled="True" Width="300" Height="290"
-                                  ItemClick="FaceGridView_ItemClick">
-                            <GridView.ItemContainerStyle>
-                                <Style TargetType="GridViewItem">
-                                    <Setter Property="Width" Value="36"/>
-                                    <Setter Property="Height" Value="36"/>
-                                </Style>
-                            </GridView.ItemContainerStyle>
-                            <GridView.ItemTemplate>
-                                <DataTemplate>
-                                    <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </GridView.ItemTemplate>
-                        </GridView>
-                    </Flyout>
-                </Button.Flyout>
-            </Button>
             <Button x:Name="EmojiButton" Style="{StaticResource FaceButtonStyle}">
                 <Button.Content>
                     <SymbolIcon Symbol="Emoji2" />
@@ -64,6 +40,30 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
+            <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
+                <Button.Content>
+                    <SymbolIcon Symbol="Emoji" />
+                </Button.Content>
+                <Button.Flyout>
+                    <Flyout>
+                        <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons}"
+                                  SelectionMode="None" IsItemClickEnabled="True" Width="300" Height="290"
+                                  ItemClick="FaceGridView_ItemClick">
+                            <GridView.ItemContainerStyle>
+                                <Style TargetType="GridViewItem">
+                                    <Setter Property="Width" Value="36"/>
+                                    <Setter Property="Height" Value="36"/>
+                                </Style>
+                            </GridView.ItemContainerStyle>
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
             <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}" Click="FileButton_Click">
                 <Button.Content>
                     <SymbolIcon Symbol="Attach" />
@@ -78,16 +78,10 @@
                 Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
                 HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 Click="SendButton_Click">
-            <Button.Template>
-                <ControlTemplate>
-                    <Border Background="{TemplateBinding Background}" CornerRadius="8">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <SymbolIcon Symbol="Send" />
-                            <TextBlock Text=" 发送"/>
-                        </StackPanel>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <SymbolIcon Symbol="Send" />
+                <TextBlock Text=" 发送"/>
+            </StackPanel>
         </Button>
     </Grid>
 </UserControl>
