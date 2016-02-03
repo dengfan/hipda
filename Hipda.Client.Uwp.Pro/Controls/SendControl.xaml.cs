@@ -43,6 +43,11 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
             string faceText = data.Label;
 
+            if (_currentTextBox.Name.Equals("TitleTextBox") && _currentTextBox.Text.Length >= 50)
+            {
+                return;
+            }
+
             int occurences = 0;
             string originalContent = _currentTextBox.Text;
 
@@ -119,25 +124,11 @@ namespace Hipda.Client.Uwp.Pro.Controls
         void AfterUpload(int fileCount)
         {
             TipTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
-
-            // 提示信息，5秒后自动清除
-            var now = DateTime.Now;
-            while (now.AddSeconds(5) > DateTime.Now)
-            {
-                TipTextBlock.Text = string.Empty;
-            }
         }
 
         void SentFailed()
         {
             TipTextBlock.Text = "对不起，发布请求失败，请稍后再试！";
-
-            // 提示信息，5秒后自动清除
-            var now = DateTime.Now;
-            while (now.AddSeconds(5) > DateTime.Now)
-            {
-                TipTextBlock.Text = string.Empty;
-            }
         }
         #endregion
 

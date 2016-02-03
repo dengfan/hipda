@@ -37,7 +37,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             string url = string.Format("http://www.hi-pda.com/forum/post.php?action=newthread&fid={0}&extra=&topicsubmit=yes", forumId);
             string resultContent = await _httpClient.PostAsync(url, postData, cts);
-            return resultContent.Contains("对不起，您两次发表间隔少于");
+            return !resultContent.Contains("对不起，您两次发表间隔少于");
         }
 
         public static async Task<bool> PostQuickReply(CancellationTokenSource cts, string content, List<string> imageNameList, int threadId)
@@ -59,9 +59,10 @@ namespace Hipda.Client.Uwp.Pro.Services
             return resultContent.Contains("您的回复已经发布");
         }
 
-        public static async Task<List<string>> UploadFiles(CancellationTokenSource cts, Action<int, int, string> beforeUpload, Action<string> insertCodeIntoTextBox, Action<int> afterUpload)
+        public static async Task<List<string>[]> UploadFiles(CancellationTokenSource cts, Action<int, int, string> beforeUpload, Action<int> afterUpload)
         {
-            var imageNameList = new List<string>();
+            var fileNameList = new List<string>();
+            var fileCodeList = new List<string>();
 
             var openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.Thumbnail;
@@ -81,7 +82,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         beforeUpload(fileIndex, files.Count, fileName);
                     }
                     
-                    imageNameList.Add(fileName);
+                    fileNameList.Add(fileName);
 
                     byte[] imageBuffer;
 
@@ -106,8 +107,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     {
                         string value = result.Split('|')[2];
                         value = string.Format("[attachimg]{0}[/attachimg]", value);
-
-                        insertCodeIntoTextBox(value);
+                        fileCodeList.Add(value);
 
                         fileIndex++;
                     }
@@ -119,7 +119,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
             }
 
-            return imageNameList;
+            return new List<string>[] { fileNameList, fileCodeList };
         }
     }
 }

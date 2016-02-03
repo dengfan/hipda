@@ -787,7 +787,17 @@ namespace Hipda.Client.Uwp.Pro
         void SendSuccess(string title)
         {
             CloseUserDialog();
-            OpenThreadByForumId();
+
+            if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
+            {
+                var page = (ThreadAndReplyPage)AppFrame.Content;
+                var cmdBar = (CommandBar)page.FindName("LeftCommandBar");
+                if (cmdBar.DataContext.GetType().Equals(typeof(ThreadListViewForDefaultViewModel)))
+                {
+                    var vm = (ThreadListViewForDefaultViewModel)cmdBar.DataContext;
+                    vm.RefreshThreadCommand.Execute(null);
+                }
+            }
         }
 
         public async void OpenCreateThreadPanel()

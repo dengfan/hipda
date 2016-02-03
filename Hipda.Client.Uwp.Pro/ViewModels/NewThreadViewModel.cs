@@ -18,17 +18,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action<string> _sentSuccess;
 
 
-        private string _title;
+        private static string _title;
 
-        public string Title
+        public static string Title
         {
             get { return _title; }
             set { _title = value; }
         }
 
-        private string _content;
+        private static string _content;
 
-        public string Content
+        public static string Content
         {
             get { return _content; }
             set { _content = value; }
@@ -39,7 +39,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand SendCommand { get; set; }
 
-        static List<string> _imaegNameList = new List<string>();
+        static List<string> _fileNameList = new List<string>();
+        static List<string> _fileCodeList = new List<string>();
 
         public NewThreadViewModel(int forumId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action sentFailded, Action<string> sentSuccess)
         {
@@ -53,10 +54,20 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             AddAttachFilesCommand.ExecuteAction = async (p) => 
             {
                 var cts = new CancellationTokenSource();
-                var data = await PostMessageService.UploadFiles(cts, _beforeUpload, _insertFileCodeIntoContentTextBox, _afterUpload);
-                if (data != null && data.Count > 0)
+                var data = await PostMessageService.UploadFiles(cts, _beforeUpload, _afterUpload);
+                if (data[0] != null && data[0].Count > 0)
                 {
-                    _imaegNameList.AddRange(data);
+                    _fileNameList.AddRange(data[0]);
+                }
+                if (data[1] != null && data[1].Count > 0)
+                {
+                    _fileCodeList.AddRange(data[1]);
+                }
+
+                if (_fileCodeList.Count > 0)
+                {
+                    string fileCodes = string.Join("\r\n", _fileCodeList);
+                    _insertFileCodeIntoContentTextBox($"\r\n{fileCodes}\r\n");
                 }
             };
 
@@ -64,10 +75,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             SendCommand.ExecuteAction = async (p) =>
             {
                 var cts = new CancellationTokenSource();
-                bool flag = await PostMessageService.PostNewThread(cts, Title, Content, _imaegNameList, forumId);
+                bool flag = await PostMessageService.PostNewThread(cts, Title, Content, _fileNameList, forumId);
                 if (flag)
                 {
-                    _imaegNameList.Clear();
+                    _fileNameList.Clear();
+                    _fileCodeList.Clear();
 
                     // 提示发贴成功
                     if (_sentSuccess != null)

@@ -17,14 +17,17 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="TitleTextBox" Margin="8" Template="{StaticResource TextBoxTemplate1}" PlaceholderText="标题，最长80个字符"
+        <TextBox x:Name="TitleTextBox" Margin="8" Template="{StaticResource TextBoxTemplate1}"
+                 PlaceholderText="标题"
                  GotFocus="TitleTextBox_GotFocus" MaxLength="80" Text="{Binding Title,Mode=TwoWay}"/>
 
         <TextBox x:Name="ContentTextBox" Margin="8" Grid.Row="1" Template="{StaticResource TextBoxTemplate1}"
                  PlaceholderText="内容" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch"
                  GotFocus="ContentTextBox_GotFocus" Text="{Binding Content,Mode=TwoWay}"/>
 
-        <TextBlock Grid.Row="2" Margin="8,0,8,8" x:Name="TipTextBlock" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="2" Margin="8,0,8,8" x:Name="TipTextBlock" HorizontalAlignment="Center"
+                   Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                   Text="请输入标题和内容"/>
 
         <CommandBar Grid.Row="3">
             <AppBarButton Icon="Emoji2" Label="Emoji">

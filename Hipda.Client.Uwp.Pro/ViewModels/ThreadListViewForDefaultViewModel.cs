@@ -24,6 +24,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public int ThreadMaxPageNo { get; set; }
 
+        public DelegateCommand RefreshThreadCommand { get; set; }
+
         public ThreadListViewForDefaultViewModel(int pageNo, int forumId, ListView leftListView, CommandBar leftCommandBar, Action openCreateThreadPanel, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _forumId = forumId;
@@ -45,8 +47,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             LoadData(pageNo, _forumId);
 
-            var refreshThreadCommand = new DelegateCommand();
-            refreshThreadCommand.ExecuteAction = (p) => {
+            RefreshThreadCommand = new DelegateCommand();
+            RefreshThreadCommand.ExecuteAction = (p) => {
                 _ds.ClearThreadData(_forumId);
                 LoadData(1, _forumId);
             };
@@ -54,7 +56,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             var btnAdd = new AppBarButton { Icon = new FontIcon { Glyph = "\uE104" }, Label = "发表新贴" };
             btnAdd.Click += (s, e) => openCreateThreadPanel();
             var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
-            btnRefresh.Command = refreshThreadCommand;
+            btnRefresh.Command = RefreshThreadCommand;
             var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
             _leftCommandBar.PrimaryCommands.Add(btnAdd);
             _leftCommandBar.PrimaryCommands.Add(btnRefresh);

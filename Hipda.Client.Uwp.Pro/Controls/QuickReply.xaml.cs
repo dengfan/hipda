@@ -145,10 +145,10 @@ namespace Hipda.Client.Uwp.Pro.Controls
         {
             var cts = new CancellationTokenSource();
             var data = await _vm.UploadFiles(cts, null, InsertImageCodeIntoReplyContentTextBox, null);
-            if (data != null && data.Count > 0)
-            {
-                _imageNameList.AddRange(data);
-            }
+            //if (data != null && data.Count > 0)
+            //{
+            //    _imageNameList.AddRange(data);
+            //}
         }
     }
 }
