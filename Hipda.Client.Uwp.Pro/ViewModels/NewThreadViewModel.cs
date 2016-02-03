@@ -14,7 +14,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action<int, int, string> _beforeUpload;
         Action<string> _insertFileCodeIntoContentTextBox;
         Action<int> _afterUpload;
-        Action _sentFailded;
+        Action<string> _sentFailded;
         Action<string> _sentSuccess;
 
 
@@ -42,7 +42,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         static List<string> _fileNameList = new List<string>();
         static List<string> _fileCodeList = new List<string>();
 
-        public NewThreadViewModel(int forumId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action sentFailded, Action<string> sentSuccess)
+        public NewThreadViewModel(int forumId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
         {
             _beforeUpload = beforeUpload;
             _insertFileCodeIntoContentTextBox = insertFileCodeIntoContentTextBox;
@@ -74,12 +74,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             SendCommand = new DelegateCommand();
             SendCommand.ExecuteAction = async (p) =>
             {
+                if (string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(Content))
+                {
+                    _sentFailded("请将标题及内容填写完整！");
+                    return;
+                }
+
                 var cts = new CancellationTokenSource();
                 bool flag = await PostMessageService.PostNewThread(cts, Title, Content, _fileNameList, forumId);
                 if (flag)
                 {
                     _fileNameList.Clear();
                     _fileCodeList.Clear();
+
+                    Title = string.Empty;
+                    Content = string.Empty;
 
                     // 提示发贴成功
                     if (_sentSuccess != null)
@@ -92,7 +101,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     // 提示发贴不成功
                     if (_sentFailded != null)
                     {
-                        _sentFailded();
+                        _sentFailded("对不起，发布请求失败，请稍后再试！");
                     }
                 }
             };

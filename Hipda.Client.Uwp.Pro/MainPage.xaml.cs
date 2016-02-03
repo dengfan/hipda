@@ -788,6 +788,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             CloseUserDialog();
 
+            // 发贴成功后，刷新主题列表
             if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
             {
                 var page = (ThreadAndReplyPage)AppFrame.Content;

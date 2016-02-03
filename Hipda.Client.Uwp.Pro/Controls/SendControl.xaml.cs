@@ -118,7 +118,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
             int cursorPosition = ContentTextBox.SelectionStart + occurences;
             ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, fileCode);
-            ContentTextBox.Focus(FocusState.Pointer);
+            ContentTextBox.SelectionStart = cursorPosition + fileCode.Length;
+            ContentTextBox.Focus(FocusState.Programmatic);
         }
 
         void AfterUpload(int fileCount)
@@ -126,9 +127,9 @@ namespace Hipda.Client.Uwp.Pro.Controls
             TipTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
         }
 
-        void SentFailed()
+        void SentFailed(string errorText)
         {
-            TipTextBlock.Text = "对不起，发布请求失败，请稍后再试！";
+            TipTextBlock.Text = errorText;
         }
         #endregion
 
