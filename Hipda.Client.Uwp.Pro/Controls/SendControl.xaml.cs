@@ -148,9 +148,13 @@ namespace Hipda.Client.Uwp.Pro.Controls
         public SendControl(SendType sendType, int forumId, Action<string> sentSuccess)
         {
             this.InitializeComponent();
-            this.DataContext = new NewThreadViewModel(forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+            this.DataContext = new NewThreadContentDialogViewModel(forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
 
-
+        public SendControl(SendType sendType, int postId, int threadId, Action<string> sentSuccess)
+        {
+            this.InitializeComponent();
+            this.DataContext = new NewThreadContentDialogViewModel(forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+        }
     }
 }

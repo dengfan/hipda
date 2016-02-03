@@ -859,6 +859,25 @@ namespace Hipda.Client.Uwp.Pro
                 await UserDialog.ShowAsync();
             }
         }
+
+        public async void OpenReplyPostPanel(int postId, int threadId)
+        {
+            FindName("UserDialog");
+
+            var sendControl = new SendControl(SendType.Reply, ForumId, SendSuccess);
+            var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
+            sendControl.SetBinding(SendControl.CountdownProperty, binding);
+
+            var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter() };
+            UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
+            UserDialog.Content = sendControl;
+
+            if (_isDialogShown == false)
+            {
+                _isDialogShown = true;
+                await UserDialog.ShowAsync();
+            }
+        }
         #endregion
     }
 }

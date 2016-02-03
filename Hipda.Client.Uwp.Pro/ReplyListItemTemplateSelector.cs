@@ -39,7 +39,7 @@ namespace Hipda.Client.Uwp.Pro
             {
                 return ReplyListHighLightItemTemplate;
             }
-            else if (data.AuthorUserId == AccountService.UserId)
+            else if (data.IsMine)
             {
                 return ReplyListRightItemTemplate;
             }

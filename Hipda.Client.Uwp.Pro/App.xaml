@@ -391,26 +391,7 @@
 
                 <ContentControl Margin="0,4,0,0" Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
 
-                <Button x:Name="menuButton" HorizontalAlignment="Center">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
-                                        <Run Text="&#xE10C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                                        <Run Text="{Binding FloorNoStr}" />
-                                </TextBlock>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                    <Button.Flyout>
-                        <MenuFlyout x:Name="replyMenu">
-                            <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" />
-                            <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" />
-                            <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" IsEnabled="False" />
-                            <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" />
-                        </MenuFlyout>
-                    </Button.Flyout>
-                </Button>
+                <c:PostMenuControl HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
             </StackPanel>
         </DataTemplate>
 
@@ -434,26 +415,7 @@
                     </StackPanel>
                 </Border>
 
-                <Button x:Name="menuButton" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center" Background="Gray" CornerRadius="10">
-                                <TextBlock HorizontalAlignment="Center" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
-                                    <Run Text="&#xE10C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                                    <Run Text="{Binding FloorNoStr}" />
-                                </TextBlock>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                    <Button.Flyout>
-                        <MenuFlyout x:Name="replyMenu">
-                            <MenuFlyoutItem x:Name="replyReplyMenuFlyoutItem" Text="回复" />
-                            <MenuFlyoutItem x:Name="refReplyMenuFlyoutItem" Text="引用" />
-                            <MenuFlyoutItem x:Name="modifyMenuFlyoutItem" Text="编辑" IsEnabled="False" />
-                            <MenuFlyoutItem x:Name="viewFullContentMenuFlyoutItem" Text="查看本楼层完整原始内容" />
-                        </MenuFlyout>
-                    </Button.Flyout>
-                </Button>
+                <c:PostMenuControl HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
             </Grid>
         </DataTemplate>
 

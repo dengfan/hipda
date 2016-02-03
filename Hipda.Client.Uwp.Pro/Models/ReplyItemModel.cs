@@ -95,6 +95,14 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
+        public bool IsMine
+        {
+            get
+            {
+                return AuthorUserId == AccountService.UserId;
+            }
+        }
+
         public override string ToString()
         {
             return this.HtmlStr;

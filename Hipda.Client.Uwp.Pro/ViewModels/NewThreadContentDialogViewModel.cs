@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class NewThreadViewModel
+    public class NewThreadContentDialogViewModel
     {
         Action<int, int, string> _beforeUpload;
         Action<string> _insertFileCodeIntoContentTextBox;
@@ -42,7 +42,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         static List<string> _fileNameList = new List<string>();
         static List<string> _fileCodeList = new List<string>();
 
-        public NewThreadViewModel(int forumId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
+        public NewThreadContentDialogViewModel(int forumId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
         {
             _beforeUpload = beforeUpload;
             _insertFileCodeIntoContentTextBox = insertFileCodeIntoContentTextBox;
