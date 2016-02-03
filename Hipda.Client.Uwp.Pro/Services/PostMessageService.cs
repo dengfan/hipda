@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.UI.Popups;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
@@ -17,13 +18,16 @@ namespace Hipda.Client.Uwp.Pro.Services
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         static string _messageTail = "\r\n \r\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]";
 
-        public static async Task<bool> PostReplyMessage(CancellationTokenSource cts, string content, List<string> imageNameList, int threadId)
+        public static async Task<bool> PostNewThread(CancellationTokenSource cts, string title, string content, List<string> imageNameList, int forumId)
         {
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
-            postData.Add(new KeyValuePair<string, object>("subject", string.Empty));
-            postData.Add(new KeyValuePair<string, object>("usesig", "0"));
-            postData.Add(new KeyValuePair<string, object>("message", $"{content}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
+            postData.Add(new KeyValuePair<string, object>("iconid", "0"));
+            postData.Add(new KeyValuePair<string, object>("subject", title));
+            postData.Add(new KeyValuePair<string, object>("message", $"{content.Trim()}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("attention_add", "1"));
+            postData.Add(new KeyValuePair<string, object>("usesig", "1"));
 
             // 图片信息
             foreach (var imageName in imageNameList)
@@ -31,7 +35,25 @@ namespace Hipda.Client.Uwp.Pro.Services
                 postData.Add(new KeyValuePair<string, object>(string.Format("attachnew[{0}][description]", imageName), string.Empty));
             }
 
-            // 发布请求
+            string url = string.Format("http://www.hi-pda.com/forum/post.php?action=newthread&fid={0}&extra=&topicsubmit=yes", forumId);
+            string resultContent = await _httpClient.PostAsync(url, postData, cts);
+            return resultContent.Contains("对不起，您两次发表间隔少于");
+        }
+
+        public static async Task<bool> PostQuickReply(CancellationTokenSource cts, string content, List<string> imageNameList, int threadId)
+        {
+            var postData = new List<KeyValuePair<string, object>>();
+            postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
+            postData.Add(new KeyValuePair<string, object>("subject", string.Empty));
+            postData.Add(new KeyValuePair<string, object>("usesig", "0"));
+            postData.Add(new KeyValuePair<string, object>("message", $"{content.Trim()}{_messageTail}"));
+
+            // 图片信息
+            foreach (var imageName in imageNameList)
+            {
+                postData.Add(new KeyValuePair<string, object>(string.Format("attachnew[{0}][description]", imageName), string.Empty));
+            }
+
             string url = string.Format("http://www.hi-pda.com/forum/post.php?action=reply&tid={0}&replysubmit=yes&infloat=yes&handlekey=fastpost&inajax=1", threadId);
             string resultContent = await _httpClient.PostAsync(url, postData, cts);
             return resultContent.Contains("您的回复已经发布");

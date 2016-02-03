@@ -268,10 +268,6 @@
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
-        <DataTemplate x:Key="CreateThreadDialogContentTemplate">
-            <c:CreateThread/>
-        </DataTemplate>
-
         <DataTemplate x:Key="PostDetailDialogContentTemplate">
             <Grid>
                 <Grid.RowDefinitions>

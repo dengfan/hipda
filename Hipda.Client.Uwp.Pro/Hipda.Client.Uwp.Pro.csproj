@@ -100,8 +100,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Commands\DelegateCommand.cs" />
-    <Compile Include="Controls\CreateThread.xaml.cs">
-      <DependentUpon>CreateThread.xaml</DependentUpon>
+    <Compile Include="Controls\SendControl.xaml.cs">
+      <DependentUpon>SendControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MyAvatarForReply.cs" />
     <Compile Include="Controls\MyListViewForUserMessageList.cs" />
@@ -136,6 +136,7 @@
     <Compile Include="Models\NavButtonItemModel.cs" />
     <Compile Include="Models\NoticeItemModel.cs" />
     <Compile Include="Models\RoamingSettingsModel.cs" />
+    <Compile Include="Models\SendType.cs" />
     <Compile Include="Models\ThreadDataType.cs" />
     <Compile Include="Models\ThreadItemForMyFavoritesModel.cs" />
     <Compile Include="Models\ThreadItemForSearchFullTextModel.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
     <Compile Include="Triggers\InputTypeTrigger.cs" />
     <Compile Include="UserMessageListItemTemplateSelector.cs" />
+    <Compile Include="ViewModels\NewThreadViewModel.cs" />
     <Compile Include="ViewModels\FaceIconViewModel.cs" />
     <Compile Include="ViewModels\ForumAllCategoryListViewViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
@@ -317,7 +319,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\CreateThread.xaml">
+    <Page Include="Controls\SendControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

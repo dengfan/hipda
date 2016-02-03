@@ -35,6 +35,18 @@ namespace Hipda.Client.Uwp.Pro
         static LocalSettingsDependencyObject _myLocalSettings = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
         static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
 
+
+        public int ForumId
+        {
+            get { return (int)GetValue(ForumIdProperty); }
+            set { SetValue(ForumIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ForumId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ForumIdProperty =
+            DependencyProperty.Register("ForumId", typeof(int), typeof(MainPage), new PropertyMetadata(0));
+
+
         public ulong ImageCacheDataSize
         {
             get { return (ulong)GetValue(ImageCacheDataSizeProperty); }
@@ -45,7 +57,23 @@ namespace Hipda.Client.Uwp.Pro
         public static readonly DependencyProperty ImageCacheDataSizeProperty =
             DependencyProperty.Register("ImageCacheDataSize", typeof(ulong), typeof(MainPage), new PropertyMetadata(0UL));
 
+
         MainPageViewModel _mainPageViewModel;
+
+        public void OpenThreadByForumId()
+        {
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), $"fid={ForumId}");
+        }
+
+        public void OpenThreadForItemType(string args)
+        {
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), $"item={args}");
+        }
+
+        public void OpenThreadForSearch(string args)
+        {
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), $"fid={args}");
+        }
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
@@ -87,7 +115,11 @@ namespace Hipda.Client.Uwp.Pro
             base.OnNavigatedTo(e);
 
             string param = e.Parameter.ToString();
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
+            if (param.StartsWith("fid="))
+            {
+                ForumId = Convert.ToInt32(param.Substring("fid=".Length));
+                OpenThreadByForumId();
+            }
 
             _mainPageViewModel.SelectedNavButton = _mainPageViewModel.NavButtons.FirstOrDefault(b => b.TypeValue.Equals(param));
         }
@@ -190,7 +222,6 @@ namespace Hipda.Client.Uwp.Pro
             new RoamingSettingsService().Save();
         }
 
-        string _prevAccessForumIdStr = "2";
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count != 1)
@@ -209,9 +240,17 @@ namespace Hipda.Client.Uwp.Pro
             {
                 if (data.TypeValue.StartsWith("fid="))
                 {
-                    _prevAccessForumIdStr = data.TypeValue.Substring("fid=".Length);
+                    ForumId = Convert.ToInt32(data.TypeValue.Substring("fid=".Length));
+                    OpenThreadByForumId();
                 }
-                AppFrame.Navigate(typeof(ThreadAndReplyPage), data.TypeValue);
+                else if (data.TypeValue.StartsWith("item="))
+                {
+                    OpenThreadForItemType(data.TypeValue.Replace("item=", string.Empty));
+                }
+                else if (data.TypeValue.StartsWith("search="))
+                {
+                    OpenThreadForSearch(data.TypeValue.Replace("search=", string.Empty));
+                }
             }
         }
 
@@ -310,7 +349,8 @@ namespace Hipda.Client.Uwp.Pro
         private void ForumAllCategoryListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = (ForumModel)e.ClickedItem;
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), $"fid={item.Id}");
+            ForumId = item.Id;
+            OpenThreadByForumId();
 
             HideLeftSwipePanel();
         }
@@ -348,8 +388,8 @@ namespace Hipda.Client.Uwp.Pro
             int searchType = SearchTypeComboBox.SelectedIndex;
             int searchTimeSpan = SearchTimeSpanComboBox.SelectedIndex;
 
-            string param = $"search={searchKeyword},{searchAuthor},{searchType},{searchTimeSpan},-1";
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
+            string args = $"{searchKeyword},{searchAuthor},{searchType},{searchTimeSpan},-1";
+            OpenThreadForSearch(args);
 
             TopNavButtonListBox.SelectedItem = null;
         }
@@ -366,15 +406,15 @@ namespace Hipda.Client.Uwp.Pro
             int searchType = SearchTypeComboBox.SelectedIndex;
             int searchTimeSpan = SearchTimeSpanComboBox.SelectedIndex;
 
-            string param = $"search={searchKeyword},{searchAuthor},{searchType},{searchTimeSpan},{_prevAccessForumIdStr}";
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), param);
+            string args = $"{searchKeyword},{searchAuthor},{searchType},{searchTimeSpan},{ForumId}";
+            OpenThreadForSearch(args);
 
             TopNavButtonListBox.SelectedItem = null;
         }
 
         private void NoticeButton_Click(object sender, RoutedEventArgs e)
         {
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), "item=notice");
+            OpenThreadForItemType("notice");
         }
 
         void SendToast(string toastXml)
@@ -741,17 +781,20 @@ namespace Hipda.Client.Uwp.Pro
             new RoamingSettingsService().UnblockThreads(_unblockThreadKeys);
             _unblockThreadKeys.Clear();
         }
-
-
-
         #endregion
+
+        #region 消息发送
+        void SendSuccess(string title)
+        {
+            CloseUserDialog();
+            OpenThreadByForumId();
+        }
 
         public async void OpenCreateThreadPanel()
         {
             FindName("UserDialog");
-            UserDialog.DataContext = null;
             UserDialog.Title = "发表新话题";
-            UserDialog.ContentTemplate = (DataTemplate)Resources["CreateThreadDialogContentTemplate"];
+            UserDialog.Content = new SendControl(SendType.New, ForumId, SendSuccess);
 
             if (_isDialogShown == false)
             {
@@ -759,5 +802,6 @@ namespace Hipda.Client.Uwp.Pro
                 await UserDialog.ShowAsync();
             }
         }
+        #endregion
     }
 }

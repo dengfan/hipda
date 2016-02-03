@@ -52,7 +52,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) =>
             {
-                _ds.ClearReplyData(_threadId);
                 LoadData(1);
             };
 
@@ -61,7 +60,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 if (_startPageNo > 1)
                 {
-                    _ds.ClearReplyData(_threadId);
                     LoadData(_startPageNo - 1);
                 }
             };
@@ -78,6 +76,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadData(int pageNo)
         {
+            _ds.ClearReplyData(_threadId);
             var cv = _ds.GetViewForReplyPageByThreadId(pageNo, _threadId, _beforeLoad, _afterLoad);
             if (cv != null)
             {

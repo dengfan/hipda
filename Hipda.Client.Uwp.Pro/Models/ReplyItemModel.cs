@@ -46,7 +46,20 @@ namespace Hipda.Client.Uwp.Pro.Models
         public int ForumId { get; private set; }
         public string ForumName { get; private set; }
         public int ThreadId { get; private set; }
-        public string ThreadTitle { get; set; }
+
+        string _threadTitle;
+        public string ThreadTitle
+        {
+            get
+            {
+                return Common.ReplaceEmojiLabel(_threadTitle);
+            }
+            set
+            {
+                _threadTitle = value;
+            }
+        }
+
         public int ThreadAuthorUserId { get; set; }
         public string AuthorUsername { get; private set; }
 

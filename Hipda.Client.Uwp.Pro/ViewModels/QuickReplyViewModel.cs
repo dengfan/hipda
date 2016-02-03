@@ -28,7 +28,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public async Task<bool> Post(CancellationTokenSource cts, string content, List<string> imageNameList, int threadId)
         {
-            return await PostMessageService.PostReplyMessage(cts, content, imageNameList, threadId);
+            return await PostMessageService.PostQuickReply(cts, content, imageNameList, threadId);
         }
     }
 }
