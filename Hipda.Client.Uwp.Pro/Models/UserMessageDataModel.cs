@@ -32,7 +32,19 @@ namespace Hipda.Client.Uwp.Pro.Models
         public int UserId { get; set; }
         public string Username { get; set; }
         public string LastMessageTime { get; set; }
-        public string LastMessageText { get; set; }
+
+        private string _lastMessageText;
+        public string LastMessageText
+        {
+            get
+            {
+                return Common.ReplaceEmojiLabel(_lastMessageText);
+            }
+            set
+            {
+                _lastMessageText = value;
+            }
+        }
 
         public Uri AvatarUri
         {
