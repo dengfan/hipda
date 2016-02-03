@@ -141,7 +141,7 @@ namespace Hipda.BackgroundTask
                                 "<visual>" +
                                     "<binding template='ToastGeneric'>" +
                                         "<text>{0}</text>" +
-                                        "<text>引用或答复了您在《{1}》主题的贴子</text>" +
+                                        "<text>答复了您在《{1}》主题的贴子</text>" +
                                         "<image placement='appLogoOverride' src='{2}' hint-crop='circle'/>" +
                                         "<text>“ {3} ”</text>" +
                                     "</binding>" +
@@ -185,7 +185,7 @@ namespace Hipda.BackgroundTask
                                 "<visual>" +
                                     "<binding template='ToastGeneric'>" +
                                         "<text>{0}</text>" +
-                                        "<text>回复了您关注的主题《{1}》</text>" +
+                                        "<text>回复了《{1}》</text>" +
                                     "</binding>" +
                                 "</visual>" +
                                 "<actions>" +
