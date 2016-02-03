@@ -23,12 +23,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public async Task<List<string>[]> UploadFiles(CancellationTokenSource cts, Action<int, int, string> beforeUpload, Action<string> insertCodeIntoTextBox, Action<int> afterUpload)
         {
-            return await PostMessageService.UploadFiles(cts, beforeUpload, afterUpload);
+            return await SendService.UploadFiles(cts, beforeUpload, afterUpload);
         }
 
         public async Task<bool> Post(CancellationTokenSource cts, string content, List<string> imageNameList, int threadId)
         {
-            return await PostMessageService.PostQuickReply(cts, content, imageNameList, threadId);
+            return await SendService.SendQuickReply(cts, content, imageNameList, threadId);
         }
     }
 }

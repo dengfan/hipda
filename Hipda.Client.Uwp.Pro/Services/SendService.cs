@@ -13,12 +13,12 @@ using Windows.UI.Popups;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public static class PostMessageService
+    public static class SendService
     {
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         static string _messageTail = "\r\n \r\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]";
 
-        public static async Task<bool> PostNewThread(CancellationTokenSource cts, string title, string content, List<string> imageNameList, int forumId)
+        public static async Task<bool> SendNewThread(CancellationTokenSource cts, string title, string content, List<string> imageNameList, int forumId)
         {
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
@@ -40,7 +40,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return !resultContent.Contains("对不起，您两次发表间隔少于");
         }
 
-        public static async Task<bool> PostQuickReply(CancellationTokenSource cts, string content, List<string> imageNameList, int threadId)
+        public static async Task<bool> SendQuickReply(CancellationTokenSource cts, string content, List<string> imageNameList, int threadId)
         {
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));

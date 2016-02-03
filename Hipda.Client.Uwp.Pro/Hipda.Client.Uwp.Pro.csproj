@@ -168,7 +168,7 @@
     <Compile Include="Services\Common.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\ForumService.cs" />
-    <Compile Include="Services\PostMessageService.cs" />
+    <Compile Include="Services\SendService.cs" />
     <Compile Include="Services\ThreadListService.cs" />
     <Compile Include="Services\MyFavoritesService.cs" />
     <Compile Include="Services\MyPostsService.cs" />

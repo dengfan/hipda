@@ -54,7 +54,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             AddAttachFilesCommand.ExecuteAction = async (p) => 
             {
                 var cts = new CancellationTokenSource();
-                var data = await PostMessageService.UploadFiles(cts, _beforeUpload, _afterUpload);
+                var data = await SendService.UploadFiles(cts, _beforeUpload, _afterUpload);
                 if (data[0] != null && data[0].Count > 0)
                 {
                     _fileNameList.AddRange(data[0]);
@@ -81,7 +81,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 }
 
                 var cts = new CancellationTokenSource();
-                bool flag = await PostMessageService.PostNewThread(cts, Title, Content, _fileNameList, forumId);
+                bool flag = await SendService.SendNewThread(cts, Title, Content, _fileNameList, forumId);
                 if (flag)
                 {
                     _fileNameList.Clear();
