@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Hipda.Client.Uwp.Pro.Controls"
+    xmlns:cvt="using:Hipda.Client.Uwp.Pro.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -10,8 +11,15 @@
     d:DesignWidth="400">
 
     <StackPanel VerticalAlignment="Bottom">
-        <Border Padding="4" CornerRadius="4" HorizontalAlignment="Center" Background="{ThemeResource SystemControlBackgroundAccentBrush}">
-            <TextBlock x:Name="TipTextBlock" Margin="4" HorizontalAlignment="Center" Text="我人有的和，主产不为这" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
+        <StackPanel.Resources>
+            <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
+        </StackPanel.Resources>
+        <Border Margin="0,0,0,4" CornerRadius="15" HorizontalAlignment="Center" Opacity="0.7"
+                Visibility="{Binding Text,ElementName=TipTextBlock,Converter={StaticResource TextLengthToTipBorderVisibilityConverter}}"
+                Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <TextBlock x:Name="TipTextBlock" Margin="12,6" HorizontalAlignment="Center" TextWrapping="Wrap"
+                       Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}"
+                       FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" />
         </Border>
         <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
             <Grid.RowDefinitions>
