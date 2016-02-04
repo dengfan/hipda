@@ -184,7 +184,8 @@
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
     <Compile Include="Triggers\InputTypeTrigger.cs" />
     <Compile Include="UserMessageListItemTemplateSelector.cs" />
-    <Compile Include="ViewModels\NewThreadContentDialogViewModel.cs" />
+    <Compile Include="ViewModels\SendEditPostContentDialogViewModel.cs" />
+    <Compile Include="ViewModels\SendNewThreadContentDialogViewModel.cs" />
     <Compile Include="ViewModels\FaceIconViewModel.cs" />
     <Compile Include="ViewModels\ForumAllCategoryListViewViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
@@ -193,7 +194,7 @@
     <Compile Include="ViewModels\QuickReplyViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForDefaultViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForSpecifiedPostViewModel.cs" />
-    <Compile Include="ViewModels\ReplyPostContentDialogViewModel.cs" />
+    <Compile Include="ViewModels\SendReplyPostContentDialogViewModel.cs" />
     <Compile Include="ViewModels\ThreadHistoryListBoxViewModel.cs" />
     <Compile Include="ViewModels\ThreadListViewForMyFavoritesViewModel.cs" />
     <Compile Include="ViewModels\ThreadListViewForMyPostsViewModel.cs" />

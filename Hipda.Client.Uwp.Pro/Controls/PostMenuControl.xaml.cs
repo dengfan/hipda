@@ -1,9 +1,11 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
@@ -39,7 +41,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             if (mp != null)
             {
                 string postSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + "..." : data.TextStr;
-                mp.OpenReplyPostPanel("r", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
+                mp.OpenSendReplyPostPanel("r", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
             }
         }
 
@@ -56,11 +58,11 @@ namespace Hipda.Client.Uwp.Pro.Controls
             if (mp != null)
             {
                 string postSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + "..." : data.TextStr;
-                mp.OpenReplyPostPanel("q", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
+                mp.OpenSendReplyPostPanel("q", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
             }
         }
 
-        private void OpenEditPostPanel(object sender, RoutedEventArgs e)
+        private async void OpenEditPostPanel(object sender, RoutedEventArgs e)
         {
             var data = (ReplyItemModel)((MenuFlyoutItem)e.OriginalSource).DataContext;
             if (data == null)
@@ -72,8 +74,9 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var mp = frame.Content as MainPage;
             if (mp != null)
             {
-                string postSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + "..." : data.TextStr;
-                mp.OpenReplyPostPanel("q", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
+                var cts = new CancellationTokenSource();
+                string[] originalData = await SendService.LoadContentForEditAsync(cts, data.PostId, data.ThreadId);
+                mp.OpenSendEditPostPanel(originalData[0], originalData[1], data.PostId, data.ThreadId);
             }
         }
 

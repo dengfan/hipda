@@ -155,7 +155,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
             this.InitializeComponent();
 
             TipTextBlock.Text = "请输入标题和内容。";
-            this.DataContext = new NewThreadContentDialogViewModel(forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+            var cts = new CancellationTokenSource();
+            this.DataContext = new SendNewThreadContentDialogViewModel(cts, forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
 
         /// <summary>
@@ -175,7 +176,17 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
             TitleTextBox.Visibility = Visibility.Collapsed;
             TipTextBlock.Text = "请输入回复内容。";
-            this.DataContext = new ReplyPostContentDialogViewModel(replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+            var cts = new CancellationTokenSource();
+            this.DataContext = new SendReplyPostContentDialogViewModel(cts, replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+        }
+
+        public SendControl(string title, string content, int postId, int threadId, Action<string> sentSuccess)
+        {
+            this.InitializeComponent();
+
+            TipTextBlock.Text = "请输入更新内容。";
+            var cts = new CancellationTokenSource();
+            this.DataContext = new SendEditPostContentDialogViewModel(cts, title, content, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
     }
 }

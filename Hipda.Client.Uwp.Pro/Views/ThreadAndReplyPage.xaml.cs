@@ -163,7 +163,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             var mp = frame.Content as MainPage;
             if (mp != null)
             {
-                mp.OpenCreateThreadPanel();
+                mp.OpenSendNewThreadPanel();
             }
         }
         #endregion

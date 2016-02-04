@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
 using Windows.Storage;
@@ -823,7 +824,7 @@ namespace Hipda.Client.Uwp.Pro
         #endregion
 
         #region 消息发送
-        public async void OpenCreateThreadPanel()
+        public async void OpenSendNewThreadPanel()
         {
             FindName("UserDialog");
 
@@ -866,7 +867,7 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        public async void OpenReplyPostPanel(string replyType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId)
+        public async void OpenSendReplyPostPanel(string replyType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId)
         {
             FindName("UserDialog");
 
@@ -927,6 +928,69 @@ namespace Hipda.Client.Uwp.Pro
             }
 
             var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter(), ConverterParameter = titleParameter };
+            UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
+
+            UserDialog.ContentTemplate = null;
+            UserDialog.Content = sendControl;
+
+            if (_isDialogShown == false)
+            {
+                _isDialogShown = true;
+                await UserDialog.ShowAsync();
+            }
+        }
+
+        public async void OpenSendEditPostPanel(string title, string content, int postId, int threadId)
+        {
+            FindName("UserDialog");
+
+            Action<string> sendSuccess = (t) =>
+            {
+                CloseUserDialog();
+
+                // 开始倒计时
+                Countdown = 30;
+                _dispatcherTimer.Stop();
+                _dispatcherTimer.Start();
+
+                // 回贴成功后，刷新回复页到底部
+                if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
+                {
+                    var page = (ThreadAndReplyPage)AppFrame.Content;
+                    var cmdBar = (CommandBar)page.FindName("RightCommandBar");
+                    if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForDefaultViewModel)))
+                    {
+                        var vm = (ReplyListViewForDefaultViewModel)cmdBar.DataContext;
+                        vm.RefreshReplyCommand.Execute(null);
+                    }
+                    else if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
+                    {
+                        var vm = (ReplyListViewForSpecifiedPostViewModel)cmdBar.DataContext;
+                        vm.RefreshReplyCommand.Execute(null);
+                    }
+                }
+                else if (AppFrame.Content.GetType().Equals(typeof(ReplyListPage)))
+                {
+                    var page = (ReplyListPage)AppFrame.Content;
+                    var cmdBar = (CommandBar)page.FindName("RightCommandBar");
+                    if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForDefaultViewModel)))
+                    {
+                        var vm = (ReplyListViewForDefaultViewModel)cmdBar.DataContext;
+                        vm.RefreshReplyCommand.Execute(null);
+                    }
+                    else if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
+                    {
+                        var vm = (ReplyListViewForSpecifiedPostViewModel)cmdBar.DataContext;
+                        vm.RefreshReplyCommand.Execute(null);
+                    }
+                }
+            };
+
+            var sendControl = new SendControl(title, content, postId, threadId, sendSuccess);
+            var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
+            sendControl.SetBinding(SendControl.CountdownProperty, binding);
+
+            var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter(), ConverterParameter = "编辑" };
             UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
 
             UserDialog.ContentTemplate = null;

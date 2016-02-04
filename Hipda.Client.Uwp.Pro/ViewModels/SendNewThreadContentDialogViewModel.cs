@@ -9,29 +9,20 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ReplyPostContentDialogViewModel
+    public class SendNewThreadContentDialogViewModel
     {
-        int _postAuthorUserId;
-        string _postAuthorUsername;
-        string _postSimpleContent;
-        int _floorNo;
-        int _postId;
-        int _threadId;
         Action<int, int, string> _beforeUpload;
         Action<string> _insertFileCodeIntoContentTextBox;
         Action<int> _afterUpload;
         Action<string> _sentFailded;
         Action<string> _sentSuccess;
 
-        string _noticeauthor;
-        string _noticetrimstr;
-        string _noticeauthormsg;
 
         private static string _title;
 
         public static string Title
         {
-            get { return _title; }
+            get { return Common.ReplaceEmojiLabel(_title); }
             set { _title = value; }
         }
 
@@ -39,7 +30,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public static string Content
         {
-            get { return _content; }
+            get { return Common.ReplaceEmojiLabel(_content); }
             set { _content = value; }
         }
 
@@ -51,36 +42,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         static List<string> _fileNameList = new List<string>();
         static List<string> _fileCodeList = new List<string>();
 
-        public ReplyPostContentDialogViewModel(string replyType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
+        public SendNewThreadContentDialogViewModel(CancellationTokenSource cts, int forumId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
         {
-            _postAuthorUserId = postAuthorUserId;
-            _postAuthorUsername = postAuthorUsername;
-            _postSimpleContent = postSimpleContent;
-            _floorNo = floorNo;
-            _postId = postId;
-            _threadId = threadId;
             _beforeUpload = beforeUpload;
             _insertFileCodeIntoContentTextBox = insertFileCodeIntoContentTextBox;
             _afterUpload = afterUpload;
             _sentSuccess = sentSuccess;
             _sentFailded = sentFailded;
 
-            if (replyType.Equals("r"))
-            {
-                _noticeauthor = $"{replyType}|{_postAuthorUserId}|[i]{_postAuthorUsername}[/i]";
-                _noticetrimstr = $"[b]回复 [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={_postId}&ptid={_threadId}]{_floorNo}#[/url] [i]{_postAuthorUsername}[/i] [/b]\r\n \r\n    ";
-            }
-            else if (replyType.Equals("q"))
-            {
-                _noticeauthor = $"{replyType}|{_postAuthorUserId}|{_postAuthorUsername}";
-                _noticetrimstr = $"[quote]{_postSimpleContent}\r\n[size=2][color=#999999]{_postAuthorUserId} 发表于 {postTime}[/color] [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={_postId}&ptid={_threadId}][img]http://www.hi-pda.com/forum/images/common/back.gif[/img][/url][/size][/quote]\r\n    ";
-            }
-            _noticeauthormsg = _postSimpleContent;
-
             AddAttachFilesCommand = new DelegateCommand();
-            AddAttachFilesCommand.ExecuteAction = async (p) =>
+            AddAttachFilesCommand.ExecuteAction = async (p) => 
             {
-                var cts = new CancellationTokenSource();
                 var data = await SendService.UploadFiles(cts, _beforeUpload, _afterUpload);
                 if (data[0] != null && data[0].Count > 0)
                 {
@@ -101,14 +73,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             SendCommand = new DelegateCommand();
             SendCommand.ExecuteAction = async (p) =>
             {
-                if (string.IsNullOrEmpty(Content))
+                if (string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(Content))
                 {
-                    _sentFailded("请填写内容！");
+                    _sentFailded("请将标题及内容填写完整！");
                     return;
                 }
 
-                var cts = new CancellationTokenSource();
-                bool flag = await SendService.SendPostReply(cts, _noticeauthor, _noticetrimstr, _noticeauthormsg, Content, _fileNameList, _threadId);
+                bool flag = await SendService.SendNewThread(cts, Title, Content, _fileNameList, forumId);
                 if (flag)
                 {
                     _fileNameList.Clear();

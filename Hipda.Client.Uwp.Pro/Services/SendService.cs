@@ -1,4 +1,5 @@
 ﻿using Hipda.Http;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,6 +19,57 @@ namespace Hipda.Client.Uwp.Pro.Services
     {
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         static string _messageTail = "\r\n \r\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]";
+
+        public static async Task SendEditPost(CancellationTokenSource cts, string title, string content, List<string> fileNameList, int postId, int threadId)
+        {
+            var postData = new List<KeyValuePair<string, object>>();
+            postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
+            postData.Add(new KeyValuePair<string, object>("subject", title));
+            postData.Add(new KeyValuePair<string, object>("message", $"{content}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
+            postData.Add(new KeyValuePair<string, object>("tid", threadId));
+            postData.Add(new KeyValuePair<string, object>("pid", postId));
+            postData.Add(new KeyValuePair<string, object>("iconid", "0"));
+
+            // 图片信息
+            foreach (var fileName in fileNameList)
+            {
+                postData.Add(new KeyValuePair<string, object>(string.Format("attachnew[{0}][description]", fileName), string.Empty));
+            }
+
+            string url = string.Format("http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=", threadId);
+            await _httpClient.PostAsync(url, postData, cts);
+        }
+
+        public static async Task<string[]> LoadContentForEditAsync(CancellationTokenSource cts, int postId, int threadId)
+        {
+            string url = $"http://www.hi-pda.com/forum/post.php?action=edit&tid={threadId}&pid={postId}";
+            string htmlContent = await _httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlContent);
+
+            // 标题
+            string subject = string.Empty;
+            var subjectInput = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("input") && n.GetAttributeValue("prompt", "").Equals("post_subject"));
+            if (subjectInput != null)
+            {
+                subject = subjectInput.Attributes["value"].Value;
+            }
+
+            // 内容
+            string content = string.Empty;
+            var contentTextArea = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("textarea") && n.GetAttributeValue("prompt", "").Equals("post_message"));
+            if (contentTextArea != null)
+            {
+                content = contentTextArea.InnerText.Replace(_messageTail, string.Empty).TrimEnd();
+            }
+
+            return new string[] { subject, content };
+        }
 
         public static async Task<bool> SendPostReply(CancellationTokenSource cts, string noticeauthor, string noticetrimstr, string noticeauthormsg, string content, List<string> fileNameList, int threadId)
         {
