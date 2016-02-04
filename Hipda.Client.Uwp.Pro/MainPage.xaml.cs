@@ -456,22 +456,6 @@ namespace Hipda.Client.Uwp.Pro
             OpenThreadForItemType("notice");
         }
 
-        void SendToast(string toastXml)
-        {
-            toastXml = Common.ReplaceHexadecimalSymbols(toastXml);
-            toastXml = Common.ReplaceEmojiLabel(toastXml);
-
-            var xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(toastXml);
-
-            // 创建通知实例
-            var notification = new ToastNotification(xmlDoc);
-
-            // 显示通知
-            var tn = ToastNotificationManager.CreateToastNotifier();
-            tn.Show(notification);
-        }
-
         #region 头像上下文菜单
         //private async void openThreadInNewView_Tapped(object sender, TappedRoutedEventArgs e)
         //{
@@ -502,7 +486,7 @@ namespace Hipda.Client.Uwp.Pro
                             "</binding>" +
                         "</visual>" +
                         "</toast>";
-                    SendToast(xml1);
+                    Common.SendToast(xml1);
                     return;
                 }
 
@@ -521,7 +505,7 @@ namespace Hipda.Client.Uwp.Pro
                     new RoamingSettingsService().SaveBlockUsers();
                 }
 
-                SendToast(xml2);
+                Common.SendToast(xml2);
             }
         }
 
@@ -538,7 +522,7 @@ namespace Hipda.Client.Uwp.Pro
                             "</binding>" +
                         "</visual>" +
                         "</toast>";
-                    SendToast(xml1);
+                    Common.SendToast(xml1);
                     return;
                 }
 
@@ -557,7 +541,7 @@ namespace Hipda.Client.Uwp.Pro
                     "</visual>" +
                     "</toast>";
 
-                SendToast(xml2);
+                Common.SendToast(xml2);
             }
         }
         #endregion
@@ -997,5 +981,38 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
         #endregion
+
+        private async void AddToFavorites_Click(object sender, RoutedEventArgs e)
+        {
+            if (PopupThreadId == 0 || string.IsNullOrEmpty(PopupThreadTitle))
+            {
+                return;
+            }
+
+            var cts = new CancellationTokenSource();
+            await SendService.SendAddToFavoritesAction(cts, PopupThreadId, PopupThreadTitle);
+        }
+
+        private void OpenUserThread_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(PopupUsername))
+            {
+                return;
+            }
+
+            OpenThreadForSearch($",{PopupUsername},0,0,-1");
+            TopNavButtonListBox.SelectedItem = null;
+        }
+
+        private async void AddBuddy_Click(object sender, RoutedEventArgs e)
+        {
+            if (PopupUserId == 0 || string.IsNullOrEmpty(PopupUsername))
+            {
+                return;
+            }
+
+            var cts = new CancellationTokenSource();
+            await SendService.SendAddBuddyAction(cts, PopupUserId, PopupUsername);
+        }
     }
 }

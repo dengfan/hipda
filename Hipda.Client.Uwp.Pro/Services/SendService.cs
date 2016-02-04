@@ -203,5 +203,38 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             return new List<string>[] { fileNameList, fileCodeList };
         }
+
+        public static async Task SendAddToFavoritesAction(CancellationTokenSource cts, int threadId, string threadTitle)
+        {
+            string url = $"http://www.hi-pda.com/forum/my.php?item=favorites&tid={threadId}&inajax=1";
+            await _httpClient.GetAsync(url, cts);
+
+            string xml = "<toast>" +
+                        "<visual>" +
+                            "<binding template='ToastGeneric'>" +
+                                $"<text>恭喜您，主题《{threadTitle}》</text>" +
+                                "<text>已收藏成功</text>" +
+                            "</binding>" +
+                        "</visual>" +
+                        "</toast>";
+            Common.SendToast(xml);
+        }
+
+        public static async Task SendAddBuddyAction(CancellationTokenSource cts, int userId, string username)
+        {
+            string url = $"http://www.hi-pda.com/forum/my.php?item=buddylist&newbuddyid={userId}&buddysubmit=yes&inajax=1";
+            await _httpClient.GetAsync(url, cts);
+
+            string xml = "<toast>" +
+                        "<visual>" +
+                            "<binding template='ToastGeneric'>" +
+                                $"<text>恭喜您，用户 {username}</text>" +
+                                $"<text>好友请求已发送成功</text>" +
+                            "</binding>" +
+                        "</visual>" +
+                        "</toast>";
+            Common.SendToast(xml);
+        }
+
     }
 }

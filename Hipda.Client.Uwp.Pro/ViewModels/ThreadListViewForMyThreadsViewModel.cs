@@ -24,6 +24,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public int ThreadMaxPageNo { get; set; }
 
+        public DelegateCommand RefreshThreadCommand { get; set; }
+
         public ThreadListViewForMyThreadsViewModel(int pageNo, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _leftListView = leftListView;
@@ -44,11 +46,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             LoadDataForMyThreads(pageNo);
 
-            var refreshThreadForThreadsCommand = new DelegateCommand();
-            refreshThreadForThreadsCommand.ExecuteAction = (p) => {
+            var RefreshThreadCommand = new DelegateCommand();
+            RefreshThreadCommand.ExecuteAction = (p) => {
                 _ds.ClearThreadDataForMyThreads();
                 LoadDataForMyThreads(1);
             };
+
+            var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
+            btnRefresh.Command = RefreshThreadCommand;
+            _leftCommandBar.PrimaryCommands.Add(btnRefresh);
         }
 
         void LoadDataForMyThreads(int pageNo)

@@ -28,6 +28,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public int ThreadMaxPageNo { get; set; }
 
+        public DelegateCommand RefreshThreadCommand { get; set; }
+
         public ThreadListViewForSearchFullTextViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _searchKeyword = searchKeyword;
@@ -54,11 +56,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds.ClearThreadDataForSearchFullText();
             LoadDataForSearchFullText(pageNo);
 
-            var refreshThreadForSearchCommand = new DelegateCommand();
-            refreshThreadForSearchCommand.ExecuteAction = (p) => {
+            var RefreshThreadCommand = new DelegateCommand();
+            RefreshThreadCommand.ExecuteAction = (p) => {
                 _ds.ClearThreadDataForSearchFullText();
                 LoadDataForSearchFullText(1);
             };
+
+            var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
+            btnRefresh.Command = RefreshThreadCommand;
+            _leftCommandBar.PrimaryCommands.Add(btnRefresh);
         }
 
         void LoadDataForSearchFullText(int pageNo)

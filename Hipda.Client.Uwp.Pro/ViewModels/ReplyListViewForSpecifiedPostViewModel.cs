@@ -30,10 +30,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action<int> _listViewScroll;
         ReplyListService _ds;
 
+        public DelegateCommand AddToFavoritesCommand { get; set; }
         public DelegateCommand RefreshReplyCommand { get; set; }
-
         public DelegateCommand LoadPrevPageDataCommand { get; set; }
-
         public DelegateCommand LoadLastPageDataCommand { get; set; }
 
 
@@ -57,6 +56,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _afterLoad = afterLoad;
             _listViewScroll = listViewScroll;
             _ds = new ReplyListService();
+
+            AddToFavoritesCommand = new DelegateCommand();
+            AddToFavoritesCommand.ExecuteAction = async (p) =>
+            {
+                await SendService.SendAddToFavoritesAction(cts, _threadId, _ds.GetThreadTitle(_threadId));
+            };
 
             RefreshReplyCommand = new DelegateCommand();
             RefreshReplyCommand.ExecuteAction = (p) =>
@@ -95,6 +100,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 int index = data[1];
                 _threadId = data[2];
                 _ds.SetScrollState(false);
+
                 var cv = _ds.GetViewForRedirectToPostByThreadId(pageNo, _threadId, index, _beforeLoad, _afterLoad, _listViewScroll);
                 if (cv != null)
                 {

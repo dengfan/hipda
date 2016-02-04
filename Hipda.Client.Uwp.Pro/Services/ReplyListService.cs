@@ -868,5 +868,16 @@ namespace Hipda.Client.Uwp.Pro.Services
             await LoadReplyDataForRedirectToSpecifiedPostAsync(postId, cts);
             return _replyData.FirstOrDefault(d => d.ThreadId == threadId).Replies.FirstOrDefault(r => r.PostId == postId);
         }
+
+        public string GetThreadTitle(int threadId)
+        {
+            var data = _replyData.FirstOrDefault(d => d.ThreadId == threadId);
+            if (data != null)
+            {
+                return data.Replies[0].ThreadTitle;
+            }
+
+            return string.Empty;
+        }
     }
 }

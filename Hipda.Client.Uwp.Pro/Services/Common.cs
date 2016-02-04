@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Windows.Data.Xml.Dom;
 using Windows.System;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
@@ -269,6 +271,22 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             return new Uri("http://www.hi-pda.com/forum/uc_server/data/avatar/" + s[8] + s[7] + s[6] + "/" + s[5] + s[4] + "/" + s[3] + s[2] + "/" + s[1] + s[0] + "_avatar_small.jpg");
+        }
+
+        public static void SendToast(string toastXml)
+        {
+            toastXml = ReplaceHexadecimalSymbols(toastXml);
+            toastXml = ReplaceEmojiLabel(toastXml);
+
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(toastXml);
+
+            // 创建通知实例
+            var notification = new ToastNotification(xmlDoc);
+
+            // 显示通知
+            var tn = ToastNotificationManager.CreateToastNotifier();
+            tn.Show(notification);
         }
 
         public static async void PostErrorEmailToDeveloper(string errorTitle, string errorDetails)

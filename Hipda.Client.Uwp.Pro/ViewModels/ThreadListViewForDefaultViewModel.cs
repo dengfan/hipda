@@ -57,10 +57,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             btnAdd.Click += (s, e) => openCreateThreadPanel();
             var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
             btnRefresh.Command = RefreshThreadCommand;
-            var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
+            //var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
             _leftCommandBar.PrimaryCommands.Add(btnAdd);
             _leftCommandBar.PrimaryCommands.Add(btnRefresh);
-            _leftCommandBar.PrimaryCommands.Add(btnSort);
+            //_leftCommandBar.PrimaryCommands.Add(btnSort);
         }
 
         void LoadData(int pageNo, int forumId)

@@ -138,7 +138,7 @@
                 </Grid.RowDefinitions>
 
                 <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-                    <AppBarButton x:Name="AddToFavoritesButton" Label="加入收藏" Command="{Binding RefreshReplyCommand}">
+                    <AppBarButton x:Name="AddToFavoritesButton" Label="加入收藏" Command="{Binding AddToFavoritesCommand}">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE734;"/>
                         </AppBarButton.Icon>

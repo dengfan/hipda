@@ -16,7 +16,6 @@
         <cvt:ElementThemeToMaskBackgroundBrush x:Key="ElementThemeToMaskBackgroundBrush"/>
         <cvt:SearchPanelVisibilityToSearchButtonStyleConverter x:Key="SearchPanelVisibilityToSearchButtonStyleConverter"/>
         
-        
         <Style x:Key="MainMenuListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="Local"/>
@@ -127,22 +126,22 @@
 
         <MenuFlyout x:Key="AvatarContextMenuForThread">
             <!--<MenuFlyoutItem Text="在新窗口中打开此主题" Tapped="openThreadInNewView_Tapped"/>-->
-            <MenuFlyoutItem Text="收藏此主题"/>
+            <MenuFlyoutItem Text="收藏此主题" Click="AddToFavorites_Click"/>
             <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="查看详细资料" Tapped="OpenUserInfoDialogMenuItem_Click"/>
-            <MenuFlyoutItem Text="查看发贴记录"/>
-            <MenuFlyoutItem Text="发短消息" Tapped="OpenUserMessageDialogMenuItem_Click"/>
-            <MenuFlyoutItem Text="加为好友"/>
+            <MenuFlyoutItem Text="查看详细资料" Click="OpenUserInfoDialogMenuItem_Click"/>
+            <MenuFlyoutItem Text="查看发贴记录" Click="OpenUserThread_Click"/>
+            <MenuFlyoutItem Text="发短消息" Click="OpenUserMessageDialogMenuItem_Click"/>
+            <MenuFlyoutItem Text="加为好友" Click="AddBuddy_Click"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="屏蔽此人" Click="BlockUserMenuItem_Click" />
             <MenuFlyoutItem Text="屏蔽此主题" Click="BlockThreadMenuItem_Click" />
         </MenuFlyout>
 
         <MenuFlyout x:Key="AvatarContextMenuForReply">
-            <MenuFlyoutItem Text="查看详细资料" Tapped="OpenUserInfoDialogMenuItem_Click"/>
-            <MenuFlyoutItem Text="查看发贴记录"/>
-            <MenuFlyoutItem Text="发短消息" Tapped="OpenUserMessageDialogMenuItem_Click"/>
-            <MenuFlyoutItem Text="加为好友"/>
+            <MenuFlyoutItem Text="查看详细资料" Click="OpenUserInfoDialogMenuItem_Click"/>
+            <MenuFlyoutItem Text="查看发贴记录" Click="OpenUserThread_Click"/>
+            <MenuFlyoutItem Text="发短消息" Click="OpenUserMessageDialogMenuItem_Click"/>
+            <MenuFlyoutItem Text="加为好友" Click="AddBuddy_Click"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="屏蔽此人" Click="BlockUserMenuItem_Click" />
         </MenuFlyout>
@@ -565,7 +564,7 @@
                                 Content="解除选中主题" Style="{StaticResource NormalButtonStyle}"
                                 Click="UnblockThreads"/>
 
-                        <HyperlinkButton Margin="0,14,0,14" HorizontalAlignment="Center" Content="购买 [移除广告] 服务"/>
+                        <HyperlinkButton Margin="0,14,0,14" HorizontalAlignment="Center" Content="购买 【移除广告】 服务"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
