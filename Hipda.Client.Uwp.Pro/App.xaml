@@ -13,7 +13,6 @@
         <vm:ForumAllCategoryListViewViewModel x:Key="ForumAllCategoryListViewViewModel"/>
         <vm:ThreadHistoryListBoxViewModel x:Key="ThreadHistoryListBoxViewModel"/>
         <vm:FaceIconViewModel x:Key="FaceIconViewModel"/>
-        <vm:SendThreadReplyViewModel x:Key="QuickReplyViewModel"/>
         <cvt:ThemeTypeToRequestedThemeConverter x:Key="ThemeTypeToRequestedThemeConverter"/>
         <cvt:UserIdToAvatarUriConverter x:Key="UserIdToAvatarUriConverter"/>
 
@@ -562,15 +561,15 @@
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
                 <StackPanel Margin="18,4,0,4">
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}">
                         <Run Text="{Binding ForumName}" />
                     </TextBlock>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
+                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
                         <Run Text="{Binding Title}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
                         <Run Text="&#x1F5E9;"/>
                         <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     </TextBlock>
@@ -583,18 +582,18 @@
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
                 <StackPanel Margin="18,4,0,4">
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}">
                         <Run Text="{Binding ForumName}" />
                     </TextBlock>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
+                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
                         <Run Text="{Binding Title}" />
                         <LineBreak/>
-                        <Run Text="&#x1F5E9;" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
-                        <Run Text="{Binding LastReplyContent}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" />
+                        <Run Text="&#x1F5E9;" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}"/>
+                        <Run Text="{Binding LastReplyContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
                         <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     </TextBlock>
                 </StackPanel>
@@ -606,15 +605,15 @@
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
                 <StackPanel Margin="18,4,0,4">
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}">
                         <Run Text="{Binding ForumName}" />
                     </TextBlock>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
+                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
                         <Run Text="{Binding Title}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
                         <Run Text="&#x1F5E9;"/>
                         <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     </TextBlock>

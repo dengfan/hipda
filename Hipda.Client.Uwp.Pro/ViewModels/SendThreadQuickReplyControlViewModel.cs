@@ -1,39 +1,27 @@
 ﻿using Hipda.Client.Uwp.Pro.Commands;
+using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class SendReplyPostContentDialogViewModel
+    public class SendThreadQuickReplyControlViewModel
     {
-        int _postAuthorUserId;
-        string _postAuthorUsername;
-        string _postSimpleContent;
-        int _floorNo;
-        int _postId;
         int _threadId;
         Action<int, int, string> _beforeUpload;
         Action<string> _insertFileCodeIntoContentTextBox;
         Action<int> _afterUpload;
         Action<string> _sentFailded;
         Action<string> _sentSuccess;
-
-        string _noticeauthor;
-        string _noticetrimstr;
-        string _noticeauthormsg;
-
-        private static string _title;
-
-        public static string Title
-        {
-            get { return _title; }
-            set { _title = value; }
-        }
 
         private static string _content;
 
@@ -51,31 +39,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         static List<string> _fileNameList = new List<string>();
         static List<string> _fileCodeList = new List<string>();
 
-        public SendReplyPostContentDialogViewModel(CancellationTokenSource cts, string replyType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
+        public SendThreadQuickReplyControlViewModel(CancellationTokenSource cts, string content, int threadId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
         {
-            _postAuthorUserId = postAuthorUserId;
-            _postAuthorUsername = postAuthorUsername;
-            _postSimpleContent = postSimpleContent;
-            _floorNo = floorNo;
-            _postId = postId;
+            Content = content;
             _threadId = threadId;
             _beforeUpload = beforeUpload;
             _insertFileCodeIntoContentTextBox = insertFileCodeIntoContentTextBox;
             _afterUpload = afterUpload;
             _sentSuccess = sentSuccess;
             _sentFailded = sentFailded;
-
-            if (replyType.Equals("r"))
-            {
-                _noticeauthor = $"{replyType}|{_postAuthorUserId}|[i]{_postAuthorUsername}[/i]";
-                _noticetrimstr = $"[b]回复 [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={_postId}&ptid={_threadId}]{_floorNo}#[/url] [i]{_postAuthorUsername}[/i] [/b]\r\n \r\n    ";
-            }
-            else if (replyType.Equals("q"))
-            {
-                _noticeauthor = $"{replyType}|{_postAuthorUserId}|{_postAuthorUsername}";
-                _noticetrimstr = $"[quote]{_postSimpleContent}\r\n[size=2][color=#999999]{_postAuthorUserId} 发表于 {postTime}[/color] [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={_postId}&ptid={_threadId}][img]http://www.hi-pda.com/forum/images/common/back.gif[/img][/url][/size][/quote]\r\n    ";
-            }
-            _noticeauthormsg = _postSimpleContent;
 
             AddAttachFilesCommand = new DelegateCommand();
             AddAttachFilesCommand.ExecuteAction = async (p) =>
@@ -106,19 +78,18 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     return;
                 }
 
-                bool flag = await SendService.SendPostReply(cts, _noticeauthor, _noticetrimstr, _noticeauthormsg, Content, _fileNameList, _threadId);
+                bool flag = await SendService.SendThreadReply(cts, Content, _fileNameList, _threadId);
                 if (flag)
                 {
                     _fileNameList.Clear();
                     _fileCodeList.Clear();
 
-                    Title = string.Empty;
                     Content = string.Empty;
 
                     // 提示发贴成功
                     if (_sentSuccess != null)
                     {
-                        _sentSuccess(Title);
+                        _sentSuccess(string.Empty);
                     }
                 }
                 else

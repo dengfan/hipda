@@ -177,7 +177,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             TitleTextBox.Visibility = Visibility.Collapsed;
             TipTextBlock.Text = "请输入回复内容。";
             var cts = new CancellationTokenSource();
-            this.DataContext = new SendReplyPostContentDialogViewModel(cts, replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+            this.DataContext = new SendPostReplyContentDialogViewModel(cts, replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
 
         public SendControl(string title, string content, int postId, int threadId, Action<string> sentSuccess)

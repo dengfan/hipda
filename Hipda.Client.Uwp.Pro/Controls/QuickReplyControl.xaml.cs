@@ -23,19 +23,91 @@ namespace Hipda.Client.Uwp.Pro.Controls
 {
     public sealed partial class QuickReplyControl : UserControl
     {
-        static SendThreadReplyViewModel _vm = (SendThreadReplyViewModel)App.Current.Resources["QuickReplyViewModel"];
-
-        public int ThreadId
+        #region UI事件
+        void EmojiGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            get { return (int)GetValue(ThreadIdProperty); }
-            set { SetValue(ThreadIdProperty, value); }
+            var data = (EmojiItemModel)e.ClickedItem;
+            if (data == null)
+            {
+                return;
+            }
+
+            string faceText = data.Label;
+
+            int occurences = 0;
+            string originalContent = ContentTextBox.Text;
+
+            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = ContentTextBox.SelectionStart + occurences;
+            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, faceText);
+            ContentTextBox.SelectionStart = cursorPosition + faceText.Length;
+            ContentTextBox.Focus(FocusState.Pointer);
         }
 
-        // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ThreadIdProperty =
-            DependencyProperty.Register("ThreadId", typeof(int), typeof(QuickReplyControl), new PropertyMetadata(0));
+        void FaceGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var data = (FaceItemModel)e.ClickedItem;
+            if (data == null)
+            {
+                return;
+            }
 
+            string faceText = data.Text;
 
+            int occurences = 0;
+            string originalContent = ContentTextBox.Text;
+
+            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = ContentTextBox.SelectionStart + occurences;
+            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, faceText);
+            ContentTextBox.SelectionStart = cursorPosition + faceText.Length;
+            ContentTextBox.Focus(FocusState.Pointer);
+        }
+        #endregion
+
+        #region 委托事件
+        void BeforeUpload(int fileIndex, int fileCount, string fileName)
+        {
+            TipTextBlock.Text = $"上载中 {fileIndex}/{fileCount} （{fileName}）";
+        }
+
+        void InsertFileCodeIntoContextTextBox(string fileCode)
+        {
+            int occurences = 0;
+            string originalContent = ContentTextBox.Text;
+
+            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = ContentTextBox.SelectionStart + occurences;
+            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, fileCode);
+            ContentTextBox.SelectionStart = cursorPosition + fileCode.Length;
+            ContentTextBox.Focus(FocusState.Programmatic);
+        }
+
+        void AfterUpload(int fileCount)
+        {
+            TipTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
+        }
+
+        void SentFailed(string errorText)
+        {
+            TipTextBlock.Text = errorText;
+        }
+        #endregion
 
         public QuickReplyControl()
         {
@@ -67,92 +139,18 @@ namespace Hipda.Client.Uwp.Pro.Controls
                     SendButton.Height = 32;
                 }
 
-                ReplyContentTextBox.MaxHeight = this.ActualHeight / 2;
+                ContentTextBox.MaxHeight = this.ActualHeight / 2;
             };
         }
 
-        private void EmojiGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var data = (EmojiItemModel)e.ClickedItem;
-            if (data == null)
-            {
-                return;
-            }
-
-            string faceText = data.Label;
-
-            int occurences = 0;
-            string originalContent = ReplyContentTextBox.Text;
-
-            for (var i = 0; i < ReplyContentTextBox.SelectionStart + occurences; i++)
-            {
-                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
-                    occurences++;
-            }
-
-            int cursorPosition = ReplyContentTextBox.SelectionStart + occurences;
-            ReplyContentTextBox.Text = ReplyContentTextBox.Text.Insert(cursorPosition, faceText);
-            ReplyContentTextBox.SelectionStart = cursorPosition + faceText.Length;
-        }
-
-        private void FaceGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var data = (FaceItemModel)e.ClickedItem;
-            if (data == null)
-            {
-                return;
-            }
-
-            string faceText = data.Text;
-
-            int occurences = 0;
-            string originalContent = ReplyContentTextBox.Text;
-
-            for (var i = 0; i < ReplyContentTextBox.SelectionStart + occurences; i++)
-            {
-                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
-                    occurences++;
-            }
-
-            int cursorPosition = ReplyContentTextBox.SelectionStart + occurences;
-            ReplyContentTextBox.Text = ReplyContentTextBox.Text.Insert(cursorPosition, faceText);
-            ReplyContentTextBox.SelectionStart = cursorPosition + faceText.Length;
-        }
-
-        static List<string> _imageNameList = new List<string>();
         private async void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ThreadId > 0)
-            {
-                var cts = new CancellationTokenSource();
-                bool flag = await _vm.Post(cts, ReplyContentTextBox.Text, _imageNameList, ThreadId);
-                await new MessageDialog(flag.ToString()).ShowAsync();
-            }
-        }
-
-        void InsertImageCodeIntoReplyContentTextBox(string imageCode)
-        {
-            int occurences = 0;
-            string originalContent = ReplyContentTextBox.Text;
-
-            for (var i = 0; i < ReplyContentTextBox.SelectionStart + occurences; i++)
-            {
-                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
-                    occurences++;
-            }
-
-            int cursorPosition = ReplyContentTextBox.SelectionStart + occurences;
-            ReplyContentTextBox.Text = ReplyContentTextBox.Text.Insert(cursorPosition, imageCode);
+            
         }
 
         private async void FileButton_Click(object sender, RoutedEventArgs e)
         {
-            var cts = new CancellationTokenSource();
-            var data = await _vm.UploadFiles(cts, null, InsertImageCodeIntoReplyContentTextBox, null);
-            //if (data != null && data.Count > 0)
-            //{
-            //    _imageNameList.AddRange(data);
-            //}
+            
         }
     }
 }
