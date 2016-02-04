@@ -111,7 +111,7 @@ namespace Hipda.Client.Uwp.Pro
 
         public void OpenThreadForSearch(string args)
         {
-            AppFrame.Navigate(typeof(ThreadAndReplyPage), $"fid={args}");
+            AppFrame.Navigate(typeof(ThreadAndReplyPage), $"search={args}");
         }
 
         public Frame AppFrame { get { return this.MainFrame; } }

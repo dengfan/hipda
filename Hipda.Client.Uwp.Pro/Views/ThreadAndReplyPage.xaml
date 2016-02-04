@@ -15,9 +15,6 @@
     NavigationCacheMode="Enabled"
     x:Name="MyThreadAndReplyPage">
 
-    <Page.Resources>
-        <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
-    </Page.Resources>
     <Grid x:Name="LayoutRoot">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">

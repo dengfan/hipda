@@ -9,9 +9,10 @@
     mc:Ignorable="d"
     NavigationCacheMode="Enabled"
     Loaded="PageRoot_Loaded"
-    Unloaded="PageRoot_Unloaded">
+    Unloaded="PageRoot_Unloaded"
+    x:Name="MyReplyListPage">
 
-    <Grid x:Name="RightWrap" x:DeferLoadStrategy="Lazy">
+    <Grid x:Name="RightWrap">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
@@ -30,9 +31,8 @@
                 </AppBarButton.Icon>
             </AppBarButton>
             <CommandBar.SecondaryCommands>
-                <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
-                <AppBarButton Label="复制链接"/>
-                <AppBarButton Label="在浏览器中打开"/>
+                <AppBarButton Label="复制链接" Command="{Binding CopyUrlCommand}"/>
+                <AppBarButton Label="在浏览器中打开" Command="{Binding OpenInBrowserCommand}"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
 
@@ -47,17 +47,58 @@
 
         <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
-        <StackPanel x:Name="ReplyPanel" Grid.Row="1" VerticalAlignment="Bottom" 
-                    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
-            <Grid>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <StackPanel x:Name="QuickReplyPanel" Grid.Row="1" VerticalAlignment="Bottom">
+            <Border Margin="0,0,0,8" Padding="8,4" CornerRadius="12" HorizontalAlignment="Center" Background="Red" Opacity="0.8"
+                            Visibility="{Binding Text.Length,ElementName=TipTextBlock,Converter={StaticResource TextLengthToTipBorderVisibilityConverter}}">
+                <TextBlock x:Name="TipTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                   FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+            </Border>
+            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="EmojiButton" Style="{StaticResource FaceButtonStyle}">
+                        <Button.Content>
+                            <SymbolIcon Symbol="Emoji" />
+                        </Button.Content>
+                        <Button.Flyout>
+                            <Flyout>
+                                <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
+                                                  SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="192"
+                                                  ItemClick="EmojiGridView_ItemClick">
+                                    <GridView.ItemContainerStyle>
+                                        <Style TargetType="GridViewItem">
+                                            <Setter Property="Width" Value="36"/>
+                                            <Setter Property="Height" Value="36"/>
+                                        </Style>
+                                    </GridView.ItemContainerStyle>
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+                                </GridView>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
                     <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
                         <Button.Content>
                             <SymbolIcon Symbol="Emoji2" />
                         </Button.Content>
                         <Button.Flyout>
                             <Flyout>
-                                <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceData}" SelectionMode="None" IsItemClickEnabled="True" IsSwipeEnabled="False" CanDragItems="False" Width="248" Height="220">
+                                <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
+                                                  SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="192"
+                                                  ItemClick="FaceGridView_ItemClick">
+                                    <GridView.ItemContainerStyle>
+                                        <Style TargetType="GridViewItem">
+                                            <Setter Property="Width" Value="36"/>
+                                            <Setter Property="Height" Value="36"/>
+                                        </Style>
+                                    </GridView.ItemContainerStyle>
                                     <GridView.ItemTemplate>
                                         <DataTemplate>
                                             <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -67,25 +108,31 @@
                             </Flyout>
                         </Button.Flyout>
                     </Button>
-                    <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}">
+                    <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}" Command="{Binding AddAttachFilesCommand}">
                         <Button.Content>
                             <SymbolIcon Symbol="Attach" />
                         </Button.Content>
                     </Button>
                 </StackPanel>
-
-                <Button x:Name="SendButton" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-                            <SymbolIcon Symbol="Send" />
-                            <TextBlock Text=" 发送"/>
-                        </StackPanel>
-                    </Button.Content>
+                <TextBox Grid.Row="1" x:Name="ContentTextBox" Template="{StaticResource TextBoxTemplate1}"
+                                 MinHeight="64" Padding="8,4" Background="Transparent" BorderThickness="0"
+                                 TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复，回车可换行。"
+                                 Text="{Binding Content,Mode=TwoWay}"/>
+                <Button Grid.Row="1" x:Name="SendButton" Margin="0,0,12,12"
+                                IsEnabled="{Binding Countdown,ElementName=MyReplyListPage,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"
+                                Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
+                                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
+                                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                Command="{Binding SendCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <x:String x:Key="SendString">发送</x:String>
+                        </StackPanel.Resources>
+                        <SymbolIcon Symbol="Send" Margin="0,0,4,0" />
+                        <TextBlock Text="{Binding Countdown,ElementName=MyReplyListPage,Converter={StaticResource CountdownToCountdownLabelConverter},ConverterParameter={StaticResource SendString}}"/>
+                    </StackPanel>
                 </Button>
             </Grid>
-            <TextBox x:Name="PostContentTextBox" Template="{StaticResource TextBoxTemplate1}" 
-                     MaxHeight="280" Padding="8,4" Background="Transparent" BorderThickness="0"
-                     TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="编辑回复内容，回车可换行。"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -1,9 +1,11 @@
-﻿using Hipda.Client.Uwp.Pro.ViewModels;
+﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
@@ -78,6 +80,10 @@ namespace Hipda.Client.Uwp.Pro.Views
             rightProgress.Visibility = Visibility.Collapsed;
             ReplyRefreshToFirstPageButton.IsEnabled = true;
             ReplyRefreshToLastPageButton.IsEnabled = true;
+
+            var cts = new CancellationTokenSource();
+            var vm = new SendThreadQuickReplyControlViewModel(cts, ThreadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, SentSuccess);
+            QuickReplyPanel.DataContext = vm;
         }
 
         async void ReplyListViewScrollForSpecifiedPost(int index)
@@ -175,9 +181,54 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
+        public int Countdown
+        {
+            get { return (int)GetValue(CountdownProperty); }
+            set { SetValue(CountdownProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Countdown.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CountdownProperty =
+            DependencyProperty.Register("Countdown", typeof(int), typeof(ReplyListPage), new PropertyMetadata(0));
+
+
+        MainPage _mainPage;
+
         public ReplyListPage()
         {
             this.InitializeComponent();
+
+            this.SizeChanged += (s, e) =>
+            {
+                string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
+                if (userInteractionType.Equals("Touch"))
+                {
+                    EmojiButton.Width = 80;
+                    EmojiButton.Height = 40;
+                    FaceButton.Width = 80;
+                    FaceButton.Height = 40;
+                    FileButton.Width = 80;
+                    FileButton.Height = 40;
+                    SendButton.Height = 40;
+                }
+                else if (userInteractionType.Equals("Mouse"))
+                {
+                    EmojiButton.Width = 32;
+                    EmojiButton.Height = 32;
+                    FaceButton.Width = 32;
+                    FaceButton.Height = 32;
+                    FileButton.Width = 32;
+                    FileButton.Height = 32;
+                    SendButton.Height = 32;
+                }
+
+                ContentTextBox.MaxHeight = this.ActualHeight / 2;
+            };
+
+            var frame = (Frame)Window.Current.Content;
+            _mainPage = (MainPage)frame.Content;
+            var countdownBinding = new Binding { Path = new PropertyPath("Countdown"), Source = _mainPage };
+            this.SetBinding(ReplyListPage.CountdownProperty, countdownBinding);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -289,8 +340,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
             else
             {
-                FindName("RightWrap");
-
                 var cts = new CancellationTokenSource();
                 if (PostId > 0)
                 {
@@ -335,5 +384,140 @@ namespace Hipda.Client.Uwp.Pro.Views
                 vm.LoadPrevPageData();
             }
         }
+
+        #region 回贴
+        #region UI事件
+        void EmojiGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var data = (EmojiItemModel)e.ClickedItem;
+            if (data == null)
+            {
+                return;
+            }
+
+            string faceText = data.Label;
+
+            int occurences = 0;
+            string originalContent = ContentTextBox.Text;
+
+            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = ContentTextBox.SelectionStart + occurences;
+            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, faceText);
+            ContentTextBox.SelectionStart = cursorPosition + faceText.Length;
+            ContentTextBox.Focus(FocusState.Pointer);
+        }
+
+        void FaceGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var data = (FaceItemModel)e.ClickedItem;
+            if (data == null)
+            {
+                return;
+            }
+
+            string faceText = data.Text;
+
+            int occurences = 0;
+            string originalContent = ContentTextBox.Text;
+
+            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = ContentTextBox.SelectionStart + occurences;
+            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, faceText);
+            ContentTextBox.SelectionStart = cursorPosition + faceText.Length;
+            ContentTextBox.Focus(FocusState.Pointer);
+        }
+        #endregion
+
+        #region 委托事件
+        int _autoRemoveTipTimerCount;
+        DispatcherTimer _autoRemoveTipTimer;
+
+        public void SendMessageTimerSetup()
+        {
+            _autoRemoveTipTimerCount = 3;
+            _autoRemoveTipTimer = new DispatcherTimer();
+            _autoRemoveTipTimer.Tick += AutoRemoveTipTimer_Tick;
+            _autoRemoveTipTimer.Interval = new TimeSpan(0, 0, 1);
+            _autoRemoveTipTimer.Start();
+        }
+
+        private void AutoRemoveTipTimer_Tick(object sender, object e)
+        {
+            if (_autoRemoveTipTimerCount == 0)
+            {
+                TipTextBlock.Text = string.Empty;
+                _autoRemoveTipTimer.Stop();
+                return;
+            }
+
+            _autoRemoveTipTimerCount--;
+        }
+
+        void BeforeUpload(int fileIndex, int fileCount, string fileName)
+        {
+            TipTextBlock.Text = $"上载中 {fileIndex}/{fileCount} （{fileName}）";
+            SendMessageTimerSetup();
+        }
+
+        void InsertFileCodeIntoContextTextBox(string fileCode)
+        {
+            int occurences = 0;
+            string originalContent = ContentTextBox.Text;
+
+            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = ContentTextBox.SelectionStart + occurences;
+            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, fileCode);
+            ContentTextBox.SelectionStart = cursorPosition + fileCode.Length;
+            ContentTextBox.Focus(FocusState.Programmatic);
+        }
+
+        void AfterUpload(int fileCount)
+        {
+            TipTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
+            SendMessageTimerSetup();
+        }
+
+        void SentFailed(string errorText)
+        {
+            TipTextBlock.Text = errorText;
+            SendMessageTimerSetup();
+        }
+
+        void SentSuccess(string title)
+        {
+            // 回贴成功后，刷新贴子到底部
+            var vmType = RightWrap.DataContext.GetType();
+            if (vmType.Equals(typeof(ReplyListViewForDefaultViewModel)))
+            {
+                var vm = (ReplyListViewForDefaultViewModel)RightWrap.DataContext;
+                vm.LoadLastPageDataCommand.Execute(null);
+            }
+            else if (vmType.Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
+            {
+                var vm = (ReplyListViewForDefaultViewModel)RightWrap.DataContext;
+                vm.LoadLastPageDataCommand.Execute(null);
+            }
+
+            // 开始倒计时
+            _mainPage?.SendMessageTimerSetup();
+        }
+        #endregion
+
+        #endregion
     }
 }

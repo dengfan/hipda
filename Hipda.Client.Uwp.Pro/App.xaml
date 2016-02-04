@@ -17,6 +17,7 @@
         <cvt:UserIdToAvatarUriConverter x:Key="UserIdToAvatarUriConverter"/>
         <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
         <cvt:CountdownToCountdownLabelConverter x:Key="CountdownToCountdownLabelConverter"/>
+        <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
 
         <GroupStyle x:Key="ForumAllCategoryListViewGroupStyle">
             <GroupStyle.HeaderTemplate>
