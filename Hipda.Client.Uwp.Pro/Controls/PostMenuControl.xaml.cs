@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
@@ -80,7 +81,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             }
         }
 
-        private async void OpenPostInBrowser(object sender, RoutedEventArgs e)
+        private async void OpenInBrowser(object sender, RoutedEventArgs e)
         {
             var data = (ReplyItemModel)((MenuFlyoutItem)e.OriginalSource).DataContext;
             if (data == null)
@@ -91,6 +92,20 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var uriStr = $"http://www.hi-pda.com/forum/viewthread.php?tid={data.ThreadId}&rpid={data.PostId}&fav=yes#pid{data.PostId}";
             Uri uri = new Uri(uriStr, UriKind.Absolute);
             await Launcher.LaunchUriAsync(uri);
+        }
+
+        private void CopyUrl(object sender, RoutedEventArgs e)
+        {
+            var data = (ReplyItemModel)((MenuFlyoutItem)e.OriginalSource).DataContext;
+            if (data == null)
+            {
+                return;
+            }
+
+            var url = $"http://www.hi-pda.com/forum/viewthread.php?tid={data.ThreadId}&rpid={data.PostId}&fav=yes#pid{data.PostId}";
+            var dataPackage = new DataPackage();
+            dataPackage.SetText(url);
+            Clipboard.SetContent(dataPackage);
         }
     }
 }

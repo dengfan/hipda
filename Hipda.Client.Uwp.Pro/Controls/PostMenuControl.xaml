@@ -28,7 +28,8 @@
                 <MenuFlyoutItem Text="回复" Click="OpenReplyPostPanel" />
                 <MenuFlyoutItem Text="引用" Click="OpenQuotePostPanel" />
                 <MenuFlyoutItem Text="编辑" IsEnabled="{Binding IsMine}" Click="OpenEditPostPanel" />
-                <MenuFlyoutItem Text="用浏览器打开" Click="OpenPostInBrowser" />
+                <MenuFlyoutItem Text="复制链接" Click="CopyUrl" />
+                <MenuFlyoutItem Text="在浏览器中打开" Click="OpenInBrowser" />
             </MenuFlyout>
         </Button.Flyout>
     </Button>

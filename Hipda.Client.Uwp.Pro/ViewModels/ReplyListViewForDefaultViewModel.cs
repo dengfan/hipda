@@ -4,6 +4,8 @@ using Hipda.Client.Uwp.Pro.Commands;
 using Hipda.Client.Uwp.Pro.Services;
 using Windows.UI.Xaml.Controls;
 using System.Threading;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.System;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -22,10 +24,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         ReplyListService _ds;
 
         public DelegateCommand RefreshReplyCommand { get; set; }
-
         public DelegateCommand LoadPrevPageDataCommand { get; set; }
-
         public DelegateCommand LoadLastPageDataCommand { get; set; }
+        public DelegateCommand CopyUrlCommand { get; set; }
+        public DelegateCommand OpenInBrowserCommand { get; set; }
 
 
         ICollectionView _replyItemCollection;
@@ -71,6 +73,23 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 _ds.ClearReplyData(_threadId);
                 LoadLastData(cts);
+            };
+
+            CopyUrlCommand = new DelegateCommand();
+            CopyUrlCommand.ExecuteAction = (p) =>
+            {
+                string url = $"http://www.hi-pda.com/forum/viewthread.php?tid={_threadId}";
+                var dataPackage = new DataPackage();
+                dataPackage.SetText(url);
+                Clipboard.SetContent(dataPackage);
+            };
+
+            OpenInBrowserCommand = new DelegateCommand();
+            OpenInBrowserCommand.ExecuteAction = async (p) =>
+            {
+                var url = $"http://www.hi-pda.com/forum/viewthread.php?tid={_threadId}";
+                Uri uri = new Uri(url, UriKind.Absolute);
+                await Launcher.LaunchUriAsync(uri);
             };
 
             LoadData(_startPageNo);

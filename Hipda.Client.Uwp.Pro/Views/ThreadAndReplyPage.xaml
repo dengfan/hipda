@@ -149,9 +149,9 @@
                         </AppBarButton.Icon>
                     </AppBarButton>
                     <CommandBar.SecondaryCommands>
-                        <AppBarToggleButton Icon="Sort" Label="倒序看贴"/>
-                        <AppBarButton Label="复制链接"/>
-                        <AppBarButton Label="在浏览器中打开"/>
+                        <!--<AppBarToggleButton Label="倒序看贴"/>-->
+                        <AppBarButton Label="复制链接" Command="{Binding CopyUrlCommand}"/>
+                        <AppBarButton Label="在浏览器中打开" Command="{Binding OpenInBrowserCommand}"/>
                     </CommandBar.SecondaryCommands>
                 </CommandBar>
 
