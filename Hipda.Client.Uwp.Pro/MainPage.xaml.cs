@@ -820,32 +820,32 @@ namespace Hipda.Client.Uwp.Pro
         #endregion
 
         #region 消息发送
-        void SendSuccess(string title)
-        {
-            CloseUserDialog();
-
-            // 
-            Countdown = 30;
-            DispatcherTimerSetup();
-
-            // 发贴成功后，刷新主题列表
-            if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
-            {
-                var page = (ThreadAndReplyPage)AppFrame.Content;
-                var cmdBar = (CommandBar)page.FindName("LeftCommandBar");
-                if (cmdBar.DataContext.GetType().Equals(typeof(ThreadListViewForDefaultViewModel)))
-                {
-                    var vm = (ThreadListViewForDefaultViewModel)cmdBar.DataContext;
-                    vm.RefreshThreadCommand.Execute(null);
-                }
-            }
-        }
-
         public async void OpenCreateThreadPanel()
         {
             FindName("UserDialog");
 
-            var sendControl = new SendControl(SendType.New, ForumId, SendSuccess);
+            Action<string> sendSuccess = (title) =>
+            {
+                CloseUserDialog();
+
+                // 倒计时
+                Countdown = 30;
+                DispatcherTimerSetup();
+
+                // 发贴成功后，刷新主题列表
+                if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
+                {
+                    var page = (ThreadAndReplyPage)AppFrame.Content;
+                    var cmdBar = (CommandBar)page.FindName("LeftCommandBar");
+                    if (cmdBar.DataContext.GetType().Equals(typeof(ThreadListViewForDefaultViewModel)))
+                    {
+                        var vm = (ThreadListViewForDefaultViewModel)cmdBar.DataContext;
+                        vm.RefreshThreadCommand.Execute(null);
+                    }
+                }
+            };
+
+            var sendControl = new SendControl(SendType.New, ForumId, sendSuccess);
             var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
             sendControl.SetBinding(SendControl.CountdownProperty, binding);
 
@@ -864,12 +864,54 @@ namespace Hipda.Client.Uwp.Pro
         {
             FindName("UserDialog");
 
-            var sendControl = new SendControl(SendType.Reply, ForumId, SendSuccess);
+            Action<string> sendSuccess = (title) =>
+            {
+                CloseUserDialog();
+
+                // 倒计时
+                Countdown = 30;
+                DispatcherTimerSetup();
+
+                // 回贴成功后，刷新回复页到底部
+                if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
+                {
+                    var page = (ThreadAndReplyPage)AppFrame.Content;
+                    var cmdBar = (CommandBar)page.FindName("RightCommandBar");
+                    if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForDefaultViewModel)))
+                    {
+                        var vm = (ReplyListViewForDefaultViewModel)cmdBar.DataContext;
+                        vm.LoadLastPageDataCommand.Execute(null);
+                    }
+                    else if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
+                    {
+                        var vm = (ReplyListViewForSpecifiedPostViewModel)cmdBar.DataContext;
+                        vm.LoadLastPageDataCommand.Execute(null);
+                    }
+                }
+                else if (AppFrame.Content.GetType().Equals(typeof(ReplyListPage)))
+                {
+                    var page = (ReplyListPage)AppFrame.Content;
+                    var cmdBar = (CommandBar)page.FindName("RightCommandBar");
+                    if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForDefaultViewModel)))
+                    {
+                        var vm = (ReplyListViewForDefaultViewModel)cmdBar.DataContext;
+                        vm.LoadLastPageDataCommand.Execute(null);
+                    }
+                    else if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
+                    {
+                        var vm = (ReplyListViewForSpecifiedPostViewModel)cmdBar.DataContext;
+                        vm.LoadLastPageDataCommand.Execute(null);
+                    }
+                }
+            };
+
+            var sendControl = new SendControl(SendType.Reply, postAuthorUserId, postAuthorUsername, postSimpleContent, floorNo, postId, threadId, sendSuccess);
             var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
             sendControl.SetBinding(SendControl.CountdownProperty, binding);
 
-            var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter() };
-            UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
+            //var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter() };
+            //UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
+            UserDialog.Title = "回复";
             UserDialog.Content = sendControl;
 
             if (_isDialogShown == false)

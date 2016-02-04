@@ -32,8 +32,7 @@
                  GotFocus="ContentTextBox_GotFocus" Text="{Binding Content,Mode=TwoWay}"/>
 
         <TextBlock Grid.Row="2" Margin="8,0,8,8" x:Name="TipTextBlock" HorizontalAlignment="Center"
-                   Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
-                   Text="请输入标题和内容。"/>
+                   Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
 
         <CommandBar Grid.Row="3">
             <AppBarButton Icon="Emoji2" Label="Emoji">

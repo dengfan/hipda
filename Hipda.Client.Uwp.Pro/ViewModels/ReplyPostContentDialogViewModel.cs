@@ -93,9 +93,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             SendCommand = new DelegateCommand();
             SendCommand.ExecuteAction = async (p) =>
             {
-                if (string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(Content))
+                if (string.IsNullOrEmpty(Content))
                 {
-                    _sentFailded("请将标题及内容填写完整！");
+                    _sentFailded("请填写内容！");
                     return;
                 }
 

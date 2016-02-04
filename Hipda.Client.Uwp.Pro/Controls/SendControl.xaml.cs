@@ -133,6 +133,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
         }
         #endregion
 
+        SendType _sendType;
 
         public int Countdown
         {
@@ -154,6 +155,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
         public SendControl(SendType sendType, int forumId, Action<string> sentSuccess)
         {
             this.InitializeComponent();
+
+            TipTextBlock.Text = "请输入标题和内容。";
             this.DataContext = new NewThreadContentDialogViewModel(forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
 
@@ -171,6 +174,9 @@ namespace Hipda.Client.Uwp.Pro.Controls
         public SendControl(SendType sendType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, int floorNo, int postId, int threadId, Action<string> sentSuccess)
         {
             this.InitializeComponent();
+
+            TitleTextBox.Visibility = Visibility.Collapsed;
+            TipTextBlock.Text = "请输入回复内容。";
             this.DataContext = new ReplyPostContentDialogViewModel(postAuthorUserId, postAuthorUsername, postSimpleContent, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
     }

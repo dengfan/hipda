@@ -245,7 +245,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 加入历史记录
-            ApplicationView.GetForCurrentView().Title = $"{threadTitle} - {forumName}";
+            ApplicationView.GetForCurrentView().Title = $"{Common.ReplaceEmojiLabel(threadTitle)} - {Common.ReplaceEmojiLabel(forumName)}";
             _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
         }
 
@@ -596,7 +596,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 加入历史记录
-            ApplicationView.GetForCurrentView().Title = $"{threadTitle} - {forumName}";
+            ApplicationView.GetForCurrentView().Title = $"{Common.ReplaceEmojiLabel(threadTitle)} - {Common.ReplaceEmojiLabel(forumName)}";
             _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
 
             int index = threadReply.Replies.FirstOrDefault(r => r.PostId == targetPostId).Index;
@@ -803,7 +803,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 加入历史记录
-            ApplicationView.GetForCurrentView().Title = $"{threadTitle} - {forumName}";
+            ApplicationView.GetForCurrentView().Title = $"{Common.ReplaceEmojiLabel(threadTitle)} - {Common.ReplaceEmojiLabel(forumName)}";
             _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
 
             int index = threadReply.Replies.Last().Index;

@@ -172,7 +172,7 @@
         <CollectionViewSource x:Name="ForumAllCategoryListViewCollectionViewSource" IsSourceGrouped="True" ItemsPath="Forums"
                               Source="{Binding ForumAllCategoryList,Source={StaticResource ForumAllCategoryListViewViewModel}}"/>
         <DataTemplate x:Key="ForumAllCategoryListViewDataTemplate">
-            <ListView ItemsSource="{Binding Source={StaticResource ForumAllCategoryListViewCollectionViewSource}}"
+            <ListView Margin="0,48,0,0" ItemsSource="{Binding Source={StaticResource ForumAllCategoryListViewCollectionViewSource}}"
                       GroupStyleSelector="{StaticResource ForumAllCategoryListViewGroupStyleSelector}"
                       SelectionMode="None" IsItemClickEnabled="True"
                       ItemClick="ForumAllCategoryListView_ItemClick">
