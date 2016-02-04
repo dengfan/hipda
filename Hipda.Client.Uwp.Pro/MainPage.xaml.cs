@@ -860,7 +860,7 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        public async void OpenReplyPostPanel(int postId, int threadId)
+        public async void OpenReplyPostPanel(int postAuthorUserId, string postAuthorUsername, string postSimpleContent, int floorNo, int postId, int threadId)
         {
             FindName("UserDialog");
 

@@ -27,7 +27,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         private void OpenReplyPostPanel(object sender, RoutedEventArgs e)
         {
-            var data = (ReplyItemModel)e.OriginalSource;
+            var data = (ReplyItemModel)((MenuFlyoutItem)e.OriginalSource).DataContext;
             if (data == null)
             {
                 return;
@@ -37,7 +37,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var mp = frame.Content as MainPage;
             if (mp != null)
             {
-                mp.OpenReplyPostPanel(data.PostId, data.ThreadId);
+                string postSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + "..." : data.TextStr;
+                mp.OpenReplyPostPanel(data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.FloorNo, data.PostId, data.ThreadId);
             }
         }
     }

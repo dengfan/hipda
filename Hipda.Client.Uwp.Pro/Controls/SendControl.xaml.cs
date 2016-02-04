@@ -145,16 +145,33 @@ namespace Hipda.Client.Uwp.Pro.Controls
             DependencyProperty.Register("Countdown", typeof(int), typeof(SendControl), new PropertyMetadata(0));
 
 
+        /// <summary>
+        /// 初始化为发贴控件
+        /// </summary>
+        /// <param name="sendType"></param>
+        /// <param name="forumId"></param>
+        /// <param name="sentSuccess"></param>
         public SendControl(SendType sendType, int forumId, Action<string> sentSuccess)
         {
             this.InitializeComponent();
             this.DataContext = new NewThreadContentDialogViewModel(forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
 
-        public SendControl(SendType sendType, int postId, int threadId, Action<string> sentSuccess)
+        /// <summary>
+        /// 初始化为回贴控件
+        /// </summary>
+        /// <param name="sendType"></param>
+        /// <param name="postAuthorUserId"></param>
+        /// <param name="postAuthorUsername"></param>
+        /// <param name="postSimpleContent"></param>
+        /// <param name="floorNo"></param>
+        /// <param name="postId"></param>
+        /// <param name="threadId"></param>
+        /// <param name="sentSuccess"></param>
+        public SendControl(SendType sendType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, int floorNo, int postId, int threadId, Action<string> sentSuccess)
         {
             this.InitializeComponent();
-            this.DataContext = new NewThreadContentDialogViewModel(forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+            this.DataContext = new ReplyPostContentDialogViewModel(postAuthorUserId, postAuthorUsername, postSimpleContent, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
     }
 }
