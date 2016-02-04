@@ -69,6 +69,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 {
                     string fileCodes = string.Join("\r\n", _fileCodeList);
                     _insertFileCodeIntoContentTextBox($"\r\n{fileCodes}\r\n");
+                    _fileCodeList.Clear();
                 }
             };
 
@@ -85,7 +86,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 if (flag)
                 {
                     _fileNameList.Clear();
-                    _fileCodeList.Clear();
 
                     Content = string.Empty;
 
