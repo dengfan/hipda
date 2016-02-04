@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Converters
 {
-    public class CountdownToSendDialogTitleConverter : IValueConverter
+    public class CountdownToCountdownLabelConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

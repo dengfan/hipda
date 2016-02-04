@@ -15,6 +15,9 @@
         <vm:FaceIconViewModel x:Key="FaceIconViewModel"/>
         <cvt:ThemeTypeToRequestedThemeConverter x:Key="ThemeTypeToRequestedThemeConverter"/>
         <cvt:UserIdToAvatarUriConverter x:Key="UserIdToAvatarUriConverter"/>
+        <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
+        <cvt:CountdownToCountdownLabelConverter x:Key="CountdownToCountdownLabelConverter"/>
+        <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
 
         <GroupStyle x:Key="ForumAllCategoryListViewGroupStyle">
             <GroupStyle.HeaderTemplate>
@@ -472,14 +475,15 @@
                 <Border Margin="0,0,0,8" Padding="8" Background="#3285D6" HorizontalAlignment="Center">
                     <TextBlock Text="以下是你搜索的回复" Foreground="#3EE8FF" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" />
                 </Border>
-                <c:MyAvatarForReply UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Center"/>
+                
+                <c:MyAvatarForReply Margin="0,0,0,4" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Center"/>
 
-                <TextBlock Margin="0,4" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Center">
+                <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Center">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
 
-                <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Center"/>
+                <ContentControl Margin="0,4" Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Center"/>
 
                 <c:PostMenuControl HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
             </StackPanel>

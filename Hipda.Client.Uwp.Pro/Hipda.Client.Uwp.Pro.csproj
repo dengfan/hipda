@@ -108,9 +108,6 @@
     </Compile>
     <Compile Include="Controls\MyAvatarForReply.cs" />
     <Compile Include="Controls\MyListViewForUserMessageList.cs" />
-    <Compile Include="Controls\QuickReplyControl.xaml.cs">
-      <DependentUpon>QuickReplyControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\UserMessageBox.xaml.cs">
       <DependentUpon>UserMessageBox.xaml</DependentUpon>
     </Compile>
@@ -120,10 +117,11 @@
     <Compile Include="Converters\BlockItemCountToEmptyLabelVisibilityConverter.cs" />
     <Compile Include="Converters\ByteToMegaByteConverter.cs" />
     <Compile Include="Converters\CountdownToSendButtonIsEnabledConverter.cs" />
-    <Compile Include="Converters\CountdownToSendDialogTitleConverter.cs" />
+    <Compile Include="Converters\CountdownToCountdownLabelConverter.cs" />
     <Compile Include="Converters\ElementThemeToMaskBackgroundBrush.cs" />
     <Compile Include="Converters\SearchPanelVisibilityToSearchButtonStyleConverter.cs" />
     <Compile Include="Converters\SelectedIndexToVisibilityConverter.cs" />
+    <Compile Include="Converters\TextLengthToTipBorderVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeTypeNameToVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeTypeToRequestedThemeConverter.cs" />
     <Compile Include="Converters\UserIdStringToInt32Converter.cs" />
@@ -331,10 +329,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SendControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\QuickReplyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

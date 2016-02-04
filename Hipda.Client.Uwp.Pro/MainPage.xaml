@@ -15,8 +15,8 @@
     <Page.Resources>
         <cvt:ElementThemeToMaskBackgroundBrush x:Key="ElementThemeToMaskBackgroundBrush"/>
         <cvt:SearchPanelVisibilityToSearchButtonStyleConverter x:Key="SearchPanelVisibilityToSearchButtonStyleConverter"/>
-        <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
-
+        
+        
         <Style x:Key="MainMenuListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="TabNavigation" Value="Local"/>

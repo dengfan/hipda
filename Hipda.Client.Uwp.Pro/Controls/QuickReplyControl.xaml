@@ -11,7 +11,7 @@
 
     <StackPanel VerticalAlignment="Bottom">
         <Border Margin="0,0,0,8" Padding="8,4" CornerRadius="12" HorizontalAlignment="Center" Background="Red" Opacity="0.8">
-            <TextBlock x:Name="TipTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" Text="我人有的和，主产不为这"
+            <TextBlock x:Name="TipTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"
                        Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                        FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
         </Border>
