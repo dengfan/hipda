@@ -31,7 +31,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public static string Title
         {
-            get { return Common.ReplaceEmojiLabel(_title); }
+            get { return _title; }
             set { _title = value; }
         }
 
@@ -39,7 +39,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public static string Content
         {
-            get { return Common.ReplaceEmojiLabel(_content); }
+            get { return _content; }
             set { _content = value; }
         }
 
