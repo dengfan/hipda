@@ -228,8 +228,8 @@ namespace Hipda.Client.Uwp.Pro.Services
             string xml = "<toast>" +
                         "<visual>" +
                             "<binding template='ToastGeneric'>" +
-                                $"<text>恭喜您，用户 {username}</text>" +
-                                $"<text>好友请求已发送成功</text>" +
+                                $"<text>恭喜您，已请求添加 {username} 为好友</text>" +
+                                $"<text>已发送成功</text>" +
                             "</binding>" +
                         "</visual>" +
                         "</toast>";
