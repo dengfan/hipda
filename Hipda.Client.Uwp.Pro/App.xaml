@@ -311,7 +311,7 @@
                             </VisualStateManager.VisualStateGroups>
 
                             <ContentPresenter x:Name="ContentPresenter"
-                                  Padding="{TemplateBinding Padding}"
+                                  Padding="0"
                                   BorderBrush="{TemplateBinding BorderBrush}"
                                   BorderThickness="{TemplateBinding BorderThickness}"
                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"

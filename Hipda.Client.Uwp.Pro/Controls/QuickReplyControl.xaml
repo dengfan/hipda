@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="Hipda.Client.Uwp.Pro.Controls.QuickReply"
+    x:Class="Hipda.Client.Uwp.Pro.Controls.QuickReplyControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Hipda.Client.Uwp.Pro.Controls"
@@ -18,7 +18,7 @@
         <StackPanel Orientation="Horizontal">
             <Button x:Name="EmojiButton" Style="{StaticResource FaceButtonStyle}">
                 <Button.Content>
-                    <SymbolIcon Symbol="Emoji2" />
+                    <SymbolIcon Symbol="Emoji" />
                 </Button.Content>
                 <Button.Flyout>
                     <Flyout>
@@ -42,7 +42,7 @@
             </Button>
             <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
                 <Button.Content>
-                    <SymbolIcon Symbol="Emoji" />
+                    <SymbolIcon Symbol="Emoji2" />
                 </Button.Content>
                 <Button.Flyout>
                     <Flyout>

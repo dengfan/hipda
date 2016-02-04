@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Hipda.Client.Uwp.Pro.Controls
 {
-    public sealed partial class QuickReply : UserControl
+    public sealed partial class QuickReplyControl : UserControl
     {
         static SendThreadReplyViewModel _vm = (SendThreadReplyViewModel)App.Current.Resources["QuickReplyViewModel"];
 
@@ -33,11 +33,11 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ThreadIdProperty =
-            DependencyProperty.Register("ThreadId", typeof(int), typeof(QuickReply), new PropertyMetadata(0));
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(QuickReplyControl), new PropertyMetadata(0));
 
 
 
-        public QuickReply()
+        public QuickReplyControl()
         {
             this.InitializeComponent();
 
@@ -46,6 +46,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
                 string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
                 if (userInteractionType.Equals("Touch"))
                 {
+                    EmojiButton.Width = 80;
+                    EmojiButton.Height = 40;
                     FaceButton.Width = 80;
                     FaceButton.Height = 40;
                     FileButton.Width = 80;
@@ -55,9 +57,11 @@ namespace Hipda.Client.Uwp.Pro.Controls
                 }
                 else if (userInteractionType.Equals("Mouse"))
                 {
-                    FaceButton.Width = 36;
+                    EmojiButton.Width = 32;
+                    EmojiButton.Height = 32;
+                    FaceButton.Width = 32;
                     FaceButton.Height = 32;
-                    FileButton.Width = 36;
+                    FileButton.Width = 32;
                     FileButton.Height = 32;
                     SendButton.Width = 80;
                     SendButton.Height = 32;

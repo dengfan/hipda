@@ -108,8 +108,8 @@
     </Compile>
     <Compile Include="Controls\MyAvatarForReply.cs" />
     <Compile Include="Controls\MyListViewForUserMessageList.cs" />
-    <Compile Include="Controls\QuickReply.xaml.cs">
-      <DependentUpon>QuickReply.xaml</DependentUpon>
+    <Compile Include="Controls\QuickReplyControl.xaml.cs">
+      <DependentUpon>QuickReplyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\UserMessageBox.xaml.cs">
       <DependentUpon>UserMessageBox.xaml</DependentUpon>
@@ -334,7 +334,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\QuickReply.xaml">
+    <Page Include="Controls\QuickReplyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
