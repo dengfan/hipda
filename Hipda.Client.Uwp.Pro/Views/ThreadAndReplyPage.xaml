@@ -126,7 +126,7 @@
 
                 <StackPanel x:Name="leftNoDataNoticePanel" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
                     <TextBlock FontSize="120" Text=":(" HorizontalAlignment="Center"></TextBlock>
-                    <TextBlock HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}" Text="对不起，没有找到数据！"/>
+                    <TextBlock HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Text="对不起，没有找到数据！"/>
                 </StackPanel>
             </Grid>
 
@@ -165,8 +165,6 @@
                 </pr:PullToRefreshBox>
 
                 <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
-
-                <ContentControl x:Name="QuickReplyContainer" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalAlignment="Bottom"/>
             </Grid>
         </Grid>
     </Grid>

@@ -73,11 +73,6 @@ namespace Hipda.Client.Uwp.Pro.Controls
             ContentTextBox.SelectionStart = cursorPosition + faceText.Length;
             ContentTextBox.Focus(FocusState.Pointer);
         }
-
-        void ContentTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            TipTextBlock.Text = string.Empty;
-        }
         #endregion
 
         #region 委托事件
@@ -115,17 +110,6 @@ namespace Hipda.Client.Uwp.Pro.Controls
         #endregion
 
 
-        public int Countdown
-        {
-            get { return (int)GetValue(CountdownProperty); }
-            set { SetValue(CountdownProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Countdown.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CountdownProperty =
-            DependencyProperty.Register("Countdown", typeof(int), typeof(QuickReplyControl), new PropertyMetadata(0));
-
-
         public QuickReplyControl(int threadId, Action<string> sentSuccess)
         {
             this.InitializeComponent();
@@ -141,7 +125,6 @@ namespace Hipda.Client.Uwp.Pro.Controls
                     FaceButton.Height = 40;
                     FileButton.Width = 80;
                     FileButton.Height = 40;
-                    SendButton.Width = 80;
                     SendButton.Height = 40;
                 }
                 else if (userInteractionType.Equals("Mouse"))
@@ -152,7 +135,6 @@ namespace Hipda.Client.Uwp.Pro.Controls
                     FaceButton.Height = 32;
                     FileButton.Width = 32;
                     FileButton.Height = 32;
-                    SendButton.Width = 80;
                     SendButton.Height = 32;
                 }
 
@@ -162,7 +144,5 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var cts = new CancellationTokenSource();
             this.DataContext = new SendThreadQuickReplyControlViewModel(cts, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
-
-        
     }
 }

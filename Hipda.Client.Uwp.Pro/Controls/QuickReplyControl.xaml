@@ -3,27 +3,17 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Hipda.Client.Uwp.Pro.Controls"
-    xmlns:cvt="using:Hipda.Client.Uwp.Pro.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400"
-    x:Name="MyQuickReplyControl">
+    d:DesignWidth="400">
 
-    <StackPanel>
-        <StackPanel.Resources>
-            <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
-            <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
-            <cvt:CountdownToStatusLabelConverter x:Key="CountdownToStatusLabelConverter"/>
-            <x:String x:Key="SendTextString">&#xE122;</x:String>
-        </StackPanel.Resources>
-        <Border Margin="0,0,0,8" CornerRadius="15" HorizontalAlignment="Center" Opacity="0.7"
-                Visibility="{Binding Text,ElementName=TipTextBlock,Converter={StaticResource TextLengthToTipBorderVisibilityConverter}}"
-                Background="Red">
-            <TextBlock x:Name="TipTextBlock" Margin="12,6" HorizontalAlignment="Center" TextWrapping="Wrap"
+    <StackPanel VerticalAlignment="Bottom">
+        <Border Margin="0,0,0,8" Padding="8,4" CornerRadius="12" HorizontalAlignment="Center" Background="Red" Opacity="0.8">
+            <TextBlock x:Name="TipTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" Text="我人有的和，主产不为这"
                        Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                       FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" />
+                       FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
         </Border>
         <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
             <Grid.RowDefinitions>
@@ -88,16 +78,16 @@
             <TextBox Grid.Row="1" x:Name="ContentTextBox" Template="{StaticResource TextBoxTemplate1}"
                      MinHeight="64" Padding="8,4" Background="Transparent" BorderThickness="0"
                      TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复，回车可换行。"
-                     Text="{Binding Content,Mode=TwoWay}" GotFocus="ContentTextBox_GotFocus"/>
+                     Text="{Binding Content,Mode=TwoWay}"/>
             <Button Grid.Row="1" x:Name="SendButton" Margin="0,0,12,12"
-                    IsEnabled="{Binding Countdown,ElementName=MyQuickReplyControl,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"
                     Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
                     Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
                     Command="{Binding SendCommand}">
-                <TextBlock FontFamily="{ThemeResource SymbolThemeFontFamily}">
-                    <Run Text="{Binding Countdown,ElementName=MyQuickReplyControl,Converter={StaticResource CountdownToStatusLabelConverter},ConverterParameter={StaticResource SendTextString}}"/>
-                </TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <SymbolIcon Symbol="Send" />
+                    <TextBlock Text=" 发送"/>
+                </StackPanel>
             </Button>
         </Grid>
     </StackPanel>

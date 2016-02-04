@@ -37,6 +37,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
 
         public DelegateCommand AddAttachFilesCommand { get; set; }
+
         public DelegateCommand SendCommand { get; set; }
 
         static List<string> _fileNameList = new List<string>();

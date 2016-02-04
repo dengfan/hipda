@@ -187,29 +187,45 @@ namespace Hipda.Client.Uwp.Pro.Views
                 var vm = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
                 RightWrap.DataContext = vm;
 
-                #region 创建快捷回复面板
-                var frame = (Frame)Window.Current.Content;
-                var mainPage = frame.Content as MainPage;
-                if (mainPage == null)
+                var quickReplyControl = new QuickReplyControl(ThreadId, (title) =>
                 {
-                    return;
-                }
+                    var frame = Window.Current.Content as Frame;
+                    var mp = frame.Content as MainPage;
+                    if (mp != null)
+                    {
+                        return;
+                    }
 
-                var quickReplyControl = new QuickReplyControl(ThreadId, (t) =>
-                {
                     // 开始倒计时
-                    mainPage.Countdown = 30;
-                    mainPage.SendMessageTimer.Stop();
-                    mainPage.SendMessageTimer.Start();
+                    mp.Countdown = 30;
+                    mp.SendMessageTimer.Stop();
+                    mp.SendMessageTimer.Start();
 
+                    // 回贴成功后，刷新贴子到底部
                     vm.LoadLastPageDataCommand.Execute(null);
                 });
+                quickReplyControl.SetValue(Grid.RowProperty, 1);
+                RightWrap.Children.Add(quickReplyControl);
 
-                var binding = new Binding { Path = new PropertyPath("Countdown"), Source = mainPage };
-                quickReplyControl.SetBinding(QuickReplyControl.CountdownProperty, binding);
+                //var threadIdBinding = new Binding { Path = new PropertyPath("ThreadId"), Source = this };
+                //QuickReplyControl1.SetBinding(QuickReplyControl.ThreadIdProperty, threadIdBinding);
+                //QuickReplyControl1.SentSuccess = (title) =>
+                //{
+                //    var frame = Window.Current.Content as Frame;
+                //    var mp = frame.Content as MainPage;
+                //    if (mp != null)
+                //    {
+                //        return;
+                //    }
 
-                QuickReplyContainer.Content = quickReplyControl;
-                #endregion
+                //    // 开始倒计时
+                //    mp.Countdown = 30;
+                //    mp.SendMessageTimer.Stop();
+                //    mp.SendMessageTimer.Start();
+
+                //    // 回贴成功后，刷新贴子到底部
+                //    vm.LoadLastPageDataCommand.Execute(null);
+                //};
             }
         }
 
@@ -226,32 +242,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             else
             {
                 var cts = new CancellationTokenSource();
-                var vm = new ReplyListViewForSpecifiedPostViewModel(cts, PostId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
-                RightWrap.DataContext = vm;
-
-                #region 创建快捷回复面板
-                var frame = (Frame)Window.Current.Content;
-                var mainPage = frame.Content as MainPage;
-                if (mainPage == null)
-                {
-                    return;
-                }
-
-                var quickReplyControl = new QuickReplyControl(ThreadId, (t) =>
-                {
-                    // 开始倒计时
-                    mainPage.Countdown = 30;
-                    mainPage.SendMessageTimer.Stop();
-                    mainPage.SendMessageTimer.Start();
-
-                    vm.LoadLastPageDataCommand.Execute(null);
-                });
-
-                var binding = new Binding { Path = new PropertyPath("Countdown"), Source = mainPage };
-                quickReplyControl.SetBinding(QuickReplyControl.CountdownProperty, binding);
-
-                QuickReplyContainer.Content = quickReplyControl;
-                #endregion
+                RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, PostId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
             }
         }
         #endregion
