@@ -12,10 +12,11 @@
     <Button>
         <Button.Template>
             <ControlTemplate>
-                <Border Opacity="0.5" Margin="0,10,0,2" Padding="6,2" HorizontalAlignment="Center"
+                <Border Margin="0,0,0,2" Padding="8,0" HorizontalAlignment="Center"
                         Background="{ThemeResource SystemControlBackgroundListLowBrush}"
-                        CornerRadius="10">
-                    <TextBlock HorizontalAlignment="Center" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        CornerRadius="12" Height="24" MinHeight="24">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
                         <Run Text="&#xE10C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         <Run Text="{Binding FloorNoStr}" />
                     </TextBlock>

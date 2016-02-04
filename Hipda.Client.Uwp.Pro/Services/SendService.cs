@@ -43,7 +43,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public static async Task<string[]> LoadContentForEditAsync(CancellationTokenSource cts, int postId, int threadId)
         {
-            string url = $"http://www.hi-pda.com/forum/post.php?action=edit&tid={threadId}&pid={postId}";
+            string url = $"http://www.hi-pda.com/forum/post.php?action=edit&tid={threadId}&pid={postId}&_={DateTime.Now.Ticks.ToString("x")}";
             string htmlContent = await _httpClient.GetAsync(url, cts);
 
             // 实例化 HtmlAgilityPack.HtmlDocument 对象

@@ -201,6 +201,11 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public static string ReplaceEmojiLabel(string txt)
         {
+            if (string.IsNullOrEmpty(txt))
+            {
+                return string.Empty;
+            }
+
             var matchs = new Regex(@":[a-z_]{3,30}:").Matches(txt);
             if (matchs != null && matchs.Count > 0)
             {
