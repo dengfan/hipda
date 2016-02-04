@@ -23,7 +23,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
 {
     public sealed partial class QuickReply : UserControl
     {
-        static QuickReplyViewModel _vm = (QuickReplyViewModel)App.Current.Resources["QuickReplyViewModel"];
+        static SendThreadReplyViewModel _vm = (SendThreadReplyViewModel)App.Current.Resources["QuickReplyViewModel"];
 
         public int ThreadId
         {

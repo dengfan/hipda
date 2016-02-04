@@ -13,7 +13,7 @@
         <vm:ForumAllCategoryListViewViewModel x:Key="ForumAllCategoryListViewViewModel"/>
         <vm:ThreadHistoryListBoxViewModel x:Key="ThreadHistoryListBoxViewModel"/>
         <vm:FaceIconViewModel x:Key="FaceIconViewModel"/>
-        <vm:QuickReplyViewModel x:Key="QuickReplyViewModel"/>
+        <vm:SendThreadReplyViewModel x:Key="QuickReplyViewModel"/>
         <cvt:ThemeTypeToRequestedThemeConverter x:Key="ThemeTypeToRequestedThemeConverter"/>
         <cvt:UserIdToAvatarUriConverter x:Key="UserIdToAvatarUriConverter"/>
 

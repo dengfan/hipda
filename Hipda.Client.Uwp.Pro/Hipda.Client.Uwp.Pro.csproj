@@ -191,7 +191,7 @@
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\ContentDialogForPostDetailViewModel.cs" />
-    <Compile Include="ViewModels\QuickReplyViewModel.cs" />
+    <Compile Include="ViewModels\SendThreadReplyViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForDefaultViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForSpecifiedPostViewModel.cs" />
     <Compile Include="ViewModels\SendReplyPostContentDialogViewModel.cs" />

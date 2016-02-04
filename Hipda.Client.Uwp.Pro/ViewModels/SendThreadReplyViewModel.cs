@@ -14,9 +14,9 @@ using Windows.Storage.Streams;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class QuickReplyViewModel : NotificationObject
+    public class SendThreadReplyViewModel : NotificationObject
     {
-        public QuickReplyViewModel()
+        public SendThreadReplyViewModel()
         {
             
         }
