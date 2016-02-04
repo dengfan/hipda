@@ -865,7 +865,7 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        public async void OpenReplyPostPanel(int postAuthorUserId, string postAuthorUsername, string postSimpleContent, int floorNo, int postId, int threadId)
+        public async void OpenReplyPostPanel(string replyType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId)
         {
             FindName("UserDialog");
 
@@ -911,11 +911,21 @@ namespace Hipda.Client.Uwp.Pro
                 }
             };
 
-            var sendControl = new SendControl(SendType.Reply, postAuthorUserId, postAuthorUsername, postSimpleContent, floorNo, postId, threadId, sendSuccess);
+            var sendControl = new SendControl(replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, floorNo, postId, threadId, sendSuccess);
             var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
             sendControl.SetBinding(SendControl.CountdownProperty, binding);
 
-            var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter(), ConverterParameter = "回复" };
+            string titleParameter = string.Empty;
+            if (replyType.Equals("r"))
+            {
+                titleParameter = "回复";
+            }
+            else if (replyType.Equals("q"))
+            {
+                titleParameter = "引用";
+            }
+
+            var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter(), ConverterParameter = titleParameter };
             UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
 
             UserDialog.ContentTemplate = null;

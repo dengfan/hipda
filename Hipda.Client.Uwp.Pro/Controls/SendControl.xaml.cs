@@ -169,13 +169,13 @@ namespace Hipda.Client.Uwp.Pro.Controls
         /// <param name="postId"></param>
         /// <param name="threadId"></param>
         /// <param name="sentSuccess"></param>
-        public SendControl(SendType sendType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, int floorNo, int postId, int threadId, Action<string> sentSuccess)
+        public SendControl(string replyType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId, Action<string> sentSuccess)
         {
             this.InitializeComponent();
 
             TitleTextBox.Visibility = Visibility.Collapsed;
             TipTextBlock.Text = "请输入回复内容。";
-            this.DataContext = new ReplyPostContentDialogViewModel(postAuthorUserId, postAuthorUsername, postSimpleContent, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+            this.DataContext = new ReplyPostContentDialogViewModel(replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
     }
 }

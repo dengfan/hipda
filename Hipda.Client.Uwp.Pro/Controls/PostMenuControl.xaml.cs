@@ -38,7 +38,24 @@ namespace Hipda.Client.Uwp.Pro.Controls
             if (mp != null)
             {
                 string postSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + "..." : data.TextStr;
-                mp.OpenReplyPostPanel(data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.FloorNo, data.PostId, data.ThreadId);
+                mp.OpenReplyPostPanel("r", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
+            }
+        }
+
+        private void OpenQuotePostPanel(object sender, RoutedEventArgs e)
+        {
+            var data = (ReplyItemModel)((MenuFlyoutItem)e.OriginalSource).DataContext;
+            if (data == null)
+            {
+                return;
+            }
+
+            var frame = Window.Current.Content as Frame;
+            var mp = frame.Content as MainPage;
+            if (mp != null)
+            {
+                string postSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + "..." : data.TextStr;
+                mp.OpenReplyPostPanel("q", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
             }
         }
     }

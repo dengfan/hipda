@@ -51,7 +51,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         static List<string> _fileNameList = new List<string>();
         static List<string> _fileCodeList = new List<string>();
 
-        public ReplyPostContentDialogViewModel(int postAuthorUserId, string postAuthorUsername, string postSimpleContent, int floorNo, int postId, int threadId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
+        public ReplyPostContentDialogViewModel(string replyType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
         {
             _postAuthorUserId = postAuthorUserId;
             _postAuthorUsername = postAuthorUsername;
@@ -65,8 +65,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _sentSuccess = sentSuccess;
             _sentFailded = sentFailded;
 
-            _noticeauthor = $"r|{_postAuthorUserId}|[i]{_postAuthorUsername}[/i]";
-            _noticetrimstr = $"[b]回复 [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={_postId}&ptid={_threadId}]{_floorNo}#[/url] [i]{_postAuthorUsername}[/i] [/b]\r\n\r\n  ";
+            if (replyType.Equals("r"))
+            {
+                _noticeauthor = $"{replyType}|{_postAuthorUserId}|[i]{_postAuthorUsername}[/i]";
+                _noticetrimstr = $"[b]回复 [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={_postId}&ptid={_threadId}]{_floorNo}#[/url] [i]{_postAuthorUsername}[/i] [/b]\r\n \r\n    ";
+            }
+            else if (replyType.Equals("q"))
+            {
+                _noticeauthor = $"{replyType}|{_postAuthorUserId}|{_postAuthorUsername}";
+                _noticetrimstr = $"[quote]{_postSimpleContent}\r\n[size=2][color=#999999]{_postAuthorUserId} 发表于 {postTime}[/color] [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={_postId}&ptid={_threadId}][img]http://www.hi-pda.com/forum/images/common/back.gif[/img][/url][/size][/quote]\r\n \r\n    ";
+            }
             _noticeauthormsg = _postSimpleContent;
 
             AddAttachFilesCommand = new DelegateCommand();
