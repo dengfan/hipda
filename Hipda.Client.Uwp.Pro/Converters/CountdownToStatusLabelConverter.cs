@@ -7,14 +7,14 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.Converters
 {
-    public class CountdownToSendDialogTitleConverter : IValueConverter
+    public class CountdownToStatusLabelConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             var val = (int)value;
             if (val > 0)
             {
-                return $"{parameter.ToString()} （倒计时{val}秒）";
+                return $"{parameter.ToString()} {val}";
             }
 
             return parameter.ToString();

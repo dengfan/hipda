@@ -1,4 +1,5 @@
-﻿using Hipda.Client.Uwp.Pro.Models;
+﻿using Hipda.Client.Uwp.Pro.Controls;
+using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
@@ -8,6 +9,7 @@ using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
@@ -182,7 +184,32 @@ namespace Hipda.Client.Uwp.Pro.Views
             else
             {
                 var cts = new CancellationTokenSource();
-                RightWrap.DataContext = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+                var vm = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+                RightWrap.DataContext = vm;
+
+                #region 创建快捷回复面板
+                var frame = (Frame)Window.Current.Content;
+                var mainPage = frame.Content as MainPage;
+                if (mainPage == null)
+                {
+                    return;
+                }
+
+                var quickReplyControl = new QuickReplyControl(ThreadId, (t) =>
+                {
+                    // 开始倒计时
+                    mainPage.Countdown = 30;
+                    mainPage.SendMessageTimer.Stop();
+                    mainPage.SendMessageTimer.Start();
+
+                    vm.LoadLastPageDataCommand.Execute(null);
+                });
+
+                var binding = new Binding { Path = new PropertyPath("Countdown"), Source = mainPage };
+                quickReplyControl.SetBinding(QuickReplyControl.CountdownProperty, binding);
+
+                QuickReplyContainer.Content = quickReplyControl;
+                #endregion
             }
         }
 
@@ -199,7 +226,32 @@ namespace Hipda.Client.Uwp.Pro.Views
             else
             {
                 var cts = new CancellationTokenSource();
-                RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, PostId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+                var vm = new ReplyListViewForSpecifiedPostViewModel(cts, PostId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
+                RightWrap.DataContext = vm;
+
+                #region 创建快捷回复面板
+                var frame = (Frame)Window.Current.Content;
+                var mainPage = frame.Content as MainPage;
+                if (mainPage == null)
+                {
+                    return;
+                }
+
+                var quickReplyControl = new QuickReplyControl(ThreadId, (t) =>
+                {
+                    // 开始倒计时
+                    mainPage.Countdown = 30;
+                    mainPage.SendMessageTimer.Stop();
+                    mainPage.SendMessageTimer.Start();
+
+                    vm.LoadLastPageDataCommand.Execute(null);
+                });
+
+                var binding = new Binding { Path = new PropertyPath("Countdown"), Source = mainPage };
+                quickReplyControl.SetBinding(QuickReplyControl.CountdownProperty, binding);
+
+                QuickReplyContainer.Content = quickReplyControl;
+                #endregion
             }
         }
         #endregion

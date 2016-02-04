@@ -298,7 +298,7 @@
                                     <VisualState x:Name="Normal" />
                                     <VisualState x:Name="PointerOver">
                                         <VisualState.Setters>
-                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlHighlightListAccentLowBrush}" />
+                                            <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource SystemControlHighlightListAccentMediumBrush}" />
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState x:Name="Pressed">

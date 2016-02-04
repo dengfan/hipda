@@ -166,7 +166,7 @@
 
                 <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
-                <c:QuickReplyControl Grid.Row="1"/>
+                <ContentControl x:Name="QuickReplyContainer" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalAlignment="Bottom"/>
             </Grid>
         </Grid>
     </Grid>

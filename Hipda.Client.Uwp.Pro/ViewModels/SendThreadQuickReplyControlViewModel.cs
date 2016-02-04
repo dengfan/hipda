@@ -14,7 +14,7 @@ using Windows.Storage.Streams;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class SendThreadQuickReplyControlViewModel
+    public class SendThreadQuickReplyControlViewModel : NotificationObject
     {
         int _threadId;
         Action<int, int, string> _beforeUpload;
@@ -23,25 +23,27 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action<string> _sentFailded;
         Action<string> _sentSuccess;
 
-        private static string _content;
+        private string _content;
 
-        public static string Content
+        public string Content
         {
             get { return _content; }
-            set { _content = value; }
+            set
+            {
+                _content = value;
+                this.RaisePropertyChanged("Content");
+            }
         }
 
 
         public DelegateCommand AddAttachFilesCommand { get; set; }
-
         public DelegateCommand SendCommand { get; set; }
 
         static List<string> _fileNameList = new List<string>();
         static List<string> _fileCodeList = new List<string>();
 
-        public SendThreadQuickReplyControlViewModel(CancellationTokenSource cts, string content, int threadId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
+        public SendThreadQuickReplyControlViewModel(CancellationTokenSource cts, int threadId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
         {
-            Content = content;
             _threadId = threadId;
             _beforeUpload = beforeUpload;
             _insertFileCodeIntoContentTextBox = insertFileCodeIntoContentTextBox;

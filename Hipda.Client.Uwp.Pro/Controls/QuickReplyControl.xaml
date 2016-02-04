@@ -8,17 +8,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    x:Name="MyQuickReplyControl">
 
-    <StackPanel VerticalAlignment="Bottom">
+    <StackPanel>
         <StackPanel.Resources>
             <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
+            <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
+            <cvt:CountdownToStatusLabelConverter x:Key="CountdownToStatusLabelConverter"/>
+            <x:String x:Key="SendTextString">&#xE122;</x:String>
         </StackPanel.Resources>
-        <Border Margin="0,0,0,4" CornerRadius="15" HorizontalAlignment="Center" Opacity="0.7"
+        <Border Margin="0,0,0,8" CornerRadius="15" HorizontalAlignment="Center" Opacity="0.7"
                 Visibility="{Binding Text,ElementName=TipTextBlock,Converter={StaticResource TextLengthToTipBorderVisibilityConverter}}"
-                Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                Background="Red">
             <TextBlock x:Name="TipTextBlock" Margin="12,6" HorizontalAlignment="Center" TextWrapping="Wrap"
-                       Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}"
+                       Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                        FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" />
         </Border>
         <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
@@ -75,24 +79,25 @@
                         </Flyout>
                     </Button.Flyout>
                 </Button>
-                <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}" Click="FileButton_Click">
+                <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}" Command="{Binding AddAttachFilesCommand}">
                     <Button.Content>
                         <SymbolIcon Symbol="Attach" />
                     </Button.Content>
                 </Button>
             </StackPanel>
             <TextBox Grid.Row="1" x:Name="ContentTextBox" Template="{StaticResource TextBoxTemplate1}"
-                             MinHeight="64" Padding="8,4" Background="Transparent" BorderThickness="0"
-                             TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复，回车可换行。"/>
+                     MinHeight="64" Padding="8,4" Background="Transparent" BorderThickness="0"
+                     TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复，回车可换行。"
+                     Text="{Binding Content,Mode=TwoWay}" GotFocus="ContentTextBox_GotFocus"/>
             <Button Grid.Row="1" x:Name="SendButton" Margin="0,0,12,12"
-                Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
-                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
-                HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                Click="SendButton_Click">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <SymbolIcon Symbol="Send" />
-                    <TextBlock Text=" 发送"/>
-                </StackPanel>
+                    IsEnabled="{Binding Countdown,ElementName=MyQuickReplyControl,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"
+                    Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
+                    Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Command="{Binding SendCommand}">
+                <TextBlock FontFamily="{ThemeResource SymbolThemeFontFamily}">
+                    <Run Text="{Binding Countdown,ElementName=MyQuickReplyControl,Converter={StaticResource CountdownToStatusLabelConverter},ConverterParameter={StaticResource SendTextString}}"/>
+                </TextBlock>
             </Button>
         </Grid>
     </StackPanel>
