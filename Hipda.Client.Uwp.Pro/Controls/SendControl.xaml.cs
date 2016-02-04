@@ -133,8 +133,6 @@ namespace Hipda.Client.Uwp.Pro.Controls
         }
         #endregion
 
-        SendType _sendType;
-
         public int Countdown
         {
             get { return (int)GetValue(CountdownProperty); }

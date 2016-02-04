@@ -73,21 +73,21 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("Countdown", typeof(int), typeof(MainPage), new PropertyMetadata(0));
 
 
-        DispatcherTimer dispatcherTimer;
+        DispatcherTimer _dispatcherTimer;
 
         public void DispatcherTimerSetup()
         {
-            dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += dispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
-            dispatcherTimer.Start();
+            _dispatcherTimer = new DispatcherTimer();
+            _dispatcherTimer.Tick += dispatcherTimer_Tick;
+            _dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
         }
 
         void dispatcherTimer_Tick(object sender, object e)
         {
             if (Countdown == 0)
             {
-                dispatcherTimer.Stop();
+                _dispatcherTimer.Stop();
+                return;
             }
 
             Countdown--;
@@ -122,6 +122,8 @@ namespace Hipda.Client.Uwp.Pro
         public MainPage()
         {
             this.InitializeComponent();
+
+            DispatcherTimerSetup();
 
             if (_myLocalSettings.ThemeType == 0)
             {
@@ -828,9 +830,10 @@ namespace Hipda.Client.Uwp.Pro
             {
                 CloseUserDialog();
 
-                // 倒计时
+                // 开始倒计时
                 Countdown = 30;
-                DispatcherTimerSetup();
+                _dispatcherTimer.Stop();
+                _dispatcherTimer.Start();
 
                 // 发贴成功后，刷新主题列表
                 if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
@@ -849,7 +852,7 @@ namespace Hipda.Client.Uwp.Pro
             var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
             sendControl.SetBinding(SendControl.CountdownProperty, binding);
 
-            var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter() };
+            var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter(), ConverterParameter = "发表新话题" };
             UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
             UserDialog.Content = sendControl;
 
@@ -868,9 +871,10 @@ namespace Hipda.Client.Uwp.Pro
             {
                 CloseUserDialog();
 
-                // 倒计时
+                // 开始倒计时
                 Countdown = 30;
-                DispatcherTimerSetup();
+                _dispatcherTimer.Stop();
+                _dispatcherTimer.Start();
 
                 // 回贴成功后，刷新回复页到底部
                 if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
@@ -909,9 +913,8 @@ namespace Hipda.Client.Uwp.Pro
             var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
             sendControl.SetBinding(SendControl.CountdownProperty, binding);
 
-            //var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter() };
-            //UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
-            UserDialog.Title = "回复";
+            var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter(), ConverterParameter = "回复" };
+            UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
             UserDialog.Content = sendControl;
 
             if (_isDialogShown == false)

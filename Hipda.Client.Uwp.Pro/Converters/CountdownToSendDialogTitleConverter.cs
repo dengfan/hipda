@@ -14,10 +14,10 @@ namespace Hipda.Client.Uwp.Pro.Converters
             var val = (int)value;
             if (val > 0)
             {
-                return $"发表新话题 （倒计时{val}秒）";
+                return $"{parameter.ToString()} （倒计时{val}秒）";
             }
 
-            return "发表新话题";
+            return parameter.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
