@@ -458,6 +458,7 @@ namespace Hipda.Client.Uwp.Pro
         void SendToast(string toastXml)
         {
             toastXml = Common.ReplaceHexadecimalSymbols(toastXml);
+            toastXml = Common.ReplaceEmojiLabel(toastXml);
 
             var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(toastXml);
