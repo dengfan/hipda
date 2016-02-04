@@ -854,6 +854,8 @@ namespace Hipda.Client.Uwp.Pro
 
             var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter(), ConverterParameter = "发表新话题" };
             UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
+
+            UserDialog.ContentTemplate = null;
             UserDialog.Content = sendControl;
 
             if (_isDialogShown == false)
@@ -915,6 +917,8 @@ namespace Hipda.Client.Uwp.Pro
 
             var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToSendDialogTitleConverter(), ConverterParameter = "回复" };
             UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
+
+            UserDialog.ContentTemplate = null;
             UserDialog.Content = sendControl;
 
             if (_isDialogShown == false)
