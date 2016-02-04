@@ -26,8 +26,8 @@
             <MenuFlyout x:Name="replyMenu">
                 <MenuFlyoutItem Text="回复" Click="OpenReplyPostPanel" />
                 <MenuFlyoutItem Text="引用" Click="OpenQuotePostPanel" />
-                <MenuFlyoutItem Text="编辑" IsEnabled="{Binding IsMine}" />
-                <MenuFlyoutItem Text="用浏览器打开" />
+                <MenuFlyoutItem Text="编辑" IsEnabled="{Binding IsMine}" Click="OpenEditPostPanel" />
+                <MenuFlyoutItem Text="用浏览器打开" Click="OpenPostInBrowser" />
             </MenuFlyout>
         </Button.Flyout>
     </Button>

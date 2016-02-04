@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -57,6 +58,36 @@ namespace Hipda.Client.Uwp.Pro.Controls
                 string postSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + "..." : data.TextStr;
                 mp.OpenReplyPostPanel("q", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
             }
+        }
+
+        private void OpenEditPostPanel(object sender, RoutedEventArgs e)
+        {
+            var data = (ReplyItemModel)((MenuFlyoutItem)e.OriginalSource).DataContext;
+            if (data == null)
+            {
+                return;
+            }
+
+            var frame = Window.Current.Content as Frame;
+            var mp = frame.Content as MainPage;
+            if (mp != null)
+            {
+                string postSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + "..." : data.TextStr;
+                mp.OpenReplyPostPanel("q", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
+            }
+        }
+
+        private async void OpenPostInBrowser(object sender, RoutedEventArgs e)
+        {
+            var data = (ReplyItemModel)((MenuFlyoutItem)e.OriginalSource).DataContext;
+            if (data == null)
+            {
+                return;
+            }
+
+            var uriStr = $"http://www.hi-pda.com/forum/viewthread.php?tid={data.ThreadId}&rpid={data.PostId}&fav=yes#pid{data.PostId}";
+            Uri uri = new Uri(uriStr, UriKind.Absolute);
+            await Launcher.LaunchUriAsync(uri);
         }
     }
 }
