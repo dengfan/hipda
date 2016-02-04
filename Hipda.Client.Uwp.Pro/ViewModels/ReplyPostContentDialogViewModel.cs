@@ -73,7 +73,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             else if (replyType.Equals("q"))
             {
                 _noticeauthor = $"{replyType}|{_postAuthorUserId}|{_postAuthorUsername}";
-                _noticetrimstr = $"[quote]{_postSimpleContent}\r\n[size=2][color=#999999]{_postAuthorUserId} 发表于 {postTime}[/color] [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={_postId}&ptid={_threadId}][img]http://www.hi-pda.com/forum/images/common/back.gif[/img][/url][/size][/quote]\r\n \r\n    ";
+                _noticetrimstr = $"[quote]{_postSimpleContent}\r\n[size=2][color=#999999]{_postAuthorUserId} 发表于 {postTime}[/color] [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost&pid={_postId}&ptid={_threadId}][img]http://www.hi-pda.com/forum/images/common/back.gif[/img][/url][/size][/quote]\r\n    ";
             }
             _noticeauthormsg = _postSimpleContent;
 

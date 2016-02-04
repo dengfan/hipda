@@ -135,7 +135,7 @@ namespace Hipda.BackgroundTask
 
                             // 发送
                             string noticeauthor = $"q|{userId}|{username}";
-                            string noticetrimstr = $"[quote]{actionText}\r\n[size=2][color=#999999]{username} 发表于 {actionTime}[/color] [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost__AND__pid={postId}__AND__ptid={threadId}][img]http://www.hi-pda.com/forum/images/common/back.gif[/img][/url][/size][/quote]\r\n \r\n    ";
+                            string noticetrimstr = $"[quote]{actionText}\r\n[size=2][color=#999999]{username} 发表于 {actionTime}[/color] [url=http://www.hi-pda.com/forum/redirect.php?goto=findpost__AND__pid={postId}__AND__ptid={threadId}][img]http://www.hi-pda.com/forum/images/common/back.gif[/img][/url][/size][/quote]\r\n    ";
                             string noticeauthormsg = actionText;
                             string _xmlForQuoteOrReply = @"<toast>" +
                                 "<visual>" +
