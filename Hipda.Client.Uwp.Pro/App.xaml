@@ -15,6 +15,7 @@
         <vm:FaceIconViewModel x:Key="FaceIconViewModel"/>
         <cvt:ThemeTypeToRequestedThemeConverter x:Key="ThemeTypeToRequestedThemeConverter"/>
         <cvt:UserIdToAvatarUriConverter x:Key="UserIdToAvatarUriConverter"/>
+        <cvt:TextToEmojiConverter x:Key="TextToEmojiConverter"/>
         <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
         <cvt:CountdownToCountdownLabelConverter x:Key="CountdownToCountdownLabelConverter"/>
         <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
@@ -343,7 +344,7 @@
                                              ReplyListHighLightItemTemplate="{StaticResource ReplyListHighLightItemTemplate}"
                                              />
 
-        <local:NoticeListItemTemplateSelector x:Key="NoticeListItemTemplateSelector"
+        <local:NoticeListItemTemplateSelector x:Key="NoticeListItemTemplateSelector" 
                                               NoticeQuoteOrReplyItemTemplate="{StaticResource NoticeQuoteOrReplyItemTemplate}"
                                               NoticeThreadItemTemplate="{StaticResource NoticeThreadItemTemplate}"
                                               NoticeBuddyItemTemplate="{StaticResource NoticeBuddyItemTemplate}"
@@ -679,7 +680,9 @@
         <DataTemplate x:Key="NoticeQuoteOrReplyItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <c:MyAvatarForReply Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource UserIdStringToInt32Converter}}" Username="{Binding Username}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatarForReply Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource UserIdStringToInt32Converter}}"
+                                    Username="{Binding Username}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}"
+                                    HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Paragraph>
@@ -693,7 +696,7 @@
                                     <HyperlinkButton.Content>
                                         <TextBlock TextWrapping="Wrap">
                                             <Underline>
-                                                <Run Text="{Binding ActionInfo[2]}"/>
+                                                <Run Text="{Binding ActionInfo[2],Converter={StaticResource TextToEmojiConverter}}"/>
                                             </Underline>
                                         </TextBlock>
                                     </HyperlinkButton.Content>
@@ -701,15 +704,15 @@
                             </InlineUIContainer>
                             <LineBreak/>
                             <Run Text="我说：" FontWeight="Bold"/>
-                            <Run Text="{Binding ActionInfo[3]}"/>
+                            <Run Text="{Binding ActionInfo[3],Converter={StaticResource TextToEmojiConverter}}"/>
                             <LineBreak/>
                             <Run Text="他说：" FontWeight="Bold"/>
-                            <Run Text="{Binding ActionInfo[4]}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                            <Run Text="{Binding ActionInfo[4],Converter={StaticResource TextToEmojiConverter}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         </Paragraph>
                     </RichTextBlock>
                     <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
-                        <Button Margin="0,0,8,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Content="回复"/>
-                        <Button Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Content="查看"/>
+                        <Button Margin="0,0,8,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Content="回复" Command="{Binding ReplyCommand}"/>
+                        <Button Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Content="查看" Command="{Binding ViewCommand}"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -718,9 +721,11 @@
         <DataTemplate x:Key="NoticeThreadItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <Border Margin="14,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20"/>
+                <Border Margin="14,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40"
+                        Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20"/>
                 <StackPanel Margin="60,4,0,12">
-                    <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                    <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Paragraph>
                             <Run Text="{Binding Username}" FontWeight="Bold" />
                             <LineBreak/>
@@ -733,7 +738,7 @@
                                     <HyperlinkButton.Content>
                                         <TextBlock TextWrapping="Wrap">
                                             <Underline>
-                                                <Run Text="{Binding ActionInfo[1]}"/>
+                                                <Run Text="{Binding ActionInfo[1],Converter={StaticResource TextToEmojiConverter}}"/>
                                             </Underline>
                                         </TextBlock>
                                     </HyperlinkButton.Content>
@@ -749,9 +754,12 @@
         <DataTemplate x:Key="NoticeBuddyItemTemplate">
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <c:MyAvatarForReply Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource UserIdStringToInt32Converter}}" Username="{Binding Username}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <c:MyAvatarForReply Margin="14,8,0,0" UserId="{Binding ActionInfo[0],Converter={StaticResource UserIdStringToInt32Converter}}"
+                                    Username="{Binding Username}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}"
+                                    HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                    <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
                         <Paragraph>
                             <Run Text="{Binding Username}" FontWeight="Bold" />
                             <Run Text="{Binding ActionTime}" />

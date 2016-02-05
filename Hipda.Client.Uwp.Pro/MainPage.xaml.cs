@@ -849,7 +849,7 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        public async void OpenSendReplyPostPanel(string replyType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId)
+        public async void OpenSendReplyPostPanel(string replyType, int postAuthorUserId, string postAuthorUsername, string quoteSimpleContent, string postTime, int floorNo, int postId, int threadId)
         {
             FindName("UserDialog");
 
@@ -893,7 +893,7 @@ namespace Hipda.Client.Uwp.Pro
                 }
             };
 
-            var sendControl = new SendControl(replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, floorNo, postId, threadId, sendSuccess);
+            var sendControl = new SendControl(replyType, postAuthorUserId, postAuthorUsername, quoteSimpleContent, postTime, floorNo, postId, threadId, sendSuccess);
             var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
             sendControl.SetBinding(SendControl.CountdownProperty, binding);
 

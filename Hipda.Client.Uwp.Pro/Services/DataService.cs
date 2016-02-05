@@ -239,9 +239,9 @@ namespace Hipda.Client.Uwp.Pro.Services
         #endregion
 
         #region notice
-        async Task<List<NoticeItemModel>> LoadNoticeDataAsync(CancellationTokenSource cts)
+        async Task<List<NoticeItemViewModel>> LoadNoticeDataAsync(CancellationTokenSource cts)
         {
-            var data = new List<NoticeItemModel>();
+            var data = new List<NoticeItemViewModel>();
 
             string url = string.Format("http://www.hi-pda.com/forum/notice.php?_={0}", DateTime.Now.Ticks.ToString("x"));
             string htmlStr = await _httpClient.GetAsync(url, cts);
@@ -321,7 +321,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         var viewLinkNode = buttonsNode.ChildNodes[2];
                         postId = viewLinkNode.Attributes[0].Value.Substring("http://www.hi-pda.com/forum/redirect.php?from=notice&goto=findpost&pid=".Length).Split('&')[0];
 
-                        data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
+                        data.Add(new NoticeItemViewModel(noticeType, isNew, username, actionTime, new string[] {
                             userId,         // 0
                             threadId,       // 1
                             threadTitle,    // 2
@@ -352,7 +352,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         actionTime = nodes.FirstOrDefault(n => n.Name.Equals("em")).InnerText.Trim();
                         isNew = nodes.Count(n => n.Name.Equals("img") && n.GetAttributeValue("alt", "").Equals("NEW")) == 1;
 
-                        data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
+                        data.Add(new NoticeItemViewModel(noticeType, isNew, username, actionTime, new string[] {
                             threadId,
                             threadTitle,
                             postId
@@ -366,7 +366,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         actionTime = divNode.ChildNodes[2].InnerText.Trim();
                         isNew = divNode.ChildNodes[3].Name.Equals("img");
 
-                        data.Add(new NoticeItemModel(noticeType, isNew, username, actionTime, new string[] {
+                        data.Add(new NoticeItemViewModel(noticeType, isNew, username, actionTime, new string[] {
                             userId
                         }));
                         break;
@@ -397,7 +397,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return data;
         }
 
-        public async Task<List<NoticeItemModel>> GetNoticeData()
+        public async Task<List<NoticeItemViewModel>> GetNoticeData()
         {
             var cts = new CancellationTokenSource();
             return await LoadNoticeDataAsync(cts);

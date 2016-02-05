@@ -122,6 +122,7 @@
     <Compile Include="Converters\SearchPanelVisibilityToSearchButtonStyleConverter.cs" />
     <Compile Include="Converters\SelectedIndexToVisibilityConverter.cs" />
     <Compile Include="Converters\TextLengthToTipBorderVisibilityConverter.cs" />
+    <Compile Include="Converters\TextToEmojiConverter.cs" />
     <Compile Include="Converters\ThemeTypeNameToVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeTypeToRequestedThemeConverter.cs" />
     <Compile Include="Converters\UserIdStringToInt32Converter.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Triggers\DeviceFamilyTrigger.cs" />
     <Compile Include="Triggers\InputTypeTrigger.cs" />
     <Compile Include="UserMessageListItemTemplateSelector.cs" />
+    <Compile Include="ViewModels\NoticeItemViewModel.cs" />
     <Compile Include="ViewModels\SendEditPostContentDialogViewModel.cs" />
     <Compile Include="ViewModels\SendNewThreadContentDialogViewModel.cs" />
     <Compile Include="ViewModels\FaceIconViewModel.cs" />

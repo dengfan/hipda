@@ -41,8 +41,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var mp = frame.Content as MainPage;
             if (mp != null)
             {
-                string postSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + "..." : data.TextStr;
-                mp.OpenSendReplyPostPanel("r", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
+                string quoteSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + " ..." : data.TextStr;
+                mp.OpenSendReplyPostPanel("r", data.AuthorUserId, data.AuthorUsername, quoteSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
             }
         }
 
@@ -58,8 +58,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var mp = frame.Content as MainPage;
             if (mp != null)
             {
-                string postSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + "..." : data.TextStr;
-                mp.OpenSendReplyPostPanel("q", data.AuthorUserId, data.AuthorUsername, postSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
+                string quoteSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + " ..." : data.TextStr;
+                mp.OpenSendReplyPostPanel("q", data.AuthorUserId, data.AuthorUsername, quoteSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
             }
         }
 

@@ -28,15 +28,6 @@ namespace Hipda.Client.Uwp.Pro.Models
 
     public class NoticeItemModel
     {
-        public NoticeItemModel(NoticeType noticeType, bool isNew, string username, string actionTime, string[] actionInfo)
-        {
-            NoticeType = noticeType;
-            IsNew = isNew;
-            Username = username;
-            ActionTime = actionTime;
-            ActionInfo = actionInfo;
-        }
-
         public NoticeType NoticeType { get; set; }
         public bool IsNew { get; set; }
         public string Username { get; set; }
