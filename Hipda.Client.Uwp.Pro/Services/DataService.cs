@@ -233,6 +233,18 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var htmlNode = doc.DocumentNode.ChildNodes[0];
                 return GetUserMessageItem(htmlNode);
             }
+            else if (resultContent.StartsWith(@"<?xml version=""1.0"" encoding=""gbk""?><root><![CDATA[<li class=""pm_date"">") && resultContent.Contains(@"images/default/notice_newpm.gif"))
+            {
+                XmlDocument xdoc = new XmlDocument();
+                xdoc.LoadXml(resultContent);
+                string html = xdoc.ChildNodes[1].InnerText;
+
+                HtmlDocument doc = new HtmlDocument();
+                doc.LoadHtml(html);
+
+                var htmlNode = doc.DocumentNode.ChildNodes[1];
+                return GetUserMessageItem(htmlNode);
+            }
 
             return null;
         }

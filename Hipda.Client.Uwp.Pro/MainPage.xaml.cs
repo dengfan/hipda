@@ -466,6 +466,7 @@ namespace Hipda.Client.Uwp.Pro
         private void NoticeButton_Click(object sender, RoutedEventArgs e)
         {
             OpenThreadForItemType("notice");
+            TopNavButtonListBox.SelectedItem = null;
         }
 
         #region 头像上下文菜单
@@ -649,8 +650,8 @@ namespace Hipda.Client.Uwp.Pro
             tb.Text = string.Empty;
 
             // 发送完成后跳到列表底部
-            var listView = Common.FindParent<Grid>(umb).Children[0] as ListView;
-            if (listView.Items.Count > 0)
+            var listView = Common.FindParent<Grid>(umb).Children[1] as ListView;
+            if (listView.Items.Count > 0) 
             {
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
                     listView.ScrollIntoView(listView.Items.Last());

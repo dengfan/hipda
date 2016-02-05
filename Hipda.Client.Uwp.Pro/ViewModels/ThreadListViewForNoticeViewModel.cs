@@ -37,14 +37,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             LoadData();
 
-
-
-            var btnRefreshForNotice = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
-            btnRefreshForNotice.Tapped += (s, e) => {
-
+            RefreshThreadCommand = new DelegateCommand();
+            RefreshThreadCommand.ExecuteAction = (p) =>
+            {
+                LoadData();
             };
 
-            _leftCommandBar.PrimaryCommands.Add(btnRefreshForNotice);
+            var RefreshButton = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
+            RefreshButton.Command = RefreshThreadCommand;
+
+            _leftCommandBar.PrimaryCommands.Add(RefreshButton);
         }
 
         async void LoadData()

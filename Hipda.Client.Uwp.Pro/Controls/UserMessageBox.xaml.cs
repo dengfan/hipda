@@ -2,21 +2,8 @@
 using Hipda.Client.Uwp.Pro.Services;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Hipda.Client.Uwp.Pro.Controls
 {
@@ -51,9 +38,34 @@ namespace Hipda.Client.Uwp.Pro.Controls
             }
         }
 
-        private void UserMessageFaceGridView_ItemClick(object sender, ItemClickEventArgs e)
+        void EmojiGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var data = e.ClickedItem as FaceItemModel;
+            var data = (EmojiItemModel)e.ClickedItem;
+            if (data == null)
+            {
+                return;
+            }
+
+            string faceText = data.Label;
+
+            int occurences = 0;
+            string originalContent = UserMessageTextBox.Text;
+
+            for (var i = 0; i < UserMessageTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = UserMessageTextBox.SelectionStart + occurences;
+            UserMessageTextBox.Text = UserMessageTextBox.Text.Insert(cursorPosition, faceText);
+            UserMessageTextBox.SelectionStart = cursorPosition + faceText.Length;
+            UserMessageTextBox.Focus(FocusState.Pointer);
+        }
+
+        void FaceGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var data = (FaceItemModel)e.ClickedItem;
             if (data == null)
             {
                 return;
@@ -73,6 +85,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             int cursorPosition = UserMessageTextBox.SelectionStart + occurences;
             UserMessageTextBox.Text = UserMessageTextBox.Text.Insert(cursorPosition, faceText);
             UserMessageTextBox.SelectionStart = cursorPosition + faceText.Length;
+            UserMessageTextBox.Focus(FocusState.Pointer);
         }
 
         private void UserMessagePostButton_Click(object sender, RoutedEventArgs e)
