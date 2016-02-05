@@ -175,7 +175,6 @@
     <Compile Include="Services\ReplyListService.cs" />
     <Compile Include="Services\SearchFullTextService.cs" />
     <Compile Include="Services\SearchTitleService.cs" />
-    <Compile Include="Services\FaceService.cs" />
     <Compile Include="Services\GeneratorIncrementalLoadingClass.cs" />
     <Compile Include="Services\IncrementalLoadingBase.cs" />
     <Compile Include="Services\SettingsService.cs" />

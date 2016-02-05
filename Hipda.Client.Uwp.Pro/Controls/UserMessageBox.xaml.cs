@@ -30,14 +30,6 @@ namespace Hipda.Client.Uwp.Pro.Controls
             this.InitializeComponent();
         }
 
-        public List<FaceItemModel> FaceData
-        {
-            get
-            {
-                return FaceService.FaceData;
-            }
-        }
-
         void EmojiGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var data = (EmojiItemModel)e.ClickedItem;
