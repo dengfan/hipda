@@ -68,7 +68,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             int i = _threadDataForMyPosts.Count;
-            for (int j = 0; j < _pageSize * 2; j += 2)
+            for (int j = 0; j < rows.Count - 1; j += 2)
             {
                 var tr = rows[j];
                 var tr2 = rows[j + 1];
