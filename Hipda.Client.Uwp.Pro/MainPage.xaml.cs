@@ -23,6 +23,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 //“空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 上有介绍
@@ -127,6 +128,15 @@ namespace Hipda.Client.Uwp.Pro
         public MainPage()
         {
             this.InitializeComponent();
+
+            var avatarBrush = new ImageBrush();
+            avatarBrush.Stretch = Stretch.UniformToFill;
+            avatarBrush.ImageSource = new BitmapImage { UriSource = Common.GetSmallAvatarUriByUserId(AccountService.UserId), DecodePixelWidth = 32 };
+            avatarBrush.ImageFailed += (s, e) => { return; };
+            AccountAvatarBorder.Background = avatarBrush;
+            string username = AccountService.Username.Substring(1, AccountService.Username.Length - 2);
+            username = AccountService.Username.Replace(username, "****");
+            AccountUsernameTextBlock.Text = $"\u2601 {username}";
 
             if (_myLocalSettings.ThemeType == 0)
             {
@@ -1016,5 +1026,11 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
         #endregion
+
+        private void AccountLogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            AccountService.ClearDefaultStatus();
+            ((Frame)Window.Current.Content).Navigate(typeof(LoginPage));
+        }
     }
 }

@@ -553,10 +553,10 @@
                 <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <Run Text="&#x1F5E9;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
-                    <Run Text=" " FontStyle="Italic"/>
+                    <!--<Run Text=" " FontStyle="Italic"/>
                     <Run Text="{Binding Index}" FontStyle="Italic"/>
                     <Run Text=":" FontStyle="Italic"/>
-                    <Run Text="{Binding Index2}" FontStyle="Italic"/>
+                    <Run Text="{Binding Index2}" FontStyle="Italic"/>-->
                 </TextBlock>
             </Grid>
         </DataTemplate>

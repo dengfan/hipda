@@ -446,9 +446,9 @@
                                 <c:MyAvatarForThread Margin="0,0,8,0" UserId="{x:Bind AuthorUserId}" Username="{x:Bind AuthorUsername}"
                                                      ThreadId="{x:Bind ThreadId}" ThreadTitle="{x:Bind Title}" ForumId="{x:Bind ForumId}" ForumName="{x:Bind ForumName}"
                                                      HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                <TextBlock Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind AuthorUsername}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
-                                <TextBlock Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Text="{x:Bind ForumName}" Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
-                                <TextBlock Margin="48,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind Title}" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                                <TextBlock Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind AuthorUsername}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                                <TextBlock Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Text="{x:Bind ForumName}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                                <TextBlock Margin="48,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind Title}" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -518,8 +518,8 @@
                                     <StackPanel Orientation="Horizontal">
                                         <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill"
                                                Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}" Source="{Binding UserId,Converter={StaticResource UserIdToAvatarUriConverter}}"/>
-                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
-                                            <Run Text="{Binding Username}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
+                                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                                            <Run Text="{Binding Username}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
                                             <LineBreak/>
                                             <Run Text="@" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                                             <Run Text="{Binding ForumName}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
@@ -531,7 +531,7 @@
                         <TextBlock Text="-------- 赞！您是一个包容的人 --------" HorizontalAlignment="Center"
                                    FontSize="{ThemeResource ToolTipContentThemeFontSize}"
                                    Visibility="{Binding BlockUsers.Count,Source={StaticResource MyRoamingSettings},Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}"
-                                   Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
                                 Content="解除选中用户" Style="{StaticResource NormalButtonStyle}" Click="UnblockUsers"/>
 
@@ -545,8 +545,8 @@
                                         <Image Margin="0,0,8,0" Width="32" Height="32" Stretch="UniformToFill"
                                                Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"
                                                Source="{Binding UserId,Converter={StaticResource UserIdToAvatarUriConverter}}"/>
-                                        <TextBlock Foreground="{ThemeResource SystemControlBackgroundBaseLowBrush}">
-                                            <Run Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
+                                        <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                                            <Run Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
                                             <LineBreak/>
                                             <Run Text="{Binding Username}" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                                             <Run Text=" @" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
@@ -559,12 +559,12 @@
                         <TextBlock Text="-------- 赞！您是一个豁达的人 --------" HorizontalAlignment="Center"
                                    FontSize="{ThemeResource ToolTipContentThemeFontSize}"
                                    Visibility="{Binding BlockThreads.Count,Source={StaticResource MyRoamingSettings},Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}"
-                                   Foreground="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
                                 Content="解除选中主题" Style="{StaticResource NormalButtonStyle}"
                                 Click="UnblockThreads"/>
 
-                        <HyperlinkButton Margin="0,14,0,14" HorizontalAlignment="Center" Content="购买 【移除广告】 服务"/>
+                        <HyperlinkButton Margin="0,14,0,14" HorizontalAlignment="Center" Content="购买【移除广告】服务"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
@@ -638,9 +638,24 @@
 
                     <ScrollViewer Margin="0 48 0 0" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Hidden">
                         <StackPanel>
+                            <StackPanel Padding="8" Orientation="Horizontal">
+                                <Border Width="32" Height="32" CornerRadius="16" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
+                                    <Border x:Name="AccountAvatarBorder" Width="32" Height="32" CornerRadius="16"
+                                            Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"
+                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Margin="18,0,12,0" x:Name="AccountUsernameTextBlock" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" VerticalAlignment="Center"/>
+                                <Button Click="AccountLogoutButton_Click" VerticalAlignment="Center" ToolTipService.ToolTip="注销">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <TextBlock Text="&#xE8F8;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
                             <Button Style="{Binding Visibility,ElementName=SearchPanel,Converter={StaticResource SearchPanelVisibilityToSearchButtonStyleConverter}}"
                                     BorderThickness="0" Padding="0" HorizontalAlignment="Stretch" Height="44"
-                                    HorizontalContentAlignment="Left" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}"
+                                    HorizontalContentAlignment="Left" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                     Click="SearchButton_Click">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
@@ -666,12 +681,12 @@
                             </Button>
                             <StackPanel x:Name="SearchPanel" Margin="8" Visibility="Collapsed">
                                 <TextBox x:Name="KeywordTextBox" Template="{StaticResource TextBoxTemplate1}" PlaceholderText="关键字" KeyUp="KeywordTextBox_KeyUp"/>
-                                <ComboBox x:Name="SearchTypeComboBox" Margin="0,8,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                                <ComboBox x:Name="SearchTypeComboBox" Margin="0,8,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                                     <x:String>标题</x:String>
                                     <x:String>全文</x:String>
                                 </ComboBox>
                                 <TextBox x:Name="AuthorTextBox" Template="{StaticResource TextBoxTemplate1}" Margin="0,8,0,0" PlaceholderText="作者"/>
-                                <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,8,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlBackgroundBaseMediumBrush}">
+                                <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,8,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                                     <x:String>全部时间</x:String>
                                     <x:String>1周以内</x:String>
                                     <x:String>1个月以内</x:String>

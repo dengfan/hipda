@@ -102,7 +102,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             // 自动登录
             var accountService = new AccountService();
-            bool isLogin = await accountService.AutoLogin();
+            bool isLogin = await accountService.LoginAsync();
 
             _rootFrame = Window.Current.Content as Frame;
 
