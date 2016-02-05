@@ -100,7 +100,7 @@
                 <Button x:Name="loginButton" TabIndex="3" Margin="0,20,0,0" HorizontalAlignment="Center" Click="loginButton_Click">
                     <Button.Template>
                         <ControlTemplate>
-                            <Grid x:Name="ButtonGrid" Width="60" Height="60" CornerRadius="30" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                            <Grid x:Name="ButtonGrid" Width="60" Height="60" CornerRadius="30" Background="{ThemeResource SystemControlBackgroundAccentBrush}">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup x:Name="CommonStates">
                                         <VisualState x:Name="Normal" />
@@ -118,7 +118,8 @@
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <FontIcon x:Name="ButtonIcon" Glyph="&#xE09F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <FontIcon x:Name="ButtonIcon" Glyph="&#xE09F;" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                          Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" />
                             </Grid>
                         </ControlTemplate>
                     </Button.Template>
