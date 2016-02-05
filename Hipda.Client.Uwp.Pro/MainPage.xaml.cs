@@ -99,6 +99,7 @@ namespace Hipda.Client.Uwp.Pro
 
         MainPageViewModel _mainPageViewModel;
 
+        #region 打开下级页面必须且只能使用以下三个方法
         public void OpenThreadByForumId()
         {
             AppFrame.Navigate(typeof(ThreadAndReplyPage), $"fid={ForumId}");
@@ -113,6 +114,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             AppFrame.Navigate(typeof(ThreadAndReplyPage), $"search={args}");
         }
+        #endregion
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
@@ -543,6 +545,39 @@ namespace Hipda.Client.Uwp.Pro
 
                 Common.SendToast(xml2);
             }
+        }
+
+        private async void AddToFavorites_Click(object sender, RoutedEventArgs e)
+        {
+            if (PopupThreadId == 0 || string.IsNullOrEmpty(PopupThreadTitle))
+            {
+                return;
+            }
+
+            var cts = new CancellationTokenSource();
+            await SendService.SendAddToFavoritesAction(cts, PopupThreadId, PopupThreadTitle);
+        }
+
+        private void OpenUserThread_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(PopupUsername))
+            {
+                return;
+            }
+
+            OpenThreadForSearch($",{PopupUsername},0,0,-1");
+            TopNavButtonListBox.SelectedItem = null;
+        }
+
+        private async void AddBuddy_Click(object sender, RoutedEventArgs e)
+        {
+            if (PopupUserId == 0 || string.IsNullOrEmpty(PopupUsername))
+            {
+                return;
+            }
+
+            var cts = new CancellationTokenSource();
+            await SendService.SendAddBuddyAction(cts, PopupUserId, PopupUsername);
         }
         #endregion
 
@@ -981,38 +1016,5 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
         #endregion
-
-        private async void AddToFavorites_Click(object sender, RoutedEventArgs e)
-        {
-            if (PopupThreadId == 0 || string.IsNullOrEmpty(PopupThreadTitle))
-            {
-                return;
-            }
-
-            var cts = new CancellationTokenSource();
-            await SendService.SendAddToFavoritesAction(cts, PopupThreadId, PopupThreadTitle);
-        }
-
-        private void OpenUserThread_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(PopupUsername))
-            {
-                return;
-            }
-
-            OpenThreadForSearch($",{PopupUsername},0,0,-1");
-            TopNavButtonListBox.SelectedItem = null;
-        }
-
-        private async void AddBuddy_Click(object sender, RoutedEventArgs e)
-        {
-            if (PopupUserId == 0 || string.IsNullOrEmpty(PopupUsername))
-            {
-                return;
-            }
-
-            var cts = new CancellationTokenSource();
-            await SendService.SendAddBuddyAction(cts, PopupUserId, PopupUsername);
-        }
     }
 }

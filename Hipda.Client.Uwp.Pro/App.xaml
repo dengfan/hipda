@@ -692,7 +692,7 @@
                             <Run Text="引用或答复了您在此主题的贴子" />
                             <LineBreak/>
                             <InlineUIContainer>
-                                <HyperlinkButton>
+                                <HyperlinkButton Command="{Binding ViewCommand}">
                                     <HyperlinkButton.Content>
                                         <TextBlock TextWrapping="Wrap">
                                             <Underline>
@@ -734,7 +734,7 @@
                             <Run Text="回复了您关注的主题" />
                             <LineBreak/>
                             <InlineUIContainer>
-                                <HyperlinkButton>
+                                <HyperlinkButton Command="{Binding ViewCommand}">
                                     <HyperlinkButton.Content>
                                         <TextBlock TextWrapping="Wrap">
                                             <Underline>
@@ -746,7 +746,7 @@
                             </InlineUIContainer>
                         </Paragraph>
                     </RichTextBlock>
-                    <Button Margin="0,0,8,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Content="查看"/>
+                    <Button Margin="0,0,8,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Content="查看" Command="{Binding ViewCommand}"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -767,7 +767,7 @@
                             <Run Text="添加您为好友" />
                         </Paragraph>
                     </RichTextBlock>
-                    <Button Margin="0,8,0,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                    <Button Margin="0,8,0,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Command="{Binding AddBuddyCommand}">
                         <TextBlock>
                             <Run Text="加 "/>
                             <Run Text="{Binding Username}"/>

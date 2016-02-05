@@ -1,9 +1,12 @@
 ﻿using Hipda.Client.Uwp.Pro.Commands;
 using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.Services;
+using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -47,21 +50,35 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     ViewCommand = new DelegateCommand();
                     ViewCommand.ExecuteAction = (p) =>
                     {
-                        
+                        int postId = Convert.ToInt32(ActionInfo[6]);
+                        var threadAndReplyPage = (ThreadAndReplyPage)mainPage.AppFrame.Content;
+                        if (threadAndReplyPage != null)
+                        {
+                            threadAndReplyPage.PostId = postId;
+                            threadAndReplyPage.OpenReplyPageByPostId();
+                        }
                     };
                     break;
                 case NoticeType.Thread:
                     ViewCommand = new DelegateCommand();
                     ViewCommand.ExecuteAction = (p) =>
                     {
-                        
+                        int postId = Convert.ToInt32(ActionInfo[2]);
+                        var threadAndReplyPage = (ThreadAndReplyPage)mainPage.AppFrame.Content;
+                        if (threadAndReplyPage != null)
+                        {
+                            threadAndReplyPage.PostId = postId;
+                            threadAndReplyPage.OpenReplyPageByPostId();
+                        }
                     };
                     break;
                 case NoticeType.Buddy:
                     AddBuddyCommand = new DelegateCommand();
-                    AddBuddyCommand.ExecuteAction = (p) =>
+                    AddBuddyCommand.ExecuteAction = async (p) =>
                     {
-                        
+                        int userId = Convert.ToInt32(ActionInfo[0]);
+                        var cts = new CancellationTokenSource();
+                        await SendService.SendAddBuddyAction(cts, userId, username);
                     };
                     break;
             }
