@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Store;
 using Windows.Data.Xml.Dom;
 using Windows.Storage;
 using Windows.System;
@@ -1032,6 +1033,11 @@ namespace Hipda.Client.Uwp.Pro
         {
             AccountService.ClearDefaultStatus();
             ((Frame)Window.Current.Content).Navigate(typeof(LoginPage));
+        }
+
+        private async void PurchaseRemoveAd_Click(object sender, RoutedEventArgs e)
+        {
+            await Launcher.LaunchUriAsync(new Uri("ms-windows-store://pdp/?ProductId=9NBLGGH5QKKD"));
         }
     }
 }

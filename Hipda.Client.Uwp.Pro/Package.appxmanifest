@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="8f81b564-a34d-48fd-88c7-58be6695ddf3" Publisher="CN=appxking" Version="1.0.0.0" />
+  <Identity Name="63653AppxKing.HiPDAUWPpro" Publisher="CN=5C7BFBCC-D6D6-4906-A546-DE530049BD46" Version="1.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="8f81b564-a34d-48fd-88c7-58be6695ddf3" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Hipda.Client.Uwp.Pro</DisplayName>
-    <PublisherDisplayName>appxking</PublisherDisplayName>
+    <DisplayName>Hi!PDA UWP pro</DisplayName>
+    <PublisherDisplayName>AppxKing</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
