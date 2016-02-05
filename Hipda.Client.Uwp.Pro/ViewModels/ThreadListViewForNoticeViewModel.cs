@@ -18,13 +18,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         CommandBar _leftCommandBar;
         DataService _ds;
 
+        public DelegateCommand RefreshThreadCommand { get; set; }
+
         public ThreadListViewForNoticeViewModel(ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
             _leftListView.ItemsSource = null;
-            _leftListView.ItemTemplateSelector = App.Current.Resources["noticeListItemTemplateSelector"] as DataTemplateSelector;
-            _leftListView.ItemContainerStyle = App.Current.Resources["NoticeItemContainerStyle"] as Style;
+            _leftListView.ItemTemplateSelector = (DataTemplateSelector)App.Current.Resources["NoticeListItemTemplateSelector"];
+            _leftListView.ItemContainerStyle = (Style)App.Current.Resources["NoticeItemContainerStyle"];
 
             _leftCommandBar = leftCommandBar;
             _leftCommandBar.Visibility = Visibility.Visible;
@@ -34,6 +36,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _ds = new DataService();
 
             LoadData();
+
+
 
             var btnRefreshForNotice = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
             btnRefreshForNotice.Tapped += (s, e) => {

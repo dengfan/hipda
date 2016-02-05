@@ -730,7 +730,7 @@
                         </Button>
                     </StackPanel>
 
-                    <Button Content="x" Command="{Binding ClearCookiesCommand}" VerticalAlignment="Bottom"/>
+                    <!--<Button Content="x" Command="{Binding ClearCookiesCommand}" VerticalAlignment="Bottom"/>-->
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>

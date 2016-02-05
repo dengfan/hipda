@@ -40,7 +40,7 @@
             <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
                               VerticalAlignment="Top" SelectionMode="None" ShowsScrollingPlaceholders="False"
                               ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-                              ItemTemplateSelector="{StaticResource replyListItemTemplateSelector}"
+                              ItemTemplateSelector="{StaticResource ReplyListItemTemplateSelector}"
                               ItemsSource="{Binding ReplyItemCollection}">
             </ListView>
         </pr:PullToRefreshBox>
