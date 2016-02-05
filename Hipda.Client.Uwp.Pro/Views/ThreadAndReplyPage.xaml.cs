@@ -30,7 +30,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         // Using a DependencyProperty as the backing store for ThreadId.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ThreadIdProperty =
-            DependencyProperty.Register("ThreadId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(0, new PropertyChangedCallback(OnThreadIdChanged)));
+            DependencyProperty.Register("ThreadId", typeof(int), typeof(ThreadAndReplyPage), new PropertyMetadata(1802310, new PropertyChangedCallback(OnThreadIdChanged)));
 
         private static void OnThreadIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -258,6 +258,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             base.OnNavigatedTo(e);
 
+            OpenReplyPageByThreadId();
             leftNoDataNoticePanel.Visibility = Visibility.Collapsed;
 
             if (e.Parameter != null)

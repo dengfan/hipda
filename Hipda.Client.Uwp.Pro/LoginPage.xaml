@@ -8,6 +8,51 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveStates">
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="TitleTextBlock.FontSize" Value="36" />
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1600" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="TitleTextBlock.FontSize" Value="30" />
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1200" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="TitleTextBlock.FontSize" Value="24" />
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="TitleTextBlock.FontSize" Value="18" />
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="400" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="TitleTextBlock.FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="2*"/>
@@ -18,8 +63,12 @@
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/Images/hipdabg1.png" Stretch="UniformToFill"/>
                 </Grid.Background>
-                <StackPanel x:Name="infoPanel" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Center" MaxWidth="600">
-                    <TextBlock Text="首先您需要登录一个账号" FontWeight="Bold" Foreground="White"/>
+                <StackPanel Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Center" MaxWidth="600">
+                    <TextBlock x:Name="TitleTextBlock" Foreground="White">
+                        <Run Text="Hi!PDA"/>
+                        <LineBreak/>
+                        <Run Text="首先您需要登录一个账号"/>
+                    </TextBlock>
                 </StackPanel>
             </Grid>
         </Grid>
@@ -79,4 +128,10 @@
             <HyperlinkButton Grid.Row="1" HorizontalAlignment="Center" NavigateUri="http://www.hi-pda.com/forum/tobenew.php">没有账号？前往注册！</HyperlinkButton>
         </Grid>
     </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Accept" Label="登录" Click="loginButton_Click"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

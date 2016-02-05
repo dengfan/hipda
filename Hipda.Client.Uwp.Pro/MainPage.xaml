@@ -310,11 +310,11 @@
                             <FontIcon Glyph="&#xE2AF;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         </AppBarButton.Icon>
                     </AppBarButton>
-                    <AppBarButton Label="回复此楼" IsEnabled="{Binding IsButtonEnable}">
+                    <!--<AppBarButton Label="回复此楼" IsEnabled="{Binding IsButtonEnable}">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE90A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         </AppBarButton.Icon>
-                    </AppBarButton>
+                    </AppBarButton>-->
                 </CommandBar>
             </Grid>
         </DataTemplate>
