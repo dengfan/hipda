@@ -5,6 +5,7 @@
     xmlns:local="using:Hipda.Client.Uwp.Pro"
     xmlns:m="using:Hipda.Client.Uwp.Pro.Models"
     xmlns:t="using:Hipda.Client.Uwp.Pro.Triggers"
+    xmlns:triggers="using:WindowsStateTriggers"
     xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
     xmlns:cvt="using:Hipda.Client.Uwp.Pro.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -624,6 +625,28 @@
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <triggers:IsFalseStateTrigger Value="{x:Bind MainSplitView.IsPaneOpen}"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PromptAllBorder.Visibility" Value="Visible"/>
+                        <Setter Target="BottomButtonPanel.Orientation" Value="Vertical"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{x:Bind MainSplitView.IsPaneOpen, Mode=OneWay}"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PromptAllBorder.Visibility" Value="Collapsed"/>
+                        <Setter Target="BottomButtonPanel.Orientation" Value="Horizontal"/>
+                    </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>

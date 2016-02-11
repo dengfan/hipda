@@ -120,12 +120,6 @@ namespace Hipda.Client.Uwp.Pro
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
-        void ElementAdapter()
-        {
-            PromptAllBorder.Visibility = ActualWidth >= 1000 ? Visibility.Collapsed : Visibility.Visible;
-            BottomButtonPanel.Orientation = MainSplitView.IsPaneOpen ? Orientation.Horizontal : Orientation.Vertical;
-        }
-
         public MainPage()
         {
             this.InitializeComponent();
@@ -150,16 +144,6 @@ namespace Hipda.Client.Uwp.Pro
 
             _mainPageViewModel = MainPageViewModel.GetInstance();
             DataContext = _mainPageViewModel;
-
-            this.SizeChanged += (s, e) =>
-            {
-                ElementAdapter();
-            };
-
-            this.Loaded += (s, e) =>
-            {
-                ElementAdapter();
-            };
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -187,13 +171,11 @@ namespace Hipda.Client.Uwp.Pro
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
         {
             MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
-            ElementAdapter();
         }
 
         private void MainSplitView_PaneClosed(SplitView sender, object args)
         {
             SearchPanel.Visibility = Visibility.Collapsed;
-            ElementAdapter();
         }
 
         void ShowLeftSwipePanel()
@@ -206,7 +188,6 @@ namespace Hipda.Client.Uwp.Pro
             {
                 // 以免 pane 挡住 left swipe panel
                 MainSplitView.IsPaneOpen = false;
-                ElementAdapter();
             }
             
             MaskGrid.Visibility = Visibility.Visible;
@@ -238,7 +219,6 @@ namespace Hipda.Client.Uwp.Pro
             {
                 // 以免 pane 挡住 left swipe panel
                 MainSplitView.IsPaneOpen = false;
-                ElementAdapter();
             }
 
             MaskGrid.Visibility = Visibility.Visible;
@@ -335,7 +315,6 @@ namespace Hipda.Client.Uwp.Pro
             if (SearchPanel.Visibility == Visibility.Collapsed)
             {
                 MainSplitView.IsPaneOpen = true;
-                ElementAdapter();
 
                 SearchPanel.Visibility = Visibility.Visible;
                 KeywordTextBox.Focus(FocusState.Programmatic);
@@ -750,7 +729,6 @@ namespace Hipda.Client.Uwp.Pro
         private void userDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             CloseUserDialog();
-            ElementAdapter();
         }
 
         private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
