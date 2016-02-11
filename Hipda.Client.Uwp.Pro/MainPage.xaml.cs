@@ -120,18 +120,38 @@ namespace Hipda.Client.Uwp.Pro
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
+        public ImageBrush UserAvatarImageBrush
+        {
+            get
+            {
+                var avatarBrush = new ImageBrush();
+                avatarBrush.Stretch = Stretch.UniformToFill;
+                avatarBrush.ImageSource = new BitmapImage { UriSource = Common.GetSmallAvatarUriByUserId(AccountService.UserId), DecodePixelWidth = 32 };
+                avatarBrush.ImageFailed += (s, e) => { return; };
+                return avatarBrush;
+            }
+        }
+
+        public string FuzzyUsername
+        {
+            get
+            {
+                string username = AccountService.Username;
+                int len = username.Length;
+                if (len < 3)
+                {
+                    return $"{username.Substring(0, 1)}*";
+                }
+                else
+                {
+                    return $"{username.Substring(0, 1)}***{username.Substring(len - 1)}";
+                }
+            }
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
-
-            var avatarBrush = new ImageBrush();
-            avatarBrush.Stretch = Stretch.UniformToFill;
-            avatarBrush.ImageSource = new BitmapImage { UriSource = Common.GetSmallAvatarUriByUserId(AccountService.UserId), DecodePixelWidth = 32 };
-            avatarBrush.ImageFailed += (s, e) => { return; };
-            AccountAvatarBorder.Background = avatarBrush;
-            string username = AccountService.Username.Substring(1, AccountService.Username.Length - 2);
-            username = AccountService.Username.Replace(username, "****");
-            AccountUsernameTextBlock.Text = $"\u2601 {username}";
 
             if (_myLocalSettings.ThemeType == 0)
             {

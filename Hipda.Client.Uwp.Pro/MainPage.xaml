@@ -665,9 +665,15 @@
                                 <Border Width="32" Height="32" CornerRadius="16" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
                                     <Border x:Name="AccountAvatarBorder" Width="32" Height="32" CornerRadius="16"
                                             Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"
-                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                                            Background="{x:Bind UserAvatarImageBrush}"/>
                                 </Border>
-                                <TextBlock Margin="18,0,12,0" x:Name="AccountUsernameTextBlock" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" VerticalAlignment="Center"/>
+                                <TextBlock Margin="18,0,12,0" x:Name="AccountUsernameTextBlock"
+                                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                           VerticalAlignment="Center">
+                                    <Run Text="&#x2601;"/>
+                                    <Run Text="{x:Bind FuzzyUsername}"/>
+                                </TextBlock>
                                 <Button Click="AccountLogoutButton_Click" VerticalAlignment="Center" ToolTipService.ToolTip="注销">
                                     <Button.Template>
                                         <ControlTemplate>
