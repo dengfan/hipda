@@ -637,8 +637,6 @@
                         <Setter Target="BottomButtonPanel.Orientation" Value="Vertical"/>
                     </VisualState.Setters>
                 </VisualState>
-            </VisualStateGroup>
-            <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
                         <StateTrigger IsActive="{x:Bind MainSplitView.IsPaneOpen, Mode=OneWay}"/>
