@@ -661,27 +661,32 @@
 
                     <ScrollViewer Margin="0 48 0 0" HorizontalScrollMode="Disabled" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Hidden">
                         <StackPanel>
-                            <StackPanel Padding="8" Orientation="Horizontal">
+                            <Grid Padding="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
                                 <Border Width="32" Height="32" CornerRadius="16" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
                                     <Border x:Name="AccountAvatarBorder" Width="32" Height="32" CornerRadius="16"
                                             Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"
                                             HorizontalAlignment="Center" VerticalAlignment="Center"
                                             Background="{x:Bind UserAvatarImageBrush}"/>
                                 </Border>
-                                <TextBlock Margin="18,0,12,0" x:Name="AccountUsernameTextBlock"
+                                <TextBlock Grid.Column="1" Margin="18,0,12,0" x:Name="AccountUsernameTextBlock"
                                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                            VerticalAlignment="Center">
                                     <Run Text="&#x2601;"/>
                                     <Run Text="{x:Bind FuzzyUsername}"/>
                                 </TextBlock>
-                                <Button Click="AccountLogoutButton_Click" VerticalAlignment="Center" ToolTipService.ToolTip="注销">
+                                <Button Grid.Column="2" Click="AccountLogoutButton_Click" VerticalAlignment="Center" ToolTipService.ToolTip="注销">
                                     <Button.Template>
                                         <ControlTemplate>
-                                            <TextBlock Text="&#xE8F8;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                                            <TextBlock Padding="8,0" Text="&#x1F6AB;"/>
                                         </ControlTemplate>
                                     </Button.Template>
                                 </Button>
-                            </StackPanel>
+                            </Grid>
                             <Button Style="{Binding Visibility,ElementName=SearchPanel,Converter={StaticResource SearchPanelVisibilityToSearchButtonStyleConverter}}"
                                     BorderThickness="0" Padding="0" HorizontalAlignment="Stretch" Height="44"
                                     HorizontalContentAlignment="Left" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
