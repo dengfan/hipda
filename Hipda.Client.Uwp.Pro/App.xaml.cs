@@ -2,6 +2,7 @@
 using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.Views;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -65,26 +66,6 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        //public ObservableCollection<ViewLifetimeControl> SecondaryViews = new ObservableCollection<ViewLifetimeControl>();
-
-        private CoreDispatcher mainDispatcher;
-        public CoreDispatcher MainDispatcher
-        {
-            get
-            {
-                return mainDispatcher;
-            }
-        }
-
-        private int mainViewId;
-        public int MainViewId
-        {
-            get
-            {
-                return mainViewId;
-            }
-        }
-
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
         /// 已执行，逻辑上等同于 main() 或 WinMain()。
@@ -96,8 +77,34 @@ namespace Hipda.Client.Uwp.Pro
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            // In App.xaml.cs file, register with the UnhandledException event handler.
+            UnhandledException += App_UnhandledException;
         }
-       
+
+        void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e != null)
+            {
+                Exception exception = e.Exception;
+                if (exception is NullReferenceException && exception.ToString().ToUpper().Contains("SOMA"))
+                {
+                    Debug.WriteLine("Handled Smaato null reference exception {0}", exception);
+                    e.Handled = true;
+                    return;
+                }
+            }
+
+            // APP SPECIFIC HANDLING HERE
+
+            if (Debugger.IsAttached)
+            {
+                // An unhandled exception has occurred; break into the debugger
+                Debugger.Break();
+            }
+        }
+
+
         async Task<bool> CreateRootFrame()
         {
             // 自动登录
@@ -114,9 +121,6 @@ namespace Hipda.Client.Uwp.Pro
                 _rootFrame = new Frame();
 
                 _rootFrame.NavigationFailed += OnNavigationFailed;
-
-                mainDispatcher = Window.Current.Dispatcher;
-                mainViewId = ApplicationView.GetForCurrentView().Id;
 
                 // 将框架放在当前窗口中
                 Window.Current.Content = _rootFrame;
@@ -234,12 +238,6 @@ namespace Hipda.Client.Uwp.Pro
                 if (eventArgs.Uri.Scheme == "hipda")
                 {
                     string uri = eventArgs.Uri.AbsoluteUri;
-                    // 在新窗口中打开指定的回复列表
-                    //if (uri.StartsWith("hipda:tid="))
-                    //{
-                    //    int tid = Convert.ToInt32(uri.Substring("hipda:tid=".Length));
-                    //    await OpenThreadInNewView(tid);
-                    //}
                 }
             }
             else if (args.Kind == ActivationKind.ToastNotification)
@@ -289,70 +287,5 @@ namespace Hipda.Client.Uwp.Pro
                 }
             }
         }
-
-        //private async Task OpenThreadInNewView(int threadId)
-        //{
-        //    ViewLifetimeControl viewControl = null;
-        //    await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-        //    {
-        //        // This object is used to keep track of the views and important
-        //        // details about the contents of those views across threads
-        //        // In your app, you would probably want to track information
-        //        // like the open document or page inside that window
-        //        viewControl = ViewLifetimeControl.CreateForCurrentView();
-        //        viewControl.Title = "坐和放宽";
-        //        // Increment the ref count because we just created the view and we have a reference to it                
-        //        viewControl.StartViewInUse();
-
-        //        var param = new OpenNewViewParameterModel
-        //        {
-        //            ElementTheme = ElementTheme.Dark,
-        //            ThreadId = threadId,
-        //            NewView = viewControl
-        //        };
-        //        var frame = new Frame();
-        //        frame.Navigate(typeof(ReplyNewViewPage), param);
-        //        Window.Current.Content = frame;
-        //        Window.Current.Activate();
-        //    });
-
-        //    // Be careful! This collection is bound to the current thread,
-        //    // so make sure to update it only from this thread
-        //    ((App)App.Current).SecondaryViews.Add(viewControl);
-
-        //    var selectedView = viewControl;
-        //    var sizePreference = ViewSizePreference.Default;
-        //    var anchorSizePreference = ViewSizePreference.Default;
-
-        //    if (viewControl != null)
-        //    {
-        //        try
-        //        {
-        //            // Prevent the view from closing while
-        //            // switching to it
-        //            selectedView.StartViewInUse();
-
-        //            // Show the previously created secondary view, using the size
-        //            // preferences the user specified. In your app, you should
-        //            // choose a size that's best for your scenario and code it,
-        //            // instead of requiring the user to decide.
-        //            var viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(
-        //                selectedView.Id,
-        //                sizePreference,
-        //                ApplicationView.GetForCurrentView().Id,
-        //                anchorSizePreference);
-
-        //            // Signal that switching has completed and let the view close
-        //            selectedView.StopViewInUse();
-        //        }
-        //        catch (InvalidOperationException)
-        //        {
-        //            // The view could be in the process of closing, and
-        //            // this thread just hasn't updated. As part of being closed,
-        //            // this thread will be informed to clean up its list of
-        //            // views (see SecondaryViewPage.xaml.cs)
-        //        }
-        //    }
-        //}
     }
 }
