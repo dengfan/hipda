@@ -79,7 +79,7 @@ namespace Hipda.Client.Uwp.Pro
             this.Suspending += OnSuspending;
 
             // In App.xaml.cs file, register with the UnhandledException event handler.
-            UnhandledException += App_UnhandledException;
+            this.UnhandledException += App_UnhandledException;
         }
 
         void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
