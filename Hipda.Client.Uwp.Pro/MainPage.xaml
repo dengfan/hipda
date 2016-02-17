@@ -8,6 +8,7 @@
     xmlns:triggers="using:WindowsStateTriggers"
     xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
     xmlns:cvt="using:Hipda.Client.Uwp.Pro.Converters"
+    xmlns:Universal="using:Microsoft.AdMediator.Universal"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" x:Name="MyMainPage"
@@ -575,7 +576,7 @@
     <Grid x:Name="pageGrid" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates">
-                <VisualState x:Name="Min1600">
+                <VisualState x:Name="Min1700">
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
                         <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
@@ -583,27 +584,27 @@
                         <Setter Target="HistoryRecordButton.IsEnabled" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1600" />
+                        <AdaptiveTrigger MinWindowWidth="1700" />
                     </VisualState.StateTriggers>
                 </VisualState>
-                <VisualState x:Name="Min1400">
+                <VisualState x:Name="Min1200">
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
                         <Setter Target="RightSideColumn.Width" Value="260" />
                         <Setter Target="HistoryRecordButton.IsEnabled" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1400" />
+                        <AdaptiveTrigger MinWindowWidth="1200" />
                     </VisualState.StateTriggers>
                 </VisualState>
-                <VisualState x:Name="Min1200">
+                <VisualState x:Name="Min900">
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="RightSideColumn.Width" Value="260" />
-                        <Setter Target="HistoryRecordButton.IsEnabled" Value="False" />
+                        <Setter Target="RightSideColumn.Width" Value="0" />
+                        <Setter Target="HistoryRecordButton.IsEnabled" Value="True" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1200" />
+                        <AdaptiveTrigger MinWindowWidth="900" />
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState>
@@ -627,6 +628,7 @@
                     </VisualState.StateTriggers>
                 </VisualState>
             </VisualStateGroup>
+            
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
@@ -827,6 +829,15 @@
                 </Grid>
             </SplitView.Content>
         </SplitView>
+
+        <Grid x:Name="AdWrap" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="160"
+              HorizontalAlignment="Right" Visibility="Collapsed">
+            <Universal:AdMediatorControl Name="AdMediatorControl1" Id="AdMediatorControl1"
+                                         HorizontalAlignment="Center" VerticalAlignment="Top"
+                                         Width="160" Height="600"/>
+            <TextBlock Text="广告也精彩" Margin="0,0,0,16" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                       HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+        </Grid>
 
         <Button x:Name="MainSplitViewToggle" Style="{StaticResource NavButtonNormalStyle}" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
             <Grid>

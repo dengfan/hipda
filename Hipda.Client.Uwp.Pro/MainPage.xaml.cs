@@ -164,6 +164,24 @@ namespace Hipda.Client.Uwp.Pro
 
             _mainPageViewModel = MainPageViewModel.GetInstance();
             DataContext = _mainPageViewModel;
+
+            this.SizeChanged += (s, e) =>
+            {
+                var isNoAd = true;
+                if (isNoAd == false)
+                {
+                    if (e.NewSize.Width >= 900)
+                    {
+                        AdWrap.Visibility = Visibility.Visible;
+                        MainSplitView.Margin = new Thickness(0, 0, 160, 0);
+                    }
+                    else
+                    {
+                        AdWrap.Visibility = Visibility.Collapsed;
+                        MainSplitView.Margin = new Thickness(0);
+                    }
+                }
+            };
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -254,7 +272,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             CloseMaskAnimation.Begin();
 
-            if (AdaptiveStates.CurrentState == Min1200 || AdaptiveStates.CurrentState == Min1400 || AdaptiveStates.CurrentState == Min1600)
+            if (AdaptiveStates.CurrentState == Min900 || AdaptiveStates.CurrentState == Min1200 || AdaptiveStates.CurrentState == Min1700)
             {
                 // 宽视图（已显示历史记录）下，直接隐藏，无过渡
                 CloseRightSwipePanelAnimation2.Begin();
