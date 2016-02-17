@@ -830,12 +830,12 @@
             </SplitView.Content>
         </SplitView>
 
-        <Grid x:Name="AdWrap" x:DeferLoadStrategy="Lazy" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="160"
-              HorizontalAlignment="Right" Visibility="Collapsed">
+        <Grid x:Name="AdWrap" x:DeferLoadStrategy="Lazy" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+              Width="160" HorizontalAlignment="Right" Visibility="Collapsed">
             <Universal:AdMediatorControl Name="AdMediatorControl1" Id="AdMediatorControl1"
                                          HorizontalAlignment="Center" VerticalAlignment="Top"
                                          Width="160" Height="600"/>
-            <TextBlock Text="广告也精彩" Margin="0,0,0,16" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+            <TextBlock Text="广告区域" Margin="0,0,0,16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                        HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
         </Grid>
 

@@ -545,9 +545,9 @@
                 <TextBlock Margin="60,22,0,22" TextWrapping="Wrap" Style="{Binding ThreadItemStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="{Binding TopFontIcon}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     <Run Text="{Binding Title}" />
-                    <Run Text="{Binding ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="{Binding ImageFontIcon}" />
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="{Binding FileFontIcon}" />
+                    <Run Text="{Binding ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                 </TextBlock>
 
                 <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
