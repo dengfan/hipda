@@ -62,6 +62,17 @@ namespace Hipda.Client.Uwp.Pro
             DependencyProperty.Register("ImageCacheDataSize", typeof(ulong), typeof(MainPage), new PropertyMetadata(0UL));
 
 
+        public string RemoveAdButtonContent
+        {
+            get { return (string)GetValue(RemoveAdButtonContentProperty); }
+            set { SetValue(RemoveAdButtonContentProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for RemoveAdButtonContent.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RemoveAdButtonContentProperty =
+            DependencyProperty.Register("RemoveAdButtonContent", typeof(string), typeof(MainPage), new PropertyMetadata("---"));
+
+
         #region 发贴计时器
 
 
@@ -149,9 +160,18 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
+        async void GetRemoveAdButtonContent()
+        {
+            // 读取内购信息
+            var listing = await CurrentApp.LoadListingInformationAsync();
+            var iap = listing.ProductListings.FirstOrDefault(p => p.Value.ProductId == "RemoveAd");
+            RemoveAdButtonContent = $"【{iap.Value.Name}】 {iap.Value.FormattedPrice}";
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
+            GetRemoveAdButtonContent();
 
             if (_myLocalSettings.ThemeType == 0)
             {
@@ -167,9 +187,10 @@ namespace Hipda.Client.Uwp.Pro
 
             this.SizeChanged += (s, e) =>
             {
-                var isNoAd = true;
-                if (isNoAd == false)
+                if (CurrentApp.LicenseInformation.ProductLicenses["RemoveAd"].IsActive == false)
                 {
+                    FindName("AdWrap");
+
                     if (e.NewSize.Width >= 900)
                     {
                         AdWrap.Visibility = Visibility.Visible;
@@ -1051,9 +1072,25 @@ namespace Hipda.Client.Uwp.Pro
             ((Frame)Window.Current.Content).Navigate(typeof(LoginPage));
         }
 
-        private async void PurchaseRemoveAd_Click(object sender, RoutedEventArgs e)
+        private async void PurchaseRemoveAdButton_Click(object sender, RoutedEventArgs e)
         {
-            await Launcher.LaunchUriAsync(new Uri("ms-windows-store://pdp/?ProductId=9NBLGGH5QKKD"));
+            try
+            {
+                var listing = await CurrentApp.LoadListingInformationAsync();
+                var iap = listing.ProductListings.FirstOrDefault(p => p.Value.ProductId == "RemoveAd");
+                var purchaseResult = await CurrentApp.RequestProductPurchaseAsync(iap.Value.ProductId);
+                if (CurrentApp.LicenseInformation.ProductLicenses[iap.Value.ProductId].IsActive)
+                {
+                    CurrentApp.ReportProductFulfillment(iap.Value.ProductId);
+
+                    AdWrap.Visibility = Visibility.Collapsed;
+                    MainSplitView.Margin = new Thickness(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                //exception 
+            }
         }
     }
 }

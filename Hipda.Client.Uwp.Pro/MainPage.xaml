@@ -566,7 +566,7 @@
                                 Content="解除选中主题" Style="{StaticResource NormalButtonStyle}"
                                 Click="UnblockThreads"/>
 
-                        <HyperlinkButton Margin="0,14,0,14" HorizontalAlignment="Center" Content="购买【移除广告】服务" Click="PurchaseRemoveAd_Click"/>
+                        <HyperlinkButton Margin="0,14,0,14" HorizontalAlignment="Center" Content="{Binding RemoveAdButtonContent,ElementName=MyMainPage}" Click="PurchaseRemoveAdButton_Click"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
@@ -830,7 +830,7 @@
             </SplitView.Content>
         </SplitView>
 
-        <Grid x:Name="AdWrap" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="160"
+        <Grid x:Name="AdWrap" x:DeferLoadStrategy="Lazy" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="160"
               HorizontalAlignment="Right" Visibility="Collapsed">
             <Universal:AdMediatorControl Name="AdMediatorControl1" Id="AdMediatorControl1"
                                          HorizontalAlignment="Center" VerticalAlignment="Top"
