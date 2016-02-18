@@ -21,7 +21,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _afterLoad;
         Action _noDataNotice;
         ThreadListService _ds;
-        AppBarToggleButton _btnSort = new AppBarToggleButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
 
         public int ThreadMaxPageNo { get; set; }
 
@@ -112,7 +111,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 btnSelectLabel.Flyout = menuFlyout;
                 _leftCommandBar.PrimaryCommands.Add(btnSelectLabel);
             }
-            
+
+            var _btnSort = new AppBarToggleButton { Icon = new SymbolIcon(Symbol.Sort), Label = "\u2601 按发布时间倒序排列（限当前版块）" };
+            _btnSort.IsChecked = RoamingSettingsService.GetOrderByDateline(_forumId);
+            _btnSort.Checked += (s, e) =>
+            {
+                RoamingSettingsService.SetOrderByDateline(_forumId, true);
+                _ds.ClearThreadData(_forumId);
+                LoadData(1, _forumId);
+            };
+            _btnSort.Unchecked += (s, e) =>
+            {
+                RoamingSettingsService.SetOrderByDateline(_forumId, false);
+                _ds.ClearThreadData(_forumId);
+                LoadData(1, _forumId);
+            };
             _leftCommandBar.SecondaryCommands.Add(_btnSort);
         }
 
@@ -139,7 +152,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadData(int pageNo, int forumId, int typeId)
         {
-            var cv = _ds.GetViewForThreadItems(_btnSort.IsChecked, pageNo, typeId, forumId, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadItems(pageNo, typeId, forumId, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();

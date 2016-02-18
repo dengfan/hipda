@@ -229,5 +229,32 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             ReadAndUpdate();
         }
+
+
+        public static bool? GetOrderByDateline(int forumId)
+        {
+            string key = $"{forumId}IsOrderByDateline";
+
+            if (_commonContainer.Values[key] == null)
+            {
+                return false;
+            }
+
+            return (bool)_commonContainer.Values[key];
+        }
+
+        public static void SetOrderByDateline(int forumId, bool isOrderByDateline)
+        {
+            string key = $"{forumId}IsOrderByDateline";
+
+            if (_commonContainer.Values[key] == null)
+            {
+                _commonContainer.Values.Add(key, isOrderByDateline);
+            }
+            else
+            {
+                _commonContainer.Values[key] = isOrderByDateline;
+            }
+        }
     }
 }
