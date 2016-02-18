@@ -70,7 +70,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for RemoveAdButtonContent.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RemoveAdButtonContentProperty =
-            DependencyProperty.Register("RemoveAdButtonContent", typeof(string), typeof(MainPage), new PropertyMetadata("---"));
+            DependencyProperty.Register("RemoveAdButtonContent", typeof(string), typeof(MainPage), new PropertyMetadata("--"));
 
 
         #region 发贴计时器
@@ -165,7 +165,7 @@ namespace Hipda.Client.Uwp.Pro
             // 读取内购信息
             var listing = await CurrentApp.LoadListingInformationAsync();
             var iap = listing.ProductListings.FirstOrDefault(p => p.Value.ProductId == "RemoveAd");
-            RemoveAdButtonContent = $"【{iap.Value.Name}】 {iap.Value.FormattedPrice}";
+            RemoveAdButtonContent = $"【{iap.Value.Name} {iap.Value.FormattedPrice}】";
         }
 
         public MainPage()
