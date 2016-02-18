@@ -20,7 +20,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         static int _pageSize = 75;
         int _maxPageNo = 1;
 
-        async Task LoadThreadDataAsync(int typeId, int forumId, int pageNo, CancellationTokenSource cts)
+        async Task LoadThreadDataAsync(bool? isOrderByDateline, int typeId, int forumId, int pageNo, CancellationTokenSource cts)
         {
             var d = _threadData.Where(t => t.ForumId == forumId && t.PageNo == pageNo);
             if (d != null && d.Count() > 0)
@@ -44,8 +44,8 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 读取数据
-            string ThreadListPageOrderBy = string.Empty;
-            string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&orderby={1}&page={2}&_={3}", forumId, ThreadListPageOrderBy, pageNo, DateTime.Now.Ticks.ToString("x"));
+            string _orderBy = isOrderByDateline == true ? "dateline" : string.Empty;
+            string url = string.Format("http://www.hi-pda.com/forum/forumdisplay.php?fid={0}&orderby={1}&page={2}&_={3}", forumId, _orderBy, pageNo, DateTime.Now.Ticks.ToString("x"));
             if (typeId > 0)
             {
                 url += $"&filter=type&typeid={typeId}";
@@ -196,11 +196,11 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
         }
 
-        async Task<int> GetMoreThreadItemsAsync(int typeId, int forumId, int pageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        async Task<int> GetMoreThreadItemsAsync(bool? isOrderByDateline, int typeId, int forumId, int pageNo, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             if (beforeLoad != null) beforeLoad();
             var cts = new CancellationTokenSource();
-            await LoadThreadDataAsync(typeId, forumId, pageNo, cts);
+            await LoadThreadDataAsync(isOrderByDateline, typeId, forumId, pageNo, cts);
             if (_threadData.Count == 0 && noDataNotice != null) noDataNotice();
             if (afterLoad != null) afterLoad();
 
@@ -212,7 +212,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return _threadData.FirstOrDefault(t => t.ForumId == forumId && t.Index == index);
         }
 
-        public ICollectionView GetViewForThreadItems(int startPageNo, int typeId, int forumId, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public ICollectionView GetViewForThreadItems(bool? isOrderByDateline, int startPageNo, int typeId, int forumId, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             var cvs = new CollectionViewSource();
             cvs.Source = new GeneratorIncrementalLoadingClass<ThreadItemModel>(
@@ -221,7 +221,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     // 加载分页数据，并写入静态类中
                     // 返回的是本次加载的数据量
-                    return await GetMoreThreadItemsAsync(typeId, forumId, pageNo, beforeLoad, afterLoad, noDataNotice);
+                    return await GetMoreThreadItemsAsync(isOrderByDateline, typeId, forumId, pageNo, beforeLoad, afterLoad, noDataNotice);
                 },
                 (index) =>
                 {

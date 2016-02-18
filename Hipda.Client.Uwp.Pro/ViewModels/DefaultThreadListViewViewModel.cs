@@ -21,6 +21,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _afterLoad;
         Action _noDataNotice;
         ThreadListService _ds;
+        AppBarToggleButton _btnSort = new AppBarToggleButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
 
         public int ThreadMaxPageNo { get; set; }
 
@@ -111,9 +112,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 btnSelectLabel.Flyout = menuFlyout;
                 _leftCommandBar.PrimaryCommands.Add(btnSelectLabel);
             }
-
-            var btnSort = new AppBarToggleButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
-            _leftCommandBar.SecondaryCommands.Add(btnSort);
+            
+            _leftCommandBar.SecondaryCommands.Add(_btnSort);
         }
 
         MenuFlyoutItem CreateMenuFlyoutItem(string typeName, int typeId)
@@ -139,7 +139,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         void LoadData(int pageNo, int forumId, int typeId)
         {
-            var cv = _ds.GetViewForThreadItems(pageNo, typeId, forumId, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadItems(_btnSort.IsChecked, pageNo, typeId, forumId, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
                 ThreadMaxPageNo = _ds.GetThreadMaxPageNo();
