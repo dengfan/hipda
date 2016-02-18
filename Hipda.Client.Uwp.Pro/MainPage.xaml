@@ -269,6 +269,14 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Name="InputPanelAnimation">
+            <DoubleAnimation x:Name="InputPanelDoubleAnimation" Duration="0:0:0.2"
+                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)"
+                             Storyboard.TargetName="InputPanel"/>
+            <DoubleAnimation x:Name="InputPanelMaskDoubleAnimation" Duration="0:0:0.2"
+                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)"
+                             Storyboard.TargetName="InputPanelMask"/>
+        </Storyboard>
 
         <DataTemplate x:Key="PostDetailDialogContentTemplate">
             <Grid>
@@ -782,6 +790,7 @@
                     </StackPanel>
 
                     <!--<Button Content="x" Command="{Binding ClearCookiesCommand}" VerticalAlignment="Bottom"/>-->
+                    <Button Content="aaa" VerticalAlignment="Bottom" Click="ShowPanel_Click"/>
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
@@ -804,14 +813,17 @@
                             </Frame.ContentTransitions>
                         </Frame>
 
-                        <ContentControl x:Name="RightSideWrap" Grid.Column="1" HorizontalContentAlignment="Stretch" ContentTemplate="{StaticResource HistoryRecordContentControl}"/>
+                        <ContentControl x:Name="RightSideWrap" Grid.Column="1" HorizontalContentAlignment="Stretch"
+                                        ContentTemplate="{StaticResource HistoryRecordContentControl}"/>
                     </Grid>
 
-                    <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy" Background="{Binding RequestedTheme,ElementName=MyMainPage,Converter={StaticResource ElementThemeToMaskBackgroundBrush}}" Opacity="0" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
+                    <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy"
+                          Background="{Binding RequestedTheme,ElementName=MyMainPage,Converter={StaticResource ElementThemeToMaskBackgroundBrush}}"
+                          Opacity="0" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
 
                     <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy"
-                      Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
-                      Margin="-260,0,0,0" Width="260" HorizontalAlignment="Left">
+                          Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
+                          Margin="-260,0,0,0" Width="260" HorizontalAlignment="Left">
                         <Grid.RenderTransform>
                             <CompositeTransform/>
                         </Grid.RenderTransform>
@@ -819,8 +831,8 @@
                     </Grid>
 
                     <Grid x:Name="RightSwipePanel" x:DeferLoadStrategy="Lazy"
-                      Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
-                      Margin="0,0,-260,0" Width="260" HorizontalAlignment="Right">
+                          Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
+                          Margin="0,0,-260,0" Width="260" HorizontalAlignment="Right">
                         <Grid.RenderTransform>
                             <CompositeTransform/>
                         </Grid.RenderTransform>
@@ -832,11 +844,11 @@
 
         <Grid x:Name="AdWrap" x:DeferLoadStrategy="Lazy" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
               Width="160" HorizontalAlignment="Right" Visibility="Collapsed">
-            <Universal:AdMediatorControl Name="AdMediatorControl1" Id="AdMediatorControl1"
+            <Universal:AdMediatorControl x:Name="AdMediatorControl1" Id="AdMediatorControl1"
                                          HorizontalAlignment="Center" VerticalAlignment="Top"
                                          Width="160" Height="600"/>
             <TextBlock Text="广告区域" Margin="0,0,0,16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
-                       HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                       HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
         </Grid>
 
         <Button x:Name="MainSplitViewToggle" Style="{StaticResource NavButtonNormalStyle}" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
@@ -860,5 +872,22 @@
                        SecondaryButtonText="关闭"
                        SecondaryButtonClick="userDialog_SecondaryButtonClick"
                        Closed="UserDialog_Closed"/>
+
+        <Grid x:Name="InputPanelMask" x:DeferLoadStrategy="Lazy"
+              Background="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"
+              Tapped="InputPanelMask_Tapped"
+              Visibility="Collapsed">
+            <Grid.RenderTransform>
+                <CompositeTransform/>
+            </Grid.RenderTransform>
+        </Grid>
+        
+        <Grid x:Name="InputPanel" x:DeferLoadStrategy="Lazy" Margin="0,48"
+              Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+              MaxWidth="720" Visibility="Collapsed">
+            <Grid.RenderTransform>
+                <CompositeTransform/>
+            </Grid.RenderTransform>
+        </Grid>
     </Grid>
 </Page>

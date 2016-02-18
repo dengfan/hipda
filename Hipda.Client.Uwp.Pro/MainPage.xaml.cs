@@ -1092,5 +1092,25 @@ namespace Hipda.Client.Uwp.Pro
                 //exception 
             }
         }
+
+        private void ShowPanel_Click(object sender, RoutedEventArgs e)
+        {
+            FindName("InputPanelMask");
+            FindName("InputPanel");
+
+            InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Visible;
+        }
+
+        private void InputPanelMask_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            InputPanelDoubleAnimation.To = InputPanel.ActualHeight;
+            InputPanelMaskDoubleAnimation.To = InputPanelMask.ActualHeight * -1;
+            InputPanelAnimation.Begin();
+            InputPanelAnimation.Completed += (s2, e2) =>
+            {
+                InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Collapsed;
+                InputPanelAnimation.Stop();
+            };
+        }
     }
 }
