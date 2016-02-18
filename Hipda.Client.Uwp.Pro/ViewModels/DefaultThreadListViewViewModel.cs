@@ -53,11 +53,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 LoadData(1, _forumId);
             };
 
+            var btnAdd = new AppBarButton { Icon = new FontIcon { Glyph = "\uE104" }, Label = "发表新贴" };
+            btnAdd.Click += (s, e) => openCreateThreadPanel();
+            _leftCommandBar.PrimaryCommands.Add(btnAdd);
+
             var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
             btnRefresh.Command = RefreshThreadCommand;
             _leftCommandBar.PrimaryCommands.Add(btnRefresh);
 
-            var btnSelectLabel = new AppBarButton { Icon = new FontIcon { Glyph = "\uE1CB" }, Label = "按标签浏览" };
+            var btnSelectLabel = new AppBarButton { Icon = new FontIcon { Glyph = "\uE169" }, Label = "按标签浏览" };
             var menuFlyout = new MenuFlyout();
             if (_forumId == 2)
             {
@@ -108,12 +112,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 _leftCommandBar.PrimaryCommands.Add(btnSelectLabel);
             }
 
-            var btnAdd = new AppBarButton { Icon = new FontIcon { Glyph = "\uE104" }, Label = "发表新贴" };
-            btnAdd.Click += (s, e) => openCreateThreadPanel();
-            _leftCommandBar.PrimaryCommands.Add(btnAdd);
-
-            //var btnSort = new AppBarButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
-            //_leftCommandBar.PrimaryCommands.Add(btnSort);
+            var btnSort = new AppBarToggleButton { Icon = new SymbolIcon(Symbol.Sort), Label = "按发布时间倒序排列" };
+            _leftCommandBar.SecondaryCommands.Add(btnSort);
         }
 
         MenuFlyoutItem CreateMenuFlyoutItem(string typeName, int typeId)
