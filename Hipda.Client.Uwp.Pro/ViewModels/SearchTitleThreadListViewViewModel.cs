@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadListViewForSearchFullTextViewModel
+    public class SearchTitleThreadListViewViewModel
     {
         int _startPageNo = 1;
         ListView _leftListView;
@@ -18,7 +18,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _beforeLoad;
         Action _afterLoad;
         Action _noDataNotice;
-        SearchFullTextService _ds;
+        SearchTitleService _ds;
 
         string _searchKeyword;
         string _searchAuthor;
@@ -30,7 +30,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand RefreshThreadCommand { get; set; }
 
-        public ThreadListViewForSearchFullTextViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public SearchTitleThreadListViewViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _searchKeyword = searchKeyword;
             _searchAuthor = searchAuthor;
@@ -50,16 +50,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _noDataNotice = noDataNotice;
-            _ds = new SearchFullTextService();
+            _ds = new SearchTitleService();
 
             // 先清除已搜索的数据
-            _ds.ClearThreadDataForSearchFullText();
-            LoadDataForSearchFullText(pageNo);
+            _ds.ClearThreadDataForSearchTitle();
+            LoadDataForSearchTitle(pageNo);
 
             var RefreshThreadCommand = new DelegateCommand();
-            RefreshThreadCommand.ExecuteAction = (p) => {
-                _ds.ClearThreadDataForSearchFullText();
-                LoadDataForSearchFullText(1);
+            RefreshThreadCommand.ExecuteAction = (p) =>
+            {
+                _ds.ClearThreadDataForSearchTitle();
+                LoadDataForSearchTitle(1);
             };
 
             var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
@@ -67,12 +68,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _leftCommandBar.PrimaryCommands.Add(btnRefresh);
         }
 
-        void LoadDataForSearchFullText(int pageNo)
+        void LoadDataForSearchTitle(int pageNo)
         {
-            var cv = _ds.GetViewForThreadPageForSearchFullText(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForSearchTitle(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
-                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchFullText();
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchTitle();
                 _startPageNo = pageNo;
                 _leftListView.ItemsSource = cv;
             }

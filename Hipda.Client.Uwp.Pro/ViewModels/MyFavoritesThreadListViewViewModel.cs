@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadListViewForMyFavoritesViewModel
+    public class MyFavoritesThreadListViewViewModel
     {
         int _startPageNo = 1;
         ListView _leftListView;
@@ -23,7 +23,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public int ThreadMaxPageNo { get; set; }
 
-        public ThreadListViewForMyFavoritesViewModel(int pageNo, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public MyFavoritesThreadListViewViewModel(int pageNo, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;

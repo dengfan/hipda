@@ -7,12 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadListViewForMyThreadsViewModel
+    public class MyPostsThreadListViewViewModel
     {
         int _startPageNo = 1;
         ListView _leftListView;
@@ -20,13 +18,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _beforeLoad;
         Action _afterLoad;
         Action _noDataNotice;
-        MyThreadsService _ds;
+        MyPostsService _ds;
 
         public int ThreadMaxPageNo { get; set; }
 
         public DelegateCommand RefreshThreadCommand { get; set; }
 
-        public ThreadListViewForMyThreadsViewModel(int pageNo, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public MyPostsThreadListViewViewModel(int pageNo, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
@@ -42,14 +40,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _noDataNotice = noDataNotice;
-            _ds = new MyThreadsService();
+            _ds = new MyPostsService();
 
-            LoadDataForMyThreads(pageNo);
+            LoadDataForMyPosts(pageNo);
 
             var RefreshThreadCommand = new DelegateCommand();
             RefreshThreadCommand.ExecuteAction = (p) => {
-                _ds.ClearThreadDataForMyThreads();
-                LoadDataForMyThreads(1);
+                _ds.ClearThreadDataForMyPosts();
+                LoadDataForMyPosts(1);
             };
 
             var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
@@ -57,12 +55,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _leftCommandBar.PrimaryCommands.Add(btnRefresh);
         }
 
-        void LoadDataForMyThreads(int pageNo)
+        void LoadDataForMyPosts(int pageNo)
         {
-            var cv = _ds.GetViewForThreadPageForMyThreads(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForMyPosts(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
-                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyThreads();
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyPosts();
                 _startPageNo = pageNo;
                 _leftListView.ItemsSource = cv;
             }
@@ -72,8 +70,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         {
             if (_startPageNo > 1)
             {
-                _ds.ClearThreadDataForMyThreads();
-                LoadDataForMyThreads(_startPageNo);
+                _ds.ClearThreadDataForMyPosts();
+                LoadDataForMyPosts(_startPageNo);
             }
         }
     }

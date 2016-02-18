@@ -17,7 +17,7 @@ namespace Hipda.Client.Uwp.Pro.Services
     public class ReplyListService
     {
         static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
-        static ThreadHistoryListBoxViewModel _threadHistoryListBoxViewModel = (ThreadHistoryListBoxViewModel)App.Current.Resources["ThreadHistoryListBoxViewModel"];
+        static HistoryThreadListViewViewModel _threadHistoryListBoxViewModel = (HistoryThreadListViewViewModel)App.Current.Resources["ThreadHistoryListBoxViewModel"];
         static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         static int _pageSize = 50;

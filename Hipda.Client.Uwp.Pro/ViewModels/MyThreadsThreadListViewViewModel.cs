@@ -7,10 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadListViewForSearchTitleViewModel
+    public class MyThreadsThreadListViewViewModel
     {
         int _startPageNo = 1;
         ListView _leftListView;
@@ -18,29 +20,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _beforeLoad;
         Action _afterLoad;
         Action _noDataNotice;
-        SearchTitleService _ds;
-
-        string _searchKeyword;
-        string _searchAuthor;
-        int _searchType;
-        int _searchTimeSpan;
-        int _searchForumSpan;
+        MyThreadsService _ds;
 
         public int ThreadMaxPageNo { get; set; }
 
         public DelegateCommand RefreshThreadCommand { get; set; }
 
-        public ThreadListViewForSearchTitleViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public MyThreadsThreadListViewViewModel(int pageNo, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
-            _searchKeyword = searchKeyword;
-            _searchAuthor = searchAuthor;
-            _searchType = searchType;
-            _searchTimeSpan = searchTimeSpan;
-            _searchForumSpan = searchForumSpan;
-
             _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
             _leftListView.ItemsSource = null;
+            _leftListView.ItemTemplateSelector = App.Current.Resources["threadListItemTemplateSelector"] as DataTemplateSelector;
+            _leftListView.ItemContainerStyle = App.Current.Resources["ThreadItemContainerStyle"] as Style;
 
             _leftCommandBar = leftCommandBar;
             _leftCommandBar.Visibility = Visibility.Visible;
@@ -50,17 +42,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _noDataNotice = noDataNotice;
-            _ds = new SearchTitleService();
+            _ds = new MyThreadsService();
 
-            // 先清除已搜索的数据
-            _ds.ClearThreadDataForSearchTitle();
-            LoadDataForSearchTitle(pageNo);
+            LoadDataForMyThreads(pageNo);
 
             var RefreshThreadCommand = new DelegateCommand();
-            RefreshThreadCommand.ExecuteAction = (p) =>
-            {
-                _ds.ClearThreadDataForSearchTitle();
-                LoadDataForSearchTitle(1);
+            RefreshThreadCommand.ExecuteAction = (p) => {
+                _ds.ClearThreadDataForMyThreads();
+                LoadDataForMyThreads(1);
             };
 
             var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
@@ -68,14 +57,23 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _leftCommandBar.PrimaryCommands.Add(btnRefresh);
         }
 
-        void LoadDataForSearchTitle(int pageNo)
+        void LoadDataForMyThreads(int pageNo)
         {
-            var cv = _ds.GetViewForThreadPageForSearchTitle(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForMyThreads(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
-                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchTitle();
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyThreads();
                 _startPageNo = pageNo;
                 _leftListView.ItemsSource = cv;
+            }
+        }
+
+        public void LoadPrevPageData()
+        {
+            if (_startPageNo > 1)
+            {
+                _ds.ClearThreadDataForMyThreads();
+                LoadDataForMyThreads(_startPageNo);
             }
         }
     }

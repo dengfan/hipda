@@ -11,7 +11,7 @@
         <local:LocalSettingsDependencyObject x:Key="MyLocalSettings"/>
         <local:RoamingSettingsDependencyObject x:Key="MyRoamingSettings"/>
         <vm:ForumAllCategoryListViewViewModel x:Key="ForumAllCategoryListViewViewModel"/>
-        <vm:ThreadHistoryListBoxViewModel x:Key="ThreadHistoryListBoxViewModel"/>
+        <vm:HistoryThreadListViewViewModel x:Key="ThreadHistoryListBoxViewModel"/>
         <vm:FaceIconViewModel x:Key="FaceIconViewModel"/>
         <cvt:ThemeTypeToRequestedThemeConverter x:Key="ThemeTypeToRequestedThemeConverter"/>
         <cvt:UserIdToAvatarUriConverter x:Key="UserIdToAvatarUriConverter"/>

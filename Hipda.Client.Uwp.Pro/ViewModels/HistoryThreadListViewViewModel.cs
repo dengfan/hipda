@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadHistoryListBoxViewModel
+    public class HistoryThreadListViewViewModel
     {
         public DelegateCommand ClearHistoryCommand { get; set; }
 
@@ -38,7 +38,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             set { _selectedOne = value; }
         }
 
-        public ThreadHistoryListBoxViewModel()
+        public HistoryThreadListViewViewModel()
         {
             ClearHistoryCommand = new DelegateCommand();
             ClearHistoryCommand.ExecuteAction = (p) => {

@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadListViewForMyPostsViewModel
+    public class SearchFullTextThreadListViewViewModel
     {
         int _startPageNo = 1;
         ListView _leftListView;
@@ -18,19 +18,29 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         Action _beforeLoad;
         Action _afterLoad;
         Action _noDataNotice;
-        MyPostsService _ds;
+        SearchFullTextService _ds;
+
+        string _searchKeyword;
+        string _searchAuthor;
+        int _searchType;
+        int _searchTimeSpan;
+        int _searchForumSpan;
 
         public int ThreadMaxPageNo { get; set; }
 
         public DelegateCommand RefreshThreadCommand { get; set; }
 
-        public ThreadListViewForMyPostsViewModel(int pageNo, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public SearchFullTextThreadListViewViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
+            _searchKeyword = searchKeyword;
+            _searchAuthor = searchAuthor;
+            _searchType = searchType;
+            _searchTimeSpan = searchTimeSpan;
+            _searchForumSpan = searchForumSpan;
+
             _leftListView = leftListView;
             _leftListView.SelectionMode = ListViewSelectionMode.Single;
             _leftListView.ItemsSource = null;
-            _leftListView.ItemTemplateSelector = App.Current.Resources["threadListItemTemplateSelector"] as DataTemplateSelector;
-            _leftListView.ItemContainerStyle = App.Current.Resources["ThreadItemContainerStyle"] as Style;
 
             _leftCommandBar = leftCommandBar;
             _leftCommandBar.Visibility = Visibility.Visible;
@@ -40,14 +50,16 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _beforeLoad = beforeLoad;
             _afterLoad = afterLoad;
             _noDataNotice = noDataNotice;
-            _ds = new MyPostsService();
+            _ds = new SearchFullTextService();
 
-            LoadDataForMyPosts(pageNo);
+            // 先清除已搜索的数据
+            _ds.ClearThreadDataForSearchFullText();
+            LoadDataForSearchFullText(pageNo);
 
             var RefreshThreadCommand = new DelegateCommand();
             RefreshThreadCommand.ExecuteAction = (p) => {
-                _ds.ClearThreadDataForMyPosts();
-                LoadDataForMyPosts(1);
+                _ds.ClearThreadDataForSearchFullText();
+                LoadDataForSearchFullText(1);
             };
 
             var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
@@ -55,23 +67,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _leftCommandBar.PrimaryCommands.Add(btnRefresh);
         }
 
-        void LoadDataForMyPosts(int pageNo)
+        void LoadDataForSearchFullText(int pageNo)
         {
-            var cv = _ds.GetViewForThreadPageForMyPosts(pageNo, _beforeLoad, _afterLoad, _noDataNotice);
+            var cv = _ds.GetViewForThreadPageForSearchFullText(pageNo, _searchKeyword, _searchAuthor, _searchTimeSpan, _searchForumSpan, _beforeLoad, _afterLoad, _noDataNotice);
             if (cv != null)
             {
-                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForMyPosts();
+                ThreadMaxPageNo = _ds.GetThreadMaxPageNoForSearchFullText();
                 _startPageNo = pageNo;
                 _leftListView.ItemsSource = cv;
-            }
-        }
-
-        public void LoadPrevPageData()
-        {
-            if (_startPageNo > 1)
-            {
-                _ds.ClearThreadDataForMyPosts();
-                LoadDataForMyPosts(_startPageNo);
             }
         }
     }

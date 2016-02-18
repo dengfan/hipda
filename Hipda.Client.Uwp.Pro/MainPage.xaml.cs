@@ -908,9 +908,9 @@ namespace Hipda.Client.Uwp.Pro
                 {
                     var page = (ThreadAndReplyPage)AppFrame.Content;
                     var cmdBar = (CommandBar)page.FindName("LeftCommandBar");
-                    if (cmdBar.DataContext.GetType().Equals(typeof(ThreadListViewForDefaultViewModel)))
+                    if (cmdBar.DataContext.GetType().Equals(typeof(DefaultThreadListViewViewModel)))
                     {
-                        var vm = (ThreadListViewForDefaultViewModel)cmdBar.DataContext;
+                        var vm = (DefaultThreadListViewViewModel)cmdBar.DataContext;
                         vm.RefreshThreadCommand.Execute(null);
                     }
                 }

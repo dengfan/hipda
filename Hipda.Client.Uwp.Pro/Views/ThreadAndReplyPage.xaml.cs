@@ -267,7 +267,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 if (param.StartsWith("fid=")) // 表示要加载指定的贴子列表页
                 {
                     int fid = Convert.ToInt32(param.Substring("fid=".Length));
-                    LeftWrap.DataContext = new ThreadListViewForDefaultViewModel(1, fid, LeftListView, LeftCommandBar, OpenCreateThreadPanel, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                    LeftWrap.DataContext = new DefaultThreadListViewViewModel(1, fid, LeftListView, LeftCommandBar, OpenCreateThreadPanel, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                 }
                 else if (param.StartsWith("item="))
                 {
@@ -275,16 +275,16 @@ namespace Hipda.Client.Uwp.Pro.Views
                     switch (threadType)
                     {
                         case "threads":
-                            LeftWrap.DataContext = new ThreadListViewForMyThreadsViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                            LeftWrap.DataContext = new MyThreadsThreadListViewViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                             break;
                         case "posts":
-                            LeftWrap.DataContext = new ThreadListViewForMyPostsViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                            LeftWrap.DataContext = new MyPostsThreadListViewViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                             break;
                         case "favorites":
-                            LeftWrap.DataContext = new ThreadListViewForMyFavoritesViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                            LeftWrap.DataContext = new MyFavoritesThreadListViewViewModel(1, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                             break;
                         case "notice":
-                            LeftWrap.DataContext = new ThreadListViewForNoticeViewModel(LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                            LeftWrap.DataContext = new NoticeThreadListViewViewModel(LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                             break;
                     }
                 }
@@ -299,11 +299,11 @@ namespace Hipda.Client.Uwp.Pro.Views
 
                     if (searchType == 0)
                     {
-                        LeftWrap.DataContext = new ThreadListViewForSearchTitleViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                        LeftWrap.DataContext = new SearchTitleThreadListViewViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     }
                     else
                     {
-                        LeftWrap.DataContext = new ThreadListViewForSearchFullTextViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
+                        LeftWrap.DataContext = new SearchFullTextThreadListViewViewModel(1, searchKeyowrd, searchAuthor, searchType, searchTimeSpan, searchForumSpan, LeftListView, LeftCommandBar, LeftBeforeLoaded, LeftAfterLoaded, LeftNoDataNotice);
                     }
                 }
                 else if (param.Contains("tid=")) // 表示要加载指定的回复列表页，从窄视图变宽后导航而来
@@ -394,24 +394,24 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             var vmType = LeftWrap.DataContext.GetType();
-            if (vmType.Equals(typeof(ThreadListViewForDefaultViewModel)))
+            if (vmType.Equals(typeof(DefaultThreadListViewViewModel)))
             {
-                var vm = LeftWrap.DataContext as ThreadListViewForDefaultViewModel;
+                var vm = LeftWrap.DataContext as DefaultThreadListViewViewModel;
                 vm.LoadPrevPageData();
             }
-            else if (vmType.Equals(typeof(ThreadListViewForMyThreadsViewModel)))
+            else if (vmType.Equals(typeof(MyThreadsThreadListViewViewModel)))
             {
-                var vm = LeftWrap.DataContext as ThreadListViewForMyThreadsViewModel;
+                var vm = LeftWrap.DataContext as MyThreadsThreadListViewViewModel;
                 vm.LoadPrevPageData();
             }
-            else if (vmType.Equals(typeof(ThreadListViewForMyPostsViewModel)))
+            else if (vmType.Equals(typeof(MyPostsThreadListViewViewModel)))
             {
-                var vm = LeftWrap.DataContext as ThreadListViewForMyPostsViewModel;
+                var vm = LeftWrap.DataContext as MyPostsThreadListViewViewModel;
                 vm.LoadPrevPageData();
             }
-            else if (vmType.Equals(typeof(ThreadListViewForMyFavoritesViewModel)))
+            else if (vmType.Equals(typeof(MyFavoritesThreadListViewViewModel)))
             {
-                var vm = LeftWrap.DataContext as ThreadListViewForMyFavoritesViewModel;
+                var vm = LeftWrap.DataContext as MyFavoritesThreadListViewViewModel;
                 vm.LoadPrevPageData();
             }
         }

@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ThreadListViewForDefaultViewModel
+    public class DefaultThreadListViewViewModel
     {
         int _forumId;
 
@@ -26,7 +26,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand RefreshThreadCommand { get; set; }
 
-        public ThreadListViewForDefaultViewModel(int pageNo, int forumId, ListView leftListView, CommandBar leftCommandBar, Action openCreateThreadPanel, Action beforeLoad, Action afterLoad, Action noDataNotice)
+        public DefaultThreadListViewViewModel(int pageNo, int forumId, ListView leftListView, CommandBar leftCommandBar, Action openCreateThreadPanel, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
             _forumId = forumId;
             _leftListView = leftListView;
