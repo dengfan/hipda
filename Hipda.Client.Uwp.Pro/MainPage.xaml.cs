@@ -242,12 +242,6 @@ namespace Hipda.Client.Uwp.Pro
             FindName("MaskGrid");
             FindName("LeftSwipePanel");
             FindName("RightSwipePanel");
-
-            if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
-            {
-                // 以免 pane 挡住 left swipe panel
-                MainSplitView.IsPaneOpen = false;
-            }
             
             MaskGrid.Visibility = Visibility.Visible;
             OpenMaskAnimation.Begin();
@@ -273,12 +267,6 @@ namespace Hipda.Client.Uwp.Pro
             FindName("MaskGrid");
             FindName("LeftSwipePanel");
             FindName("RightSwipePanel");
-
-            if (MainSplitView.DisplayMode == SplitViewDisplayMode.Overlay || MainSplitView.DisplayMode == SplitViewDisplayMode.CompactOverlay)
-            {
-                // 以免 pane 挡住 left swipe panel
-                MainSplitView.IsPaneOpen = false;
-            }
 
             MaskGrid.Visibility = Visibility.Visible;
 
