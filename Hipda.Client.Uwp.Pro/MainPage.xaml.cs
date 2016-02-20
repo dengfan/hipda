@@ -293,7 +293,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             CloseMaskAnimation.Begin();
 
-            if (AdaptiveStates.CurrentState == Min900 || AdaptiveStates.CurrentState == Min1200 || AdaptiveStates.CurrentState == Min1700)
+            if (AdaptiveStates.CurrentState == Min1200 || AdaptiveStates.CurrentState == Min1700)
             {
                 // 宽视图（已显示历史记录）下，直接隐藏，无过渡
                 CloseRightSwipePanelAnimation2.Begin();
