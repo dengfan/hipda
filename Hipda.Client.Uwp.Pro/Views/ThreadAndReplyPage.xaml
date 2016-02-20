@@ -38,22 +38,12 @@
                     </VisualState.Setters>
                 </VisualState>
 
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1000" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="LeftColumn.Width" Value="320" />
-                        <Setter Target="RightColumn.Width" Value="*" />
-                    </VisualState.Setters>
-                </VisualState>
-
                 <VisualState x:Name="DefaultState">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="720" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="LeftColumn.Width" Value="288" />
+                        <Setter Target="LeftColumn.Width" Value="320" />
                         <Setter Target="RightColumn.Width" Value="*" />
                     </VisualState.Setters>
                 </VisualState>
