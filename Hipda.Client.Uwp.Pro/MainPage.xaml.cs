@@ -1092,7 +1092,6 @@ namespace Hipda.Client.Uwp.Pro
         private void InputPanelMask_Tapped(object sender, TappedRoutedEventArgs e)
         {
             InputPanelDoubleAnimation.To = InputPanel.ActualHeight;
-            InputPanelMaskDoubleAnimation.To = InputPanelMask.ActualHeight * -1;
             InputPanelAnimation.Begin();
             InputPanelAnimation.Completed += (s2, e2) =>
             {

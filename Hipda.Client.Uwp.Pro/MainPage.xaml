@@ -273,9 +273,6 @@
             <DoubleAnimation x:Name="InputPanelDoubleAnimation" Duration="0:0:0.2"
                              Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)"
                              Storyboard.TargetName="InputPanel"/>
-            <DoubleAnimation x:Name="InputPanelMaskDoubleAnimation" Duration="0:0:0.2"
-                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)"
-                             Storyboard.TargetName="InputPanelMask"/>
         </Storyboard>
 
         <DataTemplate x:Key="PostDetailDialogContentTemplate">
@@ -616,7 +613,6 @@
                         <AdaptiveTrigger MinWindowWidth="800" />
                     </VisualState.StateTriggers>
                 </VisualState>
-
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
@@ -627,7 +623,6 @@
                         <AdaptiveTrigger MinWindowWidth="720" />
                     </VisualState.StateTriggers>
                 </VisualState>
-                
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
@@ -788,16 +783,12 @@
                         </Button>
                         <Button x:Name="HistoryRecordButton" Style="{StaticResource NavButtonNormalStyle}" Click="ShowHistoryRecordButton_Click" ToolTipService.ToolTip="历史记录">
                             <Button.Content>
-                                <Grid>
-                                    <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
-                                </Grid>
+                                <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
                             </Button.Content>
                         </Button>
                         <Button x:Name="SettingsButton" Style="{StaticResource NavButtonNormalStyle}" Click="ShowSettingsButton_Click" ToolTipService.ToolTip="设置">
                             <Button.Content>
-                                <Grid>
-                                    <SymbolIcon Symbol="Setting" />
-                                </Grid>
+                                <SymbolIcon Symbol="Setting" />
                             </Button.Content>
                         </Button>
                     </StackPanel>
@@ -890,14 +881,11 @@
               Background="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"
               Tapped="InputPanelMask_Tapped"
               Visibility="Collapsed">
-            <Grid.RenderTransform>
-                <CompositeTransform/>
-            </Grid.RenderTransform>
         </Grid>
         
         <Grid x:Name="InputPanel" x:DeferLoadStrategy="Lazy" Margin="0,48"
               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-              MaxWidth="720" Visibility="Collapsed">
+              MaxWidth="640" Visibility="Collapsed">
             <Grid.RenderTransform>
                 <CompositeTransform/>
             </Grid.RenderTransform>
