@@ -486,10 +486,14 @@
                         </ComboBox>
                         
                         <StackPanel Visibility="{Binding SelectedValue,ElementName=ThemeTypeComboBox,Converter={StaticResource ThemeTypeNameToVisibilityConverter}}">
-                            <TextBlock Text="图片亮度调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                            <TextBlock Text="图片对比度调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                             <Slider Minimum="0.1" Maximum="1.0" StepFrequency="0.1" Value="{Binding PictureOpacity,Source={StaticResource MyLocalSettings},Mode=TwoWay}"/>
                         </StackPanel>
-                        
+                        <TextBlock Text="文字对比度调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                        <ComboBox x:Name="FontContrastRatioComboBox" Margin="0,8,0,12" HorizontalAlignment="Stretch" SelectedIndex="0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                            <x:String>适中</x:String>
+                            <x:String>增强</x:String>
+                        </ComboBox>
                         <TextBlock Text="字号调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
                         <Slider Minimum="14" Maximum="22" Value="{Binding FontSize1,Source={StaticResource MyLocalSettings},Mode=TwoWay}"/>
                         <TextBlock Text="行高调节" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
