@@ -125,6 +125,7 @@
     <Compile Include="Converters\CountdownToSendButtonIsEnabledConverter.cs" />
     <Compile Include="Converters\CountdownToCountdownLabelConverter.cs" />
     <Compile Include="Converters\ElementThemeToMaskBackgroundBrush.cs" />
+    <Compile Include="Converters\FontContrastRatioToBrushConverter.cs" />
     <Compile Include="Converters\SearchPanelVisibilityToSearchButtonStyleConverter.cs" />
     <Compile Include="Converters\SelectedIndexToVisibilityConverter.cs" />
     <Compile Include="Converters\TextLengthToTipBorderVisibilityConverter.cs" />

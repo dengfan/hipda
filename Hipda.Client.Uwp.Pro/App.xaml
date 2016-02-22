@@ -19,6 +19,23 @@
         <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
         <cvt:CountdownToCountdownLabelConverter x:Key="CountdownToCountdownLabelConverter"/>
         <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
+        <cvt:FontContrastRatioToBrushConverter x:Key="FontContrastRatioToBrushConverter"/>
+
+        <Style x:Key="TextBlockFontContrastRatioStyle0" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
+
+        <Style x:Key="TextBlockFontContrastRatioStyle1" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+        </Style>
+
+        <Style TargetType="AppBarButton">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
+
+        <Style TargetType="AppBarToggleButton">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
 
         <GroupStyle x:Key="ForumAllCategoryListViewGroupStyle">
             <GroupStyle.HeaderTemplate>
@@ -280,13 +297,7 @@
             <Polygon Points="6,0 0,6 0,-6" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
         </ControlTemplate>
 
-        <Style TargetType="AppBarButton">
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-        </Style>
-
-        <Style TargetType="AppBarToggleButton">
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-        </Style>
+        
 
         <Style x:Key="FaceButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
@@ -372,7 +383,7 @@
         <DataTemplate x:Key="ReplyListLastItemTemplate">
             <StackPanel Padding="0,32,0,160">
                 <TextBlock Text="---------- 完 ----------"
-                           Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}"
+                           
                            FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                            HorizontalAlignment="Center" />
             </StackPanel>
@@ -384,7 +395,7 @@
                     <c:MyAvatarForThread UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" ThreadTitle="{Binding ThreadTitle}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                     <StackPanel Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <TextBlock Margin="0,0,0,4" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
@@ -392,7 +403,7 @@
                     </StackPanel>
                 </Grid>
 
-                <ContentControl Margin="0,4" Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
+                <ContentControl Margin="0,4" Content="{Binding XamlContent}"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
 
                 <c:PostMenuControl HorizontalAlignment="Center"/>
             </StackPanel>
@@ -406,12 +417,12 @@
 
                 <Border Margin="54,0,16,32" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
-                        <TextBlock Margin="0,0,0,4" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
+                        <ContentControl Content="{Binding XamlContent}"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />
@@ -431,12 +442,12 @@
 
                 <Border Margin="54,0,16,32" Padding="8" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
-                        <TextBlock Margin="0,0,0,4" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
+                        <ContentControl Content="{Binding XamlContent}"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />
@@ -455,7 +466,7 @@
 
                 <Border Margin="16,0,54,32" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <StackPanel>
-                        <TextBlock Margin="0,0,0,4" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
@@ -479,7 +490,7 @@
                 
                 <c:MyAvatarForReply Margin="0,0,0,4" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Center"/>
 
-                <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Center">
+                <TextBlock  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Center">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
@@ -536,12 +547,15 @@
 
                 <c:MyAvatarForThread Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" ThreadTitle="{Binding Title}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
 
-                <TextBlock Margin="60,22,0,22" TextWrapping="Wrap" Style="{Binding ThreadItemStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
+                <TextBlock Margin="60,22,0,22" TextWrapping="Wrap"
+                           HorizontalAlignment="Left" VerticalAlignment="Top"
+                           FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="{Binding TopFontIcon}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     <Run Text="{Binding Title}" />
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="{Binding ImageFontIcon}" />
@@ -549,7 +563,7 @@
                     <Run Text="{Binding ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                 </TextBlock>
 
-                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <Run Text="&#x1F5E9;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     <!--<Run Text=" " FontStyle="Italic"/>
@@ -565,15 +579,15 @@
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
                 <StackPanel Margin="18,4,0,4">
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
                         <Run Text="{Binding ForumName}" />
                     </TextBlock>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
+                    <TextBlock Margin="2" TextWrapping="Wrap"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
                         <Run Text="{Binding Title}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right">
                         <Run Text="&#x1F5E9;"/>
                         <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     </TextBlock>
@@ -586,18 +600,18 @@
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
                 <StackPanel Margin="18,4,0,4">
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
                         <Run Text="{Binding ForumName}" />
                     </TextBlock>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
+                    <TextBlock Margin="2" TextWrapping="Wrap"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
                         <Run Text="{Binding Title}" />
                         <LineBreak/>
-                        <Run Text="&#x1F5E9;" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}"/>
-                        <Run Text="{Binding LastReplyContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" />
+                        <Run Text="&#x1F5E9;" />
+                        <Run Text="{Binding LastReplyContent}"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right">
                         <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     </TextBlock>
                 </StackPanel>
@@ -609,15 +623,15 @@
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
                 <StackPanel Margin="18,4,0,4">
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
                         <Run Text="{Binding ForumName}" />
                     </TextBlock>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
+                    <TextBlock Margin="2" TextWrapping="Wrap"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
                         <Run Text="{Binding Title}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right">
                         <Run Text="&#x1F5E9;"/>
                         <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     </TextBlock>
@@ -631,14 +645,14 @@
 
                 <c:MyAvatarForThread Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" ThreadTitle="{Binding Title}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
 
                 <ContentControl Content="{Binding TitleControl}" Margin="60,22,0,22" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
 
-                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <Run Text="&#x1F5E9;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                 </TextBlock>
@@ -651,14 +665,14 @@
 
                 <c:MyAvatarForReply Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
 
                 <ContentControl Content="{Binding TitleControl}" Margin="60,22,0,22" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
 
-                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <Run Text="&#x1F5E9;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                 </TextBlock>
@@ -683,7 +697,7 @@
                                     Username="{Binding Username}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}"
                                     HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                    <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
                         <Paragraph>
                             <Run Text="{Binding Username}" FontWeight="Bold"/>
                             <Run Text="{Binding ActionTime}" />
@@ -706,12 +720,12 @@
                             <Run Text="{Binding ActionInfo[3],Converter={StaticResource TextToEmojiConverter}}"/>
                             <LineBreak/>
                             <Run Text="他说：" FontWeight="Bold"/>
-                            <Run Text="{Binding ActionInfo[4],Converter={StaticResource TextToEmojiConverter}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                            <Run Text="{Binding ActionInfo[4],Converter={StaticResource TextToEmojiConverter}}" />
                         </Paragraph>
                     </RichTextBlock>
                     <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
-                        <Button Margin="0,0,8,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Content="回复" Command="{Binding ReplyCommand}"/>
-                        <Button Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Content="查看" Command="{Binding ViewCommand}"/>
+                        <Button Margin="0,0,8,0"  Content="回复" Command="{Binding ReplyCommand}"/>
+                        <Button  Content="查看" Command="{Binding ViewCommand}"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -724,7 +738,7 @@
                         Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20"/>
                 <StackPanel Margin="60,4,0,12">
                     <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
-                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                                   >
                         <Paragraph>
                             <Run Text="{Binding Username}" FontWeight="Bold" />
                             <LineBreak/>
@@ -745,7 +759,7 @@
                             </InlineUIContainer>
                         </Paragraph>
                     </RichTextBlock>
-                    <Button Margin="0,0,8,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Content="查看" Command="{Binding ViewCommand}"/>
+                    <Button Margin="0,0,8,0"  Content="查看" Command="{Binding ViewCommand}"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -758,7 +772,7 @@
                                     HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="60,4,0,12" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
-                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                                   >
                         <Paragraph>
                             <Run Text="{Binding Username}" FontWeight="Bold" />
                             <Run Text="{Binding ActionTime}" />
@@ -766,7 +780,7 @@
                             <Run Text="添加您为好友" />
                         </Paragraph>
                     </RichTextBlock>
-                    <Button Margin="0,8,0,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Command="{Binding AddBuddyCommand}">
+                    <Button Margin="0,8,0,0"  Command="{Binding AddBuddyCommand}">
                         <TextBlock>
                             <Run Text="加 "/>
                             <Run Text="{Binding Username}"/>
@@ -787,8 +801,8 @@
             <Grid>
                 <ContentControl Margin="8 0 0 0" Template="{StaticResource MessageUpArrow}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="0,8,40,0" Padding="8" Background="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                    <ContentControl Content="{Binding XamlContent}" />
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
                         <Run Text="{Binding Username}"/>
                         <Run Text=" "/>
                         <Run Text="{Binding Time}"/>
@@ -800,8 +814,8 @@
         <DataTemplate x:Key="UserMessageRightItemTemplate">
             <Grid>
                 <StackPanel Margin="40,0,0,8" Padding="8" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}">
+                    <ContentControl Content="{Binding XamlContent}" />
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
                         <Run Text="我 "/>
                         <Run Text="{Binding Time}"/>
                         <Run Text=" "/>
@@ -818,7 +832,7 @@
                     <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
                 </Border>
                 <StackPanel Margin="56,8,8,8" HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <TextBlock Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                    <TextBlock >
                         <Run Text="{Binding Username}"/>
                         <Run Text=" "/>
                         <Run Text="{Binding LastMessageTime}"/>
@@ -826,7 +840,7 @@
                         <Run Text="{Binding NewLabel}" Foreground="Red"/>
                     </TextBlock>
                     <TextBlock Text="{Binding LastMessageText}" MaxWidth="360"
-                               Foreground="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                               
                                FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
                 </StackPanel>
             </Grid>

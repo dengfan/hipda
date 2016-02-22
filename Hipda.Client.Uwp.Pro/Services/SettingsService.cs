@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
@@ -110,7 +111,23 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
             }
         }
-        
+
+        public int FontContrastRatio
+        {
+            get
+            {
+                if (_commonContainer.Values["FontContrastRatio"] == null)
+                {
+                    _commonContainer.Values["FontContrastRatio"] = _myLocalSettings.FontContrastRatio;
+                }
+
+                return (int)_commonContainer.Values["FontContrastRatio"];
+            }
+            set
+            {
+                _commonContainer.Values["FontContrastRatio"] = value;
+            }
+        }
 
         public void ReadAndUpdate()
         {
@@ -119,6 +136,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             _myLocalSettings.FontSize2 = FontSize2;
             _myLocalSettings.LineHeight = LineHeight;
             _myLocalSettings.PictureOpacity = PictureOpacity;
+            _myLocalSettings.FontContrastRatio = FontContrastRatio;
         }
 
         public void Save()
@@ -128,6 +146,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             FontSize2 = _myLocalSettings.FontSize2;
             LineHeight = _myLocalSettings.LineHeight;
             PictureOpacity = _myLocalSettings.PictureOpacityBak;
+            FontContrastRatio = _myLocalSettings.FontContrastRatio;
         }
     }
 

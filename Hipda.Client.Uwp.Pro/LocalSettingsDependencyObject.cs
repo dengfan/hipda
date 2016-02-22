@@ -9,6 +9,7 @@ using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro
 {
@@ -86,7 +87,16 @@ namespace Hipda.Client.Uwp.Pro
         }
 
 
-        
-        
+        public int FontContrastRatio
+        {
+            get { return (int)GetValue(FontContrastRatioProperty); }
+            set { SetValue(FontContrastRatioProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FontContrastRatio.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FontContrastRatioProperty =
+            DependencyProperty.Register("FontContrastRatio", typeof(int), typeof(LocalSettingsDependencyObject), new PropertyMetadata(0));
+
+
     }
 }

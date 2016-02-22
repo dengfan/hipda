@@ -51,7 +51,7 @@
             <Border Margin="0,0,0,8" Padding="8,4" CornerRadius="12" HorizontalAlignment="Center" Background="Red" Opacity="0.8"
                             Visibility="{Binding Text.Length,ElementName=TipTextBlock,Converter={StaticResource TextLengthToTipBorderVisibilityConverter}}">
                 <TextBlock x:Name="TipTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                   
                                    FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
             </Border>
             <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
@@ -121,7 +121,7 @@
                 <Button Grid.Row="1" x:Name="SendButton" Margin="0,0,12,12"
                                 IsEnabled="{Binding Countdown,ElementName=MyReplyListPage,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"
                                 Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
-                                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
+                                 
                                 HorizontalAlignment="Right" VerticalAlignment="Bottom"
                                 Command="{Binding SendCommand}">
                     <StackPanel Orientation="Horizontal">
