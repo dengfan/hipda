@@ -616,15 +616,14 @@
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
                 <StackPanel Margin="18,4,0,4">
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
-                        <Run Text="{Binding ForumName}" />
-                    </TextBlock>
+                    <TextBlock Text="{Binding ForumName}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
-                        <Run Text="{Binding Title}" />
-                    </TextBlock>
+                    <TextBlock Text="{Binding Title}" Margin="2" TextWrapping="Wrap" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
 
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Right"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}">
                         <Run Text="&#x1F5E9;"/>
                         <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     </TextBlock>
@@ -637,20 +636,20 @@
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
                 <StackPanel Margin="18,4,0,4">
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
-                        <Run Text="{Binding ForumName}" />
-                    </TextBlock>
+                    <TextBlock Text="{Binding ForumName}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
-                        <Run Text="{Binding Title}" />
-                        <LineBreak/>
+                    <TextBlock Text="{Binding Title}" Margin="2" TextWrapping="Wrap" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+
+                    <TextBlock Margin="2" TextWrapping="Wrap" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                         <Run Text="&#x1F5E9;" />
-                        <Run Text="{Binding LastReplyContent}"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" />
+                        <Run Text="{Binding LastReplyContent}" />
                     </TextBlock>
 
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right">
-                        <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
-                    </TextBlock>
+                    <TextBlock Text="{Binding LastReplyInfo}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" FontStyle="Italic" HorizontalAlignment="Right"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -660,17 +659,16 @@
                 <Ellipse Margin="6,26,0,0" Style="{Binding StatusColorStyle}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
 
                 <StackPanel Margin="18,4,0,4">
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
-                        <Run Text="{Binding ForumName}" />
-                    </TextBlock>
+                    <TextBlock Text="{Binding ForumName}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
 
-                    <TextBlock Margin="2" TextWrapping="Wrap"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
-                        <Run Text="{Binding Title}" />
-                    </TextBlock>
+                    <TextBlock Text="{Binding Title}" Margin="2" TextWrapping="Wrap"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
 
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right">
+                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" FontStyle="Italic" HorizontalAlignment="Right"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}">
                         <Run Text="&#x1F5E9;"/>
-                        <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
+                        <Run Text="{Binding LastReplyInfo}"/>
                     </TextBlock>
                 </StackPanel>
             </Grid>
@@ -682,14 +680,19 @@
 
                 <c:MyAvatarForThread Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" ThreadTitle="{Binding Title}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Top"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
 
-                <ContentControl Content="{Binding TitleControl}" Margin="60,22,0,22" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
+                <ContentControl Content="{Binding TitleControl}" Margin="60,22,0,22" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
 
-                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}">
                     <Run Text="&#x1F5E9;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                 </TextBlock>
@@ -702,14 +705,19 @@
 
                 <c:MyAvatarForReply Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Top"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
 
-                <ContentControl Content="{Binding TitleControl}" Margin="60,22,0,22" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
+                <ContentControl Content="{Binding TitleControl}" Margin="60,22,0,22" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
 
-                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}">
                     <Run Text="&#x1F5E9;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                 </TextBlock>

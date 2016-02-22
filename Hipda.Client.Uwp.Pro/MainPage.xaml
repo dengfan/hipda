@@ -490,17 +490,17 @@
                             <x:String>白天模式</x:String>
                             <x:String>夜间模式</x:String>
                         </ComboBox>
-                        
+
+                        <TextBlock Text="文字对比度调节" />
+                        <ComboBox x:Name="FontContrastRatioComboBox" Margin="0,8,0,12" HorizontalAlignment="Stretch" SelectedIndex="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Mode=TwoWay}" >
+                            <x:String>强</x:String>
+                            <x:String>中</x:String>
+                            <x:String>弱</x:String>
+                        </ComboBox>
                         <StackPanel Visibility="{Binding SelectedValue,ElementName=ThemeTypeComboBox,Converter={StaticResource ThemeTypeNameToVisibilityConverter}}">
                             <TextBlock Text="图片对比度调节" />
                             <Slider Minimum="0.1" Maximum="1.0" StepFrequency="0.1" Value="{Binding PictureOpacity,Source={StaticResource MyLocalSettings},Mode=TwoWay}"/>
                         </StackPanel>
-                        <TextBlock Text="文字对比度调节" />
-                        <ComboBox x:Name="FontContrastRatioComboBox" Margin="0,8,0,12" HorizontalAlignment="Stretch" SelectedIndex="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Mode=TwoWay}" >
-                            <x:String>增强</x:String>
-                            <x:String>适中</x:String>
-                            <x:String>减弱</x:String>
-                        </ComboBox>
                         <TextBlock Text="字号调节" />
                         <Slider Minimum="14" Maximum="22" Value="{Binding FontSize1,Source={StaticResource MyLocalSettings},Mode=TwoWay}"/>
                         <TextBlock Text="行高调节" />
@@ -744,13 +744,17 @@
                                 </StackPanel>
                             </Button>
                             <StackPanel x:Name="SearchPanel" Margin="8" Visibility="Collapsed">
-                                <TextBox x:Name="KeywordTextBox" Template="{StaticResource TextBoxTemplate1}" PlaceholderText="关键字" KeyUp="KeywordTextBox_KeyUp"/>
-                                <ComboBox x:Name="SearchTypeComboBox" Margin="0,8,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" >
+                                <TextBox x:Name="KeywordTextBox" Template="{StaticResource TextBoxTemplate1}" PlaceholderText="关键字" KeyUp="KeywordTextBox_KeyUp"
+                                         Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
+                                <ComboBox x:Name="SearchTypeComboBox" Margin="0,8,0,0" HorizontalAlignment="Stretch" SelectedIndex="0"
+                                          Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}">
                                     <x:String>标题</x:String>
                                     <x:String>全文</x:String>
                                 </ComboBox>
-                                <TextBox x:Name="AuthorTextBox" Template="{StaticResource TextBoxTemplate1}" Margin="0,8,0,0" PlaceholderText="作者"/>
-                                <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,8,0,0" HorizontalAlignment="Stretch" SelectedIndex="0" >
+                                <TextBox x:Name="AuthorTextBox" Template="{StaticResource TextBoxTemplate1}" Margin="0,8,0,0" PlaceholderText="作者"
+                                         Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
+                                <ComboBox x:Name="SearchTimeSpanComboBox" Margin="0,8,0,0" HorizontalAlignment="Stretch" SelectedIndex="0"
+                                          Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}">
                                     <x:String>全部时间</x:String>
                                     <x:String>1周以内</x:String>
                                     <x:String>1个月以内</x:String>

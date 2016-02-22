@@ -452,7 +452,7 @@ namespace Hipda.Html
 
         public static string ConvertSearchThreadTitle(string title, string forumName, string imageFontIcon, string fileFontIcon, string viewInfo)
         {
-            string xamlStr = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumBrush}}"" TextWrapping=""Wrap"">[{4}] {0} <Run FontFamily=""Segoe MDL2 Assets"" Foreground=""OrangeRed"" Text=""{1}"" /> <Run FontFamily=""Segoe MDL2 Assets"" Foreground=""DeepSkyBlue"" Text=""{2}"" /> <Run Text=""{3}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"" /></TextBlock>";
+            string xamlStr = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}}}"" TextWrapping=""Wrap"">[{4}] {0} <Run FontFamily=""Segoe MDL2 Assets"" Foreground=""OrangeRed"" Text=""{1}"" /> <Run FontFamily=""Segoe MDL2 Assets"" Foreground=""DeepSkyBlue"" Text=""{2}"" /> <Run Text=""{3}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"" /></TextBlock>";
 
             MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(title);
             if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
@@ -480,7 +480,7 @@ namespace Hipda.Html
                 .Replace("\n", string.Empty)
                 .Replace("\r", string.Empty);
 
-            string xamlStr = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumBrush}}"" TextWrapping=""Wrap"">[{1}] {0}</TextBlock>";
+            string xamlStr = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}}}"" TextWrapping=""Wrap"">[{1}] {0}</TextBlock>";
 
             MatchCollection matchsForInvalidStr = new Regex(@"\[[^\]]*\]").Matches(searchResultHtml);
             if (matchsForInvalidStr != null && matchsForInvalidStr.Count > 0)

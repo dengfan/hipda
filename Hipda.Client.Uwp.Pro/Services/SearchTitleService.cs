@@ -101,9 +101,10 @@ namespace Hipda.Client.Uwp.Pro.Services
                 var tdNums = tr.ChildNodes[11];
                 var tdLastPost = tr.ChildNodes[13];
 
+                int threadId = 0;
                 string threadIdStr = a.Attributes[0].Value.Substring("viewthread.php?tid=".Length);
                 threadIdStr = threadIdStr.Split('&')[0];
-                int threadId = Convert.ToInt32(threadIdStr);
+                int.TryParse(threadIdStr, out threadId);
 
                 string title = a.InnerHtml;
 
