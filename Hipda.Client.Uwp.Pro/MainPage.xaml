@@ -149,23 +149,29 @@
         </MenuFlyout>
 
         <DataTemplate x:Key="NavButtonBySearchItemTemplate">
-            <StackPanel Padding="2 0 0 0" Orientation="Horizontal">
-                <FontIcon Glyph="{Binding Icon}"/>
-                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Icon}" Margin="2,0,0,0" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
             </StackPanel>
         </DataTemplate>
         
         <DataTemplate x:Key="NavButtonByForumIdItemTemplate">
-            <StackPanel Padding="2 0 0 0" Orientation="Horizontal">
-                <FontIcon Glyph="{Binding Icon}" FontFamily="Calibri" Width="20"/>
-                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Icon}" Margin="2,0,0,0" FontSize="20" Width="24"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+                <TextBlock Text="{Binding Text}" Margin="20,0,0,0" VerticalAlignment="Center"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="NavButtonByMyItemItemTemplate">
-            <StackPanel Padding="2 0 0 0" Orientation="Horizontal">
-                <FontIcon Glyph="{Binding Icon}"/>
-                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Icon}" Margin="2,0,0,0" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+                <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
             </StackPanel>
         </DataTemplate>
 
@@ -491,8 +497,9 @@
                         </StackPanel>
                         <TextBlock Text="文字对比度调节" />
                         <ComboBox x:Name="FontContrastRatioComboBox" Margin="0,8,0,12" HorizontalAlignment="Stretch" SelectedIndex="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Mode=TwoWay}" >
-                            <x:String>适中</x:String>
                             <x:String>增强</x:String>
+                            <x:String>适中</x:String>
+                            <x:String>减弱</x:String>
                         </ComboBox>
                         <TextBlock Text="字号调节" />
                         <Slider Minimum="14" Maximum="22" Value="{Binding FontSize1,Source={StaticResource MyLocalSettings},Mode=TwoWay}"/>
@@ -695,9 +702,8 @@
                                             HorizontalAlignment="Center" VerticalAlignment="Center"
                                             Background="{x:Bind UserAvatarImageBrush}"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Margin="18,0,12,0" x:Name="AccountUsernameTextBlock"
-                                           
-                                           VerticalAlignment="Center">
+                                <TextBlock Grid.Column="1" Margin="18,0,12,0" x:Name="AccountUsernameTextBlock" VerticalAlignment="Center"
+                                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}">
                                     <Run Text="&#x2601;"/>
                                     <Run Text="{x:Bind FuzzyUsername}"/>
                                 </TextBlock>
@@ -730,9 +736,11 @@
                                         </Grid>
                                     </ControlTemplate>
                                 </Button.Template>
-                                <StackPanel Padding="14 0 0 0" Orientation="Horizontal">
-                                    <FontIcon Glyph="&#xE1A3;"/>
-                                    <TextBlock Text="搜索贴子" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE1A3;" Margin="14,0,0,0" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center"
+                                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+                                    <TextBlock Text="搜索贴子" Margin="24,0,0,0" VerticalAlignment="Center"
+                                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                                 </StackPanel>
                             </Button>
                             <StackPanel x:Name="SearchPanel" Margin="8" Visibility="Collapsed">
@@ -766,34 +774,34 @@
 
                     <StackPanel x:Name="BottomButtonPanel" Grid.Row="1" BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0,1,0,0" VerticalAlignment="Bottom">
                         <Button Style="{StaticResource NavButtonNormalStyle}" Click="NoticeButton_Click" ToolTipService.ToolTip="提醒">
-                            <Button.Content>
-                                <Grid>
-                                    <FontIcon Glyph="&#xEA8F;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
-                                    <Border Visibility="{Binding NoticeNoVisibility}" Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
-                                        <TextBlock Text="{Binding PromptAllWithoutPromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
-                                    </Border>
-                                </Grid>
-                            </Button.Content>
+                            <Grid>
+                                <TextBlock Text="&#xEA8F;" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+                                <Border Visibility="{Binding NoticeNoVisibility}" Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                                    <TextBlock Text="{Binding PromptAllWithoutPromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                </Border>
+                            </Grid>
                         </Button>
                         <Button Style="{StaticResource NavButtonNormalStyle}" Click="openUserMessageListButton_Click" ToolTipService.ToolTip="短消息">
-                            <Button.Content>
-                                <Grid>
-                                    <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
-                                    <Border Visibility="{Binding PmNoVisibility}" Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
-                                        <TextBlock Text="{Binding PromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
-                                    </Border>
-                                </Grid>
-                            </Button.Content>
+                            <Grid>
+                                <TextBlock Text="&#xE8F2;" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+                                <Border Visibility="{Binding PmNoVisibility}" Margin="0,4,4,0" Padding="3,0" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.8">
+                                    <TextBlock Text="{Binding PromptPm}" Foreground="White" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                </Border>
+                            </Grid>
                         </Button>
                         <Button x:Name="HistoryRecordButton" Style="{StaticResource NavButtonNormalStyle}" Click="ShowHistoryRecordButton_Click" ToolTipService.ToolTip="历史记录">
-                            <Button.Content>
-                                <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
-                            </Button.Content>
+                            <TextBlock Text="&#xE81C;" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                         </Button>
                         <Button x:Name="SettingsButton" Style="{StaticResource NavButtonNormalStyle}" Click="ShowSettingsButton_Click" ToolTipService.ToolTip="设置">
-                            <Button.Content>
-                                <SymbolIcon Symbol="Setting" />
-                            </Button.Content>
+                            <TextBlock Text="&#xE115;" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                         </Button>
                     </StackPanel>
 

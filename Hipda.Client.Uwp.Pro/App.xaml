@@ -19,15 +19,48 @@
         <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
         <cvt:CountdownToCountdownLabelConverter x:Key="CountdownToCountdownLabelConverter"/>
         <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
-        <cvt:FontContrastRatioToBrushConverter x:Key="FontContrastRatioToBrushConverter"/>
+        <cvt:FontContrastRatioToTextBlockForeground1StyleConverter x:Key="FontContrastRatioToTextBlockForeground1StyleConverter"/>
+        <cvt:FontContrastRatioToTextBlockForeground2StyleConverter x:Key="FontContrastRatioToTextBlockForeground2StyleConverter"/>
+        <cvt:FontContrastRatioToTextBlockForeground3StyleConverter x:Key="FontContrastRatioToTextBlockForeground3StyleConverter"/>
 
-        <Style x:Key="TextBlockFontContrastRatioStyle0" TargetType="TextBlock">
+        <Style x:Key="TextBlockForegroundStyle01" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+        </Style>
+
+        <Style x:Key="TextBlockForegroundStyle02" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
+        </Style>
+
+        <Style x:Key="TextBlockForegroundStyle03" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
+        
+
+        <Style x:Key="TextBlockForegroundStyle11" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
+        </Style>
+
+        <Style x:Key="TextBlockForegroundStyle12" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
         </Style>
 
-        <Style x:Key="TextBlockFontContrastRatioStyle1" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+        <Style x:Key="TextBlockForegroundStyle13" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
         </Style>
+        
+
+        <Style x:Key="TextBlockForegroundStyle21" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
+
+        <Style x:Key="TextBlockForegroundStyle22" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
+        </Style>
+
+        <Style x:Key="TextBlockForegroundStyle23" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseLowBrush}"/>
+        </Style>
+        
 
         <Style TargetType="AppBarButton">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
@@ -548,14 +581,16 @@
                 <c:MyAvatarForThread Margin="14,8,0,0" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" ThreadTitle="{Binding Title}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <TextBlock Margin="60,4,0,0" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
-                           HorizontalAlignment="Left" VerticalAlignment="Top">
+                           HorizontalAlignment="Left" VerticalAlignment="Top"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
 
                 <TextBlock Margin="60,22,0,22" TextWrapping="Wrap"
                            HorizontalAlignment="Left" VerticalAlignment="Top"
-                           FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}">
+                           FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}">
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="{Binding TopFontIcon}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                     <Run Text="{Binding Title}" />
                     <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="{Binding ImageFontIcon}" />
@@ -563,7 +598,9 @@
                     <Run Text="{Binding ViewInfo}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" />
                 </TextBlock>
 
-                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"  HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}">
                     <Run Text="&#x1F5E9;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                     <Run Text="{Binding LastReplyInfo}" FontStyle="Italic"/>
                     <!--<Run Text=" " FontStyle="Italic"/>
