@@ -244,14 +244,12 @@ namespace Hipda.Client.Uwp.Pro
             FindName("RightSwipePanel");
             
             MaskGrid.Visibility = Visibility.Visible;
-            OpenMaskAnimation.Begin();
             OpenLeftSwipePanelAnimation.Begin();
             CloseRightSwipePanelAnimation.Begin();
         }
 
         void HideLeftSwipePanel()
         {
-            CloseMaskAnimation.Begin();
             CloseLeftSwipePanelAnimation.Begin();
             MaskGrid.Visibility = Visibility.Collapsed;
 
@@ -270,7 +268,6 @@ namespace Hipda.Client.Uwp.Pro
 
             MaskGrid.Visibility = Visibility.Visible;
 
-            OpenMaskAnimation.Begin();
             OpenRightSwipePanelAnimation.Begin();
 
             CloseLeftSwipePanelAnimation.Begin();
@@ -279,8 +276,6 @@ namespace Hipda.Client.Uwp.Pro
 
         void HideRightSwipePanel()
         {
-            CloseMaskAnimation.Begin();
-
             if (AdaptiveStates.CurrentState == Min1200 || AdaptiveStates.CurrentState == Min1700)
             {
                 // 宽视图（已显示历史记录）下，直接隐藏，无过渡
@@ -1087,6 +1082,7 @@ namespace Hipda.Client.Uwp.Pro
             FindName("InputPanel");
 
             InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Visible;
+            OpenInputPanelMaskAnimation.Begin();
         }
 
         private void InputPanelMask_Tapped(object sender, TappedRoutedEventArgs e)
@@ -1095,8 +1091,12 @@ namespace Hipda.Client.Uwp.Pro
             InputPanelAnimation.Begin();
             InputPanelAnimation.Completed += (s2, e2) =>
             {
+                CloseInputPanelMaskAnimation.Begin();
                 InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Collapsed;
+
                 InputPanelAnimation.Stop();
+                OpenInputPanelMaskAnimation.Stop();
+                CloseInputPanelMaskAnimation.Stop();
             };
         }
     }

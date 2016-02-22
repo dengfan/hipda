@@ -228,13 +228,6 @@
             </Setter>
         </Style>
 
-        <Storyboard x:Name="OpenMaskAnimation">
-            <DoubleAnimation Duration="0:0:0.2" To="0.6" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
-        </Storyboard>
-        <Storyboard x:Name="CloseMaskAnimation">
-            <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="MaskGrid"/>
-        </Storyboard>
-        
         <Storyboard x:Name="OpenLeftSwipePanelAnimation">
             <DoubleAnimation Duration="0:0:0.2" To="260" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="LeftSwipePanel">
                 <DoubleAnimation.EasingFunction>
@@ -274,6 +267,13 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:2.7" Value="-260"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        
+        <Storyboard x:Name="OpenInputPanelMaskAnimation">
+            <DoubleAnimation Duration="0:0:0.2" To="0.6" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="InputPanelMask"/>
+        </Storyboard>
+        <Storyboard x:Name="CloseInputPanelMaskAnimation">
+            <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="InputPanelMask"/>
         </Storyboard>
         <Storyboard x:Name="InputPanelAnimation">
             <DoubleAnimation x:Name="InputPanelDoubleAnimation" Duration="0:0:0.2"
@@ -838,8 +838,7 @@
                     </Grid>
 
                     <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy"
-                          Background="{Binding RequestedTheme,ElementName=MyMainPage,Converter={StaticResource ElementThemeToMaskBackgroundBrush}}"
-                          Opacity="0" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
+                          Background="Transparent" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
 
                     <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy"
                           Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
@@ -893,13 +892,13 @@
                        SecondaryButtonClick="userDialog_SecondaryButtonClick"
                        Closed="UserDialog_Closed"/>
 
-        <Grid x:Name="InputPanelMask" x:DeferLoadStrategy="Lazy"
-              Background="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"
-              Tapped="InputPanelMask_Tapped"
-              Visibility="Collapsed">
-        </Grid>
-        
-        <Grid x:Name="InputPanel" x:DeferLoadStrategy="Lazy" Margin="0,48"
+        <Grid x:Name="InputPanelMask" x:DeferLoadStrategy="Lazy" Opacity="0" Visibility="Collapsed"
+              Background="{Binding RequestedTheme,ElementName=MyMainPage,Converter={StaticResource ElementThemeToMaskBackgroundBrush}}"
+              Tapped="InputPanelMask_Tapped"/>
+
+        <Grid x:Name="InputPanel" x:DeferLoadStrategy="Lazy" Margin="20,48"
+              BorderBrush="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"
+              BorderThickness="4"
               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
               MaxWidth="640" Visibility="Collapsed">
             <Grid.RenderTransform>
