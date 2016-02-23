@@ -468,7 +468,7 @@
                                            FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
                                 <TextBlock Margin="48,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind Title}" TextWrapping="Wrap"
-                                           FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                           FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                             </Grid>
                         </DataTemplate>
