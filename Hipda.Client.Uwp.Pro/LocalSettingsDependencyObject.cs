@@ -95,7 +95,7 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for FontContrastRatio.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FontContrastRatioProperty =
-            DependencyProperty.Register("FontContrastRatio", typeof(int), typeof(LocalSettingsDependencyObject), new PropertyMetadata(0));
+            DependencyProperty.Register("FontContrastRatio", typeof(int), typeof(LocalSettingsDependencyObject), new PropertyMetadata(1));
 
 
     }
