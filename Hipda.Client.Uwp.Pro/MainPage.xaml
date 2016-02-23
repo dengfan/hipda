@@ -438,8 +438,10 @@
                 </CommandBar>
 
                 <StackPanel Orientation="Horizontal" Margin="12,0,0,0" Height="48">
-                    <FontIcon Glyph="&#xE81C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center"  />
-                    <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center"  />
+                    <TextBlock Text="&#xE81C;" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
+                    <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
                 </StackPanel>
 
                 <ListView Grid.Row="1" SelectionMode="Single"
@@ -459,9 +461,15 @@
                                 <c:MyAvatarForThread Margin="0,0,8,0" UserId="{x:Bind AuthorUserId}" Username="{x:Bind AuthorUsername}"
                                                      ThreadId="{x:Bind ThreadId}" ThreadTitle="{x:Bind Title}" ForumId="{x:Bind ForumId}" ForumName="{x:Bind ForumName}"
                                                      HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                <TextBlock Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind AuthorUsername}"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
-                                <TextBlock Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Text="{x:Bind ForumName}"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
-                                <TextBlock Margin="48,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind Title}" TextWrapping="Wrap"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                                <TextBlock Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind AuthorUsername}"
+                                           FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
+                                <TextBlock Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Text="{x:Bind ForumName}"
+                                           FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
+                                <TextBlock Margin="48,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind Title}" TextWrapping="Wrap"
+                                           FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -486,16 +494,18 @@
                 <ScrollViewer Grid.Row="1">
                     <StackPanel Padding="12,0">
                         <TextBlock Margin="0,0,0,8" Text="选择主题" />
-                        <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,12" HorizontalAlignment="Stretch" SelectedIndex="{Binding ThemeType,Source={StaticResource MyLocalSettings},Mode=TwoWay}" >
+                        <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,12" HorizontalAlignment="Stretch"
+                                  SelectedIndex="{Binding ThemeType,Source={StaticResource MyLocalSettings},Mode=TwoWay}" >
                             <x:String>白天模式</x:String>
                             <x:String>夜间模式</x:String>
                         </ComboBox>
 
                         <TextBlock Text="文字对比度调节" />
-                        <ComboBox x:Name="FontContrastRatioComboBox" Margin="0,8,0,12" HorizontalAlignment="Stretch" SelectedIndex="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Mode=TwoWay}" >
-                            <x:String>强</x:String>
+                        <ComboBox x:Name="FontContrastRatioComboBox" Margin="0,8,0,12" HorizontalAlignment="Stretch"
+                                  SelectedIndex="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Mode=TwoWay}" >
+                            <x:String>高</x:String>
                             <x:String>中</x:String>
-                            <x:String>弱</x:String>
+                            <x:String>低</x:String>
                         </ComboBox>
                         <StackPanel Visibility="{Binding SelectedValue,ElementName=ThemeTypeComboBox,Converter={StaticResource ThemeTypeNameToVisibilityConverter}}">
                             <TextBlock Text="图片对比度调节" />
@@ -866,18 +876,23 @@
             <Universal:AdMediatorControl x:Name="AdMediatorControl1" Id="AdMediatorControl1"
                                          HorizontalAlignment="Center" VerticalAlignment="Top"
                                          Width="160" Height="600"/>
-            <TextBlock Text="广告区域" Margin="0,0,0,16" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+            
+            <TextBlock Text="点击广告支持开发者" Margin="0,0,0,16"
+                       FontSize="{ThemeResource ToolTipContentThemeFontSize}"
+                       Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                        HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
         </Grid>
 
         <Button x:Name="MainSplitViewToggle" Style="{StaticResource NavButtonNormalStyle}" VerticalAlignment="Top" Click="MainSplitViewToggle_Click">
             <Grid>
                 <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                <Ellipse x:Name="PromptAllBorder" Margin="6,6,0,0" Fill="{Binding PromptColor}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Ellipse x:Name="PromptAllBorder" Margin="6,6,0,0" Fill="{Binding PromptColor}"
+                         Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </Grid>
         </Button>
 
-        <Border x:Name="TipBar" Margin="0,48,-260,0" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Width="260">
+        <Border x:Name="TipBar" Margin="0,48,-260,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+                Background="{ThemeResource SystemControlBackgroundAccentBrush}" Width="260">
             <Border.RenderTransform>
                 <CompositeTransform />
             </Border.RenderTransform>
