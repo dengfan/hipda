@@ -16,7 +16,8 @@
                         Background="{ThemeResource SystemControlBackgroundListLowBrush}"
                         CornerRadius="12" Height="24" MinHeight="24">
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                                FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                               FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                         <Run Text="&#xE10C;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                         <Run Text="{Binding FloorNoStr}" />
                     </TextBlock>

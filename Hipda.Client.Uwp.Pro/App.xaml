@@ -447,10 +447,9 @@
 
         <DataTemplate x:Key="ReplyListLastItemTemplate">
             <StackPanel Padding="0,32,0,160">
-                <TextBlock Text="---------- 完 ----------"
-                           
-                           FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
-                           HorizontalAlignment="Center" />
+                <TextBlock Text="---------- 完 ----------" HorizontalAlignment="Center"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"
+                           FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
             </StackPanel>
         </DataTemplate>
 
@@ -462,14 +461,14 @@
                                          HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                     <StackPanel Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                        <TextBlock Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                   FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                                   FontWeight="Bold" TextWrapping="Wrap" MaxLines="2"/>
+                        <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
-                        <TextBlock Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
-                                   FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
-                                   FontWeight="Bold" TextWrapping="Wrap" MaxLines="2"/>
                     </StackPanel>
                 </Grid>
 
