@@ -19,19 +19,33 @@
         <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
         <cvt:CountdownToCountdownLabelConverter x:Key="CountdownToCountdownLabelConverter"/>
         <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
+        
+        
         <cvt:FontContrastRatioToTextBlockForeground1StyleConverter x:Key="FontContrastRatioToTextBlockForeground1StyleConverter"/>
+        <cvt:FontContrastRatioToContentControlForeground1StyleConverter x:Key="FontContrastRatioToContentControlForeground1StyleConverter"/>
         <cvt:FontContrastRatioToTextBlockForeground2StyleConverter x:Key="FontContrastRatioToTextBlockForeground2StyleConverter"/>
+        <cvt:FontContrastRatioToContentControlForeground2StyleConverter x:Key="FontContrastRatioToContentControlForeground2StyleConverter"/>
         <cvt:FontContrastRatioToTextBlockForeground3StyleConverter x:Key="FontContrastRatioToTextBlockForeground3StyleConverter"/>
+        <cvt:FontContrastRatioToContentControlForeground3StyleConverter x:Key="FontContrastRatioToContentControlForeground3StyleConverter"/>
 
         <Style x:Key="TextBlockForegroundStyle01" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+        </Style>
+        <Style x:Key="ContentControlForegroundStyle01" TargetType="ContentControl">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
         </Style>
 
         <Style x:Key="TextBlockForegroundStyle02" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
         </Style>
+        <Style x:Key="ContentControlForegroundStyle02" TargetType="ContentControl">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
+        </Style>
 
         <Style x:Key="TextBlockForegroundStyle03" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
+        <Style x:Key="ContentControlForegroundStyle03" TargetType="ContentControl">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
         </Style>
         
@@ -39,12 +53,21 @@
         <Style x:Key="TextBlockForegroundStyle11" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
         </Style>
+        <Style x:Key="ContentControlForegroundStyle11" TargetType="ContentControl">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
+        </Style>
 
         <Style x:Key="TextBlockForegroundStyle12" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
         </Style>
+        <Style x:Key="ContentControlForegroundStyle12" TargetType="ContentControl">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
 
         <Style x:Key="TextBlockForegroundStyle13" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
+        </Style>
+        <Style x:Key="ContentControlForegroundStyle13" TargetType="ContentControl">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
         </Style>
         
@@ -52,12 +75,21 @@
         <Style x:Key="TextBlockForegroundStyle21" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
         </Style>
+        <Style x:Key="ContentControlForegroundStyle21" TargetType="ContentControl">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Style>
 
         <Style x:Key="TextBlockForegroundStyle22" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
         </Style>
+        <Style x:Key="ContentControlForegroundStyle22" TargetType="ContentControl">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"/>
+        </Style>
 
         <Style x:Key="TextBlockForegroundStyle23" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseLowBrush}"/>
+        </Style>
+        <Style x:Key="ContentControlForegroundStyle23" TargetType="ContentControl">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseLowBrush}"/>
         </Style>
         
@@ -425,18 +457,24 @@
         <DataTemplate x:Key="ReplyListTopItemTemplate">
             <StackPanel>
                 <Grid>
-                    <c:MyAvatarForThread UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}" ThreadTitle="{Binding ThreadTitle}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <c:MyAvatarForThread UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ThreadId="{Binding ThreadId}"
+                                         ThreadTitle="{Binding ThreadTitle}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}"
+                                         HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                     <StackPanel Margin="48,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                   Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
-                        <TextBlock Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" FontWeight="Bold" TextWrapping="Wrap" MaxLines="2"/>
+                        <TextBlock Text="{Binding ThreadTitle}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                   FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                                   FontWeight="Bold" TextWrapping="Wrap" MaxLines="2"/>
                     </StackPanel>
                 </Grid>
 
-                <ContentControl Margin="0,4" Content="{Binding XamlContent}"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
+                <ContentControl Margin="0,4" Content="{Binding XamlContent}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                                Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
 
                 <c:PostMenuControl HorizontalAlignment="Center"/>
             </StackPanel>
@@ -450,12 +488,15 @@
 
                 <Border Margin="54,0,16,32" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
-                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                   Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl Content="{Binding XamlContent}"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
+                        <ContentControl Content="{Binding XamlContent}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                                        Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
+                        
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />
@@ -475,12 +516,15 @@
 
                 <Border Margin="54,0,16,32" Padding="8" BorderThickness="2,0,0,0" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
-                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                   Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl Content="{Binding XamlContent}"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
+                        <ContentControl Content="{Binding XamlContent}"  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                                        Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
+                        
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />
@@ -499,12 +543,15 @@
 
                 <Border Margin="16,0,54,32" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderThickness="1" BorderBrush="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <StackPanel>
-                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}">
+                        <TextBlock Margin="0,0,0,4"  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                   Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                             <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                             <Run Text="{Binding AuthorCreateTime}" />
                         </TextBlock>
 
-                        <ContentControl Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" />
+                        <ContentControl Content="{Binding XamlContent}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                                        Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
+                        
                         <Button x:Name="showMoreButton" Margin="0,10,0,0"
                                 HorizontalAlignment="Stretch" Background="DeepSkyBlue" Foreground="White" BorderThickness="0"
                                 Visibility="Collapsed" />
@@ -523,12 +570,14 @@
                 
                 <c:MyAvatarForReply Margin="0,0,0,4" UserId="{Binding AuthorUserId}" Username="{Binding AuthorUsername}" ForumId="{Binding ForumId}" ForumName="{Binding ForumName}" HorizontalAlignment="Center"/>
 
-                <TextBlock  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Center">
+                <TextBlock  FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Center"
+                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                     <Run Text="{Binding AuthorUsername}" FontWeight="Bold" />
                     <Run Text="{Binding AuthorCreateTime}" />
                 </TextBlock>
 
-                <ContentControl Margin="0,4" Content="{Binding XamlContent}" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Center"/>
+                <ContentControl Margin="0,4" Content="{Binding XamlContent}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}" HorizontalAlignment="Center"
+                                Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
 
                 <c:PostMenuControl HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
             </StackPanel>

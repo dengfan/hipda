@@ -162,11 +162,17 @@ namespace Hipda.Client.Uwp.Pro
 
         async void GetRemoveAdButtonContent()
         {
-            // 读取内购信息
-            var listing = await CurrentApp.LoadListingInformationAsync();
-            var iap = listing.ProductListings.FirstOrDefault(p => p.Value.ProductId == "RemoveAd");
-            RemoveAdButtonContent = $"【{iap.Value.Name} {iap.Value.FormattedPrice}】";
-        }
+            try
+            {
+                // 读取内购信息
+                var listing = await CurrentApp.LoadListingInformationAsync();
+                var iap = listing.ProductListings.FirstOrDefault(p => p.Value.ProductId == "RemoveAd");
+                RemoveAdButtonContent = $"【{iap.Value.Name} {iap.Value.FormattedPrice}】";
+            }
+            catch (Exception)
+            {
+            }
+        }                                                    
 
         public MainPage()
         {
@@ -1070,9 +1076,8 @@ namespace Hipda.Client.Uwp.Pro
                     MainSplitView.Margin = new Thickness(0);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //exception 
             }
         }
 
