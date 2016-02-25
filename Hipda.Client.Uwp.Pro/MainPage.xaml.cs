@@ -256,6 +256,8 @@ namespace Hipda.Client.Uwp.Pro
 
         void HideLeftSwipePanel()
         {
+            FindName("MaskGrid");
+
             CloseLeftSwipePanelAnimation.Begin();
             MaskGrid.Visibility = Visibility.Collapsed;
 
