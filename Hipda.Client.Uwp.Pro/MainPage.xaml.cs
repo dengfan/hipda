@@ -172,7 +172,7 @@ namespace Hipda.Client.Uwp.Pro
             catch (Exception)
             {
             }
-        }                                                    
+        }
 
         public MainPage()
         {
