@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -36,17 +38,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        Uri _avatarUri;
-        public Uri AvatarUri
+        ImageBrush _avatarBrush;
+        public ImageBrush AvatarBrush
         {
             get
             {
-                return _avatarUri;
+                return _avatarBrush;
             }
             set
             {
-                _avatarUri = value;
-                this.RaisePropertyChanged("AvatarUri");
+                _avatarBrush = value;
+                this.RaisePropertyChanged("AvatarBrush");
             }
         }
 
@@ -77,7 +79,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             string xaml = await _ds.GetXamlForUserInfo(_userId);
             TipText = string.Empty;
             UserInfoRichTextBlock = XamlReader.Load(xaml);
-            AvatarUri = Common.GetBigAvatarUriByUserId(_userId);
+
+            BitmapImage bi = new BitmapImage();
+            bi.UriSource = Common.GetBigAvatarUriByUserId(_userId);
+            bi.DecodePixelWidth = 160;
+            ImageBrush ib = new ImageBrush();
+            ib.Stretch = Stretch.UniformToFill;
+            ib.ImageSource = bi;
+            ib.ImageFailed += (s, e) => { return; };
+            AvatarBrush = ib;
         }
     }
 }

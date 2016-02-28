@@ -17,8 +17,11 @@
                       HorizontalContentAlignment="Stretch"
                       VerticalScrollMode="Auto">
             <Grid Padding="0,0,0,16">
-                <Image Source="{Binding AvatarUri}" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"
-                       Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
+                <Border Width="160" Height="160" CornerRadius="80" Background="{ThemeResource SystemListLowColor}"
+                        HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Border Width="160" Height="160" CornerRadius="80" Background="{Binding AvatarBrush}"
+                            Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
+                </Border>
                 <ContentControl Content="{Binding UserInfoRichTextBlock}"
                                 Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
             </Grid>
