@@ -76,7 +76,7 @@
                                     <VisualState x:Name="Selected">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemChromeLowColor}"/>
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBorderBackground">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
@@ -86,7 +86,7 @@
                                     <VisualState x:Name="SelectedUnfocused">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemChromeLowColor}"/>
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBorderBackground">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
@@ -96,7 +96,7 @@
                                     <VisualState x:Name="SelectedPointerOver">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemChromeLowColor}"/>
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBorderBackground">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
@@ -106,7 +106,7 @@
                                     <VisualState x:Name="SelectedPressed">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"/>
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemChromeLowColor}"/>
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBorderBackground">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
@@ -430,7 +430,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <CommandBar Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+                <CommandBar Background="{ThemeResource SystemChromeLowColor}">
                     <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand,Source={StaticResource ThreadHistoryListBoxViewModel}}"/>
                     <CommandBar.SecondaryCommands>
                         <AppBarButton Label="移除选中项" Command="{Binding RemoveSelectedCommand,Source={StaticResource ThreadHistoryListBoxViewModel}}"/>
@@ -613,7 +613,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid x:Name="pageGrid" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+    <Grid x:Name="pageGrid" Background="{ThemeResource SystemChromeLowColor}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates">
                 <VisualState x:Name="Min1700">
@@ -865,7 +865,7 @@
                           Background="Transparent" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
 
                     <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy"
-                          Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
+                          Background="{ThemeResource SystemChromeLowColor}"
                           Margin="-260,0,0,0" Width="260" HorizontalAlignment="Left">
                         <Grid.RenderTransform>
                             <CompositeTransform/>
@@ -874,7 +874,7 @@
                     </Grid>
 
                     <Grid x:Name="RightSwipePanel" x:DeferLoadStrategy="Lazy"
-                          Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
+                          Background="{ThemeResource SystemChromeLowColor}"
                           Margin="0,0,-260,0" Width="260" HorizontalAlignment="Right">
                         <Grid.RenderTransform>
                             <CompositeTransform/>

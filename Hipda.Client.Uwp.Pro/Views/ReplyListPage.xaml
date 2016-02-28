@@ -18,7 +18,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <CommandBar Grid.Row="0" x:Name="RightCommandBar" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+        <CommandBar Grid.Row="0" x:Name="RightCommandBar" Background="{ThemeResource SystemChromeLowColor}">
             <AppBarButton x:Name="AddToFavoritesButton" Label="加入收藏" Command="{Binding AddToFavoritesCommand}">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE734;"/>
