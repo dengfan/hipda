@@ -13,7 +13,7 @@
         <Button.Template>
             <ControlTemplate>
                 <Border Margin="0,0,0,2" Padding="8,0" HorizontalAlignment="Center"
-                        Background="{ThemeResource SystemControlBackgroundListLowBrush}"
+                        Background="{ThemeResource SystemListLowColor}"
                         CornerRadius="12" Height="24" MinHeight="24">
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
                                FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"

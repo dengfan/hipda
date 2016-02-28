@@ -67,13 +67,8 @@
             </Grid.ColumnDefinitions>
 
             <Grid x:Name="LeftWrap" Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
                 <!--<CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" 
-                        Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+                        Background="{ThemeResource SystemChromeLowColor}">
                     <AppBarButton Icon="Add" Label="发表新贴"/>
                     <AppBarButton x:Name="ThreadRefreshButton" Icon="Refresh" Label="刷新" Command="{Binding RefreshThreadCommand}"/>
                     <AppBarButton x:Name="SortingButton" Icon="Sort" Label="按发布时间倒序排列"/>
@@ -106,28 +101,38 @@
                     </CommandBar.SecondaryCommands>
                 </CommandBar>-->
 
-                <CommandBar x:Name="LeftCommandBar" Grid.Row="0" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Visibility="Collapsed"/>
-
-                <pr:PullToRefreshBox Grid.Row="1" x:Name="leftPr" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
-                    <ListView x:Name="LeftListView" ItemClick="LeftListView_ItemClick" IncrementalLoadingTrigger="Edge" SelectionMode="Single"
-                          VerticalAlignment="Top" IsItemClickEnabled="True" ShowsScrollingPlaceholders="False"/>
+                <pr:PullToRefreshBox x:Name="leftPr" Margin="0,48,0,0" RefreshInvoked="leftPr_RefreshInvoked" VerticalAlignment="Top">
+                    <ListView x:Name="LeftListView" VerticalAlignment="Top"
+                              IncrementalLoadingTrigger="Edge" SelectionMode="Single"
+                              IsItemClickEnabled="True" ShowsScrollingPlaceholders="False"
+                              ItemClick="LeftListView_ItemClick" 
+                              />
                 </pr:PullToRefreshBox>
 
-                <ProgressRing Grid.Row="1" x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
+                <CommandBar x:Name="LeftCommandBar" Background="{ThemeResource SystemChromeLowColor}"
+                            VerticalAlignment="Top" Visibility="Collapsed"/>
 
-                <StackPanel x:Name="leftNoDataNoticePanel" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+                <ProgressRing x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
+
+                <StackPanel x:Name="leftNoDataNoticePanel" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
                     <TextBlock FontSize="120" Text=":(" HorizontalAlignment="Center"></TextBlock>
                     <TextBlock HorizontalAlignment="Center"  Text="对不起，没有找到数据！"/>
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="RightWrap" Grid.Column="1" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+            <Grid x:Name="RightWrap" Grid.Column="1" Background="{ThemeResource SystemChromeMediumColor}">
+                <pr:PullToRefreshBox x:Name="rightPr" Margin="0,48,0,0" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
+                    <ListView x:Name="ReplyListView" VerticalAlignment="Top"
+                              IsItemClickEnabled="False" ShowsScrollingPlaceholders="False"
+                              IncrementalLoadingTrigger="Edge" SelectionMode="None"
+                              ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
+                              ItemTemplateSelector="{StaticResource ReplyListItemTemplateSelector}"
+                              ItemsSource="{Binding ReplyItemCollection}"
+                              />
+                </pr:PullToRefreshBox>
 
-                <CommandBar Grid.Row="0" x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+                <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top"
+                            Background="{ThemeResource SystemChromeMediumColor}">
                     <AppBarButton x:Name="AddToFavoritesButton" Label="加入收藏" Command="{Binding AddToFavoritesCommand}">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE734;"/>
@@ -146,18 +151,9 @@
                     </CommandBar.SecondaryCommands>
                 </CommandBar>
 
-                <pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-                    <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
-                              VerticalAlignment="Top" SelectionMode="None" ShowsScrollingPlaceholders="False"
-                              ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-                              ItemTemplateSelector="{StaticResource ReplyListItemTemplateSelector}"
-                              ItemsSource="{Binding ReplyItemCollection}">
-                    </ListView>
-                </pr:PullToRefreshBox>
+                <ProgressRing x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
-                <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
-
-                <StackPanel x:Name="QuickReplyPanel" Grid.Row="1" VerticalAlignment="Bottom">
+                <StackPanel x:Name="QuickReplyPanel" VerticalAlignment="Bottom">
                     <Border Margin="0,0,0,8" Padding="8,4" CornerRadius="12" HorizontalAlignment="Center" Background="Red" Opacity="0.8"
                             Visibility="{Binding Text.Length,ElementName=TipTextBlock,Converter={StaticResource TextLengthToTipBorderVisibilityConverter}}">
                         <TextBlock x:Name="TipTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"

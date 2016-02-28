@@ -289,7 +289,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <StackPanel Margin="16,0,0,16" Orientation="Horizontal">
-                    <Border Background="{ThemeResource SystemControlBackgroundListLowBrush}" Width="40" Height="40">
+                    <Border Background="{ThemeResource SystemListLowColor}" Width="40" Height="40">
                         <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
                     </Border>
                     <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}"
@@ -720,7 +720,7 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Width="32" Height="32" CornerRadius="16" Background="{ThemeResource SystemControlBackgroundListLowBrush}">
+                                <Border Width="32" Height="32" CornerRadius="16" Background="{ThemeResource SystemListLowColor}">
                                     <Border x:Name="AccountAvatarBorder" Width="32" Height="32" CornerRadius="16"
                                             Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"
                                             HorizontalAlignment="Center" VerticalAlignment="Center"

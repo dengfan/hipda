@@ -54,7 +54,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyAvatarForThread">
                     <Border x:Name="border1" Style="{StaticResource AvatarStyle}"
-                            Background="{ThemeResource SystemControlBackgroundListLowBrush}">
+                            Background="{ThemeResource SystemListLowColor}">
                         <Border x:Name="border2" CornerRadius="20" Width="40" Height="40" Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
                     </Border>
                 </ControlTemplate>
@@ -67,7 +67,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyAvatarForReply">
                     <Border x:Name="border1" Style="{StaticResource AvatarStyle}"
-                            Background="{ThemeResource SystemControlBackgroundListLowBrush}">
+                            Background="{ThemeResource SystemListLowColor}">
                         <Border x:Name="border2" CornerRadius="20" Width="40" Height="40" Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
                     </Border>
                 </ControlTemplate>

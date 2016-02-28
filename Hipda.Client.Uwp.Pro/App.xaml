@@ -353,7 +353,7 @@
             <Polygon Points="0,0 10,0 10,8" Fill="{ThemeResource SystemControlHighlightListAccentLowBrush}"/>
         </ControlTemplate>
         <ControlTemplate x:Key="ReplyLeftArrow" TargetType="ContentControl">
-            <Polygon Points="0,0 6,6 6,-6" Fill="{ThemeResource SystemControlBackgroundListLowBrush}"/>
+            <Polygon Points="0,0 6,6 6,-6" Fill="{ThemeResource SystemListLowColor}"/>
         </ControlTemplate>
         <ControlTemplate x:Key="ReplyLeftArrow2" TargetType="ContentControl">
             <Polygon Points="0,0 6,6 6,-6" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
@@ -485,7 +485,7 @@
 
                 <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow}"/>
 
-                <Border Margin="54,0,16,32" Padding="8" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Border Margin="54,0,16,32" Padding="8" Background="{ThemeResource SystemListLowColor}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <StackPanel>
                         <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
@@ -828,7 +828,7 @@
             <Grid>
                 <Ellipse Margin="6,6,0,0" Fill="{Binding StatusColorBrush}" Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 <Border Margin="14,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40"
-                        Background="{ThemeResource SystemControlBackgroundListLowBrush}" CornerRadius="20"/>
+                        Background="{ThemeResource SystemListLowColor}" CornerRadius="20"/>
                 <StackPanel Margin="60,4,0,12">
                     <RichTextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                                    >
@@ -921,7 +921,7 @@
 
         <DataTemplate x:Key="UserMessageListItemTemplate">
             <Grid>
-                <Border Margin="0,8" Width="40" Height="40" Background="{ThemeResource SystemControlBackgroundListLowBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Border Margin="0,8" Width="40" Height="40" Background="{ThemeResource SystemListLowColor}" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
                 </Border>
                 <StackPanel Margin="56,8,8,8" HorizontalAlignment="Right" VerticalAlignment="Top">
