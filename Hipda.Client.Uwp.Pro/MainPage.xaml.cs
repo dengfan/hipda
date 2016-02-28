@@ -654,23 +654,26 @@ namespace Hipda.Client.Uwp.Pro
             //}
         }
 
-        public async void OpenUserMessageDialog()
+        public void OpenUserMessageDialog()
         {
             if (PopupUserId == 0)
             {
                 return;
             }
 
-            FindName("UserDialog");
-            UserDialog.DataContext = new ContentDialogForUserMessageViewModel(PopupUserId);
-            UserDialog.Title = string.Format("与 {0} 聊天", PopupUsername);
-            UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
+            OpenInputPanel($"与 {PopupUsername} 聊天");
+            InputPanelFrame.Navigate(typeof(UserMessagePage), PopupUserId);
 
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
+            //FindName("UserDialog");
+            //UserDialog.DataContext = new ContentDialogForUserMessageViewModel(PopupUserId);
+            //UserDialog.Title = string.Format("与 {0} 聊天", PopupUsername);
+            //UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
+
+            //if (_isDialogShown == false)
+            //{
+            //    _isDialogShown = true;
+            //    await UserDialog.ShowAsync();
+            //}
         }
 
         private async void UserMessageBox_Submit(object sender, EventArgs e)
@@ -692,31 +695,34 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        public async void OpenPostDetailDialog(int postId, int threadId)
+        public void OpenPostDetailDialog(int postId, int threadId)
         {
-            FindName("UserDialog");
+            OpenInputPanel($"查看引用楼");
+            InputPanelFrame.Navigate(typeof(QuoteDetailPage), $"{postId},{threadId}");
 
-            var vm = new ContentDialogForPostDetailViewModel(postId, threadId);
-            if (vm == null)
-            {
-                return;
-            }
+            //FindName("UserDialog");
 
-            UserDialog.DataContext = vm;
-            UserDialog.Title = "查看引用楼";
-            UserDialog.ContentTemplate = this.Resources["PostDetailDialogContentTemplate"] as DataTemplate;
+            //var vm = new ContentDialogForPostDetailViewModel(postId, threadId);
+            //if (vm == null)
+            //{
+            //    return;
+            //}
 
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
+            //UserDialog.DataContext = vm;
+            //UserDialog.Title = "查看引用楼";
+            //UserDialog.ContentTemplate = this.Resources["PostDetailDialogContentTemplate"] as DataTemplate;
+
+            //if (_isDialogShown == false)
+            //{
+            //    _isDialogShown = true;
+            //    await UserDialog.ShowAsync();
+            //}
         }
 
         public void OpenUserMessageListDialog()
         {
             OpenInputPanel("短消息");
-            InputPanelFrame.Navigate(typeof(UserMessagePage));
+            InputPanelFrame.Navigate(typeof(UserMessageHubPage));
         }
 
         private void openUserInfoDialogButton_Click(object sender, RoutedEventArgs e)

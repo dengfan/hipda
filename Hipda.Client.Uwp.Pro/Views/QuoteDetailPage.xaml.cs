@@ -21,9 +21,9 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class UserMessagePage : Page
+    public sealed partial class QuoteDetailPage : Page
     {
-        public UserMessagePage()
+        public QuoteDetailPage()
         {
             this.InitializeComponent();
         }
@@ -31,7 +31,11 @@ namespace Hipda.Client.Uwp.Pro.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.DataContext = new ContentDialogForUserMessageViewModel((int)e.Parameter);
+
+            string[] p = e.Parameter.ToString().Split(',');
+            int postId = Convert.ToInt32(p[0]);
+            int threadId = Convert.ToInt32(p[1]);
+            this.DataContext = new ContentDialogForPostDetailViewModel(postId, threadId);
         }
     }
 }

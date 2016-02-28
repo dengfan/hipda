@@ -12,22 +12,32 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <c:MyListViewForUserMessageList ItemsSource="{Binding DataView}" IncrementalLoadingTrigger="Edge"
-                          IsItemClickEnabled="False" IsSwipeEnabled="False" ShowsScrollingPlaceholders="False"
-                          CanDrag="False" CanDragItems="False" CanReorderItems="False"
-                          SelectionMode="{Binding SelectionMode}" SelectedUserMessageListItems="{Binding SelectedUserMessageListItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          ItemTemplate="{StaticResource UserMessageListItemTemplate}">
-        </c:MyListViewForUserMessageList>
-        <CommandBar Grid.Row="1">
-            <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
-            <AppBarButton Label="选择" IsEnabled="{Binding IsButtonEnable}" Command="{Binding IntoMultiSelectionModeCommand}">
+        <ListView Padding="16,0,16,16" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{Binding ListData}"
+                          ShowsScrollingPlaceholders="False" ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
+                          ItemTemplateSelector="{StaticResource userMessageListItemTemplateSelector}">
+            <ListView.Header>
+                <HyperlinkButton Content="点击查看所有短消息" HorizontalAlignment="Center"
+                                 Visibility="{Binding IsShowLoadMoreButton}" Command="{Binding LoadMoreCommand}"/>
+            </ListView.Header>
+        </ListView>
+        <Border Grid.Row="1" Padding="8" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
+            <c:UserMessageBox UserId="{Binding UserId}"></c:UserMessageBox>
+        </Border>
+        <CommandBar Grid.Row="2">
+            <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}">
                 <AppBarButton.Icon>
-                    <FontIcon Glyph="&#xE762;" FontFamily="Segoe MDL2 Assets" />
+                    <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 </AppBarButton.Icon>
             </AppBarButton>
-            <AppBarButton Icon="Delete" Label="删除" IsEnabled="{Binding IsDeleteButtonEnable}" Command="{Binding DeleteCommand}"/>
+            <AppBarButton Label="个人资料" IsEnabled="{Binding IsButtonEnable}">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE2AF;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
         </CommandBar>
     </Grid>
 </Page>

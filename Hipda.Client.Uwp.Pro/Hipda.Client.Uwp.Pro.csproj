@@ -220,6 +220,9 @@
     <Compile Include="Views\BlankPage1.xaml.cs">
       <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\QuoteDetailPage.xaml.cs">
+      <DependentUpon>QuoteDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReplyListPage.xaml.cs">
       <DependentUpon>ReplyListPage.xaml</DependentUpon>
     </Compile>
@@ -228,6 +231,9 @@
     </Compile>
     <Compile Include="Views\UserInfoPage.xaml.cs">
       <DependentUpon>UserInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMessageHubPage.xaml.cs">
+      <DependentUpon>UserMessageHubPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserMessagePage.xaml.cs">
       <DependentUpon>UserMessagePage.xaml</DependentUpon>
@@ -378,6 +384,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\QuoteDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ReplyListPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -387,6 +397,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UserInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserMessageHubPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

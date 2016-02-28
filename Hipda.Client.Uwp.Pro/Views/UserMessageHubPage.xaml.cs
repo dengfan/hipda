@@ -1,4 +1,6 @@
-﻿using Hipda.Client.Uwp.Pro.ViewModels;
+﻿using Hipda.Client.Uwp.Pro.Controls;
+using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,17 +23,13 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class UserMessagePage : Page
+    public sealed partial class UserMessageHubPage : Page
     {
-        public UserMessagePage()
+        public UserMessageHubPage()
         {
             this.InitializeComponent();
-        }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            this.DataContext = new ContentDialogForUserMessageViewModel((int)e.Parameter);
+            this.DataContext = new ContentDialogForUserMessageHubViewModel();
         }
     }
 }
