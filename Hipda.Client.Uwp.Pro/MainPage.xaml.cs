@@ -632,23 +632,26 @@ namespace Hipda.Client.Uwp.Pro
 
         bool _isDialogShown = false;
 
-        public async void OpenUserInfoDialog()
+        public void OpenUserInfoDialog()
         {
             if (PopupUserId == 0)
             {
                 return;
             }
 
-            FindName("UserDialog");
-            UserDialog.DataContext = new ContentDialogForUserInfoViewModel(PopupUserId);
-            UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
-            UserDialog.ContentTemplate = this.Resources["UserInfoDialogContentTemplate"] as DataTemplate;
+            OpenInputPanel($"查看 {PopupUsername} 的详细资料");
+            InputPanelFrame.Navigate(typeof(UserInfoPage), PopupUserId);
 
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
+            //FindName("UserDialog");
+            //UserDialog.DataContext = new ContentDialogForUserInfoViewModel(PopupUserId);
+            //UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
+            //UserDialog.ContentTemplate = this.Resources["UserInfoDialogContentTemplate"] as DataTemplate;
+
+            //if (_isDialogShown == false)
+            //{
+            //    _isDialogShown = true;
+            //    await UserDialog.ShowAsync();
+            //}
         }
 
         public async void OpenUserMessageDialog()

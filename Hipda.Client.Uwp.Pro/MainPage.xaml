@@ -332,37 +332,6 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Key="UserInfoDialogContentTemplate">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <ScrollViewer Padding="16,0,20,0"
-                              
-                              HorizontalContentAlignment="Stretch"
-                              VerticalScrollMode="Auto">
-                    <Grid Padding="0,0,0,16">
-                        <Image Source="{Binding AvatarUri}" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <ContentControl Content="{Binding UserInfoRichTextBlock}"/>
-                    </Grid>
-                </ScrollViewer>
-                <CommandBar Grid.Row="1">
-                    <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}" Click="openUserMessageListButton_Click">
-                        <AppBarButton.Icon>
-                            <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-                    <AppBarButton Label="发短消息" IsEnabled="{Binding IsButtonEnable}" Click="openUserMessageDialogButton_Click">
-                        <AppBarButton.Icon>
-                            <FontIcon Glyph="&#xE15F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-                </CommandBar>
-            </Grid>
-        </DataTemplate>
-
         <DataTemplate x:Key="UserMessageDialogContentTemplate">
             <Grid>
                 <Grid.RowDefinitions>
@@ -394,31 +363,6 @@
                         </AppBarButton.Icon>
                     </AppBarButton>
                     <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
-                </CommandBar>
-            </Grid>
-        </DataTemplate>
-
-        <DataTemplate x:Key="UserMessageListDialogContentTemplate">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <c:MyListViewForUserMessageList ItemsSource="{Binding DataView}" IncrementalLoadingTrigger="Edge"
-                          IsItemClickEnabled="False" IsSwipeEnabled="False" ShowsScrollingPlaceholders="False"
-                          CanDrag="False" CanDragItems="False" CanReorderItems="False"
-                          SelectionMode="{Binding SelectionMode}" SelectedUserMessageListItems="{Binding SelectedUserMessageListItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          ItemTemplate="{StaticResource UserMessageListItemTemplate}" SelectionChanged="userMessageListListView_SelectionChanged">
-                </c:MyListViewForUserMessageList>
-                <CommandBar Grid.Row="1">
-                    <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
-                    <AppBarButton Label="选择" IsEnabled="{Binding IsButtonEnable}" Command="{Binding IntoMultiSelectionModeCommand}">
-                        <AppBarButton.Icon>
-                            <FontIcon Glyph="&#xE762;" FontFamily="Segoe MDL2 Assets" />
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-                    <AppBarButton Icon="Delete" Label="删除" IsEnabled="{Binding IsDeleteButtonEnable}" Command="{Binding DeleteCommand}"/>
                 </CommandBar>
             </Grid>
         </DataTemplate>
