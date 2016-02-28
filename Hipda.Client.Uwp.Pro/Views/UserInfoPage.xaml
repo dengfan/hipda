@@ -17,8 +17,10 @@
                       HorizontalContentAlignment="Stretch"
                       VerticalScrollMode="Auto">
             <Grid Padding="0,0,0,16">
-                <Image Source="{Binding AvatarUri}" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                <ContentControl Content="{Binding UserInfoRichTextBlock}"/>
+                <Image Source="{Binding AvatarUri}" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"
+                       Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
+                <ContentControl Content="{Binding UserInfoRichTextBlock}"
+                                Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
             </Grid>
         </ScrollViewer>
         <CommandBar Grid.Row="1">

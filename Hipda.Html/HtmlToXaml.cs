@@ -294,8 +294,50 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("</td>", "↵");
             htmlContent = Regex.Replace(htmlContent, @"<span[^>]*>", string.Empty);
             htmlContent = Regex.Replace(htmlContent, @"</span>", string.Empty);
-            htmlContent = htmlContent.Replace(@"<h3 class=""blocktitle lightlink"">", @"[LineBreak/][Bold Foreground=""DimGray""]");
+            htmlContent = htmlContent.Replace(@"<h3 class=""blocktitle lightlink"">", @"[LineBreak/][Bold Foreground=""{ThemeResource SystemControlBackgroundAccentBrush}""]");
             htmlContent = htmlContent.Replace("</h3>", "[/Bold][LineBreak/]");
+            htmlContent = htmlContent.Replace(@"<img src=""images/default/online_buddy.gif"" title=""当前在线"" class=""online_buddy"">", " \uD83D\uDCA1 "); // 当前在线小图标
+            htmlContent = htmlContent.Replace(@"<img src=""images/rank/seller/0.gif"" border=""0"" class=""absmiddle"">", " \uD83D\uDC94 "); // 买家信用小图标
+            htmlContent = htmlContent.Replace(@"<img src=""images/rank/buyer/0.gif"" border=""0"" class=""absmiddle"">", " \uD83D\uDC95 "); // 卖家信用小图标
+
+            // 星星小图标
+            MatchCollection matchsForStarImage = new Regex(@"<img src=""images/default/star_level1.gif"" alt=""Rank: [0-9]*"">").Matches(htmlContent);
+            if (matchsForStarImage != null && matchsForStarImage.Count > 0)
+            {
+                for (int i = 0; i < matchsForStarImage.Count; i++)
+                {
+                    var m = matchsForStarImage[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    htmlContent = htmlContent.Replace(placeHolder, "\uD83C\uDF20");
+                }
+            }
+
+            // 月亮小图标
+            MatchCollection matchsForMoonImage = new Regex(@"<img src=""images/default/star_level2.gif"" alt=""Rank: [0-9]*"">").Matches(htmlContent);
+            if (matchsForMoonImage != null && matchsForMoonImage.Count > 0)
+            {
+                for (int i = 0; i < matchsForMoonImage.Count; i++)
+                {
+                    var m = matchsForMoonImage[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    htmlContent = htmlContent.Replace(placeHolder, "\uD83C\uDF19");
+                }
+            }
+
+            // 太阳小图标
+            MatchCollection matchsForSunImage = new Regex(@"<img src=""images/default/star_level3.gif"" alt=""Rank: [0-9]*"">").Matches(htmlContent);
+            if (matchsForSunImage != null && matchsForSunImage.Count > 0)
+            {
+                for (int i = 0; i < matchsForSunImage.Count; i++)
+                {
+                    var m = matchsForSunImage[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    htmlContent = htmlContent.Replace(placeHolder, "\uD83C\uDF1E");
+                }
+            }
 
             // 替换链接
             MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<#]*)</a>").Matches(htmlContent);
@@ -313,7 +355,7 @@ namespace Hipda.Html
                     {
                         linkUrl = string.Format("http://www.hi-pda.com/forum/{0}", linkUrl);
                     }
-                    string linkXaml = string.Format(@"[Hyperlink NavigateUri=""{0}"" Foreground=""DodgerBlue""]{1}[/Hyperlink]", linkUrl, linkContent);
+                    string linkXaml = $@"[Hyperlink NavigateUri=""{linkUrl}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}""]{linkContent}[/Hyperlink]";
                     htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                 }
             }
