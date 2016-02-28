@@ -704,7 +704,9 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <SplitView x:Name="MainSplitView" OpenPaneLength="192" PaneBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}" PaneClosed="MainSplitView_PaneClosed">
+        <SplitView x:Name="MainSplitView" OpenPaneLength="192"
+                   PaneBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                   PaneClosed="MainSplitView_PaneClosed">
             <SplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -832,9 +834,6 @@
                                        Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                         </Button>
                     </StackPanel>
-
-                    <!--<Button Content="x" Command="{Binding ClearCookiesCommand}" VerticalAlignment="Bottom"/>-->
-                    <Button Content="aaa" VerticalAlignment="Bottom" Click="ShowPanel_Click"/>
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
@@ -923,9 +922,9 @@
 
         <Grid x:Name="InputPanelMask" x:DeferLoadStrategy="Lazy" Opacity="0" Visibility="Collapsed"
               Background="{Binding RequestedTheme,ElementName=MyMainPage,Converter={StaticResource ElementThemeToMaskBackgroundBrush}}"
-              Tapped="InputPanelMask_Tapped"/>
+              Tapped="CloseInputPanelMask_Tapped"/>
 
-        <Grid x:Name="InputPanel" x:DeferLoadStrategy="Lazy" Margin="20,48"
+        <Grid x:Name="InputPanel" x:DeferLoadStrategy="Lazy" Margin="24,48"
               BorderBrush="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"
               BorderThickness="4"
               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -933,6 +932,21 @@
             <Grid.RenderTransform>
                 <CompositeTransform/>
             </Grid.RenderTransform>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="InputPanelBackButton" Text="&#xE0A6;" Padding="12" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                           Visibility="Collapsed"/>
+                <TextBlock x:Name="InputPanelTitleTextBlock" Margin="12,0,0,0" VerticalAlignment="Center" FontWeight="Bold"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+            </StackPanel>
+            <TextBlock Text="&#xE106;" Padding="12" FontFamily="{ThemeResource SymbolThemeFontFamily}" HorizontalAlignment="Right"
+                       Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                       Tapped="CloseInputPanelMask_Tapped"/>
+            <Frame Grid.Row="1" x:Name="InputPanelFrame"></Frame>
         </Grid>
     </Grid>
 </Page>

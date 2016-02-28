@@ -922,18 +922,19 @@
         <DataTemplate x:Key="UserMessageListItemTemplate">
             <Grid>
                 <Border Margin="0,8" Width="40" Height="40" Background="{ThemeResource SystemListLowColor}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
+                    <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill"
+                           Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
                 </Border>
                 <StackPanel Margin="56,8,8,8" HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <TextBlock >
+                    <TextBlock Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}">
                         <Run Text="{Binding Username}"/>
                         <Run Text=" "/>
                         <Run Text="{Binding LastMessageTime}"/>
                         <Run Text=" "/>
                         <Run Text="{Binding NewLabel}" Foreground="Red"/>
                     </TextBlock>
-                    <TextBlock Text="{Binding LastMessageText}" MaxWidth="360"
-                               
+                    <TextBlock Text="{Binding LastMessageText}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"
                                FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
                 </StackPanel>
             </Grid>

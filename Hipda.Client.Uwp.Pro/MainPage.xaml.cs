@@ -710,25 +710,10 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        public async void OpenUserMessageListDialog()
+        public void OpenUserMessageListDialog()
         {
-            FindName("UserDialog");
-
-            var vm = new ContentDialogForUserMessageHubViewModel();
-            if (vm == null)
-            {
-                return;
-            }
-
-            UserDialog.DataContext = vm;
-            UserDialog.Title = "短消息";
-            UserDialog.ContentTemplate = this.Resources["UserMessageListDialogContentTemplate"] as DataTemplate;
-
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
+            OpenInputPanel("短消息");
+            InputPanelFrame.Navigate(typeof(UserMessagePage));
         }
 
         private void openUserInfoDialogButton_Click(object sender, RoutedEventArgs e)
@@ -1083,16 +1068,19 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        private void ShowPanel_Click(object sender, RoutedEventArgs e)
+
+
+        private void OpenInputPanel(string title)
         {
             FindName("InputPanelMask");
             FindName("InputPanel");
 
             InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Visible;
             OpenInputPanelMaskAnimation.Begin();
+            InputPanelTitleTextBlock.Text = title;
         }
 
-        private void InputPanelMask_Tapped(object sender, TappedRoutedEventArgs e)
+        private void CloseInputPanelMask_Tapped(object sender, TappedRoutedEventArgs e)
         {
             InputPanelDoubleAnimation.To = InputPanel.ActualHeight;
             InputPanelAnimation.Begin();
@@ -1105,6 +1093,9 @@ namespace Hipda.Client.Uwp.Pro
                 OpenInputPanelMaskAnimation.Stop();
                 CloseInputPanelMaskAnimation.Stop();
             };
+
+            InputPanelTitleTextBlock.Text = string.Empty;
+            InputPanelFrame.BackStack.Clear();
         }
     }
 }
