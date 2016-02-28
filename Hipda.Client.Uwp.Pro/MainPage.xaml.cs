@@ -209,6 +209,8 @@ namespace Hipda.Client.Uwp.Pro
                     }
                 }
             };
+
+            this.KeyDown += InputPanel_KeyDown;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -1062,12 +1064,30 @@ namespace Hipda.Client.Uwp.Pro
             InputPanelFrame.BackStack.Clear();
         }
 
-        private void InputPanelBackButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void InputPanelFrameGoBack()
         {
             if (InputPanelFrame.CanGoBack)
             {
                 InputPanelFrame.GoBack();
                 InputPanelBackButton.Visibility = InputPanelFrame.CanGoBack ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        private void InputPanelBackButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            InputPanelFrameGoBack();
+        }
+
+        private void InputPanel_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (InputPanel == null || InputPanel.Visibility == Visibility.Collapsed)
+            {
+                return;
+            }
+
+            if (e.Key == VirtualKey.Back)
+            {
+                InputPanelFrameGoBack();
             }
         }
     }

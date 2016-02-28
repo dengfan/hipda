@@ -780,10 +780,10 @@
               Tapped="CloseInputPanelMask_Tapped"/>
 
         <Grid x:Name="InputPanel" x:DeferLoadStrategy="Lazy" Margin="24,48"
-              BorderBrush="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"
-              BorderThickness="4"
+              BorderThickness="4" BorderBrush="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"
               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-              MaxWidth="640" Visibility="Collapsed">
+              MaxWidth="640" Visibility="Collapsed"
+              KeyDown="InputPanel_KeyDown">
             <Grid.RenderTransform>
                 <CompositeTransform/>
             </Grid.RenderTransform>
