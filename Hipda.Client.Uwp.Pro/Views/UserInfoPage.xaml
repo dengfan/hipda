@@ -13,16 +13,15 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <ScrollViewer Padding="16,0,20,0"
-                      HorizontalContentAlignment="Stretch"
-                      VerticalScrollMode="Auto">
-            <Grid Padding="0,0,0,16">
+        <ScrollViewer Padding="12,0" HorizontalContentAlignment="Stretch" VerticalScrollMode="Auto">
+            <Grid Padding="0,0,0,12">
                 <Border Width="160" Height="160" CornerRadius="80" Background="{ThemeResource SystemListLowColor}"
                         HorizontalAlignment="Right" VerticalAlignment="Top">
                     <Border Width="160" Height="160" CornerRadius="80" Background="{Binding AvatarBrush}"
                             Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
                 </Border>
                 <ContentControl Content="{Binding UserInfoRichTextBlock}"
+                                FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                                 Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
             </Grid>
         </ScrollViewer>
