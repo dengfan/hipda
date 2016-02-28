@@ -56,8 +56,6 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var mp = frame.Content as MainPage;
             if (mp != null)
             {
-                mp.CloseUserDialog();
-
                 var pageType = mp.AppFrame.Content.GetType();
                 if (pageType.Equals(typeof(ThreadAndReplyPage)))
                 {

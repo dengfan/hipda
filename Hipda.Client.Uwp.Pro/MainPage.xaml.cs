@@ -630,8 +630,6 @@ namespace Hipda.Client.Uwp.Pro
         public static int PopupForumId { get; set; }
         public static string PopupForumName { get; set; }
 
-        bool _isDialogShown = false;
-
         public void OpenUserInfoDialog()
         {
             if (PopupUserId == 0)
@@ -639,8 +637,7 @@ namespace Hipda.Client.Uwp.Pro
                 return;
             }
 
-            OpenInputPanel($"查看 {PopupUsername} 的详细资料");
-            InputPanelFrame.Navigate(typeof(UserInfoPage), PopupUserId);
+            OpenInputPanel($"查看 {PopupUsername} 的详细资料", typeof(UserInfoPage), PopupUserId);
 
             //FindName("UserDialog");
             //UserDialog.DataContext = new ContentDialogForUserInfoViewModel(PopupUserId);
@@ -661,8 +658,7 @@ namespace Hipda.Client.Uwp.Pro
                 return;
             }
 
-            OpenInputPanel($"与 {PopupUsername} 聊天");
-            InputPanelFrame.Navigate(typeof(UserMessagePage), PopupUserId);
+            OpenInputPanel($"与 {PopupUsername} 聊天", typeof(UserMessagePage), PopupUserId);
 
             //FindName("UserDialog");
             //UserDialog.DataContext = new ContentDialogForUserMessageViewModel(PopupUserId);
@@ -697,8 +693,7 @@ namespace Hipda.Client.Uwp.Pro
 
         public void OpenPostDetailDialog(int postId, int threadId)
         {
-            OpenInputPanel($"查看引用楼");
-            InputPanelFrame.Navigate(typeof(QuoteDetailPage), $"{postId},{threadId}");
+            OpenInputPanel($"查看引用楼", typeof(QuoteDetailPage), $"{postId},{threadId}");
 
             //FindName("UserDialog");
 
@@ -721,8 +716,7 @@ namespace Hipda.Client.Uwp.Pro
 
         public void OpenUserMessageListDialog()
         {
-            OpenInputPanel("短消息");
-            InputPanelFrame.Navigate(typeof(UserMessageHubPage));
+            OpenInputPanel("短消息", typeof(UserMessageHubPage), null);
         }
 
         private void openUserInfoDialogButton_Click(object sender, RoutedEventArgs e)
@@ -757,27 +751,6 @@ namespace Hipda.Client.Uwp.Pro
                 PopupUsername = data.Username;
                 OpenUserMessageDialog();
             }
-        }
-
-        public void CloseUserDialog()
-        {
-            if (UserDialog != null)
-            {
-                _isDialogShown = false;
-                UserDialog.Hide();
-                UserDialog.DataContext = null;
-            }
-
-        }
-
-        private void userDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            CloseUserDialog();
-        }
-
-        private void UserDialog_Closed(ContentDialog sender, ContentDialogClosedEventArgs args)
-        {
-            CloseUserDialog();
         }
         #endregion
 
@@ -877,14 +850,12 @@ namespace Hipda.Client.Uwp.Pro
         #endregion
 
         #region 消息发送
-        public async void OpenSendNewThreadPanel()
+        public void OpenSendNewThreadPanel()
         {
             FindName("UserDialog");
 
             Action<string> sendSuccess = (title) =>
             {
-                CloseUserDialog();
-
                 // 开始倒计时
                 SendMessageTimerSetup();
 
@@ -910,22 +881,14 @@ namespace Hipda.Client.Uwp.Pro
 
             UserDialog.ContentTemplate = null;
             UserDialog.Content = sendControl;
-
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
         }
 
-        public async void OpenSendReplyPostPanel(string replyType, int postAuthorUserId, string postAuthorUsername, string quoteSimpleContent, string postTime, int floorNo, int postId, int threadId)
+        public void OpenSendReplyPostPanel(string replyType, int postAuthorUserId, string postAuthorUsername, string quoteSimpleContent, string postTime, int floorNo, int postId, int threadId)
         {
             FindName("UserDialog");
 
             Action<string> sendSuccess = (title) =>
             {
-                CloseUserDialog();
-
                 // 开始倒计时
                 SendMessageTimerSetup();
 
@@ -981,22 +944,14 @@ namespace Hipda.Client.Uwp.Pro
 
             UserDialog.ContentTemplate = null;
             UserDialog.Content = sendControl;
-
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
         }
 
-        public async void OpenSendEditPostPanel(string title, string content, int postId, int threadId)
+        public void OpenSendEditPostPanel(string title, string content, int postId, int threadId)
         {
             FindName("UserDialog");
 
             Action<string> sendSuccess = (t) =>
             {
-                CloseUserDialog();
-
                 // 开始倒计时
                 SendMessageTimerSetup();
 
@@ -1042,12 +997,6 @@ namespace Hipda.Client.Uwp.Pro
 
             UserDialog.ContentTemplate = null;
             UserDialog.Content = sendControl;
-
-            if (_isDialogShown == false)
-            {
-                _isDialogShown = true;
-                await UserDialog.ShowAsync();
-            }
         }
         #endregion
 
@@ -1079,14 +1028,20 @@ namespace Hipda.Client.Uwp.Pro
 
 
 
-        private void OpenInputPanel(string title)
+        private void OpenInputPanel(string title, Type pageType, object parameters)
         {
             FindName("InputPanelMask");
             FindName("InputPanel");
 
-            InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Visible;
-            OpenInputPanelMaskAnimation.Begin();
+            if (InputPanel.Visibility != Visibility.Visible)
+            {
+                InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Visible;
+                OpenInputPanelMaskAnimation.Begin();
+            }
+
             InputPanelTitleTextBlock.Text = title;
+            InputPanelFrame.Navigate(pageType, parameters);
+            InputPanelBackButton.Visibility = InputPanelFrame.CanGoBack ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void CloseInputPanelMask_Tapped(object sender, TappedRoutedEventArgs e)
@@ -1105,6 +1060,15 @@ namespace Hipda.Client.Uwp.Pro
 
             InputPanelTitleTextBlock.Text = string.Empty;
             InputPanelFrame.BackStack.Clear();
+        }
+
+        private void InputPanelBackButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (InputPanelFrame.CanGoBack)
+            {
+                InputPanelFrame.GoBack();
+                InputPanelBackButton.Visibility = InputPanelFrame.CanGoBack ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
     }
 }

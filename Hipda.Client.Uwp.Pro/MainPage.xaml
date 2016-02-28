@@ -773,10 +773,7 @@
         <ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy"
                        FullSizeDesired="True"
                        Template="{StaticResource ContentDialogTemplate}"
-                       
-                       SecondaryButtonText="关闭"
-                       SecondaryButtonClick="userDialog_SecondaryButtonClick"
-                       Closed="UserDialog_Closed"/>
+                       SecondaryButtonText="关闭"/>
 
         <Grid x:Name="InputPanelMask" x:DeferLoadStrategy="Lazy" Opacity="0" Visibility="Collapsed"
               Background="{Binding RequestedTheme,ElementName=MyMainPage,Converter={StaticResource ElementThemeToMaskBackgroundBrush}}"
@@ -798,6 +795,7 @@
                 <TextBlock x:Name="InputPanelBackButton" Text="&#xE0A6;" Padding="12" FontFamily="{ThemeResource SymbolThemeFontFamily}"
                            FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                           Tapped="InputPanelBackButton_Tapped"
                            Visibility="Collapsed"/>
                 <TextBlock x:Name="InputPanelTitleTextBlock" Margin="12,0,0,0" VerticalAlignment="Center" FontWeight="Bold"
                            FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"

@@ -145,7 +145,10 @@
                         </AppBarButton.Icon>
                     </AppBarButton>
                     <CommandBar.SecondaryCommands>
-                        <!--<AppBarToggleButton Label="倒序看贴"/>-->
+                        <!--<AppBarToggleButton Label="云 倒序看贴"/>-->
+                        <!--<AppBarToggleButton Label="只看某某"/>-->
+                        <AppBarButton Label="批量回复" Command="{Binding CopyUrlCommand}"/>
+                        <AppBarButton Label="批量引用" Command="{Binding CopyUrlCommand}"/>
                         <AppBarButton Label="复制链接" Command="{Binding CopyUrlCommand}"/>
                         <AppBarButton Label="在浏览器中打开" Command="{Binding OpenInBrowserCommand}"/>
                     </CommandBar.SecondaryCommands>
