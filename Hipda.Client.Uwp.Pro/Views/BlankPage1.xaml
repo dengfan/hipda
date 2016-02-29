@@ -285,41 +285,7 @@
         </Style>
     </Page.Resources>
 
-    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ListView x:Name="list1" ItemContainerStyle="{StaticResource ListViewItemStyle1}"/>
-        <TextBlock Foreground="DodgerBlue">
-            <Underline>
-                <Run Text="aaa"/>
-            </Underline>
-        </TextBlock>
-        <TextBox x:Name="tb1" Style="{StaticResource TextBoxStyle1}" Text="ddddddddd"/>
-        <TextBox x:Name="tb2" Style="{StaticResource TextBoxStyle1}" Background="{ThemeResource SystemControlBackgroundAccentBrush}" Text="ddddddddd"/>
-        <HyperlinkButton NavigateUri="hipda:tid=423423">HLB</HyperlinkButton>
-        <RichTextBlock>
-            <Paragraph>
-                <Hyperlink NavigateUri="hipda:tid=111234">hyperlink</Hyperlink>
-                <Italic FontSize=".7"></Italic>
-                <Run Foreground="#00ff00" >AAAAA</Run>
-                <Bold>
-                    <Run/>
-                </Bold>
-                <Hyperlink>
-                    <Bold></Bold>
-                </Hyperlink>
-                <InlineUIContainer>
-                    <TextBlock HorizontalAlignment="Right"/>
-                </InlineUIContainer>
-            </Paragraph>
-        </RichTextBlock>
-
-        <ListBox x:Name="adsf" ItemContainerStyle="{StaticResource ListBoxItemStyle1}">
-            <ListBoxItem>
-                <TextBlock Text="asdfasdf"/>
-            </ListBoxItem>
-        </ListBox>
-
-        <ContentDialog x:Name="aaae"></ContentDialog>
-    </StackPanel>
+    
 
 
 </Page>

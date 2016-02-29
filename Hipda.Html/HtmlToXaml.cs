@@ -52,7 +52,7 @@ namespace Hipda.Html
             htmlContent = Regex.Replace(htmlContent, @"</span>", string.Empty);
 
             // 移除无用的图片附加信息
-            MatchCollection matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n*.*").Matches(htmlContent);
+            var matchsForInvalidHtml1 = new Regex(@"<div class=""t_attach"".*\n.*\n.*\n*.*").Matches(htmlContent);
             if (matchsForInvalidHtml1 != null && matchsForInvalidHtml1.Count > 0)
             {
                 for (int i = 0; i < matchsForInvalidHtml1.Count; i++)
@@ -65,7 +65,7 @@ namespace Hipda.Html
             }
 
             // 移除无用的图片附加信息2
-            MatchCollection matchsForInvalidHtml2 = new Regex(@"<p class=""imgtitle"">\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*").Matches(htmlContent);
+            var matchsForInvalidHtml2 = new Regex(@"<p class=""imgtitle"">\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*\n*.*").Matches(htmlContent);
             if (matchsForInvalidHtml2 != null && matchsForInvalidHtml2.Count > 0)
             {
                 for (int i = 0; i < matchsForInvalidHtml2.Count; i++)
@@ -78,7 +78,7 @@ namespace Hipda.Html
             }
 
             // 替换引用链接为按钮
-            MatchCollection matchsForRefLink = new Regex(@"<a\s+href=""http:\/\/(www|cnc)\.hi\-pda\.com\/forum\/redirect\.php\?goto\=findpost&amp;pid\=(\d*)&amp;ptid\=(\d*)[^\""]*""[^>]*>(<img\s[^>]*>|\d+#)</a>").Matches(htmlContent);
+            var matchsForRefLink = new Regex(@"<a\s+href=""http:\/\/(www|cnc)\.hi\-pda\.com\/forum\/redirect\.php\?goto\=findpost&amp;pid\=(\d*)&amp;ptid\=(\d*)[^\""]*""[^>]*>(<img\s[^>]*>|\d+#)</a>").Matches(htmlContent);
             if (matchsForRefLink != null && matchsForRefLink.Count > 0)
             {
                 for (int i = 0; i < matchsForRefLink.Count; i++)
@@ -105,7 +105,7 @@ namespace Hipda.Html
             }
 
             // 替换站内链接为按钮
-            MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
+            var matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
             if (matchsForMyLink != null && matchsForMyLink.Count > 0)
             {
                 for (int i = 0; i < matchsForMyLink.Count; i++)
@@ -123,7 +123,7 @@ namespace Hipda.Html
             }
 
             // 替换链接
-            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<#]*)</a>").Matches(htmlContent);
+            var matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<#]*)</a>").Matches(htmlContent);
             if (matchsForLink != null && matchsForLink.Count > 0)
             {
                 for (int i = 0; i < matchsForLink.Count; i++)
@@ -144,7 +144,7 @@ namespace Hipda.Html
             }
 
             // 替换小字
-            MatchCollection matchsForSmallFont = new Regex(@"<font size=""1"">([^<]*)</font>").Matches(htmlContent);
+            var matchsForSmallFont = new Regex(@"<font size=""1"">([^<]*)</font>").Matches(htmlContent);
             if (matchsForSmallFont != null && matchsForSmallFont.Count > 0)
             {
                 for (int i = 0; i < matchsForSmallFont.Count; i++)
@@ -160,7 +160,7 @@ namespace Hipda.Html
             }
 
             // 替换带颜色的font标签
-            MatchCollection matchsForColorText = new Regex(@"<font color=""([#0-9a-zA-Z]*)"">([^<]*)</font>").Matches(htmlContent);
+            var matchsForColorText = new Regex(@"<font color=""([#0-9a-zA-Z]*)"">([^<]*)</font>").Matches(htmlContent);
             if (matchsForColorText != null && matchsForColorText.Count > 0)
             {
                 for (int i = 0; i < matchsForColorText.Count; i++)
@@ -181,7 +181,7 @@ namespace Hipda.Html
             }
 
             // 替换"最后编辑时间"
-            MatchCollection matchsForLastEditInfo = new Regex(@"<i class=""pstatus"">(.*)</i>").Matches(htmlContent);
+            var matchsForLastEditInfo = new Regex(@"<i class=""pstatus"">(.*)</i>").Matches(htmlContent);
             if (matchsForLastEditInfo != null && matchsForLastEditInfo.Count > 0)
             {
                 for (int i = 0; i < matchsForLastEditInfo.Count; i++)
@@ -196,9 +196,24 @@ namespace Hipda.Html
                 }
             }
 
-            // 替换引用文字标签
-            htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][Paragraph Margin=""20,0,20,0"" Foreground=""{ThemeResource SystemControlForegroundBaseLowBrush}"" FontStyle=""Italic""]");
-            htmlContent = htmlContent.Replace("</blockquote>", "[/Paragraph][Paragraph]");
+            // 替换"引用"
+            var matchsForQuote = new Regex(@"<blockquote>([\s\S]*?)<\/blockquote>").Matches(htmlContent);
+            if (matchsForQuote != null && matchsForQuote.Count > 0)
+            {
+                for (int i = 0; i < matchsForQuote.Count; i++)
+                {
+                    var m = matchsForQuote[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string quoteGrid = ConvertQuote(m.Groups[1].Value.Trim());
+                    quoteGrid = $@"[/Paragraph][/RichTextBlock]{quoteGrid}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
+                    htmlContent = htmlContent.Replace(placeHolder, quoteGrid);
+                }
+            }
+
+            //// 替换引用文字标签
+            //htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][/RichTextBlock][Grid]");
+            //htmlContent = htmlContent.Replace("</blockquote>", @"[/Grid][RichTextBlock xml:space=""preserve"" LineHeight=""{Binding LineHeight,Source={StaticResource MyLocalSettings}}""][Paragraph]");
 
             // 移除无意义图片HTML
             htmlContent = htmlContent.Replace(@"src=""images/default/attachimg.gif""", string.Empty);
@@ -252,7 +267,43 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
 
-            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            string xamlStr = $@"<RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""><Paragraph>{htmlContent}</Paragraph></RichTextBlock>";
+            xamlStr = $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"">{xamlStr}</StackPanel>";
+            return ReplaceHexadecimalSymbols(xamlStr);
+        }
+
+        public static string ConvertQuote(string htmlContent)
+        {
+            string userInfo = string.Empty;
+            string postIdStr = string.Empty;
+            string threadIdStr = string.Empty;
+            string quoteContent = string.Empty;
+
+            // 获取"引用"中的用户发表信息
+            var matchsForQuote = new Regex(@"<font color=""#999999"">([\s\S]*?)<\/font>").Matches(htmlContent);
+            if (matchsForQuote != null && matchsForQuote.Count == 1)
+            {
+                var m = matchsForQuote[0];
+                userInfo = m.Groups[1].Value.Trim();
+            }
+
+            // 获取"引用"中的 PostId 和 ThreadId
+            var matchsForPostIdAndThreadId = new Regex(@"<a href=""http://www.hi-pda.com/forum/redirect.php\?goto=findpost&amp;pid=([0-9&amp;ptid=]*?)"" target=""_blank""><img src=""http://www.hi-pda.com/forum/images/common/back.gif""").Matches(htmlContent);
+            if (matchsForQuote != null && matchsForQuote.Count == 1)
+            {
+                var m = matchsForQuote[0];
+                string result = m.Groups[1].Value.Trim().Replace("&amp;ptid=", ",");
+                if (!string.IsNullOrEmpty(result))
+                {
+                    string[] ary = result.Split(',');
+                    postIdStr = ary[0];
+                    threadIdStr = ary[1];
+                }
+            }
+
+            string xamlStr = $"<FontIcon Glyph='\uE9B2' FontFamily='Segoe MDL2 Assets' FontSize='32' HorizontalAlignment='Left' VerticalAlignment='Top'/><TextBlock Text='11111' Margin='24,0,0,0'/><TextBlock Text='AA' Margin='0,0,12,0' HorizontalAlignment='Right'/><TextBlock Text='BB' Margin='12,32,12,0'/><FontIcon Glyph='\uE9B1' FontFamily='Segoe MDL2 Assets' FontSize='32' HorizontalAlignment='Right' VerticalAlignment='Bottom'/>";
+            xamlStr = $@"<Grid Margin=""0,0,0,4"" Padding=""4"" MinWidth=""200"">{xamlStr}</Grid>";
+            xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
