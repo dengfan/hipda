@@ -211,10 +211,6 @@ namespace Hipda.Html
                 }
             }
 
-            //// 替换引用文字标签
-            //htmlContent = htmlContent.Replace("<blockquote>", @"[/Paragraph][/RichTextBlock][Grid]");
-            //htmlContent = htmlContent.Replace("</blockquote>", @"[/Grid][RichTextBlock xml:space=""preserve"" LineHeight=""{Binding LineHeight,Source={StaticResource MyLocalSettings}}""][Paragraph]");
-
             // 移除无意义图片HTML
             htmlContent = htmlContent.Replace(@"src=""images/default/attachimg.gif""", string.Empty);
             htmlContent = htmlContent.Replace(@"src=""http://www.hi-pda.com/forum/images/default/attachimg.gif""", string.Empty);
@@ -269,7 +265,9 @@ namespace Hipda.Html
 
             string xamlStr = $@"<RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""><Paragraph>{htmlContent}</Paragraph></RichTextBlock>";
             xamlStr = $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"">{xamlStr}</StackPanel>";
+            xamlStr = xamlStr.Replace("<Paragraph>\r\n", "<Paragraph>");
             xamlStr = xamlStr.Replace("<LineBreak/>\r\n</Paragraph>", "</Paragraph>");
+            xamlStr = xamlStr.Replace("<RichTextBlock xml:space=\"preserve\" LineHeight=\"{Binding LineHeight,Source={StaticResource MyLocalSettings}}\"><Paragraph></Paragraph></RichTextBlock>", string.Empty);
             xamlStr = xamlStr.Replace("<RichTextBlock xml:space=\"preserve\" LineHeight=\"{Binding LineHeight,Source={StaticResource MyLocalSettings}}\"><Paragraph>\r\n</Paragraph></RichTextBlock>", string.Empty);
             return ReplaceHexadecimalSymbols(xamlStr);
         }
@@ -305,7 +303,7 @@ namespace Hipda.Html
 
             //string xamlStr = $"<FontIcon Glyph='\uE9B2' FontFamily='Segoe MDL2 Assets' FontSize='36' HorizontalAlignment='Left' VerticalAlignment='Top' Foreground='{{ThemeResource SystemControlBackgroundAccentBrush}}'/><TextBlock Text='11111' Margin='24,0,0,0' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/><TextBlock Text='AA' Margin='0,0,24,0' HorizontalAlignment='Right' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/><TextBlock Text='BB' Margin='24,32,24,0' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/><FontIcon Glyph='\uE9B1' FontFamily='Segoe MDL2 Assets' FontSize='36' Margin='0,0,0,-20' HorizontalAlignment='Right' VerticalAlignment='Bottom' Foreground='{{ThemeResource SystemControlBackgroundAccentBrush}}'/>";
             string xamlStr = $"<TextBlock Text='11111' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/><TextBlock Text='AA' HorizontalAlignment='Right' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/><TextBlock Text='BB' Margin='0,24,0,0' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/>";
-            xamlStr = $@"<Grid Margin=""8,0,8,8"" Padding=""8"" MinWidth=""200"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
+            xamlStr = $@"<Grid Margin=""8"" Padding=""8"" MinWidth=""200"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }
