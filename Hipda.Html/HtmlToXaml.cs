@@ -274,26 +274,39 @@ namespace Hipda.Html
 
         public static string ConvertQuote(string htmlContent, Dictionary<int, string[]> postDic)
         {
-            if (htmlContent.Length <= "<font size=\"2\">".Length)
-            {
-                return string.Empty;
-            }
-
-            int i = htmlContent.IndexOf("<font size=\"2\">");
-            string quoteContent = htmlContent.Substring(0, i).Trim();
-            string quoteInfo = htmlContent.Substring(i).Trim();
+            string quoteContent, quoteInfo;
             int postId = 0;
 
-            // 获取"引用"中的 PostId
-            var matchsForPostId = new Regex("PostId=\\\"([0-9]+)\\\"").Matches(quoteInfo);
-            if (matchsForPostId != null && matchsForPostId.Count == 1)
+            try
             {
-                int.TryParse(matchsForPostId[0].Groups[1].ToString(), out postId);
+                int i = htmlContent.IndexOf("<font size=\"2\">");
+                if (i == -1)
+                {
+                    return ConvertQuote2(htmlContent);
+                }
+                quoteContent = htmlContent.Substring(0, i).Trim();
+                quoteInfo = htmlContent.Substring(i).Trim();
+
+                // 获取"引用"中的 PostId
+                var matchsForPostId = new Regex("PostId=\\\"([0-9]+)\\\"").Matches(quoteInfo);
+                if (matchsForPostId != null && matchsForPostId.Count == 1)
+                {
+                    int.TryParse(matchsForPostId[0].Groups[1].ToString(), out postId);
+                }
+
+                if (postId == 0)
+                {
+                    return ConvertQuote2(htmlContent);
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception(htmlContent);
             }
 
-            if (postId == 0)
+            if (!postDic.ContainsKey(postId))
             {
-                return string.Empty;
+                return ConvertQuote2(htmlContent);
             }
 
             string[] ary = postDic[postId];
@@ -305,6 +318,14 @@ namespace Hipda.Html
 
             string xamlStr = $"<c:MyAvatarForReply Margin='-38,0,0,0' MyWidth='30' UserId='{authorUserIdStr}' Username='{authorUsername}' ForumId='{forumIdStr}' ForumName='{forumName}' HorizontalAlignment='Left' VerticalAlignment='Top'/><ContentControl Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}'><RichTextBlock><Paragraph>{authorUsername}</Paragraph><Paragraph>{quoteContent}</Paragraph></RichTextBlock></ContentControl><TextBlock Text='{floorNoStr}' HorizontalAlignment='Right' VerticalAlignment='Top'/>";
             xamlStr = $@"<Grid Margin=""8"" Padding=""46,8,8,8"" MinWidth=""200"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
+            xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
+            return ReplaceHexadecimalSymbols(xamlStr);
+        }
+
+        public static string ConvertQuote2(string htmlContent)
+        {
+            string xamlStr = $"<ContentControl Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}'><RichTextBlock><Paragraph>{htmlContent}</Paragraph></RichTextBlock></ContentControl>";
+            xamlStr = $@"<Grid Margin=""8"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }
