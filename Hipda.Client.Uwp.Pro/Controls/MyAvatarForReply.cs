@@ -21,14 +21,25 @@ namespace Hipda.Client.Uwp.Pro.Controls
 {
     public sealed class MyAvatarForReply : Control
     {
-        private Border _border1;
-        private Border _border2;
+        Border _border1;
+        Border _border2;
 
         public MyAvatarForReply()
         {
             this.DefaultStyleKey = typeof(MyAvatarForReply);
         }
 
+
+        public int MyWidth
+        {
+            get { return (int)GetValue(MyWidthProperty); }
+            set { SetValue(MyWidthProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MyWidth.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MyWidthProperty =
+            DependencyProperty.Register("MyWidth", typeof(int), typeof(MyAvatarForReply), new PropertyMetadata(40));
+        
 
         public int UserId
         {
@@ -80,6 +91,39 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
             _border1 = GetTemplateChild("border1") as Border;
             _border2 = GetTemplateChild("border2") as Border;
+
+            if (UserId > 0)
+            {
+                GetAvatarImageBrush();
+            }
+        }
+
+        void GetAvatarImageBrush()
+        {
+            if (_border1 == null || _border2 == null)
+            {
+                return;
+            }
+
+            double cornerRadius = (double)MyWidth / 2;
+
+            _border1.Width = MyWidth;
+            _border1.Height = MyWidth;
+            _border1.CornerRadius = new CornerRadius(cornerRadius);
+
+            _border2.Width = MyWidth;
+            _border2.Height = MyWidth;
+            _border2.CornerRadius = new CornerRadius(cornerRadius);
+
+            var bi = new BitmapImage();
+            bi.UriSource = Common.GetSmallAvatarUriByUserId(UserId);
+            bi.DecodePixelWidth = MyWidth;
+
+            var ib = new ImageBrush();
+            ib.Stretch = Stretch.UniformToFill;
+            ib.ImageSource = bi;
+            ib.ImageFailed += (s, e2) => { return; };
+            _border2.Background = ib;
         }
 
         private static void OnUserIdChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -87,16 +131,9 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var instance = d as MyAvatarForReply;
             int userId = (int)e.NewValue;
 
-            if (instance._border2 != null)
+            if (userId > 0)
             {
-                BitmapImage bi = new BitmapImage();
-                bi.UriSource = Common.GetSmallAvatarUriByUserId(userId);
-                bi.DecodePixelWidth = 40;
-                ImageBrush ib = new ImageBrush();
-                ib.Stretch = Stretch.UniformToFill;
-                ib.ImageSource = bi;
-                ib.ImageFailed += (s, e2) => { return; };
-                instance._border2.Background = ib;
+                instance.GetAvatarImageBrush();
             }
         }
 

@@ -20,7 +20,7 @@ namespace Hipda.Html
             return Regex.Replace(txt, r, "", RegexOptions.Compiled);
         }
 
-        public static string ConvertPost(int threadId, string htmlContent, int maxImageCount, ref int imageCount)
+        public static string ConvertPost(int threadId, string htmlContent, Dictionary<int, string[]> postDic, int maxImageCount, ref int imageCount)
         {
             //string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
 
@@ -205,7 +205,7 @@ namespace Hipda.Html
                     var m = matchsForQuote[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string quoteGrid = ConvertQuote(m.Groups[1].Value.Trim());
+                    string quoteGrid = ConvertQuote(m.Groups[1].Value.Trim(), postDic);
                     quoteGrid = $@"[/Paragraph][/RichTextBlock]{quoteGrid}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
                     htmlContent = htmlContent.Replace(placeHolder, quoteGrid);
                 }
@@ -272,38 +272,39 @@ namespace Hipda.Html
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
-        public static string ConvertQuote(string htmlContent)
+        public static string ConvertQuote(string htmlContent, Dictionary<int, string[]> postDic)
         {
-            string userInfo = string.Empty;
-            string postIdStr = string.Empty;
-            string threadIdStr = string.Empty;
-            string quoteContent = string.Empty;
-
-            // 获取"引用"中的用户发表信息
-            var matchsForQuote = new Regex(@"<font color=""#999999"">([\s\S]*?)<\/font>").Matches(htmlContent);
-            if (matchsForQuote != null && matchsForQuote.Count == 1)
+            if (htmlContent.Length <= "<font size=\"2\">".Length)
             {
-                var m = matchsForQuote[0];
-                userInfo = m.Groups[1].Value.Trim();
+                return string.Empty;
             }
 
-            // 获取"引用"中的 PostId 和 ThreadId
-            var matchsForPostIdAndThreadId = new Regex(@"<a href=""http://www.hi-pda.com/forum/redirect.php\?goto=findpost&amp;pid=([0-9&amp;ptid=]*?)"" target=""_blank""><img src=""http://www.hi-pda.com/forum/images/common/back.gif""").Matches(htmlContent);
-            if (matchsForQuote != null && matchsForQuote.Count == 1)
+            int i = htmlContent.IndexOf("<font size=\"2\">");
+            string quoteContent = htmlContent.Substring(0, i).Trim();
+            string quoteInfo = htmlContent.Substring(i).Trim();
+            int postId = 0;
+
+            // 获取"引用"中的 PostId
+            var matchsForPostId = new Regex("PostId=\\\"([0-9]+)\\\"").Matches(quoteInfo);
+            if (matchsForPostId != null && matchsForPostId.Count == 1)
             {
-                var m = matchsForQuote[0];
-                string result = m.Groups[1].Value.Trim().Replace("&amp;ptid=", ",");
-                if (!string.IsNullOrEmpty(result))
-                {
-                    string[] ary = result.Split(',');
-                    postIdStr = ary[0];
-                    threadIdStr = ary[1];
-                }
+                int.TryParse(matchsForPostId[0].Groups[1].ToString(), out postId);
             }
 
-            //string xamlStr = $"<FontIcon Glyph='\uE9B2' FontFamily='Segoe MDL2 Assets' FontSize='36' HorizontalAlignment='Left' VerticalAlignment='Top' Foreground='{{ThemeResource SystemControlBackgroundAccentBrush}}'/><TextBlock Text='11111' Margin='24,0,0,0' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/><TextBlock Text='AA' Margin='0,0,24,0' HorizontalAlignment='Right' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/><TextBlock Text='BB' Margin='24,32,24,0' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/><FontIcon Glyph='\uE9B1' FontFamily='Segoe MDL2 Assets' FontSize='36' Margin='0,0,0,-20' HorizontalAlignment='Right' VerticalAlignment='Bottom' Foreground='{{ThemeResource SystemControlBackgroundAccentBrush}}'/>";
-            string xamlStr = $"<TextBlock Text='11111' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/><TextBlock Text='AA' HorizontalAlignment='Right' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/><TextBlock Text='BB' Margin='0,24,0,0' Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}}}'/>";
-            xamlStr = $@"<Grid Margin=""8"" Padding=""8"" MinWidth=""200"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
+            if (postId == 0)
+            {
+                return string.Empty;
+            }
+
+            string[] ary = postDic[postId];
+            string authorUserIdStr = ary[0];
+            string authorUsername = ary[1];
+            string floorNoStr = ary[2];
+            string forumIdStr = ary[3];
+            string forumName = ary[4];
+
+            string xamlStr = $"<c:MyAvatarForReply Margin='-38,0,0,0' MyWidth='30' UserId='{authorUserIdStr}' Username='{authorUsername}' ForumId='{forumIdStr}' ForumName='{forumName}' HorizontalAlignment='Left' VerticalAlignment='Top'/><ContentControl Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}'><RichTextBlock><Paragraph>{authorUsername}</Paragraph><Paragraph>{quoteContent}</Paragraph></RichTextBlock></ContentControl><TextBlock Text='{floorNoStr}' HorizontalAlignment='Right' VerticalAlignment='Top'/>";
+            xamlStr = $@"<Grid Margin=""8"" Padding=""46,8,8,8"" MinWidth=""200"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }

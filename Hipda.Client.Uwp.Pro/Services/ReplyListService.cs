@@ -19,6 +19,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
         static HistoryThreadListViewViewModel _threadHistoryListBoxViewModel = (HistoryThreadListViewViewModel)App.Current.Resources["ThreadHistoryListBoxViewModel"];
         static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
+        static Dictionary<int, string[]> _postDic = new Dictionary<int, string[]>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         static int _pageSize = 50;
         int _maxPageNo = 1;
@@ -218,7 +219,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, _postDic, 20, ref imageCount);
                 }
                 else
                 {
@@ -228,6 +229,11 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, false);
                 threadReply.Replies.Add(reply);
+
+                if (!_postDic.ContainsKey(postId))
+                {
+                    _postDic.Add(postId, new string[] { authorUserId.ToString(), authorUsername, floor.ToString(), forumId.ToString(), forumName });
+                }
 
                 i++;
                 j++;
@@ -569,7 +575,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, _postDic, 20, ref imageCount);
                 }
                 else
                 {
@@ -579,6 +585,11 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, targetPostId == postId);
                 threadReply.Replies.Add(reply);
+
+                if (!_postDic.ContainsKey(postId))
+                {
+                    _postDic.Add(postId, new string[] { authorUserId.ToString(), authorUsername, floor.ToString(), forumId.ToString(), forumName });
+                }
 
                 i++;
                 j++;
@@ -776,7 +787,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, _postDic, 20, ref imageCount);
                 }
                 else
                 {
@@ -786,6 +797,11 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, false);
                 threadReply.Replies.Add(reply);
+
+                if (!_postDic.ContainsKey(postId))
+                {
+                    _postDic.Add(postId, new string[] { authorUserId.ToString(), authorUsername, floor.ToString(), forumId.ToString(), forumName });
+                }
 
                 i++;
                 j++;
