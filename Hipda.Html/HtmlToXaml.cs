@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.System;
 
 namespace Hipda.Html
 {
@@ -20,7 +21,7 @@ namespace Hipda.Html
             return Regex.Replace(txt, r, "", RegexOptions.Compiled);
         }
 
-        public static string ConvertPost(int threadId, string htmlContent, Dictionary<int, string[]> postDic, int maxImageCount, ref int imageCount)
+        public static string ConvertPost(int postId, int threadId, string htmlContent, Dictionary<int, string[]> postDic, int maxImageCount, ref int imageCount)
         {
             //string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
 
@@ -205,7 +206,7 @@ namespace Hipda.Html
                     var m = matchsForQuote[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string quoteGrid = ConvertQuote(m.Groups[1].Value.Trim(), postDic);
+                    string quoteGrid = ConvertQuote(m.Groups[1].Value.Trim(), postDic, postId, threadId);
                     quoteGrid = $@"[/Paragraph][/RichTextBlock]{quoteGrid}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
                     htmlContent = htmlContent.Replace(placeHolder, quoteGrid);
                 }
@@ -272,10 +273,11 @@ namespace Hipda.Html
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
-        public static string ConvertQuote(string htmlContent, Dictionary<int, string[]> postDic)
+        public static string ConvertQuote(string htmlContent, Dictionary<int, string[]> postDic, int postId, int threadId)
         {
-            string quoteContent, quoteInfo;
-            int postId = 0;
+            string quoteContent = string.Empty;
+            string quoteInfo = string.Empty;
+            int quotePostId = 0;
 
             try
             {
@@ -294,34 +296,35 @@ namespace Hipda.Html
                 var matchsForPostId = new Regex("PostId=\\\"([0-9]+)\\\"").Matches(quoteInfo);
                 if (matchsForPostId != null && matchsForPostId.Count == 1)
                 {
-                    int.TryParse(matchsForPostId[0].Groups[1].ToString(), out postId);
+                    int.TryParse(matchsForPostId[0].Groups[1].ToString(), out quotePostId);
                 }
                 else
                 {
                     matchsForPostId = new Regex("pid=([0-9]+)").Matches(quoteInfo);
                     if (matchsForPostId != null && matchsForPostId.Count == 1)
                     {
-                        int.TryParse(matchsForPostId[0].Groups[1].ToString(), out postId);
+                        int.TryParse(matchsForPostId[0].Groups[1].ToString(), out quotePostId);
                     }
                 }
 
-                if (postId == 0)
+                if (quotePostId == 0)
                 {
                     return ConvertQuote2(htmlContent);
                 }
             }
-            catch (Exception)
+            catch
             {
-                throw new Exception(htmlContent);
+                string errorDetails = $"http://www.hi-pda.com/forum/viewthread.php?tid={threadId} 楼层{postId}之内容之引用解析出错。\r\n{quoteContent}\r\n{quoteInfo}";
+                PostErrorEmailToDeveloper("回复内容之引用内容解析出现异常", errorDetails);
             }
 
             // 对于已屏蔽的用户，则连引用也不显示
-            if (!postDic.ContainsKey(postId))
+            if (!postDic.ContainsKey(quotePostId))
             {
                 return string.Empty;
             }
 
-            string[] ary = postDic[postId];
+            string[] ary = postDic[quotePostId];
             string authorUserIdStr = ary[0];
             string authorUsername = ary[1];
             string floorNoStr = ary[2];
@@ -341,6 +344,15 @@ namespace Hipda.Html
             xamlStr = $@"<Grid Margin=""8"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
+        }
+
+        public static async void PostErrorEmailToDeveloper(string errorTitle, string errorDetails)
+        {
+            string uriStr = @"mailto:appxking@outlook.com?subject=【{0}】发送异常详情给开发者，以帮助开发者更好的解决问题&body={1}";
+            uriStr = string.Format(uriStr, errorTitle, errorDetails);
+
+            Uri uri = new Uri(uriStr, UriKind.Absolute);
+            await Launcher.LaunchUriAsync(uri);
         }
 
         /// <summary>

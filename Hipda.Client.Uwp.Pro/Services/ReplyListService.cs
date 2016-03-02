@@ -219,7 +219,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, _postDic, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, htmlContent, _postDic, 20, ref imageCount);
                 }
                 else
                 {
@@ -575,7 +575,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, _postDic, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, htmlContent, _postDic, 20, ref imageCount);
                 }
                 else
                 {
@@ -787,7 +787,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     htmlContent = contentNode.InnerHtml.Trim();
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(threadId, htmlContent, _postDic, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, htmlContent, _postDic, 20, ref imageCount);
                 }
                 else
                 {
