@@ -284,7 +284,10 @@ namespace Hipda.Html
                 {
                     return ConvertQuote2(htmlContent);
                 }
+
                 quoteContent = htmlContent.Substring(0, i).Trim();
+                quoteContent = new Regex("<[^>]*>").Replace(quoteContent, string.Empty);
+
                 quoteInfo = htmlContent.Substring(i).Trim();
 
                 // 获取"引用"中的 PostId
