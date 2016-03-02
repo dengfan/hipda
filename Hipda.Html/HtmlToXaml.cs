@@ -293,6 +293,14 @@ namespace Hipda.Html
                 {
                     int.TryParse(matchsForPostId[0].Groups[1].ToString(), out postId);
                 }
+                else
+                {
+                    matchsForPostId = new Regex("pid=([0-9]+)").Matches(quoteInfo);
+                    if (matchsForPostId != null && matchsForPostId.Count == 1)
+                    {
+                        int.TryParse(matchsForPostId[0].Groups[1].ToString(), out postId);
+                    }
+                }
 
                 if (postId == 0)
                 {
@@ -304,9 +312,10 @@ namespace Hipda.Html
                 throw new Exception(htmlContent);
             }
 
+            // 对于已屏蔽的用户，则连引用也不显示
             if (!postDic.ContainsKey(postId))
             {
-                return ConvertQuote2(htmlContent);
+                return string.Empty;
             }
 
             string[] ary = postDic[postId];
@@ -324,6 +333,7 @@ namespace Hipda.Html
 
         public static string ConvertQuote2(string htmlContent)
         {
+            htmlContent = new Regex("<[^>]*>").Replace(htmlContent, string.Empty);
             string xamlStr = $"<ContentControl Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}'><RichTextBlock><Paragraph>{htmlContent}</Paragraph></RichTextBlock></ContentControl>";
             xamlStr = $@"<Grid Margin=""8"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
