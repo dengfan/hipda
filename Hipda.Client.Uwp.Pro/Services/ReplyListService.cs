@@ -201,7 +201,6 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 string textContent = string.Empty;
-                string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
                 var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && (n.GetAttributeValue("class", "").Equals("t_msgfontfix") || n.GetAttributeValue("class", "").Equals("specialmsg")));
@@ -215,11 +214,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = new Regex(@"↵{1,}").Replace(textContent, "\r\n");
                     textContent = textContent.Replace("&nbsp;", "  ");
 
-                    // 用于显示原始内容
-                    htmlContent = contentNode.InnerHtml.Trim();
-
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, htmlContent, _postDic, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, contentNode.InnerHtml.Trim(), _postDic, 20, ref imageCount);
                 }
                 else
                 {
@@ -227,7 +223,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, false);
+                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, xamlContent, postTime, imageCount, false);
                 threadReply.Replies.Add(reply);
 
                 if (!_postDic.ContainsKey(postId))
@@ -245,7 +241,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (j > 1)
             {
                 var lastItem = threadReply.Replies.Last();
-                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
                 flag.IsLast = true;
                 threadReply.Replies.Add(flag);
             }
@@ -557,7 +553,6 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 string textContent = string.Empty;
-                string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
                 var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
@@ -571,11 +566,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = new Regex(@"↵{1,}").Replace(textContent, "\r\n");
                     textContent = textContent.Replace("&nbsp;", "  ");
 
-                    // 用于显示原始内容
-                    htmlContent = contentNode.InnerHtml.Trim();
-
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, htmlContent, _postDic, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, contentNode.InnerHtml.Trim(), _postDic, 20, ref imageCount);
                 }
                 else
                 {
@@ -583,7 +575,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, targetPostId == postId);
+                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, xamlContent, postTime, imageCount, targetPostId == postId);
                 threadReply.Replies.Add(reply);
 
                 if (!_postDic.ContainsKey(postId))
@@ -601,7 +593,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (j > 1)
             {
                 var lastItem = threadReply.Replies.Last();
-                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
                 flag.IsLast = true;
                 threadReply.Replies.Add(flag);
             }
@@ -769,7 +761,6 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 string textContent = string.Empty;
-                string htmlContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
                 var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
@@ -783,11 +774,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = new Regex(@"↵{1,}").Replace(textContent, "\r\n");
                     textContent = textContent.Replace("&nbsp;", "  ");
 
-                    // 用于显示原始内容
-                    htmlContent = contentNode.InnerHtml.Trim();
-
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, htmlContent, _postDic, 20, ref imageCount);
+                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, contentNode.InnerHtml.Trim(), _postDic, 20, ref imageCount);
                 }
                 else
                 {
@@ -795,7 +783,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, htmlContent, xamlContent, postTime, imageCount, false);
+                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, xamlContent, postTime, imageCount, false);
                 threadReply.Replies.Add(reply);
 
                 if (!_postDic.ContainsKey(postId))
@@ -813,7 +801,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (i > 0)
             {
                 var lastItem = threadReply.Replies.Last();
-                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
                 flag.IsLast = true;
                 threadReply.Replies.Add(flag);
             }

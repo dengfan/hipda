@@ -331,7 +331,8 @@ namespace Hipda.Html
             string forumIdStr = ary[3];
             string forumName = ary[4];
 
-            string xamlStr = $"<c:MyAvatarForReply Margin='-38,0,0,0' MyWidth='30' UserId='{authorUserIdStr}' Username='{authorUsername}' ForumId='{forumIdStr}' ForumName='{forumName}' HorizontalAlignment='Left' VerticalAlignment='Top'/><ContentControl Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}'><RichTextBlock><Paragraph>{authorUsername}</Paragraph><Paragraph>{quoteContent}</Paragraph></RichTextBlock></ContentControl><TextBlock Text='{floorNoStr}' HorizontalAlignment='Right' VerticalAlignment='Top'/>";
+            string xamlStr = $"<ContentControl Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}'><RichTextBlock><Paragraph><Run FontSize='{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}'>{authorUsername}</Run></Paragraph><Paragraph>{quoteContent}</Paragraph></RichTextBlock></ContentControl>";
+            xamlStr = $"<c:MyAvatarForReply Margin='-38,0,0,0' MyWidth='30' UserId='{authorUserIdStr}' Username='{authorUsername}' ForumId='{forumIdStr}' ForumName='{forumName}' HorizontalAlignment='Left' VerticalAlignment='Top'/>{xamlStr}<TextBlock Text='{floorNoStr}' HorizontalAlignment='Right' VerticalAlignment='Top'/>";
             xamlStr = $@"<Grid Margin=""8"" Padding=""46,8,8,8"" MinWidth=""200"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);

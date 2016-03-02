@@ -15,7 +15,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ReplyItemModel
     {
-        public ReplyItemModel(int index, int index2, int floorNo, int postId, int pageNo, int forumId, string forumName, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string htmlContent, string xamlConent, string authorCreateTime, int imageCount, bool isHighLight)
+        public ReplyItemModel(int index, int index2, int floorNo, int postId, int pageNo, int forumId, string forumName, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string xamlConent, string authorCreateTime, int imageCount, bool isHighLight)
         {
             this.Index = index;
             this.Index2 = index;
@@ -30,7 +30,6 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.AuthorUserId = authorUserId;
             this.AuthorUsername = authorUsername;
             this.TextStr = textContent;
-            this.HtmlStr = htmlContent;
             this.XamlStr = xamlConent;
             this.AuthorCreateTime = authorCreateTime;
             this.ImageCount = imageCount;
@@ -67,8 +66,6 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public string TextStr { get; private set; }
 
-        public string HtmlStr { get; private set; }
-
         public string XamlStr { get; set; }
 
         public string AuthorCreateTime { get; private set; }
@@ -101,11 +98,6 @@ namespace Hipda.Client.Uwp.Pro.Models
             {
                 return AuthorUserId == AccountService.UserId;
             }
-        }
-
-        public override string ToString()
-        {
-            return this.HtmlStr;
         }
 
         public string FloorNoStr
