@@ -29,15 +29,13 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyRefLink1">
-                    <HyperlinkButton>
-                        <TextBlock Padding="16,0" Text="{TemplateBinding LinkContent}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-                    </HyperlinkButton>
+                    <TextBlock Text="{TemplateBinding LinkContent}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style TargetType="c:MyRefLink2" >
+    <!--<Style TargetType="c:MyRefLink2" >
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyRefLink2">
@@ -47,7 +45,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
     <Style TargetType="c:MyAvatarForThread" >
         <Setter Property="Template">

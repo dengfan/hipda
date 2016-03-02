@@ -38,8 +38,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("]", "&#8971;");
             htmlContent = htmlContent.Replace("&nbsp;", " ");
             htmlContent = htmlContent.Replace("↵", "&#8629;");
-            htmlContent = htmlContent.Replace("<strong>", string.Empty);
-            htmlContent = htmlContent.Replace("</strong>", string.Empty);
+            
             htmlContent = htmlContent.Replace(@"<div class=""postattachlist"">", "↵");
             htmlContent = htmlContent.Replace("<br/>", "↵"); // ↵符号表示换行符
             htmlContent = htmlContent.Replace("<br />", "↵");
@@ -78,8 +77,8 @@ namespace Hipda.Html
                 }
             }
 
-            // 替换引用链接为按钮
-            var matchsForRefLink = new Regex(@"<a\s+href=""http:\/\/(www|cnc)\.hi\-pda\.com\/forum\/redirect\.php\?goto\=findpost&amp;pid\=(\d*)&amp;ptid\=(\d*)[^\""]*""[^>]*>(<img\s[^>]*>|\d+#)</a>").Matches(htmlContent);
+            // 替换回复链接
+            var matchsForRefLink = new Regex("<strong>回复\\s*<a href=\"[^\"]*pid=([0-9]+)[^\"]*\"[^>]*>([\\s\\S]*?)<\\/a>\\s*<i[^>]*>([\\s\\S]*?)<\\/i>\\s*</strong>").Matches(htmlContent);
             if (matchsForRefLink != null && matchsForRefLink.Count > 0)
             {
                 for (int i = 0; i < matchsForRefLink.Count; i++)
@@ -87,23 +86,20 @@ namespace Hipda.Html
                     var m = matchsForRefLink[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string postIdStr = m.Groups[2].Value;
-                    string threadIdStr = m.Groups[3].Value;
-                    string linkContent = m.Groups[4].Value;
+                    string replyPostIdStr = m.Groups[1].Value;
+                    string floorNoStr = m.Groups[2].Value;
+                    string username = m.Groups[3].Value;
 
-                    string linkXaml = string.Empty;
-                    if (linkContent.StartsWith("<img"))
-                    {
-                        linkXaml = string.Format(@"[InlineUIContainer][c:MyRefLink2 PostId=""{0}"" ThreadId=""{1}""/][/InlineUIContainer]", postIdStr, threadIdStr);
-                    }
-                    else
-                    {
-                        linkXaml = string.Format(@"[InlineUIContainer][c:MyRefLink1 PostId=""{0}"" ThreadId=""{1}"" LinkContent=""{2}""/][/InlineUIContainer]", postIdStr, threadIdStr, linkContent);
-                    }
-
-                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                    string replyXamlStr = $@"<TextBlock Text=""回复 "" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}"" VerticalAlignment=""Center""/>[c:MyRefLink1 Margin=""4"" PostId=""{replyPostIdStr}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""/]<TextBlock Text=""{username}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}"" VerticalAlignment=""Center""/>";
+                    replyXamlStr = $@"<StackPanel Orientation=""Horizontal"">{replyXamlStr}</StackPanel>";
+                    replyXamlStr = replyXamlStr.Replace("<", "[").Replace(">", "]");
+                    replyXamlStr = $@"[/Paragraph][/RichTextBlock]{replyXamlStr}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
+                    htmlContent = htmlContent.Replace(placeHolder, replyXamlStr);
                 }
             }
+
+            htmlContent = htmlContent.Replace("<strong>", string.Empty);
+            htmlContent = htmlContent.Replace("</strong>", string.Empty);
 
             // 替换站内链接为按钮
             var matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
@@ -273,7 +269,7 @@ namespace Hipda.Html
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
-        public static string ConvertQuote(string htmlContent, Dictionary<int, string[]> postDic, int postId, int threadId)
+        private static string ConvertQuote(string htmlContent, Dictionary<int, string[]> postDic, int postId, int threadId)
         {
             string quoteContent = string.Empty;
             string quoteInfo = string.Empty;
@@ -332,8 +328,9 @@ namespace Hipda.Html
             string forumName = ary[4];
 
             string xamlStr = $"<ContentControl Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}'><RichTextBlock><Paragraph><Run FontSize='{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}'>{authorUsername}</Run></Paragraph><Paragraph>{quoteContent}</Paragraph></RichTextBlock></ContentControl>";
-            xamlStr = $"<c:MyAvatarForReply Margin='-38,0,0,0' MyWidth='30' UserId='{authorUserIdStr}' Username='{authorUsername}' ForumId='{forumIdStr}' ForumName='{forumName}' HorizontalAlignment='Left' VerticalAlignment='Top'/>{xamlStr}<TextBlock Text='{floorNoStr}' HorizontalAlignment='Right' VerticalAlignment='Top'/>";
-            xamlStr = $@"<Grid Margin=""8"" Padding=""46,8,8,8"" MinWidth=""200"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
+            string floorButtonXamlStr = $@"<c:MyRefLink1 Margin=""0,0,-38,0"" PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}#"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>";
+            xamlStr = $"<c:MyAvatarForReply Margin='-38,0,0,0' MyWidth='30' UserId='{authorUserIdStr}' Username='{authorUsername}' ForumId='{forumIdStr}' ForumName='{forumName}' HorizontalAlignment='Left' VerticalAlignment='Top'/>{xamlStr}{floorButtonXamlStr}";
+            xamlStr = $@"<Grid Margin=""8"" Padding=""46,8"" MinWidth=""200"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }

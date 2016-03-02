@@ -285,4 +285,5 @@
         </Style>
     </Page.Resources>
 
+    <StackPanel></StackPanel>
 </Page>
