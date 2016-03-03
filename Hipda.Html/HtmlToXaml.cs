@@ -276,7 +276,7 @@ namespace Hipda.Html
             string xamlStr = 
                 $@"<StackPanel Orientation=""Horizontal"">
                     <TextBlock Text=""回复"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
-                    <c:MyRefLink1 Margin=""4"" FontWeight=""Bold"" PostId=""{replyPostIdStr}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}""/>
+                    <c:MyQuoteLink Margin=""4"" FontWeight=""Bold"" PostId=""{replyPostIdStr}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}""/>
                     <TextBlock Text=""{username}"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
                 </StackPanel>";
 
@@ -350,7 +350,7 @@ namespace Hipda.Html
                             <Paragraph>{quoteContent}</Paragraph>
                         </RichTextBlock>
                     </ContentControl>
-                    <c:MyRefLink1 PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}#"" FontWeight=""Bold"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>
+                    <c:MyQuoteLink PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}#"" FontWeight=""Bold"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>
                     <c:MyAvatarForReply MyWidth=""30"" UserId=""{authorUserIdStr}"" Username=""{authorUsername}"" ForumId=""{forumIdStr}"" ForumName=""{forumName}"" HorizontalAlignment=""Left"" VerticalAlignment=""Top""/>
                 </Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
