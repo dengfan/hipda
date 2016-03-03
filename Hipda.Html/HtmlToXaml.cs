@@ -89,12 +89,9 @@ namespace Hipda.Html
                     string replyPostIdStr = m.Groups[1].Value;
                     string floorNoStr = m.Groups[2].Value;
                     string username = m.Groups[3].Value;
-
-                    string replyXamlStr = $@"<TextBlock Text=""回复 "" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}"" VerticalAlignment=""Center""/>[c:MyRefLink1 Margin=""4"" PostId=""{replyPostIdStr}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""/]<TextBlock Text=""{username}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}"" VerticalAlignment=""Center""/>";
-                    replyXamlStr = $@"<StackPanel Orientation=""Horizontal"">{replyXamlStr}</StackPanel>";
-                    replyXamlStr = replyXamlStr.Replace("<", "[").Replace(">", "]");
-                    replyXamlStr = $@"[/Paragraph][/RichTextBlock]{replyXamlStr}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
-                    htmlContent = htmlContent.Replace(placeHolder, replyXamlStr);
+                    string replyXaml = ConvertReply(replyPostIdStr, floorNoStr, username, threadId);
+                    replyXaml = $@"[/Paragraph][/RichTextBlock]{replyXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
+                    htmlContent = htmlContent.Replace(placeHolder, replyXaml);
                 }
             }
 
@@ -202,9 +199,9 @@ namespace Hipda.Html
                     var m = matchsForQuote[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string quoteGrid = ConvertQuote(m.Groups[1].Value.Trim(), postDic, postId, threadId);
-                    quoteGrid = $@"[/Paragraph][/RichTextBlock]{quoteGrid}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
-                    htmlContent = htmlContent.Replace(placeHolder, quoteGrid);
+                    string quoteXaml = ConvertQuote(m.Groups[1].Value.Trim(), postDic, postId, threadId);
+                    quoteXaml = $@"[/Paragraph][/RichTextBlock]{quoteXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
+                    htmlContent = htmlContent.Replace(placeHolder, quoteXaml);
                 }
             }
 
@@ -260,12 +257,30 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
 
-            string xamlStr = $@"<RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""><Paragraph>{htmlContent}</Paragraph></RichTextBlock>";
-            xamlStr = $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"">{xamlStr}</StackPanel>";
+            
+            string xamlStr = 
+                $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"">
+                    <RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""><Paragraph>{htmlContent}</Paragraph></RichTextBlock>
+                </StackPanel>";
+
             xamlStr = xamlStr.Replace("<Paragraph>\r\n", "<Paragraph>");
             xamlStr = xamlStr.Replace("<LineBreak/>\r\n</Paragraph>", "</Paragraph>");
             xamlStr = xamlStr.Replace("<RichTextBlock xml:space=\"preserve\" LineHeight=\"{Binding LineHeight,Source={StaticResource MyLocalSettings}}\"><Paragraph></Paragraph></RichTextBlock>", string.Empty);
             xamlStr = xamlStr.Replace("<RichTextBlock xml:space=\"preserve\" LineHeight=\"{Binding LineHeight,Source={StaticResource MyLocalSettings}}\"><Paragraph>\r\n</Paragraph></RichTextBlock>", string.Empty);
+
+            return ReplaceHexadecimalSymbols(xamlStr);
+        }
+
+        private static string ConvertReply(string replyPostIdStr, string floorNoStr, string username, int threadId)
+        {
+            string xamlStr = 
+                $@"<StackPanel Orientation=""Horizontal"">
+                    <TextBlock Text=""回复"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
+                    <c:MyRefLink1 Margin=""4"" FontWeight=""Bold"" PostId=""{replyPostIdStr}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}""/>
+                    <TextBlock Text=""{username}"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
+                </StackPanel>";
+
+            xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
@@ -327,10 +342,17 @@ namespace Hipda.Html
             string forumIdStr = ary[3];
             string forumName = ary[4];
 
-            string xamlStr = $"<ContentControl Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}'><RichTextBlock><Paragraph><Run FontSize='{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}'>{authorUsername}</Run></Paragraph><Paragraph>{quoteContent}</Paragraph></RichTextBlock></ContentControl>";
-            string floorButtonXamlStr = $@"<c:MyRefLink1 Margin=""0,0,-38,0"" PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}#"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>";
-            xamlStr = $"<c:MyAvatarForReply Margin='-38,0,0,0' MyWidth='30' UserId='{authorUserIdStr}' Username='{authorUsername}' ForumId='{forumIdStr}' ForumName='{forumName}' HorizontalAlignment='Left' VerticalAlignment='Top'/>{xamlStr}{floorButtonXamlStr}";
-            xamlStr = $@"<Grid Margin=""8"" Padding=""46,8"" MinWidth=""200"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
+            string xamlStr = 
+                $@"<Grid Margin=""8"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
+                    <c:MyAvatarForReply MyWidth=""30"" UserId=""{authorUserIdStr}"" Username=""{authorUsername}"" ForumId=""{forumIdStr}"" ForumName=""{forumName}"" HorizontalAlignment=""Left"" VerticalAlignment=""Top""/>
+                    <ContentControl Margin=""0,16,0,0"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
+                        <RichTextBlock>
+                            <Paragraph Margin=""36,0,0,0""><Run FontWeight=""Bold"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}"">{authorUsername}</Run></Paragraph>
+                            <Paragraph>{quoteContent}</Paragraph>
+                        </RichTextBlock>
+                    </ContentControl>
+                    <c:MyRefLink1 PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}#"" FontWeight=""Bold"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>
+                </Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }
@@ -338,8 +360,13 @@ namespace Hipda.Html
         public static string ConvertQuote2(string htmlContent)
         {
             htmlContent = new Regex("<[^>]*>").Replace(htmlContent, string.Empty);
-            string xamlStr = $"<ContentControl Style='{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}'><RichTextBlock><Paragraph>{htmlContent}</Paragraph></RichTextBlock></ContentControl>";
-            xamlStr = $@"<Grid Margin=""8"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{xamlStr}</Grid>";
+            string xamlStr = 
+                $@"<Grid Margin=""8"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
+                    <ContentControl Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
+                        <RichTextBlock><Paragraph>{htmlContent}</Paragraph></RichTextBlock>
+                    </ContentControl>
+                </Grid>";
+
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }
