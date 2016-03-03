@@ -344,7 +344,6 @@ namespace Hipda.Html
 
             string xamlStr = 
                 $@"<Grid Margin=""8"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
-                    <c:MyAvatarForReply MyWidth=""30"" UserId=""{authorUserIdStr}"" Username=""{authorUsername}"" ForumId=""{forumIdStr}"" ForumName=""{forumName}"" HorizontalAlignment=""Left"" VerticalAlignment=""Top""/>
                     <ContentControl Margin=""0,16,0,0"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
                         <RichTextBlock>
                             <Paragraph Margin=""36,0,0,0""><Run FontWeight=""Bold"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}"">{authorUsername}</Run></Paragraph>
@@ -352,6 +351,7 @@ namespace Hipda.Html
                         </RichTextBlock>
                     </ContentControl>
                     <c:MyRefLink1 PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}#"" FontWeight=""Bold"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>
+                    <c:MyAvatarForReply MyWidth=""30"" UserId=""{authorUserIdStr}"" Username=""{authorUsername}"" ForumId=""{forumIdStr}"" ForumName=""{forumName}"" HorizontalAlignment=""Left"" VerticalAlignment=""Top""/>
                 </Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
