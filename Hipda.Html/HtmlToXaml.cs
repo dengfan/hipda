@@ -98,23 +98,20 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("<strong>", string.Empty);
             htmlContent = htmlContent.Replace("</strong>", string.Empty);
 
-            // 替换站内链接为按钮
-            //var matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
-            //if (matchsForMyLink != null && matchsForMyLink.Count > 0)
-            //{
-            //    for (int i = 0; i < matchsForMyLink.Count; i++)
-            //    {
-            //        var m = matchsForMyLink[i];
+            // 替换"引用"
+            var matchsForQuote = new Regex(@"<blockquote>([\s\S]*?)<\/blockquote>").Matches(htmlContent);
+            if (matchsForQuote != null && matchsForQuote.Count > 0)
+            {
+                for (int i = 0; i < matchsForQuote.Count; i++)
+                {
+                    var m = matchsForQuote[i];
 
-            //        string placeHolder = m.Groups[0].Value; // 要被替换的元素
-            //        string threadIdStr = m.Groups[1].Value;
-            //        string linkContent = m.Groups[2].Value;
-            //        linkContent = Regex.Replace(linkContent, @"<[^>]*>", string.Empty);
-
-            //        string linkXaml = string.Format(@"[InlineUIContainer][c:MyLink ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent);
-            //        htmlContent = htmlContent.Replace(placeHolder, linkXaml);
-            //    }
-            //}
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string quoteXaml = ConvertQuote(m.Groups[1].Value.Trim(), postDic, postId, threadId);
+                    quoteXaml = $@"[/Paragraph][/RichTextBlock]{quoteXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
+                    htmlContent = htmlContent.Replace(placeHolder, quoteXaml);
+                }
+            }
 
             // 替换链接
             int inAppLinkCount = 0;
@@ -189,34 +186,15 @@ namespace Hipda.Html
             }
 
             // 替换"最后编辑时间"
-            var matchsForLastEditInfo = new Regex(@"<i class=""pstatus"">(.*)</i>").Matches(htmlContent);
-            if (matchsForLastEditInfo != null && matchsForLastEditInfo.Count > 0)
+            var matchsForLastEditInfo = new Regex("<i class=\"pstatus\">([\\s\\S]*?)</i>").Matches(htmlContent);
+            if (matchsForLastEditInfo != null && matchsForLastEditInfo.Count == 1)
             {
-                for (int i = 0; i < matchsForLastEditInfo.Count; i++)
-                {
-                    var m = matchsForLastEditInfo[i];
+                var m = matchsForLastEditInfo[0];
+                string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                string infoContent = m.Groups[1].Value.Trim();
 
-                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string infoContent = m.Groups[1].Value.Trim();
-
-                    string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""{{ThemeResource SystemControlForegroundBaseLowBrush}}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""/][LineBreak/]", infoContent);
-                    htmlContent = htmlContent.Replace(placeHolder, infoXaml);
-                }
-            }
-
-            // 替换"引用"
-            var matchsForQuote = new Regex(@"<blockquote>([\s\S]*?)<\/blockquote>").Matches(htmlContent);
-            if (matchsForQuote != null && matchsForQuote.Count > 0)
-            {
-                for (int i = 0; i < matchsForQuote.Count; i++)
-                {
-                    var m = matchsForQuote[i];
-
-                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string quoteXaml = ConvertQuote(m.Groups[1].Value.Trim(), postDic, postId, threadId);
-                    quoteXaml = $@"[/Paragraph][/RichTextBlock]{quoteXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
-                    htmlContent = htmlContent.Replace(placeHolder, quoteXaml);
-                }
+                string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""{{ThemeResource SystemControlForegroundBaseLowBrush}}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""/][LineBreak/]", infoContent);
+                htmlContent = htmlContent.Replace(placeHolder, infoXaml);
             }
 
             // 移除无意义图片HTML
@@ -318,14 +296,14 @@ namespace Hipda.Html
                 quoteInfo = htmlContent.Substring(i).Trim();
 
                 // 获取"引用"中的 PostId
-                var matchsForPostId = new Regex("PostId=\\\"([0-9]+)\\\"").Matches(quoteInfo);
+                var matchsForPostId = new Regex("pid=([0-9]+)").Matches(quoteInfo);
                 if (matchsForPostId != null && matchsForPostId.Count == 1)
                 {
                     int.TryParse(matchsForPostId[0].Groups[1].ToString(), out quotePostId);
                 }
                 else
                 {
-                    matchsForPostId = new Regex("pid=([0-9]+)").Matches(quoteInfo);
+                    matchsForPostId = new Regex("PostId=\\\"([0-9]+)\\\"").Matches(quoteInfo);
                     if (matchsForPostId != null && matchsForPostId.Count == 1)
                     {
                         int.TryParse(matchsForPostId[0].Groups[1].ToString(), out quotePostId);
