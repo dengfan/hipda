@@ -133,18 +133,24 @@ namespace Hipda.Html
                     string linkContent = m.Groups[2].Value;
                     linkContent = new Regex("<[^>]*>").Replace(linkContent, string.Empty);
 
-                    string linkXaml = $@"[Hyperlink NavigateUri=""{linkUrl}""]{linkContent}[/Hyperlink]";
+                    
                     if (linkUrl.StartsWith("http://www.hi-pda.com/forum/") || linkUrl.StartsWith("http://hi-pda.com/forum/"))
                     {
                         inAppLinkCount++;
                         var key = $"InAppLink_{threadId}_{postId}_{inAppLinkCount}";
-                        linkXaml = $@"[Hyperlink Name=""{key}""]{linkContent}[/Hyperlink]";
+                        string linkXaml = $@"[Hyperlink Name=""{key}""]{linkContent}[/Hyperlink]";
                         if (!inAppLinkUrlDic.ContainsKey(key))
                         {
                             inAppLinkUrlDic.Add(key, linkUrl);
                         }
+                        htmlContent = new Regex(placeHolder.Replace("?", "\\?").Replace("[", "\\[").Replace("]", "\\]").Replace("(", "\\(").Replace(")", "\\)")).Replace(htmlContent, linkXaml, 1);
                     }
-                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                    else
+                    {
+                        string linkXaml = $@"[Hyperlink NavigateUri=""{linkUrl}""]{linkContent}[/Hyperlink]";
+                        htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                    }
+                    
                 }
             }
 

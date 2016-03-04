@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Pro.Services;
+using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -149,13 +150,74 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
-        private async void HyperLink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
+        private void HyperLink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
             var key = sender.Name;
             if (ReplyListService.InAppLinkUrlDic.ContainsKey(key))
             {
                 var val = ReplyListService.InAppLinkUrlDic[key];
-                await new MessageDialog(val).ShowAsync();
+                var pid = new Regex("pid=([0-9]+)").Match(val)?.Groups[1]?.Value;
+                var tid = new Regex("tid=([0-9]+)").Match(val)?.Groups[1]?.Value;
+                
+                int postId = 0;
+                if (pid != null)
+                {
+                    int.TryParse(pid, out postId);
+                }
+
+                int threadId = 0;
+                if (tid != null)
+                {
+                    int.TryParse(tid, out threadId);
+                }
+
+                if (postId == 0 && threadId == 0)
+                {
+                    return;
+                }
+
+                var frame = Window.Current.Content as Frame;
+                var mp = frame.Content as MainPage;
+                if (mp != null)
+                {
+                    var pageType = mp.AppFrame.Content.GetType();
+                    if (pageType.Equals(typeof(ThreadAndReplyPage)))
+                    {
+                        var p = (ThreadAndReplyPage)mp.AppFrame.Content;
+                        if (p != null)
+                        {
+                            if (postId > 0)
+                            {
+                                p.PostId = postId;
+                                p.OpenReplyPageByPostId();
+                            }
+                            else
+                            {
+                                p.ThreadId = Convert.ToInt32(tid);
+                                p.OpenReplyPageByThreadId();
+                            }
+                        }
+                    }
+                    else if (pageType.Equals(typeof(ReplyListPage)))
+                    {
+                        var p = (ReplyListPage)mp.AppFrame.Content;
+                        if (p != null)
+                        {
+                            p.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
+
+                            if (postId > 0)
+                            {
+                                p.PostId = postId;
+                                p.OpenReplyPageByPostId();
+                            }
+                            else
+                            {
+                                p.ThreadId = Convert.ToInt32(tid);
+                                p.OpenReplyPageByThreadId();
+                            }
+                        }
+                    }
+                }
             }
         }
 
