@@ -339,7 +339,7 @@ namespace Hipda.Html
             string forumName = ary[4];
 
             string xamlStr = 
-                $@"<Grid Margin=""8"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
+                $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
                     <ContentControl Margin=""0,16,0,0"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
                         <RichTextBlock>
                             <Paragraph Margin=""36,0,0,0""><Run FontWeight=""Bold"">{authorUsername}</Run></Paragraph>
@@ -357,7 +357,7 @@ namespace Hipda.Html
         {
             htmlContent = new Regex("<[^>]*>").Replace(htmlContent, string.Empty);
             string xamlStr = 
-                $@"<Grid Margin=""8"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
+                $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
                     <ContentControl Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
                         <RichTextBlock><Paragraph>{htmlContent}</Paragraph></RichTextBlock>
                     </ContentControl>
