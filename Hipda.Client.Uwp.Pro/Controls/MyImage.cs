@@ -46,10 +46,10 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         // Using a DependencyProperty as the backing store for FolderName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FolderNameProperty =
-            DependencyProperty.Register("FolderName", typeof(string), typeof(MyImage), new PropertyMetadata(0));
+            DependencyProperty.Register("FolderName", typeof(string), typeof(MyImage), new PropertyMetadata(string.Empty));
 
 
-        bool isCommon
+        bool _isCommon
         {
             get
             {
@@ -57,7 +57,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             }
         }
 
-        bool isGif
+        bool _isGif
         {
             get
             {
@@ -72,7 +72,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
         {
             base.OnTapped(e);
 
-            if (!isCommon)
+            if (!_isCommon)
             {
                 await OpenPhoto();
             }
@@ -100,7 +100,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             try
             {
                 _folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
-                if (isCommon)
+                if (_isCommon)
                 {
                     _folder = await _folder.CreateFolderAsync("common", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
                 }
@@ -144,7 +144,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
                 if (_folder != null && _file != null)
                 {
-                    if (isCommon)
+                    if (_isCommon)
                     {
                         img.Stretch = Stretch.None;
                         var bm = new BitmapImage();
@@ -161,7 +161,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                             int imgWidth = bitmapImg.PixelWidth;
                             int imgHeight = bitmapImg.PixelHeight;
 
-                            if (isGif) // GIF图片且不是论坛表情图标，则使用WebView控件显示
+                            if (_isGif) // GIF图片且不是论坛表情图标，则使用WebView控件显示
                             {
                                 WebView webView = new WebView();
                                 webView.SetBinding(WebView.OpacityProperty, b);
@@ -173,7 +173,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                                     await OpenPhoto();
                                 };
 
-                                string imgHtml = @"<html><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""Gif Image"" /></body></html>";
+                                string imgHtml = @"<html><head><meta name=""viewport"" content=""width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0""></head><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""Gif Image"" /></body></html>";
                                 imgHtml = string.Format(imgHtml, Url);
                                 webView.NavigateToString(imgHtml);
 
@@ -201,7 +201,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                     }
                 }
 
-                if (isCommon || !isGif) // 公共或非gif图片，使用Image控件显示
+                if (_isCommon || !_isGif) // 公共或非gif图片，使用Image控件显示
                 {
                     content1.Content = img;
                 }
