@@ -49,8 +49,6 @@ namespace Hipda.Client.Uwp.Pro.Controls
             DependencyProperty.Register("FolderName", typeof(string), typeof(MyImage), new PropertyMetadata(string.Empty));
 
 
-        static object _lockObject;
-
         bool _isCommon
         {
             get
