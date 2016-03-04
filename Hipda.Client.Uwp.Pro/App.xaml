@@ -427,7 +427,7 @@
                                               />
 
         <Style x:Key="ReplyItemContainerStyle" TargetType="ListViewItem">
-            <Setter Property="Padding" Value="14,8,20,4"/>
+            <Setter Property="Padding" Value="12,8,16,4"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -437,12 +437,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-
-        <Style x:Key="AvatarStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="20"/>
-            <Setter Property="Width" Value="40"/>
-            <Setter Property="Height" Value="40"/>
         </Style>
 
         <DataTemplate x:Key="ReplyListLastItemTemplate">

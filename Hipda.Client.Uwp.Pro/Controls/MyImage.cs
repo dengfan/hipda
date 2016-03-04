@@ -49,6 +49,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
             DependencyProperty.Register("FolderName", typeof(string), typeof(MyImage), new PropertyMetadata(string.Empty));
 
 
+        static object _lockObject;
+
         bool _isCommon
         {
             get
@@ -65,8 +67,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
             }
         }
 
-        private StorageFile _file;
-        private StorageFolder _folder;
+        StorageFile _file;
+        StorageFolder _folder;
 
         protected async override void OnTapped(TappedRoutedEventArgs e)
         {
@@ -132,11 +134,9 @@ namespace Hipda.Client.Uwp.Pro.Controls
                 using (var client = new HttpClient())
                 {
                     var response = await client.GetAsync(new Uri(Url));
-                    string statusCode = response.ReasonPhrase;
                     var buf = await response.Content.ReadAsBufferAsync();
-                    byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
                     _file = await _folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
-                    await FileIO.WriteBytesAsync(_file, bytes);
+                    await FileIO.WriteBufferAsync(_file, buf);
                 }
             }
 
@@ -153,63 +153,65 @@ namespace Hipda.Client.Uwp.Pro.Controls
                     }
                     else
                     {
-                        BitmapImage bitmapImg = new BitmapImage();
-                        IRandomAccessStream fileStream = await _file.OpenAsync(FileAccessMode.Read);
-                        if (fileStream != null)
+                        using (IRandomAccessStream fileStream = await _file.OpenAsync(FileAccessMode.Read))
                         {
-                            await bitmapImg.SetSourceAsync(fileStream);
-                            int imgWidth = bitmapImg.PixelWidth;
-                            int imgHeight = bitmapImg.PixelHeight;
-
-                            if (_isGif)
+                            if (fileStream != null)
                             {
-                                if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Mobile"))
+                                BitmapImage bitmapImg = new BitmapImage();
+                                await bitmapImg.SetSourceAsync(fileStream);
+                                int imgWidth = bitmapImg.PixelWidth;
+                                int imgHeight = bitmapImg.PixelHeight;
+
+                                if (_isGif)
                                 {
-                                    // 移动端用Button显示Gif
-                                    img.Stretch = Stretch.Uniform;
-                                    img.MaxWidth = 64;
-                                    img.Source = bitmapImg;
-
-                                    SymbolIcon gifSymbolIcon = new SymbolIcon();
-                                    gifSymbolIcon.Symbol = Symbol.Play;
-                                    gifSymbolIcon.HorizontalAlignment = HorizontalAlignment.Center;
-                                    gifSymbolIcon.VerticalAlignment = VerticalAlignment.Center;
-
-                                    Grid gifGrid = new Grid();
-                                    gifGrid.Children.Add(img);
-                                    gifGrid.Children.Add(gifSymbolIcon);
-
-                                    Button gifButton = new Button();
-                                    gifButton.Padding = new Thickness(0);
-                                    gifButton.Content = gifGrid;
-
-                                    content1.Content = gifButton;
-                                }
-                                else if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop"))
-                                {
-                                    // PC端用WebView显示Gif图片
-                                    WebView webView = new WebView();
-                                    webView.SetBinding(WebView.OpacityProperty, pictureOpacityBinding);
-                                    webView.DefaultBackgroundColor = Colors.Transparent;
-                                    webView.Width = imgWidth;
-                                    webView.Height = imgHeight;
-                                    webView.ScriptNotify += async (s, e) =>
+                                    if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Mobile"))
                                     {
-                                        await OpenPhoto();
-                                    };
+                                        // 移动端用Button显示Gif
+                                        img.Stretch = Stretch.Uniform;
+                                        img.MaxWidth = 64;
+                                        img.Source = bitmapImg;
 
-                                    string imgHtml = @"<html><head><meta name=""viewport"" content=""width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0""></head><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""Gif Image"" /></body></html>";
-                                    imgHtml = string.Format(imgHtml, Url);
-                                    webView.NavigateToString(imgHtml);
+                                        SymbolIcon gifSymbolIcon = new SymbolIcon();
+                                        gifSymbolIcon.Symbol = Symbol.Play;
+                                        gifSymbolIcon.HorizontalAlignment = HorizontalAlignment.Center;
+                                        gifSymbolIcon.VerticalAlignment = VerticalAlignment.Center;
 
-                                    content1.Content = webView;
+                                        Grid gifGrid = new Grid();
+                                        gifGrid.Children.Add(img);
+                                        gifGrid.Children.Add(gifSymbolIcon);
+
+                                        Button gifButton = new Button();
+                                        gifButton.Padding = new Thickness(0);
+                                        gifButton.Content = gifGrid;
+
+                                        content1.Content = gifButton;
+                                    }
+                                    else if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop"))
+                                    {
+                                        // PC端用WebView显示Gif图片
+                                        WebView webView = new WebView();
+                                        webView.SetBinding(WebView.OpacityProperty, pictureOpacityBinding);
+                                        webView.DefaultBackgroundColor = Colors.Transparent;
+                                        webView.Width = imgWidth;
+                                        webView.Height = imgHeight;
+                                        webView.ScriptNotify += async (s, e) =>
+                                        {
+                                            await OpenPhoto();
+                                        };
+
+                                        string imgHtml = @"<html><head><meta name=""viewport"" content=""width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0""></head><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""Gif Image"" /></body></html>";
+                                        imgHtml = string.Format(imgHtml, Url);
+                                        webView.NavigateToString(imgHtml);
+
+                                        content1.Content = webView;
+                                    }
                                 }
-                            }
-                            else // 其它图片，使用Image控件显示
-                            {
-                                img.MaxWidth = imgWidth;
-                                img.Stretch = Stretch.UniformToFill;
-                                img.Source = bitmapImg;
+                                else // 其它图片，使用Image控件显示
+                                {
+                                    img.MaxWidth = imgWidth;
+                                    img.Stretch = Stretch.UniformToFill;
+                                    img.Source = bitmapImg;
+                                }
                             }
                         }
                     }
