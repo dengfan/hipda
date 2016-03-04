@@ -166,7 +166,6 @@
     <Compile Include="Models\ThreadItemForMyThreadsModel.cs" />
     <Compile Include="Controls\MyAvatarForThread.cs" />
     <Compile Include="Controls\MyImage.cs" />
-    <Compile Include="Controls\MyLink.cs" />
     <Compile Include="Controls\MyQuoteLink.cs" />
     <Compile Include="LocalSettingsDependencyObject.cs" />
     <Compile Include="NavButtonListItemTemplateSelector.cs" />

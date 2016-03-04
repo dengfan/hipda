@@ -353,7 +353,7 @@ namespace Hipda.Html
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
-        public static string ConvertQuote2(string htmlContent)
+        private static string ConvertQuote2(string htmlContent)
         {
             htmlContent = new Regex("<[^>]*>").Replace(htmlContent, string.Empty);
             string xamlStr = 
@@ -367,7 +367,7 @@ namespace Hipda.Html
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
-        public static async void PostErrorEmailToDeveloper(string errorTitle, string errorDetails)
+        private static async void PostErrorEmailToDeveloper(string errorTitle, string errorDetails)
         {
             string uriStr = @"mailto:appxking@outlook.com?subject=【{0}】发送异常详情给开发者，以帮助开发者更好的解决问题&body={1}";
             uriStr = string.Format(uriStr, errorTitle, errorDetails);
