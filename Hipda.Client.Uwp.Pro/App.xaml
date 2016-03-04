@@ -362,7 +362,9 @@
             <Polygon Points="6,0 0,6 0,-6" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
         </ControlTemplate>
 
-        
+        <Style TargetType="ScrollBar">
+            <Setter Property="Opacity" Value="0.5"/>
+        </Style>
 
         <Style x:Key="FaceButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
@@ -427,7 +429,7 @@
                                               />
 
         <Style x:Key="ReplyItemContainerStyle" TargetType="ListViewItem">
-            <Setter Property="Padding" Value="12,8,16,4"/>
+            <Setter Property="Padding" Value="8"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -598,12 +600,12 @@
         </Style>
 
         <Style x:Key="ThreadItemContainerStyle" TargetType="ListViewItem">
-            <Setter Property="Padding" Value="0,0,20,0"/>
+            <Setter Property="Padding" Value="0,0,8,0"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
 
         <Style x:Key="NoticeItemContainerStyle" TargetType="ListViewItem">
-            <Setter Property="Padding" Value="0,0,20,0"/>
+            <Setter Property="Padding" Value="0,0,8,0"/>
             <Setter Property="MinHeight" Value="0"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Template">
