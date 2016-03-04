@@ -98,7 +98,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("<strong>", string.Empty);
             htmlContent = htmlContent.Replace("</strong>", string.Empty);
 
-            // 替换"引用"
+            // 替换引用
             var matchsForQuote = new Regex(@"<blockquote>([\s\S]*?)<\/blockquote>").Matches(htmlContent);
             if (matchsForQuote != null && matchsForQuote.Count > 0)
             {
@@ -165,7 +165,7 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string fontText = m.Groups[1].Value;
 
-                    string fontXaml = string.Format(@"[Span FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""]{0}[/Span]", fontText);
+                    string fontXaml = $@"[Span FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""]{fontText}[/Span]";
                     htmlContent = htmlContent.Replace(placeHolder, fontXaml);
                 }
             }
@@ -182,10 +182,10 @@ namespace Hipda.Html
                     string colorName = m.Groups[1].Value.ToLower().Trim();
                     string textContent = m.Groups[2].Value;
 
-                    string infoXaml = string.Format(@"[Span Foreground=""{1}""]{0}[/Span]", textContent, colorName);
+                    string infoXaml = $@"[Span Foreground=""{colorName}""]{textContent}[/Span]";
                     if (colorName.Equals("#000") || colorName.Equals("#000000") || colorName.Equals("black") || (colorName.StartsWith("#") && colorName.Length != 4 && colorName.Length != 7))
                     {
-                        infoXaml = string.Format(@"[Span]{0}[/Span]", textContent);
+                        infoXaml = $"[Span]{textContent}[/Span]";
                     }
                     htmlContent = htmlContent.Replace(placeHolder, infoXaml);
                 }
@@ -199,7 +199,7 @@ namespace Hipda.Html
                 string placeHolder = m.Groups[0].Value; // 要被替换的元素
                 string infoContent = m.Groups[1].Value.Trim();
 
-                string infoXaml = string.Format(@"[Run Text=""{0}"" Foreground=""{{ThemeResource SystemControlForegroundBaseLowBrush}}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""/][LineBreak/]", infoContent);
+                string infoXaml = $@"[Run Text=""{infoContent}"" Foreground=""{{ThemeResource SystemControlForegroundBaseLowBrush}}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""/][LineBreak/]";
                 htmlContent = htmlContent.Replace(placeHolder, infoXaml);
             }
 
@@ -218,9 +218,7 @@ namespace Hipda.Html
                     string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = @"[InlineUIContainer][c:MyImage FolderName=""{0}"" Url=""{1}""/][/InlineUIContainer]";
-                    imgXaml = string.Format(imgXaml, threadId, imgUrl);
-
+                    string imgXaml = $@"[InlineUIContainer][c:MyImage FolderName=""{threadId}"" Url=""{imgUrl}""/][/InlineUIContainer]";
                     htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
                 }
             }
