@@ -19,7 +19,8 @@ namespace Hipda.Client.Uwp.Pro.Services
         static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
         static HistoryThreadListViewViewModel _threadHistoryListBoxViewModel = (HistoryThreadListViewViewModel)App.Current.Resources["ThreadHistoryListBoxViewModel"];
         static List<ReplyPageModel> _replyData = new List<ReplyPageModel>();
-        static Dictionary<int, string[]> _postDic = new Dictionary<int, string[]>();
+        static Dictionary<int, string[]> _postDic = new Dictionary<int, string[]>(); // 用于引用块的UI显示，如通过 postid 获取楼层信息
+        public static Dictionary<string, string> InAppLinkUrlDic = new Dictionary<string, string>();
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         static int _pageSize = 50;
         int _maxPageNo = 1;
@@ -203,6 +204,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string textContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
+                int inAppLinkCount = 0;
                 var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && (n.GetAttributeValue("class", "").Equals("t_msgfontfix") || n.GetAttributeValue("class", "").Equals("specialmsg")));
                 if (contentNode != null)
                 {
@@ -215,15 +217,16 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = textContent.Replace("&nbsp;", "  ");
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, contentNode.InnerHtml.Trim(), _postDic, 20, ref imageCount);
+                    var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, contentNode.InnerHtml.Trim(), _postDic, ref InAppLinkUrlDic);
+                    xamlContent = ary[0];
+                    inAppLinkCount = Convert.ToInt32(ary[1]);
                 }
                 else
                 {
-                    xamlContent = @"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>";
-                    xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
+                    xamlContent = $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><RichTextBlock><Paragraph>作者被禁止或删除&#160;内容自动屏蔽</Paragraph></RichTextBlock></StackPanel>";
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, xamlContent, postTime, imageCount, false);
+                var reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, xamlContent, postTime, imageCount, false, inAppLinkCount);
                 threadReply.Replies.Add(reply);
 
                 if (!_postDic.ContainsKey(postId))
@@ -241,7 +244,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (j > 1)
             {
                 var lastItem = threadReply.Replies.Last();
-                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, -1, false, 0);
                 flag.IsLast = true;
                 threadReply.Replies.Add(flag);
             }
@@ -555,6 +558,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string textContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
+                int inAppLinkCount = 0;
                 var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
@@ -567,15 +571,16 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = textContent.Replace("&nbsp;", "  ");
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, contentNode.InnerHtml.Trim(), _postDic, 20, ref imageCount);
+                    var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, contentNode.InnerHtml.Trim(), _postDic, ref InAppLinkUrlDic);
+                    xamlContent = ary[0];
+                    inAppLinkCount = Convert.ToInt32(ary[1]);
                 }
                 else
                 {
-                    xamlContent = @"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>";
-                    xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
+                    xamlContent = $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><RichTextBlock><Paragraph>作者被禁止或删除&#160;内容自动屏蔽</Paragraph></RichTextBlock></StackPanel>";
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, xamlContent, postTime, imageCount, targetPostId == postId);
+                var reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, xamlContent, postTime, imageCount, targetPostId == postId, inAppLinkCount);
                 threadReply.Replies.Add(reply);
 
                 if (!_postDic.ContainsKey(postId))
@@ -593,7 +598,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (j > 1)
             {
                 var lastItem = threadReply.Replies.Last();
-                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, -1, false, 0);
                 flag.IsLast = true;
                 threadReply.Replies.Add(flag);
             }
@@ -763,6 +768,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 string textContent = string.Empty;
                 string xamlContent = string.Empty;
                 int imageCount = 0;
+                int inAppLinkCount = 0;
                 var contentNode = postContentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("t_msgfontfix"));
                 if (contentNode != null)
                 {
@@ -775,15 +781,16 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = textContent.Replace("&nbsp;", "  ");
 
                     // 转换HTML为XAML
-                    xamlContent = Html.HtmlToXaml.ConvertPost(postId, threadId, contentNode.InnerHtml.Trim(), _postDic, 20, ref imageCount);
+                    var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, contentNode.InnerHtml.Trim(), _postDic, ref InAppLinkUrlDic);
+                    xamlContent = ary[0];
+                    inAppLinkCount = Convert.ToInt32(ary[1]);
                 }
                 else
                 {
-                    xamlContent = @"<RichTextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><Paragraph>{0}</Paragraph></RichTextBlock>";
-                    xamlContent = string.Format(xamlContent, @"作者被禁止或删除&#160;内容自动屏蔽");
+                    xamlContent = $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""><RichTextBlock><Paragraph>作者被禁止或删除&#160;内容自动屏蔽</Paragraph></RichTextBlock></StackPanel>";
                 }
 
-                ReplyItemModel reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, xamlContent, postTime, imageCount, false);
+                var reply = new ReplyItemModel(i, j, floor, postId, pageNo, forumId, forumName, threadId, threadTitle, threadAuthorUserId, authorUserId, authorUsername, textContent, xamlContent, postTime, imageCount, false, inAppLinkCount);
                 threadReply.Replies.Add(reply);
 
                 if (!_postDic.ContainsKey(postId))
@@ -801,7 +808,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (i > 0)
             {
                 var lastItem = threadReply.Replies.Last();
-                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, -1, false);
+                var flag = new ReplyItemModel(lastItem.Index + 1, lastItem.Index2, -1, -1, lastItem.PageNo, -1, string.Empty, lastItem.ThreadId, string.Empty, -1, -1, string.Empty, string.Empty, string.Empty, string.Empty, -1, false, 0);
                 flag.IsLast = true;
                 threadReply.Replies.Add(flag);
             }

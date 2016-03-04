@@ -44,9 +44,15 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         // Using a DependencyProperty as the backing store for LinkContent.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LinkContentProperty =
-            DependencyProperty.Register("LinkContent", typeof(string), typeof(MyLink), new PropertyMetadata(0));
+            DependencyProperty.Register("LinkContent", typeof(string), typeof(MyLink), new PropertyMetadata(string.Empty));
 
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
 
+            Run content1 = GetTemplateChild("run1") as Run;
+            content1.Text = LinkContent;
+        }
 
         protected override void OnTapped(TappedRoutedEventArgs e)
         {

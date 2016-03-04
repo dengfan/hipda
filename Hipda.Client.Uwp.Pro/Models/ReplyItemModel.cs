@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Windows.System;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
@@ -15,7 +17,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 {
     public class ReplyItemModel
     {
-        public ReplyItemModel(int index, int index2, int floorNo, int postId, int pageNo, int forumId, string forumName, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string xamlConent, string authorCreateTime, int imageCount, bool isHighLight)
+        public ReplyItemModel(int index, int index2, int floorNo, int postId, int pageNo, int forumId, string forumName, int threadId, string threadTitle, int threadAuthorUserId, int authorUserId, string authorUsername, string textContent, string xamlConent, string authorCreateTime, int imageCount, bool isHighLight, int inAppLinkCount)
         {
             this.Index = index;
             this.Index2 = index;
@@ -35,6 +37,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             this.ImageCount = imageCount;
             this.IsHighLight = isHighLight;
             this.IsLast = false;
+            this.InAppLinkCount = inAppLinkCount;
         }
 
         public int Index { get; private set; }
@@ -76,6 +79,8 @@ namespace Hipda.Client.Uwp.Pro.Models
 
         public bool IsLast { get; set; }
 
+        public int InAppLinkCount { get; private set; }
+
         public bool HasThreadTitle
         {
             get
@@ -108,7 +113,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
-        public object XamlContent
+        public StackPanel XamlContent
         {
             get
             {
@@ -120,17 +125,37 @@ namespace Hipda.Client.Uwp.Pro.Models
 
                 try
                 {
-                    return XamlReader.Load(Common.ReplaceEmojiLabel(XamlStr));
+                    StackPanel sp = (StackPanel)XamlReader.Load(Common.ReplaceEmojiLabel(XamlStr));
+                    for (int i = 1; i <= InAppLinkCount; i++)
+                    {
+                        var key = $"InAppLink_{ThreadId}_{PostId}_{i}";
+                        var hyperLink = (Hyperlink)sp.FindName(key);
+                        if (hyperLink != null)
+                        {
+                            hyperLink.Click += HyperLink_Click;
+                        }
+                    }
+                    return sp;
                 }
                 catch
                 {
                     string errorDetails = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0} 楼层{1}内容解析出错。\r\n{2}", ThreadId, FloorNo, XamlStr);
                     Common.PostErrorEmailToDeveloper("回复内容解析出现异常", errorDetails);
 
-                    string text = Regex.Replace(TextStr, @"[^a-zA-Z\d\u4e00-\u9fa5]", " ");
-                    XamlStr = string.Format("<RichTextBlock xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"><Paragraph>{0}</Paragraph></RichTextBlock>", text);
-                    return XamlReader.Load(XamlStr);
+                    string text = Common.ReplaceHexadecimalSymbols(TextStr);
+                    XamlStr = string.Format("<StackPanel xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"><RichTextBlock><Paragraph>{0}</Paragraph></RichTextBlock></StackPanel>", text);
+                    return (StackPanel)XamlReader.Load(XamlStr);
                 }
+            }
+        }
+
+        private async void HyperLink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
+        {
+            var key = sender.Name;
+            if (ReplyListService.InAppLinkUrlDic.ContainsKey(key))
+            {
+                var val = ReplyListService.InAppLinkUrlDic[key];
+                await new MessageDialog(val).ShowAsync();
             }
         }
 

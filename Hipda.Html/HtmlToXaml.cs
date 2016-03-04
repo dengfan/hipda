@@ -21,7 +21,7 @@ namespace Hipda.Html
             return Regex.Replace(txt, r, "", RegexOptions.Compiled);
         }
 
-        public static string ConvertPost(int postId, int threadId, string htmlContent, Dictionary<int, string[]> postDic, int maxImageCount, ref int imageCount)
+        public static string[] ConvertPost(int postId, int threadId, string htmlContent, Dictionary<int, string[]> postDic, ref Dictionary<string, string> inAppLinkUrlDic)
         {
             //string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
 
@@ -77,7 +77,7 @@ namespace Hipda.Html
                 }
             }
 
-            // 替换回复链接
+            // 替换回复
             var matchsForRefLink = new Regex("<strong>回复\\s*<a href=\"[^\"]*pid=([0-9]+)[^\"]*\"[^>]*>([\\s\\S]*?)<\\/a>\\s*<i[^>]*>([\\s\\S]*?)<\\/i>\\s*</strong>").Matches(htmlContent);
             if (matchsForRefLink != null && matchsForRefLink.Count > 0)
             {
@@ -99,25 +99,26 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("</strong>", string.Empty);
 
             // 替换站内链接为按钮
-            var matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
-            if (matchsForMyLink != null && matchsForMyLink.Count > 0)
-            {
-                for (int i = 0; i < matchsForMyLink.Count; i++)
-                {
-                    var m = matchsForMyLink[i];
+            //var matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
+            //if (matchsForMyLink != null && matchsForMyLink.Count > 0)
+            //{
+            //    for (int i = 0; i < matchsForMyLink.Count; i++)
+            //    {
+            //        var m = matchsForMyLink[i];
 
-                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string threadIdStr = m.Groups[1].Value;
-                    string linkContent = m.Groups[2].Value;
-                    linkContent = Regex.Replace(linkContent, @"<[^>]*>", string.Empty);
+            //        string placeHolder = m.Groups[0].Value; // 要被替换的元素
+            //        string threadIdStr = m.Groups[1].Value;
+            //        string linkContent = m.Groups[2].Value;
+            //        linkContent = Regex.Replace(linkContent, @"<[^>]*>", string.Empty);
 
-                    string linkXaml = string.Format(@"[InlineUIContainer][c:MyLink ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent);
-                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
-                }
-            }
+            //        string linkXaml = string.Format(@"[InlineUIContainer][c:MyLink ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent);
+            //        htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+            //    }
+            //}
 
             // 替换链接
-            var matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<#]*)</a>").Matches(htmlContent);
+            int inAppLinkCount = 0;
+            var matchsForLink = new Regex("<a\\s+href=\"([^\"]*)\"[^>]*>([\\s\\S]*?)<\\/a>").Matches(htmlContent);
             if (matchsForLink != null && matchsForLink.Count > 0)
             {
                 for (int i = 0; i < matchsForLink.Count; i++)
@@ -125,14 +126,27 @@ namespace Hipda.Html
                     var m = matchsForLink[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string linkUrl = m.Groups[1].Value;
-                    string linkContent = m.Groups[2].Value;
 
+                    string linkUrl = m.Groups[1].Value;
                     if (!linkUrl.Contains(":"))
                     {
                         linkUrl = string.Format("http://www.hi-pda.com/forum/{0}", linkUrl);
                     }
-                    string linkXaml = string.Format(@"[Hyperlink NavigateUri=""{0}"" Foreground=""DodgerBlue""]{1}[/Hyperlink]", linkUrl, linkContent);
+
+                    string linkContent = m.Groups[2].Value;
+                    linkContent = new Regex("<[^>]*>").Replace(linkContent, string.Empty);
+
+                    string linkXaml = $@"[Hyperlink NavigateUri=""{linkUrl}""]{linkContent}[/Hyperlink]";
+                    if (linkUrl.StartsWith("http://www.hi-pda.com/forum/") || linkUrl.StartsWith("http://hi-pda.com/forum/"))
+                    {
+                        inAppLinkCount++;
+                        var key = $"InAppLink_{threadId}_{postId}_{inAppLinkCount}";
+                        linkXaml = $@"[Hyperlink Name=""{key}""]{linkContent}[/Hyperlink]";
+                        if (!inAppLinkUrlDic.ContainsKey(key))
+                        {
+                            inAppLinkUrlDic.Add(key, linkUrl);
+                        }
+                    }
                     htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                 }
             }
@@ -268,7 +282,7 @@ namespace Hipda.Html
             xamlStr = xamlStr.Replace("<RichTextBlock xml:space=\"preserve\" LineHeight=\"{Binding LineHeight,Source={StaticResource MyLocalSettings}}\"><Paragraph></Paragraph></RichTextBlock>", string.Empty);
             xamlStr = xamlStr.Replace("<RichTextBlock xml:space=\"preserve\" LineHeight=\"{Binding LineHeight,Source={StaticResource MyLocalSettings}}\"><Paragraph>\r\n</Paragraph></RichTextBlock>", string.Empty);
 
-            return ReplaceHexadecimalSymbols(xamlStr);
+            return new string[] { ReplaceHexadecimalSymbols(xamlStr), inAppLinkCount.ToString() };
         }
 
         private static string ConvertReply(string replyPostIdStr, string floorNoStr, string username, int threadId)
@@ -346,7 +360,7 @@ namespace Hipda.Html
                 $@"<Grid Margin=""8"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
                     <ContentControl Margin=""0,16,0,0"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
                         <RichTextBlock>
-                            <Paragraph Margin=""36,0,0,0""><Run FontWeight=""Bold"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}"">{authorUsername}</Run></Paragraph>
+                            <Paragraph Margin=""36,0,0,0""><Run FontWeight=""Bold"">{authorUsername}</Run></Paragraph>
                             <Paragraph>{quoteContent}</Paragraph>
                         </RichTextBlock>
                     </ContentControl>
@@ -378,26 +392,6 @@ namespace Hipda.Html
 
             Uri uri = new Uri(uriStr, UriKind.Absolute);
             await Launcher.LaunchUriAsync(uri);
-        }
-
-        /// <summary>
-        /// 将普通字符串转换为正则表达式字符串
-        /// </summary>
-        /// <param name="str">普通字符串</param>
-        /// <returns>正则表达式字符串</returns>
-        private static string StringToRegexPattern(string str)
-        {
-            return str
-                .Replace("^", @"\^")
-                .Replace("$", @"\$")
-                .Replace("|", @"\|")
-                .Replace("*", @"\*")
-                .Replace("+", @"\+")
-                .Replace("?", @"\?")
-                .Replace("[", @"\[")
-                .Replace("]", @"\]")
-                .Replace("(", @"\(")
-                .Replace(")", @"\)");
         }
 
         public static string ConvertUserInfo(string htmlContent)
