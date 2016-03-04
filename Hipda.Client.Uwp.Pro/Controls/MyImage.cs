@@ -97,51 +97,51 @@ namespace Hipda.Client.Uwp.Pro.Controls
         {
             base.OnApplyTemplate();
 
+            _folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
+            if (_isCommon)
+            {
+                _folder = await _folder.CreateFolderAsync("common", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
+            }
+            else
+            {
+                _folder = await _folder.CreateFolderAsync(FolderName, CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
+            }
+
+            ContentControl content1 = GetTemplateChild("content1") as ContentControl;
+            var myDependencyObject = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
+            Binding pictureOpacityBinding = new Binding { Source = myDependencyObject, Path = new PropertyPath("PictureOpacity") };
+
+            Image img = new Image();
+            img.SetBinding(Image.OpacityProperty, pictureOpacityBinding);
+            img.Stretch = Stretch.None;
+            img.ImageFailed += (s, e) =>
+            {
+                return;
+            };
+
+            string[] urlAry = Url.Split('/');
+            string fileFullName = urlAry.Last();
+            IStorageItem existsFile = await _folder.TryGetItemAsync(fileFullName);
+            if (existsFile != null)
+            {
+                _file = existsFile as StorageFile;
+            }
+            else
+            {
+                // 不存在则请求
+                using (var client = new HttpClient())
+                {
+                    var response = await client.GetAsync(new Uri(Url));
+                    string statusCode = response.ReasonPhrase;
+                    var buf = await response.Content.ReadAsBufferAsync();
+                    byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
+                    _file = await _folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
+                    await FileIO.WriteBytesAsync(_file, bytes);
+                }
+            }
+
             try
             {
-                _folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
-                if (_isCommon)
-                {
-                    _folder = await _folder.CreateFolderAsync("common", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
-                }
-                else
-                {
-                    _folder = await _folder.CreateFolderAsync(FolderName, CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
-                }
-
-                ContentControl content1 = GetTemplateChild("content1") as ContentControl;
-                var myDependencyObject = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
-                Binding b = new Binding { Source = myDependencyObject, Path = new PropertyPath("PictureOpacity") };
-
-                Image img = new Image();
-                img.SetBinding(Image.OpacityProperty, b);
-                img.Stretch = Stretch.None;
-                img.ImageFailed += (s, e) =>
-                {
-                    return;
-                };
-
-                string[] urlAry = Url.Split('/');
-                string fileFullName = urlAry.Last();
-                IStorageItem existsFile = await _folder.TryGetItemAsync(fileFullName);
-                if (existsFile != null)
-                {
-                    _file = existsFile as StorageFile;
-                }
-                else
-                {
-                    // 不存在则请求
-                    using (var client = new HttpClient())
-                    {
-                        var response = await client.GetAsync(new Uri(Url));
-                        string statusCode = response.ReasonPhrase;
-                        var buf = await response.Content.ReadAsBufferAsync();
-                        byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
-                        _file = await _folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
-                        await FileIO.WriteBytesAsync(_file, bytes);
-                    }
-                }
-
                 if (_folder != null && _file != null)
                 {
                     if (_isCommon)
@@ -161,40 +161,54 @@ namespace Hipda.Client.Uwp.Pro.Controls
                             int imgWidth = bitmapImg.PixelWidth;
                             int imgHeight = bitmapImg.PixelHeight;
 
-                            if (_isGif) // GIF图片且不是论坛表情图标，则使用WebView控件显示
+                            if (_isGif)
                             {
-                                WebView webView = new WebView();
-                                webView.SetBinding(WebView.OpacityProperty, b);
-                                webView.DefaultBackgroundColor = Colors.Transparent;
-                                webView.Width = imgWidth;
-                                webView.Height = imgHeight;
-                                webView.ScriptNotify += async (s, e) =>
+                                if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Mobile"))
                                 {
-                                    await OpenPhoto();
-                                };
+                                    // 移动端用Button显示Gif
+                                    img.Stretch = Stretch.Uniform;
+                                    img.MaxWidth = 64;
+                                    img.Source = bitmapImg;
 
-                                string imgHtml = @"<html><head><meta name=""viewport"" content=""width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0""></head><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""Gif Image"" /></body></html>";
-                                imgHtml = string.Format(imgHtml, Url);
-                                webView.NavigateToString(imgHtml);
+                                    SymbolIcon gifSymbolIcon = new SymbolIcon();
+                                    gifSymbolIcon.Symbol = Symbol.Play;
+                                    gifSymbolIcon.HorizontalAlignment = HorizontalAlignment.Center;
+                                    gifSymbolIcon.VerticalAlignment = VerticalAlignment.Center;
 
-                                content1.Content = webView;
+                                    Grid gifGrid = new Grid();
+                                    gifGrid.Children.Add(img);
+                                    gifGrid.Children.Add(gifSymbolIcon);
+
+                                    Button gifButton = new Button();
+                                    gifButton.Padding = new Thickness(0);
+                                    gifButton.Content = gifGrid;
+
+                                    content1.Content = gifButton;
+                                }
+                                else if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop"))
+                                {
+                                    // PC端用WebView显示Gif图片
+                                    WebView webView = new WebView();
+                                    webView.SetBinding(WebView.OpacityProperty, pictureOpacityBinding);
+                                    webView.DefaultBackgroundColor = Colors.Transparent;
+                                    webView.Width = imgWidth;
+                                    webView.Height = imgHeight;
+                                    webView.ScriptNotify += async (s, e) =>
+                                    {
+                                        await OpenPhoto();
+                                    };
+
+                                    string imgHtml = @"<html><head><meta name=""viewport"" content=""width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0""></head><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""Gif Image"" /></body></html>";
+                                    imgHtml = string.Format(imgHtml, Url);
+                                    webView.NavigateToString(imgHtml);
+
+                                    content1.Content = webView;
+                                }
                             }
                             else // 其它图片，使用Image控件显示
                             {
-                                if (imgWidth > 900)
-                                {
-                                    img.Stretch = Stretch.Uniform;
-                                    img.MaxWidth = 1000;
-                                }
-                                else if (imgWidth > 400)
-                                {
-                                    img.Stretch = Stretch.Uniform;
-                                    img.MaxWidth = 600;
-                                }
-                                else
-                                {
-                                    img.Stretch = Stretch.None;
-                                }
+                                img.MaxWidth = imgWidth;
+                                img.Stretch = Stretch.UniformToFill;
                                 img.Source = bitmapImg;
                             }
                         }
@@ -206,7 +220,10 @@ namespace Hipda.Client.Uwp.Pro.Controls
                     content1.Content = img;
                 }
             }
-            catch { }
+            catch
+            {
+                
+            }
         }
     }
 }
