@@ -15,16 +15,6 @@
         </Setter>
     </Style>
 
-    <!--<Style TargetType="c:MyLink" >
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="c:MyLink">
-                    <TextBlock><Underline><Run x:Name="run1"/></Underline></TextBlock>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>-->
-
     <Style TargetType="c:MyQuoteLink" >
         <Setter Property="Template">
             <Setter.Value>
