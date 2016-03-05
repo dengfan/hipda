@@ -121,21 +121,28 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
             string[] urlAry = Url.Split('/');
             string fileFullName = urlAry.Last();
-            IStorageItem existsFile = await _folder.TryGetItemAsync(fileFullName);
-            if (existsFile != null)
+            try
             {
-                _file = existsFile as StorageFile;
-            }
-            else
-            {
-                // 不存在则请求
-                using (var client = new HttpClient())
+                IStorageItem existsFile = await _folder.TryGetItemAsync(fileFullName);
+                if (existsFile != null)
                 {
-                    var response = await client.GetAsync(new Uri(Url));
-                    var buf = await response.Content.ReadAsBufferAsync();
-                    _file = await _folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
-                    await FileIO.WriteBufferAsync(_file, buf);
+                    _file = existsFile as StorageFile;
                 }
+                else
+                {
+                    // 不存在则请求
+                    using (var client = new HttpClient())
+                    {
+                        var response = await client.GetAsync(new Uri(Url));
+                        var buf = await response.Content.ReadAsBufferAsync();
+                        _file = await _folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
+                        await FileIO.WriteBufferAsync(_file, buf);
+                    }
+                }
+            }
+            catch
+            {
+
             }
 
             try
