@@ -173,7 +173,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
                                     {
                                         // 移动端用Button显示Gif
                                         img.Stretch = Stretch.Uniform;
-                                        img.MaxWidth = 64;
+                                        img.MaxWidth = imgWidth;
                                         img.Source = bitmapImg;
 
                                         SymbolIcon gifSymbolIcon = new SymbolIcon();
