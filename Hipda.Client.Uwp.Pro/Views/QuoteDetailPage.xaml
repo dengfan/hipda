@@ -13,24 +13,20 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Margin="16,0,0,16" Orientation="Horizontal">
+        <StackPanel Margin="8,0,0,8" Orientation="Horizontal">
             <Border Background="{ThemeResource SystemListLowColor}" Width="40" Height="40">
                 <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
             </Border>
-            <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}"
-                                   
-                                   VerticalAlignment="Bottom">
-                        <Run Text="{Binding FloorNoStr}"/>
-                        <LineBreak/>
-                        <Run Text="{Binding AuthorUsername}"/>
-                        <Run Text=" "/>
-                        <Run Text="{Binding AuthorCreateTime}"/>
+            <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}" VerticalAlignment="Bottom">
+                <Run Text="{Binding FloorNoStr}"/>
+                <LineBreak/>
+                <Run Text="{Binding AuthorUsername}"/>
+                <Run Text=" "/>
+                <Run Text="{Binding AuthorCreateTime}"/>
             </TextBlock>
         </StackPanel>
         <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <ScrollViewer Grid.Row="1" Padding="16,8,20,8" MinWidth="300"
-                      HorizontalContentAlignment="Stretch"
-                      Content="{Binding XamlContent}"/>
+        <ScrollViewer Grid.Row="1" Padding="8" HorizontalContentAlignment="Stretch" Content="{Binding XamlContent}"/>
         <CommandBar Grid.Row="2">
             <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}">
                 <AppBarButton.Icon>

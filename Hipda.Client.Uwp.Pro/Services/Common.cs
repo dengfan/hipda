@@ -350,7 +350,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         /// <returns></returns>
         public static string ReplaceHexadecimalSymbols(string txt)
         {
-            string r = "[\x00-\x08\x0B\x0C\x0E-\x1F\x26]";
+            string r = "[\x00-\x08\x0B\x0C\x0E-\x1F]";
             return Regex.Replace(txt, r, "", RegexOptions.Compiled);
         }
 
