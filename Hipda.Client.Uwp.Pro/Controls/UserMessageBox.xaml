@@ -71,7 +71,7 @@
         </Button>
         <TextBox x:Name="UserMessageTextBox" Grid.Column="2" Margin="0,4,20,0" VerticalAlignment="Center"
                 PlaceholderText="输入短消息" BorderThickness="0" Background="Transparent"
-                Template="{StaticResource TextBoxTemplate1}" AcceptsReturn="True" MaxHeight="160" />
+                AcceptsReturn="True" MaxHeight="160" />
         <Button x:Name="UserMessagePostButton" Grid.Column="3" Width="44" VerticalAlignment="Center" Click="UserMessagePostButton_Click">
             <Button.Template>
                 <ControlTemplate>

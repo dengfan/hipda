@@ -114,7 +114,7 @@
                         </Button.Content>
                     </Button>
                 </StackPanel>
-                <TextBox Grid.Row="1" x:Name="ContentTextBox" Template="{StaticResource TextBoxTemplate1}"
+                <TextBox Grid.Row="1" x:Name="ContentTextBox"
                                  MinHeight="64" Padding="8,4" Background="Transparent" BorderThickness="0"
                                  TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复，回车可换行。"
                                  Text="{Binding Content,Mode=TwoWay}"/>

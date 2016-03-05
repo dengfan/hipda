@@ -22,11 +22,11 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="TitleTextBox" Margin="8" Template="{StaticResource TextBoxTemplate1}"
+        <TextBox x:Name="TitleTextBox" Margin="8"
                  PlaceholderText="编辑标题" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                  GotFocus="TitleTextBox_GotFocus" MaxLength="80" Text="{Binding Title,Mode=TwoWay}"/>
 
-        <TextBox x:Name="ContentTextBox" Margin="8" Grid.Row="1" Template="{StaticResource TextBoxTemplate1}"
+        <TextBox x:Name="ContentTextBox" Margin="8" Grid.Row="1"
                  PlaceholderText="编辑内容" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch"
                  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                  GotFocus="ContentTextBox_GotFocus" Text="{Binding Content,Mode=TwoWay}"/>
