@@ -805,7 +805,7 @@
                        FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                        Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
                        Tapped="CloseInputPanelMask_Tapped"/>
-            <Frame Grid.Row="1" x:Name="InputPanelFrame"></Frame>
+            <Frame Grid.Row="1" x:Name="InputPanelFrame" ScrollViewer.VerticalScrollBarVisibility="Visible"></Frame>
         </Grid>
     </Grid>
 </Page>

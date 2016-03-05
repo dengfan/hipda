@@ -34,13 +34,13 @@ namespace Hipda.Client.Uwp.Pro
 
         // Using a DependencyProperty as the backing store for MyFontSize.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FontSizeProperty =
-            DependencyProperty.Register("FontSize1", typeof(double), typeof(LocalSettingsDependencyObject), new PropertyMetadata(15D, new PropertyChangedCallback(OnFontSize1Changed)));
+            DependencyProperty.Register("FontSize1", typeof(double), typeof(LocalSettingsDependencyObject), new PropertyMetadata(14D, new PropertyChangedCallback(OnFontSize1Changed)));
 
         private static void OnFontSize1Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var instance = d as LocalSettingsDependencyObject;
             double fs1 = (double)e.NewValue;
-            instance.FontSize2 = fs1 > 15 ? 14 : 12;
+            instance.FontSize2 = fs1 > 14 ? 14 : 12;
         }
 
         public double FontSize2
