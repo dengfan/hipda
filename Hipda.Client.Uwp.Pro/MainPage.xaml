@@ -389,13 +389,13 @@
                                 <ColumnDefinition Width="8"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Button Style="{StaticResource NormalButtonStyle}" Click="OpenImageFolderButton_Click">
+                            <Button HorizontalAlignment="Stretch" Click="OpenImageFolderButton_Click">
                                 <TextBlock Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                                     <Run Text="查看缓存图片 "/>
                                     <Run Text="{Binding ImageCacheDataSize,ElementName=MyMainPage,Converter={StaticResource ByteToMegaByteConverter}}"/>
                                 </TextBlock>
                             </Button>
-                            <Button Grid.Column="2" Style="{StaticResource NormalButtonStyle}" Click="ClearImageCacheData">
+                            <Button Grid.Column="2" HorizontalAlignment="Stretch" Click="ClearImageCacheData">
                                 <TextBlock Text="清除" Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
                             </Button>
                         </Grid>
@@ -432,7 +432,7 @@
                                    Visibility="{Binding BlockUsers.Count,Source={StaticResource MyRoamingSettings},Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}"
                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"/>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockUsersListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
-                                Content="解除选中用户" Style="{StaticResource NormalButtonStyle}" Click="UnblockUsers"/>
+                                Content="解除选中用户" HorizontalAlignment="Stretch" Click="UnblockUsers"/>
 
                         <TextBlock Margin="0,12,0,8" Text="&#x2601; 屏蔽的主题"
                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
@@ -461,7 +461,7 @@
                                    Visibility="{Binding BlockThreads.Count,Source={StaticResource MyRoamingSettings},Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}"
                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"/>
                         <Button Visibility="{Binding SelectedIndex,ElementName=BlockThreadsListBox,Converter={StaticResource SelectedIndexToVisibilityConverter}}"
-                                Content="解除选中主题" Style="{StaticResource NormalButtonStyle}"
+                                Content="解除选中主题" HorizontalAlignment="Stretch"
                                 Click="UnblockThreads"/>
 
                         <HyperlinkButton Margin="0,14,0,14" HorizontalAlignment="Center" Content="{Binding RemoveAdButtonContent,ElementName=MyMainPage}" Click="PurchaseRemoveAdButton_Click"/>
@@ -645,8 +645,8 @@
                                     <x:String>3个月以内</x:String>
                                     <x:String>1年以内</x:String>
                                 </ComboBox>
-                                <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,8,0,0" Style="{StaticResource NormalButtonStyle}" Click="SearchButton1_Click"/>
-                                <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,8,0,0" Style="{StaticResource NormalButtonStyle}" Click="SearchButton2_Click"/>
+                                <Button x:Name="SearchButton1" Content="在所有版块内搜索" Margin="0,8,0,0" HorizontalAlignment="Stretch" Click="SearchButton1_Click"/>
+                                <Button x:Name="SearchButton2" Content="在当前版块内搜索" Margin="0,8,0,0" HorizontalAlignment="Stretch" Click="SearchButton2_Click"/>
                             </StackPanel>
                             <ListBox x:Name="TopNavButtonListBox"
                                  
