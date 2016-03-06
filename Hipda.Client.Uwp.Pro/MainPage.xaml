@@ -150,27 +150,30 @@
 
         <DataTemplate x:Key="NavButtonBySearchItemTemplate">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Icon}" Margin="2,0,0,0" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                <TextBlock Text="{Binding Icon}" Margin="2,0,0,0" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center"
                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                 <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center"
+                           FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
             </StackPanel>
         </DataTemplate>
         
         <DataTemplate x:Key="NavButtonByForumIdItemTemplate">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Icon}" Margin="2,0,0,0" FontSize="20" Width="24"
+                <TextBlock Text="{Binding Icon}" Margin="2,0,0,0" FontSize="20" Width="24" VerticalAlignment="Center"
                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                 <TextBlock Text="{Binding Text}" Margin="20,0,0,0" VerticalAlignment="Center"
+                           FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="NavButtonByMyItemItemTemplate">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Icon}" Margin="2,0,0,0" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                <TextBlock Text="{Binding Icon}" Margin="2,0,0,0" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center"
                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                 <TextBlock Text="{Binding Text}" Margin="24,0,0,0" VerticalAlignment="Center"
+                           FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
             </StackPanel>
         </DataTemplate>
@@ -191,7 +194,7 @@
             </ListView>
         </DataTemplate>
 
-        <local:NavButtonListItemTemplateSelector x:Key="navButtonListItemTemplateSelector"
+        <local:NavButtonListItemTemplateSelector x:Key="NavButtonListItemTemplateSelector"
                                                  NavButtonBySearchItemTemplate="{StaticResource NavButtonBySearchItemTemplate}"
                                                  NavButtonByMyItemItemTemplate="{StaticResource NavButtonByMyItemItemTemplate}"
                                                  NavButtonByForumIdItemTemplate="{StaticResource NavButtonByForumIdItemTemplate}"
@@ -624,6 +627,7 @@
                                     <TextBlock Text="&#xE1A3;" Margin="14,0,0,0" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center"
                                                Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                                     <TextBlock Text="搜索贴子" Margin="24,0,0,0" VerticalAlignment="Center"
+                                               FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                                                Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                                 </StackPanel>
                             </Button>
@@ -651,7 +655,7 @@
                             <ListBox x:Name="TopNavButtonListBox"
                                  
                                  Background="Transparent" ItemsSource="{Binding NavButtons}"
-                                 ItemTemplateSelector="{StaticResource navButtonListItemTemplateSelector}"
+                                 ItemTemplateSelector="{StaticResource NavButtonListItemTemplateSelector}"
                                  ItemContainerStyle="{StaticResource MainMenuListBoxItemStyle}"
                                  SelectedItem="{Binding SelectedNavButton}"
                                  SelectionMode="Single"
