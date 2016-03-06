@@ -18,7 +18,9 @@ namespace Hipda.Html
         public static string ReplaceHexadecimalSymbols(string txt)
         {
             string r = "[\x00-\x08\x0B\x0C\x0E-\x1F]";
-            return Regex.Replace(txt, r, "", RegexOptions.Compiled);
+            r = Regex.Replace(txt, r, "", RegexOptions.Compiled);
+            r = r.Replace("&", "&amp;");
+            return r;
         }
 
         public static string[] ConvertPost(int postId, int threadId, string htmlContent, Dictionary<int, string[]> postDic, ref Dictionary<string, string> inAppLinkUrlDic)
@@ -110,6 +112,22 @@ namespace Hipda.Html
                     string quoteXaml = ConvertQuote(m.Groups[1].Value.Trim(), postDic, postId, threadId);
                     quoteXaml = $@"[/Paragraph][/RichTextBlock]{quoteXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
                     htmlContent = htmlContent.Replace(placeHolder, quoteXaml);
+                }
+            }
+
+            // 替换 flash js
+            var matchsForFlashJs = new Regex("<script type=\"text/javascript\" reload=\"1\">document.write[^<]*\\s'src',\\s'([^']*)'[^<]*</script>").Matches(htmlContent);
+            if (matchsForFlashJs != null && matchsForFlashJs.Count > 0)
+            {
+                for (int i = 0; i < matchsForFlashJs.Count; i++)
+                {
+                    var m = matchsForFlashJs[i];
+
+                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
+                    string url = m.Groups[1].Value;
+
+                    string linkXaml = $@"[Hyperlink NavigateUri=""{url}"" FontWeight=""Bold"" Foreground=""RoyalBlue""]【视频地址：{url}】[/Hyperlink]";
+                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                 }
             }
 

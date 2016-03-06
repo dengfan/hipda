@@ -338,8 +338,6 @@
     <Content Include="Assets\Square150x150Logo.scale-150.png" />
     <Content Include="Assets\Square150x150Logo.scale-400.png" />
     <Content Include="Assets\Square44x44Logo.scale-100.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-16_altform-unplated.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-256_altform-unplated.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-48_altform-unplated.png" />
     <None Include="Package.StoreAssociation.xml" />
