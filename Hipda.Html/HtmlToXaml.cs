@@ -126,7 +126,7 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string url = m.Groups[1].Value;
 
-                    string linkXaml = $@"[Hyperlink NavigateUri=""{url}"" FontWeight=""Bold"" Foreground=""RoyalBlue""]【视频地址：{url}】[/Hyperlink]";
+                    string linkXaml = $@"[Hyperlink NavigateUri=""{url}"" FontWeight=""Bold"" Foreground=""RoyalBlue""]【视频Flash地址：{url}】[/Hyperlink]";
                     htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                 }
             }
