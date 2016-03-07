@@ -165,7 +165,7 @@ namespace Hipda.Html
                     }
                     else
                     {
-                        string linkXaml = $@"[Hyperlink NavigateUri=""{linkUrl}""]{linkContent}[/Hyperlink]";
+                        string linkXaml = $@"[Hyperlink NavigateUri=""{linkUrl}"" Foreground=""DodgerBlue""]{linkContent}[/Hyperlink]";
                         htmlContent = htmlContent.Replace(placeHolder, linkXaml);
                     }
                     
