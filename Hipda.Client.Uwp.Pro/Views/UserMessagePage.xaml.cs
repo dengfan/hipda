@@ -33,5 +33,19 @@ namespace Hipda.Client.Uwp.Pro.Views
             base.OnNavigatedTo(e);
             this.DataContext = new UserMessagePageViewModel((int)e.Parameter);
         }
+
+        int _messageItemMaxIndex = 0;
+        private void ListView_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            if (args.InRecycleQueue == false && args.ItemIndex > _messageItemMaxIndex)
+            {
+                sender.SelectedItem = null;
+                if (sender.Items.Count > 0)
+                {
+                    sender.ScrollIntoView(sender.Items.Last());
+                    _messageItemMaxIndex = args.ItemIndex;
+                }
+            }
+        }
     }
 }

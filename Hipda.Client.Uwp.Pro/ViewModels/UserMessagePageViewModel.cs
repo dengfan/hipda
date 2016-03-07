@@ -80,6 +80,23 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
+        private string _newMessage;
+
+        public string NewMessage
+        {
+            get { return _newMessage; }
+            set
+            {
+                _newMessage = value;
+                this.RaisePropertyChanged("NewMessage");
+            }
+        }
+
+
+        public DelegateCommand LoadMoreCommand { get; set; }
+        public DelegateCommand RefreshCommand { get; set; }
+        public DelegateCommand SubmitCommand { get; set; }
+
         public UserMessagePageViewModel(int userId)
         {
             _ds = new DataService();
@@ -92,10 +109,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             RefreshCommand = new DelegateCommand();
             RefreshCommand.ExecuteAction = new Action<object>(RefreshExecute);
-        }
 
-        public DelegateCommand LoadMoreCommand { get; set; }
-        public DelegateCommand RefreshCommand { get; set; }
+            SubmitCommand = new DelegateCommand();
+            SubmitCommand.ExecuteAction = new Action<object>(SubmitExecute);
+        }
 
         void LoadMoreExecute(object parameter)
         {
@@ -105,6 +122,21 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         void RefreshExecute(object parameter)
         {
             GetData(limitCount);
+        }
+
+        async void SubmitExecute(object parameter)
+        {
+            if (string.IsNullOrEmpty(NewMessage))
+            {
+                return;
+            }
+
+            var data = await _ds.PostUserMessage(NewMessage, UserId);
+            if (data != null)
+            {
+                ListData.Add(data);
+                NewMessage = string.Empty;
+            }
         }
 
         async void GetData(int count)
@@ -129,18 +161,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
 
             IsProgressRingActive = false;
-        }
-
-        public async Task<bool> PostUserMessage(string message, int userId)
-        {
-            var data = await _ds.PostUserMessage(message, userId);
-            if (data != null)
-            {
-                ListData.Add(data);
-                return true;
-            }
-
-            return false;
         }
     }
 }

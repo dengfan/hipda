@@ -209,8 +209,6 @@ namespace Hipda.Client.Uwp.Pro
                     }
                 }
             };
-
-            //this.KeyDown += InputPanel_KeyDown;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -652,25 +650,6 @@ namespace Hipda.Client.Uwp.Pro
             OpenInputPanel($"与 {PopupUsername} 聊天", typeof(UserMessagePage), PopupUserId);
         }
 
-        private async void UserMessageBox_Submit(object sender, EventArgs e)
-        {
-            UserMessageBox umb = sender as UserMessageBox;
-            TextBox tb = umb.FindName("UserMessageTextBox") as TextBox;
-            var msg = tb.Text.Trim();
-            var vm = umb.DataContext as UserMessagePageViewModel;
-            bool isOk = await vm.PostUserMessage(msg, umb.UserId);
-            tb.Text = string.Empty;
-
-            // 发送完成后跳到列表底部
-            var listView = Common.FindParent<Grid>(umb).Children[1] as ListView;
-            if (listView.Items.Count > 0) 
-            {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                    listView.ScrollIntoView(listView.Items.Last());
-                });
-            }
-        }
-
         public void OpenPostDetailDialog(int postId, int threadId)
         {
             OpenInputPanel($"查看引用楼", typeof(QuoteDetailPage), $"{postId},{threadId}");
@@ -1022,17 +1001,17 @@ namespace Hipda.Client.Uwp.Pro
             InputPanelFrameGoBack();
         }
 
-        private void InputPanel_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (InputPanel == null || InputPanel.Visibility == Visibility.Collapsed)
-            {
-                return;
-            }
+        //private void InputPanel_KeyDown(object sender, KeyRoutedEventArgs e)
+        //{
+        //    if (InputPanel == null || InputPanel.Visibility == Visibility.Collapsed)
+        //    {
+        //        return;
+        //    }
 
-            if (e.Key == VirtualKey.Back)
-            {
-                InputPanelFrameGoBack();
-            }
-        }
+        //    if (e.Key == VirtualKey.Back)
+        //    {
+        //        InputPanelFrameGoBack();
+        //    }
+        //}
     }
 }

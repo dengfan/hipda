@@ -787,8 +787,7 @@
         <Grid x:Name="InputPanel" x:DeferLoadStrategy="Lazy" Margin="24"
               BorderThickness="4" BorderBrush="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"
               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-              MaxWidth="640" MaxHeight="800" Visibility="Collapsed"
-              KeyDown="InputPanel_KeyDown">
+              MaxWidth="640" MaxHeight="800" Visibility="Collapsed">
             <Grid.RenderTransform>
                 <CompositeTransform/>
             </Grid.RenderTransform>

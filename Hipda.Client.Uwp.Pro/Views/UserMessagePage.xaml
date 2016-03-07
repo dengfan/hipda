@@ -20,13 +20,14 @@
         <ListView VerticalAlignment="Stretch" IsItemClickEnabled="False" SelectionMode="None" ShowsScrollingPlaceholders="False"
                   ItemsSource="{Binding ListData}"
                   ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-                  ItemTemplateSelector="{StaticResource userMessageListItemTemplateSelector}">
+                  ItemTemplateSelector="{StaticResource userMessageListItemTemplateSelector}"
+                  ContainerContentChanging="ListView_ContainerContentChanging">
             <ListView.Header>
                 <HyperlinkButton Content="点击查看所有短消息" HorizontalAlignment="Center"
                                  Visibility="{Binding IsShowLoadMoreButton}" Command="{Binding LoadMoreCommand}"/>
             </ListView.Header>
         </ListView>
-        <Border Grid.Row="1" Padding="8" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
+        <Border Grid.Row="1" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
             <c:UserMessageBox UserId="{Binding UserId}"></c:UserMessageBox>
         </Border>
         <CommandBar Grid.Row="2">
