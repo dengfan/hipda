@@ -6,18 +6,24 @@
     xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled">
 
     <Grid>
-        <ListView Margin="0,0,0,48" IsItemClickEnabled="True" SelectionMode="None"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ProgressRing Grid.RowSpan="2" IsActive="{Binding IsProgressRingActive}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="40" />
+        <ListView VerticalAlignment="Stretch" IsItemClickEnabled="True" SelectionMode="None"
                   ShowsScrollingPlaceholders="False" IncrementalLoadingTrigger="Edge"
                   ItemsSource="{Binding DataView}"
                   ItemClick="ListView_ItemClick">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Border Margin="0,8" Width="40" Height="40" Background="{ThemeResource SystemListLowColor}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                            <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
+                        <Border Margin="0,8" Width="36" Height="36" Background="{ThemeResource SystemListLowColor}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Image Source="{Binding AvatarUri}" Width="36" Height="36" Stretch="UniformToFill" Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
                         </Border>
                         <StackPanel Margin="48,8,8,8" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <TextBlock FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
@@ -36,7 +42,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <CommandBar VerticalAlignment="Bottom">
+        <CommandBar Grid.Row="1">
             <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
             <AppBarButton Label="选择" IsEnabled="{Binding IsButtonEnable}" Command="{Binding IntoMultiSelectionModeCommand}">
                 <AppBarButton.Icon>
@@ -45,6 +51,5 @@
             </AppBarButton>
             <AppBarButton Icon="Delete" Label="删除" IsEnabled="{Binding IsDeleteButtonEnable}" Command="{Binding DeleteCommand}"/>
         </CommandBar>
-        <ProgressRing x:Name="ProgressRing" IsActive="{Binding IsProgressRingActive}" VerticalAlignment="Center" Width="40" Height="40" />
     </Grid>
 </Page>

@@ -679,7 +679,7 @@ namespace Hipda.Client.Uwp.Pro
             UserMessageBox umb = sender as UserMessageBox;
             TextBox tb = umb.FindName("UserMessageTextBox") as TextBox;
             var msg = tb.Text.Trim();
-            var vm = umb.DataContext as ContentDialogForUserMessageViewModel;
+            var vm = umb.DataContext as UserMessagePageViewModel;
             bool isOk = await vm.PostUserMessage(msg, umb.UserId);
             tb.Text = string.Empty;
 
@@ -734,25 +734,6 @@ namespace Hipda.Client.Uwp.Pro
         private void openUserMessageDialogButton_Click(object sender, RoutedEventArgs e)
         {
             OpenUserMessageDialog();
-        }
-
-        private void userMessageListListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //var listView = (MyListViewForUserMessageList)sender;
-            //listView.SelectedUserMessageListItems = listView.SelectedItems;
-
-            //if (listView.SelectionMode == ListViewSelectionMode.Single && e.AddedItems.Count == 1)
-            //{
-            //    var data = e.AddedItems[0] as UserMessageListItemModel;
-            //    if (data == null)
-            //    {
-            //        return;
-            //    }
-
-            //    PopupUserId = data.UserId;
-            //    PopupUsername = data.Username;
-            //    OpenUserMessageDialog();
-            //}
         }
         #endregion
 
@@ -1043,6 +1024,10 @@ namespace Hipda.Client.Uwp.Pro
 
             InputPanelTitleTextBlock.Text = title;
             InputPanelFrame.Navigate(pageType, parameters);
+        }
+
+        private void InputPanelFrame_Navigated(object sender, NavigationEventArgs e)
+        {
             InputPanelBackButton.Visibility = InputPanelFrame.CanGoBack ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -1069,7 +1054,6 @@ namespace Hipda.Client.Uwp.Pro
             if (InputPanelFrame.CanGoBack)
             {
                 InputPanelFrame.GoBack();
-                InputPanelBackButton.Visibility = InputPanelFrame.CanGoBack ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 

@@ -810,7 +810,7 @@
                        FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                        Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
                        Tapped="CloseInputPanelMask_Tapped"/>
-            <Frame Grid.Row="1" x:Name="InputPanelFrame"></Frame>
+            <Frame Grid.Row="1" x:Name="InputPanelFrame" Navigated="InputPanelFrame_Navigated"></Frame>
         </Grid>
     </Grid>
 </Page>

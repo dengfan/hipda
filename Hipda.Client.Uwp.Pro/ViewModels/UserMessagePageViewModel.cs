@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ContentDialogForUserMessageViewModel : NotificationObject
+    public class UserMessagePageViewModel : NotificationObject
     {
         int limitCount = 3;
 
@@ -27,7 +27,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private string _tipText = "请稍候，载入中。。。";
+
+        private string _tipText = string.Empty;
 
         public string TipText
         {
@@ -36,6 +37,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 _tipText = value;
                 this.RaisePropertyChanged("TipText");
+            }
+        }
+
+
+        private bool _isProgressRingActive = true;
+
+        public bool IsProgressRingActive
+        {
+            get { return _isProgressRingActive; }
+            set
+            {
+                _isProgressRingActive = value;
+                this.RaisePropertyChanged("IsProgressRingActive");
             }
         }
 
@@ -66,7 +80,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ContentDialogForUserMessageViewModel(int userId)
+        public UserMessagePageViewModel(int userId)
         {
             _ds = new DataService();
             _userId = userId;
@@ -106,6 +120,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 ListData = data.ListData;
                 IsShowLoadMoreButton = data.Total > count ? Visibility.Visible : Visibility.Collapsed;
             }
+
+            IsProgressRingActive = false;
         }
 
         public async Task<bool> PostUserMessage(string message, int userId)
