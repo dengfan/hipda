@@ -639,18 +639,7 @@ namespace Hipda.Client.Uwp.Pro
                 return;
             }
 
-            OpenInputPanel($"查看 {PopupUsername} 的详细资料", typeof(UserInfoPage), PopupUserId);
-
-            //FindName("UserDialog");
-            //UserDialog.DataContext = new ContentDialogForUserInfoViewModel(PopupUserId);
-            //UserDialog.Title = string.Format("查看 {0} 的详细资料", PopupUsername);
-            //UserDialog.ContentTemplate = this.Resources["UserInfoDialogContentTemplate"] as DataTemplate;
-
-            //if (_isDialogShown == false)
-            //{
-            //    _isDialogShown = true;
-            //    await UserDialog.ShowAsync();
-            //}
+            OpenInputPanel($"{PopupUsername} 的个人资料", typeof(UserInfoPage), PopupUserId);
         }
 
         public void OpenUserMessageDialog()
@@ -661,17 +650,6 @@ namespace Hipda.Client.Uwp.Pro
             }
 
             OpenInputPanel($"与 {PopupUsername} 聊天", typeof(UserMessagePage), PopupUserId);
-
-            //FindName("UserDialog");
-            //UserDialog.DataContext = new ContentDialogForUserMessageViewModel(PopupUserId);
-            //UserDialog.Title = string.Format("与 {0} 聊天", PopupUsername);
-            //UserDialog.ContentTemplate = this.Resources["UserMessageDialogContentTemplate"] as DataTemplate;
-
-            //if (_isDialogShown == false)
-            //{
-            //    _isDialogShown = true;
-            //    await UserDialog.ShowAsync();
-            //}
         }
 
         private async void UserMessageBox_Submit(object sender, EventArgs e)
@@ -696,24 +674,6 @@ namespace Hipda.Client.Uwp.Pro
         public void OpenPostDetailDialog(int postId, int threadId)
         {
             OpenInputPanel($"查看引用楼", typeof(QuoteDetailPage), $"{postId},{threadId}");
-
-            //FindName("UserDialog");
-
-            //var vm = new ContentDialogForPostDetailViewModel(postId, threadId);
-            //if (vm == null)
-            //{
-            //    return;
-            //}
-
-            //UserDialog.DataContext = vm;
-            //UserDialog.Title = "查看引用楼";
-            //UserDialog.ContentTemplate = this.Resources["PostDetailDialogContentTemplate"] as DataTemplate;
-
-            //if (_isDialogShown == false)
-            //{
-            //    _isDialogShown = true;
-            //    await UserDialog.ShowAsync();
-            //}
         }
 
         public void OpenUserMessageListDialog()

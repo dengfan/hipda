@@ -118,7 +118,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 TipText = string.Empty;
                 ListData = data.ListData;
-                IsShowLoadMoreButton = data.Total > count ? Visibility.Visible : Visibility.Collapsed;
+                if (count == -1)
+                {
+                    IsShowLoadMoreButton = Visibility.Collapsed;
+                }
+                else
+                {
+                    IsShowLoadMoreButton = data.Total > count ? Visibility.Visible : Visibility.Collapsed;
+                }
             }
 
             IsProgressRingActive = false;
