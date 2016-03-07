@@ -13,7 +13,6 @@
     <Grid x:Name="PostUserMessageForm">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
@@ -25,59 +24,50 @@
             </Button.Template>
             <Button.Flyout>
                 <Flyout>
-                    <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
-                            SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="180"
-                            ItemClick="EmojiGridView_ItemClick">
-                        <GridView.ItemContainerStyle>
-                            <Style TargetType="GridViewItem">
-                                <Setter Property="Width" Value="36"/>
-                                <Setter Property="Height" Value="36"/>
-                            </Style>
-                        </GridView.ItemContainerStyle>
-                        <GridView.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Value}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            </DataTemplate>
-                        </GridView.ItemTemplate>
-                    </GridView>
+                    <FlipView Background="Transparent" Width="240" Height="160">
+                        <FlipViewItem>
+                            <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
+                                SelectionMode="None" IsItemClickEnabled="True"
+                                ItemClick="FaceGridView_ItemClick">
+                                <GridView.ItemContainerStyle>
+                                    <Style TargetType="GridViewItem">
+                                        <Setter Property="Width" Value="36"/>
+                                        <Setter Property="Height" Value="36"/>
+                                    </Style>
+                                </GridView.ItemContainerStyle>
+                                <GridView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+                            </GridView>
+                        </FlipViewItem>
+                        <FlipViewItem>
+                            <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
+                                SelectionMode="None" IsItemClickEnabled="True"
+                                ItemClick="EmojiGridView_ItemClick">
+                                <GridView.ItemContainerStyle>
+                                    <Style TargetType="GridViewItem">
+                                        <Setter Property="Width" Value="36"/>
+                                        <Setter Property="Height" Value="36"/>
+                                    </Style>
+                                </GridView.ItemContainerStyle>
+                                <GridView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Value}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+                            </GridView>
+                        </FlipViewItem>
+                    </FlipView>
                 </Flyout>
             </Button.Flyout>
         </Button>
-        <Button Grid.Column="1" Width="44" VerticalAlignment="Center">
-            <Button.Template>
-                <ControlTemplate>
-                    <SymbolIcon Symbol="Emoji2"/>
-                </ControlTemplate>
-            </Button.Template>
-            <Button.Flyout>
-                <Flyout>
-                    <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
-                            SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="192"
-                            ItemClick="FaceGridView_ItemClick">
-                        <GridView.ItemContainerStyle>
-                            <Style TargetType="GridViewItem">
-                                <Setter Property="Width" Value="36"/>
-                                <Setter Property="Height" Value="36"/>
-                            </Style>
-                        </GridView.ItemContainerStyle>
-                        <GridView.ItemTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            </DataTemplate>
-                        </GridView.ItemTemplate>
-                    </GridView>
-                </Flyout>
-            </Button.Flyout>
-        </Button>
-        <TextBox x:Name="UserMessageTextBox" Grid.Column="2" Margin="0,4,20,0" VerticalAlignment="Center"
+        <TextBox x:Name="UserMessageTextBox" Grid.Column="1" Margin="0,4,20,0" VerticalAlignment="Center"
                 PlaceholderText="输入短消息" BorderThickness="0" Background="Transparent"
                 AcceptsReturn="True" MaxHeight="160" />
-        <Button x:Name="UserMessagePostButton" Grid.Column="3" Width="44" VerticalAlignment="Center" Click="UserMessagePostButton_Click">
-            <Button.Template>
-                <ControlTemplate>
-                    <SymbolIcon Symbol="Send"/>
-                </ControlTemplate>
-            </Button.Template>
+        <Button x:Name="UserMessagePostButton" Grid.Column="2" Width="44" Height="44" VerticalAlignment="Center" Click="UserMessagePostButton_Click">
+            <SymbolIcon Symbol="Send" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Button>
     </Grid>
 </UserControl>

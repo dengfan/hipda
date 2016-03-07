@@ -116,9 +116,6 @@
     <Compile Include="Controls\UserMessageBox.xaml.cs">
       <DependentUpon>UserMessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\UserSearchPanel.xaml.cs">
-      <DependentUpon>UserSearchPanel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converters\BlockItemCountToEmptyLabelVisibilityConverter.cs" />
     <Compile Include="Converters\ByteToMegaByteConverter.cs" />
     <Compile Include="Converters\CountdownToSendButtonIsEnabledConverter.cs" />
@@ -363,10 +360,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\UserMessageBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\UserSearchPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -42,6 +42,5 @@
             </AppBarButton>
             <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
         </CommandBar>
-        
     </Grid>
 </Page>

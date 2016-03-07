@@ -210,7 +210,7 @@ namespace Hipda.Client.Uwp.Pro
                 }
             };
 
-            this.KeyDown += InputPanel_KeyDown;
+            //this.KeyDown += InputPanel_KeyDown;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
