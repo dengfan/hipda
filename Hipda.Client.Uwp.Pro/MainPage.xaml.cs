@@ -738,21 +738,21 @@ namespace Hipda.Client.Uwp.Pro
 
         private void userMessageListListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var listView = (MyListViewForUserMessageList)sender;
-            listView.SelectedUserMessageListItems = listView.SelectedItems;
+            //var listView = (MyListViewForUserMessageList)sender;
+            //listView.SelectedUserMessageListItems = listView.SelectedItems;
 
-            if (listView.SelectionMode == ListViewSelectionMode.Single && e.AddedItems.Count == 1)
-            {
-                var data = e.AddedItems[0] as UserMessageListItemModel;
-                if (data == null)
-                {
-                    return;
-                }
+            //if (listView.SelectionMode == ListViewSelectionMode.Single && e.AddedItems.Count == 1)
+            //{
+            //    var data = e.AddedItems[0] as UserMessageListItemModel;
+            //    if (data == null)
+            //    {
+            //        return;
+            //    }
 
-                PopupUserId = data.UserId;
-                PopupUsername = data.Username;
-                OpenUserMessageDialog();
-            }
+            //    PopupUserId = data.UserId;
+            //    PopupUsername = data.Username;
+            //    OpenUserMessageDialog();
+            //}
         }
         #endregion
 

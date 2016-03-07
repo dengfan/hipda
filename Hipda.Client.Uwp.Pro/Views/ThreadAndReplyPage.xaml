@@ -112,7 +112,7 @@
                 <CommandBar x:Name="LeftCommandBar" Background="{ThemeResource SystemChromeLowColor}"
                             VerticalAlignment="Top" Visibility="Collapsed"/>
 
-                <ProgressRing x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
+                <ProgressRing x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="40" Height="40" />
 
                 <StackPanel x:Name="leftNoDataNoticePanel" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
                     <TextBlock FontSize="120" Text=":(" HorizontalAlignment="Center"></TextBlock>
@@ -154,7 +154,7 @@
                     </CommandBar.SecondaryCommands>
                 </CommandBar>
 
-                <ProgressRing x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
+                <ProgressRing x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="40" Height="40" />
 
                 <StackPanel x:Name="QuickReplyPanel" VerticalAlignment="Bottom">
                     <Border Margin="0,0,0,8" Padding="8,4" CornerRadius="12" HorizontalAlignment="Center" Background="Red" Opacity="0.8"

@@ -113,7 +113,6 @@
       <DependentUpon>SendControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MyAvatarForReply.cs" />
-    <Compile Include="Controls\MyListViewForUserMessageList.cs" />
     <Compile Include="Controls\UserMessageBox.xaml.cs">
       <DependentUpon>UserMessageBox.xaml</DependentUpon>
     </Compile>
@@ -214,7 +213,7 @@
     <Compile Include="ViewModels\DefaultThreadListViewViewModel.cs" />
     <Compile Include="ViewModels\ContentDialogForUserInfoViewModel.cs" />
     <Compile Include="ViewModels\ContentDialogForUserMessageViewModel.cs" />
-    <Compile Include="ViewModels\ContentDialogForUserMessageHubViewModel.cs" />
+    <Compile Include="ViewModels\UserMessageHubPageViewModel.cs" />
     <Compile Include="Views\BlankPage1.xaml.cs">
       <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>

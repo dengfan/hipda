@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ContentDialogForUserMessageHubViewModel : NotificationObject
+    public class UserMessageHubPageViewModel : NotificationObject
     {
         DataService _ds;
 
@@ -20,15 +20,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public DelegateCommand RefreshCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
 
-        private string _tipText = "请稍候，载入中。。。";
 
-        public string TipText
+        private bool _isProgressRingActive = true;
+
+        public bool IsProgressRingActive
         {
-            get { return _tipText; }
-            set { _tipText = value;
-                this.RaisePropertyChanged("TipText");
+            get { return _isProgressRingActive; }
+            set
+            {
+                _isProgressRingActive = value;
+                this.RaisePropertyChanged("IsProgressRingActive");
             }
         }
+
 
         ListViewSelectionMode _selectionMode = ListViewSelectionMode.Single;
 
@@ -89,11 +93,11 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void AfterLoaded()
         {
-            TipText = string.Empty;
+            IsProgressRingActive = false;
             IsButtonEnable = true;
         }
 
-        public ContentDialogForUserMessageHubViewModel()
+        public UserMessageHubPageViewModel()
         {
             _ds = new DataService();
 

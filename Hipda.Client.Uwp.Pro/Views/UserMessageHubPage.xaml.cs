@@ -28,8 +28,16 @@ namespace Hipda.Client.Uwp.Pro.Views
         public UserMessageHubPage()
         {
             this.InitializeComponent();
+            this.DataContext = new UserMessageHubPageViewModel();
+        }
 
-            this.DataContext = new ContentDialogForUserMessageHubViewModel();
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var data = (UserMessageListItemModel)e.ClickedItem;
+            if (data != null)
+            {
+                Frame.Navigate(typeof(UserMessagePage), data.UserId);
+            }
         }
     }
 }

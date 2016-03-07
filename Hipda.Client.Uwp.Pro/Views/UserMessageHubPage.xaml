@@ -9,18 +9,34 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <c:MyListViewForUserMessageList ItemsSource="{Binding DataView}" IncrementalLoadingTrigger="Edge"
-                          IsItemClickEnabled="False" IsSwipeEnabled="False" ShowsScrollingPlaceholders="False"
-                          CanDrag="False" CanDragItems="False" CanReorderItems="False"
-                          SelectionMode="{Binding SelectionMode}" SelectedUserMessageListItems="{Binding SelectedUserMessageListItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          ItemTemplate="{StaticResource UserMessageListItemTemplate}">
-        </c:MyListViewForUserMessageList>
-        <CommandBar Grid.Row="1">
+        <ListView Margin="0,0,0,48" IsItemClickEnabled="True" SelectionMode="None"
+                  ShowsScrollingPlaceholders="False" IncrementalLoadingTrigger="Edge"
+                  ItemsSource="{Binding DataView}"
+                  ItemClick="ListView_ItemClick">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Border Margin="0,8" Width="40" Height="40" Background="{ThemeResource SystemListLowColor}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
+                        </Border>
+                        <StackPanel Margin="48,8,8,8" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <TextBlock FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                                       Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}">
+                                <Run Text="{Binding Username}"/>
+                                <Run Text=" "/>
+                                <Run Text="{Binding LastMessageTime}"/>
+                                <Run Text=" "/>
+                                <Run Text="{Binding NewLabel}" Foreground="Red" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                            </TextBlock>
+                            <TextBlock Text="{Binding LastMessageText}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"
+                               FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <CommandBar VerticalAlignment="Bottom">
             <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
             <AppBarButton Label="选择" IsEnabled="{Binding IsButtonEnable}" Command="{Binding IntoMultiSelectionModeCommand}">
                 <AppBarButton.Icon>
@@ -29,5 +45,6 @@
             </AppBarButton>
             <AppBarButton Icon="Delete" Label="删除" IsEnabled="{Binding IsDeleteButtonEnable}" Command="{Binding DeleteCommand}"/>
         </CommandBar>
+        <ProgressRing x:Name="ProgressRing" IsActive="{Binding IsProgressRingActive}" VerticalAlignment="Center" Width="40" Height="40" />
     </Grid>
 </Page>
