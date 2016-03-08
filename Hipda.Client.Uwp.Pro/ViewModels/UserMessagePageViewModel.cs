@@ -54,7 +54,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         }
 
 
-        ObservableCollection<UserMessageItemModel> _listData;
+        ObservableCollection<UserMessageItemModel> _listData = new ObservableCollection<UserMessageItemModel>();
         public ObservableCollection<UserMessageItemModel> ListData
         {
             get
@@ -135,7 +135,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             if (data != null)
             {
                 ListData.Add(data);
-                NewMessage = string.Empty;
+                TipText = NewMessage = string.Empty;
             }
         }
 

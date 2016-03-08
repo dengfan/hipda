@@ -67,7 +67,7 @@
                 </Flyout>
             </Button.Flyout>
         </Button>
-        <TextBox x:Name="UserMessageTextBox" Grid.Column="1" VerticalAlignment="Center"
+        <TextBox x:Name="UserMessageTextBox" Grid.Column="1" Margin="0,4,0,0" VerticalAlignment="Center"
                  PlaceholderText="输入短消息" BorderThickness="0" AcceptsReturn="True" MaxHeight="160"
                  Text="{Binding NewMessage,Mode=TwoWay}"/>
         <Button x:Name="UserMessagePostButton" Grid.Column="2" Width="48" Height="48" VerticalAlignment="Center"
