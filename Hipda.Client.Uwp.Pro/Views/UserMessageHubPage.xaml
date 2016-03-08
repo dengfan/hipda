@@ -19,10 +19,16 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ProgressRing Grid.RowSpan="2" IsActive="{Binding IsProgressRingActive}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="40" />
-        <ListView x:Name="UserMessageListView" VerticalAlignment="Stretch" IsItemClickEnabled="True" SelectionMode="{Binding SelectionMode}"
+        <ListView x:Name="UserMessageListView" VerticalAlignment="Stretch" IsItemClickEnabled="True" SelectionMode="Single"
                   ShowsScrollingPlaceholders="False" IncrementalLoadingTrigger="Edge"
-                  ItemsSource="{Binding DataView}"
-                  ItemClick="UserMessageListView_ItemClick">
+                  ItemsSource="{Binding DataView}" ItemClick="UserMessageListView_ItemClick">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Padding="12,4" Text="此处仅显示每个对话的最新消息，请进入查看详情，以免错过其它消息。" TextWrapping="Wrap"
+                               FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -48,7 +54,8 @@
         </ListView>
         <CommandBar Grid.Row="1">
             <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
-            <AppBarToggleButton x:Name="MultipleSelectButton" Label="选择" IsEnabled="{Binding IsButtonEnable}" Checked="MultipleSelectButton_Checked" Unchecked="MultipleSelectButton_Unchecked">
+            <AppBarToggleButton x:Name="MultipleSelectButton" Label="选择" IsEnabled="{Binding IsButtonEnable}"
+                                Checked="MultipleSelectButton_Checked" Unchecked="MultipleSelectButton_Unchecked">
                 <AppBarToggleButton.Icon>
                     <FontIcon Glyph="&#xE762;" FontFamily="Segoe MDL2 Assets" />
                 </AppBarToggleButton.Icon>

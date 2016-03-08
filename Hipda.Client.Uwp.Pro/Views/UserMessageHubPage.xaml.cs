@@ -33,6 +33,11 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void UserMessageListView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            if (UserMessageListView.SelectionMode == ListViewSelectionMode.Multiple)
+            {
+                return;
+            }
+
             var data = (UserMessageListItemModel)e.ClickedItem;
             if (data != null)
             {
@@ -57,7 +62,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         private void MultipleSelectButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            UserMessageListView.SelectionMode = ListViewSelectionMode.None;
+            UserMessageListView.SelectionMode = ListViewSelectionMode.Single;
         }
     }
 }
