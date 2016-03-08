@@ -31,7 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.DataContext = new ContentDialogForUserInfoViewModel((int)e.Parameter);
+            this.DataContext = new UserInfoPageViewModel((int)e.Parameter);
         }
     }
 }

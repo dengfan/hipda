@@ -202,7 +202,7 @@
     <Compile Include="ViewModels\ForumAllCategoryListViewViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\NotificationObject.cs" />
-    <Compile Include="ViewModels\ContentDialogForPostDetailViewModel.cs" />
+    <Compile Include="ViewModels\QuoteDetailPageViewModel.cs" />
     <Compile Include="ViewModels\SendThreadQuickReplyControlViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForDefaultViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForSpecifiedPostViewModel.cs" />
@@ -215,7 +215,7 @@
     <Compile Include="ViewModels\SearchFullTextThreadListViewViewModel.cs" />
     <Compile Include="ViewModels\SearchTitleThreadListViewViewModel.cs" />
     <Compile Include="ViewModels\DefaultThreadListViewViewModel.cs" />
-    <Compile Include="ViewModels\ContentDialogForUserInfoViewModel.cs" />
+    <Compile Include="ViewModels\UserInfoPageViewModel.cs" />
     <Compile Include="ViewModels\UserMessagePageViewModel.cs" />
     <Compile Include="ViewModels\UserMessageHubPageViewModel.cs" />
     <Compile Include="Views\BlankPage1.xaml.cs">

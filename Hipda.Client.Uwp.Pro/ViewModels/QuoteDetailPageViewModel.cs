@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ContentDialogForPostDetailViewModel : NotificationObject
+    public class QuoteDetailPageViewModel : NotificationObject
     {
         ReplyListService _ds;
         int _postId;
@@ -87,7 +87,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ContentDialogForPostDetailViewModel(int postId, int threadId)
+        public QuoteDetailPageViewModel(int postId, int threadId)
         {
             _ds = new ReplyListService();
             _postId = postId;

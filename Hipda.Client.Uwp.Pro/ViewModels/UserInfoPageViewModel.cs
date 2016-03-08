@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
-    public class ContentDialogForUserInfoViewModel : NotificationObject
+    public class UserInfoPageViewModel : NotificationObject
     {
         UserInfoService _ds;
 
@@ -66,7 +66,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        public ContentDialogForUserInfoViewModel(int userId)
+        public UserInfoPageViewModel(int userId)
         {
             _ds = new UserInfoService();
             _userId = userId;

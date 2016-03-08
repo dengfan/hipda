@@ -35,7 +35,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             string[] p = e.Parameter.ToString().Split(',');
             int postId = Convert.ToInt32(p[0]);
             int threadId = Convert.ToInt32(p[1]);
-            this.DataContext = new ContentDialogForPostDetailViewModel(postId, threadId);
+            this.DataContext = new QuoteDetailPageViewModel(postId, threadId);
         }
     }
 }
