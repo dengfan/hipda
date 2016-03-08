@@ -111,7 +111,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("pages"));
-            _maxPageNo = DataService.GetMaxPageNo(pagesNode);
+            _maxPageNo = CommonService.GetMaxPageNo(pagesNode);
 
             var data = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("id", "").Equals("postlist"))?.ChildNodes;
             if (data == null)
@@ -250,7 +250,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 加入历史记录
-            ApplicationView.GetForCurrentView().Title = $"{Common.ReplaceEmojiLabel(threadTitle)} - {Common.ReplaceEmojiLabel(forumName)}";
+            ApplicationView.GetForCurrentView().Title = $"{CommonService.ReplaceEmojiLabel(threadTitle)} - {CommonService.ReplaceEmojiLabel(forumName)}";
             _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
         }
 
@@ -604,7 +604,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 加入历史记录
-            ApplicationView.GetForCurrentView().Title = $"{Common.ReplaceEmojiLabel(threadTitle)} - {Common.ReplaceEmojiLabel(forumName)}";
+            ApplicationView.GetForCurrentView().Title = $"{CommonService.ReplaceEmojiLabel(threadTitle)} - {CommonService.ReplaceEmojiLabel(forumName)}";
             _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
 
             int index = threadReply.Replies.FirstOrDefault(r => r.PostId == targetPostId).Index;
@@ -814,7 +814,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 加入历史记录
-            ApplicationView.GetForCurrentView().Title = $"{Common.ReplaceEmojiLabel(threadTitle)} - {Common.ReplaceEmojiLabel(forumName)}";
+            ApplicationView.GetForCurrentView().Title = $"{CommonService.ReplaceEmojiLabel(threadTitle)} - {CommonService.ReplaceEmojiLabel(forumName)}";
             _threadHistoryListBoxViewModel.Add(new ThreadItemModelBase { ThreadId = threadId, Title = threadTitle, ForumId = forumId, ForumName = forumName, AuthorUserId = threadAuthorUserId, AuthorUsername = threadAuthorUsername });
 
             int index = threadReply.Replies.Last().Index;

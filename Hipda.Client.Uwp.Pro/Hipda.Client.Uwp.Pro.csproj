@@ -171,8 +171,7 @@
     <Compile Include="ReplyListItemTemplateSelector.cs" />
     <Compile Include="RoamingSettingsDependencyObject.cs" />
     <Compile Include="Services\AccountService.cs" />
-    <Compile Include="Services\Common.cs" />
-    <Compile Include="Services\DataService.cs" />
+    <Compile Include="Services\CommonService.cs" />
     <Compile Include="Services\ForumService.cs" />
     <Compile Include="Services\NoticeService.cs" />
     <Compile Include="Services\PromptService.cs" />

@@ -25,7 +25,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
             postData.Add(new KeyValuePair<string, object>("subject", title));
-            postData.Add(new KeyValuePair<string, object>("message", $"{Common.ReplaceFaceLabel(content)}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("message", $"{CommonService.ReplaceFaceLabel(content)}{_messageTail}"));
             postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
             postData.Add(new KeyValuePair<string, object>("tid", threadId));
             postData.Add(new KeyValuePair<string, object>("pid", postId));
@@ -80,7 +80,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             postData.Add(new KeyValuePair<string, object>("noticetrimstr", "0"));
             postData.Add(new KeyValuePair<string, object>("noticeauthormsg", "0"));
             postData.Add(new KeyValuePair<string, object>("subject", string.Empty));
-            postData.Add(new KeyValuePair<string, object>("message", $"{noticetrimstr}{Common.ReplaceFaceLabel(content.Trim())}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("message", $"{noticetrimstr}{CommonService.ReplaceFaceLabel(content.Trim())}{_messageTail}"));
 
             // 图片信息
             foreach (var fileName in fileNameList)
@@ -100,7 +100,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
             postData.Add(new KeyValuePair<string, object>("iconid", "0"));
             postData.Add(new KeyValuePair<string, object>("subject", title));
-            postData.Add(new KeyValuePair<string, object>("message", $"{Common.ReplaceFaceLabel(content.Trim())}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("message", $"{CommonService.ReplaceFaceLabel(content.Trim())}{_messageTail}"));
             postData.Add(new KeyValuePair<string, object>("attention_add", "1"));
             postData.Add(new KeyValuePair<string, object>("usesig", "1"));
 
@@ -121,7 +121,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
             postData.Add(new KeyValuePair<string, object>("subject", string.Empty));
             postData.Add(new KeyValuePair<string, object>("usesig", "0"));
-            postData.Add(new KeyValuePair<string, object>("message", $"{Common.ReplaceFaceLabel(content.Trim())}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("message", $"{CommonService.ReplaceFaceLabel(content.Trim())}{_messageTail}"));
 
             // 图片信息
             foreach (var fileName in fileNameList)
@@ -217,7 +217,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                             "</binding>" +
                         "</visual>" +
                         "</toast>";
-            Common.SendToast(xml);
+            CommonService.SendToast(xml);
         }
 
         public static async Task SendAddBuddyAction(CancellationTokenSource cts, int userId, string username)
@@ -233,7 +233,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                             "</binding>" +
                         "</visual>" +
                         "</toast>";
-            Common.SendToast(xml);
+            CommonService.SendToast(xml);
         }
 
     }

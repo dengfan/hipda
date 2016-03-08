@@ -78,7 +78,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            _threadMaxPageNoForSearchTitle = DataService.GetMaxPageNo(pagesNode);
+            _threadMaxPageNoForSearchTitle = CommonService.GetMaxPageNo(pagesNode);
 
             if (pageNo > _threadMaxPageNoForSearchTitle)
             {

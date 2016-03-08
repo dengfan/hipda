@@ -41,9 +41,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         private void GetFaceIconsData()
         {
-            FaceIcons = Common.FaceData;
+            FaceIcons = CommonService.FaceData;
 
-            foreach (var pair in Common.EmojiDic)
+            foreach (var pair in CommonService.EmojiDic)
             {
                 EmojiIcons.Add(new EmojiItemModel { Label = pair.Key, Value = pair.Value });
             }

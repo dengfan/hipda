@@ -12,7 +12,7 @@ namespace Hipda.Client.Uwp.Pro.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return Common.ReplaceEmojiLabel(value.ToString());
+            return CommonService.ReplaceEmojiLabel(value.ToString());
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

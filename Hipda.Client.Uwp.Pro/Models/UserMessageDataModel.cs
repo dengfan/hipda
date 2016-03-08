@@ -38,7 +38,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return Common.ReplaceEmojiLabel(_lastMessageText);
+                return CommonService.ReplaceEmojiLabel(_lastMessageText);
             }
             set
             {
@@ -50,7 +50,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return Common.GetMiddleAvatarUriByUserId(UserId);
+                return CommonService.GetMiddleAvatarUriByUserId(UserId);
             }
         }
 
@@ -83,7 +83,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             {
                 try
                 {
-                    return XamlReader.Load(Common.ReplaceEmojiLabel(XamlStr));
+                    return XamlReader.Load(CommonService.ReplaceEmojiLabel(XamlStr));
                 }
                 catch
                 {

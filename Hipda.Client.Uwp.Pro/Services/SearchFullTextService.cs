@@ -79,7 +79,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.GetAttributeValue("class", "").Equals("pages"));
-            _threadMaxPageNoForSearchFullText = DataService.GetMaxPageNo(pagesNode);
+            _threadMaxPageNoForSearchFullText = CommonService.GetMaxPageNo(pagesNode);
 
             if (pageNo > _threadMaxPageNoForSearchFullText)
             {
@@ -137,7 +137,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     string errorDetails = "k: {0};p: {1};i: {2};t: {3};d: {4}";
                     errorDetails = string.Format(errorDetails, searchKeyword, pageNo, i, titleHtml, ex.Message);
-                    Common.PostErrorEmailToDeveloper("全文搜索解析出现异常", errorDetails);
+                    CommonService.PostErrorEmailToDeveloper("全文搜索解析出现异常", errorDetails);
                 }
             }
         }

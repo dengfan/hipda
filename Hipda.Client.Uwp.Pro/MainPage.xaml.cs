@@ -137,7 +137,7 @@ namespace Hipda.Client.Uwp.Pro
             {
                 var avatarBrush = new ImageBrush();
                 avatarBrush.Stretch = Stretch.UniformToFill;
-                avatarBrush.ImageSource = new BitmapImage { UriSource = Common.GetSmallAvatarUriByUserId(AccountService.UserId), DecodePixelWidth = 32 };
+                avatarBrush.ImageSource = new BitmapImage { UriSource = CommonService.GetSmallAvatarUriByUserId(AccountService.UserId), DecodePixelWidth = 32 };
                 avatarBrush.ImageFailed += (s, e) => { return; };
                 return avatarBrush;
             }
@@ -339,7 +339,7 @@ namespace Hipda.Client.Uwp.Pro
         private void TopNavButtonListBox_Tapped(object sender, TappedRoutedEventArgs e)
         {
             // 如果事件源是来自“更多版块”按钮，则阻止事件继续向上冒泡并停止继续执行
-            var item = Common.FindParent<ListBoxItem>(e.OriginalSource as FrameworkElement);
+            var item = CommonService.FindParent<ListBoxItem>(e.OriginalSource as FrameworkElement);
             if (item != null)
             {
                 var data = item.DataContext as NavButtonItemModel;
@@ -529,7 +529,7 @@ namespace Hipda.Client.Uwp.Pro
                             "</binding>" +
                         "</visual>" +
                         "</toast>";
-                    Common.SendToast(xml1);
+                    CommonService.SendToast(xml1);
                     return;
                 }
 
@@ -548,7 +548,7 @@ namespace Hipda.Client.Uwp.Pro
                     new RoamingSettingsService().SaveBlockUsers();
                 }
 
-                Common.SendToast(xml2);
+                CommonService.SendToast(xml2);
             }
         }
 
@@ -565,7 +565,7 @@ namespace Hipda.Client.Uwp.Pro
                             "</binding>" +
                         "</visual>" +
                         "</toast>";
-                    Common.SendToast(xml1);
+                    CommonService.SendToast(xml1);
                     return;
                 }
 
@@ -584,7 +584,7 @@ namespace Hipda.Client.Uwp.Pro
                     "</visual>" +
                     "</toast>";
 
-                Common.SendToast(xml2);
+                CommonService.SendToast(xml2);
             }
         }
 

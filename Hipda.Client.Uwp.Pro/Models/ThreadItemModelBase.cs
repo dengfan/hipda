@@ -29,7 +29,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return Common.ReplaceEmojiLabel(_title);
+                return CommonService.ReplaceEmojiLabel(_title);
             }
             set
             {

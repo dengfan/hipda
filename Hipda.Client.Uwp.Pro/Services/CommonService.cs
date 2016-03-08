@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,31 @@ using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
-    public static class Common
+    public static class CommonService
     {
+        public static int GetMaxPageNo(HtmlNode pagesNode)
+        {
+            int maxPageNo = 1;
+
+            try
+            {
+                if (pagesNode != null)
+                {
+                    var nodeList = pagesNode.Descendants().Where(n => n.Name.Equals("a") || n.Name.Equals("strong")).ToList();
+                    nodeList.RemoveAll(n => n.InnerText.Equals("下一页"));
+                    string lastPageNodeValue = nodeList.Last().InnerText.Replace("... ", string.Empty);
+                    maxPageNo = Convert.ToInt32(lastPageNodeValue);
+                }
+            }
+            catch (Exception e)
+            {
+                string errorDetails = string.Format("{0}", e.Message);
+                CommonService.PostErrorEmailToDeveloper("页码数据解析出现异常", errorDetails);
+            }
+
+            return maxPageNo;
+        }
+
         public static List<FaceItemModel> FaceData = new List<FaceItemModel>
         {
             new FaceItemModel { Image = "/Assets/Faces/default_smile.png", Text = ":)"},

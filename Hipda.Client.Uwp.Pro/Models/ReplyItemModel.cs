@@ -55,7 +55,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return Common.ReplaceEmojiLabel(_threadTitle);
+                return CommonService.ReplaceEmojiLabel(_threadTitle);
             }
             set
             {
@@ -126,7 +126,7 @@ namespace Hipda.Client.Uwp.Pro.Models
 
                 try
                 {
-                    StackPanel sp = (StackPanel)XamlReader.Load(Common.ReplaceEmojiLabel(XamlStr));
+                    StackPanel sp = (StackPanel)XamlReader.Load(CommonService.ReplaceEmojiLabel(XamlStr));
                     for (int i = 1; i <= InAppLinkCount; i++)
                     {
                         var key = $"InAppLink_{ThreadId}_{PostId}_{i}";
@@ -141,9 +141,9 @@ namespace Hipda.Client.Uwp.Pro.Models
                 catch
                 {
                     string errorDetails = string.Format("http://www.hi-pda.com/forum/viewthread.php?tid={0} 楼层{1}内容解析出错。\r\n{2}", ThreadId, FloorNo, XamlStr);
-                    Common.PostErrorEmailToDeveloper("回复内容解析出现异常", errorDetails);
+                    CommonService.PostErrorEmailToDeveloper("回复内容解析出现异常", errorDetails);
 
-                    string text = Common.ReplaceHexadecimalSymbols(TextStr);
+                    string text = CommonService.ReplaceHexadecimalSymbols(TextStr);
                     XamlStr = string.Format("<StackPanel xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"><RichTextBlock><Paragraph>{0}</Paragraph></RichTextBlock></StackPanel>", text);
                     return (StackPanel)XamlReader.Load(XamlStr);
                 }
@@ -225,7 +225,7 @@ namespace Hipda.Client.Uwp.Pro.Models
         {
             get
             {
-                return Common.GetSmallAvatarUriByUserId(AuthorUserId);
+                return CommonService.GetSmallAvatarUriByUserId(AuthorUserId);
             }
         }
     }

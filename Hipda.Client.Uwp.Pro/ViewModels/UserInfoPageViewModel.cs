@@ -81,7 +81,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             UserInfoRichTextBlock = XamlReader.Load(xaml);
 
             BitmapImage bi = new BitmapImage();
-            bi.UriSource = Common.GetBigAvatarUriByUserId(_userId);
+            bi.UriSource = CommonService.GetBigAvatarUriByUserId(_userId);
             bi.DecodePixelWidth = 160;
             ImageBrush ib = new ImageBrush();
             ib.Stretch = Stretch.UniformToFill;

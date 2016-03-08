@@ -31,7 +31,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             catch (Exception e)
             {
                 string errorDetails = string.Format("{0}", e.Message);
-                Common.PostErrorEmailToDeveloper("提醒数据解析出现异常", errorDetails);
+                CommonService.PostErrorEmailToDeveloper("提醒数据解析出现异常", errorDetails);
             }
         }
     }
