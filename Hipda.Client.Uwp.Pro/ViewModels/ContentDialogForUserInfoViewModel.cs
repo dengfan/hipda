@@ -15,7 +15,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class ContentDialogForUserInfoViewModel : NotificationObject
     {
-        DataService _ds;
+        UserInfoService _ds;
 
         int _userId;
         public int UserId
@@ -68,7 +68,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public ContentDialogForUserInfoViewModel(int userId)
         {
-            _ds = new DataService();
+            _ds = new UserInfoService();
             _userId = userId;
             
             GetUserInfoRichTextBlock();

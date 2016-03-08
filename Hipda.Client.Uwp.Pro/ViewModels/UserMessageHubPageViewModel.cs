@@ -14,7 +14,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 {
     public class UserMessageHubPageViewModel : NotificationObject
     {
-        DataService _ds;
+        UserMessageHubService _ds;
 
         public DelegateCommand IntoMultiSelectionModeCommand { get; set; }
         public DelegateCommand RefreshCommand { get; set; }
@@ -99,7 +99,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public UserMessageHubPageViewModel()
         {
-            _ds = new DataService();
+            _ds = new UserMessageHubService();
 
             GetData();
 

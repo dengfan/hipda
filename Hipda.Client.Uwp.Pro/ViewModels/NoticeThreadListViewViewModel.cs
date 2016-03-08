@@ -16,7 +16,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     {
         ListView _leftListView;
         CommandBar _leftCommandBar;
-        DataService _ds;
+        NoticeService _ds;
 
         public DelegateCommand RefreshThreadCommand { get; set; }
 
@@ -33,7 +33,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _leftCommandBar.PrimaryCommands.Clear();
             _leftCommandBar.SecondaryCommands.Clear();
 
-            _ds = new DataService();
+            _ds = new NoticeService();
 
             LoadData();
 

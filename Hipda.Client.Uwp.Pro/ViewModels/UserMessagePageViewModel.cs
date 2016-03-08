@@ -16,7 +16,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     {
         int limitCount = 3;
 
-        DataService _ds;
+        UserMessageService _ds;
 
         int _userId;
         public int UserId
@@ -99,7 +99,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public UserMessagePageViewModel(int userId)
         {
-            _ds = new DataService();
+            _ds = new UserMessageService();
             _userId = userId;
 
             GetData(limitCount);

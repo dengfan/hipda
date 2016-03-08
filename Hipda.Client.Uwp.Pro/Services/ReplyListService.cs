@@ -107,7 +107,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             // 最先读取提醒数据
             var promptContentNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("promptcontent"));
-            DataService.GetPromptData(promptContentNode);
+            PromptService.GetPromptData(promptContentNode);
 
             // 读取最大页码
             var pagesNode = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("div") && n.GetAttributeValue("class", "").Equals("pages"));
