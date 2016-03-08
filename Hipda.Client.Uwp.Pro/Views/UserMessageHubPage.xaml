@@ -9,10 +9,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <cvt:IntToBoolConverter x:Key="IntToBoolConverter"/>
-    </Page.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -21,10 +17,12 @@
         <ProgressRing Grid.RowSpan="2" IsActive="{Binding IsProgressRingActive}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="40" />
         <ListView x:Name="UserMessageListView" VerticalAlignment="Stretch" IsItemClickEnabled="True" SelectionMode="Single"
                   ShowsScrollingPlaceholders="False" IncrementalLoadingTrigger="Edge"
-                  ItemsSource="{Binding DataView}" ItemClick="UserMessageListView_ItemClick">
+                  ItemsSource="{Binding DataView}"
+                  ItemClick="UserMessageListView_ItemClick"
+                  SelectionChanged="UserMessageListView_SelectionChanged">
             <ListView.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Padding="12,4" Text="此处仅显示每个对话的最新消息，请进入查看详情，以免错过其它消息。" TextWrapping="Wrap"
+                    <TextBlock Padding="12,4" Text="此处仅显示每个对话的最新的一条消息，请进入查看详情，以免错过其它消息。" TextWrapping="Wrap"
                                FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                                Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
                 </DataTemplate>
@@ -60,7 +58,9 @@
                     <FontIcon Glyph="&#xE762;" FontFamily="Segoe MDL2 Assets" />
                 </AppBarToggleButton.Icon>
             </AppBarToggleButton>
-            <AppBarButton Icon="Delete" Label="删除" IsEnabled="{Binding SelectedItems.Count,ElementName=UserMessageListView,Converter={StaticResource IntToBoolConverter}}" Command="{Binding DeleteCommand}"/>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="DeleteButton" Icon="Delete" Label="删除选中项" IsEnabled="False" Command="{Binding DeleteCommand}"/>
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Grid>
 </Page>

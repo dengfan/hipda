@@ -28,7 +28,8 @@ namespace Hipda.Client.Uwp.Pro.Views
         public UserMessageHubPage()
         {
             this.InitializeComponent();
-            this.DataContext = new UserMessageHubPageViewModel();
+            this.DataContext = new UserMessageHubPageViewModel(UserMessageListView);
+            SetTitle($"短消息");
         }
 
         private void UserMessageListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -42,16 +43,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             if (data != null)
             {
                 Frame.Navigate(typeof(UserMessagePage), data.UserId);
-
-                var frame = (Frame)Window.Current.Content;
-                if (frame != null)
-                {
-                    var mainPage = (MainPage)frame.Content;
-                    if (mainPage != null)
-                    {
-                        mainPage.SetTitleForInputPanel($"与 {data.Username} 聊天");
-                    }
-                }
+                SetTitle($"与 {data.Username} 聊天");
             }
         }
 
@@ -63,6 +55,36 @@ namespace Hipda.Client.Uwp.Pro.Views
         private void MultipleSelectButton_Unchecked(object sender, RoutedEventArgs e)
         {
             UserMessageListView.SelectionMode = ListViewSelectionMode.Single;
+        }
+
+        private void UserMessageListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (UserMessageListView.SelectionMode != ListViewSelectionMode.Multiple)
+            {
+                DeleteButton.IsEnabled = false;
+                return;
+            }
+
+            if (UserMessageListView.SelectedItems == null)
+            {
+                DeleteButton.IsEnabled = false;
+                return;
+            }
+
+            DeleteButton.IsEnabled = UserMessageListView.SelectedItems.Count > 0;
+        }
+
+        private void SetTitle(string title)
+        {
+            var frame = (Frame)Window.Current.Content;
+            if (frame != null)
+            {
+                var mainPage = (MainPage)frame.Content;
+                if (mainPage != null)
+                {
+                    mainPage.SetTitleForInputPanel(title);
+                }
+            }
         }
     }
 }

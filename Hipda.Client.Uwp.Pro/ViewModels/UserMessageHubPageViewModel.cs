@@ -32,15 +32,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private IList<object> _selecteUserMessageListItems;
-
-        public IList<object> SelectedUserMessageListItems
-        {
-            get { return _selecteUserMessageListItems; }
-            set { _selecteUserMessageListItems = value; }
-        }
-
-
         private ICollectionView _dataView;
 
         public ICollectionView DataView
@@ -58,7 +49,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             IsProgressRingActive = false;
         }
 
-        public UserMessageHubPageViewModel()
+        public UserMessageHubPageViewModel(ListView listView)
         {
             _ds = new UserMessageHubService();
 
@@ -72,13 +63,13 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             DeleteCommand = new DelegateCommand();
             DeleteCommand.ExecuteAction = async (p) => {
-                if (SelectedUserMessageListItems == null)
+                if (listView.SelectedItems == null)
                 {
                     return;
                 }
 
                 List<int> selectedUserIds = new List<int>();
-                foreach (UserMessageListItemModel item in SelectedUserMessageListItems)
+                foreach (UserMessageListItemModel item in listView.SelectedItems)
                 {
                     selectedUserIds.Add(item.UserId);
                 }
