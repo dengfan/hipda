@@ -23,7 +23,7 @@
         <Button Grid.Column="0" Width="48" Height="48" VerticalAlignment="Center">
             <Button.Template>
                 <ControlTemplate>
-                    <SymbolIcon Symbol="Emoji"/>
+                    <SymbolIcon Symbol="Emoji2"/>
                 </ControlTemplate>
             </Button.Template>
             <Button.Flyout>
@@ -70,7 +70,7 @@
         <TextBox x:Name="UserMessageTextBox" Grid.Column="1" Margin="0,4,0,0" VerticalAlignment="Center"
                  PlaceholderText="输入短消息" BorderThickness="0" AcceptsReturn="True" MaxHeight="160"
                  Text="{Binding NewMessage,Mode=TwoWay}"/>
-        <Button x:Name="UserMessagePostButton" Grid.Column="2" Width="48" Height="48" VerticalAlignment="Center"
+        <Button x:Name="UserMessagePostButton" Grid.Column="2" Width="48" Height="48" BorderThickness="0" VerticalAlignment="Center"
                 Background="{Binding Text.Length,ElementName=UserMessageTextBox,Converter={StaticResource TextLengthToBackgroundConverter}}"
                 Command="{Binding SubmitCommand}">
             <SymbolIcon Symbol="Send" HorizontalAlignment="Center" VerticalAlignment="Center"/>

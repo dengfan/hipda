@@ -922,6 +922,7 @@ namespace Hipda.Client.Uwp.Pro
         }
         #endregion
 
+
         private void AccountLogoutButton_Click(object sender, RoutedEventArgs e)
         {
             AccountService.ClearDefaultStatus();
@@ -948,7 +949,11 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-
+        #region 弹窗
+        public void SetTitleForInputPanel(string title)
+        {
+            InputPanelTitleTextBlock.Text = title;
+        }
 
         private void OpenInputPanel(string title, Type pageType, object parameters)
         {
@@ -961,7 +966,7 @@ namespace Hipda.Client.Uwp.Pro
                 OpenInputPanelMaskAnimation.Begin();
             }
 
-            InputPanelTitleTextBlock.Text = title;
+            SetTitleForInputPanel(title);
             InputPanelFrame.Navigate(pageType, parameters);
         }
 
@@ -984,7 +989,7 @@ namespace Hipda.Client.Uwp.Pro
                 CloseInputPanelMaskAnimation.Stop();
             };
 
-            InputPanelTitleTextBlock.Text = string.Empty;
+            SetTitleForInputPanel(string.Empty);
             InputPanelFrame.BackStack.Clear();
         }
 
@@ -1001,17 +1006,6 @@ namespace Hipda.Client.Uwp.Pro
             InputPanelFrameGoBack();
         }
 
-        //private void InputPanel_KeyDown(object sender, KeyRoutedEventArgs e)
-        //{
-        //    if (InputPanel == null || InputPanel.Visibility == Visibility.Collapsed)
-        //    {
-        //        return;
-        //    }
-
-        //    if (e.Key == VirtualKey.Back)
-        //    {
-        //        InputPanelFrameGoBack();
-        //    }
-        //}
+        #endregion
     }
 }

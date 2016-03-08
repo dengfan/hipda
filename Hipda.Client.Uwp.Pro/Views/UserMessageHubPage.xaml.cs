@@ -31,13 +31,33 @@ namespace Hipda.Client.Uwp.Pro.Views
             this.DataContext = new UserMessageHubPageViewModel();
         }
 
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        private void UserMessageListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var data = (UserMessageListItemModel)e.ClickedItem;
             if (data != null)
             {
                 Frame.Navigate(typeof(UserMessagePage), data.UserId);
+
+                var frame = (Frame)Window.Current.Content;
+                if (frame != null)
+                {
+                    var mainPage = (MainPage)frame.Content;
+                    if (mainPage != null)
+                    {
+                        mainPage.SetTitleForInputPanel($"与 {data.Username} 聊天");
+                    }
+                }
             }
+        }
+
+        private void MultipleSelectButton_Checked(object sender, RoutedEventArgs e)
+        {
+            UserMessageListView.SelectionMode = ListViewSelectionMode.Multiple;
+        }
+
+        private void MultipleSelectButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            UserMessageListView.SelectionMode = ListViewSelectionMode.None;
         }
     }
 }

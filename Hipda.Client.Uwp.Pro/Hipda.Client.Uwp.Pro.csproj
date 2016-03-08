@@ -127,6 +127,7 @@
     <Compile Include="Converters\FontContrastRatioToTextBlockForeground1StyleConverter.cs" />
     <Compile Include="Converters\FontContrastRatioToTextBlockForeground2StyleConverter.cs" />
     <Compile Include="Converters\FontContrastRatioToTextBlockForeground3StyleConverter.cs" />
+    <Compile Include="Converters\IntToBoolConverter.cs" />
     <Compile Include="Converters\SearchPanelVisibilityToSearchButtonStyleConverter.cs" />
     <Compile Include="Converters\SelectedIndexToVisibilityConverter.cs" />
     <Compile Include="Converters\TextLengthToBackgroundConverter.cs" />

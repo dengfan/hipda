@@ -16,7 +16,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     {
         UserMessageHubService _ds;
 
-        public DelegateCommand IntoMultiSelectionModeCommand { get; set; }
         public DelegateCommand RefreshCommand { get; set; }
         public DelegateCommand DeleteCommand { get; set; }
 
@@ -30,43 +29,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 _isProgressRingActive = value;
                 this.RaisePropertyChanged("IsProgressRingActive");
-            }
-        }
-
-
-        ListViewSelectionMode _selectionMode = ListViewSelectionMode.Single;
-
-        public ListViewSelectionMode SelectionMode
-        {
-            get { return _selectionMode; }
-            set
-            {
-                _selectionMode = value;
-                this.RaisePropertyChanged("SelectionMode");
-            }
-        }
-
-        private bool _isButtonEnable = false;
-
-        public bool IsButtonEnable
-        {
-            get { return _isButtonEnable; }
-            set
-            {
-                _isButtonEnable = value;
-                this.RaisePropertyChanged("IsButtonEnable");
-            }
-        }
-
-        private bool _isDeleteButtonEnable = false;
-
-        public bool IsDeleteButtonEnable
-        {
-            get { return _isDeleteButtonEnable; }
-            set
-            {
-                _isDeleteButtonEnable = value;
-                this.RaisePropertyChanged("IsDeleteButtonEnable");
             }
         }
 
@@ -94,7 +56,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         private void AfterLoaded()
         {
             IsProgressRingActive = false;
-            IsButtonEnable = true;
         }
 
         public UserMessageHubPageViewModel()
@@ -107,12 +68,6 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             RefreshCommand.ExecuteAction = (p) => {
                 _ds.ClearUserMessageListData();
                 DataView = _ds.GetViewForUserMessageList(1, AfterLoaded, null);
-            };
-
-            IntoMultiSelectionModeCommand = new DelegateCommand();
-            IntoMultiSelectionModeCommand.ExecuteAction = (p) => {
-                SelectionMode = _selectionMode == ListViewSelectionMode.Multiple ? ListViewSelectionMode.Single : ListViewSelectionMode.Multiple;
-                IsDeleteButtonEnable = SelectionMode == ListViewSelectionMode.Multiple;
             };
 
             DeleteCommand = new DelegateCommand();
