@@ -491,7 +491,7 @@
                 <VisualState x:Name="Min1200">
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="RightSideColumn.Width" Value="260" />
+                        <Setter Target="RightSideColumn.Width" Value="0" />
                         <Setter Target="HistoryRecordButton.IsEnabled" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
