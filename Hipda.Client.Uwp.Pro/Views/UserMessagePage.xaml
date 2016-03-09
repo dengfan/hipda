@@ -26,7 +26,8 @@
             <Grid RequestedTheme="Dark">
                 <ContentControl Margin="8 0 0 0" Template="{StaticResource MessageUpArrow}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <StackPanel Margin="0,8,40,0" Padding="8" Background="{ThemeResource SystemControlHighlightListAccentHighBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <ContentControl Content="{Binding XamlContent}" Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}" />
+                    <ContentControl Content="{Binding XamlContent}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}" />
                     <TextBlock FontWeight="Bold" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                                Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                         <Run Text="{Binding Username}"/>
@@ -40,7 +41,8 @@
         <DataTemplate x:Key="UserMessageRightItemTemplate">
             <Grid RequestedTheme="Dark">
                 <StackPanel Margin="40,0,0,8" Padding="8" Background="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <ContentControl Content="{Binding XamlContent}" Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}" />
+                    <ContentControl Content="{Binding XamlContent}" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}" />
                     <TextBlock FontWeight="Bold" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                                Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
                         <Run Text="我 "/>
