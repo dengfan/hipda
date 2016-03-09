@@ -55,7 +55,7 @@
             <AppBarToggleButton x:Name="MultipleSelectButton" Label="选择" IsEnabled="{Binding IsButtonEnable}"
                                 Checked="MultipleSelectButton_Checked" Unchecked="MultipleSelectButton_Unchecked">
                 <AppBarToggleButton.Icon>
-                    <FontIcon Glyph="&#xE762;" FontFamily="Segoe MDL2 Assets" />
+                    <FontIcon Glyph="&#xE762;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 </AppBarToggleButton.Icon>
             </AppBarToggleButton>
             <CommandBar.SecondaryCommands>

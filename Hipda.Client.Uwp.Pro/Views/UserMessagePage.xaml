@@ -63,7 +63,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ProgressRing Grid.RowSpan="3" IsActive="{Binding IsProgressRingActive}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="40" />
-        <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
+                   FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                   Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" />
         <ListView VerticalAlignment="Stretch" IsItemClickEnabled="False" SelectionMode="None" ShowsScrollingPlaceholders="False"
                   ItemsSource="{Binding ListData}"
                   ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
@@ -78,17 +80,12 @@
             <c:UserMessageBox/>
         </Border>
         <CommandBar Grid.Row="2">
-            <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}">
-                <AppBarButton.Icon>
-                    <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-            <AppBarButton Label="个人资料" IsEnabled="{Binding IsButtonEnable}">
+            <AppBarButton Label="个人资料" Click="UserInfoButton_Click">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE2AF;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 </AppBarButton.Icon>
             </AppBarButton>
-            <AppBarButton Icon="Refresh" Label="刷新" IsEnabled="{Binding IsButtonEnable}" Command="{Binding RefreshCommand}"/>
+            <AppBarButton Icon="Refresh" Label="刷新" Command="{Binding RefreshCommand}"/>
         </CommandBar>
     </Grid>
 </Page>

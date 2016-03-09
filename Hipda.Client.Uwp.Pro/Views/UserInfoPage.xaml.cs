@@ -23,6 +23,9 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class UserInfoPage : Page
     {
+        int _userId = 0;
+        string _username = string.Empty;
+
         public UserInfoPage()
         {
             this.InitializeComponent();
@@ -31,7 +34,26 @@ namespace Hipda.Client.Uwp.Pro.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.DataContext = new UserInfoPageViewModel((int)e.Parameter);
+
+            var ary = e.Parameter.ToString().Split(',');
+            _userId = Convert.ToInt32(ary[0]);
+            _username = ary[1];
+
+            SetTitle($"{_username} 的个人资料");
+            this.DataContext = new UserInfoPageViewModel(_userId);
+        }
+
+        private void SetTitle(string title)
+        {
+            var frame = (Frame)Window.Current.Content;
+            if (frame != null)
+            {
+                var mainPage = (MainPage)frame.Content;
+                if (mainPage != null)
+                {
+                    mainPage.SetTitleForInputPanel(title);
+                }
+            }
         }
     }
 }

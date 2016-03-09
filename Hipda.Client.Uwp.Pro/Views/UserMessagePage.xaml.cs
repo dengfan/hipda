@@ -23,6 +23,9 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class UserMessagePage : Page
     {
+        int _userId = 0;
+        string _username = string.Empty;
+
         public UserMessagePage()
         {
             this.InitializeComponent();
@@ -31,7 +34,13 @@ namespace Hipda.Client.Uwp.Pro.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.DataContext = new UserMessagePageViewModel((int)e.Parameter);
+
+            var ary = e.Parameter.ToString().Split(',');
+            _userId = Convert.ToInt32(ary[0]);
+            _username = ary[1];
+
+            SetTitle($"与 {_username} 聊天");
+            this.DataContext = new UserMessagePageViewModel(_userId);
         }
 
         int _messageItemMaxIndex = 0;
@@ -44,6 +53,24 @@ namespace Hipda.Client.Uwp.Pro.Views
                 {
                     sender.ScrollIntoView(sender.Items.Last());
                     _messageItemMaxIndex = args.ItemIndex;
+                }
+            }
+        }
+
+        private void UserInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(UserInfoPage), $"{_userId},{_username}");
+        }
+
+        private void SetTitle(string title)
+        {
+            var frame = (Frame)Window.Current.Content;
+            if (frame != null)
+            {
+                var mainPage = (MainPage)frame.Content;
+                if (mainPage != null)
+                {
+                    mainPage.SetTitleForInputPanel(title);
                 }
             }
         }

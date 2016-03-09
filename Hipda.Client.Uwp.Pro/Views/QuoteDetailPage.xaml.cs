@@ -35,7 +35,22 @@ namespace Hipda.Client.Uwp.Pro.Views
             string[] p = e.Parameter.ToString().Split(',');
             int postId = Convert.ToInt32(p[0]);
             int threadId = Convert.ToInt32(p[1]);
+
+            SetTitle("查看引用楼");
             this.DataContext = new QuoteDetailPageViewModel(postId, threadId);
+        }
+
+        private void SetTitle(string title)
+        {
+            var frame = (Frame)Window.Current.Content;
+            if (frame != null)
+            {
+                var mainPage = (MainPage)frame.Content;
+                if (mainPage != null)
+                {
+                    mainPage.SetTitleForInputPanel(title);
+                }
+            }
         }
     }
 }

@@ -637,7 +637,7 @@ namespace Hipda.Client.Uwp.Pro
                 return;
             }
 
-            OpenInputPanel($"{PopupUsername} 的个人资料", typeof(UserInfoPage), PopupUserId);
+            OpenInputPanel(typeof(UserInfoPage), $"{PopupUserId},{PopupUsername}");
         }
 
         public void OpenUserMessageDialog()
@@ -647,17 +647,17 @@ namespace Hipda.Client.Uwp.Pro
                 return;
             }
 
-            OpenInputPanel($"与 {PopupUsername} 聊天", typeof(UserMessagePage), PopupUserId);
+            OpenInputPanel(typeof(UserMessagePage), $"{PopupUserId},{PopupUsername}");
         }
 
         public void OpenPostDetailDialog(int postId, int threadId)
         {
-            OpenInputPanel($"查看引用楼", typeof(QuoteDetailPage), $"{postId},{threadId}");
+            OpenInputPanel(typeof(QuoteDetailPage), $"{postId},{threadId}");
         }
 
         public void OpenUserMessageListDialog()
         {
-            OpenInputPanel("短消息", typeof(UserMessageHubPage), null);
+            OpenInputPanel(typeof(UserMessageHubPage), null);
         }
 
         private void openUserInfoDialogButton_Click(object sender, RoutedEventArgs e)
@@ -955,7 +955,7 @@ namespace Hipda.Client.Uwp.Pro
             InputPanelTitleTextBlock.Text = title;
         }
 
-        private void OpenInputPanel(string title, Type pageType, object parameters)
+        private void OpenInputPanel(Type pageType, object parameters)
         {
             FindName("InputPanelMask");
             FindName("InputPanel");
@@ -966,7 +966,6 @@ namespace Hipda.Client.Uwp.Pro
                 OpenInputPanelMaskAnimation.Begin();
             }
 
-            SetTitleForInputPanel(title);
             InputPanelFrame.Navigate(pageType, parameters);
         }
 

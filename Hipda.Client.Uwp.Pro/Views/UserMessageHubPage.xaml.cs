@@ -28,8 +28,9 @@ namespace Hipda.Client.Uwp.Pro.Views
         public UserMessageHubPage()
         {
             this.InitializeComponent();
+
+            SetTitle("短消息");
             this.DataContext = new UserMessageHubPageViewModel(UserMessageListView);
-            SetTitle($"短消息");
         }
 
         private void UserMessageListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -42,8 +43,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             var data = (UserMessageListItemModel)e.ClickedItem;
             if (data != null)
             {
-                Frame.Navigate(typeof(UserMessagePage), data.UserId);
-                SetTitle($"与 {data.Username} 聊天");
+                Frame.Navigate(typeof(UserMessagePage), $"{data.UserId},{data.Username}");
             }
         }
 
