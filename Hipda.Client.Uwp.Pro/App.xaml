@@ -1205,12 +1205,7 @@
             </Border>
         </ControlTemplate>
 
-        <ControlTemplate x:Key="MessageUpArrow" TargetType="ContentControl">
-            <Polygon Points="0,0 0,8 10,8" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-        </ControlTemplate>
-        <ControlTemplate x:Key="MessageDownArrow" TargetType="ContentControl">
-            <Polygon Points="0,0 10,0 10,8" Fill="{ThemeResource SystemControlHighlightListAccentLowBrush}"/>
-        </ControlTemplate>
+        
         <ControlTemplate x:Key="ReplyLeftArrow" TargetType="ContentControl">
             <Polygon Points="0,0 6,6 6,-6" Fill="{ThemeResource SystemListLowColor}"/>
         </ControlTemplate>
@@ -1737,38 +1732,7 @@
 
 
 
-        <local:UserMessageListItemTemplateSelector x:Key="userMessageListItemTemplateSelector"
-                                                   UserMessageLeftItemTemplate="{StaticResource UserMessageLeftItemTemplate}"
-                                                   UserMessageRightItemTemplate="{StaticResource UserMessageRightItemTemplate}"/>
-
-        <DataTemplate x:Key="UserMessageLeftItemTemplate">
-            <Grid>
-                <ContentControl Margin="8 0 0 0" Template="{StaticResource MessageUpArrow}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <StackPanel Margin="0,8,40,0" Padding="8" Background="{ThemeResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <ContentControl Content="{Binding XamlContent}" />
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
-                        <Run Text="{Binding Username}"/>
-                        <Run Text=" "/>
-                        <Run Text="{Binding Time}"/>
-                    </TextBlock>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-
-        <DataTemplate x:Key="UserMessageRightItemTemplate">
-            <Grid>
-                <StackPanel Margin="40,0,0,8" Padding="8" Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <ContentControl Content="{Binding XamlContent}" />
-                    <TextBlock FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}" >
-                        <Run Text="我 "/>
-                        <Run Text="{Binding Time}"/>
-                        <Run Text=" "/>
-                        <Run Text="{Binding IsReadInfo}" FontWeight="Bold"/>
-                    </TextBlock>
-                </StackPanel>
-                <ContentControl Margin="0 0 8 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Template="{StaticResource MessageDownArrow}"/>
-            </Grid>
-        </DataTemplate>
+        
 
         
     </Application.Resources>

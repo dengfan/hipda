@@ -133,7 +133,7 @@ namespace Hipda.Client.Uwp.Pro.Models
                         var hyperLink = (Hyperlink)sp.FindName(key);
                         if (hyperLink != null)
                         {
-                            hyperLink.Click += HyperLink_Click;
+                            hyperLink.Click += InAppLink_Click;
                         }
                     }
                     return sp;
@@ -150,7 +150,7 @@ namespace Hipda.Client.Uwp.Pro.Models
             }
         }
 
-        private void HyperLink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
+        public static void InAppLink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
             var key = sender.Name;
             if (ReplyListService.InAppLinkUrlDic.ContainsKey(key))

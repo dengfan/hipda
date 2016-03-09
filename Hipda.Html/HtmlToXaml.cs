@@ -517,7 +517,7 @@ namespace Hipda.Html
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
-        public static string ConvertUserMessage(string htmlContent)
+        public static string[] ConvertUserMessage(string htmlContent, string username, string timeStr, ref Dictionary<string, string> inAppLinkUrlDic)
         {
             htmlContent = htmlContent.Replace("[", "&#8968;");
             htmlContent = htmlContent.Replace("]", "&#8971;");
@@ -536,26 +536,9 @@ namespace Hipda.Html
             htmlContent = Regex.Replace(htmlContent, @"<span[^>]*>", string.Empty);
             htmlContent = Regex.Replace(htmlContent, @"</span>", string.Empty);
 
-            // 替换站内链接为按钮
-            MatchCollection matchsForMyLink = new Regex(@"<a\s+href=""http:\/\/www\.hi\-pda\.com\/forum\/viewthread\.php\?[^>]*&?tid\=(\d*)[^\""]*""[^>]*>(.*)</a>").Matches(htmlContent);
-            if (matchsForMyLink != null && matchsForMyLink.Count > 0)
-            {
-                for (int i = 0; i < matchsForMyLink.Count; i++)
-                {
-                    var m = matchsForMyLink[i];
-
-                    string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string threadIdStr = m.Groups[1].Value;
-                    string linkContent = m.Groups[2].Value;
-                    linkContent = Regex.Replace(linkContent, @"<[^>]*>", string.Empty);
-
-                    string linkXaml = string.Format(@"[InlineUIContainer][c:MyLink ThreadId=""{0}"" LinkContent=""{1}""/][/InlineUIContainer]", threadIdStr, linkContent);
-                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
-                }
-            }
-
             // 替换链接
-            MatchCollection matchsForLink = new Regex(@"<a\s+href=""([^""]*)""[^>]*>([^<#]*)</a>").Matches(htmlContent);
+            int inAppLinkCount = 0;
+            var matchsForLink = new Regex("<a\\s+href=\"([^\"]*)\"[^>]*>([\\s\\S]*?)<\\/a>").Matches(htmlContent);
             if (matchsForLink != null && matchsForLink.Count > 0)
             {
                 for (int i = 0; i < matchsForLink.Count; i++)
@@ -563,15 +546,32 @@ namespace Hipda.Html
                     var m = matchsForLink[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string linkUrl = m.Groups[1].Value;
-                    string linkContent = m.Groups[2].Value;
 
+                    string linkUrl = m.Groups[1].Value;
                     if (!linkUrl.Contains(":"))
                     {
                         linkUrl = string.Format("http://www.hi-pda.com/forum/{0}", linkUrl);
                     }
-                    string linkXaml = string.Format(@"[Hyperlink NavigateUri=""{0}"" Foreground=""DodgerBlue""]{1}[/Hyperlink]", linkUrl, linkContent);
-                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+
+                    string linkContent = m.Groups[2].Value;
+                    linkContent = new Regex("<[^>]*>").Replace(linkContent, string.Empty);
+
+                    if (linkUrl.StartsWith("http://www.hi-pda.com/forum/") || linkUrl.StartsWith("http://hi-pda.com/forum/"))
+                    {
+                        inAppLinkCount++;
+                        var key = $"InAppLink_{username}_{timeStr}_{inAppLinkCount}";
+                        string linkXaml = $@"[Hyperlink Name=""{key}"" Foreground=""White""]{linkContent}[/Hyperlink]";
+                        if (!inAppLinkUrlDic.ContainsKey(key))
+                        {
+                            inAppLinkUrlDic.Add(key, linkUrl);
+                        }
+                        htmlContent = new Regex(placeHolder.Replace("?", "\\?").Replace("[", "\\[").Replace("]", "\\]").Replace("(", "\\(").Replace(")", "\\)")).Replace(htmlContent, linkXaml, 1);
+                    }
+                    else
+                    {
+                        string linkXaml = $@"[Hyperlink NavigateUri=""{linkUrl}"" Foreground=""DodgerBlue""]{linkContent}[/Hyperlink]";
+                        htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                    }
                 }
             }
 
@@ -607,7 +607,8 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("]", ">");
 
             string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
-            return ReplaceHexadecimalSymbols(xamlStr);
+            xamlStr = ReplaceHexadecimalSymbols(xamlStr);
+            return new string[] { xamlStr, inAppLinkCount.ToString() };
         }
 
         public static string ConvertSearchThreadTitle(string title, string forumName, string imageFontIcon, string fileFontIcon, string viewInfo)

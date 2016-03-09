@@ -93,24 +93,14 @@ namespace Hipda.Client.Uwp.Pro.Services
             string str = userInfoNode.InnerText.Trim().Replace("&nbsp;", string.Empty).Replace("\n", "$");
             string[] strAry = str.Split('$');
             string username = strAry[0].Trim();
-            string time = strAry[1].Trim();
-            string date = time.Split(' ')[0];
+            string timeStr = strAry[1].Trim();
+            string date = timeStr.Split(' ')[0];
 
-            string textStr = messageNode.InnerText;
-            string htmlStr = messageNode.InnerHtml;
-            string xamlStr = Html.HtmlToXaml.ConvertUserMessage(htmlStr);
+            var ary = Html.HtmlToXaml.ConvertUserMessage(messageNode.InnerHtml, username, timeStr, ref ReplyListService.InAppLinkUrlDic);
+            string xamlStr = ary[0];
+            int inAppLinkCount = Convert.ToInt32(ary[1]);
 
-            return new UserMessageItemModel
-            {
-                Date = date,
-                Time = time,
-                UserId = uid,
-                Username = username,
-                TextStr = textStr,
-                HtmlStr = htmlStr,
-                XamlStr = xamlStr,
-                IsRead = isRead
-            };
+            return new UserMessageItemModel(isRead, uid, username, date, timeStr, xamlStr, inAppLinkCount);
         }
 
         public async Task<UserMessageDataModel> GetUserMessageData(int userId, int limitCount)

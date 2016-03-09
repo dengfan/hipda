@@ -30,7 +30,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Border Margin="0,8" Width="36" Height="36" Background="{ThemeResource SystemListLowColor}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Border Margin="0,8" Width="36" Height="36" Background="{ThemeResource SystemListLowColor}" HorizontalAlignment="Left" VerticalAlignment="Center">
                             <Image Source="{Binding AvatarUri}" Width="36" Height="36" Stretch="UniformToFill" Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
                         </Border>
                         <StackPanel Margin="48,8,8,8" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -38,7 +38,7 @@
                                        Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}">
                                 <Run Text="{Binding Username}"/>
                                 <Run Text=" "/>
-                                <Run Text="{Binding LastMessageTime}"/>
+                                <Run Text="{Binding LastMessageTime}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
                                 <Run Text=" "/>
                                 <Run Text="{Binding NewLabel}" Foreground="Red" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
                             </TextBlock>

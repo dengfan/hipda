@@ -1,4 +1,5 @@
 ﻿using Hipda.Client.Uwp.Pro.Services;
+using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +8,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Markup;
 
 namespace Hipda.Client.Uwp.Pro.Models
@@ -68,29 +71,39 @@ namespace Hipda.Client.Uwp.Pro.Models
     /// </summary>
     public class UserMessageItemModel
     {
-        public bool IsRead { get; set; }
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public string Date { get; set; }
-        public string Time { get; set; }
-        public int LinkCount { get; set; }
-        public string TextStr { get; set; }
-        public string HtmlStr { get; set; }
-        public string XamlStr { get; set; }
-        public object XamlContent
+        public UserMessageItemModel(bool isRead, int userId, string username, string date, string time, string xamlStr, int inAppLinkCount)
+        {
+            this.IsRead = isRead;
+            this.UserId = userId;
+            this.Username = username;
+            this.Date = date;
+            this.Time = time;
+            this.XamlStr = xamlStr;
+            this.InAppLinkCount = inAppLinkCount;
+        }
+
+        public bool IsRead { get; private set; }
+        public int UserId { get; private set; }
+        public string Username { get; private set; }
+        public string Date { get; private set; }
+        public string Time { get; private set; }
+        public string XamlStr { get; private set; }
+        public int InAppLinkCount { get; private set; }
+        public RichTextBlock XamlContent
         {
             get
             {
-                try
+                var rtb = (RichTextBlock)XamlReader.Load(CommonService.ReplaceEmojiLabel(XamlStr));
+                for (int i = 1; i <= InAppLinkCount; i++)
                 {
-                    return XamlReader.Load(CommonService.ReplaceEmojiLabel(XamlStr));
+                    var key = $"InAppLink_{Username}_{Time}_{i}";
+                    var hyperLink = (Hyperlink)rtb.FindName(key);
+                    if (hyperLink != null)
+                    {
+                        hyperLink.Click += ReplyItemModel.InAppLink_Click;
+                    }
                 }
-                catch
-                {
-                    string text = Regex.Replace(TextStr, @"[^a-zA-Z\d\u4e00-\u9fa5]", " ");
-                    XamlStr = string.Format("<RichTextBlock xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"><Paragraph>{0}</Paragraph></RichTextBlock>", text);
-                    return XamlReader.Load(XamlStr);
-                }
+                return rtb;
             }
         }
 
