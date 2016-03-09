@@ -55,5 +55,10 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
             }
         }
+
+        private void OpenPostUserMessagePanelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(UserInfoPage), $"{_userId},{_username}");
+        }
     }
 }

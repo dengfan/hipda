@@ -15,15 +15,15 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         int _postId;
         int _threadId;
 
-        private string _tipText = "请稍候，载入中。。。";
+        private bool _isProgressRingActive = true;
 
-        public string TipText
+        public bool IsProgressRingActive
         {
-            get { return _tipText; }
+            get { return _isProgressRingActive; }
             set
             {
-                _tipText = value;
-                this.RaisePropertyChanged("TipText");
+                _isProgressRingActive = value;
+                this.RaisePropertyChanged("IsProgressRingActive");
             }
         }
 
@@ -108,7 +108,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             MainPage.PopupUsername = replyItem.AuthorUsername;
             MainPage.PopupThreadId = replyItem.ThreadId;
 
-            TipText = string.Empty;
+            IsProgressRingActive = false;
             FloorNoStr = replyItem.FloorNoStr;
             AvatarUri = replyItem.AvatarUri;
             AuthorUsername = replyItem.AuthorUsername;

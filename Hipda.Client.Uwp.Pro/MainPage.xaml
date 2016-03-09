@@ -130,7 +130,7 @@
             <!--<MenuFlyoutItem Text="在新窗口中打开此主题" Tapped="openThreadInNewView_Tapped"/>-->
             <MenuFlyoutItem Text="收藏此主题" Click="AddToFavorites_Click"/>
             <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="查看详细资料" Click="OpenUserInfoDialogMenuItem_Click"/>
+            <MenuFlyoutItem Text="查看个人资料" Click="OpenUserInfoDialogMenuItem_Click"/>
             <MenuFlyoutItem Text="查看发贴记录" Click="OpenUserThread_Click"/>
             <MenuFlyoutItem Text="发短消息" Click="OpenUserMessageDialogMenuItem_Click"/>
             <MenuFlyoutItem Text="加为好友" Click="AddBuddy_Click"/>
@@ -140,7 +140,7 @@
         </MenuFlyout>
 
         <MenuFlyout x:Key="AvatarContextMenuForReply">
-            <MenuFlyoutItem Text="查看详细资料" Click="OpenUserInfoDialogMenuItem_Click"/>
+            <MenuFlyoutItem Text="查看个人资料" Click="OpenUserInfoDialogMenuItem_Click"/>
             <MenuFlyoutItem Text="查看发贴记录" Click="OpenUserThread_Click"/>
             <MenuFlyoutItem Text="发短消息" Click="OpenUserMessageDialogMenuItem_Click"/>
             <MenuFlyoutItem Text="加为好友" Click="AddBuddy_Click"/>

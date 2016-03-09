@@ -12,7 +12,7 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <ProgressRing Grid.RowSpan="2" IsActive="{Binding IsProgressRingActive}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="40" />
         <ScrollViewer Padding="12,0" HorizontalContentAlignment="Stretch" VerticalScrollMode="Auto">
             <Grid Padding="0,0,0,12">
                 <Border Width="160" Height="160" CornerRadius="80" Background="{ThemeResource SystemListLowColor}"
@@ -26,12 +26,7 @@
             </Grid>
         </ScrollViewer>
         <CommandBar Grid.Row="1">
-            <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}">
-                <AppBarButton.Icon>
-                    <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-            <AppBarButton Label="发短消息" IsEnabled="{Binding IsButtonEnable}">
+            <AppBarButton Label="发短消息" Click="OpenPostUserMessagePanelButton_Click">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE15F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 </AppBarButton.Icon>

@@ -13,41 +13,43 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Margin="8,0,0,8" Orientation="Horizontal">
+        <ProgressRing Grid.RowSpan="3" IsActive="{Binding IsProgressRingActive}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="40" />
+        <StackPanel Margin="12,0,0,12" Orientation="Horizontal">
             <Border Background="{ThemeResource SystemListLowColor}" Width="40" Height="40">
-                <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill" />
+                <Image Source="{Binding AvatarUri}" Width="40" Height="40" Stretch="UniformToFill"
+                       Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
             </Border>
-            <TextBlock Margin="8,0,0,0" FontSize="{ThemeResource ControlContentThemeFontSize}" VerticalAlignment="Bottom">
-                <Run Text="{Binding FloorNoStr}"/>
-                <LineBreak/>
+            <TextBlock Margin="12,0,0,0" VerticalAlignment="Bottom"
+                       FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                       Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}">
                 <Run Text="{Binding AuthorUsername}"/>
                 <Run Text=" "/>
-                <Run Text="{Binding AuthorCreateTime}"/>
+                <Run Text="{Binding FloorNoStr}"/>
+                <LineBreak/>
+                <Run Text="{Binding AuthorCreateTime}" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
             </TextBlock>
         </StackPanel>
-        <TextBlock Grid.Row="1" Text="{Binding TipText}" Margin="8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <ScrollViewer Grid.Row="1" Padding="8" HorizontalContentAlignment="Stretch" Content="{Binding XamlContent}"/>
+        <ScrollViewer Grid.Row="1" Padding="12">
+            <ContentControl HorizontalAlignment="Stretch" Content="{Binding XamlContent}"
+                            FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
+        </ScrollViewer>
         <CommandBar Grid.Row="2">
-            <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}">
-                <AppBarButton.Icon>
-                    <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-            <AppBarButton Label="发短消息" IsEnabled="{Binding IsButtonEnable}">
+            <AppBarButton Label="发短消息">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE15F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 </AppBarButton.Icon>
             </AppBarButton>
-            <AppBarButton Label="个人资料" IsEnabled="{Binding IsButtonEnable}">
+            <AppBarButton Label="个人资料">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE2AF;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 </AppBarButton.Icon>
             </AppBarButton>
-            <!--<AppBarButton Label="回复此楼" IsEnabled="{Binding IsButtonEnable}">
-                        <AppBarButton.Icon>
-                            <FontIcon Glyph="&#xE90A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                        </AppBarButton.Icon>
-                    </AppBarButton>-->
+            <!--<AppBarButton Label="回复此楼">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE90A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                </AppBarButton.Icon>
+            </AppBarButton>-->
         </CommandBar>
     </Grid>
 </Page>

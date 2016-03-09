@@ -16,25 +16,17 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
     public class UserInfoPageViewModel : NotificationObject
     {
         UserInfoService _ds;
-
         int _userId;
-        public int UserId
-        {
-            get
-            {
-                return _userId;
-            }
-        }
 
-        private string _tipText = "请稍候，载入中。。。";
+        private bool _isProgressRingActive = true;
 
-        public string TipText
+        public bool IsProgressRingActive
         {
-            get { return _tipText; }
+            get { return _isProgressRingActive; }
             set
             {
-                _tipText = value;
-                this.RaisePropertyChanged("TipText");
+                _isProgressRingActive = value;
+                this.RaisePropertyChanged("IsProgressRingActive");
             }
         }
 
@@ -77,8 +69,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         async void GetUserInfoRichTextBlock()
         {
             string xaml = await _ds.GetXamlForUserInfo(_userId);
-            TipText = string.Empty;
             UserInfoRichTextBlock = XamlReader.Load(xaml);
+            IsProgressRingActive = false;
 
             BitmapImage bi = new BitmapImage();
             bi.UriSource = CommonService.GetBigAvatarUriByUserId(_userId);
