@@ -23,7 +23,7 @@ namespace Hipda.Html
             return r;
         }
 
-        public static string[] ConvertPost(int postId, int threadId, string htmlContent, Dictionary<int, string[]> postDic, ref Dictionary<string, string> inAppLinkUrlDic)
+        public static string[] ConvertPost(int postId, int threadId, int forumId, string forumName, string htmlContent, Dictionary<int, string[]> floorNoDic, ref Dictionary<string, string> inAppLinkUrlDic)
         {
             //string deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
 
@@ -91,7 +91,7 @@ namespace Hipda.Html
                     int replyPostId = Convert.ToInt32(m.Groups[1].Value);
                     string floorNoStr = m.Groups[2].Value;
                     string username = m.Groups[3].Value;
-                    string replyXaml = ConvertReply(replyPostId, floorNoStr, threadId, postDic);
+                    string replyXaml = ConvertReply(username, replyPostId, floorNoStr, threadId, floorNoDic);
                     replyXaml = $@"[/Paragraph][/RichTextBlock]{replyXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
                     htmlContent = htmlContent.Replace(placeHolder, replyXaml);
                 }
@@ -109,7 +109,7 @@ namespace Hipda.Html
                     var m = matchsForQuote[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string quoteXaml = ConvertQuote(m.Groups[1].Value.Trim(), threadId, postDic);
+                    string quoteXaml = ConvertQuote(m.Groups[1].Value.Trim(), threadId, forumId, forumName, floorNoDic);
                     quoteXaml = $@"[/Paragraph][/RichTextBlock]{quoteXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
                     htmlContent = htmlContent.Replace(placeHolder, quoteXaml);
                 }
@@ -285,27 +285,43 @@ namespace Hipda.Html
             return new string[] { ReplaceHexadecimalSymbols(xamlStr), inAppLinkCount.ToString() };
         }
 
-        private static string ConvertReply(int replyPostId, string floorNoStr, int threadId, Dictionary<int, string[]> postDic)
+        private static string ConvertReply(string username, int replyPostId, string floorNoStr, int threadId, Dictionary<int, string[]> floorNoDic)
         {
-            string[] ary = postDic[replyPostId];
-            string authorUserIdStr = ary[0];
-            string authorUsername = ary[1];
+            string xamlStr = string.Empty;
 
-            string xamlStr = 
-                $@"<StackPanel Orientation=""Horizontal"">
+            // 有缓存POST数据，通常是按页码顺序加载
+            if (floorNoDic.ContainsKey(replyPostId))
+            {
+                string[] ary = floorNoDic[replyPostId];
+                string authorUserIdStr = ary[0];
+
+                xamlStr =
+                    $@"<StackPanel Orientation=""Horizontal"">
                     <TextBlock Text=""回复"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
-                    <c:MyQuoteLink Margin=""4"" FontWeight=""Bold"" UserId=""{authorUserIdStr}"" Username=""{authorUsername}"" PostId=""{replyPostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}""/>
-                    <TextBlock Text=""{authorUsername}"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
+                    <c:MyQuoteLink Margin=""4"" FontWeight=""Bold"" UserId=""{authorUserIdStr}"" Username=""{username}"" PostId=""{replyPostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}""/>
+                    <TextBlock Text=""{username}"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
                 </StackPanel>";
+            }
+            else // 无缓存POST数据，通常是直接跳转到指定页，从而导致相关的POST数据并未缓存
+            {
+                xamlStr =
+                    $@"<StackPanel Orientation=""Horizontal"">
+                    <TextBlock Text=""回复"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
+                    <c:MyQuoteLink Margin=""4"" FontWeight=""Bold"" PostId=""{replyPostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}""/>
+                    <TextBlock Text=""{username}"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
+                </StackPanel>";
+            }
 
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
-        private static string ConvertQuote(string htmlContent, int threadId, Dictionary<int, string[]> postDic)
+        private static string ConvertQuote(string htmlContent, int threadId, int forumId, string forumName, Dictionary<int, string[]> floorNoDic)
         {
+            string xamlStr = string.Empty;
             string quoteContent = string.Empty;
             string quoteInfo = string.Empty;
+            string username = string.Empty;
             int quotePostId = 0;
 
             int i = htmlContent.IndexOf("<font size=\"2\">");
@@ -319,7 +335,7 @@ namespace Hipda.Html
 
             quoteInfo = htmlContent.Substring(i).Trim();
 
-            // 获取"引用"中的 PostId
+            // 获取 PostId
             var matchsForPostId = new Regex("pid=([0-9]+)").Matches(quoteInfo);
             if (matchsForPostId != null && matchsForPostId.Count == 1)
             {
@@ -339,30 +355,46 @@ namespace Hipda.Html
                 return ConvertQuote2(htmlContent);
             }
 
-            // 对于已屏蔽的用户，则连引用也不显示
-            if (!postDic.ContainsKey(quotePostId))
+            // 获取用户名
+            var matchsForUsername = new Regex("<font color=\"#999999\">([^\\s]*)\\s").Matches(quoteInfo);
+            if (matchsForUsername != null && matchsForUsername.Count == 1)
             {
-                return string.Empty;
+                username = matchsForUsername[0].Groups[1].ToString();
             }
 
-            string[] ary = postDic[quotePostId];
-            string authorUserIdStr = ary[0];
-            string authorUsername = ary[1];
-            string floorNoStr = ary[2];
-            string forumIdStr = ary[3];
-            string forumName = ary[4];
+            // 有缓存POST数据，通常是按页码顺序加载
+            if (floorNoDic.ContainsKey(quotePostId))
+            {
+                string[] ary = floorNoDic[quotePostId];
+                string authorUserIdStr = ary[0];
+                string floorNoStr = ary[1];
 
-            string xamlStr = 
-                $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
+                xamlStr =
+                    $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
                     <ContentControl Margin=""0,16,0,0"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
                         <RichTextBlock>
-                            <Paragraph Margin=""36,0,0,0""><Run FontWeight=""Bold"">{authorUsername}</Run></Paragraph>
+                            <Paragraph Margin=""36,0,0,0""><Run FontWeight=""Bold"">{username}</Run></Paragraph>
                             <Paragraph>{quoteContent}</Paragraph>
                         </RichTextBlock>
                     </ContentControl>
-                    <c:MyQuoteLink UserId=""{authorUserIdStr}"" Username=""{authorUsername}"" PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}#"" FontWeight=""Bold"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>
-                    <c:MyAvatarForReply MyWidth=""30"" UserId=""{authorUserIdStr}"" Username=""{authorUsername}"" ForumId=""{forumIdStr}"" ForumName=""{forumName}"" HorizontalAlignment=""Left"" VerticalAlignment=""Top""/>
+                    <c:MyQuoteLink UserId=""{authorUserIdStr}"" Username=""{username}"" PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}#"" FontWeight=""Bold"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>
+                    <c:MyAvatarForReply MyWidth=""30"" UserId=""{authorUserIdStr}"" Username=""{username}"" ForumId=""{forumId}"" ForumName=""{forumName}"" HorizontalAlignment=""Left"" VerticalAlignment=""Top""/>
                 </Grid>";
+            }
+            else // 无缓存POST数据，通常是直接跳转到指定页，从而导致相关的POST数据并未缓存
+            {
+                xamlStr =
+                    $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
+                    <ContentControl Margin=""0,16,0,0"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
+                        <RichTextBlock>
+                            <Paragraph Margin=""36,0,0,0""><Run FontWeight=""Bold"">{username}</Run></Paragraph>
+                            <Paragraph>{quoteContent}</Paragraph>
+                        </RichTextBlock>
+                    </ContentControl>
+                    <c:MyQuoteLink PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""查看引用详情"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>
+                </Grid>";
+            }
+
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }

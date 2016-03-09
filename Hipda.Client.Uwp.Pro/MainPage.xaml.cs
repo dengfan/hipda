@@ -650,12 +650,12 @@ namespace Hipda.Client.Uwp.Pro
             OpenInputPanel(typeof(UserMessagePage), $"{PopupUserId},{PopupUsername}");
         }
 
-        public void OpenPostDetailDialog(int userId, string username, int postId, int threadId)
+        public void OpenQuoteDetailPage(int userId, string username, int postId, int threadId)
         {
             OpenInputPanel(typeof(QuoteDetailPage), $"{userId},{username},{postId},{threadId}");
         }
 
-        public void OpenUserMessageListDialog()
+        public void OpenUserMessageHubPage()
         {
             OpenInputPanel(typeof(UserMessageHubPage), null);
         }
@@ -667,7 +667,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private void openUserMessageListButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenUserMessageListDialog();
+            OpenUserMessageHubPage();
         }
 
         private void openUserMessageDialogButton_Click(object sender, RoutedEventArgs e)

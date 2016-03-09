@@ -38,13 +38,23 @@ namespace Hipda.Client.Uwp.Pro.Views
             base.OnNavigatedTo(e);
 
             string[] p = e.Parameter.ToString().Split(',');
-            _userId = Convert.ToInt32(p[0]);
-            _username = p[1];
+            if (!string.IsNullOrEmpty(p[0]) && !string.IsNullOrEmpty(p[1]))
+            {
+                _userId = Convert.ToInt32(p[0]);
+                _username = p[1];
+            }
+            
             _postId = Convert.ToInt32(p[2]);
             _threadId = Convert.ToInt32(p[3]);
 
             SetTitle("查看引用楼");
             this.DataContext = new QuoteDetailPageViewModel(_postId, _threadId);
+
+            // 未能获取到 UserId 则不显示 CommandBar
+            if (_userId == 0)
+            {
+                CmdBar.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void SetTitle(string title)

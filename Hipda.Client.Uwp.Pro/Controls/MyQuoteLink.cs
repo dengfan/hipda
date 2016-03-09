@@ -89,7 +89,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var mp = frame.Content as MainPage;
             if (mp != null)
             {
-                mp.OpenPostDetailDialog(UserId, Username, PostId, ThreadId);
+                mp.OpenQuoteDetailPage(UserId, Username, PostId, ThreadId);
             }
         }
     }

@@ -34,7 +34,7 @@
                             FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                             Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
         </ScrollViewer>
-        <CommandBar Grid.Row="2">
+        <CommandBar Grid.Row="2" x:Name="CmdBar">
             <AppBarButton Label="个人资料" Click="UserInfoButton_Click">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE2AF;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
