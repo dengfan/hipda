@@ -35,14 +35,14 @@
                             Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToContentControlForeground1StyleConverter}}"/>
         </ScrollViewer>
         <CommandBar Grid.Row="2">
-            <AppBarButton Label="发短消息">
-                <AppBarButton.Icon>
-                    <FontIcon Glyph="&#xE15F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-            <AppBarButton Label="个人资料">
+            <AppBarButton Label="个人资料" Click="UserInfoButton_Click">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE2AF;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton Label="发短消息" Click="UserMessageButton_Click">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE15F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 </AppBarButton.Icon>
             </AppBarButton>
             <!--<AppBarButton Label="回复此楼">

@@ -24,6 +24,27 @@ namespace Hipda.Client.Uwp.Pro.Controls
         }
 
 
+        public int UserId
+        {
+            get { return (int)GetValue(UserIdProperty); }
+            set { SetValue(UserIdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for UserId.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UserIdProperty =
+            DependencyProperty.Register("UserId", typeof(int), typeof(MyQuoteLink), new PropertyMetadata(0));
+
+
+        public string Username
+        {
+            get { return (string)GetValue(UsernameProperty); }
+            set { SetValue(UsernameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Username.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UsernameProperty =
+            DependencyProperty.Register("Username", typeof(string), typeof(MyQuoteLink), new PropertyMetadata(string.Empty));
+
 
         public int PostId
         {
@@ -68,7 +89,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             var mp = frame.Content as MainPage;
             if (mp != null)
             {
-                mp.OpenPostDetailDialog(PostId, ThreadId);
+                mp.OpenPostDetailDialog(UserId, Username, PostId, ThreadId);
             }
         }
     }

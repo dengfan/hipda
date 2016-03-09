@@ -88,10 +88,10 @@ namespace Hipda.Html
                     var m = matchsForRefLink[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string replyPostIdStr = m.Groups[1].Value;
+                    int replyPostId = Convert.ToInt32(m.Groups[1].Value);
                     string floorNoStr = m.Groups[2].Value;
                     string username = m.Groups[3].Value;
-                    string replyXaml = ConvertReply(replyPostIdStr, floorNoStr, username, threadId);
+                    string replyXaml = ConvertReply(replyPostId, floorNoStr, threadId, postDic);
                     replyXaml = $@"[/Paragraph][/RichTextBlock]{replyXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
                     htmlContent = htmlContent.Replace(placeHolder, replyXaml);
                 }
@@ -109,7 +109,7 @@ namespace Hipda.Html
                     var m = matchsForQuote[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string quoteXaml = ConvertQuote(m.Groups[1].Value.Trim(), postDic, postId, threadId);
+                    string quoteXaml = ConvertQuote(m.Groups[1].Value.Trim(), threadId, postDic);
                     quoteXaml = $@"[/Paragraph][/RichTextBlock]{quoteXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
                     htmlContent = htmlContent.Replace(placeHolder, quoteXaml);
                 }
@@ -285,62 +285,58 @@ namespace Hipda.Html
             return new string[] { ReplaceHexadecimalSymbols(xamlStr), inAppLinkCount.ToString() };
         }
 
-        private static string ConvertReply(string replyPostIdStr, string floorNoStr, string username, int threadId)
+        private static string ConvertReply(int replyPostId, string floorNoStr, int threadId, Dictionary<int, string[]> postDic)
         {
+            string[] ary = postDic[replyPostId];
+            string authorUserIdStr = ary[0];
+            string authorUsername = ary[1];
+
             string xamlStr = 
                 $@"<StackPanel Orientation=""Horizontal"">
                     <TextBlock Text=""回复"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
-                    <c:MyQuoteLink Margin=""4"" FontWeight=""Bold"" PostId=""{replyPostIdStr}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}""/>
-                    <TextBlock Text=""{username}"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
+                    <c:MyQuoteLink Margin=""4"" FontWeight=""Bold"" UserId=""{authorUserIdStr}"" Username=""{authorUsername}"" PostId=""{replyPostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}""/>
+                    <TextBlock Text=""{authorUsername}"" FontWeight=""Bold"" VerticalAlignment=""Center""/>
                 </StackPanel>";
 
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
             return ReplaceHexadecimalSymbols(xamlStr);
         }
 
-        private static string ConvertQuote(string htmlContent, Dictionary<int, string[]> postDic, int postId, int threadId)
+        private static string ConvertQuote(string htmlContent, int threadId, Dictionary<int, string[]> postDic)
         {
             string quoteContent = string.Empty;
             string quoteInfo = string.Empty;
             int quotePostId = 0;
 
-            try
+            int i = htmlContent.IndexOf("<font size=\"2\">");
+            if (i == -1)
             {
-                int i = htmlContent.IndexOf("<font size=\"2\">");
-                if (i == -1)
-                {
-                    return ConvertQuote2(htmlContent);
-                }
+                return ConvertQuote2(htmlContent);
+            }
 
-                quoteContent = htmlContent.Substring(0, i).Trim();
-                quoteContent = new Regex("<[^>]*>").Replace(quoteContent, string.Empty);
+            quoteContent = htmlContent.Substring(0, i).Trim();
+            quoteContent = new Regex("<[^>]*>").Replace(quoteContent, string.Empty);
 
-                quoteInfo = htmlContent.Substring(i).Trim();
+            quoteInfo = htmlContent.Substring(i).Trim();
 
-                // 获取"引用"中的 PostId
-                var matchsForPostId = new Regex("pid=([0-9]+)").Matches(quoteInfo);
+            // 获取"引用"中的 PostId
+            var matchsForPostId = new Regex("pid=([0-9]+)").Matches(quoteInfo);
+            if (matchsForPostId != null && matchsForPostId.Count == 1)
+            {
+                int.TryParse(matchsForPostId[0].Groups[1].ToString(), out quotePostId);
+            }
+            else
+            {
+                matchsForPostId = new Regex("PostId=\\\"([0-9]+)\\\"").Matches(quoteInfo);
                 if (matchsForPostId != null && matchsForPostId.Count == 1)
                 {
                     int.TryParse(matchsForPostId[0].Groups[1].ToString(), out quotePostId);
                 }
-                else
-                {
-                    matchsForPostId = new Regex("PostId=\\\"([0-9]+)\\\"").Matches(quoteInfo);
-                    if (matchsForPostId != null && matchsForPostId.Count == 1)
-                    {
-                        int.TryParse(matchsForPostId[0].Groups[1].ToString(), out quotePostId);
-                    }
-                }
-
-                if (quotePostId == 0)
-                {
-                    return ConvertQuote2(htmlContent);
-                }
             }
-            catch
+
+            if (quotePostId == 0)
             {
-                string errorDetails = $"http://www.hi-pda.com/forum/viewthread.php?tid={threadId} 楼层{postId}之内容之引用解析出错。\r\n{quoteContent}\r\n{quoteInfo}";
-                PostErrorEmailToDeveloper("回复内容之引用内容解析出现异常", errorDetails);
+                return ConvertQuote2(htmlContent);
             }
 
             // 对于已屏蔽的用户，则连引用也不显示
@@ -364,7 +360,7 @@ namespace Hipda.Html
                             <Paragraph>{quoteContent}</Paragraph>
                         </RichTextBlock>
                     </ContentControl>
-                    <c:MyQuoteLink PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}#"" FontWeight=""Bold"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>
+                    <c:MyQuoteLink UserId=""{authorUserIdStr}"" Username=""{authorUsername}"" PostId=""{quotePostId}"" ThreadId=""{threadId}"" LinkContent=""{floorNoStr}#"" FontWeight=""Bold"" HorizontalAlignment=""Right"" VerticalAlignment=""Top""/>
                     <c:MyAvatarForReply MyWidth=""30"" UserId=""{authorUserIdStr}"" Username=""{authorUsername}"" ForumId=""{forumIdStr}"" ForumName=""{forumName}"" HorizontalAlignment=""Left"" VerticalAlignment=""Top""/>
                 </Grid>";
             xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");

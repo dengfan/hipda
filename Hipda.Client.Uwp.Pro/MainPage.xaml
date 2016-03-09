@@ -801,6 +801,11 @@
                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
                            Tapped="InputPanelBackButton_Tapped"
                            Visibility="Collapsed"/>
+                <TextBlock x:Name="InputPanelForwardButton" Text="&#xE0AB;" Padding="12" FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                           FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                           Tapped="InputPanelForwardButton_Tapped"
+                           Visibility="Collapsed"/>
                 <TextBlock x:Name="InputPanelTitleTextBlock" Margin="12,0,0,0" VerticalAlignment="Center" FontWeight="Bold"
                            FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>

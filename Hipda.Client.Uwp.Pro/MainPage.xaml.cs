@@ -650,9 +650,9 @@ namespace Hipda.Client.Uwp.Pro
             OpenInputPanel(typeof(UserMessagePage), $"{PopupUserId},{PopupUsername}");
         }
 
-        public void OpenPostDetailDialog(int postId, int threadId)
+        public void OpenPostDetailDialog(int userId, string username, int postId, int threadId)
         {
-            OpenInputPanel(typeof(QuoteDetailPage), $"{postId},{threadId}");
+            OpenInputPanel(typeof(QuoteDetailPage), $"{userId},{username},{postId},{threadId}");
         }
 
         public void OpenUserMessageListDialog()
@@ -972,6 +972,7 @@ namespace Hipda.Client.Uwp.Pro
         private void InputPanelFrame_Navigated(object sender, NavigationEventArgs e)
         {
             InputPanelBackButton.Visibility = InputPanelFrame.CanGoBack ? Visibility.Visible : Visibility.Collapsed;
+            InputPanelForwardButton.Visibility = InputPanelFrame.CanGoForward ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void CloseInputPanelMask_Tapped(object sender, TappedRoutedEventArgs e)
@@ -1000,11 +1001,26 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
+        private void InputPanelFrameGoForward()
+        {
+            if (InputPanelFrame.CanGoForward)
+            {
+                InputPanelFrame.GoForward();
+            }
+        }
+
         private void InputPanelBackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             InputPanelFrameGoBack();
         }
 
+        private void InputPanelForwardButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            InputPanelFrameGoForward();
+        }
+
         #endregion
+
+
     }
 }

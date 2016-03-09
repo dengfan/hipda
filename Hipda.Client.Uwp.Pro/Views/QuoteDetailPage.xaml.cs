@@ -23,6 +23,11 @@ namespace Hipda.Client.Uwp.Pro.Views
     /// </summary>
     public sealed partial class QuoteDetailPage : Page
     {
+        int _userId = 0;
+        string _username = string.Empty;
+        int _postId = 0;
+        int _threadId = 0;
+
         public QuoteDetailPage()
         {
             this.InitializeComponent();
@@ -33,11 +38,13 @@ namespace Hipda.Client.Uwp.Pro.Views
             base.OnNavigatedTo(e);
 
             string[] p = e.Parameter.ToString().Split(',');
-            int postId = Convert.ToInt32(p[0]);
-            int threadId = Convert.ToInt32(p[1]);
+            _userId = Convert.ToInt32(p[0]);
+            _username = p[1];
+            _postId = Convert.ToInt32(p[2]);
+            _threadId = Convert.ToInt32(p[3]);
 
             SetTitle("查看引用楼");
-            this.DataContext = new QuoteDetailPageViewModel(postId, threadId);
+            this.DataContext = new QuoteDetailPageViewModel(_postId, _threadId);
         }
 
         private void SetTitle(string title)
@@ -51,6 +58,16 @@ namespace Hipda.Client.Uwp.Pro.Views
                     mainPage.SetTitleForInputPanel(title);
                 }
             }
+        }
+
+        private void UserInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(UserInfoPage), $"{_userId},{_username}");
+        }
+
+        private void UserMessageButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(UserMessagePage), $"{_userId},{_username}");
         }
     }
 }
