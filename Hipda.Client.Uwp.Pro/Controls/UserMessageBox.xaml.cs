@@ -9,18 +9,6 @@ namespace Hipda.Client.Uwp.Pro.Controls
 {
     public sealed partial class UserMessageBox : UserControl
     {
-        public int UserId
-        {
-            get { return (int)GetValue(UserIdProperty); }
-            set { SetValue(UserIdProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for UserId.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty UserIdProperty =
-            DependencyProperty.Register("UserId", typeof(int), typeof(UserMessageBox), new PropertyMetadata(0));
-
-
-
         public UserMessageBox()
         {
             this.InitializeComponent();

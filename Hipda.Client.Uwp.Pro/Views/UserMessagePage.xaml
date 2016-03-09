@@ -73,7 +73,7 @@
             </ListView.Header>
         </ListView>
         <Border Grid.Row="1" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="0,1,0,0">
-            <c:UserMessageBox UserId="{Binding UserId}"></c:UserMessageBox>
+            <c:UserMessageBox/>
         </Border>
         <CommandBar Grid.Row="2">
             <AppBarButton Label="短消息" IsEnabled="{Binding IsButtonEnable}">
