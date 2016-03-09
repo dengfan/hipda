@@ -26,7 +26,7 @@
             </Grid>
         </ScrollViewer>
         <CommandBar Grid.Row="1">
-            <AppBarButton Label="发短消息" Click="OpenPostUserMessagePanelButton_Click">
+            <AppBarButton Label="发短消息" Click="UserMessageButton_Click">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE15F;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 </AppBarButton.Icon>

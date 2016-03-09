@@ -74,5 +74,10 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
             }
         }
+
+        private void UserMessageHubButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(UserMessageHubPage));
+        }
     }
 }

@@ -80,7 +80,7 @@
             <c:UserMessageBox/>
         </Border>
         <CommandBar Grid.Row="2">
-            <AppBarButton Label="短消息">
+            <AppBarButton Label="短消息" Click="UserMessageHubButton_Click">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE8F2;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 </AppBarButton.Icon>
