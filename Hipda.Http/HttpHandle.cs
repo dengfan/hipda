@@ -101,7 +101,7 @@ namespace Hipda.Http
             return result;
         }
 
-        public async Task<string> PostFileAsync(string url, IDictionary<string, object> toPost, string filename, string filetype, string fieldname, byte[] buffer, CancellationTokenSource cts)
+        public async Task<string> PostFileAsync(string url, IDictionary<string, object> toPost, string filename, string fieldname, IBuffer buffer, CancellationTokenSource cts)
         {
             var result = string.Empty;
 
@@ -109,8 +109,7 @@ namespace Hipda.Http
             {
                 using (var client = new HttpClient())
                 {
-                    string boundary = "---------------------" + DateTime.Now.Ticks.ToString("x");
-
+                    string boundary = $"---------------------{DateTime.Now.Ticks.ToString("x")}";
                     var httpContent = new HttpMultipartFormDataContent(boundary);
 
                     foreach (var item in toPost)
@@ -118,13 +117,12 @@ namespace Hipda.Http
                         httpContent.Add(new HttpStringContent(item.Value.ToString(), Windows.Storage.Streams.UnicodeEncoding.Utf8), item.Key);
                     }
 
-                    var imageContent = new HttpBufferContent(WindowsRuntimeBufferExtensions.AsBuffer(buffer));
+                    var imageContent = new HttpBufferContent(buffer);
                     httpContent.Add(imageContent, fieldname, filename);
 
                     var response = await client.PostAsync(new Uri(url), httpContent).AsTask(cts.Token);
                     var buf = await response.Content.ReadAsBufferAsync();
-                    byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
-                    result = gbk.GetString(bytes, 0, bytes.Length);
+                    result = gbk.GetString(buf.ToArray());
                 }
             }
             catch (Exception ex)
