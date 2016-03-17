@@ -45,12 +45,12 @@ namespace Hipda.Client.Uwp.Pro.Services
             await _httpClient.PostAsync(url, postData, cts);
         }
 
-        public static async Task<List<AttachImageItemModel>> LoadUnusedImageAttachListAsync(CancellationTokenSource cts)
+        public static async Task<List<AttachFileItemModel>> LoadUnusedImageAttachListAsync(CancellationTokenSource cts)
         {
-            var url = $"http://www.hi-pda.com/forum/ajax.php?action=imagelist&inajax=1&ajaxtarget=imgattachlist";
-            string htmlContent = await _httpClient.GetAsync(url, cts);
+            var data = new List<AttachFileItemModel>();
 
-            var data = new List<AttachImageItemModel>();
+            var url = $"http://www.hi-pda.com/forum/ajax.php?action=imagelist&inajax=1";
+            string htmlContent = await _httpClient.GetAsync(url, cts);
             var matchs = new Regex("<img src=\"([^\"]*)\" id=\"([^\"]*)\"").Matches(htmlContent);
             if (matchs != null && matchs.Count > 0)
             {
@@ -59,7 +59,29 @@ namespace Hipda.Client.Uwp.Pro.Services
                     var m = matchs[i];
                     string src = $"http://www.hi-pda.com/forum/{m.Groups[1].Value}";
                     string id = m.Groups[2].Value.Replace("image_", string.Empty);
-                    data.Add(new AttachImageItemModel(id, src));
+                    data.Add(new AttachFileItemModel(0, id, src, string.Empty, false));
+                }
+            }
+
+            url = $"http://www.hi-pda.com/forum/ajax.php?action=attachlist&inajax=1";
+            htmlContent = await _httpClient.GetAsync(url, cts);
+            matchs = new Regex("onclick=\"insertAttachTag\\('(\\d*)'\\)\" title=\"([^\"]*)\n上传日期").Matches(htmlContent);
+            if (matchs != null && matchs.Count > 0)
+            {
+                for (int i = 0; i < matchs.Count; i++)
+                {
+                    var m = matchs[i];
+                    string id = m.Groups[1].Value;
+                    string fileName = m.Groups[2].Value.Trim();
+                    string fileExName = string.Empty;
+                    if (!fileName.Contains("."))
+                    {
+                        fileExName = string.Empty;
+                    }
+                    fileExName = $".{fileName.Split('.').Last()}";
+                    fileName = fileName.Replace(fileExName, string.Empty);
+                    fileName = fileName.Remove(0, fileName.Length - 5);
+                    data.Add(new AttachFileItemModel(1, id, $"..{fileName}", fileExName, false));
                 }
             }
 
@@ -94,7 +116,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             // 图片附件
-            var attachImageList = new ObservableCollection<AttachImageItemModel>();
+            var attachFileList = new ObservableCollection<AttachFileItemModel>();
             var imgList = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("class", string.Empty).Equals("imglist"));
             if (imgList != null)
             {
@@ -105,12 +127,35 @@ namespace Hipda.Client.Uwp.Pro.Services
                     {
                         string id = img.GetAttributeValue("id", string.Empty).Replace("image_", string.Empty);
                         string src = img.GetAttributeValue("src", string.Empty);
-                        attachImageList.Add(new AttachImageItemModel(id, $"http://www.hi-pda.com/forum/{src}"));
+                        attachFileList.Add(new AttachFileItemModel(0, id, $"http://www.hi-pda.com/forum/{src}", string.Empty, true));
                     }
                 }
             }
 
-            return new PostEditDataModel(postId, threadId, title, content, attachImageList);
+            var fileList = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", string.Empty).Equals("post_attachbody"));
+            if (fileList != null)
+            {
+                var fileLinks = fileList.Descendants().Where(n => n.Name.Equals("a") && n.GetAttributeValue("onclick", string.Empty).StartsWith("insertAttachTag("));
+                if (fileLinks != null)
+                {
+                    foreach (var link in fileLinks)
+                    {
+                        string id = link.GetAttributeValue("onclick", string.Empty).Replace("insertAttachTag('", string.Empty).Replace("')", string.Empty);
+                        string name = link.InnerText.Trim();
+                        string fileExName = string.Empty;
+                        if (!name.Contains("."))
+                        {
+                            fileExName = string.Empty;
+                        }
+                        fileExName = $".{name.Split('.').Last()}";
+                        name = name.Replace(fileExName, string.Empty);
+                        name = name.Remove(0, name.Length - 5);
+                        attachFileList.Add(new AttachFileItemModel(1, id, name, fileExName, true));
+                    }
+                }
+            }
+
+            return new PostEditDataModel(postId, threadId, title, content, attachFileList);
         }
 
         public static async Task<bool> SendPostReplyAsync(CancellationTokenSource cts, string noticeauthor, string noticetrimstr, string noticeauthormsg, string content, List<string> fileNameList, int threadId)

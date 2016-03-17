@@ -60,7 +60,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             AddToFavoritesCommand = new DelegateCommand();
             AddToFavoritesCommand.ExecuteAction = async (p) =>
             {
-                await SendService.SendAddToFavoritesAction(cts, _threadId, _ds.GetThreadTitle(_threadId));
+                await SendService.SendAddToFavoritesActionAsync(cts, _threadId, _ds.GetThreadTitle(_threadId));
             };
 
             RefreshReplyCommand = new DelegateCommand();

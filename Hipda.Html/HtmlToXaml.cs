@@ -387,7 +387,7 @@ namespace Hipda.Html
                     $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemListLowColor}}"" BorderThickness=""1,0,0,0"" BorderBrush=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">
                     <ContentControl Margin=""0,16,0,0"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
                         <RichTextBlock>
-                            <Paragraph Margin=""36,0,0,0""><Run FontWeight=""Bold"">{username}</Run></Paragraph>
+                            <Paragraph><Run FontWeight=""Bold"">{username}</Run></Paragraph>
                             <Paragraph>{quoteContent}</Paragraph>
                         </RichTextBlock>
                     </ContentControl>

@@ -105,6 +105,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AttachFileGridItemTemplateSelector.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Controls\PostMenuControl.xaml.cs">
       <DependentUpon>PostMenuControl.xaml</DependentUpon>
@@ -144,6 +145,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountItemModel.cs" />
+    <Compile Include="Models\PostEditDataModel.cs" />
     <Compile Include="Models\FaceItemModel.cs" />
     <Compile Include="Models\ForumModel.cs" />
     <Compile Include="Models\NavButtonItemModel.cs" />
@@ -195,7 +197,7 @@
     <Compile Include="Triggers\InputTypeTrigger.cs" />
     <Compile Include="UserMessageListItemTemplateSelector.cs" />
     <Compile Include="ViewModels\NoticeItemViewModel.cs" />
-    <Compile Include="ViewModels\SendEditPostContentDialogViewModel.cs" />
+    <Compile Include="ViewModels\SendEditPostPageViewModel.cs" />
     <Compile Include="ViewModels\SendNewThreadContentDialogViewModel.cs" />
     <Compile Include="ViewModels\FaceIconViewModel.cs" />
     <Compile Include="ViewModels\ForumAllCategoryListViewViewModel.cs" />
@@ -225,6 +227,18 @@
     </Compile>
     <Compile Include="Views\ReplyListPage.xaml.cs">
       <DependentUpon>ReplyListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditPostPage.xaml.cs">
+      <DependentUpon>EditPostPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SendQuotePage.xaml.cs">
+      <DependentUpon>SendQuotePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SendReplyPage.xaml.cs">
+      <DependentUpon>SendReplyPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewThreadPage.xaml.cs">
+      <DependentUpon>NewThreadPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ThreadAndReplyPage.xaml.cs">
       <DependentUpon>ThreadAndReplyPage.xaml</DependentUpon>
@@ -392,6 +406,22 @@
     <Page Include="Views\ReplyListPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EditPostPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SendQuotePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SendReplyPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewThreadPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ThreadAndReplyPage.xaml">
       <Generator>MSBuild:Compile</Generator>

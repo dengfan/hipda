@@ -55,7 +55,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             AddAttachFilesCommand = new DelegateCommand();
             AddAttachFilesCommand.ExecuteAction = async (p) =>
             {
-                var data = await SendService.UploadFiles(cts, _beforeUpload, _afterUpload);
+                var data = await SendService.UploadFileAsync(cts, _beforeUpload, _afterUpload);
                 if (data[0] != null && data[0].Count > 0)
                 {
                     _fileNameList.AddRange(data[0]);
@@ -82,7 +82,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     return;
                 }
 
-                bool flag = await SendService.SendThreadReply(cts, Content, _fileNameList, _threadId);
+                bool flag = await SendService.SendThreadReplyAsync(cts, Content, _fileNameList, _threadId);
                 if (flag)
                 {
                     _fileNameList.Clear();

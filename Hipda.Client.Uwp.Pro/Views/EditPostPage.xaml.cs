@@ -1,13 +1,17 @@
 ﻿using Hipda.Client.Uwp.Pro.Models;
+using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -16,15 +20,20 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+// “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
-namespace Hipda.Client.Uwp.Pro.Controls
+namespace Hipda.Client.Uwp.Pro.Views
 {
     /// <summary>
-    /// 发送信息控件
-    /// 用于发贴、改贴、回贴
+    /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class SendControl : UserControl
+    public sealed partial class EditPostPage : Page
     {
+        public EditPostPage()
+        {
+            this.InitializeComponent();
+        }
+
         #region UI事件
         TextBox _currentTextBox;
 
@@ -133,68 +142,32 @@ namespace Hipda.Client.Uwp.Pro.Controls
         }
         #endregion
 
-        public int Countdown
+        SendEditPostPageViewModel _vm;
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            get { return (int)GetValue(CountdownProperty); }
-            set { SetValue(CountdownProperty, value); }
-        }
+            base.OnNavigatedTo(e);
 
-        // Using a DependencyProperty as the backing store for Countdown.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CountdownProperty =
-            DependencyProperty.Register("Countdown", typeof(int), typeof(SendControl), new PropertyMetadata(0));
-
-
-        /// <summary>
-        /// 初始化为发贴控件
-        /// </summary>
-        /// <param name="sendType"></param>
-        /// <param name="forumId"></param>
-        /// <param name="sentSuccess"></param>
-        public SendControl(SendType sendType, int forumId, Action<string> sentSuccess)
-        {
-            this.InitializeComponent();
-
-            TipTextBlock.Text = "请输入标题和内容。";
+            var editData = (PostEditDataModel)e.Parameter;
             var cts = new CancellationTokenSource();
-            this.DataContext = new SendNewThreadContentDialogViewModel(cts, forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+            _vm = new SendEditPostPageViewModel(cts, editData, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, null, null);
+            this.DataContext = _vm;
         }
 
-        /// <summary>
-        /// 初始化为回贴控件
-        /// </summary>
-        /// <param name="sendType"></param>
-        /// <param name="postAuthorUserId"></param>
-        /// <param name="postAuthorUsername"></param>
-        /// <param name="postSimpleContent"></param>
-        /// <param name="floorNo"></param>
-        /// <param name="postId"></param>
-        /// <param name="threadId"></param>
-        /// <param name="sentSuccess"></param>
-        public SendControl(string replyType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId, Action<string> sentSuccess)
+        private void ImageAttachPanel_DragOver(object sender, DragEventArgs e)
         {
-            this.InitializeComponent();
-
-            TitleTextBox.Visibility = Visibility.Collapsed;
-            TipTextBlock.Text = "请输入回复内容。";
-            var cts = new CancellationTokenSource();
-            this.DataContext = new SendPostReplyContentDialogViewModel(cts, replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+            e.AcceptedOperation = DataPackageOperation.Copy;
+            e.DragUIOverride.Caption = "拖放到此处即可上传文件";
         }
 
-        /// <summary>
-        /// 初始化为改贴控件
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="content"></param>
-        /// <param name="postId"></param>
-        /// <param name="threadId"></param>
-        /// <param name="sentSuccess"></param>
-        //public SendControl(string title, string content, int postId, int threadId, Action<string> sentSuccess)
-        //{
-        //    this.InitializeComponent();
-
-        //    TipTextBlock.Text = "请输入更新内容。";
-        //    var cts = new CancellationTokenSource();
-        //    this.DataContext = new SendEditPostPageViewModel(cts, title, content, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
-        //}
+        private async void ImageAttachPanel_Drop(object sender, DragEventArgs e)
+        {
+            if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                var files = await e.DataView.GetStorageItemsAsync();
+                var cts = new CancellationTokenSource();
+                _vm.DragAndUploadFile(cts, files, BeforeUpload, AfterUpload);
+            }
+        }
     }
 }

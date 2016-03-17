@@ -78,7 +78,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     {
                         int userId = Convert.ToInt32(ActionInfo[0]);
                         var cts = new CancellationTokenSource();
-                        await SendService.SendAddBuddyAction(cts, userId, username);
+                        await SendService.SendAddBuddyActionAsync(cts, userId, username);
                     };
                     break;
             }
