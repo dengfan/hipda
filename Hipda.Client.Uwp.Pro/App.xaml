@@ -1209,7 +1209,7 @@
 
         
         <ControlTemplate x:Key="ReplyLeftArrow" TargetType="ContentControl">
-            <Polygon Points="0,0 6,6 6,-6" Fill="{ThemeResource SystemListLowColor}"/>
+            <Polygon Points="0,0 6,6 6,-6" Fill="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
         </ControlTemplate>
         <ControlTemplate x:Key="ReplyLeftArrow2" TargetType="ContentControl">
             <Polygon Points="0,0 6,6 6,-6" Fill="{ThemeResource SystemControlBackgroundAccentBrush}"/>
@@ -1333,7 +1333,8 @@
 
                 <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow}"/>
 
-                <Border Margin="54,0,16,32" Padding="8" Background="{ThemeResource SystemListLowColor}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Border Margin="54,0,16,32" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                        HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="8">
                     <StackPanel>
                         <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">

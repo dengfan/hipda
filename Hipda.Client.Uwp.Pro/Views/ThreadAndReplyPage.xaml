@@ -120,7 +120,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="RightWrap" Grid.Column="1" Background="{ThemeResource SystemChromeMediumColor}">
+            <Grid x:Name="RightWrap" Grid.Column="1" BorderThickness="1,0" BorderBrush="{ThemeResource SystemChromeMediumColor}">
                 <pr:PullToRefreshBox x:Name="rightPr" Margin="0,48,0,0" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
                     <ListView x:Name="ReplyListView" VerticalAlignment="Top"
                               IsItemClickEnabled="False" ShowsScrollingPlaceholders="False"
@@ -132,7 +132,7 @@
                 </pr:PullToRefreshBox>
 
                 <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top"
-                            Background="{ThemeResource SystemChromeMediumColor}">
+                            Background="{ThemeResource SystemChromeLowColor}">
                     <AppBarButton x:Name="AddToFavoritesButton" Label="加入收藏" Command="{Binding AddToFavoritesCommand}">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE734;"/>
