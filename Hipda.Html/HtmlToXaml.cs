@@ -370,7 +370,7 @@ namespace Hipda.Html
                 string floorNoStr = ary[1];
 
                 xamlStr =
-                    $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemChromeLowColor}}"" CornerRadius=""4"">
+                    $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemChromeLowColor}}"" BorderThickness=""0,0,1,1"" BorderBrush=""{{ThemeResource SystemChromeMediumColor}}"" CornerRadius=""4"">
                     <ContentControl Margin=""0,16,0,0"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
                         <RichTextBlock>
                             <Paragraph Margin=""36,0,0,0""><Run FontWeight=""Bold"">{username}</Run></Paragraph>
@@ -384,7 +384,7 @@ namespace Hipda.Html
             else // 无缓存POST数据，通常是直接跳转到指定页，从而导致相关的POST数据并未缓存
             {
                 xamlStr =
-                    $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemChromeLowColor}}"" CornerRadius=""4"">
+                    $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemChromeLowColor}}"" BorderThickness=""0,0,1,1"" BorderBrush=""{{ThemeResource SystemChromeMediumColor}}"" CornerRadius=""4"">
                     <ContentControl Margin=""0,16,0,0"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
                         <RichTextBlock>
                             <Paragraph><Run FontWeight=""Bold"">{username}</Run></Paragraph>
@@ -403,7 +403,7 @@ namespace Hipda.Html
         {
             htmlContent = new Regex("<[^>]*>").Replace(htmlContent, string.Empty);
             string xamlStr = 
-                $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemChromeLowColor}}"" CornerRadius=""4"">
+                $@"<Grid Margin=""0,0,0,4"" Padding=""8"" Background=""{{ThemeResource SystemChromeLowColor}}"" BorderThickness=""0,0,1,1"" BorderBrush=""{{ThemeResource SystemChromeMediumColor}}"" CornerRadius=""4"">
                     <ContentControl Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToContentControlForeground2StyleConverter}}}}"">
                         <RichTextBlock><Paragraph>{htmlContent}</Paragraph></RichTextBlock>
                     </ContentControl>
