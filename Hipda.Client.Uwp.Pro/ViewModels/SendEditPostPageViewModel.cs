@@ -150,12 +150,18 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         async void ShowUnusedImage(CancellationTokenSource cts)
         {
-            var unusedImageAttachList = await SendService.LoadUnusedImageAttachListAsync(cts);
+            var unusedImageAttachList = await SendService.LoadUnusedAttachFilesAsync(cts);
             if (unusedImageAttachList != null && unusedImageAttachList.Count > 0)
             {
+                if (AttachImageList == null)
+                {
+                    AttachImageList = new ObservableCollection<AttachFileItemModel>();
+                }
+
+                var list = AttachImageList.ToList();
                 foreach (var item in unusedImageAttachList)
                 {
-                    if (!AttachImageList.Contains(item))
+                    if (list.Count(i => i.Id.Equals(item.Id)) == 0)
                     {
                         AttachImageList.Add(item);
                     }
