@@ -46,17 +46,19 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             }
         }
 
-        private ObservableCollection<AttachFileItemModel> _attachImageList;
+        private ObservableCollection<AttachFileItemModel> _attachFileList;
 
-        public ObservableCollection<AttachFileItemModel> AttachImageList
+        public ObservableCollection<AttachFileItemModel> AttachFileList
         {
-            get { return _attachImageList; }
+            get { return _attachFileList; }
             set
             {
-                _attachImageList = value;
+                _attachFileList = value;
             }
         }
 
+        //public DelegateCommand RemoveAttachFileCommand { get; set; }
+        //public DelegateCommand InsertAttachFileCommand { get; set; }
         public DelegateCommand AddAttachFilesCommand { get; set; }
 
         public DelegateCommand SendCommand { get; set; }
@@ -70,7 +72,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             Title = editData.Title;
             Content = editData.Content;
-            AttachImageList = editData.AttachFileList;
+            AttachFileList = editData.AttachFileList;
             _postId = editData.PostId;
             _threadId = editData.ThreadId;
             _beforeUpload = beforeUpload;
@@ -78,6 +80,18 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             _afterUpload = afterUpload;
             _sentSuccess = sentSuccess;
             _sentFailded = sentFailded;
+
+            //RemoveAttachFileCommand = new DelegateCommand();
+            //RemoveAttachFileCommand.ExecuteAction = (p) =>
+            //{
+            //    int a = 1;
+            //};
+
+            //InsertAttachFileCommand = new DelegateCommand();
+            //InsertAttachFileCommand.ExecuteAction = (p) =>
+            //{
+            //    int b = 1;
+            //};
 
             AddAttachFilesCommand = new DelegateCommand();
             AddAttachFilesCommand.ExecuteAction = async (p) =>
@@ -94,8 +108,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
                 if (_fileCodeList.Count > 0)
                 {
-                    string fileCodes = string.Join("\r\n", _fileCodeList);
-                    _insertFileCodeIntoContentTextBox($"\r\n{fileCodes}\r\n");
+                    string fileCodes = string.Join("\r\n", _fileCodeList).Trim();
+                    _insertFileCodeIntoContentTextBox($"{fileCodes}\r\n");
                     _fileCodeList.Clear();
 
                     ShowUnusedImage(cts);
@@ -140,8 +154,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
             if (_fileCodeList.Count > 0)
             {
-                string fileCodes = string.Join("\r\n", _fileCodeList);
-                _insertFileCodeIntoContentTextBox($"\r\n{fileCodes}\r\n");
+                string fileCodes = string.Join("\r\n", _fileCodeList).Trim();
+                _insertFileCodeIntoContentTextBox($"{fileCodes}\r\n");
                 _fileCodeList.Clear();
 
                 ShowUnusedImage(cts);
@@ -153,20 +167,31 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             var unusedImageAttachList = await SendService.LoadUnusedAttachFilesAsync(cts);
             if (unusedImageAttachList != null && unusedImageAttachList.Count > 0)
             {
-                if (AttachImageList == null)
+                if (AttachFileList == null)
                 {
-                    AttachImageList = new ObservableCollection<AttachFileItemModel>();
+                    AttachFileList = new ObservableCollection<AttachFileItemModel>();
                 }
 
-                var list = AttachImageList.ToList();
+                var list = AttachFileList.ToList();
                 foreach (var item in unusedImageAttachList)
                 {
                     if (list.Count(i => i.Id.Equals(item.Id)) == 0)
                     {
-                        AttachImageList.Add(item);
+                        AttachFileList.Add(item);
                     }
                 }
             }
+        }
+
+        public void RemoveAttachFile(string id)
+        {
+            var item = AttachFileList.Single(f => f.Id.Equals(id));
+            AttachFileList.Remove(item);
+        }
+
+        public void InsertAttachFile(string id)
+        {
+            var item = AttachFileList.Single(f => f.Id.Equals(id));
         }
     }
 }

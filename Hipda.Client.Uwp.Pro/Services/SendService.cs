@@ -96,14 +96,26 @@ namespace Hipda.Client.Uwp.Pro.Services
             var fileList = uploadFileListNodes.Last()?.ChildNodes.FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", string.Empty).Equals("post_attachbody"));
             if (fileList != null)
             {
-                var fileLinks = fileList.Descendants().Where(n => n.Name.Equals("a") && n.GetAttributeValue("onclick", string.Empty).StartsWith("insertAttachTag("));
+                var fileLinks = fileList.Descendants().Where(n => n.Name.Equals("a") && (n.GetAttributeValue("onclick", string.Empty).StartsWith("insertAttachTag(") || n.GetAttributeValue("onclick", string.Empty).StartsWith("insertAttachimgTag(")));
                 if (fileLinks != null)
                 {
                     foreach (var link in fileLinks)
                     {
-                        string id = link.GetAttributeValue("onclick", string.Empty).Replace("insertAttachTag('", string.Empty).Replace("')", string.Empty);
-                        string fileName = link.InnerText.Trim();
-                        attachFileList.Add(new AttachFileItemModel(1, id, fileName, true));
+                        string attr = link.GetAttributeValue("onclick", string.Empty);
+                        if (attr.StartsWith("insertAttachTag("))
+                        {
+                            string id = attr.Replace("insertAttachTag('", string.Empty).Replace("')", string.Empty);
+                            string fileName = link.InnerText.Trim();
+                            attachFileList.Add(new AttachFileItemModel(1, id, fileName, true));
+                        }
+                        else if (attr.StartsWith("insertAttachimgTag("))
+                        {
+                            string id = attr.Replace("insertAttachimgTag('", string.Empty).Replace("')", string.Empty);
+                            var imgNode = fileList.Descendants().FirstOrDefault(f => f.Name.Equals("img") && f.GetAttributeValue("id", string.Empty).StartsWith($"image_{id}"));
+                            string src = imgNode.Attributes[0].Value;
+                            src = $"http://www.hi-pda.com/forum/{src}";
+                            attachFileList.Add(new AttachFileItemModel(0, id, src, true));
+                        }
                     }
                 }
             }
@@ -132,14 +144,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 
             url = $"http://www.hi-pda.com/forum/ajax.php?action=attachlist&inajax=1";
             htmlContent = await _httpClient.GetAsync(url, cts);
-            matchs = new Regex("onclick=\"insertAttachTag\\('(\\d*)'\\)\" title=\"([^\"]*)\n上传日期").Matches(htmlContent);
+            matchs = new Regex("onclick=\"(insertAttachTag|insertAttachimgTag)\\('(\\d*)'\\)\" title=\"([^\"]*)\n上传日期").Matches(htmlContent);
             if (matchs != null && matchs.Count > 0)
             {
                 for (int i = 0; i < matchs.Count; i++)
                 {
                     var m = matchs[i];
-                    string id = m.Groups[1].Value;
-                    string fileName = m.Groups[2].Value.Trim();
+                    string id = m.Groups[2].Value;
+                    string fileName = m.Groups[3].Value.Trim();
                     data.Add(new AttachFileItemModel(1, id, fileName, false));
                 }
             }
@@ -260,7 +272,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                     try
                     {
-                        string result = await _httpClient.PostFileAsync("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1&type=image", data, fileName, "Filedata", buffer, cts);
+                        string result = await _httpClient.PostFileAsync("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1", data, fileName, "Filedata", buffer, cts);
                         if (result.Contains("DISCUZUPLOAD|"))
                         {
                             string value = result.Split('|')[2];

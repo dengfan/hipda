@@ -169,5 +169,26 @@ namespace Hipda.Client.Uwp.Pro.Views
                 _vm.DragAndUploadFile(cts, files, BeforeUpload, AfterUpload);
             }
         }
+
+        private void AttachFileItem_Click(object sender, TappedRoutedEventArgs e)
+        {
+            var item = (Border)sender;
+            var menu = (MenuFlyout)this.Resources["AttachFileItemMenuFlyout"];
+            menu.ShowAt(item);
+        }
+
+        private void RemoveAttachFileItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var menuItem = (MenuFlyoutItem)sender;
+            var data = (AttachFileItemModel)menuItem.DataContext;
+            _vm.RemoveAttachFile(data.Id);
+        }
+
+        private void InsertAttachFileItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var menuItem = (MenuFlyoutItem)sender;
+            var data = (AttachFileItemModel)menuItem.DataContext;
+            _vm.InsertAttachFile(data.Id);
+        }
     }
 }

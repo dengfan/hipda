@@ -11,25 +11,33 @@
 
     <Page.Resources>
         <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
+        <cvt:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
 
-        <MenuFlyout x:Key="AttachImageMenuFlyout">
-            <MenuFlyoutItem Text="删除" />
+        <MenuFlyout x:Key="AttachFileItemMenuFlyout">
+            <MenuFlyoutItem Text="删除" Tapped="RemoveAttachFileItem_Tapped" />
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="插入" Tapped="InsertAttachFileItem_Tapped" />
         </MenuFlyout>
 
         <root:AttachFileGridItemTemplateSelector x:Key="AttachFileGridItemTemplateSelector"
                                                  ImageItemTemplate="{StaticResource ImageItemTemplate}"
                                                  FileItemTemplate="{StaticResource FileItemTemplate}"/>
+        
         <DataTemplate x:Key="ImageItemTemplate">
-            <Image Source="{Binding Content}" Stretch="Uniform" Width="40" Height="40"/>
+            <Border Width="44" Height="44" Tapped="AttachFileItem_Click">
+                <Border Background="{Binding IsUsed,Converter={StaticResource BoolToBrushConverter}}"
+                        Width="44" Height="44" RequestedTheme="Dark">
+                    <Image Source="{Binding Content}" Stretch="Uniform" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+            </Border>
         </DataTemplate>
         <DataTemplate x:Key="FileItemTemplate">
-            <Border Background="{ThemeResource SystemAccentColor}" Width="40" Height="40" RequestedTheme="Dark">
-                <TextBlock Margin="4" FontSize="{ThemeResource ToolTipContentThemeFontSize}"
-                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}">
-                    <Run Text="{Binding Content}"/>
-                    <LineBreak/>
-                    <Run Text="{Binding FileExName}"/>
-                </TextBlock>
+            <Border Width="44" Height="44" Tapped="AttachFileItem_Click">
+                <Border Background="{Binding IsUsed,Converter={StaticResource BoolToBrushConverter}}"
+                        Width="44" Height="44" RequestedTheme="Dark">
+                    <TextBlock Text="{Binding Content}" Margin="4" FontSize="{ThemeResource ToolTipContentThemeFontSize}" TextWrapping="Wrap"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+                </Border>
             </Border>
         </DataTemplate>
     </Page.Resources>
@@ -54,12 +62,12 @@
 
         <StackPanel Grid.Row="2" Padding="8,8,8,0" Background="{ThemeResource SystemChromeLowColor}"
               AllowDrop="True" DragOver="ImageAttachPanel_DragOver" Drop="ImageAttachPanel_Drop">
-            <TextBlock Margin="0,0,0,8" Text="文件面板，可将文件拖到此区域上传" HorizontalAlignment="Center" VerticalAlignment="Top"
+            <TextBlock Margin="0,0,0,8" Text="附件面板，可将文件拖到此区域上传。" HorizontalAlignment="Center" VerticalAlignment="Top"
                        FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                        Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"/>
-            <GridView ItemsSource="{Binding AttachImageList}" Height="56"
+            <GridView ItemsSource="{Binding AttachFileList}" Height="56"
                       ItemTemplateSelector="{StaticResource AttachFileGridItemTemplateSelector}"
-                      SelectionMode="None"
+                      SelectionMode="None" IsItemClickEnabled="False"
                       ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.HorizontalScrollBarVisibility="Auto"
                       ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <GridView.ItemsPanel>
@@ -74,7 +82,7 @@
                 Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
 
         <CommandBar Grid.Row="4">
-            <AppBarButton Icon="Emoji2" Label="Emoji">
+            <AppBarButton Icon="Emoji2" Label="表情图标">
                 <AppBarButton.Flyout>
                     <Flyout>
                         <FlipView>

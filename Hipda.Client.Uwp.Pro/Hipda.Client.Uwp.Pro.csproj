@@ -118,6 +118,7 @@
       <DependentUpon>UserMessageBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BlockItemCountToEmptyLabelVisibilityConverter.cs" />
+    <Compile Include="Converters\BoolToBrushConverter.cs" />
     <Compile Include="Converters\ByteToMegaByteConverter.cs" />
     <Compile Include="Converters\CountdownToSendButtonIsEnabledConverter.cs" />
     <Compile Include="Converters\CountdownToCountdownLabelConverter.cs" />

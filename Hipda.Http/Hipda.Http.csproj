@@ -110,11 +110,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <EmbeddedResource Include="gb2312.bin" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBCSEncoding.cs" />
     <Compile Include="HttpHandle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Properties\Hipda.Http.rd.xml" />

@@ -31,19 +31,32 @@ namespace Hipda.Client.Uwp.Pro.Models
 
     public class AttachFileItemModel
     {
-        public AttachFileItemModel(int fileType, string id, string name, string fileExName, bool isUsed)
+        public AttachFileItemModel(int fileType, string id, string name, bool isUsed)
         {
             this.Id = id;
             this.Content = name;
             this.FileType = fileType;
-            this.FileExName = fileExName;
             this.IsUsed = isUsed;
         }
 
-        public string Id { get; private set; }
-        public string Content { get; private set; }
+        /// <summary>
+        /// 0 表示图片 1 表示文件
+        /// </summary>
         public int FileType { get; private set; }
-        public string FileExName { get; private set; }
+
+        /// <summary>
+        /// 附件的编号，用于插入到编辑内容中
+        /// </summary>
+        public string Id { get; private set; }
+
+        /// <summary>
+        /// 图片地址 或 文件名称
+        /// </summary>
+        public string Content { get; private set; }
+
+        /// <summary>
+        /// 是否已使用
+        /// </summary>
         public bool IsUsed { get; private set; }
     }
 }
