@@ -1,5 +1,4 @@
-﻿using DBCSCodePage;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -16,17 +15,18 @@ namespace Hipda.Http
 {
     public class HttpHandle
     {
-        private Encoding gbk = null;
-        private static readonly HttpHandle instance = new HttpHandle();
+        Encoding _gbk = null;
+        private static readonly HttpHandle _instance = new HttpHandle();
 
         public HttpHandle()
         {
-            gbk = DBCSEncoding.GetDBCSEncoding("gb2312");
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            _gbk = Encoding.GetEncoding("GBK");
         }
 
         public static HttpHandle GetInstance()
         {
-            return instance;
+            return _instance;
         }
 
         public void ClearCookies()
@@ -55,8 +55,7 @@ namespace Hipda.Http
                     // 在异步任务中加入进度监控
                     var response = await client.GetAsync(new Uri(url)).AsTask(cts.Token);
                     var buf = await response.Content.ReadAsBufferAsync();
-                    byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
-                    result = gbk.GetString(bytes, 0, bytes.Length);
+                    result = _gbk.GetString(buf.ToArray());
                 }
             }
             catch (Exception ex)
@@ -85,8 +84,7 @@ namespace Hipda.Http
 
                     var response = await client.PostAsync(new Uri(url), httpContent).AsTask(cts.Token);
                     var buf = await response.Content.ReadAsBufferAsync();
-                    byte[] bytes = WindowsRuntimeBufferExtensions.ToArray(buf, 0, (int)buf.Length);
-                    result = gbk.GetString(bytes, 0, bytes.Length);
+                    result = _gbk.GetString(buf.ToArray());
                 }
             }
             catch (Exception ex)
@@ -118,11 +116,11 @@ namespace Hipda.Http
                     }
 
                     var imageContent = new HttpBufferContent(buffer);
-                    httpContent.Add(imageContent, fieldname, filename);
+                    httpContent.Add(imageContent, fieldname, EncodeToIso(filename));
 
                     var response = await client.PostAsync(new Uri(url), httpContent).AsTask(cts.Token);
                     var buf = await response.Content.ReadAsBufferAsync();
-                    result = gbk.GetString(buf.ToArray());
+                    result = _gbk.GetString(buf.ToArray());
                 }
             }
             catch (Exception ex)
@@ -163,23 +161,17 @@ namespace Hipda.Http
             return queryStr;
         }
 
-        /// <summary>
-        /// 将字符串由UTF8转为GB2312，再进行UrlEncode编码
-        /// 用于POST中文字符数据
-        /// </summary>
-        /// <param name="str">要编码的字符串</param>
-        /// <returns>编码后的字符串</returns>
         public string GetEncoding(string str)
         {
-            Encoding ut = Encoding.UTF8;
-            var gb = DBCSEncoding.GetDBCSEncoding("gb2312");
-            byte[] utbyte = ut.GetBytes(str);
-            byte[] gbbyte = Encoding.Convert(ut, gb, utbyte);
-            byte[] enn = WebUtility.UrlEncodeToBytes(gbbyte, 0, gbbyte.Length);
-            char[] gbChars = new char[ut.GetCharCount(enn, 0, enn.Length)];
-            ut.GetChars(enn, 0, enn.Length, gbChars, 0);
-            string result = new string(gbChars);
-            return result;
+            byte[] b = _gbk.GetBytes(str);
+            b = WebUtility.UrlEncodeToBytes(b, 0, b.Length);
+            return _gbk.GetString(b);
+        }
+
+        private string EncodeToIso(string str)
+        {
+            byte[] b = _gbk.GetBytes(str);
+            return Encoding.GetEncoding("ISO-8859-1").GetString(b);
         }
     }
 }
