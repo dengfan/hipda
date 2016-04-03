@@ -5,6 +5,7 @@ using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -109,6 +110,7 @@ namespace Hipda.Client.Uwp.Pro.Services
 
                 int threadId = Convert.ToInt32(span.Attributes[0].Value.Substring("thread_".Length));
                 string title = a.InnerText.Trim();
+                title = WebUtility.HtmlDecode(title);
 
                 // 判断当前主题是否已被屏蔽，是则跳过
                 if (_myRoamingSettings.BlockThreads.Any(t => t.ThreadId == threadId))
