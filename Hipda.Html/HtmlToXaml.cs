@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -36,8 +37,6 @@ namespace Hipda.Html
 
             //}
 
-            htmlContent = htmlContent.Replace("[", "&#8968;");
-            htmlContent = htmlContent.Replace("]", "&#8971;");
             htmlContent = htmlContent.Replace("&nbsp;", " ");
             htmlContent = htmlContent.Replace("↵", "&#8629;");
             
@@ -91,9 +90,10 @@ namespace Hipda.Html
                     int replyPostId = Convert.ToInt32(m.Groups[1].Value);
                     string floorNoStr = m.Groups[2].Value;
                     string username = m.Groups[3].Value;
-                    string replyXaml = ConvertReply(username, replyPostId, floorNoStr, threadId, floorNoDic);
-                    replyXaml = $@"[/Paragraph][/RichTextBlock]{replyXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
-                    htmlContent = htmlContent.Replace(placeHolder, replyXaml);
+                    string xaml = ConvertReply(username, replyPostId, floorNoStr, threadId, floorNoDic);
+                    xaml = $@"</Paragraph></RichTextBlock>{xaml}<RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""><Paragraph>";
+                    xaml = WebUtility.HtmlEncode(xaml);
+                    htmlContent = htmlContent.Replace(placeHolder, xaml);
                 }
             }
 
@@ -109,9 +109,10 @@ namespace Hipda.Html
                     var m = matchsForQuote[i];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
-                    string quoteXaml = ConvertQuote(m.Groups[1].Value.Trim(), threadId, forumId, forumName, floorNoDic);
-                    quoteXaml = $@"[/Paragraph][/RichTextBlock]{quoteXaml}[RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""][Paragraph]";
-                    htmlContent = htmlContent.Replace(placeHolder, quoteXaml);
+                    string xaml = ConvertQuote(m.Groups[1].Value.Trim(), threadId, forumId, forumName, floorNoDic);
+                    xaml = $@"</Paragraph></RichTextBlock>{xaml}<RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""><Paragraph>";
+                    xaml = WebUtility.HtmlEncode(xaml);
+                    htmlContent = htmlContent.Replace(placeHolder, xaml);
                 }
             }
 
@@ -126,8 +127,9 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string url = m.Groups[1].Value;
 
-                    string linkXaml = $@"[Hyperlink NavigateUri=""{url}"" FontWeight=""Bold"" Foreground=""RoyalBlue""]【视频Flash地址：{url}】[/Hyperlink]";
-                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                    string xaml = $@"<Hyperlink NavigateUri=""{url}"" FontWeight=""Bold"" Foreground=""RoyalBlue"">【视频Flash地址：{url}】</Hyperlink>";
+                    xaml = WebUtility.HtmlEncode(xaml);
+                    htmlContent = htmlContent.Replace(placeHolder, xaml);
                 }
             }
 
@@ -156,17 +158,19 @@ namespace Hipda.Html
                     {
                         inAppLinkCount++;
                         var key = $"InAppLink_{threadId}_{postId}_{inAppLinkCount}";
-                        string linkXaml = $@"[Hyperlink Name=""{key}""]{linkContent}[/Hyperlink]";
+                        string xaml = $@"<Hyperlink Name=""{key}"">{linkContent}</Hyperlink>";
                         if (!inAppLinkUrlDic.ContainsKey(key))
                         {
                             inAppLinkUrlDic.Add(key, linkUrl);
                         }
-                        htmlContent = new Regex(placeHolder.Replace("?", "\\?").Replace("[", "\\[").Replace("]", "\\]").Replace("(", "\\(").Replace(")", "\\)")).Replace(htmlContent, linkXaml, 1);
+                        xaml = WebUtility.HtmlEncode(xaml);
+                        htmlContent = new Regex(placeHolder.Replace("?", "\\?").Replace("[", "\\[").Replace("]", "\\]").Replace("(", "\\(").Replace(")", "\\)")).Replace(htmlContent, xaml, 1);
                     }
                     else
                     {
-                        string linkXaml = $@"[Hyperlink NavigateUri=""{linkUrl}"" Foreground=""DodgerBlue""]{linkContent}[/Hyperlink]";
-                        htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                        string xaml = $@"<Hyperlink NavigateUri=""{linkUrl}"" Foreground=""DodgerBlue"">{linkContent}</Hyperlink>";
+                        xaml = WebUtility.HtmlEncode(xaml);
+                        htmlContent = htmlContent.Replace(placeHolder, xaml);
                     }
                     
                 }
@@ -183,8 +187,9 @@ namespace Hipda.Html
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string fontText = m.Groups[1].Value;
 
-                    string fontXaml = $@"[Span FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""]{fontText}[/Span]";
-                    htmlContent = htmlContent.Replace(placeHolder, fontXaml);
+                    string xaml = $@"<Span FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}"">{fontText}</Span>";
+                    fontText = WebUtility.HtmlEncode(fontText);
+                    htmlContent = htmlContent.Replace(placeHolder, xaml);
                 }
             }
 
@@ -200,12 +205,13 @@ namespace Hipda.Html
                     string colorName = m.Groups[1].Value.ToLower().Trim();
                     string textContent = m.Groups[2].Value;
 
-                    string infoXaml = $@"[Span Foreground=""{colorName}""]{textContent}[/Span]";
+                    string xaml = $@"<Span Foreground=""{colorName}"">{textContent}</Span>";
                     if (colorName.Equals("#000") || colorName.Equals("#000000") || colorName.Equals("black") || (colorName.StartsWith("#") && colorName.Length != 4 && colorName.Length != 7))
                     {
-                        infoXaml = $"[Span]{textContent}[/Span]";
+                        xaml = $"<Span>{textContent}</Span>";
                     }
-                    htmlContent = htmlContent.Replace(placeHolder, infoXaml);
+                    xaml = WebUtility.HtmlEncode(xaml);
+                    htmlContent = htmlContent.Replace(placeHolder, xaml);
                 }
             }
 
@@ -217,8 +223,9 @@ namespace Hipda.Html
                 string placeHolder = m.Groups[0].Value; // 要被替换的元素
                 string infoContent = m.Groups[1].Value.Trim();
 
-                string infoXaml = $@"[Run Text=""{infoContent}"" Foreground=""{{ThemeResource SystemControlForegroundBaseLowBrush}}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""/][LineBreak/]";
-                htmlContent = htmlContent.Replace(placeHolder, infoXaml);
+                string xaml = $@"<Run Text=""{infoContent}"" Foreground=""{{ThemeResource SystemControlForegroundBaseLowBrush}}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""/><LineBreak/>";
+                xaml = WebUtility.HtmlEncode(xaml);
+                htmlContent = htmlContent.Replace(placeHolder, xaml);
             }
 
             // 移除无意义图片HTML
@@ -236,8 +243,9 @@ namespace Hipda.Html
                     string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = $@"[InlineUIContainer][c:MyImage FolderName=""{threadId}"" Url=""{imgUrl}""/][/InlineUIContainer]";
-                    htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
+                    string xaml = $@"<InlineUIContainer><c:MyImage FolderName=""{threadId}"" Url=""{imgUrl}""/></InlineUIContainer>";
+                    xaml = WebUtility.HtmlEncode(xaml);
+                    htmlContent = htmlContent.Replace(placeHolderLabel, xaml);
                 }
             }
 
@@ -252,10 +260,10 @@ namespace Hipda.Html
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = @"[InlineUIContainer][c:MyImage FolderName=""{0}"" Url=""{1}""/][/InlineUIContainer]";
-                    imgXaml = string.Format(imgXaml, threadId, imgUrl);
-
-                    htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
+                    string xaml = @"<InlineUIContainer><c:MyImage FolderName=""{0}"" Url=""{1}""/></InlineUIContainer>";
+                    xaml = string.Format(xaml, threadId, imgUrl);
+                    xaml = WebUtility.HtmlEncode(xaml);
+                    htmlContent = htmlContent.Replace(placeHolderLabel, xaml);
                 }
             }
             #endregion
@@ -268,21 +276,18 @@ namespace Hipda.Html
             htmlContent = new Regex(@"^↵").Replace(htmlContent, string.Empty); // 移除行首的换行符
             htmlContent = new Regex(@"↵$").Replace(htmlContent, string.Empty); // 移除行末的换行符
             htmlContent = htmlContent.Replace("↵", "\r\n"); // 解析换行符
-            htmlContent = htmlContent.Replace("[", "<");
-            htmlContent = htmlContent.Replace("]", ">");
 
-            
             string xamlStr = 
                 $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"">
                     <RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""><Paragraph>{htmlContent}</Paragraph></RichTextBlock>
                 </StackPanel>";
-
+            xamlStr = WebUtility.HtmlDecode(xamlStr);
             xamlStr = xamlStr.Replace("<Paragraph>\r\n", "<Paragraph>");
             xamlStr = xamlStr.Replace("<LineBreak/>\r\n</Paragraph>", "</Paragraph>");
             xamlStr = xamlStr.Replace("<RichTextBlock xml:space=\"preserve\" LineHeight=\"{Binding LineHeight,Source={StaticResource MyLocalSettings}}\"><Paragraph></Paragraph></RichTextBlock>", string.Empty);
             xamlStr = xamlStr.Replace("<RichTextBlock xml:space=\"preserve\" LineHeight=\"{Binding LineHeight,Source={StaticResource MyLocalSettings}}\"><Paragraph>\r\n</Paragraph></RichTextBlock>", string.Empty);
-
-            return new string[] { ReplaceHexadecimalSymbols(xamlStr), inAppLinkCount.ToString() };
+            xamlStr = ReplaceHexadecimalSymbols(xamlStr);
+            return new string[] { xamlStr, inAppLinkCount.ToString() };
         }
 
         private static string ConvertReply(string username, int replyPostId, string floorNoStr, int threadId, Dictionary<int, string[]> floorNoDic)
@@ -312,8 +317,8 @@ namespace Hipda.Html
                 </StackPanel>";
             }
 
-            xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
-            return ReplaceHexadecimalSymbols(xamlStr);
+            xamlStr = ReplaceHexadecimalSymbols(xamlStr);
+            return xamlStr;
         }
 
         private static string ConvertQuote(string htmlContent, int threadId, int forumId, string forumName, Dictionary<int, string[]> floorNoDic)
@@ -395,8 +400,8 @@ namespace Hipda.Html
                 </Grid>";
             }
 
-            xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
-            return ReplaceHexadecimalSymbols(xamlStr);
+            xamlStr = ReplaceHexadecimalSymbols(xamlStr);
+            return xamlStr;
         }
 
         private static string ConvertQuote2(string htmlContent)
@@ -409,8 +414,8 @@ namespace Hipda.Html
                     </ContentControl>
                 </Grid>";
 
-            xamlStr = xamlStr.Replace("<", "[").Replace(">", "]");
-            return ReplaceHexadecimalSymbols(xamlStr);
+            xamlStr = ReplaceHexadecimalSymbols(xamlStr);
+            return xamlStr;
         }
 
         private static async void PostErrorEmailToDeveloper(string errorTitle, string errorDetails)
@@ -424,8 +429,6 @@ namespace Hipda.Html
 
         public static string ConvertUserInfo(string htmlContent)
         {
-            htmlContent = htmlContent.Replace("[", "&#8968;");
-            htmlContent = htmlContent.Replace("]", "&#8971;");
             htmlContent = htmlContent.Replace("&nbsp;", " ");
             htmlContent = htmlContent.Replace("↵", "&#8629;");
             htmlContent = htmlContent.Replace("<strong>", string.Empty);
@@ -501,8 +504,9 @@ namespace Hipda.Html
                     {
                         linkUrl = string.Format("http://www.hi-pda.com/forum/{0}", linkUrl);
                     }
-                    string linkXaml = $@"[Hyperlink NavigateUri=""{linkUrl}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}""]{linkContent}[/Hyperlink]";
-                    htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                    string xaml = $@"<Hyperlink NavigateUri=""{linkUrl}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"">{linkContent}</Hyperlink>";
+                    xaml = WebUtility.HtmlEncode(xaml);
+                    htmlContent = htmlContent.Replace(placeHolder, xaml);
                 }
             }
 
@@ -522,10 +526,10 @@ namespace Hipda.Html
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = @"[InlineUIContainer][c:MyImage FolderName=""0"" Url=""{0}""/][/InlineUIContainer]";
-                    imgXaml = string.Format(imgXaml, imgUrl);
+                    string xaml = $@"<InlineUIContainer><c:MyImage FolderName=""0"" Url=""{imgUrl}""/></InlineUIContainer>";
+                    xaml = WebUtility.HtmlEncode(xaml);
 
-                    htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
+                    htmlContent = htmlContent.Replace(placeHolderLabel, xaml);
                 }
             }
             #endregion
@@ -542,13 +546,13 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("]", ">");
 
             string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
-            return ReplaceHexadecimalSymbols(xamlStr);
+            xamlStr = WebUtility.HtmlDecode(xamlStr);
+            xamlStr = ReplaceHexadecimalSymbols(xamlStr);
+            return xamlStr;
         }
 
         public static string[] ConvertUserMessage(string htmlContent, string username, string timeStr, ref Dictionary<string, string> inAppLinkUrlDic)
         {
-            htmlContent = htmlContent.Replace("[", "&#8968;");
-            htmlContent = htmlContent.Replace("]", "&#8971;");
             htmlContent = htmlContent.Replace("&nbsp;", " ");
             htmlContent = htmlContent.Replace("↵", "&#8629;");
             htmlContent = htmlContent.Replace("<strong>", string.Empty);
@@ -588,17 +592,19 @@ namespace Hipda.Html
                     {
                         inAppLinkCount++;
                         var key = $"InAppLink_{username}_{timeStr}_{inAppLinkCount}";
-                        string linkXaml = $@"[Hyperlink Name=""{key}"" Foreground=""White""]{linkContent}[/Hyperlink]";
+                        string xaml = $@"<Hyperlink Name=""{key}"" Foreground=""White"">{linkContent}</Hyperlink>";
                         if (!inAppLinkUrlDic.ContainsKey(key))
                         {
                             inAppLinkUrlDic.Add(key, linkUrl);
                         }
-                        htmlContent = new Regex(placeHolder.Replace("?", "\\?").Replace("[", "\\[").Replace("]", "\\]").Replace("(", "\\(").Replace(")", "\\)")).Replace(htmlContent, linkXaml, 1);
+                        xaml = WebUtility.HtmlEncode(xaml);
+                        htmlContent = new Regex(placeHolder.Replace("?", "\\?").Replace("[", "\\[").Replace("]", "\\]").Replace("(", "\\(").Replace(")", "\\)")).Replace(htmlContent, xaml, 1);
                     }
                     else
                     {
-                        string linkXaml = $@"[Hyperlink NavigateUri=""{linkUrl}"" Foreground=""DodgerBlue""]{linkContent}[/Hyperlink]";
-                        htmlContent = htmlContent.Replace(placeHolder, linkXaml);
+                        string xaml = $@"<Hyperlink NavigateUri=""{linkUrl}"" Foreground=""DodgerBlue"">{linkContent}</Hyperlink>";
+                        xaml = WebUtility.HtmlEncode(xaml);
+                        htmlContent = htmlContent.Replace(placeHolder, xaml);
                     }
                 }
             }
@@ -615,10 +621,10 @@ namespace Hipda.Html
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string imgXaml = @"[InlineUIContainer][c:MyImage FolderName=""0"" Url=""{0}""/][/InlineUIContainer]";
-                    imgXaml = string.Format(imgXaml, imgUrl);
+                    string xaml = $@"<InlineUIContainer><c:MyImage FolderName=""0"" Url=""{imgUrl}""/></InlineUIContainer>";
+                    xaml = WebUtility.HtmlEncode(xaml);
 
-                    htmlContent = htmlContent.Replace(placeHolderLabel, imgXaml);
+                    htmlContent = htmlContent.Replace(placeHolderLabel, xaml);
                 }
             }
             #endregion
@@ -635,6 +641,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("]", ">");
 
             string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            xamlStr = WebUtility.HtmlDecode(xamlStr);
             xamlStr = ReplaceHexadecimalSymbols(xamlStr);
             return new string[] { xamlStr, inAppLinkCount.ToString() };
         }
@@ -643,12 +650,12 @@ namespace Hipda.Html
         {
             string xamlStr = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}}}"" TextWrapping=""Wrap"">[{4}] {0} <Run FontFamily=""Segoe MDL2 Assets"" Foreground=""OrangeRed"" Text=""{1}"" /> <Run FontFamily=""Segoe MDL2 Assets"" Foreground=""DeepSkyBlue"" Text=""{2}"" /> <Run Text=""{3}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"" /></TextBlock>";
 
-            MatchCollection matchsForSearchKeywords = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(title);
-            if (matchsForSearchKeywords != null && matchsForSearchKeywords.Count > 0)
+            var matchs = new Regex(@"<em style=""color:red;"">([^>#]*)</em>").Matches(title);
+            if (matchs != null && matchs.Count > 0)
             {
-                for (int j = 0; j < matchsForSearchKeywords.Count; j++)
+                for (int j = 0; j < matchs.Count; j++)
                 {
-                    var m = matchsForSearchKeywords[j];
+                    var m = matchs[j];
 
                     string placeHolder = m.Groups[0].Value; // 要被替换的元素
                     string k = m.Groups[1].Value;
@@ -659,15 +666,14 @@ namespace Hipda.Html
             }
 
             xamlStr = string.Format(xamlStr, title, imageFontIcon, fileFontIcon, viewInfo, forumName);
-            return ReplaceHexadecimalSymbols(xamlStr);
+            xamlStr = ReplaceHexadecimalSymbols(xamlStr);
+            return xamlStr;
         }
 
         public static string ConvertSearchResultSummary(string titleHtml, string forumName, string searchResultSummaryHtml, string viewInfo)
         {
             string searchResultHtml = string.Format(@"<Run>{0}</Run> <Run Text=""{1}"" Foreground=""{{ThemeResource SystemControlBackgroundAccentBrush}}"" /><LineBreak/><Span FontStyle=""Italic"" Foreground=""{{ThemeResource SystemControlForegroundBaseMediumLowBrush}}"" FontSize=""{{Binding FontSize2,Source={{StaticResource MyLocalSettings}}}}""><Run>{2}</Run></Span>", titleHtml, viewInfo, searchResultSummaryHtml);
-            searchResultHtml = searchResultHtml.Replace("&", "&amp;")
-                .Replace("\n", string.Empty)
-                .Replace("\r", string.Empty);
+            searchResultHtml = searchResultHtml.Replace("\n", string.Empty).Replace("\r", string.Empty);
 
             string xamlStr = @"<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Style=""{{Binding FontContrastRatio,Source={{StaticResource MyLocalSettings}},Converter={{StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}}}"" TextWrapping=""Wrap"">[{1}] {0}</TextBlock>";
 
@@ -699,7 +705,8 @@ namespace Hipda.Html
             }
 
             xamlStr = string.Format(xamlStr, searchResultHtml, forumName);
-            return ReplaceHexadecimalSymbols(xamlStr);
+            xamlStr = ReplaceHexadecimalSymbols(xamlStr);
+            return xamlStr;
         }
     }
 }
