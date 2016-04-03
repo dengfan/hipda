@@ -24,7 +24,7 @@ namespace Hipda.Client.Uwp.Pro.Services
         static HttpHandle _httpClient = HttpHandle.GetInstance();
         static string _messageTail = "\r\n \r\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]";
 
-        public static async Task SendEditPostAsync(CancellationTokenSource cts, string title, string content, List<string> fileNameList, int postId, int threadId)
+        public static async Task SendEditPostAsync(CancellationTokenSource cts, string title, string content, List<string> fileNameList, List<string> fileRemoveList, int postId, int threadId)
         {
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
@@ -36,10 +36,16 @@ namespace Hipda.Client.Uwp.Pro.Services
             postData.Add(new KeyValuePair<string, object>("pid", postId));
             postData.Add(new KeyValuePair<string, object>("iconid", "0"));
 
-            // 图片信息
-            foreach (var fileName in fileNameList)
+            // 添加附件
+            foreach (var fileId in fileNameList)
             {
-                postData.Add(new KeyValuePair<string, object>(string.Format("attachnew[{0}][description]", fileName), string.Empty));
+                postData.Add(new KeyValuePair<string, object>(string.Format("attachnew[{0}][description]", fileId), string.Empty));
+            }
+
+            // 删除附件
+            foreach (var fileId in fileRemoveList)
+            {
+                postData.Add(new KeyValuePair<string, object>("attachdel[]", fileId));
             }
 
             string url = string.Format("http://www.hi-pda.com/forum/post.php?action=edit&extra=&editsubmit=yes&mod=", threadId);
@@ -276,7 +282,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         if (result.Contains("DISCUZUPLOAD|"))
                         {
                             string value = result.Split('|')[2];
-                            value = string.Format("[attachimg]{0}[/attachimg]", value);
+                            value = $"[attachimg]{value}[/attachimg]";
                             fileCodeList.Add(value);
 
                             fileIndex++;
