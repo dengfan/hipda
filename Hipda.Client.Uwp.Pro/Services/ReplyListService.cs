@@ -5,6 +5,7 @@ using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -189,6 +190,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         }
 
                         threadTitle = h1.InnerText.Trim();
+                        threadTitle = WebUtility.HtmlDecode(threadTitle);
                     }
                 }
 
@@ -316,6 +318,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 threadTitle = h1.InnerText.Trim();
+                threadTitle = WebUtility.HtmlDecode(threadTitle);
             }
 
             return $"{threadAuthorUserId},{threadAuthorUsername},{threadTitle}";
@@ -543,6 +546,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         }
 
                         threadTitle = h1.InnerText.Trim();
+                        threadTitle = WebUtility.HtmlDecode(threadTitle);
                     }
                 }
 
@@ -753,6 +757,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         }
 
                         threadTitle = h1.InnerText.Trim();
+                        threadTitle = WebUtility.HtmlDecode(threadTitle);
                     }
                 }
 
