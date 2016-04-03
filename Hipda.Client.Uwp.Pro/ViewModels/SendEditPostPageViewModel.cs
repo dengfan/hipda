@@ -63,8 +63,9 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public DelegateCommand SendCommand { get; set; }
 
-        static List<string> _fileNameList = new List<string>();
         static List<string> _fileCodeList = new List<string>();
+        static List<string> _fileAddList = new List<string>();
+        static List<string> _fileRemoveList = new List<string>();
 
         public SendEditPostPageViewModel(CancellationTokenSource cts, PostEditDataModel editData, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
         {
@@ -99,7 +100,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 var data = await SendService.UploadFileAsync(cts, _beforeUpload, _afterUpload);
                 if (data[0] != null && data[0].Count > 0)
                 {
-                    _fileNameList.AddRange(data[0]);
+                    _fileAddList.AddRange(data[0]);
                 }
                 if (data[1] != null && data[1].Count > 0)
                 {
@@ -125,9 +126,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     return;
                 }
 
-                await SendService.SendEditPostAsync(cts, Title, Content, _fileNameList, _postId, _threadId);
+                await SendService.SendEditPostAsync(cts, Title, Content, _fileAddList, _fileRemoveList, _postId, _threadId);
 
-                _fileNameList.Clear();
+                _fileAddList.Clear();
+                _fileRemoveList.Clear();
 
                 Title = string.Empty;
                 Content = string.Empty;
@@ -145,7 +147,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             var data = await SendService.UploadFileAsync(cts, files, beforeUpload, afterUpload);
             if (data[0] != null && data[0].Count > 0)
             {
-                _fileNameList.AddRange(data[0]);
+                _fileAddList.AddRange(data[0]);
             }
             if (data[1] != null && data[1].Count > 0)
             {
@@ -186,12 +188,14 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public void RemoveAttachFile(string id)
         {
             var item = AttachFileList.Single(f => f.Id.Equals(id));
+            _fileRemoveList.Add(item.Id);
             AttachFileList.Remove(item);
         }
 
         public void InsertAttachFile(string id)
         {
             var item = AttachFileList.Single(f => f.Id.Equals(id));
+            _insertFileCodeIntoContentTextBox($"[attachimg]{item.Id}[/attachimg]\r\n");
         }
     }
 }
