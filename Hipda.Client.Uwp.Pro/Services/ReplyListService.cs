@@ -4,6 +4,7 @@ using Hipda.Http;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -189,7 +190,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         }
 
                         threadTitle = h1.InnerText.Trim();
-                        threadTitle = CommonService.MyHtmlDecode(threadTitle);
+                        threadTitle = CommonService.MyHtmlDecodeForLoad(threadTitle);
                     }
                 }
 
@@ -318,7 +319,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 threadTitle = h1.InnerText.Trim();
-                threadTitle = CommonService.MyHtmlDecode(threadTitle);
+                threadTitle = CommonService.MyHtmlDecodeForLoad(threadTitle);
             }
 
             return $"{threadAuthorUserId},{threadAuthorUsername},{threadTitle}";
@@ -546,7 +547,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         }
 
                         threadTitle = h1.InnerText.Trim();
-                        threadTitle = CommonService.MyHtmlDecode(threadTitle);
+                        threadTitle = CommonService.MyHtmlDecodeForLoad(threadTitle);
                     }
                 }
 
@@ -758,7 +759,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         }
 
                         threadTitle = h1.InnerText.Trim();
-                        threadTitle = CommonService.MyHtmlDecode(threadTitle);
+                        threadTitle = CommonService.MyHtmlDecodeForLoad(threadTitle);
                     }
                 }
 
@@ -897,6 +898,85 @@ namespace Hipda.Client.Uwp.Pro.Services
             }
 
             return string.Empty;
+        }
+
+        public static async Task<PostEditDataModel> LoadContentForEditAsync(CancellationTokenSource cts, int postId, int threadId)
+        {
+            string url = $"http://www.hi-pda.com/forum/post.php?action=edit&tid={threadId}&pid={postId}&_={DateTime.Now.Ticks.ToString("x")}";
+            string htmlContent = await _httpClient.GetAsync(url, cts);
+
+            // 实例化 HtmlAgilityPack.HtmlDocument 对象
+            HtmlDocument doc = new HtmlDocument();
+
+            // 载入HTML
+            doc.LoadHtml(htmlContent);
+
+            // 标题
+            string title = string.Empty;
+            var subjectInput = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("input") && n.GetAttributeValue("prompt", string.Empty).Equals("post_subject"));
+            if (subjectInput != null)
+            {
+                title = subjectInput.Attributes["value"].Value;
+                title = CommonService.MyHtmlDecodeForLoad(title);
+            }
+
+            // 内容
+            string content = string.Empty;
+            var contentTextArea = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("textarea") && n.GetAttributeValue("prompt", string.Empty).Equals("post_message"));
+            if (contentTextArea != null)
+            {
+                content = contentTextArea.InnerText.Replace(SendService.MessageTail, string.Empty).TrimEnd();
+                content = CommonService.MyHtmlDecodeForLoad(content);
+            }
+
+            // 读取图片附件
+            var attachFileList = new ObservableCollection<AttachFileItemModel>();
+            var uploadFileListNodes = doc.DocumentNode.Descendants().Where(n => n.Name.Equals("div") && n.GetAttributeValue("class", string.Empty).Equals("upfilelist"));
+            var imgList = uploadFileListNodes.First()?.ChildNodes.FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("class", string.Empty).Equals("imglist"));
+            if (imgList != null)
+            {
+                var images = imgList.Descendants().Where(n => n.Name.Equals("img") && n.GetAttributeValue("src", string.Empty).StartsWith("attachments/day_") && n.GetAttributeValue("id", string.Empty).StartsWith("image_"));
+                if (images != null)
+                {
+                    foreach (var img in images)
+                    {
+                        string id = img.GetAttributeValue("id", string.Empty).Replace("image_", string.Empty);
+                        string src = img.GetAttributeValue("src", string.Empty);
+                        src = $"http://www.hi-pda.com/forum/{src}";
+                        attachFileList.Add(new AttachFileItemModel(0, id, src, true));
+                    }
+                }
+            }
+
+            // 读取文件附件
+            var fileList = uploadFileListNodes.Last()?.ChildNodes.FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", string.Empty).Equals("post_attachbody"));
+            if (fileList != null)
+            {
+                var fileLinks = fileList.Descendants().Where(n => n.Name.Equals("a") && (n.GetAttributeValue("onclick", string.Empty).StartsWith("insertAttachTag(") || n.GetAttributeValue("onclick", string.Empty).StartsWith("insertAttachimgTag(")));
+                if (fileLinks != null)
+                {
+                    foreach (var link in fileLinks)
+                    {
+                        string attr = link.GetAttributeValue("onclick", string.Empty);
+                        if (attr.StartsWith("insertAttachTag("))
+                        {
+                            string id = attr.Replace("insertAttachTag('", string.Empty).Replace("')", string.Empty);
+                            string fileName = link.InnerText.Trim();
+                            attachFileList.Add(new AttachFileItemModel(1, id, fileName, true));
+                        }
+                        else if (attr.StartsWith("insertAttachimgTag("))
+                        {
+                            string id = attr.Replace("insertAttachimgTag('", string.Empty).Replace("')", string.Empty);
+                            var imgNode = fileList.Descendants().FirstOrDefault(f => f.Name.Equals("img") && f.GetAttributeValue("id", string.Empty).StartsWith($"image_{id}"));
+                            string src = imgNode.Attributes[0].Value;
+                            src = $"http://www.hi-pda.com/forum/{src}";
+                            attachFileList.Add(new AttachFileItemModel(0, id, src, true));
+                        }
+                    }
+                }
+            }
+
+            return new PostEditDataModel(postId, threadId, title, content, attachFileList);
         }
     }
 }
