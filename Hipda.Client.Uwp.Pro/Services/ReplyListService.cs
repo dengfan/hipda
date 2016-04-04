@@ -219,7 +219,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = textContent.Replace("&nbsp;", "  ");
 
                     // 转换HTML为XAML
-                    string htmlContent = CommonService.MyHtmlDecode(contentNode.InnerHtml.Trim());
+                    string htmlContent = contentNode.InnerHtml.Trim();
                     var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, forumId, forumName, htmlContent, _floorNoDic, ref InAppLinkUrlDic);
                     xamlContent = ary[0];
                     inAppLinkCount = Convert.ToInt32(ary[1]);
@@ -576,7 +576,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = textContent.Replace("&nbsp;", "  ");
 
                     // 转换HTML为XAML
-                    string htmlContent = CommonService.MyHtmlDecode(contentNode.InnerHtml.Trim());
+                    string htmlContent = contentNode.InnerHtml.Trim();
                     var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, forumId, forumName, htmlContent, _floorNoDic, ref InAppLinkUrlDic);
                     xamlContent = ary[0];
                     inAppLinkCount = Convert.ToInt32(ary[1]);
@@ -788,7 +788,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = textContent.Replace("&nbsp;", "  ");
 
                     // 转换HTML为XAML
-                    string htmlContent = CommonService.MyHtmlDecode(contentNode.InnerHtml.Trim());
+                    string htmlContent = contentNode.InnerHtml.Trim();
                     var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, forumId, forumName, htmlContent, _floorNoDic, ref InAppLinkUrlDic);
                     xamlContent = ary[0];
                     inAppLinkCount = Convert.ToInt32(ary[1]);
