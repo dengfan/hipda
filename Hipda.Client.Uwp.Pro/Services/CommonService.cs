@@ -3,6 +3,7 @@ using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using Windows.Data.Xml.Dom;
 using Windows.System;
@@ -376,6 +377,20 @@ namespace Hipda.Client.Uwp.Pro.Services
         {
             string r = "[\x00-\x08\x0B\x0C\x0E-\x1F]";
             return Regex.Replace(txt, r, "", RegexOptions.Compiled);
+        }
+
+        public static string HtmlEncodeAbove127(string value)
+        {
+            char[] chars = value.ToCharArray();
+            StringBuilder encodedValue = new StringBuilder();
+            foreach (char c in chars)
+            {
+                if ((int)c > 127) // above normal ASCII
+                    encodedValue.Append("&#" + (int)c + ";");
+                else
+                    encodedValue.Append(c);
+            }
+            return encodedValue.ToString();
         }
 
         public static Uri GetMiddleAvatarUriByUserId(int userId)
