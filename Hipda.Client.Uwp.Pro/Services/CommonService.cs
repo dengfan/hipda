@@ -382,7 +382,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return r;
         }
 
-        public static string MyHtmlEncode(string value)
+        public static string MyHtmlEncodeForSend(string value)
         {
             char[] chars = WebUtility.HtmlEncode(value).ToCharArray();
             StringBuilder encodedValue = new StringBuilder();
@@ -401,7 +401,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             return result;
         }
 
-        public static string MyHtmlDecode(string value)
+        public static string MyHtmlDecodeForLoad(string value)
         {
             return WebUtility.HtmlDecode(WebUtility.HtmlDecode(value));
         }
