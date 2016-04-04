@@ -16,6 +16,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Popups;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using System.Net;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
@@ -26,10 +27,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public static async Task SendEditPostAsync(CancellationTokenSource cts, string title, string content, List<string> fileNameList, List<string> fileRemoveList, int postId, int threadId)
         {
+            title = CommonService.HtmlEncodeAbove127(title);
+            content = CommonService.ReplaceFaceLabel(content);
+            content = CommonService.HtmlEncodeAbove127(content);
+
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
             postData.Add(new KeyValuePair<string, object>("subject", title));
-            postData.Add(new KeyValuePair<string, object>("message", $"{CommonService.ReplaceFaceLabel(content)}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("message", $"{content}{_messageTail}"));
             postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
             postData.Add(new KeyValuePair<string, object>("usesig", "1"));
             postData.Add(new KeyValuePair<string, object>("tid", threadId));
@@ -69,6 +74,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (subjectInput != null)
             {
                 title = subjectInput.Attributes["value"].Value;
+                title = WebUtility.HtmlDecode(title);
             }
 
             // 内容
@@ -77,6 +83,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             if (contentTextArea != null)
             {
                 content = contentTextArea.InnerText.Replace(_messageTail, string.Empty).TrimEnd();
+                content = WebUtility.HtmlDecode(content);
             }
 
             // 读取图片附件
