@@ -76,7 +76,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             if (mp != null)
             {
                 var cts = new CancellationTokenSource();
-                var editData = await SendService.LoadContentForEditAsync(cts, data.PostId, data.ThreadId); // 先载入要修改的贴子的内容
+                var editData = await ReplyListService.LoadContentForEditAsync(cts, data.PostId, data.ThreadId); // 先载入要修改的贴子的内容
                 mp.OpenSendEditPostPanel(editData);
             }
         }

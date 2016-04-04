@@ -356,6 +356,11 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
 
             var selectedItem = (ThreadItemModelBase)e.ClickedItem;
+            if (selectedItem == null)
+            {
+                return;
+            }
+
             ThreadId = selectedItem.ThreadId;
             PostId = selectedItem.PostId;
 

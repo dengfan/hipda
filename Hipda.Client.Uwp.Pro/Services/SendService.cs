@@ -16,25 +16,24 @@ using Windows.Storage.Streams;
 using Windows.UI.Popups;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using System.Net;
 
 namespace Hipda.Client.Uwp.Pro.Services
 {
     public static class SendService
     {
         static HttpHandle _httpClient = HttpHandle.GetInstance();
-        static string _messageTail = "\r\n \r\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]";
+        public static string MessageTail = "\r\n \r\n[img=16,16]http://www.hi-pda.com/forum/attachments/day_140621/1406211752793e731a4fec8f7b.png[/img]";
 
         public static async Task SendEditPostAsync(CancellationTokenSource cts, string title, string content, List<string> fileNameList, List<string> fileRemoveList, int postId, int threadId)
         {
-            title = CommonService.HtmlEncodeAbove127(title);
+            title = CommonService.MyHtmlEncodeForSend(title);
             content = CommonService.ReplaceFaceLabel(content);
-            content = CommonService.HtmlEncodeAbove127(content);
+            content = CommonService.MyHtmlEncodeForSend(content);
 
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
             postData.Add(new KeyValuePair<string, object>("subject", title));
-            postData.Add(new KeyValuePair<string, object>("message", $"{content}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("message", $"{content.Trim()}{MessageTail}"));
             postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
             postData.Add(new KeyValuePair<string, object>("usesig", "1"));
             postData.Add(new KeyValuePair<string, object>("tid", threadId));
@@ -57,84 +56,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             await _httpClient.PostAsync(url, postData, cts);
         }
 
-        public static async Task<PostEditDataModel> LoadContentForEditAsync(CancellationTokenSource cts, int postId, int threadId)
-        {
-            string url = $"http://www.hi-pda.com/forum/post.php?action=edit&tid={threadId}&pid={postId}&_={DateTime.Now.Ticks.ToString("x")}";
-            string htmlContent = await _httpClient.GetAsync(url, cts);
-
-            // 实例化 HtmlAgilityPack.HtmlDocument 对象
-            HtmlDocument doc = new HtmlDocument();
-
-            // 载入HTML
-            doc.LoadHtml(htmlContent);
-
-            // 标题
-            string title = string.Empty;
-            var subjectInput = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("input") && n.GetAttributeValue("prompt", string.Empty).Equals("post_subject"));
-            if (subjectInput != null)
-            {
-                title = subjectInput.Attributes["value"].Value;
-                title = WebUtility.HtmlDecode(title);
-            }
-
-            // 内容
-            string content = string.Empty;
-            var contentTextArea = doc.DocumentNode.Descendants().FirstOrDefault(n => n.Name.Equals("textarea") && n.GetAttributeValue("prompt", string.Empty).Equals("post_message"));
-            if (contentTextArea != null)
-            {
-                content = contentTextArea.InnerText.Replace(_messageTail, string.Empty).TrimEnd();
-                content = WebUtility.HtmlDecode(content);
-            }
-
-            // 读取图片附件
-            var attachFileList = new ObservableCollection<AttachFileItemModel>();
-            var uploadFileListNodes = doc.DocumentNode.Descendants().Where(n => n.Name.Equals("div") && n.GetAttributeValue("class", string.Empty).Equals("upfilelist"));
-            var imgList = uploadFileListNodes.First()?.ChildNodes.FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("class", string.Empty).Equals("imglist"));
-            if (imgList != null)
-            {
-                var images = imgList.Descendants().Where(n => n.Name.Equals("img") && n.GetAttributeValue("src", string.Empty).StartsWith("attachments/day_") && n.GetAttributeValue("id", string.Empty).StartsWith("image_"));
-                if (images != null)
-                {
-                    foreach (var img in images)
-                    {
-                        string id = img.GetAttributeValue("id", string.Empty).Replace("image_", string.Empty);
-                        string src = img.GetAttributeValue("src", string.Empty);
-                        src = $"http://www.hi-pda.com/forum/{src}";
-                        attachFileList.Add(new AttachFileItemModel(0, id, src, true));
-                    }
-                }
-            }
-
-            // 读取文件附件
-            var fileList = uploadFileListNodes.Last()?.ChildNodes.FirstOrDefault(n => n.Name.Equals("table") && n.GetAttributeValue("summary", string.Empty).Equals("post_attachbody"));
-            if (fileList != null)
-            {
-                var fileLinks = fileList.Descendants().Where(n => n.Name.Equals("a") && (n.GetAttributeValue("onclick", string.Empty).StartsWith("insertAttachTag(") || n.GetAttributeValue("onclick", string.Empty).StartsWith("insertAttachimgTag(")));
-                if (fileLinks != null)
-                {
-                    foreach (var link in fileLinks)
-                    {
-                        string attr = link.GetAttributeValue("onclick", string.Empty);
-                        if (attr.StartsWith("insertAttachTag("))
-                        {
-                            string id = attr.Replace("insertAttachTag('", string.Empty).Replace("')", string.Empty);
-                            string fileName = link.InnerText.Trim();
-                            attachFileList.Add(new AttachFileItemModel(1, id, fileName, true));
-                        }
-                        else if (attr.StartsWith("insertAttachimgTag("))
-                        {
-                            string id = attr.Replace("insertAttachimgTag('", string.Empty).Replace("')", string.Empty);
-                            var imgNode = fileList.Descendants().FirstOrDefault(f => f.Name.Equals("img") && f.GetAttributeValue("id", string.Empty).StartsWith($"image_{id}"));
-                            string src = imgNode.Attributes[0].Value;
-                            src = $"http://www.hi-pda.com/forum/{src}";
-                            attachFileList.Add(new AttachFileItemModel(0, id, src, true));
-                        }
-                    }
-                }
-            }
-
-            return new PostEditDataModel(postId, threadId, title, content, attachFileList);
-        }
+        
 
         public static async Task<List<AttachFileItemModel>> LoadUnusedAttachFilesAsync(CancellationTokenSource cts)
         {
@@ -174,6 +96,9 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public static async Task<bool> SendPostReplyAsync(CancellationTokenSource cts, string noticeauthor, string noticetrimstr, string noticeauthormsg, string content, List<string> fileNameList, int threadId)
         {
+            content = CommonService.ReplaceFaceLabel(content);
+            content = CommonService.MyHtmlEncodeForSend(content);
+
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
             postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
@@ -182,7 +107,7 @@ namespace Hipda.Client.Uwp.Pro.Services
             postData.Add(new KeyValuePair<string, object>("noticetrimstr", "0"));
             postData.Add(new KeyValuePair<string, object>("noticeauthormsg", "0"));
             postData.Add(new KeyValuePair<string, object>("subject", string.Empty));
-            postData.Add(new KeyValuePair<string, object>("message", $"{noticetrimstr}{CommonService.ReplaceFaceLabel(content.Trim())}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("message", $"{noticetrimstr}{content.Trim()}{MessageTail}"));
 
             // 图片信息
             foreach (var fileName in fileNameList)
@@ -197,13 +122,17 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public static async Task<bool> SendNewThreadAsync(CancellationTokenSource cts, string title, string content, List<string> fileNameList, int forumId)
         {
+            title = CommonService.MyHtmlEncodeForSend(title);
+            content = CommonService.ReplaceFaceLabel(content);
+            content = CommonService.MyHtmlEncodeForSend(content);
+
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
             postData.Add(new KeyValuePair<string, object>("wysiwyg", "1"));
             postData.Add(new KeyValuePair<string, object>("usesig", "1"));
             postData.Add(new KeyValuePair<string, object>("iconid", "0"));
             postData.Add(new KeyValuePair<string, object>("subject", title));
-            postData.Add(new KeyValuePair<string, object>("message", $"{CommonService.ReplaceFaceLabel(content.Trim())}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("message", $"{content.Trim()}{MessageTail}"));
             postData.Add(new KeyValuePair<string, object>("attention_add", "1"));
 
             // 图片信息
@@ -219,11 +148,14 @@ namespace Hipda.Client.Uwp.Pro.Services
 
         public static async Task<bool> SendThreadReplyAsync(CancellationTokenSource cts, string content, List<string> fileNameList, int threadId)
         {
+            content = CommonService.ReplaceFaceLabel(content);
+            content = CommonService.MyHtmlEncodeForSend(content);
+
             var postData = new List<KeyValuePair<string, object>>();
             postData.Add(new KeyValuePair<string, object>("formhash", AccountService.FormHash));
             postData.Add(new KeyValuePair<string, object>("subject", string.Empty));
             postData.Add(new KeyValuePair<string, object>("usesig", "1"));
-            postData.Add(new KeyValuePair<string, object>("message", $"{CommonService.ReplaceFaceLabel(content.Trim())}{_messageTail}"));
+            postData.Add(new KeyValuePair<string, object>("message", $"{content.Trim()}{MessageTail}"));
 
             // 图片信息
             foreach (var fileName in fileNameList)

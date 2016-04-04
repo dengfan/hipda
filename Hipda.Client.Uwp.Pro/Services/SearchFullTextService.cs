@@ -5,6 +5,7 @@ using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -117,8 +118,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                     if (!string.IsNullOrEmpty(postIdStr))
                     {
                         postId = Convert.ToInt32(postIdStr);
-                        titleHtml = titleNode.InnerHtml;
-                        summaryHtml = div2.InnerHtml;
+                        titleHtml = WebUtility.HtmlDecode(titleNode.InnerHtml);
+                        summaryHtml = WebUtility.HtmlDecode(div2.InnerHtml);
                         forumName = div3.ChildNodes[1].ChildNodes[1].InnerText.Trim();
                         var authorNode = div3.ChildNodes[3];
                         authorUsername = authorNode.InnerText.Replace("作者: ", string.Empty).Trim();

@@ -37,6 +37,10 @@ namespace Hipda.Html
 
             //}
 
+            htmlContent = htmlContent.Replace("&lt;", "&amp;amp;lt;");
+            htmlContent = htmlContent.Replace("&gt;", "&amp;amp;gt;");
+            htmlContent = htmlContent.Replace("&amp;lt;", "&amp;amp;lt;");
+            htmlContent = htmlContent.Replace("&amp;gt;", "&amp;amp;gt;");
             htmlContent = htmlContent.Replace("&nbsp;", " ");
             htmlContent = htmlContent.Replace("↵", "&#8629;");
             
@@ -281,12 +285,13 @@ namespace Hipda.Html
                 $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"">
                     <RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""><Paragraph>{htmlContent}</Paragraph></RichTextBlock>
                 </StackPanel>";
-            xamlStr = WebUtility.HtmlDecode(xamlStr);
+            xamlStr = WebUtility.HtmlDecode(WebUtility.HtmlDecode(xamlStr));
             xamlStr = xamlStr.Replace("<Paragraph>\r\n", "<Paragraph>");
             xamlStr = xamlStr.Replace("<LineBreak/>\r\n</Paragraph>", "</Paragraph>");
             xamlStr = xamlStr.Replace("<RichTextBlock xml:space=\"preserve\" LineHeight=\"{Binding LineHeight,Source={StaticResource MyLocalSettings}}\"><Paragraph></Paragraph></RichTextBlock>", string.Empty);
             xamlStr = xamlStr.Replace("<RichTextBlock xml:space=\"preserve\" LineHeight=\"{Binding LineHeight,Source={StaticResource MyLocalSettings}}\"><Paragraph>\r\n</Paragraph></RichTextBlock>", string.Empty);
             xamlStr = ReplaceHexadecimalSymbols(xamlStr);
+            xamlStr = xamlStr.Replace("&amp;lt;", "&lt;").Replace("&amp;gt;", "&gt;");
             return new string[] { xamlStr, inAppLinkCount.ToString() };
         }
 
