@@ -5,7 +5,6 @@ using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -190,7 +189,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         }
 
                         threadTitle = h1.InnerText.Trim();
-                        threadTitle = WebUtility.HtmlDecode(threadTitle);
+                        threadTitle = CommonService.MyHtmlDecode(threadTitle);
                     }
                 }
 
@@ -220,7 +219,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = textContent.Replace("&nbsp;", "  ");
 
                     // 转换HTML为XAML
-                    var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, forumId, forumName, contentNode.InnerHtml.Trim(), _floorNoDic, ref InAppLinkUrlDic);
+                    string htmlContent = CommonService.MyHtmlDecode(contentNode.InnerHtml.Trim());
+                    var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, forumId, forumName, htmlContent, _floorNoDic, ref InAppLinkUrlDic);
                     xamlContent = ary[0];
                     inAppLinkCount = Convert.ToInt32(ary[1]);
                 }
@@ -318,7 +318,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                 }
 
                 threadTitle = h1.InnerText.Trim();
-                threadTitle = WebUtility.HtmlDecode(threadTitle);
+                threadTitle = CommonService.MyHtmlDecode(threadTitle);
             }
 
             return $"{threadAuthorUserId},{threadAuthorUsername},{threadTitle}";
@@ -546,7 +546,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         }
 
                         threadTitle = h1.InnerText.Trim();
-                        threadTitle = WebUtility.HtmlDecode(threadTitle);
+                        threadTitle = CommonService.MyHtmlDecode(threadTitle);
                     }
                 }
 
@@ -576,7 +576,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = textContent.Replace("&nbsp;", "  ");
 
                     // 转换HTML为XAML
-                    var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, forumId, forumName, contentNode.InnerHtml.Trim(), _floorNoDic, ref InAppLinkUrlDic);
+                    string htmlContent = CommonService.MyHtmlDecode(contentNode.InnerHtml.Trim());
+                    var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, forumId, forumName, htmlContent, _floorNoDic, ref InAppLinkUrlDic);
                     xamlContent = ary[0];
                     inAppLinkCount = Convert.ToInt32(ary[1]);
                 }
@@ -757,7 +758,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                         }
 
                         threadTitle = h1.InnerText.Trim();
-                        threadTitle = WebUtility.HtmlDecode(threadTitle);
+                        threadTitle = CommonService.MyHtmlDecode(threadTitle);
                     }
                 }
 
@@ -787,7 +788,8 @@ namespace Hipda.Client.Uwp.Pro.Services
                     textContent = textContent.Replace("&nbsp;", "  ");
 
                     // 转换HTML为XAML
-                    var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, forumId, forumName, contentNode.InnerHtml.Trim(), _floorNoDic, ref InAppLinkUrlDic);
+                    string htmlContent = CommonService.MyHtmlDecode(contentNode.InnerHtml.Trim());
+                    var ary = Html.HtmlToXaml.ConvertPost(postId, threadId, forumId, forumName, htmlContent, _floorNoDic, ref InAppLinkUrlDic);
                     xamlContent = ary[0];
                     inAppLinkCount = Convert.ToInt32(ary[1]);
                 }
