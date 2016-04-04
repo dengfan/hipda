@@ -3,6 +3,7 @@ using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using Windows.Data.Xml.Dom;
@@ -376,12 +377,14 @@ namespace Hipda.Client.Uwp.Pro.Services
         public static string ReplaceHexadecimalSymbols(string txt)
         {
             string r = "[\x00-\x08\x0B\x0C\x0E-\x1F]";
-            return Regex.Replace(txt, r, "", RegexOptions.Compiled);
+            r = Regex.Replace(txt, r, "", RegexOptions.Compiled);
+            r = r.Replace("&", "&amp;");
+            return r;
         }
 
-        public static string HtmlEncodeAbove127(string value)
+        public static string MyHtmlEncode(string value)
         {
-            char[] chars = value.ToCharArray();
+            char[] chars = WebUtility.HtmlEncode(value).ToCharArray();
             StringBuilder encodedValue = new StringBuilder();
             foreach (char c in chars)
             {
@@ -390,7 +393,17 @@ namespace Hipda.Client.Uwp.Pro.Services
                 else
                     encodedValue.Append(c);
             }
-            return encodedValue.ToString();
+
+            string result = encodedValue.ToString();
+            result = result.Replace("&amp;", "&");
+            result = result.Replace("&lt;", "<");
+            result = result.Replace("&gt;", ">");
+            return result;
+        }
+
+        public static string MyHtmlDecode(string value)
+        {
+            return WebUtility.HtmlDecode(WebUtility.HtmlDecode(value));
         }
 
         public static Uri GetMiddleAvatarUriByUserId(int userId)
