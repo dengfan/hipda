@@ -388,10 +388,17 @@ namespace Hipda.Client.Uwp.Pro.Services
             StringBuilder encodedValue = new StringBuilder();
             foreach (char c in chars)
             {
-                if ((int)c > 127) // above normal ASCII
-                    encodedValue.Append("&#" + (int)c + ";");
-                else
+                if (c >= 0x4e00 && c <= 0x9fbb) // 如果是汉字则不进行转码
+                {
                     encodedValue.Append(c);
+                }
+                else
+                {
+                    if (c > 127) // above normal ASCII
+                        encodedValue.Append("&#" + (int)c + ";");
+                    else
+                        encodedValue.Append(c);
+                }
             }
 
             string result = encodedValue.ToString();
