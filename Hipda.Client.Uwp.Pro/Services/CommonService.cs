@@ -382,22 +382,26 @@ namespace Hipda.Client.Uwp.Pro.Services
             return r;
         }
 
-        public static string MyHtmlEncodeForSend(string value)
+        public static string MyHtmlEncodeForSend(string txt)
         {
-            char[] chars = WebUtility.HtmlEncode(value).ToCharArray();
+            char[] chars = WebUtility.HtmlEncode(txt).ToCharArray();
             StringBuilder encodedValue = new StringBuilder();
             foreach (char c in chars)
             {
-                if (c >= 0x4e00 && c <= 0x9fbb) // 如果是汉字则不进行转码
+                if (c > 127) // above normal ASCII
                 {
-                    encodedValue.Append(c);
+                    if (Char.IsPunctuation(c) || Char.IsLetter(c))
+                    {
+                        encodedValue.Append(c);
+                    }
+                    else
+                    {
+                        encodedValue.Append("&#" + (int)c + ";");
+                    }
                 }
                 else
                 {
-                    if (c > 127) // above normal ASCII
-                        encodedValue.Append("&#" + (int)c + ";");
-                    else
-                        encodedValue.Append(c);
+                    encodedValue.Append(c);
                 }
             }
 
@@ -408,9 +412,9 @@ namespace Hipda.Client.Uwp.Pro.Services
             return result;
         }
 
-        public static string MyHtmlDecodeForLoad(string value)
+        public static string MyHtmlDecodeForLoad(string txt)
         {
-            return WebUtility.HtmlDecode(WebUtility.HtmlDecode(value));
+            return WebUtility.HtmlDecode(WebUtility.HtmlDecode(txt));
         }
 
         public static Uri GetMiddleAvatarUriByUserId(int userId)
