@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
@@ -189,6 +190,27 @@ namespace Hipda.Client.Uwp.Pro.Views
             var menuItem = (MenuFlyoutItem)sender;
             var data = (AttachFileItemModel)menuItem.DataContext;
             _vm.InsertAttachFile(data.Id);
+        }
+
+        private async void ContentTextBox_Paste(object sender, TextControlPasteEventArgs e)
+        {
+            var dpv = Clipboard.GetContent();
+
+            if (dpv.Contains(StandardDataFormats.Bitmap))
+            {
+                e.Handled = true;
+                var cts = new CancellationTokenSource();
+                var file = await dpv.GetBitmapAsync();
+                _vm.PasteAndUploadFile(cts, file, BeforeUpload, AfterUpload);
+            }
+
+            if (dpv.Contains(StandardDataFormats.StorageItems))
+            {
+                e.Handled = true;
+                var cts = new CancellationTokenSource();
+                var files = await dpv.GetStorageItemsAsync();
+                _vm.DragAndUploadFile(cts, files, BeforeUpload, AfterUpload);
+            }
         }
     }
 }

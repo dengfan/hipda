@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -145,6 +146,28 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         public async void DragAndUploadFile(CancellationTokenSource cts, IReadOnlyList<IStorageItem> files, Action<int, int, string> beforeUpload, Action<int> afterUpload)
         {
             var data = await SendService.UploadFileAsync(cts, files, beforeUpload, afterUpload);
+            if (data[0] != null && data[0].Count > 0)
+            {
+                _fileAddList.AddRange(data[0]);
+            }
+            if (data[1] != null && data[1].Count > 0)
+            {
+                _fileCodeList.AddRange(data[1]);
+            }
+
+            if (_fileCodeList.Count > 0)
+            {
+                string fileCodes = string.Join("\r\n", _fileCodeList).Trim();
+                _insertFileCodeIntoContentTextBox($"{fileCodes}\r\n");
+                _fileCodeList.Clear();
+
+                ShowUnusedImage(cts);
+            }
+        }
+
+        public async void PasteAndUploadFile(CancellationTokenSource cts, RandomAccessStreamReference file, Action<int, int, string> beforeUpload, Action<int> afterUpload)
+        {
+            var data = await SendService.UploadFileAsync(cts, file, beforeUpload, afterUpload);
             if (data[0] != null && data[0].Count > 0)
             {
                 _fileAddList.AddRange(data[0]);

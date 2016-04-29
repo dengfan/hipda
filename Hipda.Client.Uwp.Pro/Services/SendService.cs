@@ -168,6 +168,13 @@ namespace Hipda.Client.Uwp.Pro.Services
             return resultContent.Contains("您的回复已经发布");
         }
 
+        /// <summary>
+        /// 用于上传从对话框中选择的文件
+        /// </summary>
+        /// <param name="cts"></param>
+        /// <param name="beforeUpload"></param>
+        /// <param name="afterUpload"></param>
+        /// <returns></returns>
         public static async Task<List<string>[]> UploadFileAsync(CancellationTokenSource cts, Action<int, int, string> beforeUpload, Action<int> afterUpload)
         {
             var openPicker = new FileOpenPicker();
@@ -179,6 +186,14 @@ namespace Hipda.Client.Uwp.Pro.Services
             return await UploadFileAsync(cts, files, beforeUpload, afterUpload);
         }
 
+        /// <summary>
+        /// 用于上传拖拽的文件
+        /// </summary>
+        /// <param name="cts"></param>
+        /// <param name="files"></param>
+        /// <param name="beforeUpload"></param>
+        /// <param name="afterUpload"></param>
+        /// <returns></returns>
         public static async Task<List<string>[]> UploadFileAsync(CancellationTokenSource cts, IReadOnlyList<IStorageItem> files, Action<int, int, string> beforeUpload, Action<int> afterUpload)
         {
             var fileNameList = new List<string>();
@@ -237,6 +252,47 @@ namespace Hipda.Client.Uwp.Pro.Services
                 {
                     afterUpload(files.Count);
                 }
+            }
+
+            return new List<string>[] { fileNameList, fileCodeList };
+        }
+
+        /// <summary>
+        /// 用于上传剪贴板中的图片
+        /// </summary>
+        /// <param name="cts"></param>
+        /// <param name="file"></param>
+        /// <param name="beforeUpload"></param>
+        /// <param name="afterUpload"></param>
+        /// <returns></returns>
+        public static async Task<List<string>[]> UploadFileAsync(CancellationTokenSource cts, RandomAccessStreamReference file, Action<int, int, string> beforeUpload, Action<int> afterUpload)
+        {
+            var fileNameList = new List<string>();
+            var fileCodeList = new List<string>();
+            var fileName = $"{DateTime.Now.Ticks.ToString("x")}.jpg";
+
+            IRandomAccessStream stream = await file.OpenReadAsync();
+            IBuffer buffer = new Windows.Storage.Streams.Buffer((uint)stream.Size);
+            buffer = await stream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.None);
+
+            var data = new Dictionary<string, object>();
+            data.Add("uid", AccountService.UserId);
+            data.Add("hash", AccountService.Hash);
+
+            try
+            {
+                string result = await _httpClient.PostFileAsync("http://www.hi-pda.com/forum/misc.php?action=swfupload&operation=upload&simple=1", data, fileName, "Filedata", buffer, cts);
+                if (result.Contains("DISCUZUPLOAD|"))
+                {
+                    string value = result.Split('|')[2];
+                    value = $"[attachimg]{value}[/attachimg]";
+                    fileNameList.Add(fileName);
+                    fileCodeList.Add(value);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
 
             return new List<string>[] { fileNameList, fileCodeList };

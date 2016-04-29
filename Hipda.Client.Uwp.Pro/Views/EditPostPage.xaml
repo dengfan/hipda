@@ -56,9 +56,10 @@
                 GotFocus="TitleTextBox_GotFocus" MaxLength="80" Text="{Binding Title,Mode=TwoWay}"/>
 
         <TextBox x:Name="ContentTextBox" Margin="8" Grid.Row="1"
-                PlaceholderText="编辑内容" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch"
-                FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
-                GotFocus="ContentTextBox_GotFocus" Text="{Binding Content,Mode=TwoWay}"/>
+                 PlaceholderText="编辑内容" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch"
+                 FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                 GotFocus="ContentTextBox_GotFocus" Text="{Binding Content,Mode=TwoWay}"
+                 Paste="ContentTextBox_Paste"/>
 
         <StackPanel Grid.Row="2" Padding="8,8,8,0" Background="{ThemeResource SystemChromeLowColor}"
               AllowDrop="True" DragOver="ImageAttachPanel_DragOver" Drop="ImageAttachPanel_Drop">
