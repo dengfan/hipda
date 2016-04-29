@@ -13,7 +13,9 @@ namespace Hipda.Client.Uwp.Pro.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return (bool)value ? (SolidColorBrush)App.Current.Resources["SystemControlBackgroundAccentBrush"] : new SolidColorBrush(Colors.Red);
+            var b1 = (SolidColorBrush)App.Current.Resources["SystemControlBackgroundAccentBrush"];
+            var b2 = (SolidColorBrush)App.Current.Resources["SystemControlHighlightListAccentMediumBrush"];
+            return (bool)value ?  b1 : b2;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

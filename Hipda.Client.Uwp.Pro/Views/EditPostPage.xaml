@@ -24,18 +24,18 @@
                                                  FileItemTemplate="{StaticResource FileItemTemplate}"/>
         
         <DataTemplate x:Key="ImageItemTemplate">
-            <Border Width="44" Height="44" Tapped="AttachFileItem_Click">
+            <Border Width="48" Height="48" Tapped="AttachFileItem_Click">
                 <Border Background="{Binding IsUsed,Converter={StaticResource BoolToBrushConverter}}"
-                        Width="44" Height="44" RequestedTheme="Dark">
-                    <Image Source="{Binding Content}" Stretch="Uniform" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        Width="48" Height="48" RequestedTheme="Dark">
+                    <Image Source="{Binding Content}" ToolTipService.ToolTip="{Binding Content}" Stretch="Uniform" Width="44" Height="44" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="FileItemTemplate">
-            <Border Width="44" Height="44" Tapped="AttachFileItem_Click">
+            <Border Width="48" Height="48" Tapped="AttachFileItem_Click">
                 <Border Background="{Binding IsUsed,Converter={StaticResource BoolToBrushConverter}}"
-                        Width="44" Height="44" RequestedTheme="Dark">
-                    <TextBlock Text="{Binding Content}" Margin="4" FontSize="{ThemeResource ToolTipContentThemeFontSize}" TextWrapping="Wrap"
+                        Width="48" Height="48" RequestedTheme="Dark">
+                    <TextBlock Text="{Binding Content}" ToolTipService.ToolTip="{Binding Content}" Margin="4" FontSize="{ThemeResource ToolTipContentThemeFontSize}" TextWrapping="Wrap"
                            Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                 </Border>
             </Border>
