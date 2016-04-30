@@ -6,17 +6,14 @@ using Hipda.Client.Uwp.Pro.ViewModels;
 using Hipda.Client.Uwp.Pro.Views;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Store;
-using Windows.Data.Xml.Dom;
 using Windows.Storage;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
-using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -209,6 +206,8 @@ namespace Hipda.Client.Uwp.Pro
                     }
                 }
             };
+
+            myInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Touch | CoreInputDeviceTypes.Pen;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -1025,6 +1024,27 @@ namespace Hipda.Client.Uwp.Pro
 
         #endregion
 
+        #region Ink面板
+        public void OpenInkPanel()
+        {
+            InkPanel.Visibility = Visibility.Visible;
+        }
 
+        public void CloseInkPanel()
+        {
+            InkPanel.Visibility = Visibility.Collapsed;
+        }
+
+        #endregion
+
+        private void CloseInkPanelButton_Click(object sender, RoutedEventArgs e)
+        {
+            CloseInkPanel();
+        }
+
+        private void InkFinishButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

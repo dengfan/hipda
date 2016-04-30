@@ -442,6 +442,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="InkToolbarControl, Version=0.3.2">
+      <Name>InkToolbar Control</Name>
+    </SDKReference>
     <SDKReference Include="Microsoft.AdMediator.Universal, Version=1.0">
       <Name>Microsoft.AdMediator.Universal</Name>
     </SDKReference>
