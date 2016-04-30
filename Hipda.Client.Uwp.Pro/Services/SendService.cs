@@ -265,13 +265,12 @@ namespace Hipda.Client.Uwp.Pro.Services
         /// <param name="beforeUpload"></param>
         /// <param name="afterUpload"></param>
         /// <returns></returns>
-        public static async Task<List<string>[]> UploadFileAsync(CancellationTokenSource cts, RandomAccessStreamReference file, Action<int, int, string> beforeUpload, Action<int> afterUpload)
+        public static async Task<List<string>[]> UploadFileAsync(CancellationTokenSource cts, IRandomAccessStream stream, Action<int, int, string> beforeUpload, Action<int> afterUpload)
         {
             var fileNameList = new List<string>();
             var fileCodeList = new List<string>();
             var fileName = $"{DateTime.Now.Ticks.ToString("x")}.jpg";
 
-            IRandomAccessStream stream = await file.OpenReadAsync();
             IBuffer buffer = new Windows.Storage.Streams.Buffer((uint)stream.Size);
             buffer = await stream.ReadAsync(buffer, buffer.Capacity, InputStreamOptions.None);
 

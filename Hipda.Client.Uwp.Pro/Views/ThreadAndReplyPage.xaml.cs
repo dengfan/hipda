@@ -573,7 +573,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
             else if (vmType.Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
             {
-                var vm = (ReplyListViewForDefaultViewModel)RightWrap.DataContext;
+                var vm = (ReplyListViewForSpecifiedPostViewModel)RightWrap.DataContext;
                 vm.LoadLastPageDataCommand.Execute(null);
             }
 
@@ -582,15 +582,6 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
         #endregion
 
-        #endregion
-
-        #region Ink面板
-        public void OpenInkPanelButton_Click(object sender, RoutedEventArgs e)
-        {
-            var frame = (Frame)Window.Current.Content;
-            _mainPage = (MainPage)frame.Content;
-            _mainPage.OpenInkPanel();
-        }
         #endregion
     }
 }

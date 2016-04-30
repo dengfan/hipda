@@ -4,6 +4,7 @@ using Hipda.Client.Uwp.Pro.Models;
 using Hipda.Client.Uwp.Pro.Services;
 using Hipda.Client.Uwp.Pro.ViewModels;
 using Hipda.Client.Uwp.Pro.Views;
+using Microsoft.Graphics.Canvas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Store;
 using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
@@ -128,6 +131,8 @@ namespace Hipda.Client.Uwp.Pro
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
+        public Action<List<string>[]> InkFinished;
+
         public ImageBrush UserAvatarImageBrush
         {
             get
@@ -207,7 +212,7 @@ namespace Hipda.Client.Uwp.Pro
                 }
             };
 
-            myInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Touch | CoreInputDeviceTypes.Pen;
+            MyInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Touch | CoreInputDeviceTypes.Pen;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -1042,9 +1047,30 @@ namespace Hipda.Client.Uwp.Pro
             CloseInkPanel();
         }
 
-        private void InkFinishButton_Click(object sender, RoutedEventArgs e)
+        private async void InkFinishButton_Click(object sender, RoutedEventArgs e)
         {
+            string fileName = string.Empty;
+            string fileCode = string.Empty;
 
+            CanvasDevice device = CanvasDevice.GetSharedDevice();
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)MyInkCanvas.ActualWidth, (int)MyInkCanvas.ActualHeight, 96);
+
+            using (var ds = renderTarget.CreateDrawingSession())
+            {
+                ds.Clear(Colors.White);
+                ds.DrawInk(MyInkCanvas.InkPresenter.StrokeContainer.GetStrokes());
+            }
+
+            using (var stream = new InMemoryRandomAccessStream())
+            {
+                await renderTarget.SaveAsync(stream, CanvasBitmapFileFormat.Jpeg, 1f);
+
+                var cts = new CancellationTokenSource();
+                var data = await SendService.UploadFileAsync(cts, stream, null, null);
+                InkFinished(data);
+            }
+
+            CloseInkPanel();
         }
     }
 }

@@ -225,7 +225,7 @@
                                     <SymbolIcon Symbol="Attach" />
                                 </Button.Content>
                             </Button>
-                            <Button x:Name="InkButton" Style="{StaticResource FaceButtonStyle}" Click="OpenInkPanelButton_Click">
+                            <Button x:Name="InkButton" Style="{StaticResource FaceButtonStyle}" Command="{Binding AddInkImageCommand}">
                                 <Button.Content>
                                     <SymbolIcon Symbol="Highlight" />
                                 </Button.Content>

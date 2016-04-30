@@ -167,7 +167,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
         public async void PasteAndUploadFile(CancellationTokenSource cts, RandomAccessStreamReference file, Action<int, int, string> beforeUpload, Action<int> afterUpload)
         {
-            var data = await SendService.UploadFileAsync(cts, file, beforeUpload, afterUpload);
+            IRandomAccessStream stream = await file.OpenReadAsync();
+            var data = await SendService.UploadFileAsync(cts, stream, beforeUpload, afterUpload);
             if (data[0] != null && data[0].Count > 0)
             {
                 _fileAddList.AddRange(data[0]);

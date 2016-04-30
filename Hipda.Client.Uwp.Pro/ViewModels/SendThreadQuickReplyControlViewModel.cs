@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.Uwp.Pro.ViewModels
 {
@@ -37,6 +39,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
 
 
         public DelegateCommand AddAttachFilesCommand { get; set; }
+
+        public DelegateCommand AddInkImageCommand { get; set; }
 
         public DelegateCommand SendCommand { get; set; }
 
@@ -71,6 +75,32 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     _insertFileCodeIntoContentTextBox($"\r\n{fileCodes}\r\n");
                     _fileCodeList.Clear();
                 }
+            };
+
+            AddInkImageCommand = new DelegateCommand();
+            AddInkImageCommand.ExecuteAction = (p) =>
+            {
+                var frame = (Frame)Window.Current.Content;
+                var mainPage = (MainPage)frame.Content;
+                mainPage.OpenInkPanel();
+                mainPage.InkFinished = (data) =>
+                {
+                    if (data[0] != null && data[0].Count > 0)
+                    {
+                        _fileNameList.AddRange(data[0]);
+                    }
+                    if (data[1] != null && data[1].Count > 0)
+                    {
+                        _fileCodeList.AddRange(data[1]);
+                    }
+
+                    if (_fileCodeList.Count > 0)
+                    {
+                        string fileCodes = string.Join("\r\n", _fileCodeList);
+                        _insertFileCodeIntoContentTextBox($"\r\n{fileCodes}\r\n");
+                        _fileCodeList.Clear();
+                    }
+                };
             };
 
             SendCommand = new DelegateCommand();

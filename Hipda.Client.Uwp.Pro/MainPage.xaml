@@ -820,9 +820,9 @@
 
         <Grid x:Name="InkPanel" Background="Gray" Visibility="Collapsed">
             <Grid Margin="0,52,0,0" Background="White" MaxWidth="600" MaxHeight="600">
-                <InkCanvas x:Name="myInkCanvas"/>
+                <InkCanvas x:Name="MyInkCanvas"/>
             </Grid>
-            <ink:InkToolbar Margin="0,0,52,0" TargetInkCanvas="{x:Bind myInkCanvas}" VerticalAlignment="Top" HorizontalAlignment="Right" PenColor="Black" ActiveTool="Pen" />
+            <ink:InkToolbar Margin="0,0,52,0" TargetInkCanvas="{x:Bind MyInkCanvas}" VerticalAlignment="Top" HorizontalAlignment="Right" PenColor="Black" ActiveTool="Pen" />
             <Button Width="52" Height="52" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="InkFinishButton_Click">
                 <SymbolIcon Symbol="Accept"/>
             </Button>
