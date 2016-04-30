@@ -60,57 +60,66 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="EmojiButton" Style="{StaticResource FaceButtonStyle}">
-                        <Button.Content>
-                            <SymbolIcon Symbol="Emoji" />
-                        </Button.Content>
-                        <Button.Flyout>
-                            <Flyout>
-                                <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
-                                                  SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="192"
-                                                  ItemClick="EmojiGridView_ItemClick">
-                                    <GridView.ItemContainerStyle>
-                                        <Style TargetType="GridViewItem">
-                                            <Setter Property="Width" Value="36"/>
-                                            <Setter Property="Height" Value="36"/>
-                                        </Style>
-                                    </GridView.ItemContainerStyle>
-                                    <GridView.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Value}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                        </DataTemplate>
-                                    </GridView.ItemTemplate>
-                                </GridView>
-                            </Flyout>
-                        </Button.Flyout>
-                    </Button>
                     <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
                         <Button.Content>
                             <SymbolIcon Symbol="Emoji2" />
                         </Button.Content>
                         <Button.Flyout>
                             <Flyout>
-                                <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
-                                                  SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="192"
-                                                  ItemClick="FaceGridView_ItemClick">
-                                    <GridView.ItemContainerStyle>
-                                        <Style TargetType="GridViewItem">
-                                            <Setter Property="Width" Value="36"/>
-                                            <Setter Property="Height" Value="36"/>
-                                        </Style>
-                                    </GridView.ItemContainerStyle>
-                                    <GridView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                        </DataTemplate>
-                                    </GridView.ItemTemplate>
-                                </GridView>
+                                <Flyout.FlyoutPresenterStyle>
+                                    <Style TargetType="FlyoutPresenter">
+                                        <Setter Property="Margin" Value="0" />
+                                        <Setter Property="Padding" Value="0" />
+                                    </Style>
+                                </Flyout.FlyoutPresenterStyle>
+
+                                <FlipView Background="Transparent" Width="296" Height="180">
+                                    <FlipViewItem>
+                                        <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
+                                                        SelectionMode="None" IsItemClickEnabled="True"
+                                                        ItemClick="FaceGridView_ItemClick">
+                                            <GridView.ItemContainerStyle>
+                                                <Style TargetType="GridViewItem">
+                                                    <Setter Property="Width" Value="36"/>
+                                                    <Setter Property="Height" Value="36"/>
+                                                </Style>
+                                            </GridView.ItemContainerStyle>
+                                            <GridView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </DataTemplate>
+                                            </GridView.ItemTemplate>
+                                        </GridView>
+                                    </FlipViewItem>
+                                    <FlipViewItem>
+                                        <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
+                                                        SelectionMode="None" IsItemClickEnabled="True"
+                                                        ItemClick="EmojiGridView_ItemClick">
+                                            <GridView.ItemContainerStyle>
+                                                <Style TargetType="GridViewItem">
+                                                    <Setter Property="Width" Value="36"/>
+                                                    <Setter Property="Height" Value="36"/>
+                                                </Style>
+                                            </GridView.ItemContainerStyle>
+                                            <GridView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Value}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </DataTemplate>
+                                            </GridView.ItemTemplate>
+                                        </GridView>
+                                    </FlipViewItem>
+                                </FlipView>
                             </Flyout>
                         </Button.Flyout>
                     </Button>
                     <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}" Command="{Binding AddAttachFilesCommand}">
                         <Button.Content>
                             <SymbolIcon Symbol="Attach" />
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="InkButton" Style="{StaticResource FaceButtonStyle}">
+                        <Button.Content>
+                            <SymbolIcon Symbol="Highlight" />
                         </Button.Content>
                     </Button>
                 </StackPanel>

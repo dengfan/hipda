@@ -88,8 +88,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                 string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
                 if (userInteractionType.Equals("Touch"))
                 {
-                    EmojiButton.Width = 80;
-                    EmojiButton.Height = 40;
+                    InkButton.Width = 80;
+                    InkButton.Height = 40;
                     FaceButton.Width = 80;
                     FaceButton.Height = 40;
                     FileButton.Width = 80;
@@ -98,8 +98,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                 }
                 else if (userInteractionType.Equals("Mouse"))
                 {
-                    EmojiButton.Width = 32;
-                    EmojiButton.Height = 32;
+                    InkButton.Width = 32;
+                    InkButton.Height = 32;
                     FaceButton.Width = 32;
                     FaceButton.Height = 32;
                     FileButton.Width = 32;
