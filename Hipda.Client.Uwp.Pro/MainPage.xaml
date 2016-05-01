@@ -822,12 +822,54 @@
             <Grid Margin="0,52,0,0" Background="White" MaxWidth="600" MaxHeight="600">
                 <InkCanvas x:Name="MyInkCanvas"/>
             </Grid>
-            <ink:InkToolbar Margin="0,0,52,0" TargetInkCanvas="{x:Bind MyInkCanvas}" VerticalAlignment="Top" HorizontalAlignment="Right" PenColor="Black" ActiveTool="Pen" />
-            <Button Width="52" Height="52" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="InkFinishButton_Click">
-                <SymbolIcon Symbol="Accept"/>
+            <ink:InkToolbar TargetInkCanvas="{x:Bind MyInkCanvas}" VerticalAlignment="Top" HorizontalAlignment="Center" PenColor="Black" ActiveTool="Pen" />
+            <Button Margin="0,8,8,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="InkFinishButton_Click">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Grid x:Name="AcceptButtonGrid" Background="Green" Width="36" Height="36" CornerRadius="18">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <VisualState.Setters>
+                                            <Setter Target="AcceptButtonGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Target="AcceptButtonGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <SymbolIcon Symbol="Accept" Foreground="White"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
             </Button>
-            <Button Width="52" Height="52" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="CloseInkPanelButton_Click">
-                <SymbolIcon Symbol="Cancel"/>
+            <Button Margin="8,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="CloseInkPanelButton_Click">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Grid x:Name="CancelButtonGrid" Background="Red" Width="36" Height="36" CornerRadius="18">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <VisualState.Setters>
+                                            <Setter Target="CancelButtonGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Target="CancelButtonGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <SymbolIcon Symbol="Cancel" Foreground="White"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>
             </Button>
         </Grid>
     </Grid>
