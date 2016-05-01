@@ -1219,7 +1219,7 @@
         </ControlTemplate>
 
         <Style x:Key="FaceButtonStyle" TargetType="Button">
-            <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>

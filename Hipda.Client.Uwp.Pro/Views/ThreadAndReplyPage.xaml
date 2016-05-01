@@ -166,6 +166,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal">
                             <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
@@ -220,34 +221,52 @@
                                     </Flyout>
                                 </Button.Flyout>
                             </Button>
+                            <Button x:Name="InkButton" Style="{StaticResource FaceButtonStyle}" Command="{Binding AddInkImageCommand}">
+                                <Button.Content>
+                                    <FontIcon Glyph="&#xE76D;" />
+                                </Button.Content>
+                            </Button>
                             <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}" Command="{Binding AddAttachFilesCommand}">
                                 <Button.Content>
                                     <SymbolIcon Symbol="Attach" />
                                 </Button.Content>
                             </Button>
-                            <Button x:Name="InkButton" Style="{StaticResource FaceButtonStyle}" Command="{Binding AddInkImageCommand}">
-                                <Button.Content>
-                                    <SymbolIcon Symbol="Highlight" />
-                                </Button.Content>
-                            </Button>
                         </StackPanel>
                         <TextBox Grid.Row="1" x:Name="ContentTextBox"
-                                 MinHeight="100" Padding="8,4" Background="Transparent" BorderThickness="0"
-                                 TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复，回车可换行。"
+                                 MinHeight="64" Padding="8" Background="Transparent" BorderThickness="0"
+                                 TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复，Enter 换行，Ctrl + Enter 发布。"
                                  Text="{Binding Content,Mode=TwoWay}"/>
-                        <Button Grid.Row="1" x:Name="SendButton" Margin="0,0,12,12"
+                        <Button Grid.Row="2" x:Name="SendButton" Margin="8" Width="60"
+                                Background="{ThemeResource SystemControlHighlightAltListAccentHighBrush}"
                                 IsEnabled="{Binding Countdown,ElementName=MyThreadAndReplyPage,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"
-                                Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
-                                 
-                                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                HorizontalAlignment="Right" VerticalAlignment="Center"
                                 Command="{Binding SendCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel.Resources>
-                                    <x:String x:Key="SendString">发送</x:String>
-                                </StackPanel.Resources>
-                                <SymbolIcon Symbol="Send" Margin="0,0,4,0" />
-                                <TextBlock Text="{Binding Countdown,ElementName=MyThreadAndReplyPage,Converter={StaticResource CountdownToCountdownLabelConverter},ConverterParameter={StaticResource SendString}}"/>
-                            </StackPanel>
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border x:Name="SendButtonBorder" Background="{TemplateBinding Background}" CornerRadius="4" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" VerticalAlignment="Center">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal"/>
+                                                <VisualState x:Name="PointerOver">
+                                                    <VisualState.Setters>
+                                                        <Setter Target="SendButtonBorder.Background" Value="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Pressed">
+                                                    <VisualState.Setters>
+                                                        <Setter Target="SendButtonBorder.Background" Value="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <Border.Resources>
+                                            <x:String x:Key="SendString">发送</x:String>
+                                        </Border.Resources>
+                                        <TextBlock Foreground="White" Text="{Binding Countdown,ElementName=MyThreadAndReplyPage,Converter={StaticResource CountdownToCountdownLabelConverter},ConverterParameter={StaticResource SendString}}"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
                         </Button>
                     </Grid>
                 </StackPanel>

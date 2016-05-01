@@ -1031,21 +1031,6 @@ namespace Hipda.Client.Uwp.Pro
         #endregion
 
         #region Ink面板
-        public void OpenInkPanel()
-        {
-            InkPanel.Visibility = Visibility.Visible;
-        }
-
-        public void CloseInkPanel()
-        {
-            InkPanel.Visibility = Visibility.Collapsed;
-        }
-
-        private void CloseInkPanelButton_Click(object sender, RoutedEventArgs e)
-        {
-            CloseInkPanel();
-        }
-
         private async Task<List<string>[]> GetInkImage()
         {
             CanvasDevice device = CanvasDevice.GetSharedDevice();
@@ -1066,6 +1051,21 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
+        public void OpenInkPanel()
+        {
+            InkPanel.Visibility = Visibility.Visible;
+        }
+
+        public void CloseInkPanel()
+        {
+            InkPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void CloseInkPanelButton_Click(object sender, RoutedEventArgs e)
+        {
+            CloseInkPanel();
+        }
+
         private async void UploadInkContentButton_Click(object sender, RoutedEventArgs e)
         {
             var data = await GetInkImage();
@@ -1080,5 +1080,6 @@ namespace Hipda.Client.Uwp.Pro
             CloseInkPanel();
         }
         #endregion
+
     }
 }
