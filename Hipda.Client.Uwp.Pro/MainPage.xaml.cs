@@ -131,7 +131,8 @@ namespace Hipda.Client.Uwp.Pro
 
         public Frame AppFrame { get { return this.MainFrame; } }
 
-        public Action<List<string>[]> InkFinished;
+        public Action<List<string>[]> UploadInkContentDelegate;
+        public Action<List<string>[]> PostInkContentDelegate;
 
         public ImageBrush UserAvatarImageBrush
         {
@@ -1040,18 +1041,13 @@ namespace Hipda.Client.Uwp.Pro
             InkPanel.Visibility = Visibility.Collapsed;
         }
 
-        #endregion
-
         private void CloseInkPanelButton_Click(object sender, RoutedEventArgs e)
         {
             CloseInkPanel();
         }
 
-        private async void InkFinishButton_Click(object sender, RoutedEventArgs e)
+        private async Task<List<string>[]> GetInkImage()
         {
-            string fileName = string.Empty;
-            string fileCode = string.Empty;
-
             CanvasDevice device = CanvasDevice.GetSharedDevice();
             CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)MyInkCanvas.ActualWidth, (int)MyInkCanvas.ActualHeight, 96);
 
@@ -1066,11 +1062,23 @@ namespace Hipda.Client.Uwp.Pro
                 await renderTarget.SaveAsync(stream, CanvasBitmapFileFormat.Jpeg, 1f);
 
                 var cts = new CancellationTokenSource();
-                var data = await SendService.UploadFileAsync(cts, stream, null, null);
-                InkFinished(data);
+                return await SendService.UploadFileAsync(cts, stream, null, null);
             }
+        }
 
+        private async void UploadInkContentButton_Click(object sender, RoutedEventArgs e)
+        {
+            var data = await GetInkImage();
+            UploadInkContentDelegate(data);
             CloseInkPanel();
         }
+
+        private async void PostInkContentButton_Click(object sender, RoutedEventArgs e)
+        {
+            var data = await GetInkImage();
+            PostInkContentDelegate(data);
+            CloseInkPanel();
+        }
+        #endregion
     }
 }

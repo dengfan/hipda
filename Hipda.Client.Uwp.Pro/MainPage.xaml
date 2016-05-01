@@ -823,7 +823,7 @@
                 <InkCanvas x:Name="MyInkCanvas"/>
             </Grid>
             <ink:InkToolbar TargetInkCanvas="{x:Bind MyInkCanvas}" VerticalAlignment="Top" HorizontalAlignment="Center" PenColor="Black" ActiveTool="Pen" />
-            <Button Margin="0,8,8,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="InkFinishButton_Click">
+            <Button Margin="0,8,8,0" VerticalAlignment="Top" HorizontalAlignment="Right">
                 <Button.Template>
                     <ControlTemplate>
                         <Grid x:Name="AcceptButtonGrid" Background="Green" Width="36" Height="36" CornerRadius="18">
@@ -832,12 +832,12 @@
                                     <VisualState x:Name="Normal"/>
                                     <VisualState x:Name="PointerOver">
                                         <VisualState.Setters>
-                                            <Setter Target="AcceptButtonGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                            <Setter Target="AcceptButtonGrid.Background" Value="#128A50" />
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <VisualState.Setters>
-                                            <Setter Target="AcceptButtonGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
+                                            <Setter Target="AcceptButtonGrid.Background" Value="#0C5C35" />
                                         </VisualState.Setters>
                                     </VisualState>
                                 </VisualStateGroup>
@@ -846,6 +846,12 @@
                         </Grid>
                     </ControlTemplate>
                 </Button.Template>
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="上传并继续编辑内容" Click="UploadInkContentButton_Click"/>
+                        <MenuFlyoutItem Text="直接发布" Click="PostInkContentButton_Click"/>
+                    </MenuFlyout>
+                </Button.Flyout>
             </Button>
             <Button Margin="8,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="CloseInkPanelButton_Click">
                 <Button.Template>
@@ -856,12 +862,12 @@
                                     <VisualState x:Name="Normal"/>
                                     <VisualState x:Name="PointerOver">
                                         <VisualState.Setters>
-                                            <Setter Target="CancelButtonGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
+                                            <Setter Target="CancelButtonGrid.Background" Value="#FF4452" />
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <VisualState.Setters>
-                                            <Setter Target="CancelButtonGrid.Background" Value="{ThemeResource SystemControlBackgroundBaseHighBrush}" />
+                                            <Setter Target="CancelButtonGrid.Background" Value="#BB000E" />
                                         </VisualState.Setters>
                                     </VisualState>
                                 </VisualStateGroup>

@@ -83,7 +83,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 var frame = (Frame)Window.Current.Content;
                 var mainPage = (MainPage)frame.Content;
                 mainPage.OpenInkPanel();
-                mainPage.InkFinished = (data) =>
+                mainPage.UploadInkContentDelegate = (data) =>
                 {
                     if (data[0] != null && data[0].Count > 0)
                     {
@@ -99,6 +99,40 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                         string fileCodes = string.Join("\r\n", _fileCodeList);
                         _insertFileCodeIntoContentTextBox($"\r\n{fileCodes}\r\n");
                         _fileCodeList.Clear();
+                    }
+                };
+                mainPage.PostInkContentDelegate = async (data) =>
+                {
+                    if (data[0] != null && data[0].Count > 0)
+                    {
+                        _fileNameList.AddRange(data[0]);
+                    }
+                    if (data[1] != null && data[1].Count > 0)
+                    {
+                        _fileCodeList.AddRange(data[1]);
+                    }
+
+                    if (_fileCodeList.Count > 0)
+                    {
+                        string fileCodes = string.Join("\r\n", _fileCodeList);
+                        _insertFileCodeIntoContentTextBox($"\r\n{fileCodes}\r\n");
+                        _fileCodeList.Clear();
+                    }
+
+                    bool flag = await SendService.SendThreadReplyAsync(cts, $"{data[1][0]}", _fileNameList, _threadId);
+                    if (flag)
+                    {
+                        _fileNameList.Clear();
+
+                        Content = string.Empty;
+
+                        // 提示发贴成功
+                        _sentSuccess?.Invoke(string.Empty);
+                    }
+                    else
+                    {
+                        // 提示发贴不成功
+                        _sentFailded?.Invoke("对不起，发布请求失败，请稍后再试！");
                     }
                 };
             };
@@ -120,18 +154,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     Content = string.Empty;
 
                     // 提示发贴成功
-                    if (_sentSuccess != null)
-                    {
-                        _sentSuccess(string.Empty);
-                    }
+                    _sentSuccess?.Invoke(string.Empty);
                 }
                 else
                 {
                     // 提示发贴不成功
-                    if (_sentFailded != null)
-                    {
-                        _sentFailded("对不起，发布请求失败，请稍后再试！");
-                    }
+                    _sentFailded?.Invoke("对不起，发布请求失败，请稍后再试！");
                 }
             };
         }
