@@ -5,6 +5,7 @@ using Hipda.Client.Uwp.Pro.ViewModels;
 using System;
 using System.Linq;
 using System.Threading;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -94,7 +95,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                     FaceButton.Height = 40;
                     FileButton.Width = 80;
                     FileButton.Height = 40;
-                    SendButton.Height = 40;
+                    SendButton.Height = 36;
+                    ShortcutKeyButton.Height = 36;
                 }
                 else if (userInteractionType.Equals("Mouse"))
                 {
@@ -104,7 +106,8 @@ namespace Hipda.Client.Uwp.Pro.Views
                     FaceButton.Height = 32;
                     FileButton.Width = 32;
                     FileButton.Height = 32;
-                    SendButton.Height = 32;
+                    SendButton.Height = 28;
+                    ShortcutKeyButton.Height = 28;
                 }
 
                 ContentTextBox.MaxHeight = this.ActualHeight / 2;
@@ -449,60 +452,7 @@ namespace Hipda.Client.Uwp.Pro.Views
             //PostReplyTextBox.Text = data.TextStr;
         }
 
-        #region 回贴
-        #region UI事件
-        void EmojiGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var data = (EmojiItemModel)e.ClickedItem;
-            if (data == null)
-            {
-                return;
-            }
-
-            string faceText = data.Label;
-
-            int occurences = 0;
-            string originalContent = ContentTextBox.Text;
-
-            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
-            {
-                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
-                    occurences++;
-            }
-
-            int cursorPosition = ContentTextBox.SelectionStart + occurences;
-            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, faceText);
-            ContentTextBox.SelectionStart = cursorPosition + faceText.Length;
-            ContentTextBox.Focus(FocusState.Pointer);
-        }
-
-        void FaceGridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            var data = (FaceItemModel)e.ClickedItem;
-            if (data == null)
-            {
-                return;
-            }
-
-            string faceText = data.Text;
-
-            int occurences = 0;
-            string originalContent = ContentTextBox.Text;
-
-            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
-            {
-                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
-                    occurences++;
-            }
-
-            int cursorPosition = ContentTextBox.SelectionStart + occurences;
-            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, faceText);
-            ContentTextBox.SelectionStart = cursorPosition + faceText.Length;
-            ContentTextBox.Focus(FocusState.Pointer);
-        }
-        #endregion
-
-        #region 委托事件
+        #region 快速回贴
         int _autoRemoveTipTimerCount;
         DispatcherTimer _autoRemoveTipTimer;
 
@@ -580,7 +530,95 @@ namespace Hipda.Client.Uwp.Pro.Views
             // 开始倒计时
             _mainPage?.SendMessageTimerSetup();
         }
-        #endregion
+
+
+        void EmojiGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var data = (EmojiItemModel)e.ClickedItem;
+            if (data == null)
+            {
+                return;
+            }
+
+            string faceText = data.Label;
+
+            int occurences = 0;
+            string originalContent = ContentTextBox.Text;
+
+            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = ContentTextBox.SelectionStart + occurences;
+            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, faceText);
+            ContentTextBox.SelectionStart = cursorPosition + faceText.Length;
+            ContentTextBox.Focus(FocusState.Pointer);
+        }
+
+        void FaceGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var data = (FaceItemModel)e.ClickedItem;
+            if (data == null)
+            {
+                return;
+            }
+
+            string faceText = data.Text;
+
+            int occurences = 0;
+            string originalContent = ContentTextBox.Text;
+
+            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = ContentTextBox.SelectionStart + occurences;
+            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, faceText);
+            ContentTextBox.SelectionStart = cursorPosition + faceText.Length;
+            ContentTextBox.Focus(FocusState.Pointer);
+        }
+
+        private void QuickReplyPanel_DragOver(object sender, DragEventArgs e)
+        {
+            e.AcceptedOperation = DataPackageOperation.Copy;
+            e.DragUIOverride.Caption = "拖放到此处即可上传文件";
+        }
+
+        private async void QuickReplyPanel_Drop(object sender, DragEventArgs e)
+        {
+            if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                var files = await e.DataView.GetStorageItemsAsync();
+                var cts = new CancellationTokenSource();
+                var vm = ((FrameworkElement)sender).DataContext as SendThreadQuickReplyControlViewModel;
+                vm.UploadMultipleFiles(cts, files, BeforeUpload, AfterUpload);
+            }
+        }
+
+        private async void ContentTextBox_Paste(object sender, TextControlPasteEventArgs e)
+        {
+            var vm = ((FrameworkElement)sender).DataContext as SendThreadQuickReplyControlViewModel;
+
+            var cts = new CancellationTokenSource();
+            var dpv = Clipboard.GetContent();
+            if (dpv.Contains(StandardDataFormats.Bitmap))
+            {
+                e.Handled = true;
+                var file = await dpv.GetBitmapAsync();
+                vm.UploadSingleFile(cts, file, BeforeUpload, AfterUpload);
+            }
+
+            if (dpv.Contains(StandardDataFormats.StorageItems))
+            {
+                e.Handled = true;
+                var files = await dpv.GetStorageItemsAsync();
+                vm.UploadMultipleFiles(cts, files, BeforeUpload, AfterUpload);
+            }
+        }
 
         #endregion
     }

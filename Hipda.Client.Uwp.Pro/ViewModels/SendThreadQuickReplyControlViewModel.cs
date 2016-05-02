@@ -163,5 +163,46 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 }
             };
         }
+
+        public async void UploadMultipleFiles(CancellationTokenSource cts, IReadOnlyList<IStorageItem> files, Action<int, int, string> beforeUpload, Action<int> afterUpload)
+        {
+            var data = await SendService.UploadFileAsync(cts, files, beforeUpload, afterUpload);
+            if (data[0] != null && data[0].Count > 0)
+            {
+                _fileNameList.AddRange(data[0]);
+            }
+            if (data[1] != null && data[1].Count > 0)
+            {
+                _fileCodeList.AddRange(data[1]);
+            }
+
+            if (_fileCodeList.Count > 0)
+            {
+                string fileCodes = string.Join("\r\n", _fileCodeList).Trim();
+                _insertFileCodeIntoContentTextBox($"{fileCodes}\r\n");
+                _fileCodeList.Clear();
+            }
+        }
+
+        public async void UploadSingleFile(CancellationTokenSource cts, RandomAccessStreamReference file, Action<int, int, string> beforeUpload, Action<int> afterUpload)
+        {
+            IRandomAccessStream stream = await file.OpenReadAsync();
+            var data = await SendService.UploadFileAsync(cts, stream, beforeUpload, afterUpload);
+            if (data[0] != null && data[0].Count > 0)
+            {
+                _fileNameList.AddRange(data[0]);
+            }
+            if (data[1] != null && data[1].Count > 0)
+            {
+                _fileCodeList.AddRange(data[1]);
+            }
+
+            if (_fileCodeList.Count > 0)
+            {
+                string fileCodes = string.Join("\r\n", _fileCodeList).Trim();
+                _insertFileCodeIntoContentTextBox($"{fileCodes}\r\n");
+                _fileCodeList.Clear();
+            }
+        }
     }
 }

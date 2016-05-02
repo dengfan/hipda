@@ -156,13 +156,13 @@
 
                 <ProgressRing x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="40" Height="40" />
 
-                <StackPanel x:Name="QuickReplyPanel" VerticalAlignment="Bottom">
+                <StackPanel x:Name="QuickReplyPanel" VerticalAlignment="Bottom" AllowDrop="True" DragOver="QuickReplyPanel_DragOver" Drop="QuickReplyPanel_Drop">
                     <Border Margin="0,0,0,8" Padding="8,4" CornerRadius="12" HorizontalAlignment="Center" Background="Red" Opacity="0.8"
                             Visibility="{Binding Text.Length,ElementName=TipTextBlock,Converter={StaticResource TextLengthToTipBorderVisibilityConverter}}">
                         <TextBlock x:Name="TipTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"
                                    FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
                     </Border>
-                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8" BorderThickness="0,1,0,0" BorderBrush="{ThemeResource SystemChromeMediumColor}">
+                    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.9" BorderThickness="0,1,0,0" BorderBrush="{ThemeResource SystemChromeMediumColor}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto" />
@@ -234,27 +234,27 @@
                         </StackPanel>
                         <TextBox Grid.Row="1" x:Name="ContentTextBox"
                                  MinHeight="64" Padding="8" Background="Transparent" BorderThickness="0"
-                                 TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复，Enter 换行，Ctrl + Enter 发布。"
-                                 Text="{Binding Content,Mode=TwoWay}"/>
-                        <Button Grid.Row="2" x:Name="SendButton" Margin="8" Width="60"
-                                Background="{ThemeResource SystemControlHighlightAltListAccentHighBrush}"
+                                 TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复。小提示：可使用截图粘贴、复制粘贴、拖拽的方式可上传文件。"
+                                 Text="{Binding Content,Mode=TwoWay}" Paste="ContentTextBox_Paste"/>
+                        <Button Grid.Row="2" x:Name="SendButton" Margin="0,8,40,8" Padding="0" Width="56"
+                                Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                                 IsEnabled="{Binding Countdown,ElementName=MyThreadAndReplyPage,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"
                                 HorizontalAlignment="Right" VerticalAlignment="Center"
                                 Command="{Binding SendCommand}">
                             <Button.Template>
                                 <ControlTemplate>
-                                    <Border x:Name="SendButtonBorder" Background="{TemplateBinding Background}" CornerRadius="4" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" VerticalAlignment="Center">
+                                    <Border x:Name="SendButtonBorder" Background="{TemplateBinding Background}" CornerRadius="4,0,0,4" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" VerticalAlignment="Center">
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="CommonStates">
                                                 <VisualState x:Name="Normal"/>
                                                 <VisualState x:Name="PointerOver">
                                                     <VisualState.Setters>
-                                                        <Setter Target="SendButtonBorder.Background" Value="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" />
+                                                        <Setter Target="SendButtonBorder.Background" Value="{ThemeResource SystemControlHighlightAltListAccentHighBrush}" />
                                                     </VisualState.Setters>
                                                 </VisualState>
                                                 <VisualState x:Name="Pressed">
                                                     <VisualState.Setters>
-                                                        <Setter Target="SendButtonBorder.Background" Value="{ThemeResource SystemControlBackgroundAccentBrush}" />
+                                                        <Setter Target="SendButtonBorder.Background" Value="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" />
                                                     </VisualState.Setters>
                                                 </VisualState>
                                             </VisualStateGroup>
@@ -267,6 +267,45 @@
                                     </Border>
                                 </ControlTemplate>
                             </Button.Template>
+                        </Button>
+                        <Button Grid.Row="2" x:Name="ShortcutKeyButton" Margin="0,8,8,8" Padding="0" Width="32"
+                                Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                IsEnabled="{Binding Countdown,ElementName=MyThreadAndReplyPage,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"
+                                HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border x:Name="SendButtonBorder" Background="{TemplateBinding Background}" CornerRadius="0,4,4,0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" VerticalAlignment="Center">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="Normal"/>
+                                                <VisualState x:Name="PointerOver">
+                                                    <VisualState.Setters>
+                                                        <Setter Target="SendButtonBorder.Background" Value="{ThemeResource SystemControlHighlightAltListAccentHighBrush}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState x:Name="Pressed">
+                                                    <VisualState.Setters>
+                                                        <Setter Target="SendButtonBorder.Background" Value="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <FontIcon Foreground="White" Glyph="&#xE972;" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <ToggleMenuFlyoutItem Text="使用 Enter 键发送"/>
+                                    <ToggleMenuFlyoutItem Text="使用 Ctrl + Enter 键发送"/>
+                                    <MenuFlyoutSubItem Text="上传图片压缩">
+                                        <ToggleMenuFlyoutItem Text="不压缩"/>
+                                        <ToggleMenuFlyoutItem Text="900K" />
+                                        <ToggleMenuFlyoutItem Text="600K"/>
+                                        <ToggleMenuFlyoutItem Text="300K"/>
+                                    </MenuFlyoutSubItem>
+                                </MenuFlyout>
+                            </Button.Flyout>
                         </Button>
                     </Grid>
                 </StackPanel>

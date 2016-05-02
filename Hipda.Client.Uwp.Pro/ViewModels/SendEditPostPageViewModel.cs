@@ -136,10 +136,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                 Content = string.Empty;
 
                 // 提示发贴成功
-                if (_sentSuccess != null)
-                {
-                    _sentSuccess(Title);
-                }
+                _sentSuccess?.Invoke(Title);
             };
         }
 
