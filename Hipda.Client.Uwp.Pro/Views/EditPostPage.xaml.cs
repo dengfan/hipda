@@ -155,19 +155,19 @@ namespace Hipda.Client.Uwp.Pro.Views
             this.DataContext = _vm;
         }
 
-        private void ImageAttachPanel_DragOver(object sender, DragEventArgs e)
+        private void EditPostGrid_DragOver(object sender, DragEventArgs e)
         {
             e.AcceptedOperation = DataPackageOperation.Copy;
             e.DragUIOverride.Caption = "拖放到此处即可上传文件";
         }
 
-        private async void ImageAttachPanel_Drop(object sender, DragEventArgs e)
+        private async void EditPostGrid_Drop(object sender, DragEventArgs e)
         {
             if (e.DataView.Contains(StandardDataFormats.StorageItems))
             {
                 var files = await e.DataView.GetStorageItemsAsync();
                 var cts = new CancellationTokenSource();
-                _vm.DragAndUploadFile(cts, files, BeforeUpload, AfterUpload);
+                _vm.UploadMultipleFiles(cts, files, BeforeUpload, AfterUpload);
             }
         }
 
@@ -201,7 +201,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 e.Handled = true;
                 var cts = new CancellationTokenSource();
                 var file = await dpv.GetBitmapAsync();
-                _vm.PasteAndUploadFile(cts, file, BeforeUpload, AfterUpload);
+                _vm.UploadSingleFile(cts, file, BeforeUpload, AfterUpload);
             }
 
             if (dpv.Contains(StandardDataFormats.StorageItems))
@@ -209,7 +209,7 @@ namespace Hipda.Client.Uwp.Pro.Views
                 e.Handled = true;
                 var cts = new CancellationTokenSource();
                 var files = await dpv.GetStorageItemsAsync();
-                _vm.DragAndUploadFile(cts, files, BeforeUpload, AfterUpload);
+                _vm.UploadMultipleFiles(cts, files, BeforeUpload, AfterUpload);
             }
         }
     }

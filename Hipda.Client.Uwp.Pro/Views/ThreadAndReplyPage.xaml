@@ -236,7 +236,7 @@
                                  MinHeight="64" Padding="8" Background="Transparent" BorderThickness="0"
                                  TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复。小提示：可使用截图粘贴、复制粘贴、拖拽的方式可上传文件。"
                                  Text="{Binding Content,Mode=TwoWay}" Paste="ContentTextBox_Paste"/>
-                        <Button Grid.Row="2" x:Name="SendButton" Margin="0,8,40,8" Padding="0" Width="56"
+                        <Button Grid.Row="2" x:Name="SendButton" Margin="0,8,40,8" Padding="0" Width="52"
                                 Background="{ThemeResource SystemControlBackgroundAccentBrush}"
                                 IsEnabled="{Binding Countdown,ElementName=MyThreadAndReplyPage,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"
                                 HorizontalAlignment="Right" VerticalAlignment="Center"
@@ -290,7 +290,7 @@
                                                 </VisualState>
                                             </VisualStateGroup>
                                         </VisualStateManager.VisualStateGroups>
-                                        <FontIcon Foreground="White" Glyph="&#xE972;" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <FontIcon Foreground="White" Glyph="&#xE972;" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                 </ControlTemplate>
                             </Button.Template>

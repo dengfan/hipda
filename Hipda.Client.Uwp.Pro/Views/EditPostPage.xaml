@@ -42,7 +42,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid x:Name="EditPostGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" AllowDrop="True" DragOver="EditPostGrid_DragOver" Drop="EditPostGrid_Drop">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -61,9 +61,8 @@
                  GotFocus="ContentTextBox_GotFocus" Text="{Binding Content,Mode=TwoWay}"
                  Paste="ContentTextBox_Paste"/>
 
-        <StackPanel Grid.Row="2" Padding="8,8,8,0" Background="{ThemeResource SystemChromeLowColor}"
-              AllowDrop="True" DragOver="ImageAttachPanel_DragOver" Drop="ImageAttachPanel_Drop">
-            <TextBlock Margin="0,0,0,8" Text="附件面板，可将文件拖到此区域上传。" HorizontalAlignment="Center" VerticalAlignment="Top"
+        <StackPanel Grid.Row="2" Padding="8,8,8,0" Background="{ThemeResource SystemChromeLowColor}">
+            <TextBlock Margin="0,0,0,8" Text="附件面板" HorizontalAlignment="Center" VerticalAlignment="Top"
                        FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                        Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"/>
             <GridView ItemsSource="{Binding AttachFileList}" Height="56"
