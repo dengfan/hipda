@@ -45,7 +45,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                         string quoteTime = ActionTime;
                         int postId = Convert.ToInt32(ActionInfo[6]);
                         int threadId = Convert.ToInt32(ActionInfo[1]);
-                        mainPage.OpenSendReplyPostPanel("q", userId, username, quoteSimpleContent, quoteTime, 0, postId, threadId);
+                        //mainPage.OpenSendReplyPostPanel("q", userId, username, quoteSimpleContent, quoteTime, 0, postId, threadId);
                     };
                     ViewCommand = new DelegateCommand();
                     ViewCommand.ExecuteAction = (p) =>

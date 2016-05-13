@@ -230,11 +230,11 @@ namespace Hipda.Client.Uwp.Pro
             _mainPageViewModel.SelectedNavButton = _mainPageViewModel.NavButtons.FirstOrDefault(b => b.TypeValue.Equals(param));
         }
 
-        public async void ShowTipBar(string tipContent)
+        public async void ShowTipsBar(string tipsContent)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                TipTextBlock.Text = Uri.UnescapeDataString(tipContent);
-                ShowTipBarAnimation.Begin();
+                TipTextBlock.Text = Uri.UnescapeDataString(tipsContent);
+                ShowTipsBarAnimation.Begin();
             });
         }
 
@@ -812,68 +812,68 @@ namespace Hipda.Client.Uwp.Pro
             //UserDialog.Content = sendControl;
         }
 
-        public void OpenSendReplyPostPanel(string replyType, int postAuthorUserId, string postAuthorUsername, string quoteSimpleContent, string postTime, int floorNo, int postId, int threadId)
-        {
-            FindName("UserDialog");
+        //public void OpenSendReplyPostPanel(string replyType, int postAuthorUserId, string postAuthorUsername, string quoteSimpleContent, string postTime, int floorNo, int postId, int threadId)
+        //{
+        //    FindName("UserDialog");
 
-            Action<string> sendSuccess = (title) =>
-            {
-                // 开始倒计时
-                SendMessageTimerSetup();
+        //    Action<string> sendSuccess = (title) =>
+        //    {
+        //        // 开始倒计时
+        //        SendMessageTimerSetup();
 
-                // 回贴成功后，刷新回复页到底部
-                if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
-                {
-                    var page = (ThreadAndReplyPage)AppFrame.Content;
-                    var cmdBar = (CommandBar)page.FindName("RightCommandBar");
-                    if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForDefaultViewModel)))
-                    {
-                        var vm = (ReplyListViewForDefaultViewModel)cmdBar.DataContext;
-                        vm.LoadLastPageDataCommand.Execute(null);
-                    }
-                    else if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
-                    {
-                        var vm = (ReplyListViewForSpecifiedPostViewModel)cmdBar.DataContext;
-                        vm.LoadLastPageDataCommand.Execute(null);
-                    }
-                }
-                else if (AppFrame.Content.GetType().Equals(typeof(ReplyListPage)))
-                {
-                    var page = (ReplyListPage)AppFrame.Content;
-                    var cmdBar = (CommandBar)page.FindName("RightCommandBar");
-                    if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForDefaultViewModel)))
-                    {
-                        var vm = (ReplyListViewForDefaultViewModel)cmdBar.DataContext;
-                        vm.LoadLastPageDataCommand.Execute(null);
-                    }
-                    else if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
-                    {
-                        var vm = (ReplyListViewForSpecifiedPostViewModel)cmdBar.DataContext;
-                        vm.LoadLastPageDataCommand.Execute(null);
-                    }
-                }
-            };
+        //        // 回贴成功后，刷新回复页到底部
+        //        if (AppFrame.Content.GetType().Equals(typeof(ThreadAndReplyPage)))
+        //        {
+        //            var page = (ThreadAndReplyPage)AppFrame.Content;
+        //            var cmdBar = (CommandBar)page.FindName("RightCommandBar");
+        //            if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForDefaultViewModel)))
+        //            {
+        //                var vm = (ReplyListViewForDefaultViewModel)cmdBar.DataContext;
+        //                vm.LoadLastPageDataCommand.Execute(null);
+        //            }
+        //            else if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
+        //            {
+        //                var vm = (ReplyListViewForSpecifiedPostViewModel)cmdBar.DataContext;
+        //                vm.LoadLastPageDataCommand.Execute(null);
+        //            }
+        //        }
+        //        else if (AppFrame.Content.GetType().Equals(typeof(ReplyListPage)))
+        //        {
+        //            var page = (ReplyListPage)AppFrame.Content;
+        //            var cmdBar = (CommandBar)page.FindName("RightCommandBar");
+        //            if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForDefaultViewModel)))
+        //            {
+        //                var vm = (ReplyListViewForDefaultViewModel)cmdBar.DataContext;
+        //                vm.LoadLastPageDataCommand.Execute(null);
+        //            }
+        //            else if (cmdBar.DataContext.GetType().Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
+        //            {
+        //                var vm = (ReplyListViewForSpecifiedPostViewModel)cmdBar.DataContext;
+        //                vm.LoadLastPageDataCommand.Execute(null);
+        //            }
+        //        }
+        //    };
 
-            var sendControl = new SendControl(replyType, postAuthorUserId, postAuthorUsername, quoteSimpleContent, postTime, floorNo, postId, threadId, sendSuccess);
-            var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
-            sendControl.SetBinding(SendControl.CountdownProperty, binding);
+        //    var sendControl = new SendControl(replyType, postAuthorUserId, postAuthorUsername, quoteSimpleContent, postTime, floorNo, postId, threadId, sendSuccess);
+        //    var binding = new Binding { Path = new PropertyPath("Countdown"), Source = this };
+        //    sendControl.SetBinding(SendControl.CountdownProperty, binding);
 
-            string titleParameter = string.Empty;
-            if (replyType.Equals("r"))
-            {
-                titleParameter = "回复";
-            }
-            else if (replyType.Equals("q"))
-            {
-                titleParameter = "引用";
-            }
+        //    string titleParameter = string.Empty;
+        //    if (replyType.Equals("r"))
+        //    {
+        //        titleParameter = "回复";
+        //    }
+        //    else if (replyType.Equals("q"))
+        //    {
+        //        titleParameter = "引用";
+        //    }
 
-            var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToCountdownLabelConverter(), ConverterParameter = titleParameter };
-            UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
+        //    var titleBinding = new Binding { Path = new PropertyPath("Countdown"), Source = this, Converter = new CountdownToCountdownLabelConverter(), ConverterParameter = titleParameter };
+        //    UserDialog.SetBinding(ContentDialog.TitleProperty, titleBinding);
 
-            UserDialog.ContentTemplate = null;
-            UserDialog.Content = sendControl;
-        }
+        //    UserDialog.ContentTemplate = null;
+        //    UserDialog.Content = sendControl;
+        //}
 
         public void OpenSendEditPostPanel(PostEditDataModel editData)
         {

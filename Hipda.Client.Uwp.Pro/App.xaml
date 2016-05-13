@@ -1010,7 +1010,7 @@
             </Setter>
         </Style>
 
-        <ControlTemplate x:Key="ContentDialogTemplate" TargetType="ContentDialog">
+        <!--<ControlTemplate x:Key="ContentDialogTemplate" TargetType="ContentDialog">
             <Border x:Name="Container">
                 <Grid x:Name="LayoutRoot">
                     <Grid.RowDefinitions>
@@ -1042,7 +1042,7 @@
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
-                                        <!--Here, I delete 'Height="Auto"' of RowDefinition.-->
+                                        --><!--Here, I delete 'Height="Auto"' of RowDefinition.--><!--
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <ContentControl x:Name="Title"
@@ -1099,7 +1099,7 @@
                     </Border>
                 </Grid>
             </Border>
-        </ControlTemplate>
+        </ControlTemplate>-->
 
         <local:LocalSettingsDependencyObject x:Key="MyLocalSettings"/>
         <local:RoamingSettingsDependencyObject x:Key="MyRoamingSettings"/>

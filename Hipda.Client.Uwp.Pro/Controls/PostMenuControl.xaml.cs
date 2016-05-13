@@ -42,7 +42,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             if (mp != null)
             {
                 string quoteSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + " ..." : data.TextStr;
-                mp.OpenSendReplyPostPanel("r", data.AuthorUserId, data.AuthorUsername, quoteSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
+                //mp.OpenSendReplyPostPanel("r", data.AuthorUserId, data.AuthorUsername, quoteSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
             }
         }
 
@@ -59,7 +59,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             if (mp != null)
             {
                 string quoteSimpleContent = data.TextStr.Length > 300 ? data.TextStr.Substring(0, 290) + " ..." : data.TextStr;
-                mp.OpenSendReplyPostPanel("q", data.AuthorUserId, data.AuthorUsername, quoteSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
+                //mp.OpenSendReplyPostPanel("q", data.AuthorUserId, data.AuthorUsername, quoteSimpleContent, data.AuthorCreateTime, data.FloorNo, data.PostId, data.ThreadId);
             }
         }
 

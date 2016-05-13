@@ -64,7 +64,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                         //var mp = frame.Content as MainPage;
                         //if (mp != null)
                         //{
-                        //    mp.ShowTipBar("操作成功！");
+                        //    mp.ShowTipsBar("操作成功！");
                         //}
                     }
                 }

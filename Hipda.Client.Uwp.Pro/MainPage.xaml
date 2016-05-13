@@ -263,8 +263,8 @@
         <Storyboard x:Name="CloseRightSwipePanelAnimation2">
             <DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="RightSwipePanel"/>
         </Storyboard>
-        <Storyboard x:Name="ShowTipBarAnimation">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="TipBar">
+        <Storyboard x:Name="ShowTipsBarAnimation">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="TipsBar">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-260"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-240"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:2.6" Value="-240"/>
@@ -768,7 +768,7 @@
             </Grid>
         </Button>
 
-        <Border x:Name="TipBar" Margin="0,48,-260,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+        <Border x:Name="TipsBar" Margin="0,48,-260,0" HorizontalAlignment="Right" VerticalAlignment="Top"
                 Background="{ThemeResource SystemControlBackgroundAccentBrush}" Width="260">
             <Border.RenderTransform>
                 <CompositeTransform />
@@ -776,15 +776,17 @@
             <TextBlock x:Name="TipTextBlock" Padding="8,8,28,8" TextWrapping="Wrap"/>
         </Border>
 
-        <ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy"
+        <!--<ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy"
                        FullSizeDesired="True"
                        Template="{StaticResource ContentDialogTemplate}"
-                       SecondaryButtonText="关闭"/>
+                       SecondaryButtonText="关闭"/>-->
 
+        <!--遮罩层-->
         <Grid x:Name="InputPanelMask" x:DeferLoadStrategy="Lazy" Opacity="0" Visibility="Collapsed"
               Background="{Binding RequestedTheme,ElementName=MyMainPage,Converter={StaticResource ElementThemeToMaskBackgroundBrush}}"
               Tapped="CloseInputPanelMask_Tapped"/>
 
+        <!--输入面板，用于发表新贴、回贴、改贴-->
         <Grid x:Name="InputPanel" x:DeferLoadStrategy="Lazy" Margin="24"
               BorderThickness="4" BorderBrush="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"
               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -818,6 +820,7 @@
             <Frame Grid.Row="1" x:Name="InputPanelFrame" Navigated="InputPanelFrame_Navigated"></Frame>
         </Grid>
 
+        <!--墨迹面板-->
         <Grid x:Name="InkPanel" Background="Gray" Visibility="Collapsed">
             <Grid Margin="0,52,0,0" Background="White" MaxWidth="600" MaxHeight="600">
                 <InkCanvas x:Name="MyInkCanvas"/>

@@ -262,6 +262,7 @@ namespace Hipda.Html
                     var m = matchsForImage2[i];
                     string placeHolderLabel = m.Groups[0].Value; // 要被替换的元素
                     string imgUrl = m.Groups[1].Value; // 图片URL
+                    if (imgUrl.Equals("http://img.hi-pda.com/forum/images/default/attachimg.gif")) continue;
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
                     string xaml = @"<InlineUIContainer><c:MyImage FolderName=""{0}"" Url=""{1}""/></InlineUIContainer>";
