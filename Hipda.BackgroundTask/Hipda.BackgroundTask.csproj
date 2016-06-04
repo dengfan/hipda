@@ -119,8 +119,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack-PCL">
-      <HintPath>..\libs\HtmlAgilityPack-PCL.dll</HintPath>
+    <Reference Include="HtmlAgilityPack-PCL, Version=1.4.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\etc\HtmlAgilityPack-PCL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
