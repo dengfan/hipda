@@ -1,13 +1,13 @@
 ﻿{
   "dependencies": {
     "HtmlAgilityPack": "1.4.9",
-    "Microsoft.ApplicationInsights": "1.2.3",
+    "Microsoft.ApplicationInsights": "2.1.0",
     "Microsoft.ApplicationInsights.PersistenceChannel": "1.2.3",
     "Microsoft.ApplicationInsights.WindowsApps": "1.1.1",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
-    "Newtonsoft.Json": "8.0.2",
-    "PullToRefresh.UWP": "0.3.3",
-    "Win2D.uwp": "1.17.0",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
+    "Newtonsoft.Json": "8.0.3",
+    "PullToRefresh.UWP": "0.3.4",
+    "Win2D.uwp": "1.18.0",
     "WindowsStateTriggers": "1.1.0"
   },
   "frameworks": {
