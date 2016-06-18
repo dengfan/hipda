@@ -455,7 +455,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         {
             if (_autoRemoveTipTimerCount == 0)
             {
-                TipTextBlock.Text = string.Empty;
+                TipsBarTextBlock.Text = string.Empty;
                 _autoRemoveTipTimer.Stop();
                 return;
             }
@@ -465,7 +465,7 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         void BeforeUpload(int fileIndex, int fileCount, string fileName)
         {
-            TipTextBlock.Text = $"上载中 {fileIndex}/{fileCount} （{fileName}）";
+            TipsBarTextBlock.Text = $"上载中 {fileIndex}/{fileCount} （{fileName}）";
             SendMessageTimerSetup();
         }
 
@@ -488,13 +488,13 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         void AfterUpload(int fileCount)
         {
-            TipTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
+            TipsBarTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
             SendMessageTimerSetup();
         }
 
         void SentFailed(string errorText)
         {
-            TipTextBlock.Text = errorText;
+            TipsBarTextBlock.Text = errorText;
             SendMessageTimerSetup();
         }
 

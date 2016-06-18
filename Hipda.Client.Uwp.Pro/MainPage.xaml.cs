@@ -230,13 +230,7 @@ namespace Hipda.Client.Uwp.Pro
             _mainPageViewModel.SelectedNavButton = _mainPageViewModel.NavButtons.FirstOrDefault(b => b.TypeValue.Equals(param));
         }
 
-        public async void ShowTipsBar(string tipsContent)
-        {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                TipTextBlock.Text = Uri.UnescapeDataString(tipsContent);
-                ShowTipsBarAnimation.Begin();
-            });
-        }
+        
 
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -958,7 +952,7 @@ namespace Hipda.Client.Uwp.Pro
             }
         }
 
-        #region 弹窗
+        #region 遮罩及输入面板
         public void SetTitleForInputPanel(string title)
         {
             InputPanelTitleTextBlock.Text = title;
@@ -1081,5 +1075,31 @@ namespace Hipda.Client.Uwp.Pro
         }
         #endregion
 
+        #region 提示条
+        public async void ShowTipsBar(string tipsContent)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                TipsBarTextBlock.Text = Uri.UnescapeDataString(tipsContent);
+                ShowTipsBarShortAnimation.Begin();
+            });
+        }
+
+        private void TipsBar_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ShowTipsBarAnimationHide.Begin();
+        }
+        #endregion
+
+        private void xxx_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ShowTipsBarAnimationShow.Begin();
+        }
+
+        private void yyy_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ShowTipsBarAnimationHide.Begin();
+        }
+
+        
     }
 }

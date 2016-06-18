@@ -263,16 +263,30 @@
         <Storyboard x:Name="CloseRightSwipePanelAnimation2">
             <DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="RightSwipePanel"/>
         </Storyboard>
-        <Storyboard x:Name="ShowTipsBarAnimation">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="TipsBar">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-260"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-240"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:2.6" Value="-240"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:2.7" Value="-260"/>
+        
+        <Storyboard x:Name="ShowTipsBarShortAnimation">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TipsBar">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="56"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="48"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2.6" Value="48"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2.7" Value="56"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
-        
+
+        <Storyboard x:Name="ShowTipsBarAnimationShow">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TipsBar">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="56"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="48"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="ShowTipsBarAnimationHide">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TipsBar">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="56"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
         <Storyboard x:Name="OpenInputPanelMaskAnimation">
             <DoubleAnimation Duration="0:0:0.2" To="0.6" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="InputPanelMask"/>
         </Storyboard>
@@ -768,14 +782,6 @@
             </Grid>
         </Button>
 
-        <Border x:Name="TipsBar" Margin="0,48,-260,0" HorizontalAlignment="Right" VerticalAlignment="Top"
-                Background="{ThemeResource SystemControlBackgroundAccentBrush}" Width="260">
-            <Border.RenderTransform>
-                <CompositeTransform />
-            </Border.RenderTransform>
-            <TextBlock x:Name="TipTextBlock" Padding="8,8,28,8" TextWrapping="Wrap"/>
-        </Border>
-
         <!--<ContentDialog x:Name="UserDialog" x:DeferLoadStrategy="Lazy"
                        FullSizeDesired="True"
                        Template="{StaticResource ContentDialogTemplate}"
@@ -820,7 +826,7 @@
             <Frame Grid.Row="1" x:Name="InputPanelFrame" Navigated="InputPanelFrame_Navigated"></Frame>
         </Grid>
 
-        <!--墨迹面板-->
+        <!--Ink面板-->
         <Grid x:Name="InkPanel" Background="Gray" Visibility="Collapsed">
             <Grid Margin="0,52,0,0" Background="White" MaxWidth="600" MaxHeight="600">
                 <InkCanvas x:Name="MyInkCanvas"/>
@@ -881,5 +887,21 @@
                 </Button.Template>
             </Button>
         </Grid>
+
+        <!--提示条-->
+        <Border x:Name="TipsBar" VerticalAlignment="Top" Margin="0,-48,0,0" Height="48" Opacity="0.9"
+                Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                Tapped="TipsBar_Tapped">
+            <Border.RenderTransform>
+                <CompositeTransform />
+            </Border.RenderTransform>
+            <TextBlock x:Name="TipsBarTextBlock" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button Content="xxx" Tapped="xxx_Tapped"/>
+            <Button Content="yyy" Tapped="yyy_Tapped"/>
+        </StackPanel>
+        
     </Grid>
 </Page>

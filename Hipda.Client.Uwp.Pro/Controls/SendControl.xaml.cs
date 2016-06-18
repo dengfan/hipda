@@ -102,7 +102,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
         #region 委托事件
         void BeforeUpload(int fileIndex, int fileCount, string fileName)
         {
-            TipTextBlock.Text = $"上载中 {fileIndex}/{fileCount} （{fileName}）";
+            TipsBarTextBlock.Text = $"上载中 {fileIndex}/{fileCount} （{fileName}）";
         }
 
         void InsertFileCodeIntoContextTextBox(string fileCode)
@@ -124,12 +124,12 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         void AfterUpload(int fileCount)
         {
-            TipTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
+            TipsBarTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
         }
 
         void SentFailed(string errorText)
         {
-            TipTextBlock.Text = errorText;
+            TipsBarTextBlock.Text = errorText;
         }
         #endregion
 
@@ -154,7 +154,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
         {
             this.InitializeComponent();
 
-            TipTextBlock.Text = "请输入标题和内容。";
+            TipsBarTextBlock.Text = "请输入标题和内容。";
             var cts = new CancellationTokenSource();
             this.DataContext = new SendNewThreadContentDialogViewModel(cts, forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
@@ -175,7 +175,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
             this.InitializeComponent();
 
             TitleTextBox.Visibility = Visibility.Collapsed;
-            TipTextBlock.Text = "请输入回复内容。";
+            TipsBarTextBlock.Text = "请输入回复内容。";
             var cts = new CancellationTokenSource();
             this.DataContext = new SendPostReplyContentDialogViewModel(cts, replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
@@ -192,7 +192,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
         //{
         //    this.InitializeComponent();
 
-        //    TipTextBlock.Text = "请输入更新内容。";
+        //    TipsBarTextBlock.Text = "请输入更新内容。";
         //    var cts = new CancellationTokenSource();
         //    this.DataContext = new SendEditPostPageViewModel(cts, title, content, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         //}

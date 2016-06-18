@@ -78,7 +78,7 @@
             </GridView>
         </StackPanel>
         
-        <TextBlock Grid.Row="3" Margin="8,0,8,8" x:Name="TipTextBlock" HorizontalAlignment="Center"
+        <TextBlock Grid.Row="3" Margin="8,0,8,8" x:Name="TipsBarTextBlock" HorizontalAlignment="Center"
                 Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
 
         <CommandBar Grid.Row="4">

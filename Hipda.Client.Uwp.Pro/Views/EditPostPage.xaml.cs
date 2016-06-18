@@ -112,7 +112,7 @@ namespace Hipda.Client.Uwp.Pro.Views
         #region 委托事件
         void BeforeUpload(int fileIndex, int fileCount, string fileName)
         {
-            TipTextBlock.Text = $"上载中 {fileIndex}/{fileCount} （{fileName}）";
+            TipsBarTextBlock.Text = $"上载中 {fileIndex}/{fileCount} （{fileName}）";
         }
 
         void InsertFileCodeIntoContextTextBox(string fileCode)
@@ -134,12 +134,12 @@ namespace Hipda.Client.Uwp.Pro.Views
 
         void AfterUpload(int fileCount)
         {
-            TipTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
+            TipsBarTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
         }
 
         void SentFailed(string errorText)
         {
-            TipTextBlock.Text = errorText;
+            TipsBarTextBlock.Text = errorText;
         }
         #endregion
 
