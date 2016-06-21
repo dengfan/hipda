@@ -132,7 +132,6 @@
     <Compile Include="Converters\SearchPanelVisibilityToSearchButtonStyleConverter.cs" />
     <Compile Include="Converters\SelectedIndexToVisibilityConverter.cs" />
     <Compile Include="Converters\TextLengthToBackgroundConverter.cs" />
-    <Compile Include="Converters\TextLengthToTipBorderVisibilityConverter.cs" />
     <Compile Include="Converters\TextToEmojiConverter.cs" />
     <Compile Include="Converters\ThemeTypeNameToVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeTypeToRequestedThemeConverter.cs" />

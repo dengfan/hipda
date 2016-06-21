@@ -1111,7 +1111,6 @@
         <cvt:TextToEmojiConverter x:Key="TextToEmojiConverter"/>
         <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
         <cvt:CountdownToCountdownLabelConverter x:Key="CountdownToCountdownLabelConverter"/>
-        <cvt:TextLengthToTipBorderVisibilityConverter x:Key="TextLengthToTipBorderVisibilityConverter"/>
         
         <cvt:FontContrastRatioToTextBlockForeground1StyleConverter x:Key="FontContrastRatioToTextBlockForeground1StyleConverter"/>
         <cvt:FontContrastRatioToContentControlForeground1StyleConverter x:Key="FontContrastRatioToContentControlForeground1StyleConverter"/>
@@ -1334,8 +1333,7 @@
                 <ContentControl Margin="48 16 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Template="{StaticResource ReplyLeftArrow}"/>
 
                 <Border Margin="54,0,16,32" Padding="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                        BorderThickness="0,0,1,1" BorderBrush="{ThemeResource SystemChromeMediumColor}"
-                        HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="4">
+                        HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="8">
                     <StackPanel>
                         <TextBlock Margin="0,0,0,4" FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">

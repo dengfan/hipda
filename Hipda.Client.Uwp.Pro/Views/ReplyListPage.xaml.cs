@@ -203,23 +203,23 @@ namespace Hipda.Client.Uwp.Pro.Views
                 string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
                 if (userInteractionType.Equals("Touch"))
                 {
-                    InkButton.Width = 80;
-                    InkButton.Height = 40;
+                    //InkButton.Width = 80;
+                    //InkButton.Height = 40;
                     FaceButton.Width = 80;
                     FaceButton.Height = 40;
-                    FileButton.Width = 80;
-                    FileButton.Height = 40;
-                    SendButton.Height = 40;
+                    //FileButton.Width = 80;
+                    //FileButton.Height = 40;
+                    //SendButton.Height = 40;
                 }
                 else if (userInteractionType.Equals("Mouse"))
                 {
-                    InkButton.Width = 32;
-                    InkButton.Height = 32;
+                    //InkButton.Width = 32;
+                    //InkButton.Height = 32;
                     FaceButton.Width = 32;
                     FaceButton.Height = 32;
-                    FileButton.Width = 32;
-                    FileButton.Height = 32;
-                    SendButton.Height = 32;
+                    //FileButton.Width = 32;
+                    //FileButton.Height = 32;
+                    //SendButton.Height = 32;
                 }
 
                 ContentTextBox.MaxHeight = this.ActualHeight / 2;
@@ -385,8 +385,85 @@ namespace Hipda.Client.Uwp.Pro.Views
             }
         }
 
-        #region 回贴
-        #region UI事件
+        #region 快速回贴
+        int _autoRemoveTipTimerCount;
+        DispatcherTimer _autoRemoveTipTimer;
+
+        public void SendMessageTimerSetup()
+        {
+            _autoRemoveTipTimerCount = 3;
+            _autoRemoveTipTimer = new DispatcherTimer();
+            _autoRemoveTipTimer.Tick += AutoRemoveTipTimer_Tick;
+            _autoRemoveTipTimer.Interval = new TimeSpan(0, 0, 1);
+            _autoRemoveTipTimer.Start();
+        }
+
+        private void AutoRemoveTipTimer_Tick(object sender, object e)
+        {
+            if (_autoRemoveTipTimerCount == 0)
+            {
+                _autoRemoveTipTimer.Stop();
+                return;
+            }
+
+            _autoRemoveTipTimerCount--;
+        }
+
+        void BeforeUpload(int fileIndex, int fileCount, string fileName)
+        {
+            _mainPage?.ShowTipsBarWhenUpload($"{fileName} 上载中 {fileIndex}/{fileCount}");
+            SendMessageTimerSetup();
+        }
+
+        void InsertFileCodeIntoContextTextBox(string fileCode)
+        {
+            int occurences = 0;
+            string originalContent = ContentTextBox.Text;
+
+            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
+            {
+                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
+                    occurences++;
+            }
+
+            int cursorPosition = ContentTextBox.SelectionStart + occurences;
+            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, fileCode);
+            ContentTextBox.SelectionStart = cursorPosition + fileCode.Length;
+            ContentTextBox.Focus(FocusState.Programmatic);
+        }
+
+        void AfterUpload(int fileCount)
+        {
+            _mainPage?.ShowTipsBar($"文件上传已完成，共上传 {fileCount} 个文件。", false);
+            SendMessageTimerSetup();
+        }
+
+        void SentFailed(string errorText)
+        {
+            _mainPage?.ShowTipsBar(errorText, true);
+            SendMessageTimerSetup();
+        }
+
+        void SentSuccess(string title)
+        {
+            // 回贴成功后，刷新贴子到底部
+            var vmType = RightWrap.DataContext.GetType();
+            if (vmType.Equals(typeof(ReplyListViewForDefaultViewModel)))
+            {
+                var vm = (ReplyListViewForDefaultViewModel)RightWrap.DataContext;
+                vm.LoadLastPageDataCommand.Execute(null);
+            }
+            else if (vmType.Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
+            {
+                var vm = (ReplyListViewForSpecifiedPostViewModel)RightWrap.DataContext;
+                vm.LoadLastPageDataCommand.Execute(null);
+            }
+
+            // 开始倒计时
+            _mainPage?.SendMessageTimerSetup();
+        }
+
+
         void EmojiGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var data = (EmojiItemModel)e.ClickedItem;
@@ -436,87 +513,6 @@ namespace Hipda.Client.Uwp.Pro.Views
             ContentTextBox.SelectionStart = cursorPosition + faceText.Length;
             ContentTextBox.Focus(FocusState.Pointer);
         }
-        #endregion
-
-        #region 委托事件
-        int _autoRemoveTipTimerCount;
-        DispatcherTimer _autoRemoveTipTimer;
-
-        public void SendMessageTimerSetup()
-        {
-            _autoRemoveTipTimerCount = 3;
-            _autoRemoveTipTimer = new DispatcherTimer();
-            _autoRemoveTipTimer.Tick += AutoRemoveTipTimer_Tick;
-            _autoRemoveTipTimer.Interval = new TimeSpan(0, 0, 1);
-            _autoRemoveTipTimer.Start();
-        }
-
-        private void AutoRemoveTipTimer_Tick(object sender, object e)
-        {
-            if (_autoRemoveTipTimerCount == 0)
-            {
-                TipsBarTextBlock.Text = string.Empty;
-                _autoRemoveTipTimer.Stop();
-                return;
-            }
-
-            _autoRemoveTipTimerCount--;
-        }
-
-        void BeforeUpload(int fileIndex, int fileCount, string fileName)
-        {
-            TipsBarTextBlock.Text = $"上载中 {fileIndex}/{fileCount} （{fileName}）";
-            SendMessageTimerSetup();
-        }
-
-        void InsertFileCodeIntoContextTextBox(string fileCode)
-        {
-            int occurences = 0;
-            string originalContent = ContentTextBox.Text;
-
-            for (var i = 0; i < ContentTextBox.SelectionStart + occurences; i++)
-            {
-                if (originalContent[i] == '\r' && originalContent[i + 1] == '\n')
-                    occurences++;
-            }
-
-            int cursorPosition = ContentTextBox.SelectionStart + occurences;
-            ContentTextBox.Text = ContentTextBox.Text.Insert(cursorPosition, fileCode);
-            ContentTextBox.SelectionStart = cursorPosition + fileCode.Length;
-            ContentTextBox.Focus(FocusState.Programmatic);
-        }
-
-        void AfterUpload(int fileCount)
-        {
-            TipsBarTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
-            SendMessageTimerSetup();
-        }
-
-        void SentFailed(string errorText)
-        {
-            TipsBarTextBlock.Text = errorText;
-            SendMessageTimerSetup();
-        }
-
-        void SentSuccess(string title)
-        {
-            // 回贴成功后，刷新贴子到底部
-            var vmType = RightWrap.DataContext.GetType();
-            if (vmType.Equals(typeof(ReplyListViewForDefaultViewModel)))
-            {
-                var vm = (ReplyListViewForDefaultViewModel)RightWrap.DataContext;
-                vm.LoadLastPageDataCommand.Execute(null);
-            }
-            else if (vmType.Equals(typeof(ReplyListViewForSpecifiedPostViewModel)))
-            {
-                var vm = (ReplyListViewForDefaultViewModel)RightWrap.DataContext;
-                vm.LoadLastPageDataCommand.Execute(null);
-            }
-
-            // 开始倒计时
-            _mainPage?.SendMessageTimerSetup();
-        }
-        #endregion
 
         #endregion
     }

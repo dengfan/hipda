@@ -1041,7 +1041,9 @@ namespace Hipda.Client.Uwp.Pro
                 await renderTarget.SaveAsync(stream, CanvasBitmapFileFormat.Jpeg, 1f);
 
                 var cts = new CancellationTokenSource();
-                return await SendService.UploadFileAsync(cts, stream, null, null);
+                return await SendService.UploadFileAsync(cts, stream, 
+                    (fileIndex, fileCount, fileName) => { ShowTipsBarWhenUpload($"{fileName} 上载中 {fileIndex}/{fileCount}"); }, 
+                    (fileCount) => { ShowTipsBar($"文件上传已完成，共上传 {fileCount} 个文件。", false); });
             }
         }
 
@@ -1076,29 +1078,44 @@ namespace Hipda.Client.Uwp.Pro
         #endregion
 
         #region 提示条
-        public async void ShowTipsBar(string tipsContent)
+        private async void TipsBar_Tapped(object sender, TappedRoutedEventArgs e)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                TipsBarTextBlock.Text = Uri.UnescapeDataString(tipsContent);
+                ShowTipsBarAnimationHide.Begin();
+            });
+        }
+
+        public async void ShowTipsBar(string tipsText, bool isAlert)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                var c1 = Color.FromArgb(255, 239, 80, 38); // 红色
+                var c2 = Color.FromArgb(255, 126, 188, 67); // 绿色
+                TipsBar.Background = new SolidColorBrush(isAlert ? c1 : c2);
+                TipsBarTextBlock.Text = Uri.UnescapeDataString(tipsText);
                 ShowTipsBarShortAnimation.Begin();
             });
         }
 
-        private void TipsBar_Tapped(object sender, TappedRoutedEventArgs e)
+        public async void ShowTipsBarWhenUpload(string tipsText)
         {
-            ShowTipsBarAnimationHide.Begin();
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                var c = Color.FromArgb(255, 253, 184, 19); // 桔色
+                TipsBar.Background = new SolidColorBrush(c);
+                TipsBarTextBlock.Text = Uri.UnescapeDataString(tipsText);
+                ShowTipsBarAnimationShow.Begin();
+            });
         }
         #endregion
 
-        private void xxx_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            ShowTipsBarAnimationShow.Begin();
-        }
+        //private void xxx_Tapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    ShowTipsBarAnimationShow.Begin();
+        //}
 
-        private void yyy_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            ShowTipsBarAnimationHide.Begin();
-        }
+        //private void yyy_Tapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    ShowTipsBarAnimationHide.Begin();
+        //}
 
         
     }

@@ -157,11 +157,6 @@
                 <ProgressRing x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="40" Height="40" />
 
                 <StackPanel x:Name="QuickReplyPanel" VerticalAlignment="Bottom" AllowDrop="True" DragOver="QuickReplyPanel_DragOver" Drop="QuickReplyPanel_Drop">
-                    <Border Margin="0,0,0,8" Padding="8,4" CornerRadius="12" HorizontalAlignment="Center" Background="Red" Opacity="0.8"
-                            Visibility="{Binding Text.Length,ElementName=TipsBarTextBlock,Converter={StaticResource TextLengthToTipBorderVisibilityConverter}}">
-                        <TextBlock x:Name="TipsBarTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
-                    </Border>
                     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.9" BorderThickness="0,1,0,0" BorderBrush="{ThemeResource SystemChromeMediumColor}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>

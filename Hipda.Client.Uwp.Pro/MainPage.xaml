@@ -889,19 +889,18 @@
         </Grid>
 
         <!--提示条-->
-        <Border x:Name="TipsBar" VerticalAlignment="Top" Margin="0,-48,0,0" Height="48" Opacity="0.9"
-                Background="{ThemeResource SystemControlBackgroundAccentBrush}"
-                Tapped="TipsBar_Tapped">
+        <Border x:Name="TipsBar" VerticalAlignment="Top" Margin="0,-48,0,0" Height="48" Opacity="0.9" Tapped="TipsBar_Tapped">
             <Border.RenderTransform>
                 <CompositeTransform />
             </Border.RenderTransform>
-            <TextBlock x:Name="TipsBarTextBlock" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock x:Name="TipsBarTextBlock" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Foreground="White" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"/>
         </Border>
 
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <!--<StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button Content="xxx" Tapped="xxx_Tapped"/>
             <Button Content="yyy" Tapped="yyy_Tapped"/>
-        </StackPanel>
+        </StackPanel>-->
         
     </Grid>
 </Page>

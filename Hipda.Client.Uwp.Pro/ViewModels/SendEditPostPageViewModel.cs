@@ -68,7 +68,8 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         static List<string> _fileAddList = new List<string>();
         static List<string> _fileRemoveList = new List<string>();
 
-        public SendEditPostPageViewModel(CancellationTokenSource cts, PostEditDataModel editData, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
+        public SendEditPostPageViewModel(CancellationTokenSource cts, PostEditDataModel editData, 
+            Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
         {
             ShowUnusedImage(cts);
 
@@ -123,7 +124,7 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
             {
                 if (string.IsNullOrEmpty(Content))
                 {
-                    _sentFailded("请填写内容！");
+                    _sentFailded?.Invoke("请填写内容！");
                     return;
                 }
 

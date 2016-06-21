@@ -25,6 +25,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
     /// </summary>
     public sealed partial class SendControl : UserControl
     {
+        MainPage _mainPage;
+
         #region UI事件
         TextBox _currentTextBox;
 
@@ -102,7 +104,7 @@ namespace Hipda.Client.Uwp.Pro.Controls
         #region 委托事件
         void BeforeUpload(int fileIndex, int fileCount, string fileName)
         {
-            TipsBarTextBlock.Text = $"上载中 {fileIndex}/{fileCount} （{fileName}）";
+            _mainPage?.ShowTipsBarWhenUpload($"{fileName} 上载中 {fileIndex}/{fileCount}");
         }
 
         void InsertFileCodeIntoContextTextBox(string fileCode)
@@ -124,14 +126,15 @@ namespace Hipda.Client.Uwp.Pro.Controls
 
         void AfterUpload(int fileCount)
         {
-            TipsBarTextBlock.Text = $"文件上传已完成，共上传 {fileCount} 个文件。";
+            _mainPage?.ShowTipsBar($"文件上传已完成，共上传 {fileCount} 个文件。", false);
         }
 
         void SentFailed(string errorText)
         {
-            TipsBarTextBlock.Text = errorText;
+            _mainPage?.ShowTipsBar(errorText, true);
         }
         #endregion
+
 
         public int Countdown
         {
@@ -154,7 +157,8 @@ namespace Hipda.Client.Uwp.Pro.Controls
         {
             this.InitializeComponent();
 
-            TipsBarTextBlock.Text = "请输入标题和内容。";
+            _mainPage = (Window.Current.Content as Frame).Content as MainPage;
+
             var cts = new CancellationTokenSource();
             this.DataContext = new SendNewThreadContentDialogViewModel(cts, forumId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
@@ -174,10 +178,11 @@ namespace Hipda.Client.Uwp.Pro.Controls
         {
             this.InitializeComponent();
 
-            TitleTextBox.Visibility = Visibility.Collapsed;
-            TipsBarTextBlock.Text = "请输入回复内容。";
+            _mainPage = (Window.Current.Content as Frame).Content as MainPage;
+
             var cts = new CancellationTokenSource();
-            this.DataContext = new SendPostReplyContentDialogViewModel(cts, replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
+            this.DataContext = new SendPostReplyContentDialogViewModel(cts, replyType, postAuthorUserId, postAuthorUsername, postSimpleContent, postTime, 
+                floorNo, postId, threadId, BeforeUpload, InsertFileCodeIntoContextTextBox, AfterUpload, SentFailed, sentSuccess);
         }
 
         /// <summary>

@@ -51,7 +51,10 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
         static List<string> _fileNameList = new List<string>();
         static List<string> _fileCodeList = new List<string>();
 
-        public SendPostReplyContentDialogViewModel(CancellationTokenSource cts, string replyType, int postAuthorUserId, string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId, Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, Action<string> sentFailded, Action<string> sentSuccess)
+        public SendPostReplyContentDialogViewModel(CancellationTokenSource cts, string replyType, int postAuthorUserId, 
+            string postAuthorUsername, string postSimpleContent, string postTime, int floorNo, int postId, int threadId, 
+            Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload,
+            Action<string> sentFailded, Action<string> sentSuccess)
         {
             _postAuthorUserId = postAuthorUserId;
             _postAuthorUsername = postAuthorUsername;
@@ -116,18 +119,12 @@ namespace Hipda.Client.Uwp.Pro.ViewModels
                     Content = string.Empty;
 
                     // 提示发贴成功
-                    if (_sentSuccess != null)
-                    {
-                        _sentSuccess(Title);
-                    }
+                    _sentSuccess?.Invoke(Title);
                 }
                 else
                 {
                     // 提示发贴不成功
-                    if (_sentFailded != null)
-                    {
-                        _sentFailded("对不起，发布请求失败，请稍后再试！");
-                    }
+                    _sentFailded?.Invoke("对不起，发布请求失败，请稍后再试！");
                 }
             };
         }

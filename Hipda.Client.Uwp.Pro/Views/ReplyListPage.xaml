@@ -47,100 +47,94 @@
 
         <ProgressRing Grid.Row="1" x:Name="rightProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="50" Height="50" />
 
-        <StackPanel x:Name="QuickReplyPanel" Grid.Row="1" VerticalAlignment="Bottom">
-            <Border Margin="0,0,0,8" Padding="8,4" CornerRadius="12" HorizontalAlignment="Center" Background="Red" Opacity="0.8"
-                            Visibility="{Binding Text.Length,ElementName=TipsBarTextBlock,Converter={StaticResource TextLengthToTipBorderVisibilityConverter}}">
-                <TextBlock x:Name="TipsBarTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   
-                                   FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"/>
-            </Border>
-            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Opacity="0.8">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}">
-                        <Button.Content>
-                            <SymbolIcon Symbol="Emoji2" />
-                        </Button.Content>
-                        <Button.Flyout>
-                            <Flyout>
-                                <Flyout.FlyoutPresenterStyle>
-                                    <Style TargetType="FlyoutPresenter">
-                                        <Setter Property="Margin" Value="0" />
-                                        <Setter Property="Padding" Value="0" />
-                                    </Style>
-                                </Flyout.FlyoutPresenterStyle>
+        <StackPanel Grid.Row="1" x:Name="QuickReplyPanel" VerticalAlignment="Bottom">
+            <Grid Background="{ThemeResource SystemChromeMediumColor}" Opacity="0.9" Height="48">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="48"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="FaceButton" Style="{StaticResource FaceButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button.Content>
+                        <SymbolIcon Symbol="Emoji2" />
+                    </Button.Content>
+                    <Button.Flyout>
+                        <Flyout>
+                            <Flyout.FlyoutPresenterStyle>
+                                <Style TargetType="FlyoutPresenter">
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Padding" Value="0" />
+                                </Style>
+                            </Flyout.FlyoutPresenterStyle>
 
-                                <FlipView Background="Transparent" Width="296" Height="180">
-                                    <FlipViewItem>
-                                        <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
+                            <FlipView Background="Transparent" Width="296" Height="180">
+                                <FlipViewItem>
+                                    <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
                                                         SelectionMode="None" IsItemClickEnabled="True"
                                                         ItemClick="FaceGridView_ItemClick">
-                                            <GridView.ItemContainerStyle>
-                                                <Style TargetType="GridViewItem">
-                                                    <Setter Property="Width" Value="36"/>
-                                                    <Setter Property="Height" Value="36"/>
-                                                </Style>
-                                            </GridView.ItemContainerStyle>
-                                            <GridView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                                </DataTemplate>
-                                            </GridView.ItemTemplate>
-                                        </GridView>
-                                    </FlipViewItem>
-                                    <FlipViewItem>
-                                        <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
+                                        <GridView.ItemContainerStyle>
+                                            <Style TargetType="GridViewItem">
+                                                <Setter Property="Width" Value="36"/>
+                                                <Setter Property="Height" Value="36"/>
+                                            </Style>
+                                        </GridView.ItemContainerStyle>
+                                        <GridView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridView.ItemTemplate>
+                                    </GridView>
+                                </FlipViewItem>
+                                <FlipViewItem>
+                                    <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
                                                         SelectionMode="None" IsItemClickEnabled="True"
                                                         ItemClick="EmojiGridView_ItemClick">
-                                            <GridView.ItemContainerStyle>
-                                                <Style TargetType="GridViewItem">
-                                                    <Setter Property="Width" Value="36"/>
-                                                    <Setter Property="Height" Value="36"/>
-                                                </Style>
-                                            </GridView.ItemContainerStyle>
-                                            <GridView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding Value}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                                </DataTemplate>
-                                            </GridView.ItemTemplate>
-                                        </GridView>
-                                    </FlipViewItem>
-                                </FlipView>
-                            </Flyout>
-                        </Button.Flyout>
+                                        <GridView.ItemContainerStyle>
+                                            <Style TargetType="GridViewItem">
+                                                <Setter Property="Width" Value="36"/>
+                                                <Setter Property="Height" Value="36"/>
+                                            </Style>
+                                        </GridView.ItemContainerStyle>
+                                        <GridView.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Value}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridView.ItemTemplate>
+                                    </GridView>
+                                </FlipViewItem>
+                            </FlipView>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+                <Border Grid.Column="1" Padding="8,4" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" CornerRadius="8" VerticalAlignment="Center" Height="36">
+                    <TextBox x:Name="ContentTextBox" VerticalAlignment="Center" Background="Transparent" BorderThickness="0"
+                             PlaceholderText="快速回复，按 Enter 键发送。" Text="{Binding Content,Mode=TwoWay}"/>
+                </Border>
+                <Button Grid.Column="2" x:Name="MoreButton" Style="{StaticResource FaceButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button.Content>
+                        <SymbolIcon Symbol="More" />
+                    </Button.Content>
+                </Button>
+                <!--<StackPanel Orientation="Horizontal">
+                    
+                    <Button x:Name="InkButton" Style="{StaticResource FaceButtonStyle}" Command="{Binding AddInkImageCommand}">
+                        <Button.Content>
+                            <FontIcon Glyph="&#xE76D;" />
+                        </Button.Content>
                     </Button>
                     <Button x:Name="FileButton" Style="{StaticResource FaceButtonStyle}" Command="{Binding AddAttachFilesCommand}">
                         <Button.Content>
                             <SymbolIcon Symbol="Attach" />
                         </Button.Content>
                     </Button>
-                    <Button x:Name="InkButton" Style="{StaticResource FaceButtonStyle}">
-                        <Button.Content>
-                            <SymbolIcon Symbol="Highlight" />
-                        </Button.Content>
-                    </Button>
-                </StackPanel>
-                <TextBox Grid.Row="1" x:Name="ContentTextBox"
-                                 MinHeight="64" Padding="8,4" Background="Transparent" BorderThickness="0"
-                                 TextWrapping="Wrap" AcceptsReturn="True" PlaceholderText="快速回复，回车可换行。"
-                                 Text="{Binding Content,Mode=TwoWay}"/>
-                <Button Grid.Row="1" x:Name="SendButton" Margin="0,0,12,12"
-                                IsEnabled="{Binding Countdown,ElementName=MyReplyListPage,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"
-                                Background="{ThemeResource SystemControlHighlightListAccentLowBrush}" 
-                                 
-                                HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                                Command="{Binding SendCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel.Resources>
-                            <x:String x:Key="SendString">发送</x:String>
-                        </StackPanel.Resources>
-                        <SymbolIcon Symbol="Send" Margin="0,0,4,0" />
-                        <TextBlock Text="{Binding Countdown,ElementName=MyReplyListPage,Converter={StaticResource CountdownToCountdownLabelConverter},ConverterParameter={StaticResource SendString}}"/>
-                    </StackPanel>
-                </Button>
+                </StackPanel>-->
+                
+                <!--<Button Grid.Row="2" x:Name="SendButton" Margin="0,8,40,8" Padding="0" Width="52"
+                                Background="{ThemeResource SystemControlBackgroundAccentBrush}"
+                                IsEnabled="{Binding Countdown,ElementName=MyThreadAndReplyPage,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"
+                                HorizontalAlignment="Right" VerticalAlignment="Center"
+                                Command="{Binding SendCommand}" Content="发送">
+                </Button>-->
             </Grid>
         </StackPanel>
     </Grid>

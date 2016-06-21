@@ -31,9 +31,6 @@
                  FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
                  GotFocus="ContentTextBox_GotFocus" Text="{Binding Content,Mode=TwoWay}"/>
 
-        <TextBlock Grid.Row="2" Margin="8,0,8,8" x:Name="TipsBarTextBlock" HorizontalAlignment="Center"
-                   Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
-
         <CommandBar Grid.Row="3">
             <AppBarButton Icon="Emoji2" Label="Emoji">
                 <AppBarButton.Flyout>

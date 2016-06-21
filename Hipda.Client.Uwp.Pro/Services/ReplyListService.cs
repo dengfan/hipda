@@ -942,7 +942,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                     {
                         string id = img.GetAttributeValue("id", string.Empty).Replace("image_", string.Empty);
                         string src = img.GetAttributeValue("src", string.Empty);
-                        src = $"http://www.hi-pda.com/forum/{src}";
+                        //src = $"http://www.hi-pda.com/forum/{src}";
                         attachFileList.Add(new AttachFileItemModel(0, id, src, true));
                     }
                 }
@@ -969,7 +969,7 @@ namespace Hipda.Client.Uwp.Pro.Services
                             string id = attr.Replace("insertAttachimgTag('", string.Empty).Replace("')", string.Empty);
                             var imgNode = fileList.Descendants().FirstOrDefault(f => f.Name.Equals("img") && f.GetAttributeValue("id", string.Empty).StartsWith($"image_{id}"));
                             string src = imgNode.Attributes[0].Value;
-                            src = $"http://www.hi-pda.com/forum/{src}";
+                            //src = $"http://www.hi-pda.com/forum/{src}";
                             attachFileList.Add(new AttachFileItemModel(0, id, src, true));
                         }
                     }
