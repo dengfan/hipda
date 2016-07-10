@@ -131,9 +131,9 @@
                             <ControlTemplate>
                                 <StackPanel>
                                     <Border Background="#F25022" CornerRadius="8" Width="64" Height="64">
-                                        <FontIcon Glyph="&#xE1C3;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="White" HorizontalAlignment="Center" FontSize="24"/>
+                                        <FontIcon Glyph="&#xE1C3;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="White" HorizontalAlignment="Center" FontSize="32"/>
                                     </Border>
-                                    <TextBlock Margin="0,4,0,0" Text="图片|文件" HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
+                                    <TextBlock Margin="0,4,0,0" Text="图片或文件" HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                                 </StackPanel>
                             </ControlTemplate>
                         </Button.Template>
@@ -143,7 +143,7 @@
                             <ControlTemplate>
                                 <StackPanel>
                                     <Border Background="#80BB00" CornerRadius="8" Width="64" Height="64">
-                                        <FontIcon Glyph="&#xE1C3;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="White" HorizontalAlignment="Center" FontSize="24"/>
+                                        <FontIcon Glyph="&#xE76D;" FontFamily="{ThemeResource SymbolThemeFontFamily}" Foreground="White" HorizontalAlignment="Center" FontSize="32"/>
                                     </Border>
                                     <TextBlock Margin="0,4,0,0" Text="白板" HorizontalAlignment="Center" FontSize="{ThemeResource ToolTipContentThemeFontSize}"/>
                                 </StackPanel>
