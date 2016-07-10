@@ -515,5 +515,29 @@ namespace Hipda.Client.Uwp.Pro.Views
         }
 
         #endregion
+
+        private void FaceButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            FacePanel.Visibility = Visibility.Visible;
+            FilePanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void FileButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            FacePanel.Visibility = Visibility.Collapsed;
+            FilePanel.Visibility = Visibility.Visible;
+        }
+
+        private void HideReplyBottomPanel(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            FacePanel.Visibility = Visibility.Collapsed;
+            FilePanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void QuickReplyPanel_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            // 阻止 HideReplyBottomPanel 事件向下传递
+            e.Handled = true;
+        }
     }
 }
