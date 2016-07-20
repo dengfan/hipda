@@ -246,23 +246,7 @@
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
-        <Storyboard x:Name="OpenRightSwipePanelAnimation">
-            <DoubleAnimation Duration="0:0:0.2" To="-260" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="RightSwipePanel">
-                <DoubleAnimation.EasingFunction>
-                    <ExponentialEase EasingMode="EaseIn" />
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
-        </Storyboard>
-        <Storyboard x:Name="CloseRightSwipePanelAnimation">
-            <DoubleAnimation Duration="0:0:0.2" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="RightSwipePanel">
-                <DoubleAnimation.EasingFunction>
-                    <ExponentialEase EasingMode="EaseOut" />
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
-        </Storyboard>
-        <Storyboard x:Name="CloseRightSwipePanelAnimation2">
-            <DoubleAnimation Duration="0:0:0" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="RightSwipePanel"/>
-        </Storyboard>
+        
         
         <Storyboard x:Name="ShowTipsBarShortAnimation">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TipsBar">
@@ -715,13 +699,31 @@
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
-                <Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition x:Name="RightSideColumn" Width="0" />
-                        </Grid.ColumnDefinitions>
+                <SplitView x:Name="SubSplitView" PanePlacement="Right" DisplayMode="Inline">
+                    <SplitView.Pane>
+     
+                        <Pivot x:Name="rootPivot" Title="PIVOT TITLE">
+                            <Pivot.RightHeader>
+                                <CommandBar ClosedDisplayMode="Compact">
+                                    <AppBarButton Icon="Back" Label="Previous"/>
+                                    <AppBarButton Icon="Forward" Label="Next"/>
+                                </CommandBar>
+                            </Pivot.RightHeader>
+                            <PivotItem Header="Pivot Item 1">
+                                <ContentControl x:Name="RightSwipeContentControl" HorizontalContentAlignment="Stretch" ContentTemplate="{StaticResource HistoryRecordContentControl}"/>
 
+                            </PivotItem>
+                            <PivotItem Header="Pivot Item 2">
+                                <!--Pivot content goes here-->
+                                <TextBlock Text="Content of pivot item 2."/>
+                            </PivotItem>
+                            <PivotItem Header="Pivot Item 3">
+                                <!--Pivot content goes here-->
+                                <TextBlock Text="Content of pivot item 3."/>
+                            </PivotItem>
+                        </Pivot>
+                    </SplitView.Pane>
+                    <SplitView.Content>
                         <Frame x:Name="MainFrame">
                             <Frame.ContentTransitions>
                                 <TransitionCollection>
@@ -733,32 +735,8 @@
                                 </TransitionCollection>
                             </Frame.ContentTransitions>
                         </Frame>
-
-                        <ContentControl x:Name="RightSideWrap" Grid.Column="1" HorizontalContentAlignment="Stretch"
-                                        ContentTemplate="{StaticResource HistoryRecordContentControl}"/>
-                    </Grid>
-
-                    <Grid x:Name="MaskGrid" x:DeferLoadStrategy="Lazy"
-                          Background="Transparent" Visibility="Collapsed" Tapped="MaskGrid_Tapped"/>
-
-                    <Grid x:Name="LeftSwipePanel" x:DeferLoadStrategy="Lazy"
-                          Background="{ThemeResource SystemChromeLowColor}"
-                          Margin="-260,0,0,0" Width="260" HorizontalAlignment="Left">
-                        <Grid.RenderTransform>
-                            <CompositeTransform/>
-                        </Grid.RenderTransform>
-                        <ContentControl x:Name="LeftSwipeContentControl" HorizontalContentAlignment="Stretch"/>
-                    </Grid>
-
-                    <Grid x:Name="RightSwipePanel" x:DeferLoadStrategy="Lazy"
-                          Background="{ThemeResource SystemChromeLowColor}"
-                          Margin="0,0,-260,0" Width="260" HorizontalAlignment="Right">
-                        <Grid.RenderTransform>
-                            <CompositeTransform/>
-                        </Grid.RenderTransform>
-                        <ContentControl x:Name="RightSwipeContentControl" HorizontalContentAlignment="Stretch"/>
-                    </Grid>
-                </Grid>
+                    </SplitView.Content>
+                </SplitView>
             </SplitView.Content>
         </SplitView>
 
@@ -779,6 +757,12 @@
                 <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 <Ellipse x:Name="PromptAllBorder" Margin="6,6,0,0" Fill="{Binding PromptColor}"
                          Width="6" Height="6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </Grid>
+        </Button>
+
+        <Button x:Name="SubSplitViewToggle" Style="{StaticResource NavButtonNormalStyle}" VerticalAlignment="Bottom" Click="SubSplitViewToggle_Click">
+            <Grid>
+                <FontIcon Glyph="&#xE700;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
             </Grid>
         </Button>
 

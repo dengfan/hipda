@@ -242,66 +242,9 @@ namespace Hipda.Client.Uwp.Pro
             SearchPanel.Visibility = Visibility.Collapsed;
         }
 
-        void ShowLeftSwipePanel()
-        {
-            FindName("MaskGrid");
-            FindName("LeftSwipePanel");
-            FindName("RightSwipePanel");
-            
-            MaskGrid.Visibility = Visibility.Visible;
-            OpenLeftSwipePanelAnimation.Begin();
-            CloseRightSwipePanelAnimation.Begin();
-        }
+        
 
-        void HideLeftSwipePanel()
-        {
-            FindName("MaskGrid");
-
-            CloseLeftSwipePanelAnimation.Begin();
-            MaskGrid.Visibility = Visibility.Collapsed;
-
-            var selectedItem = (NavButtonItemModel)TopNavButtonListBox.SelectedItem;
-            if (selectedItem != null && selectedItem.TypeValue.Equals("more"))
-            {
-                TopNavButtonListBox.SelectedItem = null;
-            }
-        }
-
-        void ShowRightSwipePanel()
-        {
-            FindName("MaskGrid");
-            FindName("LeftSwipePanel");
-            FindName("RightSwipePanel");
-
-            MaskGrid.Visibility = Visibility.Visible;
-
-            OpenRightSwipePanelAnimation.Begin();
-
-            CloseLeftSwipePanelAnimation.Begin();
-            TopNavButtonListBox.SelectedItem = null;
-        }
-
-        void HideRightSwipePanel()
-        {
-            if (AdaptiveStates.CurrentState == Min1200 || AdaptiveStates.CurrentState == Min1700)
-            {
-                // 宽视图（已显示历史记录）下，直接隐藏，无过渡
-                CloseRightSwipePanelAnimation2.Begin();
-            }
-            else
-            {
-                CloseRightSwipePanelAnimation.Begin();
-            }
-            
-
-            MaskGrid.Visibility = Visibility.Collapsed;
-
-            // 保存本地设置
-            new LocalSettingsService().Save();
-
-            // 保存漫游设置
-            new RoamingSettingsService().Save();
-        }
+        
 
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -313,9 +256,9 @@ namespace Hipda.Client.Uwp.Pro
             var data = e.AddedItems[0] as NavButtonItemModel;
             if (data.TypeValue.Equals("more"))
             {
-                ShowLeftSwipePanel();
+                //ShowLeftSwipePanel();
 
-                LeftSwipeContentControl.ContentTemplate = (DataTemplate)Resources["ForumAllCategoryListViewDataTemplate"];
+                //LeftSwipeContentControl.ContentTemplate = (DataTemplate)Resources["ForumAllCategoryListViewDataTemplate"];
             }
             else
             {
@@ -348,15 +291,6 @@ namespace Hipda.Client.Uwp.Pro
                     return;
                 }
             }
-
-            HideLeftSwipePanel();
-            HideRightSwipePanel();
-        }
-
-        private void MaskGrid_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            HideLeftSwipePanel();
-            HideRightSwipePanel();
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -432,7 +366,7 @@ namespace Hipda.Client.Uwp.Pro
             ForumId = item.Id;
             OpenThreadByForumId();
 
-            HideLeftSwipePanel();
+            //HideLeftSwipePanel();
         }
 
         private void ShowHistoryRecordButton_Click(object sender, RoutedEventArgs e)
@@ -440,7 +374,7 @@ namespace Hipda.Client.Uwp.Pro
             FindName("RightSwipePanel");
             RightSwipeContentControl.ContentTemplate = Resources["HistoryRecordContentControl"] as DataTemplate;
 
-            ShowRightSwipePanel();
+            //ShowRightSwipePanel();
         }
 
         private async void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
@@ -448,7 +382,7 @@ namespace Hipda.Client.Uwp.Pro
             FindName("RightSwipePanel");
             RightSwipeContentControl.ContentTemplate = Resources["SettingsContentControl"] as DataTemplate;
 
-            ShowRightSwipePanel();
+            //ShowRightSwipePanel();
 
             // 更新黑名单
             new RoamingSettingsService().ReadAndUpdate();
@@ -1105,6 +1039,11 @@ namespace Hipda.Client.Uwp.Pro
                 ShowTipsBarAnimationShow.Begin();
             });
         }
+
+        private void SubSplitViewToggle_Click(object sender, RoutedEventArgs e)
+        {
+            SubSplitView.IsPaneOpen = !SubSplitView.IsPaneOpen;
+        }
         #endregion
 
         //private void xxx_Tapped(object sender, TappedRoutedEventArgs e)
@@ -1117,6 +1056,6 @@ namespace Hipda.Client.Uwp.Pro
         //    ShowTipsBarAnimationHide.Begin();
         //}
 
-        
+
     }
 }
