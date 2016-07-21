@@ -365,24 +365,24 @@ namespace Hipda.Client.Uwp.Pro
             var item = (ForumModel)e.ClickedItem;
             ForumId = item.Id;
             OpenThreadByForumId();
-
-            //HideLeftSwipePanel();
         }
 
         private void ShowHistoryRecordButton_Click(object sender, RoutedEventArgs e)
         {
-            FindName("RightSwipePanel");
-            RightSwipeContentControl.ContentTemplate = Resources["HistoryRecordContentControl"] as DataTemplate;
-
-            //ShowRightSwipePanel();
+            RightPivot.SelectedIndex = 0;
+            if (SubSplitView.IsPaneOpen == false)
+            {
+                SubSplitView.IsPaneOpen = true;
+            }
         }
 
         private async void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            FindName("RightSwipePanel");
-            RightSwipeContentControl.ContentTemplate = Resources["SettingsContentControl"] as DataTemplate;
-
-            //ShowRightSwipePanel();
+            RightPivot.SelectedIndex = 1;
+            if (SubSplitView.IsPaneOpen == false)
+            {
+                SubSplitView.IsPaneOpen = true;
+            }
 
             // 更新黑名单
             new RoamingSettingsService().ReadAndUpdate();

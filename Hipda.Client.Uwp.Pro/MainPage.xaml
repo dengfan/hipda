@@ -283,60 +283,6 @@
                              Storyboard.TargetName="InputPanel"/>
         </Storyboard>
 
-        <DataTemplate x:Key="HistoryRecordContentControl">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <CommandBar Background="{ThemeResource SystemChromeLowColor}">
-                    <AppBarButton Icon="Delete" Label="清空" Command="{Binding ClearHistoryCommand,Source={StaticResource ThreadHistoryListBoxViewModel}}"/>
-                    <CommandBar.SecondaryCommands>
-                        <AppBarButton Label="移除选中项" Command="{Binding RemoveSelectedCommand,Source={StaticResource ThreadHistoryListBoxViewModel}}"/>
-                    </CommandBar.SecondaryCommands>
-                </CommandBar>
-
-                <StackPanel Orientation="Horizontal" Margin="12,0,0,0" Height="48">
-                    <TextBlock Text="&#xE81C;" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}" VerticalAlignment="Center"
-                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
-                    <TextBlock Margin="8,0,0,0" Text="历史记录" VerticalAlignment="Center"
-                               Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
-                </StackPanel>
-
-                <ListView Grid.Row="1" SelectionMode="Single"
-                         ItemsSource="{Binding ThreadHistoryData,Source={StaticResource ThreadHistoryListBoxViewModel}}"
-                         SelectedItem="{Binding SelectedOne,Source={StaticResource ThreadHistoryListBoxViewModel},Mode=TwoWay}"
-                         SelectionChanged="ThreadHistoryListView_SelectionChanged"
-                          ContainerContentChanging="ThreadHistoryListView_ContainerContentChanging">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Padding" Value="8,8,20,8"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="m:ThreadItemModelBase">
-                            <Grid>
-                                <c:MyAvatarForThread MyWidth="32"  UserId="{x:Bind AuthorUserId}" Username="{x:Bind AuthorUsername}"
-                                                     ThreadId="{x:Bind ThreadId}" ThreadTitle="{x:Bind Title}" ForumId="{x:Bind ForumId}" ForumName="{x:Bind ForumName}"
-                                                     HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                <TextBlock Margin="40,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind AuthorUsername}"
-                                           FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
-                                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
-                                <TextBlock Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Text="{x:Bind ForumName}"
-                                           FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
-                                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
-                                <TextBlock Margin="40,16,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind Title}" TextWrapping="Wrap"
-                                           FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
-                                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Grid>
-        </DataTemplate>
-
         <cvt:ThemeTypeNameToVisibilityConverter x:Key="ThemeTypeNameToVisibilityConverter"/>
         <cvt:SelectedIndexToVisibilityConverter x:Key="SelectedIndexToVisibilityConverter"/>
         <cvt:ByteToMegaByteConverter x:Key="ByteToMegaByteConverter"/>
@@ -476,43 +422,50 @@
     <Grid x:Name="pageGrid" Background="{ThemeResource SystemChromeLowColor}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates">
-                <VisualState x:Name="Min1700">
+                <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="True" />
-                        <Setter Target="RightSideColumn.Width" Value="260" />
-                        <Setter Target="HistoryRecordButton.IsEnabled" Value="False" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="Inline" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1700" />
                     </VisualState.StateTriggers>
                 </VisualState>
-                <VisualState x:Name="Min1200">
-                    <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="RightSideColumn.Width" Value="0" />
-                        <Setter Target="HistoryRecordButton.IsEnabled" Value="False" />
-                    </VisualState.Setters>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1200" />
-                    </VisualState.StateTriggers>
-                </VisualState>
-
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="RightSideColumn.Width" Value="0" />
-                        <Setter Target="HistoryRecordButton.IsEnabled" Value="True" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="Inline" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="800" />
+                        <AdaptiveTrigger MinWindowWidth="1500" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="Overlay" />
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1300" />
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
-                        <Setter Target="RightSideColumn.Width" Value="0" />
-                        <Setter Target="HistoryRecordButton.IsEnabled" Value="True" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="Overlay" />
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1024" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="Overlay" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="720" />
@@ -521,8 +474,8 @@
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="RightSideColumn.Width" Value="0" />
-                        <Setter Target="HistoryRecordButton.IsEnabled" Value="True" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="Overlay" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="400" />
@@ -531,8 +484,8 @@
                 <VisualState>
                     <VisualState.Setters>
                         <Setter Target="MainSplitView.DisplayMode" Value="Overlay"/>
-                        <Setter Target="RightSideColumn.Width" Value="0" />
-                        <Setter Target="HistoryRecordButton.IsEnabled" Value="True" />
+                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="Overlay" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />
@@ -699,27 +652,49 @@
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
-                <SplitView x:Name="SubSplitView" PanePlacement="Right" DisplayMode="Inline">
+                <SplitView x:Name="SubSplitView" PanePlacement="Right" OpenPaneLength="280">
                     <SplitView.Pane>
-     
-                        <Pivot x:Name="rootPivot" Title="PIVOT TITLE">
-                            <Pivot.RightHeader>
-                                <CommandBar ClosedDisplayMode="Compact">
-                                    <AppBarButton Icon="Back" Label="Previous"/>
-                                    <AppBarButton Icon="Forward" Label="Next"/>
-                                </CommandBar>
-                            </Pivot.RightHeader>
-                            <PivotItem Header="Pivot Item 1">
-                                <ContentControl x:Name="RightSwipeContentControl" HorizontalContentAlignment="Stretch" ContentTemplate="{StaticResource HistoryRecordContentControl}"/>
-
+                        <Pivot x:Name="RightPivot">
+                            <Pivot.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" FontSize="20" FontFamily="{ThemeResource SymbolThemeFontFamily}"/>
+                                </DataTemplate>
+                            </Pivot.HeaderTemplate>
+                            <PivotItem Header="&#xE81C;" Margin="0">
+                                <ListView Grid.Row="1" SelectionMode="Single"
+                                     ItemsSource="{Binding ThreadHistoryData,Source={StaticResource ThreadHistoryListBoxViewModel}}"
+                                     SelectedItem="{Binding SelectedOne,Source={StaticResource ThreadHistoryListBoxViewModel},Mode=TwoWay}"
+                                     SelectionChanged="ThreadHistoryListView_SelectionChanged"
+                                     ContainerContentChanging="ThreadHistoryListView_ContainerContentChanging">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Padding" Value="8,8,20,8"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="m:ThreadItemModelBase">
+                                            <Grid>
+                                                <c:MyAvatarForThread MyWidth="20" UserId="{x:Bind AuthorUserId}" Username="{x:Bind AuthorUsername}"
+                                                    ThreadId="{x:Bind ThreadId}" ThreadTitle="{x:Bind Title}" ForumId="{x:Bind ForumId}" ForumName="{x:Bind ForumName}"
+                                                    HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                <TextBlock Margin="24,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind AuthorUsername}"
+                                                    FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
+                                                <TextBlock Margin="0,2,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Text="{x:Bind ForumName}"
+                                                    FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"/>
+                                                <TextBlock Margin="0,24,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{x:Bind Title}" TextWrapping="Wrap"
+                                                    FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
                             </PivotItem>
-                            <PivotItem Header="Pivot Item 2">
+                            <PivotItem Header="&#xE115;">
                                 <!--Pivot content goes here-->
                                 <TextBlock Text="Content of pivot item 2."/>
-                            </PivotItem>
-                            <PivotItem Header="Pivot Item 3">
-                                <!--Pivot content goes here-->
-                                <TextBlock Text="Content of pivot item 3."/>
                             </PivotItem>
                         </Pivot>
                     </SplitView.Pane>
