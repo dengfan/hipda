@@ -98,6 +98,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="AdMediator.config" />
+    <Content Include="Assets\Fonts\icomoon.ttf" />
     <None Include="Hipda.Client.Uwp.Pro_StoreKey.pfx" />
     <None Include="project.json" />
   </ItemGroup>
@@ -383,6 +384,16 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Controls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Themes\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -454,7 +465,7 @@
       <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
     </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
-      <Name>Windows Mobile Extensions for the UWP</Name>
+      <Name>Windows Mobile Extensions for the UWP %28WindowsMobile, Version=10.0.10240.0%29</Name>
     </SDKReference>
   </ItemGroup>
   <ItemGroup>

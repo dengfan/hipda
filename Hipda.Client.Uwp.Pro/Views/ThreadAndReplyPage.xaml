@@ -120,7 +120,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="RightWrap" Grid.Column="1" BorderThickness="1,0" BorderBrush="{ThemeResource SystemChromeMediumColor}">
+            <Grid x:Name="RightWrap" Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="{ThemeResource SystemChromeMediumColor}">
                 <pr:PullToRefreshBox x:Name="rightPr" Margin="0,48,0,0" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
                     <ListView x:Name="ReplyListView" VerticalAlignment="Top"
                               IsItemClickEnabled="False" ShowsScrollingPlaceholders="False"
