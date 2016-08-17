@@ -5,10 +5,18 @@
 
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
-            <Color x:Key="SystemAccentColor">#FF80397B</Color>
+            <Color x:Key="SystemAccentColor">#FF9287AE</Color>
+            <Color x:Key="MainMenuBackgroundColor">#FF9287AE</Color>
+            <Color x:Key="MainMenuForegroundColor">#FFFFFFFF</Color>
+            <Color x:Key="LeftWrapBackgroundColor">#FFFFFFFF</Color>
+            <Color x:Key="RightWrapBackgroundColor">#FFF4F2F7</Color>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
-            <Color x:Key="SystemAccentColor">#FF2B2B2B</Color>
+            <Color x:Key="SystemAccentColor">#FF9287AE</Color>
+            <Color x:Key="MainMenuBackgroundColor">#FF2B2B2B</Color>
+            <Color x:Key="MainMenuForegroundColor">#FFFFFFFF</Color>
+            <Color x:Key="LeftWrapBackgroundColor">#FF000000</Color>
+            <Color x:Key="RightWrapBackgroundColor">#FF1E1E1E</Color>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
