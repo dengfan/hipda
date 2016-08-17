@@ -66,7 +66,7 @@
                 <ColumnDefinition x:Name="RightColumn" Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Grid x:Name="LeftWrap" Grid.Column="0">
+            <Grid x:Name="LeftWrap" Grid.Column="0" Background="{ThemeResource LeftWrapBackgroundColor}">
                 <!--<CommandBar x:Name="LeftCommandBar" VerticalAlignment="Top" 
                         Background="{ThemeResource SystemChromeLowColor}">
                     <AppBarButton Icon="Add" Label="发表新贴"/>
@@ -109,7 +109,7 @@
                               />
                 </pr:PullToRefreshBox>
 
-                <CommandBar x:Name="LeftCommandBar" Background="{ThemeResource SystemChromeLowColor}"
+                <CommandBar x:Name="LeftCommandBar" Background="{ThemeResource LeftWrapBackgroundColor}"
                             VerticalAlignment="Top" Visibility="Collapsed"/>
 
                 <ProgressRing x:Name="leftProgress" VerticalAlignment="Center" Visibility="Collapsed" Width="40" Height="40" />
@@ -120,7 +120,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid x:Name="RightWrap" Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="{ThemeResource SystemChromeMediumColor}">
+            <Grid x:Name="RightWrap" Grid.Column="1" Background="{ThemeResource RightWrapBackgroundColor}">
                 <pr:PullToRefreshBox x:Name="rightPr" Margin="0,48,0,0" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
                     <ListView x:Name="ReplyListView" VerticalAlignment="Top"
                               IsItemClickEnabled="False" ShowsScrollingPlaceholders="False"
@@ -131,8 +131,7 @@
                               />
                 </pr:PullToRefreshBox>
 
-                <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top"
-                            Background="{ThemeResource SystemChromeLowColor}">
+                <CommandBar x:Name="RightCommandBar" VerticalAlignment="Top" Background="{ThemeResource RightWrapBackgroundColor}">
                     <AppBarButton x:Name="AddToFavoritesButton" Label="加入收藏" Command="{Binding AddToFavoritesCommand}">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE734;"/>
