@@ -1045,7 +1045,9 @@ namespace Hipda.Client.Uwp.Pro
             SubSplitView.IsPaneOpen = !SubSplitView.IsPaneOpen;
             App.Current.Resources.MergedDictionaries.RemoveAt(1);
             App.Current.Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("ms-resource:///Files/Themes/Red.xaml", UriKind.Absolute) });
-            ThemeTypeComboBox.SelectedIndex = ThemeTypeComboBox.SelectedIndex == 0 ? 1 : 0; // 切换黑白场景以刷新主题
+            var i = ThemeTypeComboBox.SelectedIndex;
+            ThemeTypeComboBox.SelectedIndex = i == 0 ? 1 : 0; // 切换黑白场景以刷新主题
+            ThemeTypeComboBox.SelectedIndex = i; // 再切换回原场景
         }
         #endregion
 
