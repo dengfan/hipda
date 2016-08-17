@@ -571,13 +571,13 @@
                             <PivotItem Header="&#xE115;">
                                 <ScrollViewer>
                                     <StackPanel>
-                                        <TextBlock Margin="0,0,0,8" Text="选择主题"
+                                        <TextBlock Margin="0,0,0,8" Text="切换场景"
                                    Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
                                         <ComboBox x:Name="ThemeTypeComboBox" Margin="0,0,0,12" HorizontalAlignment="Stretch"
                                   SelectedIndex="{Binding ThemeType,Source={StaticResource MyLocalSettings},Mode=TwoWay}"
                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}">
-                                            <x:String>白天模式</x:String>
-                                            <x:String>夜间模式</x:String>
+                                            <x:String>白天</x:String>
+                                            <x:String>晚上</x:String>
                                         </ComboBox>
 
                                         <TextBlock Text="文字对比度调节"
