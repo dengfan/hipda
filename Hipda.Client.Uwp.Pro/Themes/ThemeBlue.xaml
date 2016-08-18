@@ -1,0 +1,24 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Hipda.Client.Uwp.Pro">
+
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <Color x:Key="SystemAccentColor">#FF00A3EE</Color>
+            <Color x:Key="MainMenuBackgroundColor">#FF00A3EE</Color>
+            <Color x:Key="MainMenuForegroundColor">#FFFFFFFF</Color>
+            <Color x:Key="LeftWrapBackgroundColor">#FFFFFFFF</Color>
+            <Color x:Key="RightWrapBackgroundColor">#FFF4F2F7</Color>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <Color x:Key="SystemAccentColor">#FF00A3EE</Color>
+            <Color x:Key="MainMenuBackgroundColor">#FF2B2B2B</Color>
+            <Color x:Key="MainMenuForegroundColor">#FFFFFFFF</Color>
+            <Color x:Key="LeftWrapBackgroundColor">#FF000000</Color>
+            <Color x:Key="RightWrapBackgroundColor">#FF1E1E1E</Color>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+</ResourceDictionary>
+

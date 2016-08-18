@@ -1043,15 +1043,40 @@ namespace Hipda.Client.Uwp.Pro
         private void SubSplitViewToggle_Click(object sender, RoutedEventArgs e)
         {
             SubSplitView.IsPaneOpen = !SubSplitView.IsPaneOpen;
+        }
 
+        private void ThemeColorGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
             // 切换主题样式
             App.Current.Resources.MergedDictionaries.RemoveAt(1);
-            App.Current.Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("ms-resource:///Files/Themes/Red.xaml", UriKind.Absolute) });
-            
+
+            Uri uri = new Uri("ms-resource:///Files/Themes/ThemePurple.xaml", UriKind.Absolute);
+            switch (ThemeColorGridView.SelectedIndex)
+            {
+                case 1:
+                    uri = new Uri("ms-resource:///Files/Themes/ThemeRed.xaml", UriKind.Absolute);
+                    break;
+                case 2:
+                    uri = new Uri("ms-resource:///Files/Themes/ThemeGreen.xaml", UriKind.Absolute);
+                    break;
+                case 3:
+                    uri = new Uri("ms-resource:///Files/Themes/ThemeBlue.xaml", UriKind.Absolute);
+                    break;
+                case 4:
+                    uri = new Uri("ms-resource:///Files/Themes/ThemeYellow.xaml", UriKind.Absolute);
+                    break;
+                default:
+                    uri = new Uri("ms-resource:///Files/Themes/ThemePurple.xaml", UriKind.Absolute);
+                    break;
+            }
+
+            App.Current.Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = uri });
+
             // 切换黑白场景以刷新主题
             var i = ThemeTypeComboBox.SelectedIndex;
             ThemeTypeComboBox.SelectedIndex = 1 - i;
             ThemeTypeComboBox.SelectedIndex = i;
+
         }
         #endregion
 

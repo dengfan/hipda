@@ -630,6 +630,7 @@
                                         Text="{Binding}" />
                                 </DataTemplate>
                             </Pivot.HeaderTemplate>
+                            <!-- 历史记录 -->
                             <PivotItem Margin="0" Header="&#xE81C;">
                                 <ListView
                                     Grid.Row="1"
@@ -676,7 +677,7 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Top"
                                                     Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                                    FontSize="{Binding FontSize, Source={StaticResource MyLocalSettings}}"
+                                                    FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
                                                     Text="{x:Bind Title}"
                                                     TextWrapping="Wrap" />
                                             </Grid>
@@ -684,9 +685,24 @@
                                     </ListView.ItemTemplate>
                                 </ListView>
                             </PivotItem>
+                            <!-- 设置 -->
                             <PivotItem Header="&#xE115;">
                                 <ScrollViewer>
                                     <StackPanel>
+                                        <TextBlock
+                                            Margin="0,0,0,8"
+                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                                            Text="选择主题" />
+                                        <GridView x:Name="ThemeColorGridView" IsItemClickEnabled="False" SelectionMode="Single" SelectionChanged="ThemeColorGridView_SelectionChanged">
+                                            <GridView.Items>
+                                                <GridViewItem Background="#FF8276A3" Height="48"/>
+                                                <GridViewItem Background="#FFF25022" Height="48"/>
+                                                <GridViewItem Background="#FF7FBA00" Height="48"/>
+                                                <GridViewItem Background="#FF00A3EE" Height="48"/>
+                                                <GridViewItem Background="#FFFFB901" Height="48"/>
+                                            </GridView.Items>
+                                        </GridView>
+                                        
                                         <TextBlock
                                             Margin="0,0,0,8"
                                             Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
