@@ -618,7 +618,7 @@
             <SplitView.Content>
                 <SplitView
                     x:Name="SubSplitView"
-                    OpenPaneLength="280"
+                    OpenPaneLength="264"
                     PanePlacement="Right">
                     <SplitView.Pane>
                         <Pivot x:Name="RightPivot">
@@ -695,11 +695,11 @@
                                             Text="选择主题" />
                                         <GridView x:Name="ThemeColorGridView" IsItemClickEnabled="False" SelectionMode="Single" SelectionChanged="ThemeColorGridView_SelectionChanged">
                                             <GridView.Items>
-                                                <GridViewItem Background="#FF8276A3" Height="48"/>
-                                                <GridViewItem Background="#FFF25022" Height="48"/>
-                                                <GridViewItem Background="#FF7FBA00" Height="48"/>
-                                                <GridViewItem Background="#FF00A3EE" Height="48"/>
-                                                <GridViewItem Background="#FFFFB901" Height="48"/>
+                                                <GridViewItem Background="#FF8276A3"/>
+                                                <GridViewItem Background="#FFF25022"/>
+                                                <GridViewItem Background="#FF7FBA00"/>
+                                                <GridViewItem Background="#FF00A3EE"/>
+                                                <GridViewItem Background="#FFFFB901"/>
                                             </GridView.Items>
                                         </GridView>
                                         
