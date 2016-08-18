@@ -1050,7 +1050,7 @@ namespace Hipda.Client.Uwp.Pro
             
             // 切换黑白场景以刷新主题
             var i = ThemeTypeComboBox.SelectedIndex;
-            ThemeTypeComboBox.SelectedIndex = -1;
+            ThemeTypeComboBox.SelectedIndex = 1 - i;
             ThemeTypeComboBox.SelectedIndex = i;
         }
         #endregion
