@@ -356,520 +356,525 @@
 
         <SplitView
             x:Name="MainSplitView"
-            OpenPaneLength="192"
-            PaneBackground="{ThemeResource MainMenuBackgroundColor}"
-            PaneClosed="MainSplitView_PaneClosed">
+            DisplayMode="Overlay"
+            OpenPaneLength="272"
+            PanePlacement="Right">
             <SplitView.Pane>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <ScrollViewer
-                        Margin="0 48 0 0"
-                        HorizontalScrollMode="Disabled"
-                        VerticalScrollBarVisibility="Hidden"
-                        VerticalScrollMode="Auto">
-                        <StackPanel>
-                            <Grid Padding="8">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Border
-                                    Width="32"
-                                    Height="32"
-                                    Background="{ThemeResource SystemListLowColor}"
-                                    CornerRadius="16">
-                                    <Border
-                                        x:Name="AccountAvatarBorder"
-                                        Width="32"
-                                        Height="32"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Background="{x:Bind UserAvatarImageBrush}"
-                                        Opacity="{Binding PictureOpacity, Source={StaticResource MyLocalSettings}}"
-                                        CornerRadius="16" />
-                                </Border>
+                <Pivot x:Name="RightPivot">
+                    <Pivot.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                FontSize="20"
+                                Text="{Binding}" />
+                        </DataTemplate>
+                    </Pivot.HeaderTemplate>
+                    <!--  历史记录  -->
+                    <PivotItem Margin="0" Header="&#xE81C;">
+                        <ListView
+                            Grid.Row="1"
+                            ContainerContentChanging="ThreadHistoryListView_ContainerContentChanging"
+                            ItemsSource="{Binding ThreadHistoryData, Source={StaticResource ThreadHistoryListBoxViewModel}}"
+                            SelectedItem="{Binding SelectedOne, Source={StaticResource ThreadHistoryListBoxViewModel}, Mode=TwoWay}"
+                            SelectionChanged="ThreadHistoryListView_SelectionChanged"
+                            SelectionMode="Single">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Padding" Value="8,8,20,8" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="m:ThreadItemModelBase">
+                                    <Grid>
+                                        <c:MyAvatarForThread
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            ForumId="{x:Bind ForumId}"
+                                            ForumName="{x:Bind ForumName}"
+                                            MyWidth="20"
+                                            ThreadId="{x:Bind ThreadId}"
+                                            ThreadTitle="{x:Bind Title}"
+                                            UserId="{x:Bind AuthorUserId}"
+                                            Username="{x:Bind AuthorUsername}" />
+                                        <TextBlock
+                                            Margin="24,2,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"
+                                            FontSize="{Binding FontSize2, Source={StaticResource MyLocalSettings}}"
+                                            Text="{x:Bind AuthorUsername}" />
+                                        <TextBlock
+                                            Margin="0,2,0,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"
+                                            FontSize="{Binding FontSize2, Source={StaticResource MyLocalSettings}}"
+                                            Text="{x:Bind ForumName}" />
+                                        <TextBlock
+                                            Margin="0,24,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                                            FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
+                                            Text="{x:Bind Title}"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </PivotItem>
+                    <!--  设置  -->
+                    <PivotItem Header="&#xE115;">
+                        <ScrollViewer>
+                            <StackPanel>
                                 <TextBlock
-                                    x:Name="AccountUsernameTextBlock"
-                                    Grid.Column="1"
-                                    Margin="18,0,12,0"
-                                    VerticalAlignment="Center"
+                                    Margin="0,0,0,8"
                                     Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                    FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}">
-                                    <Run Text="&#x2601;" />
-                                    <Run Text="{x:Bind FuzzyUsername}" />
-                                </TextBlock>
-                                <Button
-                                    Grid.Column="2"
-                                    VerticalAlignment="Center"
-                                    Click="AccountLogoutButton_Click"
-                                    ToolTipService.ToolTip="注销">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <TextBlock
-                                                Padding="8,0"
-                                                FontFamily="Assets/Fonts/icomoon.ttf#icomoon"
-                                                Text="&#xE986;" />
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                            </Grid>
-                            <Button
-                                Height="44"
-                                Padding="0"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Left"
-                                Style="{Binding Visibility, ElementName=SearchPanel, Converter={StaticResource SearchPanelVisibilityToSearchButtonStyleConverter}}"
-                                BorderThickness="0"
-                                Click="SearchButton_Click">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Grid
-                                            x:Name="RootGrid"
-                                            Height="{TemplateBinding Height}"
-                                            Background="{TemplateBinding Background}">
-                                            <VisualStateManager.VisualStateGroups>
-                                                <VisualStateGroup x:Name="CommonStates">
-                                                    <VisualState x:Name="Normal" />
-                                                    <VisualState x:Name="PointerOver">
-                                                        <VisualState.Setters>
-                                                            <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlHighlightListLowBrush}" />
-                                                        </VisualState.Setters>
-                                                    </VisualState>
-                                                </VisualStateGroup>
-                                            </VisualStateManager.VisualStateGroups>
-                                            <ContentPresenter
-                                                x:Name="ContentPresenter"
-                                                Foreground="{TemplateBinding Foreground}"
-                                                AutomationProperties.AccessibilityView="Raw"
-                                                ContentTemplate="{TemplateBinding ContentTemplate}" />
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="14,0,0,0"
-                                        VerticalAlignment="Center"
-                                        Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                        Foreground="{ThemeResource MainMenuForegroundColor}"
-                                        FontFamily="Assets/Fonts/icomoon.ttf#icomoon"
-                                        FontSize="20"
-                                        Text="&#xE986;" />
-                                    <TextBlock
-                                        Margin="24,0,0,0"
-                                        VerticalAlignment="Center"
-                                        Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                        Foreground="{ThemeResource MainMenuForegroundColor}"
-                                        FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
-                                        Text="搜索贴子" />
+                                    Text="选择主题" />
+                                <GridView
+                                    x:Name="ThemeColorGridView"
+                                    IsItemClickEnabled="False"
+                                    SelectionChanged="ThemeColorGridView_SelectionChanged"
+                                    SelectionMode="Single">
+                                    <GridView.Items>
+                                        <GridViewItem Background="#FF8276A3" />
+                                        <GridViewItem Background="#FFF25022" />
+                                        <GridViewItem Background="#FF7FBA00" />
+                                        <GridViewItem Background="#FF00A3EE" />
+                                        <GridViewItem Background="#FFFFB901" />
+                                    </GridView.Items>
+                                </GridView>
+
+                                <TextBlock
+                                    Margin="0,0,0,8"
+                                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                                    Text="切换场景" />
+                                <ComboBox
+                                    x:Name="ThemeTypeComboBox"
+                                    Margin="0,0,0,12"
+                                    HorizontalAlignment="Stretch"
+                                    Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                    SelectedIndex="{Binding ThemeType, Source={StaticResource MyLocalSettings}, Mode=TwoWay}">
+                                    <x:String>白天</x:String>
+                                    <x:String>夜晚</x:String>
+                                </ComboBox>
+
+                                <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" Text="文字对比度调节" />
+                                <ComboBox
+                                    x:Name="FontContrastRatioComboBox"
+                                    Margin="0,8,0,12"
+                                    HorizontalAlignment="Stretch"
+                                    Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                    SelectedIndex="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Mode=TwoWay}">
+                                    <x:String>高</x:String>
+                                    <x:String>中</x:String>
+                                    <x:String>低</x:String>
+                                </ComboBox>
+                                <StackPanel Visibility="{Binding SelectedValue, ElementName=ThemeTypeComboBox, Converter={StaticResource ThemeTypeNameToVisibilityConverter}}">
+                                    <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" Text="图片对比度调节" />
+                                    <Slider
+                                        Maximum="1.0"
+                                        Minimum="0.1"
+                                        StepFrequency="0.1"
+                                        Value="{Binding PictureOpacity, Source={StaticResource MyLocalSettings}, Mode=TwoWay}" />
                                 </StackPanel>
-                            </Button>
-                            <StackPanel
-                                x:Name="SearchPanel"
-                                Margin="8"
-                                Visibility="Collapsed">
-                                <TextBox
-                                    x:Name="KeywordTextBox"
-                                    Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
-                                    KeyUp="KeywordTextBox_KeyUp"
-                                    PlaceholderText="关键字" />
-                                <ComboBox
-                                    x:Name="SearchTypeComboBox"
-                                    Margin="0,8,0,0"
-                                    HorizontalAlignment="Stretch"
-                                    Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
-                                    SelectedIndex="0">
-                                    <x:String>标题</x:String>
-                                    <x:String>全文</x:String>
-                                </ComboBox>
-                                <TextBox
-                                    x:Name="AuthorTextBox"
-                                    Margin="0,8,0,0"
-                                    Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
-                                    PlaceholderText="作者" />
-                                <ComboBox
-                                    x:Name="SearchTimeSpanComboBox"
-                                    Margin="0,8,0,0"
-                                    HorizontalAlignment="Stretch"
-                                    Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
-                                    SelectedIndex="0">
-                                    <x:String>全部时间</x:String>
-                                    <x:String>1周以内</x:String>
-                                    <x:String>1个月以内</x:String>
-                                    <x:String>3个月以内</x:String>
-                                    <x:String>1年以内</x:String>
-                                </ComboBox>
-                                <Button
-                                    x:Name="SearchButton1"
-                                    Margin="0,8,0,0"
-                                    HorizontalAlignment="Stretch"
-                                    Click="SearchButton1_Click"
-                                    Content="在所有版块内搜索" />
-                                <Button
-                                    x:Name="SearchButton2"
-                                    Margin="0,8,0,0"
-                                    HorizontalAlignment="Stretch"
-                                    Click="SearchButton2_Click"
-                                    Content="在当前版块内搜索" />
-                            </StackPanel>
-                            <ListBox
-                                x:Name="TopNavButtonListBox"
-                                Background="Transparent"
-                                ItemTemplateSelector="{StaticResource NavButtonListItemTemplateSelector}"
-                                ItemsSource="{Binding NavButtons}"
-                                SelectedItem="{Binding SelectedNavButton}"
-                                SelectionChanged="TopNavButtonListBox_SelectionChanged"
-                                SelectionMode="Single"
-                                Tapped="TopNavButtonListBox_Tapped" />
-                        </StackPanel>
-                    </ScrollViewer>
+                                <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" Text="字号调节" />
+                                <Slider
+                                    Maximum="22"
+                                    Minimum="14"
+                                    Value="{Binding FontSize1, Source={StaticResource MyLocalSettings}, Mode=TwoWay}" />
+                                <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" Text="行高调节" />
+                                <Slider
+                                    Maximum="48"
+                                    Minimum="20"
+                                    Value="{Binding LineHeight, Source={StaticResource MyLocalSettings}, Mode=TwoWay}" />
 
-                    <StackPanel
-                        x:Name="BottomButtonPanel"
-                        Grid.Row="1"
-                        VerticalAlignment="Bottom">
-                        <Button
-                            Style="{StaticResource NavButtonNormalStyle}"
-                            Click="NoticeButton_Click"
-                            ToolTipService.ToolTip="提醒">
-                            <Grid>
+                                <Grid Margin="0,0,0,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="8" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button HorizontalAlignment="Stretch" Click="OpenImageFolderButton_Click">
+                                        <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
+                                            <Run Text="查看缓存图片 " />
+                                            <Run Text="{Binding ImageCacheDataSize, ElementName=MyMainPage, Converter={StaticResource ByteToMegaByteConverter}}" />
+                                        </TextBlock>
+                                    </Button>
+                                    <Button
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Stretch"
+                                        Click="ClearImageCacheData">
+                                        <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}" Text="清除" />
+                                    </Button>
+                                </Grid>
+
+                                <ToggleSwitch
+                                    Margin="0,0,0,8"
+                                    Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                    IsOn="{Binding CanShowTopThread, Source={StaticResource MyRoamingSettings}, Mode=TwoWay}">
+                                    <ToggleSwitch.Header>
+                                        <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" Text="&#x2601; 显示置顶贴" />
+                                    </ToggleSwitch.Header>
+                                </ToggleSwitch>
+
+                                <TextBlock
+                                    Margin="0,0,0,8"
+                                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                                    Text="&#x2601; 屏蔽的用户" />
+                                <ListBox
+                                    x:Name="BlockUsersListBox"
+                                    Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                                    ItemsSource="{Binding BlockUsers, Source={StaticResource MyRoamingSettings}, Mode=TwoWay}"
+                                    SelectionChanged="BlockUsersListBox_SelectionChanged"
+                                    SelectionMode="Multiple">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image
+                                                    Width="32"
+                                                    Height="32"
+                                                    Margin="0,0,8,0"
+                                                    Opacity="{Binding PictureOpacity, Source={StaticResource MyLocalSettings}}"
+                                                    Source="{Binding UserId, Converter={StaticResource UserIdToAvatarUriConverter}}"
+                                                    Stretch="UniformToFill" />
+                                                <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
+                                                    <Run Text="{Binding Username}" />
+                                                    <LineBreak />
+                                                    <Run FontSize="{ThemeResource ToolTipContentThemeFontSize}" Text="@" />
+                                                    <Run FontSize="{ThemeResource ToolTipContentThemeFontSize}" Text="{Binding ForumName}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                                 <TextBlock
                                     HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
+                                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"
+                                    FontSize="{ThemeResource ToolTipContentThemeFontSize}"
+                                    Text="-------- 赞！您是一个包容的人 --------"
+                                    Visibility="{Binding BlockUsers.Count, Source={StaticResource MyRoamingSettings}, Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}" />
+                                <Button
+                                    HorizontalAlignment="Stretch"
+                                    Click="UnblockUsers"
+                                    Content="解除选中用户"
+                                    Visibility="{Binding SelectedIndex, ElementName=BlockUsersListBox, Converter={StaticResource SelectedIndexToVisibilityConverter}}" />
+
+                                <TextBlock
+                                    Margin="0,12,0,8"
                                     Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                    FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                    FontSize="20"
-                                    Text="&#xEA8F;" />
-                                <Border
-                                    Margin="0,4,4,0"
-                                    Padding="3,0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    Background="Red"
-                                    Opacity="0.8"
-                                    Visibility="{Binding NoticeNoVisibility}">
-                                    <TextBlock
-                                        Foreground="White"
-                                        FontSize="{ThemeResource ToolTipContentThemeFontSize}"
-                                        Text="{Binding PromptAllWithoutPromptPm}" />
-                                </Border>
-                            </Grid>
-                        </Button>
-                        <Button
-                            Style="{StaticResource NavButtonNormalStyle}"
-                            Click="openUserMessageListButton_Click"
-                            ToolTipService.ToolTip="短消息">
-                            <Grid>
+                                    Text="&#x2601; 屏蔽的主题" />
+                                <ListBox
+                                    x:Name="BlockThreadsListBox"
+                                    Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                                    ItemsSource="{Binding BlockThreads, Source={StaticResource MyRoamingSettings}, Mode=TwoWay}"
+                                    SelectionChanged="BlockThreadsListBox_SelectionChanged"
+                                    SelectionMode="Multiple">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image
+                                                    Width="32"
+                                                    Height="32"
+                                                    Margin="0,0,8,0"
+                                                    Opacity="{Binding PictureOpacity, Source={StaticResource MyLocalSettings}}"
+                                                    Source="{Binding UserId, Converter={StaticResource UserIdToAvatarUriConverter}}"
+                                                    Stretch="UniformToFill" />
+                                                <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
+                                                    <Run Text="{Binding ThreadTitle}" />
+                                                    <LineBreak />
+                                                    <Run FontSize="{ThemeResource ToolTipContentThemeFontSize}" Text="{Binding Username}" />
+                                                    <Run FontSize="{ThemeResource ToolTipContentThemeFontSize}" Text=" @" />
+                                                    <Run FontSize="{ThemeResource ToolTipContentThemeFontSize}" Text="{Binding ForumName}" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                                 <TextBlock
                                     HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                    FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                    FontSize="20"
-                                    Text="&#xE8F2;" />
-                                <Border
-                                    Margin="0,4,4,0"
-                                    Padding="3,0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    Background="Red"
-                                    Opacity="0.8"
-                                    Visibility="{Binding PmNoVisibility}">
-                                    <TextBlock
-                                        Foreground="White"
-                                        FontSize="{ThemeResource ToolTipContentThemeFontSize}"
-                                        Text="{Binding PromptPm}" />
-                                </Border>
-                            </Grid>
-                        </Button>
-                        <Button
-                            x:Name="HistoryRecordButton"
-                            Style="{StaticResource NavButtonNormalStyle}"
-                            Click="ShowHistoryRecordButton_Click"
-                            ToolTipService.ToolTip="历史记录">
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                FontSize="20"
-                                Text="&#xE81C;" />
-                        </Button>
-                        <Button
-                            x:Name="SettingsButton"
-                            Style="{StaticResource NavButtonNormalStyle}"
-                            Click="ShowSettingsButton_Click"
-                            ToolTipService.ToolTip="设置">
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                FontSize="20"
-                                Text="&#xE115;" />
-                        </Button>
-                    </StackPanel>
-                </Grid>
+                                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"
+                                    FontSize="{ThemeResource ToolTipContentThemeFontSize}"
+                                    Text="-------- 赞！您是一个豁达的人 --------"
+                                    Visibility="{Binding BlockThreads.Count, Source={StaticResource MyRoamingSettings}, Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}" />
+                                <Button
+                                    HorizontalAlignment="Stretch"
+                                    Click="UnblockThreads"
+                                    Content="解除选中主题"
+                                    Visibility="{Binding SelectedIndex, ElementName=BlockThreadsListBox, Converter={StaticResource SelectedIndexToVisibilityConverter}}" />
+
+                                <HyperlinkButton
+                                    Margin="0,14,0,14"
+                                    HorizontalAlignment="Center"
+                                    Click="PurchaseRemoveAdButton_Click"
+                                    Content="{Binding RemoveAdButtonContent, ElementName=MyMainPage}" />
+                            </StackPanel>
+                        </ScrollViewer>
+                    </PivotItem>
+                </Pivot>
             </SplitView.Pane>
             <SplitView.Content>
                 <SplitView
                     x:Name="SubSplitView"
-                    OpenPaneLength="264"
-                    PanePlacement="Right">
+                    OpenPaneLength="192"
+                    PaneBackground="{ThemeResource MainMenuBackgroundColor}"
+                    PaneClosed="MainSplitView_PaneClosed">
                     <SplitView.Pane>
-                        <Pivot x:Name="RightPivot">
-                            <Pivot.HeaderTemplate>
-                                <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <ScrollViewer
+                                Margin="0,48,0,0"
+                                HorizontalScrollMode="Disabled"
+                                VerticalScrollBarVisibility="Hidden"
+                                VerticalScrollMode="Auto">
+                                <StackPanel>
+                                    <Grid Padding="8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border
+                                            Width="32"
+                                            Height="32"
+                                            Background="{ThemeResource SystemListLowColor}"
+                                            CornerRadius="16">
+                                            <Border
+                                                x:Name="AccountAvatarBorder"
+                                                Width="32"
+                                                Height="32"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Background="{x:Bind UserAvatarImageBrush}"
+                                                Opacity="{Binding PictureOpacity, Source={StaticResource MyLocalSettings}}"
+                                                CornerRadius="16" />
+                                        </Border>
+                                        <TextBlock
+                                            x:Name="AccountUsernameTextBlock"
+                                            Grid.Column="1"
+                                            Margin="18,0,12,0"
+                                            VerticalAlignment="Center"
+                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                                            FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}">
+                                            <Run Text="&#x2601;" />
+                                            <Run Text="{x:Bind FuzzyUsername}" />
+                                        </TextBlock>
+                                        <Button
+                                            Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            Click="AccountLogoutButton_Click"
+                                            ToolTipService.ToolTip="注销">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <TextBlock
+                                                        Padding="8,0"
+                                                        FontFamily="Assets/Fonts/icomoon.ttf#icomoon"
+                                                        Text="&#xE986;" />
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </Grid>
+                                    <Button
+                                        Height="44"
+                                        Padding="0"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        Style="{Binding Visibility, ElementName=SearchPanel, Converter={StaticResource SearchPanelVisibilityToSearchButtonStyleConverter}}"
+                                        BorderThickness="0"
+                                        Click="SearchButton_Click">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid
+                                                    x:Name="RootGrid"
+                                                    Height="{TemplateBinding Height}"
+                                                    Background="{TemplateBinding Background}">
+                                                    <ContentPresenter
+                                                        x:Name="ContentPresenter"
+                                                        Foreground="{TemplateBinding Foreground}"
+                                                        AutomationProperties.AccessibilityView="Raw"
+                                                        ContentTemplate="{TemplateBinding ContentTemplate}" />
+                                                    <VisualStateManager.VisualStateGroups>
+                                                        <VisualStateGroup x:Name="CommonStates">
+                                                            <VisualState x:Name="Normal" />
+                                                            <VisualState x:Name="PointerOver">
+                                                                <VisualState.Setters>
+                                                                    <Setter Target="RootGrid.Background" Value="{ThemeResource SystemControlHighlightListLowBrush}" />
+                                                                </VisualState.Setters>
+                                                            </VisualState>
+                                                        </VisualStateGroup>
+                                                    </VisualStateManager.VisualStateGroups>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock
+                                                Margin="14,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                                                Foreground="{ThemeResource MainMenuForegroundColor}"
+                                                FontFamily="Assets/Fonts/icomoon.ttf#icomoon"
+                                                FontSize="20"
+                                                Text="&#xE986;" />
+                                            <TextBlock
+                                                Margin="24,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                                                Foreground="{ThemeResource MainMenuForegroundColor}"
+                                                FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
+                                                Text="搜索贴子" />
+                                        </StackPanel>
+                                    </Button>
+                                    <StackPanel
+                                        x:Name="SearchPanel"
+                                        Margin="8"
+                                        Visibility="Collapsed">
+                                        <TextBox
+                                            x:Name="KeywordTextBox"
+                                            Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                            KeyUp="KeywordTextBox_KeyUp"
+                                            PlaceholderText="关键字" />
+                                        <ComboBox
+                                            x:Name="SearchTypeComboBox"
+                                            Margin="0,8,0,0"
+                                            HorizontalAlignment="Stretch"
+                                            Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                            SelectedIndex="0">
+                                            <x:String>标题</x:String>
+                                            <x:String>全文</x:String>
+                                        </ComboBox>
+                                        <TextBox
+                                            x:Name="AuthorTextBox"
+                                            Margin="0,8,0,0"
+                                            Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                            PlaceholderText="作者" />
+                                        <ComboBox
+                                            x:Name="SearchTimeSpanComboBox"
+                                            Margin="0,8,0,0"
+                                            HorizontalAlignment="Stretch"
+                                            Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
+                                            SelectedIndex="0">
+                                            <x:String>全部时间</x:String>
+                                            <x:String>1周以内</x:String>
+                                            <x:String>1个月以内</x:String>
+                                            <x:String>3个月以内</x:String>
+                                            <x:String>1年以内</x:String>
+                                        </ComboBox>
+                                        <Button
+                                            x:Name="SearchButton1"
+                                            Margin="0,8,0,0"
+                                            HorizontalAlignment="Stretch"
+                                            Click="SearchButton1_Click"
+                                            Content="在所有版块内搜索" />
+                                        <Button
+                                            x:Name="SearchButton2"
+                                            Margin="0,8,0,0"
+                                            HorizontalAlignment="Stretch"
+                                            Click="SearchButton2_Click"
+                                            Content="在当前版块内搜索" />
+                                    </StackPanel>
+                                    <ListBox
+                                        x:Name="TopNavButtonListBox"
+                                        Background="Transparent"
+                                        ItemTemplateSelector="{StaticResource NavButtonListItemTemplateSelector}"
+                                        ItemsSource="{Binding NavButtons}"
+                                        SelectedItem="{Binding SelectedNavButton}"
+                                        SelectionChanged="TopNavButtonListBox_SelectionChanged"
+                                        SelectionMode="Single"
+                                        Tapped="TopNavButtonListBox_Tapped" />
+                                </StackPanel>
+                            </ScrollViewer>
+
+                            <StackPanel
+                                x:Name="BottomButtonPanel"
+                                Grid.Row="1"
+                                VerticalAlignment="Bottom">
+                                <Button
+                                    Style="{StaticResource NavButtonNormalStyle}"
+                                    Click="NoticeButton_Click"
+                                    ToolTipService.ToolTip="提醒">
+                                    <Grid>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                                            FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                            FontSize="20"
+                                            Text="&#xEA8F;" />
+                                        <Border
+                                            Margin="0,4,4,0"
+                                            Padding="3,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Background="Red"
+                                            Opacity="0.8"
+                                            Visibility="{Binding NoticeNoVisibility}">
+                                            <TextBlock
+                                                Foreground="White"
+                                                FontSize="{ThemeResource ToolTipContentThemeFontSize}"
+                                                Text="{Binding PromptAllWithoutPromptPm}" />
+                                        </Border>
+                                    </Grid>
+                                </Button>
+                                <Button
+                                    Style="{StaticResource NavButtonNormalStyle}"
+                                    Click="openUserMessageListButton_Click"
+                                    ToolTipService.ToolTip="短消息">
+                                    <Grid>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                                            FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                            FontSize="20"
+                                            Text="&#xE8F2;" />
+                                        <Border
+                                            Margin="0,4,4,0"
+                                            Padding="3,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Background="Red"
+                                            Opacity="0.8"
+                                            Visibility="{Binding PmNoVisibility}">
+                                            <TextBlock
+                                                Foreground="White"
+                                                FontSize="{ThemeResource ToolTipContentThemeFontSize}"
+                                                Text="{Binding PromptPm}" />
+                                        </Border>
+                                    </Grid>
+                                </Button>
+                                <Button
+                                    x:Name="HistoryRecordButton"
+                                    Style="{StaticResource NavButtonNormalStyle}"
+                                    Click="ShowHistoryRecordButton_Click"
+                                    ToolTipService.ToolTip="历史记录">
                                     <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
                                         FontFamily="{ThemeResource SymbolThemeFontFamily}"
                                         FontSize="20"
-                                        Text="{Binding}" />
-                                </DataTemplate>
-                            </Pivot.HeaderTemplate>
-                            <!-- 历史记录 -->
-                            <PivotItem Margin="0" Header="&#xE81C;">
-                                <ListView
-                                    Grid.Row="1"
-                                    ContainerContentChanging="ThreadHistoryListView_ContainerContentChanging"
-                                    ItemsSource="{Binding ThreadHistoryData, Source={StaticResource ThreadHistoryListBoxViewModel}}"
-                                    SelectedItem="{Binding SelectedOne, Source={StaticResource ThreadHistoryListBoxViewModel}, Mode=TwoWay}"
-                                    SelectionChanged="ThreadHistoryListView_SelectionChanged"
-                                    SelectionMode="Single">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                            <Setter Property="Padding" Value="8,8,20,8" />
-                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate x:DataType="m:ThreadItemModelBase">
-                                            <Grid>
-                                                <c:MyAvatarForThread
-                                                    HorizontalAlignment="Left"
-                                                    VerticalAlignment="Top"
-                                                    ForumId="{x:Bind ForumId}"
-                                                    ForumName="{x:Bind ForumName}"
-                                                    MyWidth="20"
-                                                    ThreadId="{x:Bind ThreadId}"
-                                                    ThreadTitle="{x:Bind Title}"
-                                                    UserId="{x:Bind AuthorUserId}"
-                                                    Username="{x:Bind AuthorUsername}" />
-                                                <TextBlock
-                                                    Margin="24,2,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    VerticalAlignment="Top"
-                                                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"
-                                                    FontSize="{Binding FontSize2, Source={StaticResource MyLocalSettings}}"
-                                                    Text="{x:Bind AuthorUsername}" />
-                                                <TextBlock
-                                                    Margin="0,2,0,0"
-                                                    HorizontalAlignment="Right"
-                                                    VerticalAlignment="Top"
-                                                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"
-                                                    FontSize="{Binding FontSize2, Source={StaticResource MyLocalSettings}}"
-                                                    Text="{x:Bind ForumName}" />
-                                                <TextBlock
-                                                    Margin="0,24,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    VerticalAlignment="Top"
-                                                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                                    FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
-                                                    Text="{x:Bind Title}"
-                                                    TextWrapping="Wrap" />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </PivotItem>
-                            <!-- 设置 -->
-                            <PivotItem Header="&#xE115;">
-                                <ScrollViewer>
-                                    <StackPanel>
-                                        <TextBlock
-                                            Margin="0,0,0,8"
-                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                            Text="选择主题" />
-                                        <GridView x:Name="ThemeColorGridView" IsItemClickEnabled="False" SelectionMode="Single" SelectionChanged="ThemeColorGridView_SelectionChanged">
-                                            <GridView.Items>
-                                                <GridViewItem Background="#FF8276A3"/>
-                                                <GridViewItem Background="#FFF25022"/>
-                                                <GridViewItem Background="#FF7FBA00"/>
-                                                <GridViewItem Background="#FF00A3EE"/>
-                                                <GridViewItem Background="#FFFFB901"/>
-                                            </GridView.Items>
-                                        </GridView>
-                                        
-                                        <TextBlock
-                                            Margin="0,0,0,8"
-                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                            Text="切换场景" />
-                                        <ComboBox
-                                            x:Name="ThemeTypeComboBox"
-                                            Margin="0,0,0,12"
-                                            HorizontalAlignment="Stretch"
-                                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                            SelectedIndex="{Binding ThemeType, Source={StaticResource MyLocalSettings}, Mode=TwoWay}">
-                                            <x:String>白天</x:String>
-                                            <x:String>夜晚</x:String>
-                                        </ComboBox>
-
-                                        <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" Text="文字对比度调节" />
-                                        <ComboBox
-                                            x:Name="FontContrastRatioComboBox"
-                                            Margin="0,8,0,12"
-                                            HorizontalAlignment="Stretch"
-                                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                            SelectedIndex="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Mode=TwoWay}">
-                                            <x:String>高</x:String>
-                                            <x:String>中</x:String>
-                                            <x:String>低</x:String>
-                                        </ComboBox>
-                                        <StackPanel Visibility="{Binding SelectedValue, ElementName=ThemeTypeComboBox, Converter={StaticResource ThemeTypeNameToVisibilityConverter}}">
-                                            <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" Text="图片对比度调节" />
-                                            <Slider
-                                                Maximum="1.0"
-                                                Minimum="0.1"
-                                                StepFrequency="0.1"
-                                                Value="{Binding PictureOpacity, Source={StaticResource MyLocalSettings}, Mode=TwoWay}" />
-                                        </StackPanel>
-                                        <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" Text="字号调节" />
-                                        <Slider
-                                            Maximum="22"
-                                            Minimum="14"
-                                            Value="{Binding FontSize1, Source={StaticResource MyLocalSettings}, Mode=TwoWay}" />
-                                        <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" Text="行高调节" />
-                                        <Slider
-                                            Maximum="48"
-                                            Minimum="20"
-                                            Value="{Binding LineHeight, Source={StaticResource MyLocalSettings}, Mode=TwoWay}" />
-
-                                        <Grid Margin="0,0,0,16">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="8" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Button HorizontalAlignment="Stretch" Click="OpenImageFolderButton_Click">
-                                                <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
-                                                    <Run Text="查看缓存图片 " />
-                                                    <Run Text="{Binding ImageCacheDataSize, ElementName=MyMainPage, Converter={StaticResource ByteToMegaByteConverter}}" />
-                                                </TextBlock>
-                                            </Button>
-                                            <Button
-                                                Grid.Column="2"
-                                                HorizontalAlignment="Stretch"
-                                                Click="ClearImageCacheData">
-                                                <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}" Text="清除" />
-                                            </Button>
-                                        </Grid>
-
-                                        <ToggleSwitch
-                                            Margin="0,0,0,8"
-                                            Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                            IsOn="{Binding CanShowTopThread, Source={StaticResource MyRoamingSettings}, Mode=TwoWay}">
-                                            <ToggleSwitch.Header>
-                                                <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}" Text="&#x2601; 显示置顶贴" />
-                                            </ToggleSwitch.Header>
-                                        </ToggleSwitch>
-
-                                        <TextBlock
-                                            Margin="0,0,0,8"
-                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                            Text="&#x2601; 屏蔽的用户" />
-                                        <ListBox
-                                            x:Name="BlockUsersListBox"
-                                            Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
-                                            ItemsSource="{Binding BlockUsers, Source={StaticResource MyRoamingSettings}, Mode=TwoWay}"
-                                            SelectionChanged="BlockUsersListBox_SelectionChanged"
-                                            SelectionMode="Multiple">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Image
-                                                            Width="32"
-                                                            Height="32"
-                                                            Margin="0,0,8,0"
-                                                            Opacity="{Binding PictureOpacity, Source={StaticResource MyLocalSettings}}"
-                                                            Source="{Binding UserId, Converter={StaticResource UserIdToAvatarUriConverter}}"
-                                                            Stretch="UniformToFill" />
-                                                        <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
-                                                            <Run Text="{Binding Username}" />
-                                                            <LineBreak />
-                                                            <Run FontSize="{ThemeResource ToolTipContentThemeFontSize}" Text="@" />
-                                                            <Run FontSize="{ThemeResource ToolTipContentThemeFontSize}" Text="{Binding ForumName}" />
-                                                        </TextBlock>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                        <TextBlock
-                                            HorizontalAlignment="Center"
-                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"
-                                            FontSize="{ThemeResource ToolTipContentThemeFontSize}"
-                                            Text="-------- 赞！您是一个包容的人 --------"
-                                            Visibility="{Binding BlockUsers.Count, Source={StaticResource MyRoamingSettings}, Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}" />
-                                        <Button
-                                            HorizontalAlignment="Stretch"
-                                            Click="UnblockUsers"
-                                            Content="解除选中用户"
-                                            Visibility="{Binding SelectedIndex, ElementName=BlockUsersListBox, Converter={StaticResource SelectedIndexToVisibilityConverter}}" />
-
-                                        <TextBlock
-                                            Margin="0,12,0,8"
-                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                                            Text="&#x2601; 屏蔽的主题" />
-                                        <ListBox
-                                            x:Name="BlockThreadsListBox"
-                                            Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
-                                            ItemsSource="{Binding BlockThreads, Source={StaticResource MyRoamingSettings}, Mode=TwoWay}"
-                                            SelectionChanged="BlockThreadsListBox_SelectionChanged"
-                                            SelectionMode="Multiple">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Image
-                                                            Width="32"
-                                                            Height="32"
-                                                            Margin="0,0,8,0"
-                                                            Opacity="{Binding PictureOpacity, Source={StaticResource MyLocalSettings}}"
-                                                            Source="{Binding UserId, Converter={StaticResource UserIdToAvatarUriConverter}}"
-                                                            Stretch="UniformToFill" />
-                                                        <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
-                                                            <Run Text="{Binding ThreadTitle}" />
-                                                            <LineBreak />
-                                                            <Run FontSize="{ThemeResource ToolTipContentThemeFontSize}" Text="{Binding Username}" />
-                                                            <Run FontSize="{ThemeResource ToolTipContentThemeFontSize}" Text=" @" />
-                                                            <Run FontSize="{ThemeResource ToolTipContentThemeFontSize}" Text="{Binding ForumName}" />
-                                                        </TextBlock>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                        <TextBlock
-                                            HorizontalAlignment="Center"
-                                            Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"
-                                            FontSize="{ThemeResource ToolTipContentThemeFontSize}"
-                                            Text="-------- 赞！您是一个豁达的人 --------"
-                                            Visibility="{Binding BlockThreads.Count, Source={StaticResource MyRoamingSettings}, Converter={StaticResource BlockItemCountToEmptyLabelVisibilityConverter}}" />
-                                        <Button
-                                            HorizontalAlignment="Stretch"
-                                            Click="UnblockThreads"
-                                            Content="解除选中主题"
-                                            Visibility="{Binding SelectedIndex, ElementName=BlockThreadsListBox, Converter={StaticResource SelectedIndexToVisibilityConverter}}" />
-
-                                        <HyperlinkButton
-                                            Margin="0,14,0,14"
-                                            HorizontalAlignment="Center"
-                                            Click="PurchaseRemoveAdButton_Click"
-                                            Content="{Binding RemoveAdButtonContent, ElementName=MyMainPage}" />
-                                    </StackPanel>
-                                </ScrollViewer>
-                            </PivotItem>
-                        </Pivot>
+                                        Text="&#xE81C;" />
+                                </Button>
+                                <Button
+                                    x:Name="SettingsButton"
+                                    Style="{StaticResource NavButtonNormalStyle}"
+                                    Click="ShowSettingsButton_Click"
+                                    ToolTipService.ToolTip="设置">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
+                                        FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                        FontSize="20"
+                                        Text="&#xE115;" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
                     </SplitView.Pane>
                     <SplitView.Content>
                         <Frame x:Name="MainFrame">
@@ -1038,6 +1043,7 @@
                             Height="36"
                             Background="Green"
                             CornerRadius="18">
+                            <SymbolIcon Foreground="White" Symbol="Accept" />
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal" />
@@ -1053,7 +1059,6 @@
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <SymbolIcon Foreground="White" Symbol="Accept" />
                         </Grid>
                     </ControlTemplate>
                 </Button.Template>
@@ -1077,6 +1082,7 @@
                             Height="36"
                             Background="Red"
                             CornerRadius="18">
+                            <SymbolIcon Foreground="White" Symbol="Cancel" />
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal" />
@@ -1092,7 +1098,6 @@
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <SymbolIcon Foreground="White" Symbol="Cancel" />
                         </Grid>
                     </ControlTemplate>
                 </Button.Template>
@@ -1122,8 +1127,7 @@
             <VisualStateGroup x:Name="AdaptiveStates">
                 <VisualState>
                     <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="CompactInline" />
-                        <Setter Target="SubSplitView.DisplayMode" Value="Inline" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="CompactInline" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1700" />
@@ -1131,9 +1135,8 @@
                 </VisualState>
                 <VisualState>
                     <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
-                        <Setter Target="SubSplitView.DisplayMode" Value="Inline" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="CompactOverlay" />
+                        <Setter Target="SubSplitView.IsPaneOpen" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1500" />
@@ -1141,9 +1144,8 @@
                 </VisualState>
                 <VisualState>
                     <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
-                        <Setter Target="SubSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="CompactOverlay" />
+                        <Setter Target="SubSplitView.IsPaneOpen" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1300" />
@@ -1151,9 +1153,8 @@
                 </VisualState>
                 <VisualState>
                     <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
                         <Setter Target="SubSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="SubSplitView.IsPaneOpen" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="1024" />
@@ -1161,9 +1162,8 @@
                 </VisualState>
                 <VisualState>
                     <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
                         <Setter Target="SubSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="SubSplitView.IsPaneOpen" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="720" />
@@ -1171,9 +1171,8 @@
                 </VisualState>
                 <VisualState>
                     <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
-                        <Setter Target="SubSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="SubSplitView.DisplayMode" Value="CompactOverlay" />
+                        <Setter Target="SubSplitView.IsPaneOpen" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="400" />
@@ -1181,9 +1180,8 @@
                 </VisualState>
                 <VisualState>
                     <VisualState.Setters>
-                        <Setter Target="MainSplitView.DisplayMode" Value="Overlay" />
-                        <Setter Target="MainSplitView.IsPaneOpen" Value="False" />
                         <Setter Target="SubSplitView.DisplayMode" Value="Overlay" />
+                        <Setter Target="SubSplitView.IsPaneOpen" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="0" />

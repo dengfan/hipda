@@ -234,7 +234,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
         {
-            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
+            SubSplitView.IsPaneOpen = !SubSplitView.IsPaneOpen;
         }
 
         private void MainSplitView_PaneClosed(SplitView sender, object args)
@@ -297,7 +297,7 @@ namespace Hipda.Client.Uwp.Pro
         {
             if (SearchPanel.Visibility == Visibility.Collapsed)
             {
-                MainSplitView.IsPaneOpen = true;
+                SubSplitView.IsPaneOpen = true;
 
                 SearchPanel.Visibility = Visibility.Visible;
                 KeywordTextBox.Focus(FocusState.Programmatic);
@@ -370,18 +370,18 @@ namespace Hipda.Client.Uwp.Pro
         private void ShowHistoryRecordButton_Click(object sender, RoutedEventArgs e)
         {
             RightPivot.SelectedIndex = 0;
-            if (SubSplitView.IsPaneOpen == false)
+            if (MainSplitView.IsPaneOpen == false)
             {
-                SubSplitView.IsPaneOpen = true;
+                MainSplitView.IsPaneOpen = true;
             }
         }
 
         private async void ShowSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             RightPivot.SelectedIndex = 1;
-            if (SubSplitView.IsPaneOpen == false)
+            if (MainSplitView.IsPaneOpen == false)
             {
-                SubSplitView.IsPaneOpen = true;
+                MainSplitView.IsPaneOpen = true;
             }
 
             // 更新黑名单
@@ -1042,7 +1042,7 @@ namespace Hipda.Client.Uwp.Pro
 
         private void SubSplitViewToggle_Click(object sender, RoutedEventArgs e)
         {
-            SubSplitView.IsPaneOpen = !SubSplitView.IsPaneOpen;
+            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
         }
 
         private void ThemeColorGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
