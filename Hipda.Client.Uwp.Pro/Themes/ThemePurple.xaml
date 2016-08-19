@@ -10,6 +10,8 @@
             <Color x:Key="MainMenuForegroundColor">#FFFFFFFF</Color>
             <Color x:Key="LeftWrapBackgroundColor">#FFFFFFFF</Color>
             <Color x:Key="RightWrapBackgroundColor">#FFF4F2F7</Color>
+            <Color x:Key="LeftWrapBorderColor">#FFEFEFEF</Color>
+            <Color x:Key="RightWrapBorderColor">#FFEFEFEF</Color>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <Color x:Key="SystemAccentColor">#FF8276A3</Color>
@@ -17,6 +19,8 @@
             <Color x:Key="MainMenuForegroundColor">#FFFFFFFF</Color>
             <Color x:Key="LeftWrapBackgroundColor">#FF000000</Color>
             <Color x:Key="RightWrapBackgroundColor">#FF1E1E1E</Color>
+            <Color x:Key="LeftWrapBorderColor">#FF1E1E1E</Color>
+            <Color x:Key="RightWrapBorderColor">#FF1E1E1E</Color>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 

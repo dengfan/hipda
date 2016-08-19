@@ -105,6 +105,8 @@
             <Grid
                 x:Name="RightWrap"
                 Grid.Column="1"
+                BorderThickness="1,0"
+                BorderBrush="{ThemeResource RightWrapBorderColor}"
                 Background="{ThemeResource RightWrapBackgroundColor}">
                 <pr:PullToRefreshBox
                     x:Name="rightPr"
@@ -173,7 +175,7 @@
                     Drop="QuickReplyPanel_Drop">
                     <Grid
                         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                        BorderBrush="{ThemeResource SystemChromeMediumColor}"
+                        BorderBrush="{ThemeResource RightWrapBorderColor}"
                         BorderThickness="0,1,0,0"
                         Opacity="0.9">
                         <Grid.RowDefinitions>
@@ -301,7 +303,7 @@
                                         Height="{TemplateBinding Height}"
                                         VerticalAlignment="Center"
                                         Background="{TemplateBinding Background}"
-                                        CornerRadius="4,0,0,4">
+                                        CornerRadius="8,0,0,8">
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="CommonStates">
                                                 <VisualState x:Name="Normal" />
@@ -347,7 +349,7 @@
                                         Height="{TemplateBinding Height}"
                                         VerticalAlignment="Center"
                                         Background="{TemplateBinding Background}"
-                                        CornerRadius="0,4,4,0">
+                                        CornerRadius="0,8,8,0">
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="CommonStates">
                                                 <VisualState x:Name="Normal" />
