@@ -352,8 +352,7 @@
         <cvt:BlockItemCountToEmptyLabelVisibilityConverter x:Key="BlockItemCountToEmptyLabelVisibilityConverter" />
     </Page.Resources>
 
-    <Grid x:Name="pageGrid" Background="{ThemeResource SystemChromeLowColor}">
-
+    <Grid x:Name="pageGrid">
         <SplitView
             x:Name="MainSplitView"
             DisplayMode="Overlay"
