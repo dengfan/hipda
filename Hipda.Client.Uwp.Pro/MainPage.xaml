@@ -917,10 +917,10 @@
         </Grid>
 
         <Button
-            x:Name="MainSplitViewToggle"
+            x:Name="MainMenuButton"
             VerticalAlignment="Top"
             Style="{StaticResource NavButtonNormalStyle}"
-            Click="MainSplitViewToggle_Click">
+            Click="MainMenuButtonToggle_Click">
             <Grid>
                 <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE700;" />
                 <Ellipse
@@ -931,16 +931,6 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Fill="{Binding PromptColor}" />
-            </Grid>
-        </Button>
-
-        <Button
-            x:Name="SubSplitViewToggle"
-            VerticalAlignment="Center"
-            Style="{StaticResource NavButtonNormalStyle}"
-            Click="SubSplitViewToggle_Click">
-            <Grid>
-                <FontIcon FontFamily="{ThemeResource SymbolThemeFontFamily}" Glyph="&#xE700;" />
             </Grid>
         </Button>
 
@@ -1191,7 +1181,7 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <triggers:IsFalseStateTrigger Value="{x:Bind MainSplitView.IsPaneOpen}" />
+                        <triggers:IsFalseStateTrigger Value="{x:Bind SubSplitView.IsPaneOpen}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="PromptAllBorder.Visibility" Value="Visible" />
@@ -1202,7 +1192,7 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <StateTrigger IsActive="{x:Bind MainSplitView.IsPaneOpen, Mode=OneWay}" />
+                        <StateTrigger IsActive="{x:Bind SubSplitView.IsPaneOpen, Mode=OneWay}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="PromptAllBorder.Visibility" Value="Collapsed" />

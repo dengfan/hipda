@@ -232,7 +232,7 @@ namespace Hipda.Client.Uwp.Pro
 
         
 
-        private void MainSplitViewToggle_Click(object sender, RoutedEventArgs e)
+        private void MainMenuButtonToggle_Click(object sender, RoutedEventArgs e)
         {
             SubSplitView.IsPaneOpen = !SubSplitView.IsPaneOpen;
         }
@@ -1038,11 +1038,6 @@ namespace Hipda.Client.Uwp.Pro
                 TipsBarTextBlock.Text = Uri.UnescapeDataString(tipsText);
                 ShowTipsBarAnimationShow.Begin();
             });
-        }
-
-        private void SubSplitViewToggle_Click(object sender, RoutedEventArgs e)
-        {
-            MainSplitView.IsPaneOpen = !MainSplitView.IsPaneOpen;
         }
 
         private void ThemeColorGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
