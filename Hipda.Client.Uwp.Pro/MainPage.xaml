@@ -6,7 +6,6 @@
     xmlns:c="using:Hipda.Client.Uwp.Pro.Controls"
     xmlns:cvt="using:Hipda.Client.Uwp.Pro.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:ink="using:Microsoft.Labs.InkToolbarControl"
     xmlns:local="using:Hipda.Client.Uwp.Pro"
     xmlns:m="using:Hipda.Client.Uwp.Pro.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -1015,11 +1014,8 @@
                 Background="White">
                 <InkCanvas x:Name="MyInkCanvas" />
             </Grid>
-            <ink:InkToolbar
-                HorizontalAlignment="Center"
+            <InkToolbar HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                ActiveTool="Pen"
-                PenColor="Black"
                 TargetInkCanvas="{x:Bind MyInkCanvas}" />
             <Button
                 Margin="0,8,8,0"
