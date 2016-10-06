@@ -1,0 +1,131 @@
+﻿<Page
+    x:Class="Hipda.Client.Views.EditPostPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Hipda.Client.Views"
+    xmlns:root="using:Hipda.Client"
+    xmlns:cvt="using:Hipda.Client.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
+        <cvt:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
+
+        <MenuFlyout x:Key="AttachFileItemMenuFlyout">
+            <MenuFlyoutItem Text="删除" Tapped="RemoveAttachFileItem_Tapped" />
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="插入" Tapped="InsertAttachFileItem_Tapped" />
+        </MenuFlyout>
+
+        <root:AttachFileGridItemTemplateSelector x:Key="AttachFileGridItemTemplateSelector"
+                                                 ImageItemTemplate="{StaticResource ImageItemTemplate}"
+                                                 FileItemTemplate="{StaticResource FileItemTemplate}"/>
+        
+        <DataTemplate x:Key="ImageItemTemplate">
+            <Border Width="48" Height="48" Tapped="AttachFileItem_Click">
+                <Border Background="{Binding IsUsed,Converter={StaticResource BoolToBrushConverter}}"
+                        Width="48" Height="48" RequestedTheme="Dark">
+                    <Image Source="{Binding Content}" ToolTipService.ToolTip="{Binding Content}" Stretch="Uniform" Width="44" Height="44" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="FileItemTemplate">
+            <Border Width="48" Height="48" Tapped="AttachFileItem_Click">
+                <Border Background="{Binding IsUsed,Converter={StaticResource BoolToBrushConverter}}"
+                        Width="48" Height="48" RequestedTheme="Dark">
+                    <TextBlock Text="{Binding Content}" ToolTipService.ToolTip="{Binding Content}" Margin="4" FontSize="{ThemeResource ToolTipContentThemeFontSize}" TextWrapping="Wrap"
+                           Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"/>
+                </Border>
+            </Border>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid x:Name="EditPostGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" AllowDrop="True" DragOver="EditPostGrid_DragOver" Drop="EditPostGrid_Drop">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="TitleTextBox" Margin="8"
+                PlaceholderText="编辑标题" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                GotFocus="TitleTextBox_GotFocus" MaxLength="80" Text="{Binding Title,Mode=TwoWay}"/>
+
+        <TextBox x:Name="ContentTextBox" Margin="8" Grid.Row="1"
+                 PlaceholderText="编辑内容" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch"
+                 FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                 GotFocus="ContentTextBox_GotFocus" Text="{Binding Content,Mode=TwoWay}"
+                 Paste="ContentTextBox_Paste"/>
+
+        <StackPanel Grid.Row="2" Padding="8,8,8,0" Background="{ThemeResource SystemChromeLowColor}">
+            <TextBlock Margin="0,0,0,8" Text="附件面板" HorizontalAlignment="Center" VerticalAlignment="Top"
+                       FontSize="{Binding FontSize2,Source={StaticResource MyLocalSettings}}"
+                       Style="{Binding FontContrastRatio,Source={StaticResource MyLocalSettings},Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"/>
+            <GridView ItemsSource="{Binding AttachFileList}" Height="56"
+                      ItemTemplateSelector="{StaticResource AttachFileGridItemTemplateSelector}"
+                      SelectionMode="None" IsItemClickEnabled="False"
+                      ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VariableSizedWrapGrid Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
+        </StackPanel>
+        
+        <TextBlock Grid.Row="3" Margin="8,0,8,8" x:Name="TipsBarTextBlock" HorizontalAlignment="Center"
+                Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+
+        <CommandBar Grid.Row="4">
+            <AppBarButton Icon="Emoji2" Label="表情图标">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <FlipView>
+                            <FlipViewItem>
+                                <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
+                                        SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="180"
+                                        ItemClick="EmojiGridView_ItemClick">
+                                    <GridView.ItemContainerStyle>
+                                        <Style TargetType="GridViewItem">
+                                            <Setter Property="Width" Value="36"/>
+                                            <Setter Property="Height" Value="36"/>
+                                        </Style>
+                                    </GridView.ItemContainerStyle>
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Value}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+                                </GridView>
+                            </FlipViewItem>
+                            <FlipViewItem>
+                                <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
+                                        SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="192"
+                                        ItemClick="FaceGridView_ItemClick">
+                                    <GridView.ItemContainerStyle>
+                                        <Style TargetType="GridViewItem">
+                                            <Setter Property="Width" Value="36"/>
+                                            <Setter Property="Height" Value="36"/>
+                                        </Style>
+                                    </GridView.ItemContainerStyle>
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+                                </GridView>
+                            </FlipViewItem>
+                        </FlipView>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton Icon="Attach" Label="添加附件" Command="{Binding AddAttachFilesCommand}"/>
+            <AppBarButton Icon="Send" Label="发送" Command="{Binding SendCommand}" IsEnabled="{Binding Countdown,ElementName=MySendControl,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"/>
+        </CommandBar>
+    </Grid>
+</Page>

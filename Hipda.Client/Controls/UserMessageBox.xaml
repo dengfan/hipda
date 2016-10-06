@@ -1,0 +1,79 @@
+﻿<UserControl
+    x:Class="Hipda.Client.Controls.UserMessageBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Hipda.Client.Controls"
+    xmlns:cvt="using:Hipda.Client.Converters"
+    xmlns:m="using:Hipda.Client.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    
+    <Grid x:Name="PostUserMessageForm">
+        <Grid.Resources>
+            <cvt:TextLengthToBackgroundConverter x:Key="TextLengthToBackgroundConverter"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Width="48" Height="48" VerticalAlignment="Center">
+            <Button.Template>
+                <ControlTemplate>
+                    <SymbolIcon Symbol="Emoji2"/>
+                </ControlTemplate>
+            </Button.Template>
+            <Button.Flyout>
+                <Flyout>
+                    <FlipView Background="Transparent" Width="240" Height="160">
+                        <FlipViewItem>
+                            <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
+                                SelectionMode="None" IsItemClickEnabled="True"
+                                ItemClick="FaceGridView_ItemClick">
+                                <GridView.ItemContainerStyle>
+                                    <Style TargetType="GridViewItem">
+                                        <Setter Property="Width" Value="36"/>
+                                        <Setter Property="Height" Value="36"/>
+                                    </Style>
+                                </GridView.ItemContainerStyle>
+                                <GridView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+                            </GridView>
+                        </FlipViewItem>
+                        <FlipViewItem>
+                            <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
+                                SelectionMode="None" IsItemClickEnabled="True"
+                                ItemClick="EmojiGridView_ItemClick">
+                                <GridView.ItemContainerStyle>
+                                    <Style TargetType="GridViewItem">
+                                        <Setter Property="Width" Value="36"/>
+                                        <Setter Property="Height" Value="36"/>
+                                    </Style>
+                                </GridView.ItemContainerStyle>
+                                <GridView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Value}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+                            </GridView>
+                        </FlipViewItem>
+                    </FlipView>
+                </Flyout>
+            </Button.Flyout>
+        </Button>
+        <TextBox x:Name="UserMessageTextBox" Grid.Column="1" Margin="0,4,0,0" VerticalAlignment="Center"
+                 PlaceholderText="输入短消息" BorderThickness="0" AcceptsReturn="True" MaxHeight="160"
+                 Text="{Binding NewMessage,Mode=TwoWay}"/>
+        <Button x:Name="UserMessagePostButton" Grid.Column="2" Width="48" Height="48" BorderThickness="0" VerticalAlignment="Center"
+                Background="{Binding Text.Length,ElementName=UserMessageTextBox,Converter={StaticResource TextLengthToBackgroundConverter}}"
+                Command="{Binding SubmitCommand}">
+            <SymbolIcon Symbol="Send" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Button>
+    </Grid>
+</UserControl>

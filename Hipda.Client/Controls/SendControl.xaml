@@ -1,0 +1,81 @@
+﻿<UserControl
+    x:Class="Hipda.Client.Controls.SendControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Hipda.Client.Controls"
+    xmlns:cvt="using:Hipda.Client.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    x:Name="MySendControl">
+
+    <Grid>
+        <Grid.Resources>
+            <cvt:CountdownToSendButtonIsEnabledConverter x:Key="CountdownToSendButtonIsEnabledConverter"/>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="TitleTextBox" Margin="8"
+                 PlaceholderText="编辑标题" FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                 GotFocus="TitleTextBox_GotFocus" MaxLength="80" Text="{Binding Title,Mode=TwoWay}"/>
+
+        <TextBox x:Name="ContentTextBox" Margin="8" Grid.Row="1"
+                 PlaceholderText="编辑内容" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch"
+                 FontSize="{Binding FontSize1,Source={StaticResource MyLocalSettings}}"
+                 GotFocus="ContentTextBox_GotFocus" Text="{Binding Content,Mode=TwoWay}"/>
+
+        <CommandBar Grid.Row="3">
+            <AppBarButton Icon="Emoji2" Label="Emoji">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <GridView x:Name="EmojiGridView" ItemsSource="{Binding EmojiIcons,Source={StaticResource FaceIconViewModel}}"
+                                  SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="180"
+                                  ItemClick="EmojiGridView_ItemClick">
+                            <GridView.ItemContainerStyle>
+                                <Style TargetType="GridViewItem">
+                                    <Setter Property="Width" Value="36"/>
+                                    <Setter Property="Height" Value="36"/>
+                                </Style>
+                            </GridView.ItemContainerStyle>
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Value}" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton Icon="Emoji" Label="表情头像">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <GridView x:Name="FaceGridView" ItemsSource="{Binding FaceIcons,Source={StaticResource FaceIconViewModel}}"
+                                  SelectionMode="None" IsItemClickEnabled="True" Width="248" Height="192"
+                                  ItemClick="FaceGridView_ItemClick">
+                            <GridView.ItemContainerStyle>
+                                <Style TargetType="GridViewItem">
+                                    <Setter Property="Width" Value="36"/>
+                                    <Setter Property="Height" Value="36"/>
+                                </Style>
+                            </GridView.ItemContainerStyle>
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Image}" Stretch="Uniform" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton Icon="Attach" Label="添加附件" Command="{Binding AddAttachFilesCommand}"/>
+            <AppBarButton Icon="Send" Label="发送" Command="{Binding SendCommand}" IsEnabled="{Binding Countdown,ElementName=MySendControl,Converter={StaticResource CountdownToSendButtonIsEnabledConverter}}"/>
+        </CommandBar>
+    </Grid>
+</UserControl>

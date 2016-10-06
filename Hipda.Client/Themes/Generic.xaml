@@ -1,0 +1,51 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:Hipda.Client.Controls">
+
+    <Style TargetType="c:MyImage">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:MyImage">
+                    <ContentControl x:Name="content1" Margin="4">
+                        <TextBlock Text="&#x1F40C;"/>
+                    </ContentControl>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="c:MyQuoteLink" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:MyQuoteLink">
+                    <TextBlock Text="{TemplateBinding LinkContent}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="c:MyAvatarForThread" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:MyAvatarForThread">
+                    <Border x:Name="border1" Background="{ThemeResource SystemListLowColor}">
+                        <Border x:Name="border2" Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="c:MyAvatarForReply" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:MyAvatarForReply">
+                    <Border x:Name="border1" Background="{ThemeResource SystemListLowColor}">
+                        <Border x:Name="border2" Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
