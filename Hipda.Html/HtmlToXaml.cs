@@ -283,7 +283,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("↵", "\r\n"); // 解析换行符
 
             string xamlStr = 
-                $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls"">
+                $@"<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Controls"">
                     <RichTextBlock xml:space=""preserve"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}""><Paragraph>{htmlContent}</Paragraph></RichTextBlock>
                 </StackPanel>";
             xamlStr = WebUtility.HtmlDecode(WebUtility.HtmlDecode(xamlStr));
@@ -551,7 +551,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
 
-            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" LineHeight=""{{Binding LineHeight,Source={{StaticResource MyLocalSettings}}}}"" xmlns:c=""using:Hipda.Client.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
             xamlStr = WebUtility.HtmlDecode(xamlStr);
             xamlStr = ReplaceHexadecimalSymbols(xamlStr);
             return xamlStr;
@@ -646,7 +646,7 @@ namespace Hipda.Html
             htmlContent = htmlContent.Replace("[", "<");
             htmlContent = htmlContent.Replace("]", ">");
 
-            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Uwp.Pro.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
+            string xamlStr = string.Format(@"<RichTextBlock xml:space=""preserve"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:c=""using:Hipda.Client.Controls""><Paragraph>{0}</Paragraph></RichTextBlock>", htmlContent);
             xamlStr = WebUtility.HtmlDecode(xamlStr);
             xamlStr = ReplaceHexadecimalSymbols(xamlStr);
             return new string[] { xamlStr, inAppLinkCount.ToString() };
