@@ -1,11 +1,13 @@
-﻿using System;
-using Windows.UI.Xaml.Data;
-using Hipda.Client.Commands;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Hipda.Client.Services;
-using Windows.UI.Xaml.Controls;
+using System;
 using System.Threading;
+using System.Windows.Input;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.System;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.ViewModels
 {
@@ -13,7 +15,7 @@ namespace Hipda.Client.ViewModels
     /// 回复列表之视图模型
     /// 根据 thread id 加载
     /// </summary>
-    public class ReplyListViewForDefaultViewModel : NotificationObject
+    public class ReplyListViewForDefaultViewModel : ViewModelBase
     {
         int _startPageNo = 1;
         int _threadId;
@@ -23,12 +25,12 @@ namespace Hipda.Client.ViewModels
         Action<int> _listViewScroll;
         ReplyListService _ds;
 
-        public DelegateCommand AddToFavoritesCommand { get; set; }
-        public DelegateCommand RefreshReplyCommand { get; set; }
-        public DelegateCommand LoadPrevPageDataCommand { get; set; }
-        public DelegateCommand LoadLastPageDataCommand { get; set; }
-        public DelegateCommand CopyUrlCommand { get; set; }
-        public DelegateCommand OpenInBrowserCommand { get; set; }
+        public ICommand AddToFavoritesCommand { get; set; }
+        public ICommand RefreshReplyCommand { get; set; }
+        public ICommand LoadPrevPageDataCommand { get; set; }
+        public ICommand LoadLastPageDataCommand { get; set; }
+        public ICommand CopyUrlCommand { get; set; }
+        public ICommand OpenInBrowserCommand { get; set; }
 
 
         ICollectionView _replyItemCollection;
@@ -38,8 +40,7 @@ namespace Hipda.Client.ViewModels
             get { return _replyItemCollection; }
             set
             {
-                _replyItemCollection = value;
-                this.RaisePropertyChanged("ReplyItemCollection");
+                Set(ref _replyItemCollection, value);
             }
         }
 
@@ -52,52 +53,46 @@ namespace Hipda.Client.ViewModels
             _listViewScroll = listViewScroll;
             _ds = new ReplyListService();
 
-            AddToFavoritesCommand = new DelegateCommand();
-            AddToFavoritesCommand.ExecuteAction = async (p) =>
+            AddToFavoritesCommand = new RelayCommand(async () =>
             {
                 await SendService.SendAddToFavoritesActionAsync(cts, threadId, _ds.GetThreadTitle(threadId));
-            };
+            });
 
-            RefreshReplyCommand = new DelegateCommand();
-            RefreshReplyCommand.ExecuteAction = (p) =>
+            RefreshReplyCommand = new RelayCommand(() =>
             {
                 _ds.ClearReplyData(_threadId);
                 LoadData(1);
-            };
+            });
 
-            LoadPrevPageDataCommand = new DelegateCommand();
-            LoadPrevPageDataCommand.ExecuteAction = (p) =>
+            LoadPrevPageDataCommand = new RelayCommand(() =>
             {
                 if (_startPageNo > 1)
                 {
                     _ds.ClearReplyData(_threadId);
                     LoadData(_startPageNo - 1);
                 }
-            };
+            });
 
-            LoadLastPageDataCommand = new DelegateCommand();
-            LoadLastPageDataCommand.ExecuteAction = (p) =>
+            LoadLastPageDataCommand = new RelayCommand(() =>
             {
                 _ds.ClearReplyData(_threadId);
                 LoadLastData(cts);
-            };
+            });
 
-            CopyUrlCommand = new DelegateCommand();
-            CopyUrlCommand.ExecuteAction = (p) =>
+            CopyUrlCommand = new RelayCommand(() =>
             {
                 string url = $"http://www.hi-pda.com/forum/viewthread.php?tid={_threadId}";
                 var dataPackage = new DataPackage();
                 dataPackage.SetText(url);
                 Clipboard.SetContent(dataPackage);
-            };
+            });
 
-            OpenInBrowserCommand = new DelegateCommand();
-            OpenInBrowserCommand.ExecuteAction = async (p) =>
+            OpenInBrowserCommand = new RelayCommand(async () =>
             {
                 var url = $"http://www.hi-pda.com/forum/viewthread.php?tid={_threadId}";
                 Uri uri = new Uri(url, UriKind.Absolute);
                 await Launcher.LaunchUriAsync(uri);
-            };
+            });
 
             LoadData(_startPageNo);
         }

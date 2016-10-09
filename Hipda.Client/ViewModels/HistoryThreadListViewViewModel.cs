@@ -1,20 +1,16 @@
-﻿using Hipda.Client.Commands;
+﻿using GalaSoft.MvvmLight.Command;
 using Hipda.Client.Models;
-using Hipda.Client.Services;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Hipda.Client.ViewModels
 {
     public class HistoryThreadListViewViewModel
     {
-        public DelegateCommand ClearHistoryCommand { get; set; }
+        public ICommand ClearHistoryCommand { get; set; }
 
-        public DelegateCommand RemoveSelectedCommand { get; set; }
+        public ICommand RemoveSelectedCommand { get; set; }
 
         private ObservableCollection<ThreadItemModelBase> _threadHistoryData = new ObservableCollection<ThreadItemModelBase>();
 
@@ -40,18 +36,18 @@ namespace Hipda.Client.ViewModels
 
         public HistoryThreadListViewViewModel()
         {
-            ClearHistoryCommand = new DelegateCommand();
-            ClearHistoryCommand.ExecuteAction = (p) => {
+            ClearHistoryCommand = new RelayCommand(() =>
+            {
                 _threadHistoryData.Clear();
-            };
+            });
 
-            RemoveSelectedCommand = new DelegateCommand();
-            RemoveSelectedCommand.ExecuteAction = (p) => {
+            RemoveSelectedCommand = new RelayCommand(() =>
+            {
                 if (SelectedOne != null)
                 {
                     _threadHistoryData.Remove(SelectedOne);
                 }
-            };
+            });
         }
 
         public void Add(ThreadItemModelBase item)

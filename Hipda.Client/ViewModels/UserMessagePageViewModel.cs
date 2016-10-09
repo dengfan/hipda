@@ -1,18 +1,14 @@
-﻿using Hipda.Client.Commands;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Hipda.Client.Models;
 using Hipda.Client.Services;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.ViewModels
 {
-    public class UserMessagePageViewModel : NotificationObject
+    public class UserMessagePageViewModel : ViewModelBase
     {
         int limitCount = 3;
 
@@ -35,8 +31,7 @@ namespace Hipda.Client.ViewModels
             get { return _tipText; }
             set
             {
-                _tipText = value;
-                this.RaisePropertyChanged("TipText");
+                Set(ref _tipText, value);
             }
         }
 
@@ -48,8 +43,7 @@ namespace Hipda.Client.ViewModels
             get { return _isProgressRingActive; }
             set
             {
-                _isProgressRingActive = value;
-                this.RaisePropertyChanged("IsProgressRingActive");
+                Set(ref _isProgressRingActive, value);
             }
         }
 
@@ -63,8 +57,7 @@ namespace Hipda.Client.ViewModels
             }
             set
             {
-                _listData = value;
-                this.RaisePropertyChanged("ListData");
+                Set(ref _listData, value);
             }
         }
 
@@ -75,8 +68,7 @@ namespace Hipda.Client.ViewModels
             get { return _isShowLoadMoreButton; }
             set
             {
-                _isShowLoadMoreButton = value;
-                this.RaisePropertyChanged("IsShowLoadMoreButton");
+                Set(ref _isShowLoadMoreButton, value);
             }
         }
 
@@ -87,15 +79,14 @@ namespace Hipda.Client.ViewModels
             get { return _newMessage; }
             set
             {
-                _newMessage = value;
-                this.RaisePropertyChanged("NewMessage");
+                Set(ref _newMessage, value);
             }
         }
 
 
-        public DelegateCommand LoadMoreCommand { get; set; }
-        public DelegateCommand RefreshCommand { get; set; }
-        public DelegateCommand SubmitCommand { get; set; }
+        public ICommand LoadMoreCommand { get; set; }
+        public ICommand RefreshCommand { get; set; }
+        public ICommand SubmitCommand { get; set; }
 
         public UserMessagePageViewModel(int userId)
         {
@@ -104,27 +95,24 @@ namespace Hipda.Client.ViewModels
 
             GetData(limitCount);
 
-            LoadMoreCommand = new DelegateCommand();
-            LoadMoreCommand.ExecuteAction = new Action<object>(LoadMoreExecute);
+            LoadMoreCommand = new RelayCommand(LoadMoreExecute);
 
-            RefreshCommand = new DelegateCommand();
-            RefreshCommand.ExecuteAction = new Action<object>(RefreshExecute);
+            RefreshCommand = new RelayCommand(RefreshExecute);
 
-            SubmitCommand = new DelegateCommand();
-            SubmitCommand.ExecuteAction = new Action<object>(SubmitExecute);
+            SubmitCommand = new RelayCommand(SubmitExecute);
         }
 
-        void LoadMoreExecute(object parameter)
+        void LoadMoreExecute()
         {
             GetData(-1);
         }
 
-        void RefreshExecute(object parameter)
+        void RefreshExecute()
         {
             GetData(limitCount);
         }
 
-        async void SubmitExecute(object parameter)
+        async void SubmitExecute()
         {
             if (string.IsNullOrEmpty(NewMessage))
             {

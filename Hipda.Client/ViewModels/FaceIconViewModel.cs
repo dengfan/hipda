@@ -1,14 +1,11 @@
-﻿using Hipda.Client.Models;
+﻿using GalaSoft.MvvmLight;
+using Hipda.Client.Models;
 using Hipda.Client.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hipda.Client.ViewModels
 {
-    public class FaceIconViewModel : NotificationObject
+    public class FaceIconViewModel : ViewModelBase
     {
         private List<FaceItemModel> _faceIcons;
 
@@ -17,8 +14,7 @@ namespace Hipda.Client.ViewModels
             get { return _faceIcons; }
             set
             {
-                _faceIcons = value;
-                this.RaisePropertyChanged("FaceIcons");
+                Set(ref _faceIcons, value);
             }
         }
 
@@ -29,8 +25,7 @@ namespace Hipda.Client.ViewModels
             get { return _emojiIcons; }
             set
             {
-                _emojiIcons = value;
-                this.RaisePropertyChanged("FaceIcons");
+                Set(ref _emojiIcons, value);
             }
         }
 

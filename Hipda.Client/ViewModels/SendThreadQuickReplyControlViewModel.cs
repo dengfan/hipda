@@ -1,22 +1,18 @@
-﻿using Hipda.Client.Commands;
-using Hipda.Client.Models;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Hipda.Client.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Hipda.Client.ViewModels
 {
-    public class SendThreadQuickReplyControlViewModel : NotificationObject
+    public class SendThreadQuickReplyControlViewModel : ViewModelBase
     {
         int _threadId;
         Action<int, int, string> _beforeUpload;
@@ -32,23 +28,22 @@ namespace Hipda.Client.ViewModels
             get { return _content; }
             set
             {
-                _content = value;
-                this.RaisePropertyChanged("Content");
+                Set(ref _content, value);
             }
         }
 
 
-        public DelegateCommand AddAttachFilesCommand { get; set; }
+        public ICommand AddAttachFilesCommand { get; set; }
 
-        public DelegateCommand AddInkImageCommand { get; set; }
+        public ICommand AddInkImageCommand { get; set; }
 
-        public DelegateCommand SendCommand { get; set; }
+        public ICommand SendCommand { get; set; }
 
         static List<string> _fileNameList = new List<string>();
         static List<string> _fileCodeList = new List<string>();
 
-        public SendThreadQuickReplyControlViewModel(CancellationTokenSource cts, int threadId, 
-            Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox,Action<int> afterUpload,
+        public SendThreadQuickReplyControlViewModel(CancellationTokenSource cts, int threadId,
+            Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload,
             Action<string> sentFailded, Action<string> sentSuccess)
         {
             _threadId = threadId;
@@ -58,8 +53,7 @@ namespace Hipda.Client.ViewModels
             _sentSuccess = sentSuccess;
             _sentFailded = sentFailded;
 
-            AddAttachFilesCommand = new DelegateCommand();
-            AddAttachFilesCommand.ExecuteAction = async (p) =>
+            AddAttachFilesCommand = new RelayCommand(async () =>
             {
                 var data = await SendService.UploadFileAsync(cts, _beforeUpload, _afterUpload);
                 if (data[0] != null && data[0].Count > 0)
@@ -77,10 +71,9 @@ namespace Hipda.Client.ViewModels
                     _insertFileCodeIntoContentTextBox($"\r\n{fileCodes}\r\n");
                     _fileCodeList.Clear();
                 }
-            };
+            });
 
-            AddInkImageCommand = new DelegateCommand();
-            AddInkImageCommand.ExecuteAction = (p) =>
+            AddInkImageCommand = new RelayCommand(() =>
             {
                 var frame = (Frame)Window.Current.Content;
                 var mainPage = (MainPage)frame.Content;
@@ -137,10 +130,9 @@ namespace Hipda.Client.ViewModels
                         _sentFailded?.Invoke("对不起，发布请求失败，请稍后再试！");
                     }
                 };
-            };
+            });
 
-            SendCommand = new DelegateCommand();
-            SendCommand.ExecuteAction = async (p) =>
+            SendCommand = new RelayCommand(async () =>
             {
                 if (string.IsNullOrEmpty(Content))
                 {
@@ -163,7 +155,7 @@ namespace Hipda.Client.ViewModels
                     // 提示发贴不成功
                     _sentFailded?.Invoke("对不起，发布请求失败，请稍后再试！");
                 }
-            };
+            });
         }
 
         public async void UploadMultipleFiles(CancellationTokenSource cts, IReadOnlyList<IStorageItem> files,
