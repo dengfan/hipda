@@ -12,9 +12,6 @@ namespace Hipda.Client.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        // 饿汉模式，确保只有一个实例
-        private static readonly MainPageViewModel instance = new MainPageViewModel();
-
         public MainPageViewModel()
         {
             NavButtons = new ObservableCollection<NavButtonItemModel>();
@@ -31,11 +28,6 @@ namespace Hipda.Client.ViewModels
                 var _httpClient = HttpHandle.GetInstance();
                 _httpClient.ClearCookies();
             });
-        }
-
-        public static MainPageViewModel GetInstance()
-        {
-            return instance;
         }
 
         public ICommand ClearCookiesCommand { get; set; }

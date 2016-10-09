@@ -1,8 +1,5 @@
-﻿using Hipda.Client.Controls;
-using Hipda.Client.Converters;
-using Hipda.Client.Models;
+﻿using Hipda.Client.Models;
 using Hipda.Client.Services;
-using Hipda.Client.ViewModels;
 using Hipda.Client.Views;
 using Microsoft.Graphics.Canvas;
 using System;
@@ -12,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Store;
 using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.System;
 using Windows.UI;
@@ -21,7 +17,6 @@ using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -110,8 +105,6 @@ namespace Hipda.Client
         }
         #endregion
 
-        MainPageViewModel _mainPageViewModel;
-
         #region 打开下级页面必须且只能使用以下三个方法
         public void OpenThreadByForumId()
         {
@@ -191,9 +184,6 @@ namespace Hipda.Client
                 this.RequestedTheme = ElementTheme.Dark;
             }
 
-            _mainPageViewModel = MainPageViewModel.GetInstance();
-            DataContext = _mainPageViewModel;
-
             this.SizeChanged += (s, e) =>
             {
                 if (CurrentApp.LicenseInformation.ProductLicenses["移除广告"].IsActive == false)
@@ -227,10 +217,8 @@ namespace Hipda.Client
                 OpenThreadByForumId();
             }
 
-            _mainPageViewModel.SelectedNavButton = _mainPageViewModel.NavButtons.FirstOrDefault(b => b.TypeValue.Equals(param));
+            ViewModelLocator.Main.SelectedNavButton = ViewModelLocator.Main.NavButtons.FirstOrDefault(b => b.TypeValue.Equals(param));
         }
-
-        
 
         private void MainMenuButtonToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -241,10 +229,6 @@ namespace Hipda.Client
         {
             SearchPanel.Visibility = Visibility.Collapsed;
         }
-
-        
-
-        
 
         private void TopNavButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
