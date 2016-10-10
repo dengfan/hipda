@@ -371,20 +371,6 @@ namespace Hipda.Client.Views
             }
         }
 
-        void rightPr_RefreshInvoked(DependencyObject sender, object args)
-        {
-            if (PostId > 0)
-            {
-                var vm = (ReplyListViewForSpecifiedPostViewModel)DataContext;
-                vm.LoadPrevPageData();
-            }
-            else if (ThreadId > 0)
-            {
-                var vm = (ReplyListViewForDefaultViewModel)DataContext;
-                vm.LoadPrevPageData();
-            }
-        }
-
         #region 快速回贴
         int _autoRemoveTipTimerCount;
         DispatcherTimer _autoRemoveTipTimer;
@@ -547,7 +533,16 @@ namespace Hipda.Client.Views
 
         private void ReplyListView_RefreshRequested(object sender, Controls.RefreshRequestedEventArgs e)
         {
-
+            if (PostId > 0)
+            {
+                var vm = (ReplyListViewForSpecifiedPostViewModel)DataContext;
+                vm.LoadPrevPageData();
+            }
+            else if (ThreadId > 0)
+            {
+                var vm = (ReplyListViewForDefaultViewModel)DataContext;
+                vm.LoadPrevPageData();
+            }
         }
     }
 }

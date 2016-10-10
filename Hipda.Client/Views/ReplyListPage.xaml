@@ -13,14 +13,8 @@
     mc:Ignorable="d">
 
     <Grid x:Name="RightWrap" Tapped="HideReplyBottomPanel">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
         <CommandBar
             x:Name="RightCommandBar"
-            Grid.Row="0"
             Background="{ThemeResource SystemChromeLowColor}">
             <AppBarButton
                 x:Name="AddToFavoritesButton"
@@ -49,118 +43,40 @@
             </CommandBar.SecondaryCommands>
         </CommandBar>
 
-        <!--<pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-            <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
-                              VerticalAlignment="Top" SelectionMode="None" ShowsScrollingPlaceholders="False"
-                              ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-                              ItemTemplateSelector="{StaticResource ReplyListItemTemplateSelector}"
-                              ItemsSource="{Binding ReplyItemCollection}">
-            </ListView>
-        </pr:PullToRefreshBox>-->
-
         <c:RefreshableListView
-                    x:Name="ReplyListView"
-                    Margin="0,48,0,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    IncrementalLoadingTrigger="Edge"
-                    PullProgressChanged="ReplyListView_PullProgressChanged"
-                    RefreshRequested="ReplyListView_RefreshRequested">
-
+            x:Name="ReplyListView"
+            Margin="0,48,0,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            IncrementalLoadingTrigger="Edge"
+            IsItemClickEnabled="False"
+            ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
+            ItemTemplateSelector="{StaticResource ReplyListItemTemplateSelector}"
+            ItemsSource="{Binding ReplyItemCollection}"
+            PullProgressChanged="ReplyListView_PullProgressChanged"
+            RefreshRequested="ReplyListView_RefreshRequested"
+            SelectionMode="None"
+            ShowsScrollingPlaceholders="False">
             <c:RefreshableListView.RefreshIndicatorContent>
                 <Grid Height="100" Background="Transparent">
                     <FontIcon
-                                Margin="0,0,0,30"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Bottom"
-                                FontFamily="Segoe MDL2 Assets"
-                                FontSize="20"
-                                Glyph="&#xE72C;"
-                                RenderTransformOrigin="0.5,0.5">
+                        Margin="0,0,0,30"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="20"
+                        Glyph="&#xE72C;"
+                        RenderTransformOrigin="0.5,0.5">
                         <FontIcon.RenderTransform>
                             <RotateTransform x:Name="SpinnerTransform" Angle="0" />
                         </FontIcon.RenderTransform>
                     </FontIcon>
                 </Grid>
             </c:RefreshableListView.RefreshIndicatorContent>
-
-            <c:RefreshableListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Padding" Value="0" />
-                </Style>
-            </c:RefreshableListView.ItemContainerStyle>
-
-            <c:RefreshableListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ItemsStackPanel ItemsUpdatingScrollMode="KeepScrollOffset" />
-                </ItemsPanelTemplate>
-            </c:RefreshableListView.ItemsPanel>
-
-            <!--<c:RefreshableListView.ItemTemplate>
-                        <DataTemplate x:DataType="local:ListItemData">
-
-                            <Grid Height="120">
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="120" />
-                                    <ColumnDefinition Width="16" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-
-                                <Image
-                                    Grid.Row="0"
-                                    Grid.RowSpan="3"
-                                    Grid.Column="0"
-                                    Width="120"
-                                    Height="120"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    Source="{x:Bind Path=Image}"
-                                    Stretch="UniformToFill" />
-
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    Style="{StaticResource TitleTextBlockStyle}"
-                                    MaxLines="1"
-                                    Text="{x:Bind Path=Header, Mode=OneTime}"
-                                    TextTrimming="Clip" />
-                                <TextBlock
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    Style="{StaticResource CaptionTextBlockStyle}"
-                                    MaxLines="1"
-                                    Text="{x:Bind Path=Attribution, Mode=OneTime}"
-                                    TextTrimming="Clip" />
-                                <TextBlock
-                                    Grid.Row="2"
-                                    Grid.Column="2"
-                                    Margin="0,4,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    Style="{StaticResource BodyTextBlockStyle}"
-                                    Text="{x:Bind Path=Body, Mode=OneTime}"
-                                    TextTrimming="Clip" />
-                            </Grid>
-
-                        </DataTemplate>
-                    </c:RefreshableListView.ItemTemplate>-->
-
         </c:RefreshableListView>
 
         <ProgressRing
             x:Name="rightProgress"
-            Grid.Row="1"
             Width="50"
             Height="50"
             VerticalAlignment="Center"
@@ -168,7 +84,6 @@
 
         <StackPanel
             x:Name="QuickReplyPanel"
-            Grid.Row="1"
             VerticalAlignment="Bottom"
             Background="{ThemeResource SystemChromeMediumColor}"
             Opacity="0.9"
@@ -270,7 +185,6 @@
                     </FlipViewItem>
                 </FlipView>
                 <Button
-                    Grid.Row="1"
                     Width="48"
                     Height="36"
                     Margin="0,0,72,0"
@@ -283,7 +197,6 @@
                     </Button.Content>
                 </Button>
                 <Button
-                    Grid.Row="1"
                     Width="72"
                     Height="36"
                     Margin="0,-36,0,0"

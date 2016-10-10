@@ -57,7 +57,7 @@ namespace Hipda.Client
             DependencyProperty.Register("ImageCacheDataSize", typeof(ulong), typeof(MainPage), new PropertyMetadata(0UL));
 
 
-        public string RemoveAdButtonContent
+        public string RemoveAdsButtonContent
         {
             get { return (string)GetValue(RemoveAdButtonContentProperty); }
             set { SetValue(RemoveAdButtonContentProperty, value); }
@@ -163,7 +163,7 @@ namespace Hipda.Client
                 // 读取内购信息
                 var listing = await CurrentApp.LoadListingInformationAsync();
                 var iap = listing.ProductListings.FirstOrDefault(p => p.Value.ProductId == "RemoveAd");
-                RemoveAdButtonContent = $"【{iap.Value.Name} {iap.Value.FormattedPrice}】";
+                RemoveAdsButtonContent = $"【{iap.Value.Name} {iap.Value.FormattedPrice}】";
             }
             catch (Exception)
             {
