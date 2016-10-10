@@ -13,9 +13,7 @@
     mc:Ignorable="d">
 
     <Grid x:Name="RightWrap" Tapped="HideReplyBottomPanel">
-        <CommandBar
-            x:Name="RightCommandBar"
-            Background="{ThemeResource SystemChromeLowColor}">
+        <CommandBar x:Name="RightCommandBar" Background="{ThemeResource SystemChromeLowColor}">
             <AppBarButton
                 x:Name="AddToFavoritesButton"
                 Command="{Binding AddToFavoritesCommand}"
@@ -48,6 +46,7 @@
             Margin="0,48,0,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+            AutoRefresh="False"
             IncrementalLoadingTrigger="Edge"
             IsItemClickEnabled="False"
             ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
