@@ -13,7 +13,6 @@
     xmlns:triggers="using:WindowsStateTriggers"
     x:Name="MyMainPage"
     DataContext="{Binding Path=Main, Source={StaticResource Locator}}"
-    RequestedTheme="{Binding ThemeType, Source={StaticResource MyLocalSettings}, Converter={StaticResource ThemeTypeToRequestedThemeConverter}, Mode=TwoWay}"
     mc:Ignorable="d">
 
     <Page.Resources>

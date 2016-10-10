@@ -13,6 +13,19 @@
     mc:Ignorable="d">
 
     <Grid x:Name="RightWrap" Tapped="HideReplyBottomPanel">
+        <Grid.Resources>
+            <Storyboard x:Name="SpinnerStoryboard">
+                <DoubleAnimation
+                    Duration="00:00:00.5"
+                    FillBehavior="HoldEnd"
+                    From="0"
+                    RepeatBehavior="Forever"
+                    Storyboard.TargetName="SpinnerTransform"
+                    Storyboard.TargetProperty="Angle"
+                    To="360" />
+            </Storyboard>
+        </Grid.Resources>
+
         <CommandBar x:Name="RightCommandBar" Background="{ThemeResource SystemChromeLowColor}">
             <AppBarButton
                 x:Name="AddToFavoritesButton"
@@ -44,8 +57,7 @@
         <c:RefreshableListView
             x:Name="ReplyListView"
             Margin="0,48,0,0"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
+            VerticalAlignment="Top"
             AutoRefresh="False"
             IncrementalLoadingTrigger="Edge"
             IsItemClickEnabled="False"

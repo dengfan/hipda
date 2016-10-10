@@ -108,14 +108,14 @@
                 <c:RefreshableListView
                     x:Name="LeftListView"
                     Margin="0,48,0,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
+                    VerticalAlignment="Top"
                     AutoRefresh="False"
                     IncrementalLoadingTrigger="Edge"
                     IsItemClickEnabled="True"
                     ItemClick="LeftListView_ItemClick"
                     PullProgressChanged="LeftListView_PullProgressChanged"
                     RefreshRequested="LeftListViewv_RefreshRequested"
+                    SelectionMode="Single"
                     ShowsScrollingPlaceholders="False">
                     <c:RefreshableListView.RefreshIndicatorContent>
                         <Grid Height="100" Background="Transparent">
@@ -171,8 +171,7 @@
                 <c:RefreshableListView
                     x:Name="ReplyListView"
                     Margin="0,48,0,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
+                    VerticalAlignment="Top"
                     AutoRefresh="False"
                     IncrementalLoadingTrigger="Edge"
                     IsItemClickEnabled="False"
