@@ -1,12 +1,19 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Hipda.Client.Commands;
+using Hipda.Client.Models;
 using Hipda.Client.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace Hipda.Client.ViewModels
 {
-    public class UserInfoPageViewModel : ViewModelBase
+    public class UserInfoPageViewModel : NotificationObject
     {
         UserInfoService _ds;
         int _userId;
@@ -18,7 +25,8 @@ namespace Hipda.Client.ViewModels
             get { return _isProgressRingActive; }
             set
             {
-                Set(ref _isProgressRingActive, value);
+                _isProgressRingActive = value;
+                this.RaisePropertyChanged("IsProgressRingActive");
             }
         }
 
@@ -31,7 +39,8 @@ namespace Hipda.Client.ViewModels
             }
             set
             {
-                Set(ref _avatarBrush, value);
+                _avatarBrush = value;
+                this.RaisePropertyChanged("AvatarBrush");
             }
         }
 
@@ -44,7 +53,8 @@ namespace Hipda.Client.ViewModels
             }
             set
             {
-                Set(ref _userInfoRichTextBlock, value);
+                _userInfoRichTextBlock = value;
+                this.RaisePropertyChanged("UserInfoRichTextBlock");
             }
         }
 

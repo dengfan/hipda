@@ -1,9 +1,14 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using Hipda.Client.Commands;
 using Hipda.Client.Services;
 using System;
-using System.Windows.Input;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.ViewModels
 {
@@ -13,7 +18,7 @@ namespace Hipda.Client.ViewModels
         CommandBar _leftCommandBar;
         NoticeService _ds;
 
-        public ICommand RefreshThreadCommand { get; set; }
+        public DelegateCommand RefreshThreadCommand { get; set; }
 
         public NoticeThreadListViewViewModel(ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
@@ -32,10 +37,11 @@ namespace Hipda.Client.ViewModels
 
             LoadData();
 
-            RefreshThreadCommand = new RelayCommand(() =>
+            RefreshThreadCommand = new DelegateCommand();
+            RefreshThreadCommand.ExecuteAction = (p) =>
             {
                 LoadData();
-            });
+            };
 
             var RefreshButton = new AppBarButton { Icon = new SymbolIcon(Symbol.Refresh), Label = "刷新" };
             RefreshButton.Command = RefreshThreadCommand;

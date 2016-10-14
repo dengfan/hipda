@@ -1,18 +1,19 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using Hipda.Client.Commands;
 using Hipda.Client.Models;
 using Hipda.Client.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
 
 namespace Hipda.Client.ViewModels
 {
-    public class SendEditPostPageViewModel : ViewModelBase
+    public class SendEditPostPageViewModel : NotificationObject
     {
         int _postId;
         int _threadId;
@@ -29,7 +30,8 @@ namespace Hipda.Client.ViewModels
             get { return _title; }
             set
             {
-                Set(ref _title, value);
+                _title = value;
+                this.RaisePropertyChanged("Title");
             }
         }
 
@@ -40,7 +42,8 @@ namespace Hipda.Client.ViewModels
             get { return _content; }
             set
             {
-                Set(ref _content, value);
+                _content = value;
+                this.RaisePropertyChanged("Content");
             }
         }
 
@@ -55,11 +58,11 @@ namespace Hipda.Client.ViewModels
             }
         }
 
-        //public RelayCommand RemoveAttachFileCommand { get; set; }
-        //public RelayCommand InsertAttachFileCommand { get; set; }
-        public RelayCommand AddAttachFilesCommand { get; set; }
+        //public DelegateCommand RemoveAttachFileCommand { get; set; }
+        //public DelegateCommand InsertAttachFileCommand { get; set; }
+        public DelegateCommand AddAttachFilesCommand { get; set; }
 
-        public RelayCommand SendCommand { get; set; }
+        public DelegateCommand SendCommand { get; set; }
 
         static List<string> _fileCodeList = new List<string>();
         static List<string> _fileAddList = new List<string>();
@@ -81,11 +84,20 @@ namespace Hipda.Client.ViewModels
             _sentSuccess = sentSuccess;
             _sentFailded = sentFailded;
 
-            //RemoveAttachFileCommand = new RelayCommand(() => { });
+            //RemoveAttachFileCommand = new DelegateCommand();
+            //RemoveAttachFileCommand.ExecuteAction = (p) =>
+            //{
+            //    int a = 1;
+            //};
 
-            //InsertAttachFileCommand = new RelayCommand(() => { });
+            //InsertAttachFileCommand = new DelegateCommand();
+            //InsertAttachFileCommand.ExecuteAction = (p) =>
+            //{
+            //    int b = 1;
+            //};
 
-            AddAttachFilesCommand = new RelayCommand(async () =>
+            AddAttachFilesCommand = new DelegateCommand();
+            AddAttachFilesCommand.ExecuteAction = async (p) =>
             {
                 var data = await SendService.UploadFileAsync(cts, _beforeUpload, _afterUpload);
                 if (data[0] != null && data[0].Count > 0)
@@ -105,9 +117,10 @@ namespace Hipda.Client.ViewModels
 
                     ShowUnusedImage(cts);
                 }
-            });
+            };
 
-            SendCommand = new RelayCommand(async () =>
+            SendCommand = new DelegateCommand();
+            SendCommand.ExecuteAction = async (p) =>
             {
                 if (string.IsNullOrEmpty(Content))
                 {
@@ -125,7 +138,7 @@ namespace Hipda.Client.ViewModels
 
                 // 提示发贴成功
                 _sentSuccess?.Invoke(Title);
-            });
+            };
         }
 
         public async void UploadMultipleFiles(CancellationTokenSource cts, IReadOnlyList<IStorageItem> files, Action<int, int, string> beforeUpload, Action<int> afterUpload)

@@ -108,15 +108,15 @@
                 <c:RefreshableListView
                     x:Name="LeftListView"
                     Margin="0,48,0,0"
-                    VerticalAlignment="Top"
-                    AutoRefresh="False"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
                     IncrementalLoadingTrigger="Edge"
+                    ShowsScrollingPlaceholders="False"
+                    AutoRefresh="False"
                     IsItemClickEnabled="True"
                     ItemClick="LeftListView_ItemClick"
                     PullProgressChanged="LeftListView_PullProgressChanged"
-                    RefreshRequested="LeftListViewv_RefreshRequested"
-                    SelectionMode="Single"
-                    ShowsScrollingPlaceholders="False">
+                    RefreshRequested="LeftListViewv_RefreshRequested">
                     <c:RefreshableListView.RefreshIndicatorContent>
                         <Grid Height="100" Background="Transparent">
                             <FontIcon
@@ -171,17 +171,18 @@
                 <c:RefreshableListView
                     x:Name="ReplyListView"
                     Margin="0,48,0,0"
-                    VerticalAlignment="Top"
-                    AutoRefresh="False"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
                     IncrementalLoadingTrigger="Edge"
+                    SelectionMode="None"
+                    ShowsScrollingPlaceholders="False"
+                    AutoRefresh="False"
                     IsItemClickEnabled="False"
                     ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
                     ItemTemplateSelector="{StaticResource ReplyListItemTemplateSelector}"
                     ItemsSource="{Binding ReplyItemCollection}"
                     PullProgressChanged="ReplyListView_PullProgressChanged"
-                    RefreshRequested="ReplyListView_RefreshRequested"
-                    SelectionMode="None"
-                    ShowsScrollingPlaceholders="False">
+                    RefreshRequested="ReplyListView_RefreshRequested">
                     <c:RefreshableListView.RefreshIndicatorContent>
                         <Grid Height="100" Background="Transparent">
                             <FontIcon

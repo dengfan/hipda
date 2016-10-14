@@ -1,17 +1,24 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using Hipda.Client.Commands;
 using Hipda.Client.Models;
+using Hipda.Client.Services;
 using Hipda.Http;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
 namespace Hipda.Client.ViewModels
 {
-    public class MainPageViewModel : ViewModelBase
+    public class MainPageViewModel : NotificationObject
     {
+        // 饿汉模式，确保只有一个实例
+        private static readonly MainPageViewModel instance = new MainPageViewModel();
+
         public MainPageViewModel()
         {
             NavButtons = new ObservableCollection<NavButtonItemModel>();
@@ -23,14 +30,19 @@ namespace Hipda.Client.ViewModels
             NavButtons.Add(new NavButtonItemModel { Icon = "BS", Text = "Buy & Sell", TypeValue = "fid=6" });
             NavButtons.Add(new NavButtonItemModel { Icon = "\uE712", Text = "更多版块", TypeValue = "more" });
 
-            ClearCookiesCommand = new RelayCommand(() =>
-            {
+            ClearCookiesCommand = new DelegateCommand();
+            ClearCookiesCommand.ExecuteAction = (p) => {
                 var _httpClient = HttpHandle.GetInstance();
                 _httpClient.ClearCookies();
-            });
+            };
         }
 
-        public ICommand ClearCookiesCommand { get; set; }
+        public static MainPageViewModel GetInstance()
+        {
+            return instance;
+        }
+
+        public DelegateCommand ClearCookiesCommand { get; set; }
 
 
         private ObservableCollection<NavButtonItemModel> _navButtons;
@@ -40,7 +52,8 @@ namespace Hipda.Client.ViewModels
             get { return _navButtons; }
             set
             {
-                Set(ref _navButtons, value);
+                _navButtons = value;
+                this.RaisePropertyChanged("NavButton");
             }
         }
 
@@ -51,7 +64,8 @@ namespace Hipda.Client.ViewModels
             get { return _selectedNavButton; }
             set
             {
-                Set(ref _selectedNavButton, value);
+                _selectedNavButton = value;
+                this.RaisePropertyChanged("SelectedNavButton");
             }
         }
 
@@ -64,9 +78,9 @@ namespace Hipda.Client.ViewModels
             set
             {
                 _promptPm = value;
-                RaisePropertyChanged("PromptPm");
-                RaisePropertyChanged("PmNoVisibility");
-                RaisePropertyChanged("PromptColor");
+                this.RaisePropertyChanged("PromptPm");
+                this.RaisePropertyChanged("PmNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 
@@ -78,9 +92,9 @@ namespace Hipda.Client.ViewModels
             set
             {
                 _promptAnnouncePm = value;
-                RaisePropertyChanged("PromptAllWithoutPromptPm");
-                RaisePropertyChanged("NoticeNoVisibility");
-                RaisePropertyChanged("PromptColor");
+                this.RaisePropertyChanged("PromptAllWithoutPromptPm");
+                this.RaisePropertyChanged("NoticeNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 
@@ -92,9 +106,9 @@ namespace Hipda.Client.ViewModels
             set
             {
                 _promptSystemPm = value;
-                RaisePropertyChanged("PromptAllWithoutPromptPm");
-                RaisePropertyChanged("NoticeNoVisibility");
-                RaisePropertyChanged("PromptColor");
+                this.RaisePropertyChanged("PromptAllWithoutPromptPm");
+                this.RaisePropertyChanged("NoticeNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 
@@ -106,9 +120,9 @@ namespace Hipda.Client.ViewModels
             set
             {
                 _promptFriend = value;
-                RaisePropertyChanged("PromptAllWithoutPromptPm");
-                RaisePropertyChanged("NoticeNoVisibility");
-                RaisePropertyChanged("PromptColor");
+                this.RaisePropertyChanged("PromptAllWithoutPromptPm");
+                this.RaisePropertyChanged("NoticeNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 
@@ -120,9 +134,9 @@ namespace Hipda.Client.ViewModels
             set
             {
                 _promptThreads = value;
-                RaisePropertyChanged("PromptAllWithoutPromptPm");
-                RaisePropertyChanged("NoticeNoVisibility");
-                RaisePropertyChanged("PromptColor");
+                this.RaisePropertyChanged("PromptAllWithoutPromptPm");
+                this.RaisePropertyChanged("NoticeNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 
@@ -134,9 +148,9 @@ namespace Hipda.Client.ViewModels
             set
             {
                 _promptNoticeCountInToastTempData = value;
-                RaisePropertyChanged("PromptAllWithoutPromptPm");
-                RaisePropertyChanged("NoticeNoVisibility");
-                RaisePropertyChanged("PromptColor");
+                this.RaisePropertyChanged("PromptAllWithoutPromptPm");
+                this.RaisePropertyChanged("NoticeNoVisibility");
+                this.RaisePropertyChanged("PromptColor");
             }
         }
 

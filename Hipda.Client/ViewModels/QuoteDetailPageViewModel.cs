@@ -1,10 +1,15 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Hipda.Client.Models;
 using Hipda.Client.Services;
+using Hipda.Client.Views;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Hipda.Client.ViewModels
 {
-    public class QuoteDetailPageViewModel : ViewModelBase
+    public class QuoteDetailPageViewModel : NotificationObject
     {
         ReplyListService _ds;
         int _postId;
@@ -17,7 +22,8 @@ namespace Hipda.Client.ViewModels
             get { return _isProgressRingActive; }
             set
             {
-                Set(ref _isProgressRingActive, value);
+                _isProgressRingActive = value;
+                this.RaisePropertyChanged("IsProgressRingActive");
             }
         }
 
@@ -28,7 +34,8 @@ namespace Hipda.Client.ViewModels
             get { return _floorNoStr; }
             set
             {
-                Set(ref _floorNoStr, value);
+                _floorNoStr = value;
+                this.RaisePropertyChanged("FloorNoStr");
             }
         }
 
@@ -39,7 +46,8 @@ namespace Hipda.Client.ViewModels
             get { return _avatarUri; }
             set
             {
-                Set(ref _avatarUri, value);
+                _avatarUri = value;
+                this.RaisePropertyChanged("AvatarUri");
             }
         }
 
@@ -50,7 +58,8 @@ namespace Hipda.Client.ViewModels
             get { return _authorUsername; }
             set
             {
-                Set(ref _authorUsername, value);
+                _authorUsername = value;
+                this.RaisePropertyChanged("AuthorUsername");
             }
         }
 
@@ -61,7 +70,8 @@ namespace Hipda.Client.ViewModels
             get { return _authorCreateTime; }
             set
             {
-                Set(ref _authorCreateTime, value);
+                _authorCreateTime = value;
+                this.RaisePropertyChanged("AuthorCreateTime");
             }
         }
 
@@ -72,7 +82,8 @@ namespace Hipda.Client.ViewModels
             get { return _xamlContent; }
             set
             {
-                Set(ref _xamlContent, value);
+                _xamlContent = value;
+                this.RaisePropertyChanged("XamlContent");
             }
         }
 

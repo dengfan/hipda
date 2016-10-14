@@ -3,12 +3,15 @@ using Hipda.Client.Models;
 using Hipda.Client.Services;
 using Hipda.Client.ViewModels;
 using System;
+using System.Linq;
 using System.Threading;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
@@ -79,9 +82,9 @@ namespace Hipda.Client.Views
 
         public ThreadAndReplyPage()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
-            SizeChanged += (s, e) =>
+            this.SizeChanged += (s, e) =>
             {
                 string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
                 if (userInteractionType.Equals("Touch"))
@@ -107,13 +110,13 @@ namespace Hipda.Client.Views
                     ShortcutKeyButton.Height = 28;
                 }
 
-                ContentTextBox.MaxHeight = ActualHeight / 2;
+                ContentTextBox.MaxHeight = this.ActualHeight / 2;
             };
 
             var frame = (Frame)Window.Current.Content;
             _mainPage = (MainPage)frame.Content;
             var countdownBinding = new Binding { Path = new PropertyPath("Countdown"), Source = _mainPage };
-            SetBinding(CountdownProperty, countdownBinding);
+            this.SetBinding(ThreadAndReplyPage.CountdownProperty, countdownBinding);
         }
 
         #region 委托事件
@@ -574,12 +577,12 @@ namespace Hipda.Client.Views
                 if (e.PullProgress == 1)
                 {
                     // Progress = 1.0 means that the refresh has been triggered.
-                    if (SpinnerStoryboard.GetCurrentState() == ClockState.Stopped)
+                    if (SpinnerStoryboard.GetCurrentState() == Windows.UI.Xaml.Media.Animation.ClockState.Stopped)
                     {
                         SpinnerStoryboard.Begin();
                     }
                 }
-                else if (SpinnerStoryboard.GetCurrentState() != ClockState.Stopped)
+                else if (SpinnerStoryboard.GetCurrentState() != Windows.UI.Xaml.Media.Animation.ClockState.Stopped)
                 {
                     SpinnerStoryboard.Stop();
                 }

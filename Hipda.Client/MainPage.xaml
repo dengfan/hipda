@@ -12,7 +12,7 @@
     xmlns:t="using:Hipda.Client.Triggers"
     xmlns:triggers="using:WindowsStateTriggers"
     x:Name="MyMainPage"
-    DataContext="{Binding Path=Main, Source={StaticResource Locator}}"
+    RequestedTheme="{Binding ThemeType, Source={StaticResource MyLocalSettings}, Converter={StaticResource ThemeTypeToRequestedThemeConverter}, Mode=TwoWay}"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -1014,8 +1014,7 @@
                 Background="White">
                 <InkCanvas x:Name="MyInkCanvas" />
             </Grid>
-            <InkToolbar
-                HorizontalAlignment="Center"
+            <InkToolbar HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 TargetInkCanvas="{x:Bind MyInkCanvas}" />
             <Button

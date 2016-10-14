@@ -1,11 +1,14 @@
-﻿using GalaSoft.MvvmLight;
-using Hipda.Client.Models;
+﻿using Hipda.Client.Models;
 using Hipda.Client.Services;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Hipda.Client.ViewModels
 {
-    public class ForumAllCategoryListViewViewModel : ViewModelBase
+    public class ForumAllCategoryListViewViewModel : NotificationObject
     {
         ForumService _ds;
 
@@ -16,7 +19,8 @@ namespace Hipda.Client.ViewModels
             get { return _forumAllCategoryList; }
             set
             {
-                Set(ref _forumAllCategoryList, value);
+                _forumAllCategoryList = value;
+                this.RaisePropertyChanged("ForumAllCategoryList");
             }
         }
 

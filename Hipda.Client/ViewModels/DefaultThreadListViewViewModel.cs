@@ -1,7 +1,10 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using Hipda.Client.Commands;
 using Hipda.Client.Services;
 using System;
-using System.Windows.Input;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -21,7 +24,7 @@ namespace Hipda.Client.ViewModels
 
         public int ThreadMaxPageNo { get; set; }
 
-        public ICommand RefreshThreadCommand { get; set; }
+        public DelegateCommand RefreshThreadCommand { get; set; }
 
         public DefaultThreadListViewViewModel(int pageNo, int forumId, ListView leftListView, CommandBar leftCommandBar, Action openCreateThreadPanel, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
@@ -44,11 +47,11 @@ namespace Hipda.Client.ViewModels
 
             LoadData(pageNo, _forumId);
 
-            RefreshThreadCommand = new RelayCommand(() =>
-            {
+            RefreshThreadCommand = new DelegateCommand();
+            RefreshThreadCommand.ExecuteAction = (p) => {
                 _ds.ClearThreadData(_forumId);
                 LoadData(1, _forumId);
-            });
+            };
 
             var btnAdd = new AppBarButton { Icon = new FontIcon { Glyph = "\uE104" }, Label = "发表新贴" };
             btnAdd.Click += (s, e) => openCreateThreadPanel();
@@ -96,11 +99,12 @@ namespace Hipda.Client.ViewModels
             var menuFlyoutItem = new MenuFlyoutItem();
             menuFlyoutItem.Text = typeName;
 
-            var OpenThreadByTypeIdCommand = new RelayCommand(() =>
+            var OpenThreadByTypeIdCommand = new DelegateCommand();
+            OpenThreadByTypeIdCommand.ExecuteAction = (p) =>
             {
                 _ds.ClearThreadData(_forumId);
                 LoadData(1, _forumId, typeId);
-            });
+            };
             menuFlyoutItem.Command = OpenThreadByTypeIdCommand;
 
             return menuFlyoutItem;

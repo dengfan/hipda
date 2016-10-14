@@ -1,7 +1,10 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using Hipda.Client.Commands;
 using Hipda.Client.Services;
 using System;
-using System.Windows.Input;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -25,7 +28,7 @@ namespace Hipda.Client.ViewModels
 
         public int ThreadMaxPageNo { get; set; }
 
-        public ICommand RefreshThreadCommand { get; set; }
+        public DelegateCommand RefreshThreadCommand { get; set; }
 
         public SearchFullTextThreadListViewViewModel(int pageNo, string searchKeyword, string searchAuthor, int searchType, int searchTimeSpan, int searchForumSpan, ListView leftListView, CommandBar leftCommandBar, Action beforeLoad, Action afterLoad, Action noDataNotice)
         {
@@ -53,11 +56,11 @@ namespace Hipda.Client.ViewModels
             _ds.ClearThreadDataForSearchFullText();
             LoadDataForSearchFullText(pageNo);
 
-            var RefreshThreadCommand = new RelayCommand(() =>
-            {
+            var RefreshThreadCommand = new DelegateCommand();
+            RefreshThreadCommand.ExecuteAction = (p) => {
                 _ds.ClearThreadDataForSearchFullText();
                 LoadDataForSearchFullText(1);
-            });
+            };
 
             var btnRefresh = new AppBarButton { Icon = new FontIcon { Glyph = "\uE895" }, Label = "刷新" };
             btnRefresh.Command = RefreshThreadCommand;

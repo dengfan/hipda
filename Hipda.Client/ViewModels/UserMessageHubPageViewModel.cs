@@ -1,20 +1,23 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+﻿using Hipda.Client.Commands;
 using Hipda.Client.Models;
 using Hipda.Client.Services;
+using System;
 using System.Collections.Generic;
-using System.Windows.Input;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Windows.System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 
 namespace Hipda.Client.ViewModels
 {
-    public class UserMessageHubPageViewModel : ViewModelBase
+    public class UserMessageHubPageViewModel : NotificationObject
     {
         UserMessageHubService _ds;
 
-        public ICommand RefreshCommand { get; set; }
-        public ICommand DeleteCommand { get; set; }
+        public DelegateCommand RefreshCommand { get; set; }
+        public DelegateCommand DeleteCommand { get; set; }
 
 
         private bool _isProgressRingActive = true;
@@ -24,7 +27,8 @@ namespace Hipda.Client.ViewModels
             get { return _isProgressRingActive; }
             set
             {
-                Set(ref _isProgressRingActive, value);
+                _isProgressRingActive = value;
+                this.RaisePropertyChanged("IsProgressRingActive");
             }
         }
 
@@ -35,7 +39,8 @@ namespace Hipda.Client.ViewModels
             get { return _dataView; }
             set
             {
-                Set(ref _dataView, value);
+                _dataView = value;
+                this.RaisePropertyChanged("DataView");
             }
         }
 
@@ -50,14 +55,14 @@ namespace Hipda.Client.ViewModels
 
             GetData();
 
-            RefreshCommand = new RelayCommand(() =>
-            {
+            RefreshCommand = new DelegateCommand();
+            RefreshCommand.ExecuteAction = (p) => {
                 _ds.ClearUserMessageListData();
                 DataView = _ds.GetViewForUserMessageList(1, AfterLoaded, null);
-            });
+            };
 
-            DeleteCommand = new RelayCommand(async () =>
-            {
+            DeleteCommand = new DelegateCommand();
+            DeleteCommand.ExecuteAction = async (p) => {
                 if (listView.SelectedItems == null)
                 {
                     return;
@@ -75,7 +80,7 @@ namespace Hipda.Client.ViewModels
                     _ds.ClearUserMessageListData();
                     DataView = _ds.GetViewForUserMessageList(1, AfterLoaded, null);
                 }
-            });
+            };
         }
 
         void GetData()

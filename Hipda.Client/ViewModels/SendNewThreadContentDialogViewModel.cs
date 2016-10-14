@@ -1,9 +1,11 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using Hipda.Client.Commands;
 using Hipda.Client.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
-using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace Hipda.Client.ViewModels
 {
@@ -33,15 +35,15 @@ namespace Hipda.Client.ViewModels
         }
 
 
-        public ICommand AddAttachFilesCommand { get; set; }
+        public DelegateCommand AddAttachFilesCommand { get; set; }
 
-        public ICommand SendCommand { get; set; }
+        public DelegateCommand SendCommand { get; set; }
 
         static List<string> _fileNameList = new List<string>();
         static List<string> _fileCodeList = new List<string>();
 
-        public SendNewThreadContentDialogViewModel(CancellationTokenSource cts, int forumId,
-            Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload,
+        public SendNewThreadContentDialogViewModel(CancellationTokenSource cts, int forumId, 
+            Action<int, int, string> beforeUpload, Action<string> insertFileCodeIntoContentTextBox, Action<int> afterUpload, 
             Action<string> sentFailded, Action<string> sentSuccess)
         {
             _beforeUpload = beforeUpload;
@@ -50,7 +52,8 @@ namespace Hipda.Client.ViewModels
             _sentSuccess = sentSuccess;
             _sentFailded = sentFailded;
 
-            AddAttachFilesCommand = new RelayCommand(async () =>
+            AddAttachFilesCommand = new DelegateCommand();
+            AddAttachFilesCommand.ExecuteAction = async (p) => 
             {
                 var data = await SendService.UploadFileAsync(cts, _beforeUpload, _afterUpload);
                 if (data[0] != null && data[0].Count > 0)
@@ -68,9 +71,10 @@ namespace Hipda.Client.ViewModels
                     _insertFileCodeIntoContentTextBox($"\r\n{fileCodes}\r\n");
                     _fileCodeList.Clear();
                 }
-            });
+            };
 
-            SendCommand = new RelayCommand(async () =>
+            SendCommand = new DelegateCommand();
+            SendCommand.ExecuteAction = async (p) =>
             {
                 if (string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(Content))
                 {
@@ -87,14 +91,20 @@ namespace Hipda.Client.ViewModels
                     Content = string.Empty;
 
                     // 提示发贴成功
-                    _sentSuccess?.Invoke(Title);
+                    if (_sentSuccess != null)
+                    {
+                        _sentSuccess(Title);
+                    }
                 }
                 else
                 {
                     // 提示发贴不成功
-                    _sentFailded?.Invoke("对不起，发布请求失败，请稍后再试！");
+                    if (_sentFailded != null)
+                    {
+                        _sentFailded("对不起，发布请求失败，请稍后再试！");
+                    }
                 }
-            });
+            };
         }
     }
 }

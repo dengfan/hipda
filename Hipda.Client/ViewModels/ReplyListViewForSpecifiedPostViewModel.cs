@@ -1,11 +1,17 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Hipda.Client.Services;
-using System;
-using System.Threading;
-using System.Windows.Input;
-using Windows.UI.Xaml.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Hipda.Client.Models;
 using Windows.UI.Xaml.Data;
+using Hipda.Client.Commands;
+using Hipda.Client.Services;
+using Windows.UI.Xaml.Controls;
+using System.Threading;
+using Windows.UI.Xaml.Media;
+using Windows.UI;
+using Windows.UI.Xaml;
 
 namespace Hipda.Client.ViewModels
 {
@@ -13,7 +19,7 @@ namespace Hipda.Client.ViewModels
     /// 查看指定的POST之回复列表之视图模型
     /// 根据 post id 及 thread id 加载
     /// </summary>
-    public class ReplyListViewForSpecifiedPostViewModel : ViewModelBase
+    public class ReplyListViewForSpecifiedPostViewModel : NotificationObject
     {
         int _startPageNo = 1;
         int _postId;
@@ -24,10 +30,10 @@ namespace Hipda.Client.ViewModels
         Action<int> _listViewScroll;
         ReplyListService _ds;
 
-        public ICommand AddToFavoritesCommand { get; set; }
-        public ICommand RefreshReplyCommand { get; set; }
-        public ICommand LoadPrevPageDataCommand { get; set; }
-        public ICommand LoadLastPageDataCommand { get; set; }
+        public DelegateCommand AddToFavoritesCommand { get; set; }
+        public DelegateCommand RefreshReplyCommand { get; set; }
+        public DelegateCommand LoadPrevPageDataCommand { get; set; }
+        public DelegateCommand LoadLastPageDataCommand { get; set; }
 
 
         ICollectionView _replyItemCollection;
@@ -37,7 +43,8 @@ namespace Hipda.Client.ViewModels
             get { return _replyItemCollection; }
             set
             {
-                Set(ref _replyItemCollection, value);
+                _replyItemCollection = value;
+                this.RaisePropertyChanged("ReplyItemCollection");
             }
         }
 
@@ -50,31 +57,35 @@ namespace Hipda.Client.ViewModels
             _listViewScroll = listViewScroll;
             _ds = new ReplyListService();
 
-            AddToFavoritesCommand = new RelayCommand(async () =>
+            AddToFavoritesCommand = new DelegateCommand();
+            AddToFavoritesCommand.ExecuteAction = async (p) =>
             {
                 await SendService.SendAddToFavoritesActionAsync(cts, _threadId, _ds.GetThreadTitle(_threadId));
-            });
+            };
 
-            RefreshReplyCommand = new RelayCommand(() =>
+            RefreshReplyCommand = new DelegateCommand();
+            RefreshReplyCommand.ExecuteAction = (p) =>
             {
                 _ds.ClearReplyData(_threadId);
                 LoadData(1);
-            });
+            };
 
-            LoadPrevPageDataCommand = new RelayCommand(() =>
+            LoadPrevPageDataCommand = new DelegateCommand();
+            LoadPrevPageDataCommand.ExecuteAction = (p) =>
             {
                 if (_startPageNo > 1)
                 {
                     _ds.ClearReplyData(_threadId);
                     LoadData(_startPageNo - 1);
                 }
-            });
+            };
 
-            LoadLastPageDataCommand = new RelayCommand(() =>
+            LoadLastPageDataCommand = new DelegateCommand();
+            LoadLastPageDataCommand.ExecuteAction = (p) =>
             {
                 _ds.ClearReplyData(_threadId);
                 LoadData(_ds.GetReplyMaxPageNo());
-            });
+            };
 
             FirstLoad(cts);
         }

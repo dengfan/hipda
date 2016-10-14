@@ -9,7 +9,6 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <local:ViewModelLocator x:Key="Locator"></local:ViewModelLocator>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/Controls.xaml" />
                 <ResourceDictionary Source="Themes/ThemePurple.xaml" />

@@ -98,8 +98,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModelLocator.cs" />
     <Compile Include="Selectors\AttachFileGridItemTemplateSelector.cs" />
+    <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Controls\MyAvatarForReply.cs" />
     <Compile Include="Controls\MyAvatarForThread.cs" />
     <Compile Include="Controls\MyImage.cs" />
@@ -200,6 +200,7 @@
     <Compile Include="ViewModels\MyThreadsThreadListViewViewModel.cs" />
     <Compile Include="ViewModels\NoticeItemViewModel.cs" />
     <Compile Include="ViewModels\NoticeThreadListViewViewModel.cs" />
+    <Compile Include="ViewModels\NotificationObject.cs" />
     <Compile Include="ViewModels\QuoteDetailPageViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForDefaultViewModel.cs" />
     <Compile Include="ViewModels\ReplyListViewForSpecifiedPostViewModel.cs" />
