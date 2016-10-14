@@ -196,50 +196,17 @@ namespace Hipda.Client.Views
 
         public ReplyListPage()
         {
-            this.InitializeComponent();
-
-            this.SizeChanged += (s, e) =>
-            {
-                string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
-                if (userInteractionType.Equals("Touch"))
-                {
-                    //InkButton.Width = 80;
-                    //InkButton.Height = 40;
-                    FaceButton.Width = 80;
-                    FaceButton.Height = 40;
-                    //FileButton.Width = 80;
-                    //FileButton.Height = 40;
-                    //SendButton.Height = 40;
-                }
-                else if (userInteractionType.Equals("Mouse"))
-                {
-                    //InkButton.Width = 32;
-                    //InkButton.Height = 32;
-                    FaceButton.Width = 32;
-                    FaceButton.Height = 32;
-                    //FileButton.Width = 32;
-                    //FileButton.Height = 32;
-                    //SendButton.Height = 32;
-                }
-
-                ContentTextBox.MaxHeight = this.ActualHeight / 2;
-            };
+            InitializeComponent();
 
             var frame = (Frame)Window.Current.Content;
             _mainPage = (MainPage)frame.Content;
             var countdownBinding = new Binding { Path = new PropertyPath("Countdown"), Source = _mainPage };
-            this.SetBinding(ReplyListPage.CountdownProperty, countdownBinding);
+            SetBinding(CountdownProperty, countdownBinding);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
-            if (Frame.CanGoBack)
-            {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-                SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;
-            }
 
             string param = e.Parameter.ToString();
             if (param.StartsWith("tid="))
@@ -291,23 +258,35 @@ namespace Hipda.Client.Views
                 #endregion
             }
 
+            // Register for hardware and software back request from the system
+            SystemNavigationManager systemNavigationManager = SystemNavigationManager.GetForCurrentView();
+            systemNavigationManager.BackRequested += DetailPage_BackRequested;
+            systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
 
-            if (Frame.CanGoBack)
-            {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-                SystemNavigationManager.GetForCurrentView().BackRequested -= BackRequested;
-            }
+            SystemNavigationManager systemNavigationManager = SystemNavigationManager.GetForCurrentView();
+            systemNavigationManager.BackRequested -= DetailPage_BackRequested;
+            systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
         }
 
-        void BackRequested(object sender, BackRequestedEventArgs e)
+        private void OnBackRequested()
         {
-            Frame.GoBack(new CommonNavigationTransitionInfo());
+            // Page above us will be our master view.
+            // Make sure we are using the "drill out" animation in this transition.
+
+            Frame.GoBack(new DrillInNavigationTransitionInfo());
+        }
+
+        void DetailPage_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            // Mark event as handled so we don't get bounced out of the app.
             e.Handled = true;
+
+            OnBackRequested();
         }
 
         void NavigateBackForWideState(bool useTransition)
@@ -317,7 +296,7 @@ namespace Hipda.Client.Views
 
             if (useTransition)
             {
-                Frame.GoBack(new SlideNavigationTransitionInfo());
+                Frame.GoBack(new EntranceNavigationTransitionInfo());
             }
             else
             {
@@ -368,20 +347,6 @@ namespace Hipda.Client.Views
 
                 // We shouldn't see this page since we are in "wide master-detail" mode.
                 NavigateBackForWideState(useTransition: false);
-            }
-        }
-
-        void rightPr_RefreshInvoked(DependencyObject sender, object args)
-        {
-            if (PostId > 0)
-            {
-                var vm = (ReplyListViewForSpecifiedPostViewModel)DataContext;
-                vm.LoadPrevPageData();
-            }
-            else if (ThreadId > 0)
-            {
-                var vm = (ReplyListViewForDefaultViewModel)DataContext;
-                vm.LoadPrevPageData();
             }
         }
 
@@ -537,7 +502,7 @@ namespace Hipda.Client.Views
         private void QuickReplyPanel_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             // 阻止 HideReplyBottomPanel 事件向下传递
-            e.Handled = true;
+            //e.Handled = true;
         }
 
         private void ReplyListView_PullProgressChanged(object sender, Controls.RefreshProgressEventArgs e)
@@ -547,7 +512,16 @@ namespace Hipda.Client.Views
 
         private void ReplyListView_RefreshRequested(object sender, Controls.RefreshRequestedEventArgs e)
         {
-
+            if (PostId > 0)
+            {
+                var vm = DataContext as ReplyListViewForSpecifiedPostViewModel;
+                vm.LoadPrevPageData();
+            }
+            else if (ThreadId > 0)
+            {
+                var vm = DataContext as ReplyListViewForDefaultViewModel;
+                vm.LoadPrevPageData();
+            }
         }
     }
 }

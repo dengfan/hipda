@@ -57,6 +57,7 @@
             x:Name="ReplyListView"
             Margin="0,48,0,0"
             VerticalAlignment="Top"
+            AutoRefresh="False"
             IncrementalLoadingTrigger="Edge"
             IsItemClickEnabled="False"
             ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
