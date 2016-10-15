@@ -992,7 +992,7 @@
         <!--  Ink面板  -->
         <Grid
             x:Name="InkPanel"
-            Background="Gray"
+            Background="Transparent"
             Visibility="Collapsed">
             <Grid
                 MaxWidth="600"
@@ -1097,6 +1097,7 @@
                 FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
                 TextWrapping="Wrap" />
         </Border>
+        
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates">
                 <VisualState>

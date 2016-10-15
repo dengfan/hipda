@@ -1036,11 +1036,13 @@ namespace Hipda.Client
 
         public void OpenInkPanel()
         {
+            MainGridBlurEffect_Set(mainGrid);
             InkPanel.Visibility = Visibility.Visible;
         }
 
         public void CloseInkPanel()
         {
+            MainGridBlurEffect_Unset(mainGrid);
             InkPanel.Visibility = Visibility.Collapsed;
         }
 
