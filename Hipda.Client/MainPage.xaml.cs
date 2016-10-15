@@ -213,18 +213,25 @@ namespace Hipda.Client
                     }
                 }
 
-                MainGridBlurEffect_SizeChanged(e);
+                MainGridBlurEffect_SizeChanged(mainGrid, e);
             };
 
             MyInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Touch | CoreInputDeviceTypes.Pen;
-
-            MainGridBlurEffect_Prepare();
         }
 
         #region 失焦滤镜
-        void MainGridBlurEffect_Prepare()
+        void MainGridBlurEffect_SizeChanged(FrameworkElement element, SizeChangedEventArgs e)
         {
-            compositor = ElementCompositionPreview.GetElementVisual(mainGrid).Compositor;
+            var blurVisual = (SpriteVisual)ElementCompositionPreview.GetElementChildVisual(element);
+            if (blurVisual != null)
+            {
+                blurVisual.Size = e.NewSize.ToVector2();
+            }
+        }
+
+        void MainGridBlurEffect_Set(FrameworkElement element)
+        {
+            compositor = ElementCompositionPreview.GetElementVisual(element).Compositor;
 
             // we create the effect. 
             // Notice the Source parameter definition. Here we tell the effect that the source will come from another element/object
@@ -244,32 +251,20 @@ namespace Hipda.Client
             // we are basically chaining the layers (xaml grid definition -> rendered bitmap of the grid -> blur effect -> screen)
             var destinationBrush = compositor.CreateBackdropBrush();
             brush.SetSourceParameter("background", destinationBrush);
-        }
 
-        void MainGridBlurEffect_SizeChanged(SizeChangedEventArgs e)
-        {
-            var blurVisual = (SpriteVisual)ElementCompositionPreview.GetElementChildVisual(mainGrid);
-            if (blurVisual != null)
-            {
-                blurVisual.Size = e.NewSize.ToVector2();
-            }
-        }
-
-        void MainGridBlurEffect_Set()
-        {
             // we create the visual sprite that will hold our generated bitmap (the blurred grid)
             // Visual Sprite are "raw" elements so there is no automatic layouting. You have to specify the size yourself
             var blurSprite = compositor.CreateSpriteVisual();
-            blurSprite.Size = new Vector2((float)mainGrid.ActualWidth, (float)mainGrid.ActualHeight);
+            blurSprite.Size = new Vector2((float)element.ActualWidth, (float)element.ActualHeight);
             blurSprite.Brush = brush;
 
             // we add our sprite to the rendering pipeline
-            ElementCompositionPreview.SetElementChildVisual(mainGrid, blurSprite);
+            ElementCompositionPreview.SetElementChildVisual(element, blurSprite);
         }
 
-        void MainGridBlurEffect_Unset()
+        void MainGridBlurEffect_Unset(FrameworkElement element)
         {
-            ElementCompositionPreview.SetElementChildVisual(mainGrid, null);
+            ElementCompositionPreview.SetElementChildVisual(element, null);
         }
         #endregion
 
@@ -959,7 +954,7 @@ namespace Hipda.Client
                 InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Visible;
             }
 
-            MainGridBlurEffect_Set();
+            MainGridBlurEffect_Set(mainGrid);
 
             InputPanelFrame.Navigate(pageType, parameters);
         }
@@ -974,17 +969,18 @@ namespace Hipda.Client
         {
             InputPanelDoubleAnimation.To = InputPanel.ActualHeight;
             InputPanelAnimation.Begin();
-            InputPanelAnimation.Completed += (s2, e2) =>
-            {
-                InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Collapsed;
-
-                InputPanelAnimation.Stop();
-
-                MainGridBlurEffect_Unset();
-            };
+            InputPanelAnimation.Completed += InputPanelAnimation_Completed;
 
             SetTitleForInputPanel(string.Empty);
             InputPanelFrame.BackStack.Clear();
+        }
+
+        private void InputPanelAnimation_Completed(object sender, object e)
+        {
+            InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Collapsed;
+            InputPanelAnimation.Stop();
+            MainGridBlurEffect_Unset(mainGrid);
+            InputPanelAnimation.Completed -= InputPanelAnimation_Completed; // 这句有必要吗？
         }
 
         private void InputPanelFrameGoBack()
