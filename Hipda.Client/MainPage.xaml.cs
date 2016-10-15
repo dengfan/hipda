@@ -37,6 +37,55 @@ namespace Hipda.Client
         private CompositionEffectBrush brush;
         private Compositor compositor;
 
+        #region 失焦滤镜
+        void MainGridBlurEffect_SizeChanged(FrameworkElement element, SizeChangedEventArgs e)
+        {
+            var blurVisual = (SpriteVisual)ElementCompositionPreview.GetElementChildVisual(element);
+            if (blurVisual != null)
+            {
+                blurVisual.Size = e.NewSize.ToVector2();
+            }
+        }
+
+        void MainGridBlurEffect_Set(FrameworkElement element)
+        {
+            compositor = ElementCompositionPreview.GetElementVisual(element).Compositor;
+
+            // we create the effect. 
+            // Notice the Source parameter definition. Here we tell the effect that the source will come from another element/object
+            var blurEffect = new GaussianBlurEffect
+            {
+                Name = "Blur",
+                Source = new CompositionEffectSourceParameter("background"),
+                BlurAmount = 15f,
+                BorderMode = EffectBorderMode.Hard,
+            };
+
+            // we convert the effect to a brush that can be used to paint the visual layer
+            var blurEffectFactory = compositor.CreateEffectFactory(blurEffect);
+            brush = blurEffectFactory.CreateBrush();
+
+            // We create a special brush to get the image output of the previous layer.
+            // we are basically chaining the layers (xaml grid definition -> rendered bitmap of the grid -> blur effect -> screen)
+            var destinationBrush = compositor.CreateBackdropBrush();
+            brush.SetSourceParameter("background", destinationBrush);
+
+            // we create the visual sprite that will hold our generated bitmap (the blurred grid)
+            // Visual Sprite are "raw" elements so there is no automatic layouting. You have to specify the size yourself
+            var blurSprite = compositor.CreateSpriteVisual();
+            blurSprite.Size = new Vector2((float)element.ActualWidth, (float)element.ActualHeight);
+            blurSprite.Brush = brush;
+
+            // we add our sprite to the rendering pipeline
+            ElementCompositionPreview.SetElementChildVisual(element, blurSprite);
+        }
+
+        void MainGridBlurEffect_Unset(FrameworkElement element)
+        {
+            ElementCompositionPreview.SetElementChildVisual(element, null);
+        }
+        #endregion
+
         static LocalSettingsDependencyObject _myLocalSettings = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
         static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
 
@@ -218,55 +267,6 @@ namespace Hipda.Client
 
             MyInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Touch | CoreInputDeviceTypes.Pen;
         }
-
-        #region 失焦滤镜
-        void MainGridBlurEffect_SizeChanged(FrameworkElement element, SizeChangedEventArgs e)
-        {
-            var blurVisual = (SpriteVisual)ElementCompositionPreview.GetElementChildVisual(element);
-            if (blurVisual != null)
-            {
-                blurVisual.Size = e.NewSize.ToVector2();
-            }
-        }
-
-        void MainGridBlurEffect_Set(FrameworkElement element)
-        {
-            compositor = ElementCompositionPreview.GetElementVisual(element).Compositor;
-
-            // we create the effect. 
-            // Notice the Source parameter definition. Here we tell the effect that the source will come from another element/object
-            var blurEffect = new GaussianBlurEffect
-            {
-                Name = "Blur",
-                Source = new CompositionEffectSourceParameter("background"),
-                BlurAmount = 15f,
-                BorderMode = EffectBorderMode.Hard,
-            };
-
-            // we convert the effect to a brush that can be used to paint the visual layer
-            var blurEffectFactory = compositor.CreateEffectFactory(blurEffect);
-            brush = blurEffectFactory.CreateBrush();
-
-            // We create a special brush to get the image output of the previous layer.
-            // we are basically chaining the layers (xaml grid definition -> rendered bitmap of the grid -> blur effect -> screen)
-            var destinationBrush = compositor.CreateBackdropBrush();
-            brush.SetSourceParameter("background", destinationBrush);
-
-            // we create the visual sprite that will hold our generated bitmap (the blurred grid)
-            // Visual Sprite are "raw" elements so there is no automatic layouting. You have to specify the size yourself
-            var blurSprite = compositor.CreateSpriteVisual();
-            blurSprite.Size = new Vector2((float)element.ActualWidth, (float)element.ActualHeight);
-            blurSprite.Brush = brush;
-
-            // we add our sprite to the rendering pipeline
-            ElementCompositionPreview.SetElementChildVisual(element, blurSprite);
-        }
-
-        void MainGridBlurEffect_Unset(FrameworkElement element)
-        {
-            ElementCompositionPreview.SetElementChildVisual(element, null);
-        }
-        #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

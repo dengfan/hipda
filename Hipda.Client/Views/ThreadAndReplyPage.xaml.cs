@@ -3,15 +3,12 @@ using Hipda.Client.Models;
 using Hipda.Client.Services;
 using Hipda.Client.ViewModels;
 using System;
-using System.Linq;
 using System.Threading;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Core;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
@@ -82,41 +79,41 @@ namespace Hipda.Client.Views
 
         public ThreadAndReplyPage()
         {
-            this.InitializeComponent();
-
-            this.SizeChanged += (s, e) =>
-            {
-                string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
-                if (userInteractionType.Equals("Touch"))
-                {
-                    InkButton.Width = 80;
-                    InkButton.Height = 40;
-                    FaceButton.Width = 80;
-                    FaceButton.Height = 40;
-                    FileButton.Width = 80;
-                    FileButton.Height = 40;
-                    SendButton.Height = 36;
-                    ShortcutKeyButton.Height = 36;
-                }
-                else if (userInteractionType.Equals("Mouse"))
-                {
-                    InkButton.Width = 32;
-                    InkButton.Height = 32;
-                    FaceButton.Width = 32;
-                    FaceButton.Height = 32;
-                    FileButton.Width = 32;
-                    FileButton.Height = 32;
-                    SendButton.Height = 28;
-                    ShortcutKeyButton.Height = 28;
-                }
-
-                ContentTextBox.MaxHeight = this.ActualHeight / 2;
-            };
+            InitializeComponent();
 
             var frame = (Frame)Window.Current.Content;
             _mainPage = (MainPage)frame.Content;
             var countdownBinding = new Binding { Path = new PropertyPath("Countdown"), Source = _mainPage };
-            this.SetBinding(ThreadAndReplyPage.CountdownProperty, countdownBinding);
+            SetBinding(CountdownProperty, countdownBinding);
+        }
+
+        private void ThreadAndReplyPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
+            if (userInteractionType.Equals("Touch"))
+            {
+                InkButton.Width = 80;
+                InkButton.Height = 40;
+                FaceButton.Width = 80;
+                FaceButton.Height = 40;
+                FileButton.Width = 80;
+                FileButton.Height = 40;
+                SendButton.Height = 36;
+                ShortcutKeyButton.Height = 36;
+            }
+            else if (userInteractionType.Equals("Mouse"))
+            {
+                InkButton.Width = 32;
+                InkButton.Height = 32;
+                FaceButton.Width = 32;
+                FaceButton.Height = 32;
+                FileButton.Width = 32;
+                FileButton.Height = 32;
+                SendButton.Height = 28;
+                ShortcutKeyButton.Height = 28;
+            }
+
+            ContentTextBox.MaxHeight = ActualHeight / 2;
         }
 
         #region 委托事件
@@ -261,6 +258,8 @@ namespace Hipda.Client.Views
         {
             base.OnNavigatedTo(e);
 
+            SizeChanged += ThreadAndReplyPage_SizeChanged;
+
             OpenReplyPageByThreadId();
             leftNoDataNoticePanel.Visibility = Visibility.Collapsed;
 
@@ -327,6 +326,8 @@ namespace Hipda.Client.Views
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             base.OnNavigatingFrom(e);
+
+            SizeChanged -= ThreadAndReplyPage_SizeChanged;
         }
 
         private void AdaptiveStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
