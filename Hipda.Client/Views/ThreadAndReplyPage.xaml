@@ -225,14 +225,28 @@
                             <FontIcon Glyph="&#xE777;" />
                         </AppBarButton.Icon>
                     </AppBarButton>
-                    <CommandBar.SecondaryCommands>
-                        <!--<AppBarToggleButton Label="云 倒序看贴"/>-->
-                        <!--<AppBarToggleButton Label="只看某某"/>-->
-                        <AppBarButton Command="{Binding CopyUrlCommand}" Label="批量回复" />
-                        <AppBarButton Command="{Binding CopyUrlCommand}" Label="批量引用" />
-                        <AppBarButton Command="{Binding CopyUrlCommand}" Label="复制链接" />
-                        <AppBarButton Command="{Binding OpenInBrowserCommand}" Label="在浏览器中打开" />
-                    </CommandBar.SecondaryCommands>
+                    <!--<AppBarToggleButton Label="云 倒序看贴"/>-->
+                    <!--<AppBarToggleButton Label="只看某某"/>-->
+                    <AppBarButton Command="{Binding CopyUrlCommand}" Label="批量回复">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE11F;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Command="{Binding CopyUrlCommand}" Label="批量引用">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE134;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Command="{Binding CopyUrlCommand}" Label="复制链接">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE71B;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Command="{Binding OpenInBrowserCommand}" Label="在浏览器中打开">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE12B;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
                 </CommandBar>
 
                 <ProgressRing
