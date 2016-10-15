@@ -372,7 +372,7 @@ namespace Hipda.Client.Views
                 if (AdaptiveStates.CurrentState == NarrowState)
                 {
                     string p = $"pid={PostId}";
-                    Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                    Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
                 }
                 else
                 {
@@ -384,7 +384,7 @@ namespace Hipda.Client.Views
                 if (AdaptiveStates.CurrentState == NarrowState)
                 {
                     string p = $"tid={ThreadId}";
-                    Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+                    Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
                 }
                 else
                 {

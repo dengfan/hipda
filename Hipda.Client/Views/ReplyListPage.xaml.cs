@@ -502,12 +502,31 @@ namespace Hipda.Client.Views
         private void QuickReplyPanel_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             // 阻止 HideReplyBottomPanel 事件向下传递
-            //e.Handled = true;
+            e.Handled = true;
         }
 
         private void ReplyListView_PullProgressChanged(object sender, Controls.RefreshProgressEventArgs e)
         {
-
+            if (e.IsRefreshable)
+            {
+                if (e.PullProgress == 1)
+                {
+                    // Progress = 1.0 means that the refresh has been triggered.
+                    if (SpinnerStoryboard.GetCurrentState() == Windows.UI.Xaml.Media.Animation.ClockState.Stopped)
+                    {
+                        SpinnerStoryboard.Begin();
+                    }
+                }
+                else if (SpinnerStoryboard.GetCurrentState() != Windows.UI.Xaml.Media.Animation.ClockState.Stopped)
+                {
+                    SpinnerStoryboard.Stop();
+                }
+                else
+                {
+                    // Turn the indicator by an amount proportional to the pull progress.
+                    SpinnerTransform.Angle = e.PullProgress * 360;
+                }
+            }
         }
 
         private void ReplyListView_RefreshRequested(object sender, Controls.RefreshRequestedEventArgs e)

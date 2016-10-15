@@ -26,10 +26,51 @@
             </Storyboard>
         </Grid.Resources>
 
+        <!--<pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
+            <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
+                              VerticalAlignment="Top" SelectionMode="None" ShowsScrollingPlaceholders="False"
+                              ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
+                              ItemTemplateSelector="{StaticResource ReplyListItemTemplateSelector}"
+                              ItemsSource="{Binding ReplyItemCollection}">
+            </ListView>
+        </pr:PullToRefreshBox>-->
+
+        <c:RefreshableListView
+            x:Name="ReplyListView"
+            Margin="0,48,0,0"
+            VerticalAlignment="Top"
+            AutoRefresh="False"
+            IncrementalLoadingTrigger="Edge"
+            IsItemClickEnabled="False"
+            ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
+            ItemTemplateSelector="{StaticResource ReplyListItemTemplateSelector}"
+            ItemsSource="{Binding ReplyItemCollection}"
+            PullProgressChanged="ReplyListView_PullProgressChanged"
+            RefreshRequested="ReplyListView_RefreshRequested"
+            SelectionMode="None"
+            ShowsScrollingPlaceholders="False">
+            <c:RefreshableListView.RefreshIndicatorContent>
+                <Grid Height="100" Background="Transparent">
+                    <FontIcon
+                        Margin="0,0,0,30"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        FontFamily="Segoe MDL2 Assets"
+                        FontSize="20"
+                        Glyph="&#xE72C;"
+                        RenderTransformOrigin="0.5,0.5">
+                        <FontIcon.RenderTransform>
+                            <RotateTransform x:Name="SpinnerTransform" Angle="0" />
+                        </FontIcon.RenderTransform>
+                    </FontIcon>
+                </Grid>
+            </c:RefreshableListView.RefreshIndicatorContent>
+        </c:RefreshableListView>
+
         <CommandBar
             x:Name="RightCommandBar"
             VerticalAlignment="Top"
-            Background="{ThemeResource SystemChromeLowColor}">
+            Opacity="0.8">
             <AppBarButton
                 x:Name="AddToFavoritesButton"
                 Command="{Binding AddToFavoritesCommand}"
@@ -57,49 +98,6 @@
             </CommandBar.SecondaryCommands>
         </CommandBar>
 
-        <!--<pr:PullToRefreshBox Grid.Row="1" x:Name="rightPr" RefreshInvoked="rightPr_RefreshInvoked" VerticalAlignment="Top">
-            <ListView x:Name="ReplyListView" IsItemClickEnabled="False"
-                              VerticalAlignment="Top" SelectionMode="None" ShowsScrollingPlaceholders="False"
-                              ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-                              ItemTemplateSelector="{StaticResource ReplyListItemTemplateSelector}"
-                              ItemsSource="{Binding ReplyItemCollection}">
-            </ListView>
-        </pr:PullToRefreshBox>-->
-
-        <c:RefreshableListView
-            x:Name="ReplyListView"
-            Margin="0,48,0,0"
-            VerticalAlignment="Top"
-            AutoRefresh="False"
-            IncrementalLoadingTrigger="Edge"
-            IsItemClickEnabled="False"
-            ItemContainerStyle="{StaticResource ReplyItemContainerStyle}"
-            ItemTemplateSelector="{StaticResource ReplyListItemTemplateSelector}"
-            ItemsSource="{Binding ReplyItemCollection}"
-            PullProgressChanged="ReplyListView_PullProgressChanged"
-            RefreshRequested="ReplyListView_RefreshRequested"
-            SelectionMode="None"
-            ShowsScrollingPlaceholders="False">
-
-            <c:RefreshableListView.RefreshIndicatorContent>
-                <Grid Height="100" Background="Transparent">
-                    <FontIcon
-                        Margin="0,0,0,30"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Bottom"
-                        FontFamily="Segoe MDL2 Assets"
-                        FontSize="20"
-                        Glyph="&#xE72C;"
-                        RenderTransformOrigin="0.5,0.5">
-                        <FontIcon.RenderTransform>
-                            <RotateTransform x:Name="SpinnerTransform" Angle="0" />
-                        </FontIcon.RenderTransform>
-                    </FontIcon>
-                </Grid>
-            </c:RefreshableListView.RefreshIndicatorContent>
-
-        </c:RefreshableListView>
-
         <ProgressRing
             x:Name="rightProgress"
             Width="50"
@@ -110,8 +108,6 @@
         <StackPanel
             x:Name="QuickReplyPanel"
             VerticalAlignment="Bottom"
-            Background="{ThemeResource SystemChromeMediumColor}"
-            Opacity="0.9"
             Tapped="QuickReplyPanel_Tapped">
             <Grid Height="48">
                 <Grid.ColumnDefinitions>

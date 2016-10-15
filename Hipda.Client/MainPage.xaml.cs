@@ -1,33 +1,31 @@
-﻿using Hipda.Client.Controls;
-using Hipda.Client.Converters;
-using Hipda.Client.Models;
+﻿using Hipda.Client.Models;
 using Hipda.Client.Services;
 using Hipda.Client.ViewModels;
 using Hipda.Client.Views;
 using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.Effects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Store;
 using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.System;
 using Windows.UI;
+using Windows.UI.Composition;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-
-//“空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 上有介绍
 
 namespace Hipda.Client
 {
@@ -36,6 +34,9 @@ namespace Hipda.Client
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private CompositionEffectBrush brush;
+        private Compositor compositor;
+
         static LocalSettingsDependencyObject _myLocalSettings = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
         static RoamingSettingsDependencyObject _myRoamingSettings = (RoamingSettingsDependencyObject)App.Current.Resources["MyRoamingSettings"];
 
@@ -179,22 +180,22 @@ namespace Hipda.Client
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             GetRemoveAdButtonContent();
 
             if (_myLocalSettings.ThemeType == 0)
             {
-                this.RequestedTheme = ElementTheme.Light;
+                RequestedTheme = ElementTheme.Light;
             }
             else if (_myLocalSettings.ThemeType == 1)
             {
-                this.RequestedTheme = ElementTheme.Dark;
+                RequestedTheme = ElementTheme.Dark;
             }
 
             _mainPageViewModel = MainPageViewModel.GetInstance();
             DataContext = _mainPageViewModel;
 
-            this.SizeChanged += (s, e) =>
+            SizeChanged += (s, e) =>
             {
                 if (CurrentApp.LicenseInformation.ProductLicenses["移除广告"].IsActive == false)
                 {
@@ -211,10 +212,66 @@ namespace Hipda.Client
                         MainSplitView.Margin = new Thickness(0);
                     }
                 }
+
+                MainGridBlurEffect_SizeChanged(e);
             };
 
             MyInkCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Touch | CoreInputDeviceTypes.Pen;
+
+            MainGridBlurEffect_Prepare();
         }
+
+        #region 失焦滤镜
+        void MainGridBlurEffect_Prepare()
+        {
+            compositor = ElementCompositionPreview.GetElementVisual(mainGrid).Compositor;
+
+            // we create the effect. 
+            // Notice the Source parameter definition. Here we tell the effect that the source will come from another element/object
+            var blurEffect = new GaussianBlurEffect
+            {
+                Name = "Blur",
+                Source = new CompositionEffectSourceParameter("background"),
+                BlurAmount = 15f,
+                BorderMode = EffectBorderMode.Hard,
+            };
+
+            // we convert the effect to a brush that can be used to paint the visual layer
+            var blurEffectFactory = compositor.CreateEffectFactory(blurEffect);
+            brush = blurEffectFactory.CreateBrush();
+
+            // We create a special brush to get the image output of the previous layer.
+            // we are basically chaining the layers (xaml grid definition -> rendered bitmap of the grid -> blur effect -> screen)
+            var destinationBrush = compositor.CreateBackdropBrush();
+            brush.SetSourceParameter("background", destinationBrush);
+        }
+
+        void MainGridBlurEffect_SizeChanged(SizeChangedEventArgs e)
+        {
+            var blurVisual = (SpriteVisual)ElementCompositionPreview.GetElementChildVisual(mainGrid);
+            if (blurVisual != null)
+            {
+                blurVisual.Size = e.NewSize.ToVector2();
+            }
+        }
+
+        void MainGridBlurEffect_Set()
+        {
+            // we create the visual sprite that will hold our generated bitmap (the blurred grid)
+            // Visual Sprite are "raw" elements so there is no automatic layouting. You have to specify the size yourself
+            var blurSprite = compositor.CreateSpriteVisual();
+            blurSprite.Size = new Vector2((float)mainGrid.ActualWidth, (float)mainGrid.ActualHeight);
+            blurSprite.Brush = brush;
+
+            // we add our sprite to the rendering pipeline
+            ElementCompositionPreview.SetElementChildVisual(mainGrid, blurSprite);
+        }
+
+        void MainGridBlurEffect_Unset()
+        {
+            ElementCompositionPreview.SetElementChildVisual(mainGrid, null);
+        }
+        #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -900,8 +957,9 @@ namespace Hipda.Client
             if (InputPanel.Visibility != Visibility.Visible)
             {
                 InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Visible;
-                OpenInputPanelMaskAnimation.Begin();
             }
+
+            MainGridBlurEffect_Set();
 
             InputPanelFrame.Navigate(pageType, parameters);
         }
@@ -918,12 +976,11 @@ namespace Hipda.Client
             InputPanelAnimation.Begin();
             InputPanelAnimation.Completed += (s2, e2) =>
             {
-                CloseInputPanelMaskAnimation.Begin();
                 InputPanel.Visibility = InputPanelMask.Visibility = Visibility.Collapsed;
 
                 InputPanelAnimation.Stop();
-                OpenInputPanelMaskAnimation.Stop();
-                CloseInputPanelMaskAnimation.Stop();
+
+                MainGridBlurEffect_Unset();
             };
 
             SetTitleForInputPanel(string.Empty);
