@@ -10,7 +10,7 @@
                     <StackPanel>
                         <TextBlock x:Name="tbIcon1" Text="&#x1F40C;"/>
                         <Grid>
-                            <Image x:Name="image1"/>
+                            <Image x:Name="image1" Visibility="Collapsed"/>
                             <Button x:Name="btnPlayGif" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Width="40" Height="40" Visibility="Collapsed">
                                 <SymbolIcon Symbol="Play" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button>

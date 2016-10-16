@@ -140,7 +140,9 @@ namespace Hipda.Client.Controls
 
             img.MaxWidth = bi.PixelWidth;
             img.Stretch = Stretch.UniformToFill;
+            img.Visibility = Visibility.Visible;
             img.ImageOpened -= Img_ImageOpened;
+
             var tbIcon1 = GetTemplateChild("tbIcon1") as TextBlock;
             tbIcon1.Visibility = Visibility.Collapsed;
         }
