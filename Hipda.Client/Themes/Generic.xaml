@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyImage">
-                    <ContentControl x:Name="content1" Margin="4">
+                    <ContentControl x:Name="cc1" Margin="4">
                         <TextBlock Text="&#x1F40C;"/>
                     </ContentControl>
                 </ControlTemplate>
