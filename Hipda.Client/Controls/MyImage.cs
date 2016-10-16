@@ -98,9 +98,11 @@ namespace Hipda.Client.Controls
             var myDependencyObject = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
             Binding pictureOpacityBinding = new Binding { Source = myDependencyObject, Path = new PropertyPath("PictureOpacity") };
 
+            var bi = new BitmapImage { UriSource = new Uri(Url) };
+            bi.AutoPlay = false;
             var img = GetTemplateChild("image1") as Image;
             img.SetBinding(OpacityProperty, pictureOpacityBinding);
-            img.Source = new BitmapImage { UriSource = new Uri(Url) };
+            img.Source = bi;
             img.MaxWidth = 1;
             img.Stretch = Stretch.UniformToFill;
             img.ImageOpened += Img_ImageOpened;
@@ -110,7 +112,6 @@ namespace Hipda.Client.Controls
         {
             var img = sender as Image;
             var bi = img.Source as BitmapImage;
-            bi.AutoPlay = false;
             img.MaxWidth = bi.PixelWidth;
             img.Stretch = Stretch.UniformToFill;
             img.ImageOpened -= Img_ImageOpened;
