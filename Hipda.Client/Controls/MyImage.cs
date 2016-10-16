@@ -26,7 +26,7 @@ namespace Hipda.Client.Controls
 
         public string Url { get; set; }
 
-        bool _isCommon
+        bool _isCommonIcon
         {
             get
             {
@@ -40,7 +40,7 @@ namespace Hipda.Client.Controls
 
             try
             {
-                if (!_isCommon)
+                if (!_isCommonIcon)
                 {
                     var folder = ApplicationData.Current.LocalCacheFolder;
                     var file = await SaveFile(folder);
@@ -99,19 +99,45 @@ namespace Hipda.Client.Controls
             Binding pictureOpacityBinding = new Binding { Source = myDependencyObject, Path = new PropertyPath("PictureOpacity") };
 
             var bi = new BitmapImage { UriSource = new Uri(Url) };
-            bi.AutoPlay = false;
             var img = GetTemplateChild("image1") as Image;
             img.SetBinding(OpacityProperty, pictureOpacityBinding);
             img.Source = bi;
-            img.MaxWidth = 1;
-            img.Stretch = Stretch.UniformToFill;
             img.ImageOpened += Img_ImageOpened;
+
+            if (!_isCommonIcon)
+            {
+                bi.AutoPlay = false;
+                var btn1 = GetTemplateChild("btnPlayGif") as Button;
+                btn1.Tapped += Btn1_Tapped;
+            }
+        }
+
+        private void Btn1_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            e.Handled = true;
+
+            var btn1 = sender as Button;
+            btn1.Visibility = Visibility.Collapsed;
+
+            var img = GetTemplateChild("image1") as Image;
+            var bi = img.Source as BitmapImage;
+            bi.Play();
         }
 
         private void Img_ImageOpened(object sender, RoutedEventArgs e)
         {
             var img = sender as Image;
             var bi = img.Source as BitmapImage;
+
+            if (!_isCommonIcon)
+            {
+                var btn1 = GetTemplateChild("btnPlayGif") as Button;
+                if (bi.IsAnimatedBitmap)
+                {
+                    btn1.Visibility = Visibility.Visible;
+                }
+            }
+
             img.MaxWidth = bi.PixelWidth;
             img.Stretch = Stretch.UniformToFill;
             img.ImageOpened -= Img_ImageOpened;

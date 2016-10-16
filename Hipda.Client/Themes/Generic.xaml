@@ -9,7 +9,12 @@
                 <ControlTemplate TargetType="c:MyImage">
                     <StackPanel>
                         <TextBlock x:Name="tbIcon1" Text="&#x1F40C;"/>
-                        <Image x:Name="image1"/>
+                        <Grid>
+                            <Image x:Name="image1"/>
+                            <Button x:Name="btnPlayGif" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Width="40" Height="40" Visibility="Collapsed">
+                                <SymbolIcon Symbol="Play" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button>
+                        </Grid>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
