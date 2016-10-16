@@ -95,16 +95,15 @@ namespace Hipda.Client.Controls
         {
             base.OnApplyTemplate();
 
-            var cc1 = GetTemplateChild("cc1") as ContentControl;
             var myDependencyObject = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
             Binding pictureOpacityBinding = new Binding { Source = myDependencyObject, Path = new PropertyPath("PictureOpacity") };
 
-            var bi = new BitmapImage { UriSource = new Uri(Url) };
-            var img = new Image();
+            var img = GetTemplateChild("image1") as Image;
             img.SetBinding(OpacityProperty, pictureOpacityBinding);
-            img.Source = bi;
+            img.Source = new BitmapImage { UriSource = new Uri(Url) };
+            img.MaxWidth = 1;
+            img.Stretch = Stretch.UniformToFill;
             img.ImageOpened += Img_ImageOpened;
-            cc1.Content = img;
         }
 
         private void Img_ImageOpened(object sender, RoutedEventArgs e)
@@ -115,6 +114,8 @@ namespace Hipda.Client.Controls
             img.MaxWidth = bi.PixelWidth;
             img.Stretch = Stretch.UniformToFill;
             img.ImageOpened -= Img_ImageOpened;
+            var tbIcon1 = GetTemplateChild("tbIcon1") as TextBlock;
+            tbIcon1.Visibility = Visibility.Collapsed;
         }
     }
 }
