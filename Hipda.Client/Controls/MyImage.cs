@@ -24,26 +24,10 @@ namespace Hipda.Client.Controls
             this.DefaultStyleKey = typeof(MyImage);
         }
 
-        public string Url
-        {
-            get { return (string)GetValue(UrlProperty); }
-            set { SetValue(UrlProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Url.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty UrlProperty =
-            DependencyProperty.Register("Url", typeof(string), typeof(MyImage), new PropertyMetadata(string.Empty));
+        public string Url { get; set; }
 
 
-        public string FolderName
-        {
-            get { return (string)GetValue(FolderNameProperty); }
-            set { SetValue(FolderNameProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for FolderName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty FolderNameProperty =
-            DependencyProperty.Register("FolderName", typeof(string), typeof(MyImage), new PropertyMetadata(string.Empty));
+        public string FolderName { get; set; }
 
 
         bool _isCommon
@@ -108,22 +92,19 @@ namespace Hipda.Client.Controls
             var myDependencyObject = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
             Binding pictureOpacityBinding = new Binding { Source = myDependencyObject, Path = new PropertyPath("PictureOpacity") };
 
-            Image img = new Image();
-            img.SetBinding(Image.OpacityProperty, pictureOpacityBinding);
+            var img = new Image();
+            img.SetBinding(OpacityProperty, pictureOpacityBinding);
             img.Stretch = Stretch.None;
-            img.ImageFailed += (s, e) =>
-            {
-                return;
-            };
+            img.ImageFailed += Img_ImageFailed;
 
             string[] urlAry = Url.Split('/');
             string fileFullName = urlAry.Last();
             try
             {
-                IStorageItem existsFile = await _folder.TryGetItemAsync(fileFullName);
-                if (existsFile != null)
+                var f = await _folder.TryGetItemAsync(fileFullName);
+                if (f != null)
                 {
-                    _file = existsFile as StorageFile;
+                    _file = f as StorageFile;
                 }
                 else
                 {
@@ -136,98 +117,41 @@ namespace Hipda.Client.Controls
                         await FileIO.WriteBufferAsync(_file, buf);
                     }
                 }
-            }
-            catch
-            {
 
-            }
-
-            try
-            {
                 if (_folder != null && _file != null)
                 {
-                    if (_isCommon)
+                    using (var fileStream = await _file.OpenAsync(FileAccessMode.Read))
                     {
-                        img.Stretch = Stretch.None;
-                        var bm = new BitmapImage();
-                        bm.UriSource = new Uri(Url, UriKind.Absolute);
-                        img.Source = bm;
-                    }
-                    else
-                    {
-                        using (IRandomAccessStream fileStream = await _file.OpenAsync(FileAccessMode.Read))
+                        if (fileStream != null)
                         {
-                            if (fileStream != null)
+                            var bitmapImg = new BitmapImage();
+                            await bitmapImg.SetSourceAsync(fileStream);
+                            int imgWidth = bitmapImg.PixelWidth;
+                            int imgHeight = bitmapImg.PixelHeight;
+
+                            if (bitmapImg.IsAnimatedBitmap)
                             {
-                                BitmapImage bitmapImg = new BitmapImage();
-                                await bitmapImg.SetSourceAsync(fileStream);
-                                int imgWidth = bitmapImg.PixelWidth;
-                                int imgHeight = bitmapImg.PixelHeight;
 
-                                if (_isGif)
-                                {
-                                    if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Mobile"))
-                                    {
-                                        // 移动端用Button显示Gif
-                                        img.Stretch = Stretch.Uniform;
-                                        img.MaxWidth = imgWidth;
-                                        img.Source = bitmapImg;
-
-                                        SymbolIcon gifSymbolIcon = new SymbolIcon();
-                                        gifSymbolIcon.Symbol = Symbol.Play;
-                                        gifSymbolIcon.HorizontalAlignment = HorizontalAlignment.Center;
-                                        gifSymbolIcon.VerticalAlignment = VerticalAlignment.Center;
-
-                                        Grid gifGrid = new Grid();
-                                        gifGrid.Children.Add(img);
-                                        gifGrid.Children.Add(gifSymbolIcon);
-
-                                        Button gifButton = new Button();
-                                        gifButton.Padding = new Thickness(0);
-                                        gifButton.Content = gifGrid;
-
-                                        content1.Content = gifButton;
-                                    }
-                                    else if (Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.Desktop"))
-                                    {
-                                        // PC端用WebView显示Gif图片
-                                        WebView webView = new WebView();
-                                        webView.SetBinding(WebView.OpacityProperty, pictureOpacityBinding);
-                                        webView.DefaultBackgroundColor = Colors.Transparent;
-                                        webView.Width = imgWidth;
-                                        webView.Height = imgHeight;
-                                        webView.ScriptNotify += async (s, e) =>
-                                        {
-                                            await OpenPhoto();
-                                        };
-
-                                        string imgHtml = @"<html><head><meta name=""viewport"" content=""width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0""></head><body style=""margin:0;padding:0;"" onclick=""window.external.notify('go');""><img src=""{0}"" alt=""Gif Image"" /></body></html>";
-                                        imgHtml = string.Format(imgHtml, Url);
-                                        webView.NavigateToString(imgHtml);
-
-                                        content1.Content = webView;
-                                    }
-                                }
-                                else // 其它图片，使用Image控件显示
-                                {
-                                    img.MaxWidth = imgWidth;
-                                    img.Stretch = Stretch.UniformToFill;
-                                    img.Source = bitmapImg;
-                                }
                             }
+                            bitmapImg.AutoPlay = false;
+                            img.MaxWidth = imgWidth;
+                            img.Stretch = Stretch.UniformToFill;
+                            img.Source = bitmapImg;
+                            content1.Content = img;
                         }
                     }
                 }
-
-                if (_isCommon || !_isGif) // 公共或非gif图片，使用Image控件显示
-                {
-                    content1.Content = img;
-                }
             }
             catch
             {
-                
+
             }
+        }
+
+        private void Img_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            var img = sender as Image;
+            img.ImageFailed -= Img_ImageFailed;
         }
     }
 }
