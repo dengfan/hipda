@@ -484,7 +484,7 @@
                                         </Grid.ColumnDefinitions>
                                         <Button HorizontalAlignment="Stretch" Click="OpenImageFolderButton_Click">
                                             <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}">
-                                                <Run Text="查看缓存图片 " />
+                                                <Run Text="图片收藏夹" />
                                                 <Run Text="{Binding ImageCacheDataSize, ElementName=MyMainPage, Converter={StaticResource ByteToMegaByteConverter}}" />
                                             </TextBlock>
                                         </Button>
@@ -492,7 +492,7 @@
                                             Grid.Column="2"
                                             HorizontalAlignment="Stretch"
                                             Click="ClearImageCacheData">
-                                            <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}" Text="清除" />
+                                            <TextBlock Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}" Text="清空" />
                                         </Button>
                                     </Grid>
 

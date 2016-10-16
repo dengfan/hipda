@@ -442,7 +442,7 @@ namespace Hipda.Client
             // 统计缓存文件大小
             if (ImageCacheDataSize == 0)
             {
-                var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
+                var folder = ApplicationData.Current.LocalCacheFolder;
                 await GetDataSizeInFolder(folder);
             }
         }
@@ -664,15 +664,8 @@ namespace Hipda.Client
         #region 设置面板相关程序
         private async void OpenImageFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
-            if (folder != null)
-            {
-                await Launcher.LaunchFolderAsync(folder);
-            }
-            else
-            {
-                await new MessageDialog("暂无缓存文件！", "温馨提示").ShowAsync();
-            }
+            var folder = ApplicationData.Current.LocalCacheFolder;
+            await Launcher.LaunchFolderAsync(folder);
         }
 
         private async Task GetDataSizeInFolder(StorageFolder folder)
@@ -703,7 +696,7 @@ namespace Hipda.Client
 
         private async void CommandInvokedHandler(IUICommand command)
         {
-            var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
+            var folder = ApplicationData.Current.LocalCacheFolder;
             await folder.DeleteAsync();
             ImageCacheDataSize = 0;
             await GetDataSizeInFolder(folder);
