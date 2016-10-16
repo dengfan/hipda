@@ -144,7 +144,6 @@ namespace Hipda.Client.Controls
             var ib = new ImageBrush();
             ib.Stretch = Stretch.UniformToFill;
             ib.ImageSource = bi;
-            ib.ImageFailed += (s, e2) => { return; };
             _border2.Background = ib;
         }
 

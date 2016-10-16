@@ -247,7 +247,7 @@ namespace Hipda.Html
                     string imgUrl = matchsForImage1[i].Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string xaml = $@"<InlineUIContainer><c:MyImage FolderName=""{threadId}"" Url=""{imgUrl}""/></InlineUIContainer>";
+                    string xaml = $@"<InlineUIContainer><c:MyImage Url=""{imgUrl}""/></InlineUIContainer>";
                     xaml = WebUtility.HtmlEncode(xaml);
                     htmlContent = htmlContent.Replace(placeHolderLabel, xaml);
                 }
@@ -265,8 +265,7 @@ namespace Hipda.Html
                     if (imgUrl.Equals("http://img.hi-pda.com/forum/images/default/attachimg.gif")) continue;
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string xaml = @"<InlineUIContainer><c:MyImage FolderName=""{0}"" Url=""{1}""/></InlineUIContainer>";
-                    xaml = string.Format(xaml, threadId, imgUrl);
+                    string xaml = $@"<InlineUIContainer><c:MyImage Url=""{imgUrl}""/></InlineUIContainer>";
                     xaml = WebUtility.HtmlEncode(xaml);
                     htmlContent = htmlContent.Replace(placeHolderLabel, xaml);
                 }
@@ -532,7 +531,7 @@ namespace Hipda.Html
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string xaml = $@"<InlineUIContainer><c:MyImage FolderName=""0"" Url=""{imgUrl}""/></InlineUIContainer>";
+                    string xaml = $@"<InlineUIContainer><c:MyImage Url=""{imgUrl}""/></InlineUIContainer>";
                     xaml = WebUtility.HtmlEncode(xaml);
 
                     htmlContent = htmlContent.Replace(placeHolderLabel, xaml);
@@ -627,7 +626,7 @@ namespace Hipda.Html
                     string imgUrl = m.Groups[1].Value; // 图片URL
                     if (!imgUrl.StartsWith("http")) imgUrl = "http://www.hi-pda.com/forum/" + imgUrl;
 
-                    string xaml = $@"<InlineUIContainer><c:MyImage FolderName=""0"" Url=""{imgUrl}""/></InlineUIContainer>";
+                    string xaml = $@"<InlineUIContainer><c:MyImage Url=""{imgUrl}""/></InlineUIContainer>";
                     xaml = WebUtility.HtmlEncode(xaml);
 
                     htmlContent = htmlContent.Replace(placeHolderLabel, xaml);

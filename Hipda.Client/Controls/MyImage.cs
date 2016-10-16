@@ -26,10 +26,6 @@ namespace Hipda.Client.Controls
 
         public string Url { get; set; }
 
-
-        public string FolderName { get; set; }
-
-
         bool _isCommon
         {
             get
@@ -38,28 +34,49 @@ namespace Hipda.Client.Controls
             }
         }
 
-        bool _isGif
-        {
-            get
-            {
-                return Url.ToLower().EndsWith(".gif");
-            }
-        }
-
-        StorageFile _file;
-        StorageFolder _folder;
-
         protected async override void OnTapped(TappedRoutedEventArgs e)
         {
             base.OnTapped(e);
 
-            if (!_isCommon)
+            try
             {
-                await OpenPhoto();
+                if (!_isCommon)
+                {
+                    var folder = ApplicationData.Current.LocalCacheFolder;
+                    var file = await SaveFile(folder);
+                    if (file != null)
+                    {
+                        await OpenPhoto(file, folder);
+                    }
+                }
+            }
+            catch { }
+        }
+
+        async Task<IStorageFile> SaveFile(StorageFolder folder)
+        {
+            string[] urlAry = Url.Split('/');
+            string fileFullName = urlAry.Last();
+            var savedFile = await folder.TryGetItemAsync(fileFullName);
+            if (savedFile != null)
+            {
+                return savedFile as StorageFile;
+            }
+            else
+            {
+                // 不存在则请求
+                using (var client = new HttpClient())
+                {
+                    var response = await client.GetAsync(new Uri(Url));
+                    var buf = await response.Content.ReadAsBufferAsync();
+                    var file = await folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
+                    await FileIO.WriteBufferAsync(file, buf);
+                    return file;
+                }
             }
         }
 
-        private async Task OpenPhoto()
+        private async Task OpenPhoto(IStorageFile file, StorageFolder folder)
         {
             var fileTypeFilter = new List<string>();
             fileTypeFilter.Add(".jpg");
@@ -68,27 +85,17 @@ namespace Hipda.Client.Controls
             fileTypeFilter.Add(".bmp");
             fileTypeFilter.Add(".gif");
             var queryOptions = new QueryOptions(CommonFileQuery.DefaultQuery, fileTypeFilter);
-            var query = _folder.CreateFileQueryWithOptions(queryOptions);
+            var query = folder.CreateFileQueryWithOptions(queryOptions);
             var options = new LauncherOptions();
             options.NeighboringFilesQuery = query;
-            await Launcher.LaunchFileAsync(_file, options);
+            await Launcher.LaunchFileAsync(file, options);
         }
 
-        protected async override void OnApplyTemplate()
+        protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
-            _folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("hipda", CreationCollisionOption.OpenIfExists);
-            if (_isCommon)
-            {
-                _folder = await _folder.CreateFolderAsync("common", CreationCollisionOption.OpenIfExists); // 为公共图片创建一个文件夹
-            }
-            else
-            {
-                _folder = await _folder.CreateFolderAsync(FolderName, CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
-            }
-
-            var content1 = GetTemplateChild("content1") as ContentControl;
+            var cc1 = GetTemplateChild("cc1") as ContentControl;
             var myDependencyObject = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
             Binding pictureOpacityBinding = new Binding { Source = myDependencyObject, Path = new PropertyPath("PictureOpacity") };
 
@@ -97,63 +104,14 @@ namespace Hipda.Client.Controls
             img.SetBinding(OpacityProperty, pictureOpacityBinding);
             img.Source = bi;
             img.ImageOpened += Img_ImageOpened;
-            content1.Content = img;
-
-            //string[] urlAry = Url.Split('/');
-            //string fileFullName = urlAry.Last();
-            //try
-            //{
-            //    var f = await _folder.TryGetItemAsync(fileFullName);
-            //    if (f != null)
-            //    {
-            //        _file = f as StorageFile;
-            //    }
-            //    else
-            //    {
-            //        // 不存在则请求
-            //        using (var client = new HttpClient())
-            //        {
-            //            var response = await client.GetAsync(new Uri(Url));
-            //            var buf = await response.Content.ReadAsBufferAsync();
-            //            _file = await _folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
-            //            await FileIO.WriteBufferAsync(_file, buf);
-            //        }
-            //    }
-
-            //    if (_folder != null && _file != null)
-            //    {
-            //        using (var fileStream = await _file.OpenAsync(FileAccessMode.Read))
-            //        {
-            //            if (fileStream != null)
-            //            {
-            //                var bitmapImg = new BitmapImage();
-            //                await bitmapImg.SetSourceAsync(fileStream);
-            //                int imgWidth = bitmapImg.PixelWidth;
-            //                int imgHeight = bitmapImg.PixelHeight;
-
-            //                if (bitmapImg.IsAnimatedBitmap)
-            //                {
-
-            //                }
-            //                bitmapImg.AutoPlay = false;
-            //                img.MaxWidth = imgWidth;
-            //                img.Stretch = Stretch.UniformToFill;
-            //                img.Source = bitmapImg;
-            //                content1.Content = img;
-            //            }
-            //        }
-            //    }
-            //}
-            //catch
-            //{
-
-            //}
+            cc1.Content = img;
         }
 
         private void Img_ImageOpened(object sender, RoutedEventArgs e)
         {
             var img = sender as Image;
             var bi = img.Source as BitmapImage;
+            bi.AutoPlay = false;
             img.MaxWidth = bi.PixelWidth;
             img.Stretch = Stretch.UniformToFill;
             img.ImageOpened -= Img_ImageOpened;
