@@ -88,70 +88,75 @@ namespace Hipda.Client.Controls
                 _folder = await _folder.CreateFolderAsync(FolderName, CreationCollisionOption.OpenIfExists); // 为当前主题创建一个文件夹
             }
 
-            ContentControl content1 = GetTemplateChild("content1") as ContentControl;
+            var content1 = GetTemplateChild("content1") as ContentControl;
             var myDependencyObject = (LocalSettingsDependencyObject)App.Current.Resources["MyLocalSettings"];
             Binding pictureOpacityBinding = new Binding { Source = myDependencyObject, Path = new PropertyPath("PictureOpacity") };
 
+            var bi = new BitmapImage { UriSource = new Uri(Url) };
             var img = new Image();
             img.SetBinding(OpacityProperty, pictureOpacityBinding);
-            img.Stretch = Stretch.None;
-            img.ImageFailed += Img_ImageFailed;
+            img.Source = bi;
+            img.ImageOpened += Img_ImageOpened;
+            content1.Content = img;
 
-            string[] urlAry = Url.Split('/');
-            string fileFullName = urlAry.Last();
-            try
-            {
-                var f = await _folder.TryGetItemAsync(fileFullName);
-                if (f != null)
-                {
-                    _file = f as StorageFile;
-                }
-                else
-                {
-                    // 不存在则请求
-                    using (var client = new HttpClient())
-                    {
-                        var response = await client.GetAsync(new Uri(Url));
-                        var buf = await response.Content.ReadAsBufferAsync();
-                        _file = await _folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
-                        await FileIO.WriteBufferAsync(_file, buf);
-                    }
-                }
+            //string[] urlAry = Url.Split('/');
+            //string fileFullName = urlAry.Last();
+            //try
+            //{
+            //    var f = await _folder.TryGetItemAsync(fileFullName);
+            //    if (f != null)
+            //    {
+            //        _file = f as StorageFile;
+            //    }
+            //    else
+            //    {
+            //        // 不存在则请求
+            //        using (var client = new HttpClient())
+            //        {
+            //            var response = await client.GetAsync(new Uri(Url));
+            //            var buf = await response.Content.ReadAsBufferAsync();
+            //            _file = await _folder.CreateFileAsync(fileFullName, CreationCollisionOption.ReplaceExisting);
+            //            await FileIO.WriteBufferAsync(_file, buf);
+            //        }
+            //    }
 
-                if (_folder != null && _file != null)
-                {
-                    using (var fileStream = await _file.OpenAsync(FileAccessMode.Read))
-                    {
-                        if (fileStream != null)
-                        {
-                            var bitmapImg = new BitmapImage();
-                            await bitmapImg.SetSourceAsync(fileStream);
-                            int imgWidth = bitmapImg.PixelWidth;
-                            int imgHeight = bitmapImg.PixelHeight;
+            //    if (_folder != null && _file != null)
+            //    {
+            //        using (var fileStream = await _file.OpenAsync(FileAccessMode.Read))
+            //        {
+            //            if (fileStream != null)
+            //            {
+            //                var bitmapImg = new BitmapImage();
+            //                await bitmapImg.SetSourceAsync(fileStream);
+            //                int imgWidth = bitmapImg.PixelWidth;
+            //                int imgHeight = bitmapImg.PixelHeight;
 
-                            if (bitmapImg.IsAnimatedBitmap)
-                            {
+            //                if (bitmapImg.IsAnimatedBitmap)
+            //                {
 
-                            }
-                            bitmapImg.AutoPlay = false;
-                            img.MaxWidth = imgWidth;
-                            img.Stretch = Stretch.UniformToFill;
-                            img.Source = bitmapImg;
-                            content1.Content = img;
-                        }
-                    }
-                }
-            }
-            catch
-            {
+            //                }
+            //                bitmapImg.AutoPlay = false;
+            //                img.MaxWidth = imgWidth;
+            //                img.Stretch = Stretch.UniformToFill;
+            //                img.Source = bitmapImg;
+            //                content1.Content = img;
+            //            }
+            //        }
+            //    }
+            //}
+            //catch
+            //{
 
-            }
+            //}
         }
 
-        private void Img_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        private void Img_ImageOpened(object sender, RoutedEventArgs e)
         {
             var img = sender as Image;
-            img.ImageFailed -= Img_ImageFailed;
+            var bi = img.Source as BitmapImage;
+            img.MaxWidth = bi.PixelWidth;
+            img.Stretch = Stretch.UniformToFill;
+            img.ImageOpened -= Img_ImageOpened;
         }
     }
 }
