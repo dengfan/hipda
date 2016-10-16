@@ -8,11 +8,21 @@
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyImage">
                     <StackPanel>
-                        <TextBlock x:Name="tbIcon1" Text="&#x1F40C;"/>
+                        <TextBlock x:Name="tbIcon1" Text="&#x1F40C;" />
                         <Grid>
-                            <Image x:Name="image1" Visibility="Collapsed"/>
-                            <Button x:Name="btnPlayGif" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" Width="40" Height="40" Visibility="Collapsed">
-                                <SymbolIcon Symbol="Play" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Image x:Name="image1" Visibility="Collapsed" />
+                            <Button
+                                x:Name="btnPlayGif"
+                                Width="40"
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                Visibility="Collapsed">
+                                <SymbolIcon
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Symbol="Play" />
                             </Button>
                         </Grid>
                     </StackPanel>
@@ -21,34 +31,34 @@
         </Setter>
     </Style>
 
-    <Style TargetType="c:MyQuoteLink" >
+    <Style TargetType="c:MyQuoteLink">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyQuoteLink">
-                    <TextBlock Text="{TemplateBinding LinkContent}" Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+                    <TextBlock Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" Text="{TemplateBinding LinkContent}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style TargetType="c:MyAvatarForThread" >
+    <Style TargetType="c:MyAvatarForThread">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyAvatarForThread">
                     <Border x:Name="border1" Background="{ThemeResource SystemListLowColor}">
-                        <Border x:Name="border2" Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
+                        <Border x:Name="border2" Opacity="{Binding PictureOpacity, Source={StaticResource MyLocalSettings}}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style TargetType="c:MyAvatarForReply" >
+    <Style TargetType="c:MyAvatarForReply">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="c:MyAvatarForReply">
                     <Border x:Name="border1" Background="{ThemeResource SystemListLowColor}">
-                        <Border x:Name="border2" Opacity="{Binding PictureOpacity,Source={StaticResource MyLocalSettings}}"/>
+                        <Border x:Name="border2" Opacity="{Binding PictureOpacity, Source={StaticResource MyLocalSettings}}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

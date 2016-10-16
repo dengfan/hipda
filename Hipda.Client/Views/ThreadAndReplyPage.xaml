@@ -168,6 +168,11 @@
                 BorderBrush="{ThemeResource RightWrapBorderBrush}"
                 BorderThickness="1,0">
 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
                 <c:RefreshableListView
                     x:Name="ReplyListView"
                     Margin="0,48,0,0"
@@ -258,15 +263,15 @@
 
                 <StackPanel
                     x:Name="QuickReplyPanel"
+                    Grid.Row="1"
+                    Margin="8,0"
                     VerticalAlignment="Bottom"
+                    BorderBrush="{ThemeResource LeftWrapBackgroundColor}"
+                    BorderThickness="0,1,0,0"
                     AllowDrop="True"
                     DragOver="QuickReplyPanel_DragOver"
                     Drop="QuickReplyPanel_Drop">
-                    <Grid
-                        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                        BorderBrush="{ThemeResource RightWrapBorderBrush}"
-                        BorderThickness="0,1,0,0"
-                        Opacity="0.9">
+                    <Grid Margin="4">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
