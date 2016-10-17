@@ -1318,7 +1318,7 @@
     </Style>
 
     <DataTemplate x:Key="ReplyListLastItemTemplate">
-        <StackPanel Padding="0,24">
+        <StackPanel Padding="0,16,0,168">
             <TextBlock
                 HorizontalAlignment="Center"
                 Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground3StyleConverter}}"
