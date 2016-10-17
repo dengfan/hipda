@@ -34,10 +34,10 @@ namespace Hipda.Client
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        #region 失焦滤镜
         private CompositionEffectBrush brush;
         private Compositor compositor;
 
-        #region 失焦滤镜
         void MainGridBlurEffect_SizeChanged(FrameworkElement element, SizeChangedEventArgs e)
         {
             var blurVisual = (SpriteVisual)ElementCompositionPreview.GetElementChildVisual(element);

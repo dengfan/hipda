@@ -168,11 +168,6 @@
                 BorderBrush="{ThemeResource RightWrapBorderBrush}"
                 BorderThickness="1,0">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
                 <c:RefreshableListView
                     x:Name="ReplyListView"
                     Margin="0,48,0,0"
@@ -261,17 +256,19 @@
                     VerticalAlignment="Center"
                     Visibility="Collapsed" />
 
-                <StackPanel
+                <Grid
                     x:Name="QuickReplyPanel"
-                    Grid.Row="1"
-                    Margin="8,0"
                     VerticalAlignment="Bottom"
-                    BorderBrush="{ThemeResource LeftWrapBackgroundColor}"
-                    BorderThickness="0,1,0,0"
                     AllowDrop="True"
                     DragOver="QuickReplyPanel_DragOver"
                     Drop="QuickReplyPanel_Drop">
-                    <Grid Margin="4">
+                    <Grid x:Name="blurEffectGrid" />
+                    <Grid
+                        Margin="6,0,6,6"
+                        Padding="0,6,0,0"
+                        Background="Transparent"
+                        BorderBrush="{ThemeResource LeftWrapBackgroundBrush}"
+                        BorderThickness="0,1,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -482,7 +479,7 @@
                             </Button.Flyout>
                         </Button>
                     </Grid>
-                </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
         <VisualStateManager.VisualStateGroups>
