@@ -1302,7 +1302,6 @@
         NoticeThreadItemTemplate="{StaticResource NoticeThreadItemTemplate}" />
 
     <Style x:Key="ReplyItemContainerStyle" TargetType="ListViewItem">
-        <Setter Property="Padding" Value="12" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template">
