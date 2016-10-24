@@ -952,12 +952,6 @@ namespace Hipda.Client
             InputPanelFrame.Navigate(pageType, parameters);
         }
 
-        private void InputPanelFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-            InputPanelBackButton.Visibility = InputPanelFrame.CanGoBack ? Visibility.Visible : Visibility.Collapsed;
-            InputPanelForwardButton.Visibility = InputPanelFrame.CanGoForward ? Visibility.Visible : Visibility.Collapsed;
-        }
-
         private void CloseInputPanelMask_Tapped(object sender, TappedRoutedEventArgs e)
         {
             InputPanelDoubleAnimation.To = InputPanel.ActualHeight;
@@ -965,7 +959,6 @@ namespace Hipda.Client
             InputPanelAnimation.Completed += InputPanelAnimation_Completed;
 
             SetTitleForInputPanel(string.Empty);
-            InputPanelFrame.BackStack.Clear();
         }
 
         private void InputPanelAnimation_Completed(object sender, object e)
@@ -974,32 +967,6 @@ namespace Hipda.Client
             InputPanelAnimation.Stop();
             MainGridBlurEffect_Unset(mainGrid);
             InputPanelAnimation.Completed -= InputPanelAnimation_Completed; // 这句有必要吗？
-        }
-
-        private void InputPanelFrameGoBack()
-        {
-            if (InputPanelFrame.CanGoBack)
-            {
-                InputPanelFrame.GoBack();
-            }
-        }
-
-        private void InputPanelFrameGoForward()
-        {
-            if (InputPanelFrame.CanGoForward)
-            {
-                InputPanelFrame.GoForward();
-            }
-        }
-
-        private void InputPanelBackButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            InputPanelFrameGoBack();
-        }
-
-        private void InputPanelForwardButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            InputPanelFrameGoForward();
         }
 
         #endregion

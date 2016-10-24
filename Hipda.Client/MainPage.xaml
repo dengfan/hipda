@@ -603,7 +603,7 @@
                 <SplitView.Content>
                     <SplitView
                         x:Name="SubSplitView"
-                        OpenPaneLength="192"
+                        OpenPaneLength="256"
                         PaneBackground="{ThemeResource MainMenuBackgroundColor}"
                         PaneClosed="MainSplitView_PaneClosed">
                         <SplitView.Pane>
@@ -927,7 +927,6 @@
             x:Name="InputPanelMask"
             Background="Transparent"
             x:DeferLoadStrategy="Lazy"
-            Tapped="CloseInputPanelMask_Tapped"
             Visibility="Collapsed" />
 
         <!--  输入面板，用于发表新贴、回贴、改贴  -->
@@ -935,58 +934,40 @@
             x:Name="InputPanel"
             MaxWidth="640"
             MaxHeight="800"
-            Margin="24"
+            Margin="24,48"
             Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-            BorderBrush="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"
-            BorderThickness="4"
+            BorderBrush="{ThemeResource SystemAccentBrush}"
+            BorderThickness="1"
             x:DeferLoadStrategy="Lazy"
             Visibility="Collapsed">
             <Grid.RenderTransform>
                 <CompositeTransform />
             </Grid.RenderTransform>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="40" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    x:Name="InputPanelBackButton"
-                    Padding="12"
-                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                    FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                    FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
-                    Tapped="InputPanelBackButton_Tapped"
-                    Text="&#xE0A6;"
-                    Visibility="Collapsed" />
-                <TextBlock
-                    x:Name="InputPanelForwardButton"
-                    Padding="12"
-                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                    FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                    FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
-                    Tapped="InputPanelForwardButton_Tapped"
-                    Text="&#xE0AB;"
-                    Visibility="Collapsed" />
-                <TextBlock
-                    x:Name="InputPanelTitleTextBlock"
-                    Margin="12,0,0,0"
-                    VerticalAlignment="Center"
-                    Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                    FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
-                    FontWeight="Bold" />
-            </StackPanel>
+
             <TextBlock
-                Padding="12"
-                HorizontalAlignment="Right"
+                x:Name="InputPanelTitleTextBlock"
+                Margin="12,0,0,0"
+                VerticalAlignment="Center"
                 Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
-                FontFamily="{ThemeResource SymbolThemeFontFamily}"
                 FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
-                Tapped="CloseInputPanelMask_Tapped"
-                Text="&#xE106;" />
-            <Frame
-                x:Name="InputPanelFrame"
-                Grid.Row="1"
-                Navigated="InputPanelFrame_Navigated" />
+                FontWeight="Bold" />
+
+            <Button
+                Width="40"
+                Height="40"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                BorderThickness="0"
+                Tapped="CloseInputPanelMask_Tapped">
+                <SymbolIcon Symbol="Cancel" Foreground="{ThemeResource SystemAccentBrush}" />
+            </Button>
+
+            <Frame x:Name="InputPanelFrame" Grid.Row="1" />
         </Grid>
 
         <!--  Ink面板  -->
@@ -1097,7 +1078,7 @@
                 FontSize="{Binding FontSize1, Source={StaticResource MyLocalSettings}}"
                 TextWrapping="Wrap" />
         </Border>
-        
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates">
                 <VisualState>
@@ -1142,15 +1123,6 @@
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="720" />
-                    </VisualState.StateTriggers>
-                </VisualState>
-                <VisualState>
-                    <VisualState.Setters>
-                        <Setter Target="SubSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="SubSplitView.IsPaneOpen" Value="False" />
-                    </VisualState.Setters>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="400" />
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState>

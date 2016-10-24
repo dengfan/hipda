@@ -133,6 +133,11 @@
                             </FontIcon>
                         </Grid>
                     </c:RefreshableListView.RefreshIndicatorContent>
+                    <c:RefreshableListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel ItemsUpdatingScrollMode="KeepScrollOffset"/>
+                        </ItemsPanelTemplate>
+                    </c:RefreshableListView.ItemsPanel>
                 </c:RefreshableListView>
 
                 <CommandBar
@@ -164,7 +169,7 @@
             <Grid
                 x:Name="RightWrap"
                 Grid.Column="1"
-                Background="{ThemeResource RightWrapBackgroundBrush}"
+                Background="{ThemeResource LeftWrapBackgroundBrush}"
                 BorderBrush="{ThemeResource RightWrapBorderBrush}"
                 BorderThickness="1,0">
 
@@ -208,7 +213,7 @@
                 <CommandBar
                     x:Name="RightCommandBar"
                     VerticalAlignment="Top"
-                    Background="{ThemeResource RightWrapBackgroundBrush}">
+                    Background="{ThemeResource LeftWrapBackgroundBrush}">
                     <AppBarButton
                         x:Name="AddToFavoritesButton"
                         Command="{Binding AddToFavoritesCommand}"
@@ -272,7 +277,7 @@
                         Margin="6,0,6,6"
                         Padding="0,6,0,0"
                         Background="Transparent"
-                        BorderBrush="{ThemeResource LeftWrapBackgroundBrush}"
+                        BorderBrush="{ThemeResource RightWrapBorderColor}"
                         BorderThickness="0,1,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -494,7 +499,7 @@
                         <AdaptiveTrigger MinWindowWidth="1600" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="LeftColumn.Width" Value="480" />
+                        <Setter Target="LeftColumn.Width" Value="528" />
                         <Setter Target="RightColumn.Width" Value="*" />
                     </VisualState.Setters>
                 </VisualState>

@@ -65,6 +65,11 @@
                     </FontIcon>
                 </Grid>
             </c:RefreshableListView.RefreshIndicatorContent>
+            <c:RefreshableListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel ItemsUpdatingScrollMode="KeepScrollOffset"/>
+                </ItemsPanelTemplate>
+            </c:RefreshableListView.ItemsPanel>
         </c:RefreshableListView>
 
         <CommandBar
