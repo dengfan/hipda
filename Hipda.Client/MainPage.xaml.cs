@@ -308,9 +308,8 @@ namespace Hipda.Client
             var data = e.AddedItems[0] as NavButtonItemModel;
             if (data.TypeValue.Equals("more"))
             {
-                //ShowLeftSwipePanel();
-
-                //LeftSwipeContentControl.ContentTemplate = (DataTemplate)Resources["ForumAllCategoryListViewDataTemplate"];
+                MainGridBlurEffect_Set(mainGrid);
+                ForumAllCategoryGridView.Visibility = Visibility.Visible;
             }
             else
             {

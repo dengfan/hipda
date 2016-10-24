@@ -215,21 +215,7 @@
             IsSourceGrouped="True"
             ItemsPath="Forums"
             Source="{Binding ForumAllCategoryList, Source={StaticResource ForumAllCategoryListViewViewModel}}" />
-        <DataTemplate x:Key="ForumAllCategoryListViewDataTemplate">
-            <ListView
-                Margin="0,48,0,0"
-                GroupStyleSelector="{StaticResource ForumAllCategoryListViewGroupStyleSelector}"
-                IsItemClickEnabled="True"
-                ItemClick="ForumAllCategoryListView_ItemClick"
-                ItemsSource="{Binding Source={StaticResource ForumAllCategoryListViewCollectionViewSource}}"
-                SelectionMode="None">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </DataTemplate>
+        <DataTemplate x:Key="ForumAllCategoryListViewDataTemplate" />
 
         <local:NavButtonListItemTemplateSelector
             x:Key="NavButtonListItemTemplateSelector"
@@ -964,11 +950,33 @@
                 Background="Transparent"
                 BorderThickness="0"
                 Tapped="CloseInputPanelMask_Tapped">
-                <SymbolIcon Symbol="Cancel" Foreground="{ThemeResource SystemAccentBrush}" />
+                <SymbolIcon Foreground="{ThemeResource SystemAccentBrush}" Symbol="Cancel" />
             </Button>
 
             <Frame x:Name="InputPanelFrame" Grid.Row="1" />
         </Grid>
+
+        <GridView
+            x:Name="ForumAllCategoryGridView"
+            Padding="24"
+            GroupStyleSelector="{StaticResource ForumAllCategoryListViewGroupStyleSelector}"
+            IsItemClickEnabled="True"
+            ItemClick="ForumAllCategoryListView_ItemClick"
+            ItemsSource="{Binding Source={StaticResource ForumAllCategoryListViewCollectionViewSource}}"
+            SelectionMode="None"
+            Visibility="Collapsed">
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="Padding" Value="12,4" />
+                    <Setter Property="HorizontalAlignment" Value="Left" />
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
 
         <!--  Ink面板  -->
         <Grid

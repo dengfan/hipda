@@ -60,7 +60,8 @@ namespace Hipda.Client.Services
                 {
                     int forumId = Convert.ToInt32(item.Attributes[0].Value);
                     string forumName = item.NextSibling.InnerText;
-                    forumName = forumName.Replace("&nbsp;", " ");
+                    forumName = forumName.Replace("&nbsp;", string.Empty);
+                    forumName = forumName.Trim();
 
                     forumGroup.Forums.Add(new ForumModel { Id = forumId, Name = forumName });
                 }
