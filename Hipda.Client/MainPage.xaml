@@ -1094,7 +1094,7 @@
                         <Setter Target="SubSplitView.DisplayMode" Value="CompactInline" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1700" />
+                        <AdaptiveTrigger MinWindowWidth="1800" />
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState>
@@ -1103,16 +1103,7 @@
                         <Setter Target="SubSplitView.IsPaneOpen" Value="False" />
                     </VisualState.Setters>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1500" />
-                    </VisualState.StateTriggers>
-                </VisualState>
-                <VisualState>
-                    <VisualState.Setters>
-                        <Setter Target="SubSplitView.DisplayMode" Value="CompactOverlay" />
-                        <Setter Target="SubSplitView.IsPaneOpen" Value="False" />
-                    </VisualState.Setters>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1300" />
+                        <AdaptiveTrigger MinWindowWidth="1600" />
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState>

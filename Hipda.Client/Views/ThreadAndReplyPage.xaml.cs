@@ -173,6 +173,33 @@ namespace Hipda.Client.Views
 
             ContentTextBox.MaxHeight = ActualHeight / 2;
 
+            if (ActualWidth > 720)
+            {
+                Grid.SetColumn(RightWrap, 1);
+                Grid.SetColumn(LeftWrap, 0);
+
+                LeftColumn.Width = new GridLength(320);
+                RightColumn.Width = new GridLength(1, GridUnitType.Star);
+
+                if (ActualWidth > 1200)
+                {
+                    LeftColumn.Width = new GridLength(480);
+                }
+
+                if (ActualWidth > 1600)
+                {
+                    LeftColumn.Width = new GridLength(544);
+                }
+            }
+            else
+            {
+                Grid.SetColumn(RightWrap, 0);
+                Grid.SetColumn(LeftWrap, 0);
+
+                LeftColumn.Width = new GridLength(1, GridUnitType.Star);
+                RightColumn.Width = new GridLength(0);
+            }
+
             MainGridBlurEffect_SizeChanged(blurEffectGrid);
         }
 
@@ -283,17 +310,17 @@ namespace Hipda.Client.Views
         /// </summary>
         public void OpenReplyPageByThreadId()
         {
-            if (AdaptiveStates.CurrentState == NarrowState)
-            {
-                string p = $"tid={ThreadId}";
-                Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-            }
-            else
-            {
+            //if (AdaptiveStates.CurrentState == NarrowState)
+            //{
+            //    string p = $"tid={ThreadId}";
+            //    Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+            //}
+            //else
+            //{
                 var cts = new CancellationTokenSource();
                 var vm = new ReplyListViewForDefaultViewModel(cts, ThreadId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
                 RightWrap.DataContext = vm;
-            }
+            //}
         }
 
         /// <summary>
@@ -301,16 +328,16 @@ namespace Hipda.Client.Views
         /// </summary>
         public void OpenReplyPageByPostId()
         {
-            if (AdaptiveStates.CurrentState == NarrowState)
-            {
-                string p = $"pid={PostId}";
-                Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
-            }
-            else
-            {
+            //if (AdaptiveStates.CurrentState == NarrowState)
+            //{
+            //    string p = $"pid={PostId}";
+            //    Frame.Navigate(typeof(ReplyListPage), p, new CommonNavigationTransitionInfo());
+            //}
+            //else
+            //{
                 var cts = new CancellationTokenSource();
                 RightWrap.DataContext = new ReplyListViewForSpecifiedPostViewModel(cts, PostId, ReplyListView, RightBeforeLoaded, RightAfterLoaded, ReplyListViewScrollForSpecifiedPost);
-            }
+            //}
         }
         #endregion
 
@@ -380,7 +407,7 @@ namespace Hipda.Client.Views
                 }
             }
 
-            UpdateForVisualState(AdaptiveStates.CurrentState);
+            //UpdateForVisualState(AdaptiveStates.CurrentState);
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -392,24 +419,24 @@ namespace Hipda.Client.Views
 
         private void AdaptiveStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
         {
-            UpdateForVisualState(e.NewState, e.OldState);
+            //UpdateForVisualState(e.NewState, e.OldState);
         }
 
-        private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
-        {
-            var isNarrow = newState == NarrowState;
-            if (isNarrow && oldState == DefaultState) // 从宽视图进入窄视图
-            {
-                if (PostId > 0)
-                {
-                    Frame.Navigate(typeof(ReplyListPage), $"pid={PostId}");
-                }
-                else if (ThreadId > 0)
-                {
-                    Frame.Navigate(typeof(ReplyListPage), $"tid={ThreadId}");
-                }
-            }
-        }
+        //private void UpdateForVisualState(VisualState newState, VisualState oldState = null)
+        //{
+        //    var isNarrow = newState == NarrowState;
+        //    if (isNarrow && oldState == DefaultState) // 从宽视图进入窄视图
+        //    {
+        //        if (PostId > 0)
+        //        {
+        //            Frame.Navigate(typeof(ReplyListPage), $"pid={PostId}");
+        //        }
+        //        else if (ThreadId > 0)
+        //        {
+        //            Frame.Navigate(typeof(ReplyListPage), $"tid={ThreadId}");
+        //        }
+        //    }
+        //}
 
         private void LeftListView_ItemClick(object sender, ItemClickEventArgs e) 
         {
@@ -430,27 +457,27 @@ namespace Hipda.Client.Views
 
             if (PostId > 0)
             {
-                if (AdaptiveStates.CurrentState == NarrowState)
-                {
-                    string p = $"pid={PostId}";
-                    Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
-                }
-                else
-                {
+                //if (AdaptiveStates.CurrentState == NarrowState)
+                //{
+                //    string p = $"pid={PostId}";
+                //    Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                //}
+                //else
+                //{
                     OpenReplyPageByPostId();
-                }
+                //}
             }
             else if (ThreadId > 0)
             {
-                if (AdaptiveStates.CurrentState == NarrowState)
-                {
-                    string p = $"tid={ThreadId}";
-                    Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
-                }
-                else
-                {
+                //if (AdaptiveStates.CurrentState == NarrowState)
+                //{
+                //    string p = $"tid={ThreadId}";
+                //    Frame.Navigate(typeof(ReplyListPage), p, new DrillInNavigationTransitionInfo());
+                //}
+                //else
+                //{
                     OpenReplyPageByThreadId();
-                }
+                //}
             }
         }
 

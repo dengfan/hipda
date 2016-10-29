@@ -1621,14 +1621,6 @@
 
     <DataTemplate x:Key="ThreadListNormalItemTemplate">
         <Grid>
-            <Ellipse
-                Width="6"
-                Height="6"
-                Margin="6,6,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Style="{Binding StatusColorStyle}" />
-
             <c:MyAvatarForThread
                 Margin="14,8,0,0"
                 HorizontalAlignment="Left"
