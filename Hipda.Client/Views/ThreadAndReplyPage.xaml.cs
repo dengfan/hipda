@@ -13,6 +13,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Hosting;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
@@ -145,8 +146,63 @@ namespace Hipda.Client.Views
             MainGridBlurEffect_Set(blurEffectGrid);
         }
 
+        private TranslateTransform _tt;
+
+        private void ThreadAndReplyPage_ManipulationCompleted(object sender, Windows.UI.Xaml.Input.ManipulationCompletedRoutedEventArgs e)
+        {
+            if (ActualWidth > 720)
+            {
+                _tt.X = 0;
+                return;
+            }
+
+            double abs_delta = Math.Abs(e.Cumulative.Translation.X);
+            double speed = Math.Abs(e.Velocities.Linear.X);
+            double delta = e.Cumulative.Translation.X;
+            double to = 0;
+
+            if (abs_delta < ActualWidth / 3 && speed < 0.5)
+            {
+                _tt.X = 0;
+                return;
+            }
+
+            if (delta > 0)
+                to = ActualWidth;
+            else if (delta < 0)
+                return;
+
+            var s = new Storyboard();
+            var doubleanimation = new DoubleAnimation() { Duration = new Duration(TimeSpan.FromMilliseconds(120)), From = _tt.X, To = to };
+            Storyboard.SetTarget(doubleanimation, _tt);
+            Storyboard.SetTargetProperty(doubleanimation, "X");
+            s.Children.Add(doubleanimation);
+            s.Begin();
+        }
+
+        private void ThreadAndReplyPage_ManipulationDelta(object sender, Windows.UI.Xaml.Input.ManipulationDeltaRoutedEventArgs e)
+        {
+            if (ActualWidth > 720)
+            {
+                _tt.X = 0;
+                return;
+            }
+
+            if (_tt.X + e.Delta.Translation.X < 0)
+            {
+                _tt.X = 0;
+                return;
+            }
+            _tt.X += e.Delta.Translation.X;
+        }
+
         private void ThreadAndReplyPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            if (_tt.X != 0)
+            {
+                _tt.X = 0;
+            }
+
             string userInteractionType = Windows.UI.ViewManagement.UIViewSettings.GetForCurrentView().UserInteractionMode.ToString();
             if (userInteractionType.Equals("Touch"))
             {
@@ -173,10 +229,9 @@ namespace Hipda.Client.Views
 
             ContentTextBox.MaxHeight = ActualHeight / 2;
 
-            if (ActualWidth > 720)
+            if (ActualWidth > 720) // 分屏模式
             {
                 Grid.SetColumn(RightWrap, 1);
-                Grid.SetColumn(LeftWrap, 0);
 
                 LeftColumn.Width = new GridLength(320);
                 RightColumn.Width = new GridLength(1, GridUnitType.Star);
@@ -190,14 +245,17 @@ namespace Hipda.Client.Views
                 {
                     LeftColumn.Width = new GridLength(544);
                 }
+
+                RightWrap.BorderThickness = new Thickness(1,0,1,0);
             }
-            else
+            else // 全屏模式
             {
                 Grid.SetColumn(RightWrap, 0);
-                Grid.SetColumn(LeftWrap, 0);
 
                 LeftColumn.Width = new GridLength(1, GridUnitType.Star);
                 RightColumn.Width = new GridLength(0);
+
+                RightWrap.BorderThickness = new Thickness(0);
             }
 
             MainGridBlurEffect_SizeChanged(blurEffectGrid);
@@ -345,6 +403,10 @@ namespace Hipda.Client.Views
         {
             base.OnNavigatedTo(e);
 
+            _tt = RightWrap.RenderTransform as TranslateTransform;
+            ManipulationDelta += ThreadAndReplyPage_ManipulationDelta;
+            ManipulationCompleted += ThreadAndReplyPage_ManipulationCompleted;
+
             SizeChanged += ThreadAndReplyPage_SizeChanged;
 
             OpenReplyPageByThreadId();
@@ -415,6 +477,8 @@ namespace Hipda.Client.Views
             base.OnNavigatingFrom(e);
 
             SizeChanged -= ThreadAndReplyPage_SizeChanged;
+            ManipulationDelta -= ThreadAndReplyPage_ManipulationDelta;
+            ManipulationCompleted -= ThreadAndReplyPage_ManipulationCompleted;
         }
 
         private void AdaptiveStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
@@ -440,6 +504,8 @@ namespace Hipda.Client.Views
 
         private void LeftListView_ItemClick(object sender, ItemClickEventArgs e) 
         {
+            _tt.X = 0;
+
             // 如果进入了选择模式，则不打开主题
             if (LeftListView.SelectionMode == ListViewSelectionMode.Multiple)
             {
@@ -480,8 +546,6 @@ namespace Hipda.Client.Views
                 //}
             }
         }
-
-        
 
         private void PostDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {

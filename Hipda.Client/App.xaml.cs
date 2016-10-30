@@ -27,44 +27,44 @@ namespace Hipda.Client
         Frame _rootFrame;
         bool _isLaunched = false;
 
-        async void RegisterBackgroundTask()
-        {
-            //// 判断一下是否允许访问后台任务
-            //var res = await BackgroundExecutionManager.RequestAccessAsync();
-            //if (res == BackgroundAccessStatus.DeniedBySystemPolicy || res == BackgroundAccessStatus.Unspecified)
-            //{
-            //    return;
-            //}
+        //async void RegisterBackgroundTask()
+        //{
+        //    // 判断一下是否允许访问后台任务
+        //    var res = await BackgroundExecutionManager.RequestAccessAsync();
+        //    if (res == BackgroundAccessStatus.DeniedBySystemPolicy || res == BackgroundAccessStatus.Unspecified)
+        //    {
+        //        return;
+        //    }
 
-            //Type taskType = typeof(BackgroundTask.UpdateToastTask);
-            //var task = BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(t => t.Name == taskType.Name);
-            //if (task == null)
-            //{
-            //    // 注册后台任务
-            //    BackgroundTaskBuilder bd = new BackgroundTaskBuilder();
-            //    bd.Name = taskType.Name;
-            //    bd.TaskEntryPoint = taskType.FullName;
+        //    Type taskType = typeof(BackgroundTask.UpdateToastTask);
+        //    var task = BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(t => t.Name == taskType.Name);
+        //    if (task == null)
+        //    {
+        //        // 注册后台任务
+        //        BackgroundTaskBuilder bd = new BackgroundTaskBuilder();
+        //        bd.Name = taskType.Name;
+        //        bd.TaskEntryPoint = taskType.FullName;
 
-            //    // 声明触发器
-            //    TimeTrigger trigger = new TimeTrigger(15, false);
-            //    bd.SetTrigger(trigger);
-            //    bd.Register();
-            //}
+        //        // 声明触发器
+        //        TimeTrigger trigger = new TimeTrigger(15, false);
+        //        bd.SetTrigger(trigger);
+        //        bd.Register();
+        //    }
 
-            //Type taskType2 = typeof(BackgroundTask.HandleToastActionTask);
-            //var task2 = BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(t => t.Name == taskType2.Name);
-            //if (task2 == null)
-            //{
-            //    // 注册后台任务
-            //    BackgroundTaskBuilder bd = new BackgroundTaskBuilder();
-            //    bd.Name = taskType2.Name;
-            //    bd.TaskEntryPoint = taskType2.FullName;
+        //    Type taskType2 = typeof(BackgroundTask.HandleToastActionTask);
+        //    var task2 = BackgroundTaskRegistration.AllTasks.Values.FirstOrDefault(t => t.Name == taskType2.Name);
+        //    if (task2 == null)
+        //    {
+        //        // 注册后台任务
+        //        BackgroundTaskBuilder bd = new BackgroundTaskBuilder();
+        //        bd.Name = taskType2.Name;
+        //        bd.TaskEntryPoint = taskType2.FullName;
 
-            //    // 声明触发器
-            //    bd.SetTrigger(new ToastNotificationActionTrigger());
-            //    bd.Register();
-            //}
-        }
+        //        // 声明触发器
+        //        bd.SetTrigger(new ToastNotificationActionTrigger());
+        //        bd.Register();
+        //    }
+        //}
 
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
@@ -192,7 +192,7 @@ namespace Hipda.Client
             //titleBar.ButtonForegroundColor = Colors.White;
 
             // 注册后台任务
-            RegisterBackgroundTask();
+            //RegisterBackgroundTask();
         }
 
         /// <summary>

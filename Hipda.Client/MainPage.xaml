@@ -262,30 +262,6 @@
             </Setter>
         </Style>
 
-        <Storyboard x:Name="OpenLeftSwipePanelAnimation">
-            <DoubleAnimation
-                Duration="0:0:0.2"
-                Storyboard.TargetName="LeftSwipePanel"
-                Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)"
-                To="260">
-                <DoubleAnimation.EasingFunction>
-                    <ExponentialEase EasingMode="EaseIn" />
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
-        </Storyboard>
-        <Storyboard x:Name="CloseLeftSwipePanelAnimation">
-            <DoubleAnimation
-                Duration="0:0:0.2"
-                Storyboard.TargetName="LeftSwipePanel"
-                Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)"
-                To="0">
-                <DoubleAnimation.EasingFunction>
-                    <ExponentialEase EasingMode="EaseOut" />
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
-        </Storyboard>
-
-
         <Storyboard x:Name="ShowTipsBarShortAnimation">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TipsBar" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="56" />

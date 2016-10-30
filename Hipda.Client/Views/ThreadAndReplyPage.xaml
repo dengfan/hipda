@@ -163,7 +163,11 @@
             x:Name="RightWrap"
             Background="{ThemeResource LeftWrapBackgroundBrush}"
             BorderBrush="{ThemeResource RightWrapBorderBrush}"
-            BorderThickness="1,0">
+            ManipulationMode="System,TranslateX">
+
+            <Grid.RenderTransform>
+                <TranslateTransform />
+            </Grid.RenderTransform>
 
             <c:RefreshableListView
                 x:Name="ReplyListView"
@@ -197,7 +201,7 @@
                 </c:RefreshableListView.RefreshIndicatorContent>
                 <c:RefreshableListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsStackPanel ItemsUpdatingScrollMode="KeepScrollOffset" />
+                        <ItemsStackPanel Background="Transparent" ItemsUpdatingScrollMode="KeepScrollOffset" ManipulationMode="System,TranslateX" />
                     </ItemsPanelTemplate>
                 </c:RefreshableListView.ItemsPanel>
             </c:RefreshableListView>
@@ -240,12 +244,18 @@
                             <FontIcon Glyph="&#xE134;" />
                         </AppBarButton.Icon>
                     </AppBarButton>-->
-                    <AppBarButton x:Name="AppBarButtonCopyUrl" Command="{Binding CopyUrlCommand}" Label="复制链接">
+                    <AppBarButton
+                        x:Name="AppBarButtonCopyUrl"
+                        Command="{Binding CopyUrlCommand}"
+                        Label="复制链接">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE71B;" />
                         </AppBarButton.Icon>
                     </AppBarButton>
-                    <AppBarButton x:Name="AppBarButtonOpenInBrowser" Command="{Binding OpenInBrowserCommand}" Label="在浏览器中打开">
+                    <AppBarButton
+                        x:Name="AppBarButtonOpenInBrowser"
+                        Command="{Binding OpenInBrowserCommand}"
+                        Label="在浏览器中打开">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE12B;" />
                         </AppBarButton.Icon>
