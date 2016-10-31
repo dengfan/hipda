@@ -198,6 +198,7 @@ namespace Hipda.Client.Views
 
         private void ThreadAndReplyPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            
             if (_tt.X != 0)
             {
                 _tt.X = 0;
@@ -250,12 +251,15 @@ namespace Hipda.Client.Views
             }
             else // 全屏模式
             {
-                Grid.SetColumn(RightWrap, 0);
+                if (e.PreviousSize.Width > 720)
+                {
+                    Grid.SetColumn(RightWrap, 0);
 
-                LeftColumn.Width = new GridLength(1, GridUnitType.Star);
-                RightColumn.Width = new GridLength(0);
+                    LeftColumn.Width = new GridLength(1, GridUnitType.Star);
+                    RightColumn.Width = new GridLength(0);
 
-                RightWrap.BorderThickness = new Thickness(0);
+                    RightWrap.BorderThickness = new Thickness(0);
+                }
             }
 
             MainGridBlurEffect_SizeChanged(blurEffectGrid);

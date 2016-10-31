@@ -22,12 +22,6 @@
 
         <Grid x:Name="LeftWrap" Background="{ThemeResource LeftWrapBackgroundBrush}">
 
-            <Grid.Transitions>
-                <TransitionCollection>
-                    <RepositionThemeTransition />
-                </TransitionCollection>
-            </Grid.Transitions>
-
             <Grid.Resources>
                 <Storyboard x:Name="SpinnerStoryboard">
                     <DoubleAnimation
