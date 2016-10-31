@@ -1622,7 +1622,7 @@
     <DataTemplate x:Key="ThreadListNormalItemTemplate">
         <Grid>
             <c:MyAvatarForThread
-                Margin="14,8,0,0"
+                Margin="10,8,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 ForumId="{Binding ForumId}"
@@ -1633,7 +1633,7 @@
                 Username="{Binding AuthorUsername}" />
 
             <TextBlock
-                Margin="60,4,0,0"
+                Margin="56,4,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"
@@ -1643,7 +1643,7 @@
             </TextBlock>
 
             <TextBlock
-                Margin="60,22,0,22"
+                Margin="56,22,0,22"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"

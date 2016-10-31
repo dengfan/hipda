@@ -16,8 +16,8 @@
     <Grid x:Name="LayoutRoot">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="LeftColumn" Width="320" />
-            <ColumnDefinition x:Name="RightColumn" Width="*" />
+            <ColumnDefinition x:Name="LeftColumn" Width="*" />
+            <ColumnDefinition x:Name="RightColumn" Width="0" />
         </Grid.ColumnDefinitions>
 
         <Grid x:Name="LeftWrap" Background="{ThemeResource LeftWrapBackgroundBrush}">
@@ -201,7 +201,10 @@
                 </c:RefreshableListView.RefreshIndicatorContent>
                 <c:RefreshableListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsStackPanel Background="Transparent" ItemsUpdatingScrollMode="KeepScrollOffset" ManipulationMode="System,TranslateX" />
+                        <ItemsStackPanel
+                            Background="Transparent"
+                            ItemsUpdatingScrollMode="KeepScrollOffset"
+                            ManipulationMode="System,TranslateX" />
                     </ItemsPanelTemplate>
                 </c:RefreshableListView.ItemsPanel>
             </c:RefreshableListView>
