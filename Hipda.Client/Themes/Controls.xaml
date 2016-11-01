@@ -1622,7 +1622,7 @@
     <DataTemplate x:Key="ThreadListNormalItemTemplate">
         <Grid>
             <c:MyAvatarForThread
-                Margin="10,8,0,0"
+                Margin="12,8,0,8"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 ForumId="{Binding ForumId}"
@@ -1633,7 +1633,7 @@
                 Username="{Binding AuthorUsername}" />
 
             <TextBlock
-                Margin="56,4,0,0"
+                Margin="60,4,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground2StyleConverter}}"
@@ -1643,7 +1643,7 @@
             </TextBlock>
 
             <TextBlock
-                Margin="56,22,0,22"
+                Margin="60,24,0,8"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Style="{Binding FontContrastRatio, Source={StaticResource MyLocalSettings}, Converter={StaticResource FontContrastRatioToTextBlockForeground1StyleConverter}}"
@@ -1659,7 +1659,7 @@
                 <Run Foreground="{ThemeResource SystemControlBackgroundAccentBrush}" Text="{Binding ViewInfo}" />
             </TextBlock>
 
-            <TextBlock
+            <!--<TextBlock
                 Margin="0,0,0,4"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
@@ -1667,11 +1667,11 @@
                 FontSize="{Binding FontSize2, Source={StaticResource MyLocalSettings}}">
                 <Run FontFamily="{ThemeResource SymbolThemeFontFamily}" Text="&#x1F5E9;" />
                 <Run FontStyle="Italic" Text="{Binding LastReplyInfo}" />
-                <!--<Run Text=" " FontStyle="Italic"/>
-                    <Run Text="{Binding Index}" FontStyle="Italic"/>
-                    <Run Text=":" FontStyle="Italic"/>
-                    <Run Text="{Binding Index2}" FontStyle="Italic"/>-->
-            </TextBlock>
+                <Run Text=" " FontStyle="Italic"/>
+                <Run Text="{Binding Index}" FontStyle="Italic"/>
+                <Run Text=":" FontStyle="Italic"/>
+                <Run Text="{Binding Index2}" FontStyle="Italic"/>
+            </TextBlock>-->
         </Grid>
     </DataTemplate>
 

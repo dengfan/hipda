@@ -138,7 +138,7 @@ namespace Hipda.Client.Controls
             _border2.CornerRadius = new CornerRadius(cornerRadius);
 
             var bi = new BitmapImage();
-            bi.UriSource = CommonService.GetSmallAvatarUriByUserId(UserId);
+            bi.UriSource = CommonService.GetMiddleAvatarUriByUserId(UserId);
             bi.DecodePixelWidth = MyWidth;
 
             var ib = new ImageBrush();

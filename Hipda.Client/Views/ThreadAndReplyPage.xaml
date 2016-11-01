@@ -131,7 +131,13 @@
                 x:Name="LeftCommandBar"
                 VerticalAlignment="Top"
                 Background="{ThemeResource LeftWrapBackgroundBrush}"
-                Visibility="Collapsed" />
+                Visibility="Collapsed">
+                <CommandBar.Content>
+                    <Grid Margin="60,0,8,0" Height="48">
+                        <TextBlock Text="Discovery" VerticalAlignment="Center"/>
+                    </Grid>
+                </CommandBar.Content>
+            </CommandBar>
 
             <ProgressRing
                 x:Name="leftProgress"
