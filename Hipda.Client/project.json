@@ -2,6 +2,7 @@
   "dependencies": {
     "HtmlAgilityPack": "1.4.9.5",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+    "MvvmLight": "5.3.0",
     "Newtonsoft.Json": "9.0.1",
     "Win2D.uwp": "1.19.0",
     "WindowsStateTriggers": "1.1.0"
