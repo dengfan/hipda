@@ -2,14 +2,12 @@
     x:Class="Hipda.Client.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Universal="using:Microsoft.AdMediator.Universal"
     xmlns:c="using:Hipda.Client.Controls"
     xmlns:cvt="using:Hipda.Client.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Hipda.Client"
     xmlns:m="using:Hipda.Client.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:t="using:Hipda.Client.Triggers"
     xmlns:triggers="using:WindowsStateTriggers"
     x:Name="MyMainPage"
     RequestedTheme="{Binding ThemeType, Source={StaticResource MyLocalSettings}, Converter={StaticResource ThemeTypeToRequestedThemeConverter}, Mode=TwoWay}"
@@ -848,21 +846,13 @@
                 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                 x:DeferLoadStrategy="Lazy"
                 Visibility="Collapsed">
-                <Universal:AdMediatorControl
-                    x:Name="AdMediatorControl1"
-                    Width="160"
-                    Height="600"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Id="AdMediatorControl1" />
-
-                <!--<TextBlock
+                <TextBlock
                     Margin="0,0,0,16"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom"
                     Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                     FontSize="{ThemeResource ToolTipContentThemeFontSize}"
-                    Text="广告区域" />-->
+                    Text="广告区域" />
             </Grid>
 
             <Button
